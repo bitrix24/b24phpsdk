@@ -1,0 +1,83 @@
+{
+  "name": "bitrix24/b24phpsdk",
+  "description": "An official PHP library for the Bitrix24 REST API",
+  "keywords": [
+    "Bitrix24",
+    "PHP",
+    "REST",
+    "API"
+  ],
+  "type": "library",
+  "homepage": "https://github.com/bitrix24/b24phpsdk",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Bitrix24",
+      "homepage": "https://github.com/bitrix24/"
+    }
+  ],
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
+  "require": {
+    "php": "8.2.* || 8.3.*",
+    "ext-json": "*",
+    "ext-curl": "*",
+    "ext-intl": "*",
+    "psr/log": "^2 || ^3",
+    "fig/http-message-util": "^1",
+    "giggsey/libphonenumber-for-php": "^8",
+    "darsyn/ip": "^4 || ^5",
+    "nesbot/carbon": "^3",
+    "moneyphp/money": "^3 || ^4",
+    "mesilov/moneyphp-percentage": "^0.2",
+    "symfony/http-client": "^6 || ^7",
+    "symfony/console": "^6 || ^7",
+    "symfony/dotenv": "^6 || ^7",
+    "symfony/filesystem": "^6 || ^7",
+    "symfony/mime": "^6 || ^7",
+    "symfony/finder": "^6 || ^7",
+    "symfony/http-client-contracts": "^2 || ^3",
+    "symfony/http-foundation": "^6 || ^7",
+    "symfony/event-dispatcher": "^6 || ^7",
+    "symfony/uid": "^6 || ^7"
+  },
+  "require-dev": {
+    "fakerphp/faker": "^1",
+    "monolog/monolog": "^3",
+    "nunomaduro/phpinsights": "^2",
+    "phpstan/phpstan": "1.11.7",
+    "phpunit/phpunit": "^10 || ^11",
+    "psalm/phar": "^5",
+    "rector/rector": "^1",
+    "roave/security-advisories": "dev-master",
+    "symfony/debug-bundle": "^6 || ^7",
+    "symfony/stopwatch": "^6 || ^7",
+    "typhoon/reflection": "^0.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Bitrix24\\SDK\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Bitrix24\\SDK\\Tools\\": "tools",
+      "Bitrix24\\SDK\\Tests\\": "tests"
+    }
+  },
+  "scripts": {
+    "phpunit-run-unit-tests": [
+      "phpunit --testsuite unit_tests"
+    ],
+    "phpunit-run-integration-tests": [
+      "phpunit --testsuite integration_tests"
+    ],
+    "phpstan-analyse": [
+      "vendor/bin/phpstan analyse --memory-limit 1G"
+    ]
+  }
+}
