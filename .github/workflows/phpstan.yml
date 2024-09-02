@@ -1,8 +1,7 @@
+name: PHPStan lint checks
 on:
   push:
   pull_request:
-
-name: PHPStan lint checks
 
 jobs:
   static-analysis:

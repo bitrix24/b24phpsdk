@@ -11,7 +11,7 @@ default:
 ENV := $(PWD)/tests/.env
 ENV_LOCAL := $(PWD)/tests/.env.local
 include $(ENV)
-include $(ENV_LOCAL)
+-include $(ENV_LOCAL)
 
 debug-show-env:
 	@echo BITRIX24_WEBHOOK $(BITRIX24_WEBHOOK)
