@@ -5,10 +5,11 @@ An official PHP library for the Bitrix24 REST API
 
 ## Build status
 
-| CI\CD [status](https://github.com/bitrix24/b24phpsdk/actions) on `master`                                                                                                                       | 
-|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
-| [![phpstan check](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpstan.yml/badge.svg)](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpstan.yml)                    | 
-| [![unit-tests status](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpunit.yml/badge.svg)](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpunit.yml)                | 
+| CI\CD [status](https://github.com/bitrix24/b24phpsdk/actions) on `master`                                                                                                  | 
+|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
+| [![phpstan check](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpstan.yml/badge.svg)](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpstan.yml)     | 
+| [![rector check](https://github.com/bitrix24/b24phpsdk/actions/workflows/rector.yml/badge.svg)](https://github.com/bitrix24/b24phpsdk/actions/workflows/rector.yml)        | 
+| [![unit-tests status](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpunit.yml/badge.svg)](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpunit.yml) | 
 
 Integration tests run in GitHub actions with real Bitrix24 portal
 

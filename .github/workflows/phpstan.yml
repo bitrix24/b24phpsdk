@@ -1,8 +1,7 @@
+name: "PHPStan lint checks"
 on:
   push:
   pull_request:
-
-name: PHPStan lint checks
 
 jobs:
   static-analysis:
@@ -16,7 +15,7 @@ jobs:
           - "8.2"
           - "8.3"
         dependencies: [ highest ]
-        operating-system: [ ubuntu-latest, windows-latest ]
+        operating-system: [ ubuntu-latest]
 
     steps:
       - name: "Checkout"

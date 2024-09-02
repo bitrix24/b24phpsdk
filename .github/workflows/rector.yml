@@ -1,0 +1,50 @@
+name: "Rector lint checks"
+on:
+  push:
+  pull_request:
+
+env:
+  COMPOSER_FLAGS: "--ansi --no-interaction --no-progress --prefer-dist"
+
+jobs:
+  tests:
+    name: "Rector lint checks"
+
+    runs-on: ${{ matrix.operating-system }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - "8.2"
+          - "8.3"
+        dependencies: [ highest ]
+        operating-system: [ ubuntu-latest]
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: "none"
+          php-version: "${{ matrix.php-version }}"
+          extensions: json, bcmath, curl, intl, mbstring
+
+      - name: "Install dependencies"
+        run: |
+          composer update ${{ env.COMPOSER_FLAGS }}
+
+      - name: "run Rector"
+        run: "make lint-rector"
+
+      - name: "is Rector check succeeded"
+        if: ${{ success() }}
+        run: |
+          echo '✅ Rector check pass, congratulations!'
+
+      - name: "is Rector check failed"
+        if: ${{ failure() }}
+        run: |
+          echo '::error:: ❗️ Rector check failed (╯°益°)╯彡┻━┻'
