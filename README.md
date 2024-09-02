@@ -9,7 +9,6 @@ An official PHP library for the Bitrix24 REST API
 |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
 | [![phpstan check](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpstan.yml/badge.svg)](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpstan.yml)                    | 
 | [![unit-tests status](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpunit.yml/badge.svg)](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpunit.yml)                | 
-| [![integration-tests status](https://github.com/bitrix24/b24phpsdk/actions/workflows/integration.yml/badge.svg)](https://github.com/bitrix24/b24phpsdk/actions/workflows/integration.yml) | 
 
 Integration tests run in GitHub actions with real Bitrix24 portal
 
