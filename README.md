@@ -301,7 +301,7 @@ make test-unit
 
 ❗️Do not run integration tests with production Bitrix24 accounts
 
-For run integration test you must:
+For running integration test you must:
 
 1. Create new Bitrix24 account for development tests.
 2. Go to left menu, click «Sitemap».
