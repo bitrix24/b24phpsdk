@@ -17,3 +17,15 @@ Available contracts
 - [ApplicationInstallations](/src/Application/Contracts/ApplicationInstallations/Docs/ApplicationInstallations.md) – Store information about application installation, linked with Bitrix24 Account with auth tokens.
 - [ContactPersons](/src/Application/Contracts/ContactPersons/Docs/ContactPersons.md) – Store information about person who installed application.
 - [Bitrix24Partners](/src/Application/Contracts/Bitrix24Partners/Docs/Bitrix24Partners.md) – Store information about Bitrix24 Partner who supports client portal and install or configure application.
+
+## Development
+
+### Update internal documentation: regenerate methods list
+1. Create file `/tests/.env.local`
+   - set env variable `BITRIX24_WEBHOOK`  
+   - set env variable `DOCUMENTATION_DEFAULT_TARGET_BRANCH`, default value `blob/master`
+2. Call make file
+```shell
+make build-documentation
+```
+3. Commit updated file `/docs/EN/Services/bitrix24-php-sdk-methods.md`
