@@ -1,8 +1,8 @@
 {
-  "name": "mesilov/bitrix24-php-sdk-webhook-example",
+  "name": "bitrix24/b24phpsdk-webhook-example",
   "description": "Example for work with bitrix24-php-sdk via webhook",
   "minimum-stability": "stable",
-  "license": "proprietary",
+  "license": "MIT",
   "authors": [
     {
       "name": "Maksim Mesilov",
@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "mesilov/bitrix24-php-sdk": "dev-feature/390-prepare-publish-2-0",
+    "bitrix24/b24phpsdk": "dev-main",
     "monolog/monolog": "^3",
     "symfony/dotenv": "^7"
   },
