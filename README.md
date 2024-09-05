@@ -1,5 +1,8 @@
 Bitrix24 REST API PHP SDK
 ================
+[![Total Downloads](https://img.shields.io/packagist/dt/bitrix24/b24phpsdk.svg)](https://packagist.org/packages/bitrix24/b24phpsdk)
+[![Latest Stable Version](https://img.shields.io/packagist/v/bitrix24/b24phpsdk.svg)](https://packagist.org/packages/bitrix24/b24phpsdk)
+
 
 An official PHP library for the Bitrix24 REST API
 
@@ -12,6 +15,13 @@ An official PHP library for the Bitrix24 REST API
 | [![unit-tests status](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpunit.yml/badge.svg)](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpunit.yml) | 
 
 Integration tests run in GitHub actions with real Bitrix24 portal
+
+## Installation
+Install the latest version with
+```bash
+composer require bitrix24/b24phpsdk
+```
+Or add `"bitrix24/b24phpsdk": "1.0"` to `composer.json` of your application.
 
 ## B24PhpSdk ✨FEATURES✨
 
@@ -88,9 +98,6 @@ Performance improvements 🚀
 - ext-json: *
 - ext-curl: *
 
-## Installation
-
-Add `"bitrix24/b24phpsdk": "2.x"` to `composer.json` of your application. Or clone repo to your project.
 
 ## Examples
 
