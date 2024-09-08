@@ -23,6 +23,8 @@ use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ServiceBuilderFactory
@@ -125,4 +127,22 @@ class ServiceBuilderFactory
         );
     }
 
+    /**
+     * Create service builder from incoming webhook
+     *
+     * @param non-empty-string $webhookUrl incoming webhook url from your bitrix24 portal
+     * @param EventDispatcherInterface|null $eventDispatcher optional event dispatcher for subscribe some domain events if need
+     * @param LoggerInterface|null $logger optional logger for debug logs
+     * @throws InvalidArgumentException
+     */
+    public static function createServiceBuilderFromWebhook(string $webhookUrl, ?EventDispatcherInterface $eventDispatcher = null, ?LoggerInterface $logger = null): ServiceBuilder
+    {
+        if ($eventDispatcher === null) {
+            $eventDispatcher = new EventDispatcher();
+        }
+        if ($logger === null) {
+            $logger = new NullLogger();
+        }
+        return (new ServiceBuilderFactory($eventDispatcher, $logger))->initFromWebhook($webhookUrl);
+    }
 }
