@@ -16,8 +16,7 @@ use Bitrix24\SDK\Services\ServiceBuilderFactory;
 require_once 'vendor/autoload.php';
 
 // init bitrix24-php-sdk service from webhook
-$webhookUrl = 'INSERT_HERE_YOUR_WEBHOOK_URL';
-$b24Service = ServiceBuilderFactory::createServiceBuilderFromWebhook($webhookUrl);
+$b24Service = ServiceBuilderFactory::createServiceBuilderFromWebhook('INSERT_HERE_YOUR_WEBHOOK_URL');
 
-// call interested method
-var_dump($b24Service->getMainScope()->main()->getServerTime()->time()->format(DATE_ATOM));
+// call some method
+var_dump($b24Service->getMainScope()->main()->getApplicationInfo()->applicationInfo());

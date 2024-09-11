@@ -16,6 +16,7 @@ namespace Bitrix24\SDK\Tests\Unit\Core\Credentials;
 use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ApplicationProfileTest extends TestCase
@@ -25,7 +26,7 @@ class ApplicationProfileTest extends TestCase
      *
      * @throws InvalidArgumentException
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('arrayDataProvider')]
+    #[DataProvider('arrayDataProvider')]
     public function testFromArray(array $arr, ?string $expectedException): void
     {
         if ($expectedException !== null) {
@@ -34,8 +35,8 @@ class ApplicationProfileTest extends TestCase
 
         $applicationProfile = ApplicationProfile::initFromArray($arr);
 
-        $this->assertEquals($applicationProfile->getClientId(), $arr['BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID']);
-        $this->assertEquals($applicationProfile->getClientSecret(), $arr['BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET']);
+        $this->assertEquals($applicationProfile->clientId, $arr['BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID']);
+        $this->assertEquals($applicationProfile->clientSecret, $arr['BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET']);
     }
 
     public static function arrayDataProvider(): Generator

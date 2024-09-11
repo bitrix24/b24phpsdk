@@ -14,13 +14,9 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Core\Credentials;
 
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException;
 
-/**
- * Class ApplicationProfile
- *
- * @package Bitrix24\SDK\Core\Credentials
- */
-class ApplicationProfile
+readonly class ApplicationProfile
 {
     private const BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID = 'BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID';
 
@@ -31,27 +27,18 @@ class ApplicationProfile
     /**
      * ApplicationProfile constructor.
      */
-    public function __construct(private readonly string $clientId, private readonly string $clientSecret, private readonly Scope $scope)
+    public function __construct(
+        public string $clientId,
+        public string $clientSecret,
+        public Scope  $scope)
     {
-    }
-
-    public function getClientId(): string
-    {
-        return $this->clientId;
-    }
-
-    public function getClientSecret(): string
-    {
-        return $this->clientSecret;
-    }
-
-    public function getScope(): Scope
-    {
-        return $this->scope;
     }
 
     /**
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @param array $appProfile
+     * @return ApplicationProfile
+     * @throws InvalidArgumentException
+     * @throws UnknownScopeCodeException
      */
     public static function initFromArray(array $appProfile): self
     {
@@ -70,7 +57,7 @@ class ApplicationProfile
         return new self(
             $appProfile[self::BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID],
             $appProfile[self::BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET],
-            new Scope(str_replace(' ', '', explode(',', (string) $appProfile[self::BITRIX24_PHP_SDK_APPLICATION_SCOPE]))),
+            Scope::initFromString((string)$appProfile[self::BITRIX24_PHP_SDK_APPLICATION_SCOPE])
         );
     }
 }
