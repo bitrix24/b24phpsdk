@@ -28,12 +28,17 @@
 - Changed bitrix24-php-sdk version in headers in class `Bitrix24\SDK\Core\ApiClient`,
   see [wrong API-client and sdk version in headers](https://github.com/bitrix24/b24phpsdk/issues/13).
 
+### Fixed
+
+- Fixed variable names in `Bitrix24\SDK\Services\ServiceBuilderFactory::initFromRequest`,
+  see [wrong variable name](https://github.com/bitrix24/b24phpsdk/issues/30).
+
 <!--
 ### Deprecated
 
 ### Removed
 
-### Fixed
+
 
 ### Security
 -->
