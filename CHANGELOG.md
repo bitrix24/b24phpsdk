@@ -10,7 +10,7 @@
 ### Security
 -->
 
-## 1.1.0 – 2024.09.
+## 1.1.0 – 2024.09.12
 
 ### Added
 
@@ -27,6 +27,8 @@
   `/examples/local-application/`
 - Changed bitrix24-php-sdk version in headers in class `Bitrix24\SDK\Core\ApiClient`,
   see [wrong API-client and sdk version in headers](https://github.com/bitrix24/b24phpsdk/issues/13).
+- Changed scope for property `core` in `Bitrix24\SDK\Services\AbstractServiceBuilder` - for better DX,
+  see [Make core public in service builder](https://github.com/bitrix24/b24phpsdk/issues/26).
 
 ### Fixed
 

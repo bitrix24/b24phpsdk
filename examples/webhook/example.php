@@ -16,7 +16,9 @@ use Bitrix24\SDK\Services\ServiceBuilderFactory;
 require_once 'vendor/autoload.php';
 
 // init bitrix24-php-sdk service from webhook
-$b24Service = ServiceBuilderFactory::createServiceBuilderFromWebhook('INSERT_HERE_YOUR_WEBHOOK_URL');
+$b24Service = ServiceBuilderFactory::createServiceBuilderFromWebhook('https://bitrix24-php-sdk-playground.bitrix24.ru/rest/1/b6g6r1zr85pzzpw5/');
 
 // call some method
 var_dump($b24Service->getMainScope()->main()->getApplicationInfo()->applicationInfo());
+// call core
+var_dump($b24Service->core->call('user.current'));

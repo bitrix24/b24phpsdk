@@ -125,6 +125,9 @@ $b24Service = ServiceBuilderFactory::createServiceBuilderFromWebhook('INSERT_HER
 
 // call some method
 var_dump($b24Service->getMainScope()->main()->getApplicationInfo()->applicationInfo());
+// call core for method in not implemented service
+var_dump($b24Service->core->call('user.current'));
+
 ```
 5. Call php file in shell
 
