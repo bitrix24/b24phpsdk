@@ -25,6 +25,8 @@
 - Changed example for work with webhook in [README.md](README.md) file and directory `/examples/webhook/`
 - Changed example for work with local application in [README.md](README.md) file and directory
   `/examples/local-application/`
+- Changed bitrix24-php-sdk version in headers in class `Bitrix24\SDK\Core\ApiClient`,
+  see [wrong API-client and sdk version in headers](https://github.com/bitrix24/b24phpsdk/issues/13).
 
 <!--
 ### Deprecated
