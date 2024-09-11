@@ -103,8 +103,8 @@ class ApiClient implements ApiClientInterface
             http_build_query(
                 [
                     'grant_type' => 'refresh_token',
-                    'client_id' => $this->getCredentials()->getApplicationProfile()->getClientId(),
-                    'client_secret' => $this->getCredentials()->getApplicationProfile()->getClientSecret(),
+                    'client_id' => $this->getCredentials()->getApplicationProfile()->clientId,
+                    'client_secret' => $this->getCredentials()->getApplicationProfile()->clientSecret,
                     'refresh_token' => $this->getCredentials()->getAuthToken()->getRefreshToken(),
                     $this->requestIdGenerator->getQueryStringParameterName() => $requestId
                 ]
