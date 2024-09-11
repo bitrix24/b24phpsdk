@@ -35,10 +35,16 @@ readonly class ApplicationProfile
     }
 
     /**
-     * @param array $appProfile
-     * @return ApplicationProfile
-     * @throws InvalidArgumentException
+     * Init Application profile from array
+     *
+     * @param array{
+     *      BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID: string,
+     *      BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET: string,
+     *      BITRIX24_PHP_SDK_APPLICATION_SCOPE: string
+     *  } $appProfile
+     *
      * @throws UnknownScopeCodeException
+     * @throws InvalidArgumentException
      */
     public static function initFromArray(array $appProfile): self
     {
@@ -57,7 +63,7 @@ readonly class ApplicationProfile
         return new self(
             $appProfile[self::BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID],
             $appProfile[self::BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET],
-            Scope::initFromString((string)$appProfile[self::BITRIX24_PHP_SDK_APPLICATION_SCOPE])
+            Scope::initFromString($appProfile[self::BITRIX24_PHP_SDK_APPLICATION_SCOPE])
         );
     }
 }
