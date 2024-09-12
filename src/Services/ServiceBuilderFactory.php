@@ -167,8 +167,8 @@ class ServiceBuilderFactory
         ?LoggerInterface          $logger = null
     ): ServiceBuilder
     {
-        if (!array_key_exists('DOMAIN', $placementRequest->query->keys())) {
-            throw new InvalidArgumentException('key «DOMAIN» not found in request');
+        if (!in_array('DOMAIN', $placementRequest->query->keys(), true)) {
+            throw new InvalidArgumentException('key «DOMAIN» not found in GET request arguments');
         }
 
         $rawDomainUrl = trim((string)$placementRequest->query->get('DOMAIN'));
