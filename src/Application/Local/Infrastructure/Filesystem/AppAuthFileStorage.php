@@ -16,6 +16,7 @@ namespace Bitrix24\SDK\Application\Local\Infrastructure\Filesystem;
 use Bitrix24\SDK\Application\Local\Entity\LocalAppAuth;
 use Bitrix24\SDK\Application\Local\Repository\LocalAppAuthRepositoryInterface;
 use Bitrix24\SDK\Core\Exceptions\FileNotFoundException;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken;
 use JsonException;
 use Psr\Log\LoggerInterface;
@@ -39,6 +40,7 @@ readonly class AppAuthFileStorage implements LocalAppAuthRepositoryInterface
     /**
      * @throws FileNotFoundException
      * @throws JsonException
+     * @throws InvalidArgumentException
      */
     public function get(): LocalAppAuth
     {
@@ -51,7 +53,14 @@ readonly class AppAuthFileStorage implements LocalAppAuthRepositoryInterface
         }
 
         $payload = file_get_contents($this->authFileName);
-        return LocalAppAuth::initFromArray(json_decode($payload['auth_token'], true, 512, JSON_THROW_ON_ERROR));
+        $appAuthPayload = json_decode($payload, true, 512, JSON_THROW_ON_ERROR);
+        if ($appAuthPayload === null) {
+            throw new InvalidArgumentException('local app auth is empty');
+        }
+        $appAuthPayload = LocalAppAuth::initFromArray($appAuthPayload);
+        $this->logger->debug('AppAuthFileStorage.get.finish');
+
+        return $appAuthPayload;
     }
 
     /**
