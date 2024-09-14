@@ -23,8 +23,8 @@
   - `Local\Infrastructure\Filesystem\AppAuthFileStorage`: class for store LocalAppAuth in file
   - `Local\Repository\LocalAppAuthRepositoryInterface`: interface for LocalAppAuthRepository.
 - Added `WrongClientException` for handle errors with wrong application client configuration. 
+- Added checks for empty string in args for constructor `Bitrix24\SDK\Core\Credentials\ApplicationProfile`
 - Documentation: added section [Basic necessary knowledge](docs/EN/documentation.md) in SDK documentation
-
 ### Changed
 
 - Changed scope for properties `Bitrix24\SDK\Core\Credentials\ApplicationProfile` - mark as public
