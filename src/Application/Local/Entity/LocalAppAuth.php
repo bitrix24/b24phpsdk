@@ -20,7 +20,7 @@ final class LocalAppAuth
     public function __construct(
         private AuthToken       $authToken,
         private readonly string $domainUrl,
-        private ?string         $applicationToken)
+        private readonly ?string         $applicationToken)
     {
     }
 

@@ -49,6 +49,7 @@ class CredentialsTest extends TestCase
     {
         $credentials = Credentials::createFromOAuth(
             new AuthToken('', '', 0),
+            // @phpstan-ignore-next-line
             new ApplicationProfile('', '', new Scope(['crm'])),
             'bitrix24-php-sdk-playground.bitrix24.ru'
         );
@@ -64,6 +65,7 @@ class CredentialsTest extends TestCase
     {
         $credentials = Credentials::createFromOAuth(
             new AuthToken('', '', 0),
+            // @phpstan-ignore-next-line
             new ApplicationProfile('', '', new Scope(['crm'])),
             'bitrix24-php-sdk-playground.bitrix24.ru'
         );
@@ -80,6 +82,7 @@ class CredentialsTest extends TestCase
     {
         $credentials = Credentials::createFromOAuth(
             new AuthToken('', '', 0),
+            // @phpstan-ignore-next-line
             new ApplicationProfile('', '', new Scope(['crm'])),
             'https://bitrix24-php-sdk-playground.bitrix24.ru'
         );
@@ -102,6 +105,7 @@ class CredentialsTest extends TestCase
         yield 'with oauth domain url with end /' => [
             Credentials::createFromOAuth(
                 new AuthToken('', '', 0),
+                // @phpstan-ignore-next-line
                 new ApplicationProfile('', '', new Scope(['crm'])),
                 'https://bitrix24-php-sdk-playground.bitrix24.ru/'
             ),
@@ -110,6 +114,7 @@ class CredentialsTest extends TestCase
         yield 'with oauth domain url without end /' => [
             Credentials::createFromOAuth(
                 new AuthToken('', '', 0),
+                // @phpstan-ignore-next-line
                 new ApplicationProfile('', '', new Scope(['crm'])),
                 'https://bitrix24-php-sdk-playground.bitrix24.ru'
             ),

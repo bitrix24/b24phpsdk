@@ -64,7 +64,7 @@ class ServiceBuilderFactory
     }
 
     /**
-     * Init service builder from request
+     * Init service builder
      *
      * @param ApplicationProfile $applicationProfile
      * @param AuthToken $authToken
@@ -73,7 +73,7 @@ class ServiceBuilderFactory
      * @return ServiceBuilder
      * @throws InvalidArgumentException
      */
-    public function initFromRequest(
+    public function init(
         ApplicationProfile $applicationProfile,
         AuthToken          $authToken,
         string             $bitrix24DomainUrl
@@ -184,7 +184,7 @@ class ServiceBuilderFactory
         }
 
         return (new ServiceBuilderFactory($eventDispatcher, $logger))
-            ->initFromRequest(
+            ->init(
                 $applicationProfile,
                 AuthToken::initFromPlacementRequest($placementRequest),
                 $rawDomainUrl

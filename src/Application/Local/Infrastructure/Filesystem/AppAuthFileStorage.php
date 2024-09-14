@@ -55,6 +55,7 @@ readonly class AppAuthFileStorage implements LocalAppAuthRepositoryInterface
         if ($appAuthPayload === null) {
             throw new InvalidArgumentException('local app auth is empty');
         }
+
         $appAuthPayload = LocalAppAuth::initFromArray($appAuthPayload);
         $this->logger->debug('AppAuthFileStorage.get.finish');
 
@@ -73,26 +74,26 @@ readonly class AppAuthFileStorage implements LocalAppAuthRepositoryInterface
     public function saveRenewedToken(RenewedAuthToken $renewedAuthToken): void
     {
         $this->logger->debug('AppAuthFileStorage.saveRenewedToken.start');
-        $currentAuth = $this->get();
-        $currentAuth->updateAuthToken($renewedAuthToken->authToken);
+        $localAppAuth = $this->get();
+        $localAppAuth->updateAuthToken($renewedAuthToken->authToken);
 
-        $this->save($currentAuth);
+        $this->save($localAppAuth);
         $this->logger->debug('AppAuthFileStorage.saveRenewedToken.finish');
     }
 
     /**
      * Saves the given LocalAppAuth object to a file.
      *
-     * @param LocalAppAuth $appAuth The LocalAppAuth object to be saved.
+     * @param LocalAppAuth $localAppAuth The LocalAppAuth object to be saved.
      * @throws JsonException If the JSON encoding fails.
      */
-    public function save(LocalAppAuth $appAuth): void
+    public function save(LocalAppAuth $localAppAuth): void
     {
         $this->logger->debug('AppAuthFileStorage.save.start', [
             'authFileName' => $this->authFileName
         ]);
 
-        $tokenPayload = json_encode($appAuth->toArray(), JSON_THROW_ON_ERROR);
+        $tokenPayload = json_encode($localAppAuth->toArray(), JSON_THROW_ON_ERROR);
         $this->filesystem->dumpFile($this->authFileName, $tokenPayload);
 
         $this->logger->debug('AppAuthFileStorage.save.finish', [

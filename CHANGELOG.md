@@ -10,7 +10,7 @@
 ### Security
 -->
 
-## 1.1.0 – 2024.09.12
+## 1.1.0 – 2024.09.15
 
 ### Added
 
@@ -18,6 +18,12 @@
   webhook, see [add super-simple kick-off guide](https://github.com/bitrix24/b24phpsdk/issues/17).
 - Added method `Bitrix24\SDK\Services\ServiceBuilderFactory::createServiceBuilderFromPlacementRequest` for simple work
   with placement request, see [add super-simple kick-off guide](https://github.com/bitrix24/b24phpsdk/issues/17).
+- Added helpers for build local application in namespace `Bitrix24\SDK\Application\Local`:
+  - `Local\Entity\LocalAppAuth`: auth data for local application. Contains: `AuthToken`, domainUrl and applicationToken.
+  - `Local\Infrastructure\Filesystem\AppAuthFileStorage`: class for store LocalAppAuth in file
+  - `Local\Repository\LocalAppAuthRepositoryInterface`: interface for LocalAppAuthRepository.
+- Added `WrongClientException` for handle errors with wrong application client configuration. 
+- Documentation: added section [Basic necessary knowledge](docs/EN/documentation.md) in SDK documentation
 
 ### Changed
 
@@ -29,7 +35,7 @@
   see [wrong API-client and sdk version in headers](https://github.com/bitrix24/b24phpsdk/issues/13).
 - Changed scope for property `core` in `Bitrix24\SDK\Services\AbstractServiceBuilder` - for better DX,
   see [Make core public in service builder](https://github.com/bitrix24/b24phpsdk/issues/26).
-
+- Changed method name `Bitrix24\SDK\Services\ServiceBuilderFactory::initFromRequest` to `Bitrix24\SDK\Services\ServiceBuilderFactory::init`
 ### Fixed
 
 - Fixed variable names in `Bitrix24\SDK\Services\ServiceBuilderFactory::initFromRequest`,
