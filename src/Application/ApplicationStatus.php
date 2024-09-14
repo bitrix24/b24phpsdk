@@ -45,7 +45,7 @@ class ApplicationStatus
             self::STATUS_SHORT_LOCAL => 'local',
             self::STATUS_SHORT_SUBSCRIPTION => 'subscription',
             default => throw new InvalidArgumentException(
-                sprintf('unknown application status code %s', $statusShortCode)
+                sprintf('unknown application status code «%s»', $statusShortCode)
             ),
         };
     }

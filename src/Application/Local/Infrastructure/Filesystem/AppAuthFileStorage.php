@@ -32,16 +32,14 @@ readonly class AppAuthFileStorage implements LocalAppAuthRepositoryInterface
     {
     }
 
-    public function isAvailable(): bool
-    {
-        return $this->filesystem->exists($this->authFileName);
-    }
-
     /**
-     * @throws FileNotFoundException
-     * @throws JsonException
-     * @throws InvalidArgumentException
-     */
+     * Retrieves the local app authentication details.
+     *
+     * This method retrieves the local app authentication details by reading the contents of a specific file.
+     * It starts by logging a debug message with the start event. Then, it checks if the specified file exists.
+     * If the file does not exist, it throws a FileNotFoundException indicating that the file with the stored access token was not found.
+     * If the file exists, it reads the contents of the file and decodes it using JSON.
+     **/
     public function get(): LocalAppAuth
     {
         $this->logger->debug('AppAuthFileStorage.get.start', [
@@ -64,21 +62,29 @@ readonly class AppAuthFileStorage implements LocalAppAuthRepositoryInterface
     }
 
     /**
-     * @throws FileNotFoundException
-     * @throws JsonException
+     * Saves a renewed authentication token.
+     *
+     * @param RenewedAuthToken $renewedAuthToken The renewed authentication token to be saved.
+     *
+     * @throws FileNotFoundException If the file with the stored access token is not found.
+     * @throws JsonException If there is an error decoding the local app auth payload.
+     * @throws InvalidArgumentException If the local app auth is empty.
      */
     public function saveRenewedToken(RenewedAuthToken $renewedAuthToken): void
     {
         $this->logger->debug('AppAuthFileStorage.saveRenewedToken.start');
-        $updatedAuth = $this->get();
-        $updatedAuth->updateAuthToken($renewedAuthToken->authToken);
+        $currentAuth = $this->get();
+        $currentAuth->updateAuthToken($renewedAuthToken->authToken);
 
-        $this->save($updatedAuth);
+        $this->save($currentAuth);
         $this->logger->debug('AppAuthFileStorage.saveRenewedToken.finish');
     }
 
     /**
-     * @throws JsonException
+     * Saves the given LocalAppAuth object to a file.
+     *
+     * @param LocalAppAuth $appAuth The LocalAppAuth object to be saved.
+     * @throws JsonException If the JSON encoding fails.
      */
     public function save(LocalAppAuth $appAuth): void
     {

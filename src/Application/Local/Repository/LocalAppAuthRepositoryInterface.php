@@ -23,6 +23,4 @@ interface LocalAppAuthRepositoryInterface
     public function saveRenewedToken(RenewedAuthToken $renewedAuthToken): void;
 
     public function save(LocalAppAuth $appAuth): void;
-
-    public function isAvailable():bool;
 }
