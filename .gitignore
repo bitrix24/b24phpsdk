@@ -11,3 +11,4 @@ examples/logs
 /var
 *.log
 .env.local
+*.local
