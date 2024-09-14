@@ -137,7 +137,7 @@ php -f example.php
 
 ### Work with local application
 
-1. Go to `/examples/local-application` folder
+1. Go to `/examples/local-app` folder
 2. Open console and install dependencies
 
 ```shell

@@ -34,7 +34,7 @@ Full list of buzzwords, patterns and dependencies used in SDK.
 - [rector](https://getrector.org/documentation): PHP automated refactoring tool
 
 ### Additional PHP dependencies
-- [monolog](https://github.com/Seldaek/monolog): Logging for PHP.
+- [monolog](https://github.com/Seldaek/monolog): Logging for PHP, supports severity levels from [rfc5424](https://datatracker.ietf.org/doc/html/rfc5424)
 - [libphonenumber for PHP](https://github.com/giggsey/libphonenumber-for-php): Library for parsing, formatting, storing and validating international phone numbers. This library is based on Google's [libphonenumber](https://github.com/google/libphonenumber).
 - [darsyn\IP](https://github.com/darsyn/ip): IP is an immutable value object for (both version 4 and 6) IP addresses.
 - [carbon](https://github.com/briannesbitt/carbon): Simple PHP API extension for DateTime.
