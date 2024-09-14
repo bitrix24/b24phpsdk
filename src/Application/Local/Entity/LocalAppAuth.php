@@ -56,9 +56,9 @@ final class LocalAppAuth
     {
         return [
             'auth_token' => [
-                'access_token' => $this->authToken->getAccessToken(),
-                'refresh_token' => $this->authToken->getRefreshToken(),
-                'expires' => $this->authToken->getExpires()
+                'access_token' => $this->authToken->accessToken,
+                'refresh_token' => $this->authToken->refreshToken,
+                'expires' => $this->authToken->expires
             ],
             'domain_url' => $this->domainUrl,
             'application_token' => $this->applicationToken,

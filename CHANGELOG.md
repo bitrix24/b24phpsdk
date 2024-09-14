@@ -22,10 +22,14 @@
   - `Local\Entity\LocalAppAuth`: auth data for local application. Contains: `AuthToken`, domainUrl and applicationToken.
   - `Local\Infrastructure\Filesystem\AppAuthFileStorage`: class for store LocalAppAuth in file
   - `Local\Repository\LocalAppAuthRepositoryInterface`: interface for LocalAppAuthRepository.
+- Added example `/examples/local-app-with-token-storage` for demonstrate all options for work with SDK. 
 - Added `WrongClientException` for handle errors with wrong application client configuration. 
+- Added `WrongConfigurationException` for handle errors with wrong application infrastructure configuration. 
 - Added checks for empty string in args for constructor `Bitrix24\SDK\Core\Credentials\ApplicationProfile`
 - Added checks for empty string in args for constructor `Bitrix24\SDK\Core\Credentials\ApplicationProfile`
+- Added class `Bitrix24\SDK\Application\Requests\Events\ApplicationLifeCycleEventsFabric`
 - Documentation: added section [Basic necessary knowledge](docs/EN/documentation.md) in SDK documentation
+
 ### Changed
 - Changed order in expired_token case: 
   - old: get new auth token → repeat api-call → emit event `Bitrix24\SDK\Events\AuthTokenRenewedEvent` for store token
