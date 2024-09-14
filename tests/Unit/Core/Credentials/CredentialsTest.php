@@ -48,9 +48,8 @@ class CredentialsTest extends TestCase
     public function testDomainUrlWithoutProtocol(): void
     {
         $credentials = Credentials::createFromOAuth(
-            new AuthToken('', '', 0),
-            // @phpstan-ignore-next-line
-            new ApplicationProfile('', '', new Scope(['crm'])),
+            new AuthToken('test', 'test', 0),
+            new ApplicationProfile('test', 'test', new Scope(['crm'])),
             'bitrix24-php-sdk-playground.bitrix24.ru'
         );
         $this->assertEquals(
@@ -64,9 +63,8 @@ class CredentialsTest extends TestCase
     public function testIsWebhookContext():void
     {
         $credentials = Credentials::createFromOAuth(
-            new AuthToken('', '', 0),
-            // @phpstan-ignore-next-line
-            new ApplicationProfile('', '', new Scope(['crm'])),
+            new AuthToken('test', 'test', 0),
+            new ApplicationProfile('test', 'test', new Scope(['crm'])),
             'bitrix24-php-sdk-playground.bitrix24.ru'
         );
         $this->assertFalse($credentials->isWebhookContext());
@@ -81,9 +79,8 @@ class CredentialsTest extends TestCase
     public function testDomainUrlWithProtocol(): void
     {
         $credentials = Credentials::createFromOAuth(
-            new AuthToken('', '', 0),
-            // @phpstan-ignore-next-line
-            new ApplicationProfile('', '', new Scope(['crm'])),
+            new AuthToken('test', 'test', 0),
+            new ApplicationProfile('test', 'test', new Scope(['crm'])),
             'https://bitrix24-php-sdk-playground.bitrix24.ru'
         );
         $this->assertEquals(
@@ -104,18 +101,16 @@ class CredentialsTest extends TestCase
         ];
         yield 'with oauth domain url with end /' => [
             Credentials::createFromOAuth(
-                new AuthToken('', '', 0),
-                // @phpstan-ignore-next-line
-                new ApplicationProfile('', '', new Scope(['crm'])),
+                new AuthToken('test', 'test', 0),
+                new ApplicationProfile('test', 'test', new Scope(['crm'])),
                 'https://bitrix24-php-sdk-playground.bitrix24.ru/'
             ),
             'https://bitrix24-php-sdk-playground.bitrix24.ru',
         ];
         yield 'with oauth domain url without end /' => [
             Credentials::createFromOAuth(
-                new AuthToken('', '', 0),
-                // @phpstan-ignore-next-line
-                new ApplicationProfile('', '', new Scope(['crm'])),
+                new AuthToken('test', 'test', 0),
+                new ApplicationProfile('test', 'test', new Scope(['crm'])),
                 'https://bitrix24-php-sdk-playground.bitrix24.ru'
             ),
             'https://bitrix24-php-sdk-playground.bitrix24.ru',

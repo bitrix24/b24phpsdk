@@ -24,10 +24,15 @@
   - `Local\Repository\LocalAppAuthRepositoryInterface`: interface for LocalAppAuthRepository.
 - Added `WrongClientException` for handle errors with wrong application client configuration. 
 - Added checks for empty string in args for constructor `Bitrix24\SDK\Core\Credentials\ApplicationProfile`
+- Added checks for empty string in args for constructor `Bitrix24\SDK\Core\Credentials\ApplicationProfile`
 - Documentation: added section [Basic necessary knowledge](docs/EN/documentation.md) in SDK documentation
 ### Changed
-
+- Changed order in expired_token case: 
+  - old: get new auth token → repeat api-call → emit event `Bitrix24\SDK\Events\AuthTokenRenewedEvent` for store token
+  - new: get new auth token → emit event `Bitrix24\SDK\Events\AuthTokenRenewedEvent` for store token → repeat api-call
+- Changed dependencies for `Bitrix24\SDK\Core\ApiClient` - added class `Bitrix24\SDK\Core\ApiLevelErrorHandler`
 - Changed scope for properties `Bitrix24\SDK\Core\Credentials\ApplicationProfile` - mark as public
+- Changed scope for properties `Bitrix24\SDK\Core\Credentials\AuthToken` - mark as public
 - Changed example for work with webhook in [README.md](README.md) file and directory `/examples/webhook/`
 - Changed example for work with local application in [README.md](README.md) file and directory
   `/examples/local-application/`

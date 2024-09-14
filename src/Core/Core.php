@@ -118,15 +118,18 @@ class Core implements CoreInterface
                             $this->logger->debug(
                                 'access token renewed',
                                 [
-                                    'newAccessToken' => $renewedToken->authToken->getAccessToken(),
-                                    'newRefreshToken' => $renewedToken->authToken->getRefreshToken(),
-                                    'newExpires' => $renewedToken->authToken->getExpires(),
+                                    'newAccessToken' => $renewedToken->authToken->accessToken,
+                                    'newRefreshToken' => $renewedToken->authToken->refreshToken,
+                                    'newExpires' => $renewedToken->authToken->expires,
                                     'appStatus' => $renewedToken->applicationStatus->getStatusCode(),
                                 ]
                             );
                             $this->apiClient->getCredentials()->setAuthToken($renewedToken->authToken);
 
-                            // repeat api-call
+                            // dispatch event for save new auth token in storage
+                            $this->eventDispatcher->dispatch(new AuthTokenRenewedEvent($renewedToken));
+
+                            // repeat previous api-call with new auth token
                             $response = $this->call($apiMethod, $parameters);
                             $this->logger->debug(
                                 'api call repeated',
@@ -136,8 +139,6 @@ class Core implements CoreInterface
                                 ]
                             );
 
-                            // dispatch event
-                            $this->eventDispatcher->dispatch(new AuthTokenRenewedEvent($renewedToken));
                             break;
                         case 'method_confirm_waiting':
                             throw new MethodConfirmWaitingException(

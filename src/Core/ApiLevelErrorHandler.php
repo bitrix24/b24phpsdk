@@ -21,6 +21,7 @@ use Bitrix24\SDK\Core\Exceptions\OperationTimeLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\UserNotFoundOrIsNotActiveException;
 use Bitrix24\SDK\Core\Exceptions\WrongAuthTypeException;
+use Bitrix24\SDK\Core\Exceptions\WrongClientException;
 use Bitrix24\SDK\Services\Workflows\Exceptions\ActivityOrRobotAlreadyInstalledException;
 use Bitrix24\SDK\Services\Workflows\Exceptions\ActivityOrRobotValidationFailureException;
 use Bitrix24\SDK\Services\Workflows\Exceptions\WorkflowTaskAlreadyCompletedException;
@@ -79,7 +80,7 @@ class ApiLevelErrorHandler
     private function handleError(array $responseBody, ?string $batchCommandId = null): void
     {
         $errorCode = strtolower(trim((string)$responseBody[self::ERROR_KEY]));
-        $errorDescription = strtolower(trim((string)$responseBody[self::ERROR_DESCRIPTION_KEY]));
+        $errorDescription = array_key_exists(self::ERROR_DESCRIPTION_KEY, $responseBody) ? strtolower(trim((string)$responseBody[self::ERROR_DESCRIPTION_KEY])) : null;
 
         $this->logger->debug(
             'handle.errorInformation',
@@ -96,17 +97,27 @@ class ApiLevelErrorHandler
 
         // todo send issues to bitrix24
         // fix errors without error_code responses
-        if ($errorCode === '' && strtolower($errorDescription) === strtolower('You can delete ONLY templates created by current application')) {
+        if ($errorCode === '' && strtolower((string) $errorDescription) === strtolower('You can delete ONLY templates created by current application')) {
             $errorCode = 'bizproc_workflow_template_access_denied';
         }
 
-        if ($errorCode === '' && strtolower($errorDescription) === strtolower('No fields to update.')) {
+        if ($errorCode === '' && strtolower((string) $errorDescription) === strtolower('No fields to update.')) {
             $errorCode = 'bad_request_no_fields_to_update';
         }
 
-        if ($errorCode === '' && strtolower($errorDescription) === strtolower('User is not found or is not active')) {
+        if ($errorCode === '' && strtolower((string) $errorDescription) === strtolower('User is not found or is not active')) {
             $errorCode = 'user_not_found_or_is_not_active';
         }
+
+        // todo check errors
+        // EXPIRED_TOKEN
+        // ERROR_OAUTH
+        // ERROR_METHOD_NOT_FOUND
+        // INVALID_TOKEN
+        // INVALID_GRANT
+        // PAYMENT_REQUIRED
+        // NO_AUTH_FOUND
+        // INSUFFICIENT_SCOPE
 
         switch ($errorCode) {
             case 'error_task_completed':
@@ -130,36 +141,10 @@ class ApiLevelErrorHandler
                 throw new UserNotFoundOrIsNotActiveException(sprintf('%s - %s', $errorCode, $errorDescription));
             case 'wrong_auth_type':
                 throw new WrongAuthTypeException(sprintf('%s - %s', $errorCode, $errorDescription));
+            case 'wrong_client':
+                throw new WrongClientException(sprintf('%s - %s', $errorCode, $errorDescription));
             default:
                 throw new BaseException(sprintf('%s - %s %s', $errorCode, $errorDescription, $batchErrorPrefix));
         }
-
-        //            switch (strtoupper(trim($apiResponse['error']))) {
-//                case 'EXPIRED_TOKEN':
-//                    throw new Bitrix24TokenIsExpiredException($errorMsg);
-//                case 'WRONG_CLIENT':
-//                case 'ERROR_OAUTH':
-//                    $this->log->error($errorMsg, $this->getErrorContext());
-//                    throw new Bitrix24WrongClientException($errorMsg);
-//                case 'ERROR_METHOD_NOT_FOUND':
-//                    $this->log->error($errorMsg, $this->getErrorContext());
-//                    throw new Bitrix24MethodNotFoundException($errorMsg);
-//                case 'INVALID_TOKEN':
-//                case 'INVALID_GRANT':
-//                    $this->log->error($errorMsg, $this->getErrorContext());
-//                    throw new Bitrix24TokenIsInvalidException($errorMsg);
-
-//                case 'PAYMENT_REQUIRED':
-//                    $this->log->error($errorMsg, $this->getErrorContext());
-//                    throw new Bitrix24PaymentRequiredException($errorMsg);
-//                case 'NO_AUTH_FOUND':
-//                    $this->log->error($errorMsg, $this->getErrorContext());
-//                    throw new Bitrix24PortalRenamedException($errorMsg);
-//                case 'INSUFFICIENT_SCOPE':
-//                    $this->log->error($errorMsg, $this->getErrorContext());
-//                    throw new Bitrix24InsufficientScope($errorMsg);
-//                default:
-//                    $this->log->error($errorMsg, $this->getErrorContext());
-//                    throw new Bitrix24ApiException($errorMsg);
     }
 }

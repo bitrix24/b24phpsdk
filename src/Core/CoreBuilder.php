@@ -27,11 +27,6 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-/**
- * Class CoreBuilder
- *
- * @package Bitrix24\SDK\Core
- */
 class CoreBuilder
 {
     private ?ApiClientInterface $apiClient = null;
@@ -113,15 +108,16 @@ class CoreBuilder
      */
     public function build(): CoreInterface
     {
-        if (!$this->credentials instanceof \Bitrix24\SDK\Core\Credentials\Credentials) {
+        if (!$this->credentials instanceof Credentials) {
             throw new InvalidArgumentException('you must set credentials before call method build');
         }
 
-        if (!$this->apiClient instanceof \Bitrix24\SDK\Core\Contracts\ApiClientInterface) {
+        if (!$this->apiClient instanceof ApiClientInterface) {
             $this->apiClient = new ApiClient(
                 $this->credentials,
                 $this->httpClient,
                 $this->requestIdGenerator,
+                $this->apiLevelErrorHandler,
                 $this->logger
             );
         }
