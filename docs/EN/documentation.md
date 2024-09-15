@@ -27,6 +27,7 @@ Full list of buzzwords, patterns and dependencies used in SDK.
 - [make](https://www.gnu.org/software/make/manual/make.html): Automate build processes
 - [env-files](https://12factor.net/config): Store configuration in the environment
 - [GitHub Actions](https://docs.github.com/en/actions): automate tasks throughout the software development lifecycle.
+- [ngrok](https://ngrok.com/use-cases/developer-preview): Share your local app without deploying
 
 ### Code quality and refactoring
 - [phpunit](https://phpunit.de/documentation.html): PHP testing framework
