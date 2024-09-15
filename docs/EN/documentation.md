@@ -28,6 +28,8 @@ Full list of buzzwords, patterns and dependencies used in SDK.
 - [env-files](https://12factor.net/config): Store configuration in the environment
 - [GitHub Actions](https://docs.github.com/en/actions): automate tasks throughout the software development lifecycle.
 - [ngrok](https://ngrok.com/use-cases/developer-preview): Share your local app without deploying
+- [PHP built-in web-server](https://www.php.net/manual/en/features.commandline.webserver.php): This web server is designed to aid application development. It may also be useful for testing purposes or for application demonstrations that are run in controlled environments.
+- [cURL](https://curl.se/docs/tutorial.html): Command line tool and library for transferring data with URLs
 
 ### Code quality and refactoring
 - [phpunit](https://phpunit.de/documentation.html): PHP testing framework

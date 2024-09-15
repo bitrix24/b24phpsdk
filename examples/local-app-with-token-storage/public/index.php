@@ -15,7 +15,7 @@ namespace App;
 
 use Symfony\Component\HttpFoundation\Request;
 
-require_once 'vendor/autoload.php';
+require_once dirname(__DIR__). '/vendor/autoload.php';
 
 $incomingRequest = Request::createFromGlobals();
 Application::getLog()->debug('index.init', ['request' => $incomingRequest->request->all(), 'query' => $incomingRequest->query->all()]);

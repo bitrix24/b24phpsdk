@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "bitrix24/b24phpsdk": "1.*",
+    "bitrix24/b24phpsdk": "dev-feature/29-add-examples-for-store-tokens",
     "monolog/monolog": "^3",
     "symfony/console": "^7",
     "symfony/dotenv": "^7",

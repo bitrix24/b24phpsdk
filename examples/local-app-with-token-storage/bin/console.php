@@ -1,7 +1,5 @@
 <?php
-require dirname(__DIR__,3) . '/vendor/autoload.php';
-
-require dirname(__DIR__).'/src/Application.php';
+require_once dirname(__DIR__). '/vendor/autoload.php';
 
 use App\Application;
 use Symfony\Component\Console\Command\Command;
