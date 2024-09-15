@@ -15,7 +15,6 @@ Local application example for education purposes.
     .env - example env file
     .env.local - non commited file with actual data
     .auth.json.local - auth data from application
-/docs - documentation    
 /public - folder served with web-server
     event-handler.php – event handler           
     index.php - base script loaded in default application placement
