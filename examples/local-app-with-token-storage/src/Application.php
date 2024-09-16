@@ -40,6 +40,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 class Application
 {
     private const CONFIG_FILE_NAME = '/config/.env';
+
     private const LOG_FILE_NAME = '/var/log/application.log';
 
     public static function processEvents(Request $incomingRequest): Response
@@ -50,9 +51,10 @@ class Application
         try {
             // todo create global event fabric
             $event = (new ApplicationLifeCycleEventsFabric())->create($incomingRequest);
-            if ($event === null) {
+            if (!$event instanceof \Bitrix24\SDK\Application\Requests\Events\EventInterface) {
                 throw new InvalidArgumentException('unknown event');
             }
+
             self::getLog()->debug('event.received', [
                 'eventCode' => $event->getEventCode(),
                 'eventPayload' => $event->getEventPayload()
@@ -75,17 +77,19 @@ class Application
                     // add your event handler code
                     break;
             }
+
             $response->setContent('OK');
-        } catch (\Throwable $exception) {
+        } catch (\Throwable $throwable) {
             self::getLog()->error('processEvents.error', [
-                'message' => $exception->getMessage(),
-                'trace' => $exception->getTraceAsString(),
+                'message' => $throwable->getMessage(),
+                'trace' => $throwable->getTraceAsString(),
                 'event_payload' => $incomingRequest->request->all()
             ]);
 
             $response->setStatusCode(500);
-            $response->setContent($exception->getMessage());
+            $response->setContent($throwable->getMessage());
         }
+
         return $response;
     }
 
@@ -105,6 +109,7 @@ class Application
             if (!array_key_exists('BITRIX24_PHP_SDK_LOG_LEVEL', $_ENV)) {
                 throw new InvalidArgumentException('in $_ENV variables not found key BITRIX24_PHP_SDK_LOG_LEVEL');
             }
+
             // rotating
             $rotatingFileHandler = new RotatingFileHandler(dirname(__DIR__) . self::LOG_FILE_NAME, 0, (int)$_ENV['BITRIX24_PHP_SDK_LOG_LEVEL']);
             $rotatingFileHandler->setFilenameFormat('{filename}-{date}', 'Y-m-d');
@@ -126,8 +131,8 @@ class Application
     protected static function getEventDispatcher(): EventDispatcherInterface
     {
         $eventDispatcher = new EventDispatcher();
-        $eventDispatcher->addListener(AuthTokenRenewedEvent::class, function (AuthTokenRenewedEvent $event): void {
-            self::onAuthTokenRenewedEventListener($event);
+        $eventDispatcher->addListener(AuthTokenRenewedEvent::class, function (AuthTokenRenewedEvent $authTokenRenewedEvent): void {
+            self::onAuthTokenRenewedEventListener($authTokenRenewedEvent);
         });
         return $eventDispatcher;
     }
@@ -135,17 +140,16 @@ class Application
     /**
      * Event listener for when the authentication token is renewed.
      *
-     * @param AuthTokenRenewedEvent $event The event object containing the renewed authentication token.
-     * @return void
+     * @param AuthTokenRenewedEvent $authTokenRenewedEvent The event object containing the renewed authentication token.
      */
-    protected static function onAuthTokenRenewedEventListener(AuthTokenRenewedEvent $event): void
+    protected static function onAuthTokenRenewedEventListener(AuthTokenRenewedEvent $authTokenRenewedEvent): void
     {
         self::getLog()->debug('onAuthTokenRenewedEventListener.start', [
-            'expires' => $event->getRenewedToken()->authToken->expires
+            'expires' => $authTokenRenewedEvent->getRenewedToken()->authToken->expires
         ]);
 
         // save renewed auth token
-        self::getAuthRepository()->saveRenewedToken($event->getRenewedToken());
+        self::getAuthRepository()->saveRenewedToken($authTokenRenewedEvent->getRenewedToken());
 
         self::getLog()->debug('onAuthTokenRenewedEventListener.finish');
     }
@@ -162,7 +166,7 @@ class Application
     {
         self::getLog()->debug('getB24Service.start');
 
-        $sb = (new ServiceBuilderFactory(
+        return (new ServiceBuilderFactory(
             self::getEventDispatcher(),
             self::getLog()
         ))->init(
@@ -172,8 +176,6 @@ class Application
             self::getAuthRepository()->get()->getAuthToken(),
             self::getAuthRepository()->get()->getDomainUrl()
         );
-
-        return $sb;
     }
 
     /**
@@ -213,20 +215,19 @@ class Application
             $profile = ApplicationProfile::initFromArray($_ENV);
             self::getLog()->debug('getApplicationProfile.finish');
             return $profile;
-        } catch (InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException $invalidArgumentException) {
             self::getLog()->error('getApplicationProfile.error',
                 [
-                    'message' => sprintf('cannot read config from $_ENV: %s', $exception->getMessage()),
-                    'trace' => $exception->getTraceAsString()
+                    'message' => sprintf('cannot read config from $_ENV: %s', $invalidArgumentException->getMessage()),
+                    'trace' => $invalidArgumentException->getTraceAsString()
                 ]);
-            throw $exception;
+            throw $invalidArgumentException;
         }
     }
 
     /**
      * Loads configuration from the environment file.
      *
-     * @return void
      * @throws WrongConfigurationException if "symfony/dotenv" is not added as a Composer dependency.
      */
     private static function loadConfigFromEnvFile(): void
@@ -237,12 +238,12 @@ class Application
                 throw new WrongConfigurationException('You need to add "symfony/dotenv" as Composer dependencies.');
             }
 
-            $input = new ArgvInput();
-            if (null !== $env = $input->getParameterOption(['--env', '-e'], null, true)) {
+            $argvInput = new ArgvInput();
+            if (null !== $env = $argvInput->getParameterOption(['--env', '-e'], null, true)) {
                 putenv('APP_ENV=' . $_SERVER['APP_ENV'] = $_ENV['APP_ENV'] = $env);
             }
 
-            if ($input->hasParameterOption('--no-debug', true)) {
+            if ($argvInput->hasParameterOption('--no-debug', true)) {
                 putenv('APP_DEBUG=' . $_SERVER['APP_DEBUG'] = $_ENV['APP_DEBUG'] = '0');
             }
 

@@ -1,5 +1,5 @@
 /.idea*
-var/
+/var/*
 vendor
 config/auth.json
 composer.phar
