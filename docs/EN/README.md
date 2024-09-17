@@ -3,6 +3,9 @@ bitrix24-php-sdk documentation
 ## Basic necessary knowledge
 Full list of buzzwords, patterns and dependencies used in SDK.
 
+### Bitrix24
+- 
+
 ### PHP
 
 - [namespaces](https://www.php.net/manual/en/language.namespaces.php): Organize code into logical groups
@@ -26,6 +29,7 @@ Full list of buzzwords, patterns and dependencies used in SDK.
 - [composer](https://getcomposer.org/doc/): PHP dependency management tool
 - [make](https://www.gnu.org/software/make/manual/make.html): Automate build processes
 - [env-files](https://12factor.net/config): Store configuration in the environment
+- [yaml](https://learnxinyminutes.com/docs/yaml/): YAML is a data serialisation language designed to be directly writable and readable by humans.
 - [GitHub Actions](https://docs.github.com/en/actions): automate tasks throughout the software development lifecycle.
 - [ngrok](https://ngrok.com/use-cases/developer-preview): Share your local app without deploying
 - [PHP built-in web-server](https://www.php.net/manual/en/features.commandline.webserver.php): This web server is designed to aid application development. It may also be useful for testing purposes or for application demonstrations that are run in controlled environments.

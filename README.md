@@ -90,7 +90,7 @@ Performance improvements 🚀
 ## Documentation
 
 - [Bitrix24 API documentation - English](https://training.bitrix24.com/rest_help/)
-- [Internal documentation](docs/EN/documentation.md) for B24PhpSdk
+- [Internal documentation](docs/EN/README.md) for B24PhpSdk
 
 ## Requirements
 
