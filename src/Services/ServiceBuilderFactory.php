@@ -22,11 +22,13 @@ use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Services\Telephony\Events\TelephonyEventsFabric;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Bitrix24\SDK\Application\Requests\Events\ApplicationLifeCycleEventsFabric;
 
 class ServiceBuilderFactory
 {
@@ -124,6 +126,12 @@ class ServiceBuilderFactory
                 $batch,
                 $this->log
             ))->build(),
+            new EventsFabric(
+                [
+                    new ApplicationLifeCycleEventsFabric(),
+                    new TelephonyEventsFabric(),
+                ],
+                $this->log),
             $this->log
         );
     }

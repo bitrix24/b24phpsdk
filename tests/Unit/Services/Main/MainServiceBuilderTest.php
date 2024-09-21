@@ -13,28 +13,24 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Services\Main;
 
+use Bitrix24\SDK\Services\EventsFabric;
 use Bitrix24\SDK\Services\Main\MainServiceBuilder;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBatch;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBulkItemsReader;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullCore;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-/**
- * Class CRMServiceBuilderTest
- *
- * @package Bitrix24\SDK\Tests\Unit\Services\CRM
- */
-#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\Main\MainServiceBuilder::class)]
+#[CoversClass(MainServiceBuilder::class)]
 class MainServiceBuilderTest extends TestCase
 {
     private MainServiceBuilder $serviceBuilder;
 
     public function testGetMainService(): void
     {
-        $this->serviceBuilder->main();
-        $this::assertTrue(true);
+        $this::assertSame($this->serviceBuilder->main(), $this->serviceBuilder->main());
     }
 
     protected function setUp(): void
@@ -43,6 +39,7 @@ class MainServiceBuilderTest extends TestCase
             new NullCore(),
             new NullBatch(),
             new NullBulkItemsReader(),
+            new EventsFabric([], new NullLogger()),
             new NullLogger()
         ))->getMainScope();
     }

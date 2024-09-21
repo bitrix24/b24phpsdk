@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Services\IM;
 
+use Bitrix24\SDK\Services\EventsFabric;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBatch;
@@ -29,8 +30,7 @@ class IMServiceBuilderTest extends TestCase
 
     public function testGetIMService(): void
     {
-        $this->serviceBuilder->notify();
-        $this::assertTrue(true);
+        $this::assertSame($this->serviceBuilder->notify(), $this->serviceBuilder->notify());
     }
 
     protected function setUp(): void
@@ -40,6 +40,7 @@ class IMServiceBuilderTest extends TestCase
             new NullCore(),
             new NullBatch(),
             new NullBulkItemsReader(),
+            new EventsFabric([],new NullLogger()),
             new NullLogger()
         ))->getIMScope();
     }
