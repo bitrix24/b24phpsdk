@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\Telephony\Events;
 
 
-use Bitrix24\SDK\Application\Requests\Events\EventInterface;
+use Bitrix24\SDK\Core\Contracts\Events\EventInterface;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Services\Telephony\Events\OnExternalCallBackStart\OnExternalCallBackStart;
 use Bitrix24\SDK\Services\Telephony\Events\OnExternalCallStart\OnExternalCallStart;

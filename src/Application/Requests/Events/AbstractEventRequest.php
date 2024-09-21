@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Application\Requests\Events;
 
 use Bitrix24\SDK\Application\Requests\AbstractRequest;
 use Symfony\Component\HttpFoundation\Request;
+use Bitrix24\SDK\Core\Contracts\Events\EventInterface;
 
 abstract class AbstractEventRequest extends AbstractRequest implements EventInterface
 {

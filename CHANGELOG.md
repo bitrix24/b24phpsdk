@@ -31,6 +31,7 @@
 - Documentation: added section [Basic necessary knowledge](docs/EN/documentation.md) in SDK documentation
 
 ### Changed
+- ❗️moved interface `EventInterface` from `Bitrix24\SDK\Application\Requests\Events` to `Bitrix24\SDK\Core\Contracts\Events`
 - Changed order in expired_token case: 
   - old: get new auth token → repeat api-call → emit event `Bitrix24\SDK\Events\AuthTokenRenewedEvent` for store token
   - new: get new auth token → emit event `Bitrix24\SDK\Events\AuthTokenRenewedEvent` for store token → repeat api-call

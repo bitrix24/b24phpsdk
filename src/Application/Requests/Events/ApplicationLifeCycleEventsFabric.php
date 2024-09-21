@@ -17,6 +17,7 @@ namespace Bitrix24\SDK\Application\Requests\Events;
 use Bitrix24\SDK\Application\Requests\Events\OnApplicationInstall\OnApplicationInstall;
 use Bitrix24\SDK\Application\Requests\Events\OnApplicationUninstall\OnApplicationUninstall;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Contracts\Events\EventInterface;
 
 use Symfony\Component\HttpFoundation\Request;
 
