@@ -34,7 +34,6 @@ class ServiceBuilder extends AbstractServiceBuilder
         public CoreInterface               $core,
         protected BatchOperationsInterface $batch,
         protected BulkItemsReaderInterface $bulkItemsReader,
-        public readonly EventsFabric       $eventsFabric,
         protected LoggerInterface          $log)
     {
         parent::__construct($core, $batch, $bulkItemsReader, $log);

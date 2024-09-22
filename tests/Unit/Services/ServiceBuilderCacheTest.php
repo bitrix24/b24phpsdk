@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Services;
 
-use Bitrix24\SDK\Services\EventsFabric;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBatch;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBulkItemsReader;
@@ -83,7 +82,6 @@ class ServiceBuilderCacheTest extends TestCase
             new NullCore(),
             new NullBatch(),
             new NullBulkItemsReader(),
-            new EventsFabric([], new NullLogger()),
             new NullLogger()
         );
     }

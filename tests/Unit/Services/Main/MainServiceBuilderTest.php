@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Services\Main;
 
-use Bitrix24\SDK\Services\EventsFabric;
+use Bitrix24\SDK\Services\RemoteEventsFabric;
 use Bitrix24\SDK\Services\Main\MainServiceBuilder;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBatch;
@@ -39,7 +39,6 @@ class MainServiceBuilderTest extends TestCase
             new NullCore(),
             new NullBatch(),
             new NullBulkItemsReader(),
-            new EventsFabric([], new NullLogger()),
             new NullLogger()
         ))->getMainScope();
     }

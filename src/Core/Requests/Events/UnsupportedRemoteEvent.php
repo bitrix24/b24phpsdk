@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Core\Requests\Events;
 use Bitrix24\SDK\Application\Requests\Events\AbstractEventRequest;
 
 /**
- * The UnsupportedEvent class is a concrete implementation of the AbstractEventRequest class.
+ * The UnsupportedRemoteEvent class is a concrete implementation of the AbstractEventRequest class.
  *
  * This class represents an unsupported event request in the system. It is used when an unsupported
  * event is encountered during processing.
@@ -25,6 +25,6 @@ use Bitrix24\SDK\Application\Requests\Events\AbstractEventRequest;
  *
  * @see AbstractEventRequest
  */
-class UnsupportedEvent extends AbstractEventRequest
+class UnsupportedRemoteEvent extends AbstractEventRequest
 {
 }

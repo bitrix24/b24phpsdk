@@ -14,12 +14,14 @@
 
 ### Added
 
+- Added class `Bitrix24\SDK\Services\RemoteEventsFabric` for simple work with builtin Bitrix24 events. You can create
+  Bitrix24 events from `Symfony\Component\HttpFoundation\Request` object. If event is not supported in SDK, fabric will
+  create `Bitrix24\SDK\Core\Requests\Events\UnsupportedRemoteEvent` with generic interface
+  `Bitrix24\SDK\Core\Contracts\Events\EventInterface` without typehints.
 - Added method `Bitrix24\SDK\Services\ServiceBuilderFactory::createServiceBuilderFromWebhook` for simple work with
   webhook, see [add super-simple kick-off guide](https://github.com/bitrix24/b24phpsdk/issues/17).
 - Added method `Bitrix24\SDK\Services\ServiceBuilderFactory::createServiceBuilderFromPlacementRequest` for simple work
   with placement request, see [add super-simple kick-off guide](https://github.com/bitrix24/b24phpsdk/issues/17).
-- Added `Bitrix24\SDK\Services\EventsFabric::createEvent` for simple work with builtin Bitrix24 events. You can create
-  Bitrix24 events from `Symfony\Component\HttpFoundation\Request` object.
 - Added `Bitrix24\SDK\Core\Contracts\Events\EventsFabricInterface` for scope-based event fabrics.
 - Added `Bitrix24\SDK\Core\Requests\Events\UnsupportedEvent` as a default event container object for unsupported in SDK
   Bitrix24 events.
