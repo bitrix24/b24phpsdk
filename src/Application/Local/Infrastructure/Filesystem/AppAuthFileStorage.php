@@ -42,10 +42,11 @@ readonly class AppAuthFileStorage implements LocalAppAuthRepositoryInterface
             $this->logger->debug('AppAuthFileStorage.getApplicationToken.fileNotFound');
             return null;
         }
-        $appAuth = $this->getPayload();
+
+        $localAppAuth = $this->getPayload();
         $this->logger->debug('AppAuthFileStorage.getApplicationToken.finish');
 
-        return $appAuth->getApplicationToken();
+        return $localAppAuth->getApplicationToken();
     }
 
     /**
@@ -65,10 +66,11 @@ readonly class AppAuthFileStorage implements LocalAppAuthRepositoryInterface
         if (!$this->filesystem->exists($this->authFileName)) {
             throw new FileNotFoundException(sprintf('file «%s» with stored access token not found', $this->authFileName));
         }
-        $appAuthPayload = $this->getPayload();
+
+        $localAppAuth = $this->getPayload();
         $this->logger->debug('AppAuthFileStorage.getAuth.finish');
 
-        return $appAuthPayload;
+        return $localAppAuth;
     }
 
     private function getPayload(): LocalAppAuth
@@ -78,6 +80,7 @@ readonly class AppAuthFileStorage implements LocalAppAuthRepositoryInterface
         if ($appAuthPayload === null) {
             throw new InvalidArgumentException('local app auth is empty');
         }
+
         return LocalAppAuth::initFromArray($appAuthPayload);
     }
 
