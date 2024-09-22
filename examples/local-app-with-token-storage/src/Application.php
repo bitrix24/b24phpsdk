@@ -69,6 +69,7 @@ class Application
             if ($placementRequest->getRequest()->getBaseUrl() === '/install.php') {
                 self::processOnInstallPlacementRequest($placementRequest);
             }
+
             // todo process other placement request
 
         } elseif (RemoteEventsFabric::isCanProcess($incomingRequest)) {
@@ -83,6 +84,7 @@ class Application
             ]);
             self::processRemoteEvents($event);
         }
+
         self::getLog()->debug('processRequest.finish');
 
         return new Response('OK', 200);
@@ -122,8 +124,6 @@ class Application
     /**
      * Process first request (installation) on default placement
      *
-     * @param PlacementRequest $placementRequest
-     * @return void
      * @throws InvalidArgumentException
      * @throws UnknownScopeCodeException
      * @throws WrongConfigurationException
@@ -245,8 +245,6 @@ class Application
     }
 
     /**
-     * @param Request|null $request
-     * @return ServiceBuilder
      * @throws InvalidArgumentException
      * @throws UnknownScopeCodeException
      * @throws WrongConfigurationException
