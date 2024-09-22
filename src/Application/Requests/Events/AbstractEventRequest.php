@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Application\Requests\Events;
 
 use Bitrix24\SDK\Application\Requests\AbstractRequest;
 use Symfony\Component\HttpFoundation\Request;
+use Bitrix24\SDK\Core\Contracts\Events\EventInterface;
 
 abstract class AbstractEventRequest extends AbstractRequest implements EventInterface
 {
@@ -24,7 +25,7 @@ abstract class AbstractEventRequest extends AbstractRequest implements EventInte
 
     protected array $eventPayload;
 
-    protected int $eventId;
+    protected ?int $eventId;
 
     public function __construct(Request $request)
     {
@@ -32,13 +33,12 @@ abstract class AbstractEventRequest extends AbstractRequest implements EventInte
         $payload = [];
         parse_str($request->getContent(), $payload);
         $this->eventPayload = $payload;
-
         $this->eventCode = $this->eventPayload['event'];
         $this->timestamp = (int)$this->eventPayload['ts'];
-        $this->eventId = (int)$this->eventPayload['event_id'];
+        $this->eventId = array_key_exists('event_id', $this->eventPayload) ? (int)$this->eventPayload['event_id'] : null;
     }
 
-    public function getEventId(): int
+    public function getEventId(): ?int
     {
         return $this->eventId;
     }

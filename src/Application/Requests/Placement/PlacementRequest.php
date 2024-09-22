@@ -90,7 +90,6 @@ class PlacementRequest extends AbstractRequest
         return $this->code;
     }
 
-
     public function getPlacementOptions(): array
     {
         return $this->placementOptions;
@@ -102,9 +101,20 @@ class PlacementRequest extends AbstractRequest
         return $this->domainUrl;
     }
 
-
     public function getLanguageCode(): string
     {
         return $this->languageCode;
+    }
+
+    /**
+     * Checks if the provided request can be processed.
+     *
+     * @param Request $request The request object.
+     *
+     * @return bool Returns true if the request can be processed, false otherwise.
+     */
+    public static function isCanProcess(Request $request): bool
+    {
+        return $request->request->get('PLACEMENT') !== null;
     }
 }

@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services;
 
+use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
+use Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface;
+use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Services\Catalog\CatalogServiceBuilder;
 use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
@@ -23,9 +26,19 @@ use Bitrix24\SDK\Services\User\UserServiceBuilder;
 use Bitrix24\SDK\Services\UserConsent\UserConsentServiceBuilder;
 use Bitrix24\SDK\Services\Placement\PlacementServiceBuilder;
 use Bitrix24\SDK\Services\Workflows\WorkflowsServiceBuilder;
+use Psr\Log\LoggerInterface;
 
 class ServiceBuilder extends AbstractServiceBuilder
 {
+    public function __construct(
+        public CoreInterface               $core,
+        protected BatchOperationsInterface $batch,
+        protected BulkItemsReaderInterface $bulkItemsReader,
+        protected LoggerInterface          $log)
+    {
+        parent::__construct($core, $batch, $bulkItemsReader, $log);
+    }
+
     public function getCRMScope(): CRMServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {

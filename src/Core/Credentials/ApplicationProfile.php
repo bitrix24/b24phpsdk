@@ -26,12 +26,26 @@ readonly class ApplicationProfile
 
     /**
      * ApplicationProfile constructor.
+     * @throws InvalidArgumentException
      */
     public function __construct(
+        /**
+         * @var non-empty-string $clientId
+         */
         public string $clientId,
+        /**
+         * @var non-empty-string $clientSecret
+         */
         public string $clientSecret,
         public Scope  $scope)
     {
+        if (trim($clientId) === '') {
+            throw new InvalidArgumentException('clientId cannot be empty');
+        }
+
+        if (trim($clientSecret) === '') {
+            throw new InvalidArgumentException('clientSecret cannot be empty');
+        }
     }
 
     /**
@@ -48,6 +62,7 @@ readonly class ApplicationProfile
      */
     public static function initFromArray(array $appProfile): self
     {
+        // check array keys
         if (!array_key_exists(self::BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID, $appProfile)) {
             throw new InvalidArgumentException(sprintf('in array key %s not found', self::BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID));
         }
@@ -58,6 +73,16 @@ readonly class ApplicationProfile
 
         if (!array_key_exists(self::BITRIX24_PHP_SDK_APPLICATION_SCOPE, $appProfile)) {
             throw new InvalidArgumentException(sprintf('in array key %s not found', self::BITRIX24_PHP_SDK_APPLICATION_SCOPE));
+        }
+
+        // check array on non-empty values
+        $appProfile = array_map('trim', $appProfile);
+        if ($appProfile[self::BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID] === '') {
+            throw new InvalidArgumentException(sprintf('in array key %s cannot be empty', self::BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID));
+        }
+
+        if ($appProfile[self::BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET] === '') {
+            throw new InvalidArgumentException(sprintf('in array key %s cannot be empty', self::BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET));
         }
 
         return new self(

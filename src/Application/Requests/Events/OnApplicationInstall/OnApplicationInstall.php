@@ -17,6 +17,8 @@ use Bitrix24\SDK\Application\Requests\Events\AbstractEventRequest;
 
 class OnApplicationInstall extends AbstractEventRequest
 {
+    public const CODE = 'ONAPPINSTALL';
+
     public function getApplicationData(): ApplicationData
     {
         return new ApplicationData($this->eventPayload['data']);

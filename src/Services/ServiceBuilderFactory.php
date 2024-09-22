@@ -64,7 +64,7 @@ class ServiceBuilderFactory
     }
 
     /**
-     * Init service builder from request
+     * Init service builder
      *
      * @param ApplicationProfile $applicationProfile
      * @param AuthToken $authToken
@@ -73,7 +73,7 @@ class ServiceBuilderFactory
      * @return ServiceBuilder
      * @throws InvalidArgumentException
      */
-    public function initFromRequest(
+    public function init(
         ApplicationProfile $applicationProfile,
         AuthToken          $authToken,
         string             $bitrix24DomainUrl
@@ -167,8 +167,8 @@ class ServiceBuilderFactory
         ?LoggerInterface          $logger = null
     ): ServiceBuilder
     {
-        if (!array_key_exists('DOMAIN', $placementRequest->query->keys())) {
-            throw new InvalidArgumentException('key «DOMAIN» not found in request');
+        if (!in_array('DOMAIN', $placementRequest->query->keys(), true)) {
+            throw new InvalidArgumentException('key «DOMAIN» not found in GET request arguments');
         }
 
         $rawDomainUrl = trim((string)$placementRequest->query->get('DOMAIN'));
@@ -184,7 +184,7 @@ class ServiceBuilderFactory
         }
 
         return (new ServiceBuilderFactory($eventDispatcher, $logger))
-            ->initFromRequest(
+            ->init(
                 $applicationProfile,
                 AuthToken::initFromPlacementRequest($placementRequest),
                 $rawDomainUrl
