@@ -9,6 +9,9 @@
       "email": "mesilov.maxim@gmail.com"
     }
   ],
+  "config": {
+    "sort-packages": true
+  },
   "require": {
     "bitrix24/b24phpsdk": "dev-feature/29-add-examples-for-store-tokens",
     "monolog/monolog": "^3",
@@ -20,7 +23,7 @@
   "require-dev": {
     "phpstan/phpstan": "1.11.7",
     "rector/rector": "^1",
-    "roave/security-advisories": "dev-master"
+    "roave/security-advisories": "dev-latest"
   },
   "autoload": {
     "psr-4": {

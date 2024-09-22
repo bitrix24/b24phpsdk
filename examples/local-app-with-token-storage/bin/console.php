@@ -12,7 +12,7 @@ use Symfony\Component\Console\SingleCommandApplication;
         Application::getLog()->debug('cliCommand.start');
         try {
             $output->writeln(['<info>Example CLI application</info>','']);
-            $output->writeln('Try to connect to bitrix24 with local application credentials and call method «server.time»...');
+            $output->writeln('Try to connect to bitrix24 with credentials stored in «config/auth.json.local» and call method «server.time»...');
 
             // get auth data stored in file and call bitrix24 rest api
             $sb = Application::getB24Service();

@@ -16,12 +16,19 @@ namespace App;
 use Bitrix24\SDK\Application\Local\Entity\LocalAppAuth;
 use Bitrix24\SDK\Application\Local\Infrastructure\Filesystem\AppAuthFileStorage;
 use Bitrix24\SDK\Application\Local\Repository\LocalAppAuthRepositoryInterface;
-use Bitrix24\SDK\Application\Requests\Events\ApplicationLifeCycleEventsFabric;
+use Bitrix24\SDK\Application\Requests\Events\OnApplicationInstall\OnApplicationInstall;
+use Bitrix24\SDK\Application\Requests\Events\OnApplicationUninstall\OnApplicationUninstall;
+use Bitrix24\SDK\Application\Requests\Placement\PlacementRequest;
+use Bitrix24\SDK\Core\Contracts\Events\EventInterface;
 use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
+use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException;
 use Bitrix24\SDK\Core\Exceptions\WrongConfigurationException;
 use Bitrix24\SDK\Events\AuthTokenRenewedEvent;
+use Bitrix24\SDK\Services\Main\Common\EventHandlerMetadata;
+use Bitrix24\SDK\Services\RemoteEventsFabric;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
 use Monolog\Handler\RotatingFileHandler;
@@ -43,54 +50,137 @@ class Application
 
     private const LOG_FILE_NAME = '/var/log/application.log';
 
-    public static function processEvents(Request $incomingRequest): Response
+    public static function processRequest(Request $incomingRequest): Response
     {
-        self::getLog()->debug('processEvents.start', ['request' => $incomingRequest->request->all()]);
+        self::getLog()->debug('processRequest.start', [
+            'request' => $incomingRequest->request->all(),
+            'baseUrl' => $incomingRequest->getBaseUrl(),
+        ]);
+        // it can be
+        // - incoming request when placement or custom type in userfield loaded
+        // - incoming event request on install.php when lical app without UI
+        if (PlacementRequest::isCanProcess($incomingRequest)) {
+            self::getLog()->debug('processRequest.placementRequest', [
+                'request' => $incomingRequest->request->all()
+            ]);
+            $placementRequest = new PlacementRequest($incomingRequest);
 
-        $response = new Response();
-        try {
-            // todo create global event fabric
-            $event = (new ApplicationLifeCycleEventsFabric())->create($incomingRequest);
-            if (!$event instanceof \Bitrix24\SDK\Application\Requests\Events\EventInterface) {
-                throw new InvalidArgumentException('unknown event');
+            // is install url?
+            if ($placementRequest->getRequest()->getBaseUrl() === '/install.php') {
+                self::processOnInstallPlacementRequest($placementRequest);
             }
+            // todo process other placement request
 
-            self::getLog()->debug('event.received', [
+        } elseif (RemoteEventsFabric::isCanProcess($incomingRequest)) {
+            self::getLog()->debug('processRequest.b24EventRequest');
+
+            // process event request
+            $event = RemoteEventsFabric::init(self::getLog())->createEvent($incomingRequest);
+            self::getLog()->debug('processRequest.eventRequest', [
+                'eventClassName' => $event::class,
                 'eventCode' => $event->getEventCode(),
-                'eventPayload' => $event->getEventPayload()
+                'eventPayload' => $event->getEventPayload(),
             ]);
+            self::processRemoteEvents($event);
+        }
+        self::getLog()->debug('processRequest.finish');
 
-            switch ($event->getEventCode()) {
-                case 'ONAPPINSTALL':
-                    // save auth tokens and application token
-                    self::getAuthRepository()->save(
-                        new LocalAppAuth(
-                            $event->getAuth()->authToken,
-                            $event->getAuth()->domain,
-                            $event->getAuth()->application_token
-                        )
-                    );
-                    break;
-                case 'OTHER_EVENT_CODE':
+        return new Response('OK', 200);
+    }
+
+    protected static function processRemoteEvents(EventInterface $b24Event): void
+    {
+        self::getLog()->debug('processRemoteEvents.start', [
+            'event_code' => $b24Event->getEventCode(),
+            'event_classname' => $b24Event::class,
+            'event_payload' => $b24Event->getEventPayload()
+        ]);
+
+        switch ($b24Event->getEventCode()) {
+            case OnApplicationInstall::CODE:
+                self::getLog()->debug('processRemoteEvents.onApplicationInstall');
+
+                // save auth tokens and application token
+                self::getAuthRepository()->save(
+                    new LocalAppAuth(
+                        $b24Event->getAuth()->authToken,
+                        $b24Event->getAuth()->domain,
+                        $b24Event->getAuth()->application_token
+                    )
+                );
+                break;
+            case 'OTHER_EVENT_CODE':
 
 
-                    // add your event handler code
-                    break;
-            }
-
-            $response->setContent('OK');
-        } catch (\Throwable $throwable) {
-            self::getLog()->error('processEvents.error', [
-                'message' => $throwable->getMessage(),
-                'trace' => $throwable->getTraceAsString(),
-                'event_payload' => $incomingRequest->request->all()
-            ]);
-
-            $response->setStatusCode(500);
-            $response->setContent($throwable->getMessage());
+                // add your event handler code
+                break;
         }
 
-        return $response;
+        self::getLog()->debug('processRemoteEvents.finish');
+    }
+
+    /**
+     * Process first request (installation) on default placement
+     *
+     * @param PlacementRequest $placementRequest
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws UnknownScopeCodeException
+     * @throws WrongConfigurationException
+     * @throws BaseException
+     * @throws TransportException
+     */
+    protected static function processOnInstallPlacementRequest(PlacementRequest $placementRequest): void
+    {
+        self::getLog()->debug('processRequest.processOnInstallPlacementRequest.start');
+
+        $currentB24UserId = self::getB24Service($placementRequest->getRequest())
+            ->getMainScope()
+            ->main()
+            ->getCurrentUserProfile()
+            ->getUserProfile()
+            ->ID;
+
+        $eventHandlerUrl = sprintf('https://%s/event-handler.php', $placementRequest->getRequest()->server->get('HTTP_HOST'));
+        self::getLog()->debug('processRequest.processOnInstallPlacementRequest.startBindEventHandlers', [
+            'eventHandlerUrl' => $eventHandlerUrl
+        ]);
+
+        // register application lifecycle event handlers
+        self::getB24Service($placementRequest->getRequest())->getMainScope()->eventManager()->bindEventHandlers(
+            [
+                // register event handlers for implemented in SDK events
+                new EventHandlerMetadata(
+                    OnApplicationInstall::CODE,
+                    $eventHandlerUrl,
+                    $currentB24UserId
+                ),
+                new EventHandlerMetadata(
+                    OnApplicationUninstall::CODE,
+                    $eventHandlerUrl,
+                    $currentB24UserId,
+                ),
+
+                // register not implemented in SDK event
+                new EventHandlerMetadata(
+                    'ONCRMCONTACTADD',
+                    $eventHandlerUrl,
+                    $currentB24UserId,
+                ),
+            ]
+        );
+        self::getLog()->debug('processRequest.processOnInstallPlacementRequest.finishBindEventHandlers');
+
+        // save admin auth token without application_token key
+        // they will arrive at OnApplicationInstall event
+        self::getAuthRepository()->save(
+            new LocalAppAuth(
+                $placementRequest->getAccessToken(),
+                $placementRequest->getDomainUrl(),
+                null
+            )
+        );
+        self::getLog()->debug('processRequest.processOnInstallPlacementRequest.finish');
     }
 
     /**
@@ -155,17 +245,27 @@ class Application
     }
 
     /**
-     * Retrieves an instance of the B24Service.
-     *
-     * @return ServiceBuilder The B24Service instance.
+     * @param Request|null $request
+     * @return ServiceBuilder
      * @throws InvalidArgumentException
      * @throws UnknownScopeCodeException
      * @throws WrongConfigurationException
      */
-    public static function getB24Service(): ServiceBuilder
+    public static function getB24Service(?Request $request = null): ServiceBuilder
     {
-        self::getLog()->debug('getB24Service.start');
+        // init bitrix24 service builder auth data from request
+        if ($request instanceof Request) {
+            self::getLog()->debug('getB24Service.authFromRequest');
+            return ServiceBuilderFactory::createServiceBuilderFromPlacementRequest(
+                $request,
+                self::getApplicationProfile(),
+                self::getEventDispatcher(),
+                self::getLog(),
+            );
+        }
 
+        // init bitrix24 service builder auth data from saved auth token
+        self::getLog()->debug('getB24Service.authFromAuthRepositoryStorage');
         return (new ServiceBuilderFactory(
             self::getEventDispatcher(),
             self::getLog()

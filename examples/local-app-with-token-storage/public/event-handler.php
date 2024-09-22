@@ -20,6 +20,6 @@ require_once dirname(__DIR__). '/vendor/autoload.php';
 $incomingRequest = Request::createFromGlobals();
 Application::getLog()->debug('event-handler.init', ['request' => $incomingRequest->request->all(), 'query' => $incomingRequest->query->all()]);
 
-//try to process incoming events and send processing result to response
-Application::processEvents($incomingRequest)->send();
+//try to process incoming requests and send processing result to response
+Application::processRequest($incomingRequest)->send();;
 

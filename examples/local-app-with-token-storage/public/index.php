@@ -26,5 +26,5 @@ Application::getLog()->debug('index.init', ['request' => $incomingRequest->reque
 </pre>
 <?php
 
-// todo try work with app
+//  try work with app
 

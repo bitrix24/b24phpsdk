@@ -20,7 +20,7 @@ require_once dirname(__DIR__). '/vendor/autoload.php';
 $incomingRequest = Request::createFromGlobals();
 Application::getLog()->debug('install.init', ['request' => $incomingRequest->request->all(), 'query' => $incomingRequest->query->all()]);
 // try to process ONAPPINSTALL event
-Application::processEvents($incomingRequest)->send();
+Application::processRequest($incomingRequest)->send();
 ?>
 <pre>
     Application installation started, tokens from Bitrix24:
