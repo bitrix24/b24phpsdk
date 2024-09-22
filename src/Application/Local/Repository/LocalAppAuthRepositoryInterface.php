@@ -18,9 +18,23 @@ use Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken;
 
 interface LocalAppAuthRepositoryInterface
 {
-    public function get(): LocalAppAuth;
+    /**
+     * Get stored auth tokens from repository
+     */
+    public function getAuth(): LocalAppAuth;
 
+    /**
+     * Get application_token for check security signature for events
+     */
+    public function getApplicationToken(): ?string;
+
+    /**
+     * Save renewed access token and refresh token
+     */
     public function saveRenewedToken(RenewedAuthToken $renewedAuthToken): void;
 
+    /**
+     * Save new auth token
+     */
     public function save(LocalAppAuth $localAppAuth): void;
 }

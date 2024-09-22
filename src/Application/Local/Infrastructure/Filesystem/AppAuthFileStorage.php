@@ -32,6 +32,22 @@ readonly class AppAuthFileStorage implements LocalAppAuthRepositoryInterface
     {
     }
 
+    public function getApplicationToken(): ?string
+    {
+        $this->logger->debug('AppAuthFileStorage.getApplicationToken.start', [
+            'authFileName' => $this->authFileName
+        ]);
+
+        if (!$this->filesystem->exists($this->authFileName)) {
+            $this->logger->debug('AppAuthFileStorage.getApplicationToken.fileNotFound');
+            return null;
+        }
+        $appAuth = $this->getPayload();
+        $this->logger->debug('AppAuthFileStorage.getApplicationToken.finish');
+
+        return $appAuth->getApplicationToken();
+    }
+
     /**
      * Retrieves the local app authentication details.
      *
@@ -40,26 +56,29 @@ readonly class AppAuthFileStorage implements LocalAppAuthRepositoryInterface
      * If the file does not exist, it throws a FileNotFoundException indicating that the file with the stored access token was not found.
      * If the file exists, it reads the contents of the file and decodes it using JSON.
      **/
-    public function get(): LocalAppAuth
+    public function getAuth(): LocalAppAuth
     {
-        $this->logger->debug('AppAuthFileStorage.get.start', [
+        $this->logger->debug('AppAuthFileStorage.getAuth.start', [
             'authFileName' => $this->authFileName
         ]);
 
         if (!$this->filesystem->exists($this->authFileName)) {
             throw new FileNotFoundException(sprintf('file «%s» with stored access token not found', $this->authFileName));
         }
+        $appAuthPayload = $this->getPayload();
+        $this->logger->debug('AppAuthFileStorage.getAuth.finish');
 
+        return $appAuthPayload;
+    }
+
+    private function getPayload(): LocalAppAuth
+    {
         $payload = file_get_contents($this->authFileName);
         $appAuthPayload = json_decode($payload, true, 512, JSON_THROW_ON_ERROR);
         if ($appAuthPayload === null) {
             throw new InvalidArgumentException('local app auth is empty');
         }
-
-        $appAuthPayload = LocalAppAuth::initFromArray($appAuthPayload);
-        $this->logger->debug('AppAuthFileStorage.get.finish');
-
-        return $appAuthPayload;
+        return LocalAppAuth::initFromArray($appAuthPayload);
     }
 
     /**
@@ -74,7 +93,7 @@ readonly class AppAuthFileStorage implements LocalAppAuthRepositoryInterface
     public function saveRenewedToken(RenewedAuthToken $renewedAuthToken): void
     {
         $this->logger->debug('AppAuthFileStorage.saveRenewedToken.start');
-        $localAppAuth = $this->get();
+        $localAppAuth = $this->getAuth();
         $localAppAuth->updateAuthToken($renewedAuthToken->authToken);
 
         $this->save($localAppAuth);

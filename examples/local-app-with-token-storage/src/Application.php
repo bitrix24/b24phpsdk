@@ -77,9 +77,9 @@ class Application
 
             // get application_token for check event security signature
             // see https://apidocs.bitrix24.com/api-reference/events/safe-event-handlers.html
-            // on first lifecycle event OnApplicationInstall application token is null
+            // on first lifecycle event OnApplicationInstall application token is null and file with auth data doesn't exists
             // we save application_token and all next events will be validated security signature
-            $applicationToken = self::getAuthRepository()->get()->getApplicationToken();
+            $applicationToken = self::getAuthRepository()->getApplicationToken();
             $event = RemoteEventsFabric::init(self::getLog())->createEvent($incomingRequest, $applicationToken);
             self::getLog()->debug('processRequest.eventRequest', [
                 'eventClassName' => $event::class,
@@ -286,8 +286,8 @@ class Application
         // load app profile from /config/.env.local to $_ENV and create ApplicationProfile object
             self::getApplicationProfile(),
             // load oauth tokens and portal URL stored in /config/auth.json.local to LocalAppAuth object
-            self::getAuthRepository()->get()->getAuthToken(),
-            self::getAuthRepository()->get()->getDomainUrl()
+            self::getAuthRepository()->getAuth()->getAuthToken(),
+            self::getAuthRepository()->getAuth()->getDomainUrl()
         );
     }
 
