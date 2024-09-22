@@ -17,7 +17,8 @@
 - Added class `Bitrix24\SDK\Services\RemoteEventsFabric` for simple work with builtin Bitrix24 events. You can create
   Bitrix24 events from `Symfony\Component\HttpFoundation\Request` object. If event is not supported in SDK, fabric will
   create `Bitrix24\SDK\Core\Requests\Events\UnsupportedRemoteEvent` with generic interface
-  `Bitrix24\SDK\Core\Contracts\Events\EventInterface` without typehints.
+  `Bitrix24\SDK\Core\Contracts\Events\EventInterface` without typehints. Every event checked with valid
+  `application_token` signature.
 - Added method `Bitrix24\SDK\Services\ServiceBuilderFactory::createServiceBuilderFromWebhook` for simple work with
   webhook, see [add super-simple kick-off guide](https://github.com/bitrix24/b24phpsdk/issues/17).
 - Added method `Bitrix24\SDK\Services\ServiceBuilderFactory::createServiceBuilderFromPlacementRequest` for simple work
@@ -26,14 +27,18 @@
 - Added `Bitrix24\SDK\Core\Requests\Events\UnsupportedEvent` as a default event container object for unsupported in SDK
   Bitrix24 events.
 - Added helpers for build local application in namespace `Bitrix24\SDK\Application\Local`:
-    - `Local\Entity\LocalAppAuth`: auth data for local application. Contains: `AuthToken`, domainUrl and
-      applicationToken.
+    - `Local\Entity\LocalAppAuth`: auth data for local application. Contains: `AuthToken`, `domainUrl` and
+      `applicationToken`.
     - `Local\Infrastructure\Filesystem\AppAuthFileStorage`: class for store LocalAppAuth in file
     - `Local\Repository\LocalAppAuthRepositoryInterface`: interface for LocalAppAuthRepository.
-- Added example `/examples/local-app-with-token-storage` for demonstrate all options for work with SDK and created local application skeleton.
+- Added example `/examples/local-app-with-token-storage` for demonstrate all options for work with SDK and created local
+  application skeleton.
 - Added `WrongClientException` for handle errors with wrong application client configuration.
 - Added `PaymentRequiredException` for handle errors with expired subscription.
 - Added `WrongConfigurationException` for handle errors with wrong application infrastructure configuration.
+- Added `WrongSecuritySignatureException` for handle errors
+  with [wrong signature events](https://apidocs.bitrix24.com/api-reference/events/safe-event-handlers.html) with
+  `application_token`.
 - Added checks for empty string in args for constructor `Bitrix24\SDK\Core\Credentials\ApplicationProfile`
 - Added checks for empty string in args for constructor `Bitrix24\SDK\Core\Credentials\ApplicationProfile`
 - Added class `Bitrix24\SDK\Application\Requests\Events\ApplicationLifeCycleEventsFabric`
