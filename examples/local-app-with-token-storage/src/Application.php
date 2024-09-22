@@ -97,8 +97,6 @@ class Application
     /**
      * Process remote bitrix24 events
      *
-     * @param EventInterface $b24Event
-     * @return void
      * @throws InvalidArgumentException
      * @throws WrongConfigurationException
      */
