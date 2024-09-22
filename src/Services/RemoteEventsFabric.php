@@ -48,7 +48,7 @@ readonly class RemoteEventsFabric
      * @param Request $request
      * @return bool
      */
-    public function isCanProcess(Request $request): bool
+    public static function isCanProcess(Request $request): bool
     {
         $payload = [];
         parse_str($request->getContent(), $payload);
