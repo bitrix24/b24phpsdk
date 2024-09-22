@@ -75,8 +75,12 @@ class Application
         } elseif (RemoteEventsFabric::isCanProcess($incomingRequest)) {
             self::getLog()->debug('processRequest.b24EventRequest');
 
-            // process event request
-            $event = RemoteEventsFabric::init(self::getLog())->createEvent($incomingRequest);
+            // get application_token for check event security signature
+            // see https://apidocs.bitrix24.com/api-reference/events/safe-event-handlers.html
+            // on first lifecycle event OnApplicationInstall application token is null
+            // we save application_token and all next events will be validated security signature
+            $applicationToken = self::getAuthRepository()->get()->getApplicationToken();
+            $event = RemoteEventsFabric::init(self::getLog())->createEvent($incomingRequest, $applicationToken);
             self::getLog()->debug('processRequest.eventRequest', [
                 'eventClassName' => $event::class,
                 'eventCode' => $event->getEventCode(),
@@ -90,6 +94,14 @@ class Application
         return new Response('OK', 200);
     }
 
+    /**
+     * Process remote bitrix24 events
+     *
+     * @param EventInterface $b24Event
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws WrongConfigurationException
+     */
     protected static function processRemoteEvents(EventInterface $b24Event): void
     {
         self::getLog()->debug('processRemoteEvents.start', [
@@ -112,9 +124,14 @@ class Application
                 );
                 break;
             case 'OTHER_EVENT_CODE':
-
-
                 // add your event handler code
+                break;
+            default:
+                self::getLog()->warning('processRemoteEvents.unknownEvent', [
+                    'event_code' => $b24Event->getEventCode(),
+                    'event_classname' => $b24Event::class,
+                    'event_payload' => $b24Event->getEventPayload()
+                ]);
                 break;
         }
 
