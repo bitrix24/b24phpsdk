@@ -18,6 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\MethodNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\OperationTimeLimitExceededException;
+use Bitrix24\SDK\Core\Exceptions\PaymentRequiredException;
 use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\UserNotFoundOrIsNotActiveException;
 use Bitrix24\SDK\Core\Exceptions\WrongAuthTypeException;
@@ -57,6 +58,11 @@ class ApiLevelErrorHandler
     {
         // single query error response
         if (array_key_exists(self::ERROR_KEY, $responseBody) && array_key_exists(self::ERROR_DESCRIPTION_KEY, $responseBody)) {
+            $this->handleError($responseBody);
+        }
+
+        // error in refresh token request
+        if (array_key_exists(self::ERROR_KEY, $responseBody) && !array_key_exists(self::RESULT_KEY, $responseBody)) {
             $this->handleError($responseBody);
         }
 
@@ -115,7 +121,6 @@ class ApiLevelErrorHandler
         // ERROR_METHOD_NOT_FOUND
         // INVALID_TOKEN
         // INVALID_GRANT
-        // PAYMENT_REQUIRED
         // NO_AUTH_FOUND
         // INSUFFICIENT_SCOPE
 
@@ -141,6 +146,8 @@ class ApiLevelErrorHandler
                 throw new UserNotFoundOrIsNotActiveException(sprintf('%s - %s', $errorCode, $errorDescription));
             case 'wrong_auth_type':
                 throw new WrongAuthTypeException(sprintf('%s - %s', $errorCode, $errorDescription));
+            case 'payment_required':
+                throw new PaymentRequiredException(sprintf('%s - %s', $errorCode, $errorDescription));
             case 'wrong_client':
                 throw new WrongClientException(sprintf('%s - %s', $errorCode, $errorDescription));
             default:

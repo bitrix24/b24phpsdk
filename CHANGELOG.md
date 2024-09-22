@@ -10,7 +10,7 @@
 ### Security
 -->
 
-## 1.1.0 – 2024.09.15
+## 1.1.0 – 2024.09.22
 
 ### Added
 
@@ -30,6 +30,7 @@
     - `Local\Repository\LocalAppAuthRepositoryInterface`: interface for LocalAppAuthRepository.
 - Added example `/examples/local-app-with-token-storage` for demonstrate all options for work with SDK.
 - Added `WrongClientException` for handle errors with wrong application client configuration.
+- Added `PaymentRequiredException` for handle errors with expired subscription.
 - Added `WrongConfigurationException` for handle errors with wrong application infrastructure configuration.
 - Added checks for empty string in args for constructor `Bitrix24\SDK\Core\Credentials\ApplicationProfile`
 - Added checks for empty string in args for constructor `Bitrix24\SDK\Core\Credentials\ApplicationProfile`
@@ -60,6 +61,7 @@
 
 - Fixed variable names in `Bitrix24\SDK\Services\ServiceBuilderFactory::initFromRequest`,
   see [wrong variable name](https://github.com/bitrix24/b24phpsdk/issues/30).
+- Fixed some corner cases in `Bitrix24\SDK\Core\ApiLevelErrorHandler`
 
 <!--
 ### Deprecated
