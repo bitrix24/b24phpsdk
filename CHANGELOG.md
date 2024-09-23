@@ -43,6 +43,7 @@
 - Added checks for empty string in args for constructor `Bitrix24\SDK\Core\Credentials\ApplicationProfile`
 - Added class `Bitrix24\SDK\Application\Requests\Events\ApplicationLifeCycleEventsFabric`
 - Documentation: added section [Basic necessary knowledge](docs/EN/documentation.md) in [SDK documentation](https://github.com/bitrix24/b24phpsdk/issues/35)
+- Documentation: added section [Call unsupported methods in SDK](docs/EN/documentation.md) in [SDK documentation](https://github.com/bitrix24/b24phpsdk/issues/15)
 
 ### Changed
 
