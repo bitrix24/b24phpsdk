@@ -10,7 +10,7 @@
 ### Security
 -->
 
-## 1.1.0 – 2024.09.22
+## 1.1.0 – 2024.09.24
 
 ### Added
 
@@ -42,7 +42,7 @@
 - Added checks for empty string in args for constructor `Bitrix24\SDK\Core\Credentials\ApplicationProfile`
 - Added checks for empty string in args for constructor `Bitrix24\SDK\Core\Credentials\ApplicationProfile`
 - Added class `Bitrix24\SDK\Application\Requests\Events\ApplicationLifeCycleEventsFabric`
-- Documentation: added section [Basic necessary knowledge](docs/EN/documentation.md) in SDK documentation
+- Documentation: added section [Basic necessary knowledge](docs/EN/documentation.md) in [SDK documentation](https://github.com/bitrix24/b24phpsdk/issues/35)
 
 ### Changed
 
