@@ -20,5 +20,6 @@ $b24Service = ServiceBuilderFactory::createServiceBuilderFromWebhook('INSERT_HER
 
 // call some method
 var_dump($b24Service->getMainScope()->main()->getApplicationInfo()->applicationInfo());
-// call core
-var_dump($b24Service->core->call('user.current'));
+
+// call core if method not implemented in services
+var_dump($b24Service->core->call('user.current')->getResponseData()->getResult());
