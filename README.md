@@ -21,7 +21,7 @@ Install the latest version with
 ```bash
 composer require bitrix24/b24phpsdk
 ```
-Or add `"bitrix24/b24phpsdk": "1.0"` to `composer.json` of your application.
+Or add `"bitrix24/b24phpsdk": "1.1.*"` to `composer.json` of your application.
 
 ## B24PhpSdk ✨FEATURES✨
 
