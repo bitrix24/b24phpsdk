@@ -31,8 +31,10 @@
       `applicationToken`.
     - `Local\Infrastructure\Filesystem\AppAuthFileStorage`: class for store LocalAppAuth in file
     - `Local\Repository\LocalAppAuthRepositoryInterface`: interface for LocalAppAuthRepository.
-- Added example `/examples/local-app-with-token-storage` for demonstrate all options for work with SDK and created local
+- Developer experience: added example `/examples/local-app-with-token-storage` for demonstrate all options for work with SDK and created local
   application skeleton.
+- Developer experience: added example `/examples/webhook-error-handling` for demonstrate exceptions handling. 
+- Developer experience: added example `/examples/local-app-placement` for demonstrate work with placements. 
 - Added `WrongClientException` for handle errors with wrong application client configuration.
 - Added `PaymentRequiredException` for handle errors with expired subscription.
 - Added `WrongConfigurationException` for handle errors with wrong application infrastructure configuration.

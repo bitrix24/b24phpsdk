@@ -135,6 +135,31 @@ Available contracts
   who installed application.
 - [Bitrix24Partners](/src/Application/Contracts/Bitrix24Partners/Docs/Bitrix24Partners.md) – Store information about
   Bitrix24 Partner who supports client portal and install or configure application.
+## Errors handling
+In SDK implemented exceptions hierarchy, they stored in `Bitrix24\SDK\Core\Exceptions` folder.
+```php
+declare(strict_types=1);
+
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Services\ServiceBuilderFactory;
+
+require_once 'vendor/autoload.php';
+try {
+    // init bitrix24-php-sdk service from webhook
+    $b24Service = ServiceBuilderFactory::createServiceBuilderFromWebhook('INSERT_HERE_YOUR_WEBHOOK_URL');
+
+    // call unknown method and throw  exception
+    $b24Service->core->call('Unknown method');
+} catch (InvalidArgumentException $exception) {
+    print(sprintf('ERROR IN CONFIGURATION OR CALL ARGS: %s', $exception->getMessage()) . PHP_EOL);
+    print($exception::class.PHP_EOL);
+    print($exception->getTraceAsString());
+} catch (Throwable $throwable) {
+    print(sprintf('FATAL ERROR: %s', $throwable->getMessage()) . PHP_EOL);
+    print($throwable::class.PHP_EOL);
+    print($throwable->getTraceAsString());
+}
+```
 
 ## Development
 
