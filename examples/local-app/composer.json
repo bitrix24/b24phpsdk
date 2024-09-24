@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "bitrix24/b24phpsdk": "1.0",
+    "bitrix24/b24phpsdk": "dev-dev",
     "monolog/monolog": "^3",
     "symfony/dotenv": "^7"
   },

@@ -58,9 +58,9 @@ readonly class AuthTokenFileStorage implements AuthTokenRepositoryInterface
     public function saveToken(AuthToken $authToken): void
     {
         $tokenPayload = json_encode([
-            'access_token' => $authToken->getAccessToken(),
-            'refresh_token' => $authToken->getRefreshToken(),
-            'expires' => $authToken->getExpires()
+            'access_token' => $authToken->accessToken,
+            'refresh_token' => $authToken->refreshToken,
+            'expires' => $authToken->expires
         ], JSON_THROW_ON_ERROR);
 
         $this->filesystem->dumpFile($this->getFileName(), $tokenPayload);

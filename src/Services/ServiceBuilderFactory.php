@@ -23,6 +23,9 @@ use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ServiceBuilderFactory
@@ -61,24 +64,24 @@ class ServiceBuilderFactory
     }
 
     /**
-     * Init service builder from request
+     * Init service builder
      *
      * @param ApplicationProfile $applicationProfile
-     * @param AuthToken $accessToken
+     * @param AuthToken $authToken
      * @param string $bitrix24DomainUrl
      *
      * @return ServiceBuilder
      * @throws InvalidArgumentException
      */
-    public function initFromRequest(
+    public function init(
         ApplicationProfile $applicationProfile,
-        AuthToken          $accessToken,
+        AuthToken          $authToken,
         string             $bitrix24DomainUrl
     ): ServiceBuilder
     {
         return $this->getServiceBuilder(
             Credentials::createFromOAuth(
-                $accessToken,
+                $authToken,
                 $applicationProfile,
                 $bitrix24DomainUrl
             )
@@ -125,4 +128,66 @@ class ServiceBuilderFactory
         );
     }
 
+    /**
+     * Create service builder from incoming webhook
+     *
+     * @param non-empty-string $webhookUrl incoming webhook url from your bitrix24 portal
+     * @param EventDispatcherInterface|null $eventDispatcher optional event dispatcher for subscribe some domain events if need
+     * @param LoggerInterface|null $logger optional logger for debug logs
+     * @throws InvalidArgumentException
+     */
+    public static function createServiceBuilderFromWebhook(
+        string                    $webhookUrl,
+        ?EventDispatcherInterface $eventDispatcher = null,
+        ?LoggerInterface          $logger = null): ServiceBuilder
+    {
+        if ($eventDispatcher === null) {
+            $eventDispatcher = new EventDispatcher();
+        }
+        if ($logger === null) {
+            $logger = new NullLogger();
+        }
+        return (new ServiceBuilderFactory($eventDispatcher, $logger))->initFromWebhook($webhookUrl);
+    }
+
+    /**
+     * Create service builder from placement request
+     *
+     * @param Request $placementRequest The placement request object that contains the request data.
+     * @param ApplicationProfile $applicationProfile The application profile object.
+     * @param EventDispatcherInterface|null $eventDispatcher Optional event dispatcher for subscribing to domain events.
+     * @param LoggerInterface|null $logger Optional logger for debug logs.
+     * @return ServiceBuilder The service builder object.
+     * @throws InvalidArgumentException If the key "DOMAIN" is not found in the request.
+     */
+    public static function createServiceBuilderFromPlacementRequest(
+        Request                   $placementRequest,
+        ApplicationProfile        $applicationProfile,
+        ?EventDispatcherInterface $eventDispatcher = null,
+        ?LoggerInterface          $logger = null
+    ): ServiceBuilder
+    {
+        if (!in_array('DOMAIN', $placementRequest->query->keys(), true)) {
+            throw new InvalidArgumentException('key «DOMAIN» not found in GET request arguments');
+        }
+
+        $rawDomainUrl = trim((string)$placementRequest->query->get('DOMAIN'));
+        if ($rawDomainUrl === '') {
+            throw new InvalidArgumentException('DOMAIN key cannot be empty in request');
+        }
+
+        if ($eventDispatcher === null) {
+            $eventDispatcher = new EventDispatcher();
+        }
+        if ($logger === null) {
+            $logger = new NullLogger();
+        }
+
+        return (new ServiceBuilderFactory($eventDispatcher, $logger))
+            ->init(
+                $applicationProfile,
+                AuthToken::initFromPlacementRequest($placementRequest),
+                $rawDomainUrl
+            );
+    }
 }

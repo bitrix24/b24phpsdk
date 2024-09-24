@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Application\Requests\Events;
 
 
 use Bitrix24\SDK\Application\ApplicationStatus;
+use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException;
@@ -32,6 +33,7 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  * @property-read  ApplicationStatus $status
  * @property-read  int $user_id
  * @property-read  non-empty-string $application_token
+ * @property-read  AuthToken $authToken
  */
 class EventAuthItem extends AbstractItem
 {
@@ -45,6 +47,7 @@ class EventAuthItem extends AbstractItem
             'expires', 'expires_in' => (int)$this->data[$offset],
             'scope' => Scope::initFromString((string)$this->data[$offset]),
             'status' => ApplicationStatus::initFromString((string)$this->data[$offset]),
+            'authToken' => AuthToken::initFromArray($this->data),
             default => $this->data[$offset] ?? null,
         };
     }

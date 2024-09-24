@@ -1,7 +1,7 @@
 name: 🚀 SDK Feature Request
 description: Ideas for new features and improvements in SDK
 labels: enhancement in SDK
-
+title: "[Feature in SDK]: "
 body:
   - type: textarea
     id: description

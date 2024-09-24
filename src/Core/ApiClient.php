@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Core;
 
 use Bitrix24\SDK\Core\Contracts\ApiClientInterface;
+use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
 use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
@@ -37,9 +38,9 @@ class ApiClient implements ApiClientInterface
     /**
      * @const string
      */
-    protected const SDK_VERSION = '2.0.0';
+    protected const SDK_VERSION = '1.1.0';
 
-    protected const SDK_USER_AGENT = 'bitrix24-php-sdk';
+    protected const SDK_USER_AGENT = 'b24-php-sdk';
 
     /**
      * ApiClient constructor.
@@ -48,6 +49,7 @@ class ApiClient implements ApiClientInterface
         protected Credentials                 $credentials,
         protected HttpClientInterface         $client,
         protected RequestIdGeneratorInterface $requestIdGenerator,
+        protected ApiLevelErrorHandler        $apiLevelErrorHandler,
         protected LoggerInterface             $logger)
     {
         $this->logger->debug(
@@ -88,7 +90,7 @@ class ApiClient implements ApiClientInterface
         $this->logger->debug('getNewAuthToken.start', [
             'requestId' => $requestId
         ]);
-        if (!$this->getCredentials()->getApplicationProfile() instanceof \Bitrix24\SDK\Core\Credentials\ApplicationProfile) {
+        if (!$this->getCredentials()->getApplicationProfile() instanceof ApplicationProfile) {
             throw new InvalidArgumentException('application profile not set');
         }
 
@@ -103,9 +105,9 @@ class ApiClient implements ApiClientInterface
             http_build_query(
                 [
                     'grant_type' => 'refresh_token',
-                    'client_id' => $this->getCredentials()->getApplicationProfile()->getClientId(),
-                    'client_secret' => $this->getCredentials()->getApplicationProfile()->getClientSecret(),
-                    'refresh_token' => $this->getCredentials()->getAuthToken()->getRefreshToken(),
+                    'client_id' => $this->getCredentials()->getApplicationProfile()->clientId,
+                    'client_secret' => $this->getCredentials()->getApplicationProfile()->clientSecret,
+                    'refresh_token' => $this->getCredentials()->getAuthToken()->refreshToken,
                     $this->requestIdGenerator->getQueryStringParameterName() => $requestId
                 ]
             )
@@ -121,7 +123,14 @@ class ApiClient implements ApiClientInterface
         ];
         $response = $this->client->request($method, $url, $requestOptions);
         $responseData = $response->toArray(false);
+        $this->logger->debug('getNewAuthToken.response', [
+            'httpStatus'=>$response->getStatusCode(),
+            'responseData' => $responseData,
+            'requestId' => $requestId
+        ]);
         if ($response->getStatusCode() === StatusCodeInterface::STATUS_OK) {
+            $this->apiLevelErrorHandler->handle($responseData);
+
             $newAuthToken = RenewedAuthToken::initFromArray($responseData);
 
             $this->logger->debug('getNewAuthToken.finish', [
@@ -169,7 +178,7 @@ class ApiClient implements ApiClientInterface
                 throw new InvalidArgumentException('access token in credentials not found ');
             }
 
-            $parameters['auth'] = $this->getCredentials()->getAuthToken()->getAccessToken();
+            $parameters['auth'] = $this->getCredentials()->getAuthToken()->accessToken;
         }
 
         // duplicate request id in query string for current version of bitrix24 api

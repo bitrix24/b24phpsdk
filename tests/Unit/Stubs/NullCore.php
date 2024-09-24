@@ -43,6 +43,7 @@ class NullCore implements CoreInterface
             Credentials::createFromWebhook(new WebhookUrl('')),
             new MockHttpClient(),
             new DefaultRequestIdGenerator(),
+            new ApiLevelErrorHandler(new NullLogger()),
             new NullLogger());
     }
 }

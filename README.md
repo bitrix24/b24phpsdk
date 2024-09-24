@@ -21,7 +21,7 @@ Install the latest version with
 ```bash
 composer require bitrix24/b24phpsdk
 ```
-Or add `"bitrix24/b24phpsdk": "1.0"` to `composer.json` of your application.
+Or add `"bitrix24/b24phpsdk": "1.1.*"` to `composer.json` of your application.
 
 ## B24PhpSdk ✨FEATURES✨
 
@@ -90,7 +90,7 @@ Performance improvements 🚀
 ## Documentation
 
 - [Bitrix24 API documentation - English](https://apidocs.bitrix24.com/)
-- [Internal documentation](docs/EN/documentation.md) for B24PhpSdk
+- [Internal documentation](docs/EN/README.md) for B24PhpSdk
 
 ## Requirements
 
@@ -113,39 +113,22 @@ composer install
 3. Open Bitrix24 account: Developer resources → Other → Inbound webhook
 4. Open example file and insert webhook url into `$webhookUrl`
 
-<details>
-  <summary>see example.php file</summary>
-
 ```php
 declare(strict_types=1);
 
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-use Monolog\Processor\MemoryUsageProcessor;
 
 require_once 'vendor/autoload.php';
 
-$webhookUrl = 'INSERT_HERE_YOUR_WEBHOOK_URL';
-
-$log = new Logger('bitrix24-php-sdk');
-$log->pushHandler(new StreamHandler('bitrix24-php-sdk.log'));
-$log->pushProcessor(new MemoryUsageProcessor(true, true));
-
-// create service builder factory
-$b24ServiceFactory = new ServiceBuilderFactory(new EventDispatcher(), $log);
 // init bitrix24-php-sdk service from webhook
-$b24Service = $b24ServiceFactory->initFromWebhook($webhookUrl);
+$b24Service = ServiceBuilderFactory::createServiceBuilderFromWebhook('INSERT_HERE_YOUR_WEBHOOK_URL');
 
-// work with interested scope
-var_dump($b24Service->getMainScope()->main()->getCurrentUserProfile()->getUserProfile());
-// get deals list and address to first element
-var_dump($b24Service->getCRMScope()->lead()->list([], [], ['ID', 'TITLE'])->getLeads()[0]->TITLE);
+// call some method
+var_dump($b24Service->getMainScope()->main()->getApplicationInfo()->applicationInfo());
+// call core for method in not implemented service
+var_dump($b24Service->core->call('user.current'));
+
 ```
-
-</details>
-
 5. Call php file in shell
 
 ```shell
@@ -154,7 +137,7 @@ php -f example.php
 
 ### Work with local application
 
-1. Go to `/examples/local-application` folder
+1. Go to `/examples/local-app` folder
 2. Open console and install dependencies
 
 ```shell
@@ -201,13 +184,8 @@ x-powered-by: PHP/8.3.8
 ```php
 declare(strict_types=1);
 
-use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
-use Monolog\Processor\MemoryUsageProcessor;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 
 require_once 'vendor/autoload.php';
@@ -217,23 +195,16 @@ require_once 'vendor/autoload.php';
     <?= print_r($_REQUEST, true) ?>
 </pre>
 <?php
-$request = Request::createFromGlobals();
 
-$log = new Logger('bitrix24-php-sdk');
-$log->pushHandler(new StreamHandler('bitrix24-php-sdk.log'));
-$log->pushProcessor(new MemoryUsageProcessor(true, true));
-
-$b24ServiceBuilderFactory = new ServiceBuilderFactory(new EventDispatcher(), $log);
 $appProfile = ApplicationProfile::initFromArray([
     'BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID' => 'INSERT_HERE_YOUR_DATA',
     'BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET' => 'INSERT_HERE_YOUR_DATA',
     'BITRIX24_PHP_SDK_APPLICATION_SCOPE' => 'INSERT_HERE_YOUR_DATA'
 ]);
-$b24Service = $b24ServiceBuilderFactory->initFromRequest($appProfile, AuthToken::initFromPlacementRequest($request), $request->get('DOMAIN'));
+
+$b24Service = ServiceBuilderFactory::createServiceBuilderFromPlacementRequest(Request::createFromGlobals(), $appProfile);
 
 var_dump($b24Service->getMainScope()->main()->getCurrentUserProfile()->getUserProfile());
-// get deals list and address to first element
-var_dump($b24Service->getCRMScope()->lead()->list([], [], ['ID', 'TITLE'])->getLeads()[0]->TITLE);
 ```
 
 </details>

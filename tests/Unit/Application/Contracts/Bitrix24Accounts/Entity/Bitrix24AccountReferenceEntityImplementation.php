@@ -57,9 +57,9 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
         Scope                            $applicationScope,
     )
     {
-        $this->accessToken = $authToken->getAccessToken();
-        $this->refreshToken = $authToken->getRefreshToken();
-        $this->expires = $authToken->getExpires();
+        $this->accessToken = $authToken->accessToken;
+        $this->refreshToken = $authToken->refreshToken;
+        $this->expires = $authToken->expires;
         $this->applicationScope = $applicationScope->getScopeCodes();
     }
 
@@ -115,9 +115,9 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
             );
         }
 
-        $this->accessToken = $renewedAuthToken->authToken->getAccessToken();
-        $this->refreshToken = $renewedAuthToken->authToken->getRefreshToken();
-        $this->expires = $renewedAuthToken->authToken->getExpires();
+        $this->accessToken = $renewedAuthToken->authToken->accessToken;
+        $this->refreshToken = $renewedAuthToken->authToken->refreshToken;
+        $this->expires = $renewedAuthToken->authToken->expires;
         $this->updatedAt = new CarbonImmutable();
     }
 
