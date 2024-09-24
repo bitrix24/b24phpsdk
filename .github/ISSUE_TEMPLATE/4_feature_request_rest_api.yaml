@@ -1,7 +1,7 @@
 name: 🚀 REST-API Feature Request
 description: Ideas for new features and improvements in REST-API
 labels: enhancement in REST-API
-
+title: "[Feature in REST-API]: "
 body:
   - type: textarea
     id: description

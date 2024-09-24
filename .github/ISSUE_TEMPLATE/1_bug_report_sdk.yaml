@@ -1,7 +1,7 @@
 name: 🐛 SDK bug report
 description: SDK bug report template
 labels: bug in SDK
-
+title: "[Bug in SDK]: "
 body:
   - type: input
     id: affected-versions

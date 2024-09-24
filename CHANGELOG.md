@@ -10,7 +10,7 @@
 ### Security
 -->
 
-## 1.1.0 – 2024.09.24
+## 1.1.0 – 2024.09.25
 
 ### Added
 
@@ -40,10 +40,10 @@
   with [wrong signature events](https://apidocs.bitrix24.com/api-reference/events/safe-event-handlers.html) with
   `application_token`.
 - Added checks for empty string in args for constructor `Bitrix24\SDK\Core\Credentials\ApplicationProfile`
-- Added checks for empty string in args for constructor `Bitrix24\SDK\Core\Credentials\ApplicationProfile`
 - Added class `Bitrix24\SDK\Application\Requests\Events\ApplicationLifeCycleEventsFabric`
-- Documentation: added section [Basic necessary knowledge](docs/EN/documentation.md) in [SDK documentation](https://github.com/bitrix24/b24phpsdk/issues/35)
-- Documentation: added section [Call unsupported methods in SDK](docs/EN/documentation.md) in [SDK documentation](https://github.com/bitrix24/b24phpsdk/issues/15)
+- Documentation: added section [Basic necessary knowledge](docs/EN/README.md) in [SDK documentation](https://github.com/bitrix24/b24phpsdk/issues/35)
+- Documentation: added section [Call unsupported methods](docs/EN/README.md) in [SDK documentation](https://github.com/bitrix24/b24phpsdk/issues/15)
+- Developer experience: add issue template [Ship new SDK release](https://github.com/bitrix24/b24phpsdk/issues/42)  
 
 ### Changed
 
