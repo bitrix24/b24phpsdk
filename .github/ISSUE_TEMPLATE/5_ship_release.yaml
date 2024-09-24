@@ -6,18 +6,18 @@ body:
   - type: markdown
     attributes:
       value: |
-        write release notes documentation in the changelog.MD
-        update version in all code examples in main README.md
-        update the version in headers in the file `/src/Core/ApiClient.php`
-        update version in examples folder
-        checkout each example with release branch and test it
-        rebuild the list of the supported methods in SDK documentation
-        local pass phpstan linter
-        local pass rector linter
-        local pass PHPUnit tests
-        pass all integration tests by scope
+       - write release notes documentation in the changelog.MD
+       - update version in all code examples in main README.md
+       - update the version in headers in the file `/src/Core/ApiClient.php`
+       - update version in examples folder
+       - checkout each example with release branch and test it
+       - rebuild the list of the supported methods in SDK documentation
+       - local pass phpstan linter
+       - local pass rector linter
+       - local pass PHPUnit tests
+       - pass all integration tests by scope
   - type: input
-    id: new version
+    id: new-version
     attributes:
       label: new version
       placeholder: x.y.z
