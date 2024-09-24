@@ -1,0 +1,18 @@
+{
+  "name": "bitrix24/b24phpsdk-webhook-example",
+  "description": "Example for work with bitrix24-php-sdk via webhook",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Maksim Mesilov",
+      "email": "mesilov.maxim@gmail.com"
+    }
+  ],
+  "require": {
+    "bitrix24/b24phpsdk": "dev-dev"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest"
+  }
+}
