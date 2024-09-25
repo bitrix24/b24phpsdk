@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Unit\Services\CRM;
 
 use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
-use Bitrix24\SDK\Services\RemoteEventsFabric;
+use Bitrix24\SDK\Services\RemoteEventsFactory;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBatch;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBulkItemsReader;

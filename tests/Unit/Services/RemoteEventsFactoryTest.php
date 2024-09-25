@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Tests\Unit\Services;
 use Bitrix24\SDK\Core\Exceptions\PaymentRequiredException;
 use Bitrix24\SDK\Core\Exceptions\WrongSecuritySignatureException;
 use Bitrix24\SDK\Core\Requests\Events\UnsupportedRemoteEvent;
-use Bitrix24\SDK\Services\RemoteEventsFabric;
+use Bitrix24\SDK\Services\RemoteEventsFactory;
 use Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -25,10 +25,10 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\Request;
 
-#[CoversClass(RemoteEventsFabric::class)]
-class RemoteEventsFabricTest extends TestCase
+#[CoversClass(RemoteEventsFactory::class)]
+class RemoteEventsFactoryTest extends TestCase
 {
-    private RemoteEventsFabric $eventsFabric;
+    private RemoteEventsFactory $eventsFabric;
 
     #[Test]
     #[DataProvider('remoteEventsDataProvider')]
@@ -84,6 +84,6 @@ class RemoteEventsFabricTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->eventsFabric = RemoteEventsFabric::init(new NullLogger());
+        $this->eventsFabric = RemoteEventsFactory::init(new NullLogger());
     }
 }

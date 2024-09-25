@@ -24,7 +24,7 @@ use Bitrix24\SDK\Services\Telephony\Events\TelephonyEventsFabric;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-readonly class RemoteEventsFabric
+readonly class RemoteEventsFactory
 {
     /**
      * @throws InvalidArgumentException
