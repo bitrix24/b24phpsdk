@@ -29,7 +29,7 @@ use Bitrix24\SDK\Core\Exceptions\WrongConfigurationException;
 use Bitrix24\SDK\Events\AuthTokenRenewedEvent;
 use Bitrix24\SDK\Services\Main\Common\EventHandlerMetadata;
 use Bitrix24\SDK\Services\Placement\Service\PlacementLocationCode;
-use Bitrix24\SDK\Services\RemoteEventsFabric;
+use Bitrix24\SDK\Services\RemoteEventsFactory;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
 use Monolog\Handler\RotatingFileHandler;
@@ -80,7 +80,7 @@ class Application
 
                 self::getB24Service($incomingRequest)->core->call('unknown method');
 
-            } elseif (RemoteEventsFabric::isCanProcess($incomingRequest)) {
+            } elseif (RemoteEventsFactory::isCanProcess($incomingRequest)) {
                 self::getLog()->debug('processRequest.b24EventRequest');
 
                 // get application_token for check event security signature
@@ -88,7 +88,7 @@ class Application
                 // on first lifecycle event OnApplicationInstall application token is null and file with auth data doesn't exists
                 // we save application_token and all next events will be validated security signature
                 $applicationToken = self::getAuthRepository()->getApplicationToken();
-                $event = RemoteEventsFabric::init(self::getLog())->createEvent($incomingRequest, $applicationToken);
+                $event = RemoteEventsFactory::init(self::getLog())->createEvent($incomingRequest, $applicationToken);
                 self::getLog()->debug('processRequest.eventRequest', [
                     'eventClassName' => $event::class,
                     'eventCode' => $event->getEventCode(),
