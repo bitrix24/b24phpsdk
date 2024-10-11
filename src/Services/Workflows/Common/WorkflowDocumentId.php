@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Workflows\Common;
 
-readonly class WorkflowDocumentId
+final readonly class WorkflowDocumentId
 {
     public function __construct(
         public string $moduleId,
@@ -25,7 +25,11 @@ readonly class WorkflowDocumentId
 
     public function getId(): int
     {
-        return (int)substr($this->targetDocumentId, 0, strpos('_', $this->targetDocumentId));
+        if (is_numeric($this->targetDocumentId)) {
+            return (int)$this->targetDocumentId;
+        }
+
+        return (int)substr($this->targetDocumentId, strrpos($this->targetDocumentId, '_') + 1);
     }
 
     public static function initFromArray(array $data): WorkflowDocumentId
