@@ -49,7 +49,7 @@ class IncomingRobotRequest extends AbstractRequest
             WorkflowDocumentType::initFromArray($data['document_type']),
             $data['event_token'],
             $data['properties'],
-            $data['use_subscription'] === 'Y' ? true : false,
+            $data['use_subscription'] === 'Y',
             (int)$data['timeout_duration'],
             (int)$data['ts'],
             Auth::initFromArray($data['auth'])

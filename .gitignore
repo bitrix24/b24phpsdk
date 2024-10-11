@@ -9,6 +9,7 @@ tools/logs
 tests/ApplicationBridge/auth.json
 examples/logs
 /var
+*.private.env.*
 *.log
 .env.local
 *.local

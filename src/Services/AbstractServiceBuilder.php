@@ -20,6 +20,9 @@ use Psr\Log\LoggerInterface;
 
 abstract class AbstractServiceBuilder
 {
+    /**
+     * @var array<string, mixed>
+     */
     protected array $serviceCache;
 
     /**

@@ -1,5 +1,12 @@
 # b24-php-sdk change log
 
+## 1.2.0 – 2024.11.?
+
+### Fixed
+
+- Fixed errors in `Bitrix24\SDK\Services\Workflows\Common\WorkflowDocumentId`,
+  see [parsing errors](https://github.com/bitrix24/b24phpsdk/issues/54).
+
 <!--
 ## Unreleased
 ### Added
@@ -31,10 +38,11 @@
       `applicationToken`.
     - `Local\Infrastructure\Filesystem\AppAuthFileStorage`: class for store LocalAppAuth in file
     - `Local\Repository\LocalAppAuthRepositoryInterface`: interface for LocalAppAuthRepository.
-- Developer experience: added example `/examples/local-app-with-token-storage` for demonstrate all options for work with SDK and created local
+- Developer experience: added example `/examples/local-app-with-token-storage` for demonstrate all options for work with
+  SDK and created local
   application skeleton.
-- Developer experience: added example `/examples/webhook-error-handling` for demonstrate exceptions handling. 
-- Developer experience: added example `/examples/local-app-placement` for demonstrate work with placements. 
+- Developer experience: added example `/examples/webhook-error-handling` for demonstrate exceptions handling.
+- Developer experience: added example `/examples/local-app-placement` for demonstrate work with placements.
 - Added `WrongClientException` for handle errors with wrong application client configuration.
 - Added `PaymentRequiredException` for handle errors with expired subscription.
 - Added `WrongConfigurationException` for handle errors with wrong application infrastructure configuration.
@@ -43,9 +51,11 @@
   `application_token`.
 - Added checks for empty string in args for constructor `Bitrix24\SDK\Core\Credentials\ApplicationProfile`
 - Added class `Bitrix24\SDK\Application\Requests\Events\ApplicationLifeCycleEventsFabric`
-- Documentation: added section [Basic necessary knowledge](docs/EN/README.md) in [SDK documentation](https://github.com/bitrix24/b24phpsdk/issues/35)
-- Documentation: added section [Call unsupported methods](docs/EN/README.md) in [SDK documentation](https://github.com/bitrix24/b24phpsdk/issues/15)
-- Developer experience: add issue template [Ship new SDK release](https://github.com/bitrix24/b24phpsdk/issues/42)  
+- Documentation: added section [Basic necessary knowledge](docs/EN/README.md)
+  in [SDK documentation](https://github.com/bitrix24/b24phpsdk/issues/35)
+- Documentation: added section [Call unsupported methods](docs/EN/README.md)
+  in [SDK documentation](https://github.com/bitrix24/b24phpsdk/issues/15)
+- Developer experience: add issue template [Ship new SDK release](https://github.com/bitrix24/b24phpsdk/issues/42)
 
 ### Changed
 
