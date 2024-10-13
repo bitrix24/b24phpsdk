@@ -8,6 +8,7 @@ tools/.env.local
 tools/logs
 tests/ApplicationBridge/auth.json
 examples/logs
+diplodoc/var
 /var
 *.private.env.*
 *.log

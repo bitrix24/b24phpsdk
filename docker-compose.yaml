@@ -1,0 +1,7 @@
+services:
+  php-cli:
+    build:
+      context: ./docker/php-cli
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html
