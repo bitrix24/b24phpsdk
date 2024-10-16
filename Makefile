@@ -69,7 +69,7 @@ debug-show-env:
 
 # build documentation
 build-documentation:
-	php bin/console b24:util:generate-coverage-documentation --webhook=$(BITRIX24_WEBHOOK) --repository-url=https://github.com/bitrix24/b24phpsdk --repository-branch=$(DOCUMENTATION_DEFAULT_TARGET_BRANCH) --file=docs/EN/Services/bitrix24-php-sdk-methods.md
+	php bin/console b24-dev:generate-coverage-documentation --webhook=$(BITRIX24_WEBHOOK) --repository-url=https://github.com/bitrix24/b24phpsdk --repository-branch=$(DOCUMENTATION_DEFAULT_TARGET_BRANCH) --file=docs/EN/Services/bitrix24-php-sdk-methods.md
 
 # linters
 lint-phpstan:
