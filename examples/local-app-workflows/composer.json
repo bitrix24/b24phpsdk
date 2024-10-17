@@ -1,0 +1,33 @@
+{
+  "name": "bitrix24/b24phpsdk-local-app-example",
+  "description": "Example for work with bitrix24-php-sdk with local application and workflows",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Maksim Mesilov",
+      "email": "mesilov.maxim@gmail.com"
+    }
+  ],
+  "config": {
+    "sort-packages": true
+  },
+  "require": {
+    "bitrix24/b24phpsdk": "dev-dev",
+    "monolog/monolog": "^3",
+    "symfony/console": "^7",
+    "symfony/dotenv": "^7",
+    "symfony/event-dispatcher": "^7",
+    "symfony/filesystem": "^7"
+  },
+  "require-dev": {
+    "phpstan/phpstan": "1.11.7",
+    "rector/rector": "^1",
+    "roave/security-advisories": "dev-latest"
+  },
+  "autoload": {
+    "psr-4": {
+      "Examples\\Workflows\\": "src/"
+    }
+  }
+}
