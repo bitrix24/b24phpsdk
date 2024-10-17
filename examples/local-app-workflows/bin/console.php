@@ -1,6 +1,8 @@
 <?php
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
+use Bitrix24\SDK\Services\Workflows\Common\WorkflowAutoExecutionType;
+use Bitrix24\SDK\Services\Workflows\Common\WorkflowDocumentType;
 use Examples\Workflows\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -63,6 +65,18 @@ use Symfony\Component\Console\SingleCommandApplication;
                             );
                         }
                         $table->render();
+                        break;
+                    case 'workflow template: add template from file':
+                        $output->writeln('<info>try to add new workflow template from file...</info>');
+                        $result = $sb->getBizProcScope()->template()->add(
+                            WorkflowDocumentType::buildForContact(),
+                            'test_workflow_for_contact',
+                            'Test workflow for contact with demonstration options',
+                            WorkflowAutoExecutionType::withoutAutoExecution,
+                            dirname(__DIR__) . '/templates/contact-demo-percentage.bpt'
+                        );
+
+                        $output->writeln(sprintf('added template id: %s', $result->getId()));
                         break;
                     case 'exit🚪':
                         Application::getLog()->debug('cliCommand.finish');
