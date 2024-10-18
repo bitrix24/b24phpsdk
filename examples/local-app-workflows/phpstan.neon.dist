@@ -1,6 +1,7 @@
 parameters:
   level: 4
   paths:
+    - bin/
     - src/
   bootstrapFiles:
     - tests/bootstrap.php

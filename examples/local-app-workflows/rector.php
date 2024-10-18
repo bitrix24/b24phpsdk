@@ -16,6 +16,7 @@ use Rector\Set\ValueObject\DowngradeLevelSetList;
 
 return RectorConfig::configure()
     ->withPaths([
+        __DIR__ . '/bin',
         __DIR__ . '/src',
     ])
     ->withCache(cacheDirectory: __DIR__ . '/var/cache/rector')
