@@ -39,6 +39,7 @@ use function Typhoon\Type\stringify;
 class GenerateExamplesForDocumentationCommand extends Command
 {
     const TARGET_FOLDER = 'folder';
+    const PROMPT_TEMPLATE_FILE = 'prompt-template';
 
     public function __construct(
         private TyphoonReflector          $typhoonReflector,
@@ -62,7 +63,14 @@ class GenerateExamplesForDocumentationCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 'folder for generated examples',
                 ''
-            );
+            )
+            ->addOption(
+                self::PROMPT_TEMPLATE_FILE,
+                null,
+                InputOption::VALUE_REQUIRED,
+                'master prompt template markdown file',
+                ''
+            );;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -73,48 +81,40 @@ class GenerateExamplesForDocumentationCommand extends Command
             if ($targetFolder === '') {
                 throw new InvalidArgumentException('you must provide a folder to save generated examples');
             }
+            $promptTemplateFile = (string)$input->getOption(self::PROMPT_TEMPLATE_FILE);
+            if ($promptTemplateFile === '') {
+                throw new InvalidArgumentException('you must provide a markdown file with prompt template');
+            }
             // get sdk root path, change magic number if move current file to another folder depth
             $sdkBasePath = dirname(__FILE__, 5) . '/';
             $this->logger->debug('GenerateExamplesForDocumentationCommand.start', [
-
                 'targetFolder' => $targetFolder,
-                'sdkBasePath' => $sdkBasePath
+                'sdkBasePath' => $sdkBasePath,
+                'promptTemplateFile' => $promptTemplateFile
             ]);
             $io->info('Generate api examples...');
 
+            $promptTemplate = $this->loadPromptTemplateFromFile($promptTemplateFile);
+
+
+            $methodName = 'crm.deal.list';
             $data = $this->prepareDataForPromptByServiceMethod(
                 CRMServiceBuilder::class,
                 \Bitrix24\SDK\Services\CRM\Deal\Service\Deal::class,
                 'list'
             );
+            $prompt = $this->generatePromptFromTemplate(
+                $promptTemplate,
+                $data
+            );
 
+            $promptFileName = sprintf('%s/prompts/%s/prompt-%s.md',
+                $targetFolder,
+                $methodName,
+                $methodName,
+            );
 
-//            dd($data);
-
-
-//            dd($this->getClassSourceCode(\Bitrix24\SDK\Services\CRM\Deal\Service\Deal::class));
-
-//            $this->attributesParser->getMethodParameters(
-//                \Bitrix24\SDK\Services\CRM\Deal\Service\Deal::class,
-//                'list'
-//            );
-
-//            $rootSbMethods = $this->attributesParser->getClassMethods(ServiceBuilder::class);
-//
-//            foreach ($rootSbMethods as $method) {
-//                print(sprintf('%s:%s',
-//                    $method['method_name'],
-//                    $method['method_return_type']
-//                ).PHP_EOL);
-//            }
-//
-//            $rootSbMethods = $this->attributesParser->getClassMethods('Bitrix24\SDK\Services\CRM\CRMServiceBuilder');
-//            foreach ($rootSbMethods as $method) {
-//                print(sprintf('%s:%s',
-//                        $method['method_name'],
-//                        $method['method_return_type']
-//                    ).PHP_EOL);
-//            }
+            $this->savePrompt($promptFileName, $prompt);
 
 
         } catch (Throwable $exception) {
@@ -124,6 +124,26 @@ class GenerateExamplesForDocumentationCommand extends Command
             return self::INVALID;
         }
         return self::SUCCESS;
+    }
+
+    private function savePrompt($fileName, $content): void
+    {
+        $this->filesystem->dumpFile($fileName, $content);
+    }
+
+    private function generatePromptFromTemplate(string $template, array $data): string
+    {
+        //todo validate template and keys in data
+        return str_replace(array_keys($data), array_values($data), $template);
+    }
+
+    private function loadPromptTemplateFromFile(string $fileName): string
+    {
+        if (!$this->filesystem->exists($fileName)) {
+            throw new FileNotFoundException(sprintf('prompt template file not found: %s', $fileName));
+        }
+
+        return file_get_contents($fileName);
     }
 
     protected function prepareDataForPromptByServiceMethod(
@@ -136,15 +156,44 @@ class GenerateExamplesForDocumentationCommand extends Command
 
         ]);
 
+        // pack method parameters
+        $methodParameters = PHP_EOL;
+        foreach ($this->getMethodParameters($serviceClassName, $serviceMethodName) as $parameter) {
+            $methodParameters .= sprintf('%s%s $%s',
+                    $parameter['is_optional'] === true ? '?' : '',
+                    $parameter['type'],
+                    $parameter['name'],
+
+                ) . PHP_EOL;
+        }
+
+        // pack root service builder methods
+        $rootSbMethods = '';
+        foreach ($this->getClassMethods(ServiceBuilder::class) as $method) {
+            $rootSbMethods .= sprintf('%s:%s',
+                    $method['method_name'],
+                    $method['method_return_type']
+                ) . PHP_EOL;
+        }
+
+        // pack service builder methods
+        $sbMethods = '';
+        foreach ($this->getClassMethods($serviceBuilderClassName) as $method) {
+            $sbMethods .= sprintf('%s:%s',
+                    $method['method_name'],
+                    $method['method_return_type']
+                ) . PHP_EOL;
+        }
+
         $result = [
             '#PHP_VERSION#' => PHP_VERSION,
             '#METHOD_NAME#' => $serviceMethodName,
             '#CLASS_NAME#' => $serviceClassName,
-            '#METHOD_PARAMETERS#' => $this->getMethodParameters($serviceClassName, $serviceMethodName),
+            '#METHOD_PARAMETERS#' => $methodParameters,
             //todo cache?
-            '#ROOT_SERVICE_BUILDER_METHODS#' => $this->getClassMethods(ServiceBuilder::class),
+            '#ROOT_SERVICE_BUILDER_METHODS#' => $rootSbMethods,
             //todo cache?
-            '#SCOPE_SERVICE_BUILDER_METHODS#' => $this->getClassMethods($serviceBuilderClassName),
+            '#SCOPE_SERVICE_BUILDER_METHODS#' => $sbMethods,
             //todo cache?
             '#CLASS_SOURCE_CODE#' => $this->getClassSourceCode($serviceClassName)
         ];
@@ -199,7 +248,7 @@ class GenerateExamplesForDocumentationCommand extends Command
     /**
      * @param class-string $className
      * @param non-empty-string $methodName
-     * @return array
+     * @return array{is_optional: bool, name: string, type: string, is_has_default_value: bool, default_value: mixed}
      */
     private function getMethodParameters(string $className, string $methodName): array
     {

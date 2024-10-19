@@ -1,10 +1,14 @@
-Write php #PHP_VERSION# call example with requirements: 
+Write php #PHP_VERSION# call example with requirements:
 
-1. Variable $serviceBuilder of type ServiceBuilder is already created outside the scope of this example (no need to create it). 
-2. Add call example for method «#METHOD_NAME#» from variable $serviceBuilder, generate full call chain to class «#CLASS_NAME#»
+1. Variable $serviceBuilder of type ServiceBuilder is already created outside the scope of this example (no need to
+   create it).
+2. Add call example for method «#METHOD_NAME#» from variable $serviceBuilder, generate full call chain to class
+   «#CLASS_NAME#»
 3. Use arguments for method «#CLASS_NAME#» from phpDoc annotation:
 
-   «#METHOD_PARAMETERS#»
+```
+   #METHOD_PARAMETERS#
+```   
 
 4. Surround call «#METHOD_NAME#» with try-catch construction and catch Throwable exception
 5. For fields with type DateTime use date format Atom
@@ -12,9 +16,16 @@ Write php #PHP_VERSION# call example with requirements:
 
 Root Entry point service builder methods by scope with related service builders:
 
+```
 #ROOT_SERVICE_BUILDER_METHODS#
+```
 
+Target Service builder with methods returned related services
+
+```
 #SCOPE_SERVICE_BUILDER_METHODS#
+```
+Current service with methods
 ```php
 #CLASS_SOURCE_CODE#
 ```
