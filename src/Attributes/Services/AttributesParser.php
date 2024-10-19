@@ -17,11 +17,9 @@ use Bitrix24\SDK\Attributes\ApiBatchMethodMetadata;
 use Bitrix24\SDK\Attributes\ApiBatchServiceMetadata;
 use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
-use Bitrix24\SDK\Services\ServiceBuilder;
 use ReflectionClass;
 use Symfony\Component\Filesystem\Filesystem;
 use Typhoon\Reflection\TyphoonReflector;
-use Typhoon\Type\Internal\NamedObjectType;
 use function Typhoon\Type\stringify;
 
 readonly class AttributesParser
@@ -31,29 +29,6 @@ readonly class AttributesParser
         private Filesystem       $filesystem,
     )
     {
-    }
-
-    /**
-     * @return array<int<0,max>, array<string,string>>
-     */
-    public function getClassMethods(string $className): array
-    {
-        $typhoonClassMeta = $this->typhoonReflector->reflectClass($className);
-        $methods = [];
-        foreach ($typhoonClassMeta->methods() as $method) {
-            if (!$method->isPublic()) {
-                continue;
-            }
-            // skip __construct()
-            if (stringify($method->returnType()) === 'mixed') {
-                continue;
-            }
-            $methods[] = [
-                'method_name' => str_replace('method ', '', $method->id->describe()),
-                'method_return_type' => stringify($method->returnType()),
-            ];
-        }
-        return $methods;
     }
 
     /**

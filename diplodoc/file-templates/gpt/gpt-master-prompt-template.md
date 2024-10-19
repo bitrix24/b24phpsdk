@@ -4,7 +4,7 @@ Write php #PHP_VERSION# call example with requirements:
 2. Add call example for method «#METHOD_NAME#» from variable $serviceBuilder, generate full call chain to class «#CLASS_NAME#»
 3. Use arguments for method «#CLASS_NAME#» from phpDoc annotation:
 
-   «#METHOD_ARGUMENTS#»
+   «#METHOD_PARAMETERS#»
 
 4. Surround call «#METHOD_NAME#» with try-catch construction and catch Throwable exception
 5. For fields with type DateTime use date format Atom

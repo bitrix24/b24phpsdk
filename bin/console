@@ -76,6 +76,7 @@ $application->add(new Commands\GenerateCoverageDocumentationCommand(
     new Symfony\Component\Filesystem\Filesystem(),
     $log));
 $application->add(new Commands\GenerateExamplesForDocumentationCommand(
+    TyphoonReflector::build(),
     new AttributesParser(TyphoonReflector::build(), new Symfony\Component\Filesystem\Filesystem()),
     new Symfony\Component\Finder\Finder(),
     new Symfony\Component\Filesystem\Filesystem(),
