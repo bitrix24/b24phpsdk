@@ -19,7 +19,8 @@
   "config": {
     "sort-packages": true,
     "allow-plugins": {
-      "dealerdirect/phpcodesniffer-composer-installer": true
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "php-http/discovery": true
     }
   },
   "require": {
@@ -49,12 +50,15 @@
     "fakerphp/faker": "^1",
     "monolog/monolog": "^3",
     "nunomaduro/phpinsights": "^2",
+    "nyholm/psr7": "^1.8",
+    "openai-php/client": "0.10.*",
     "phpstan/phpstan": "1.11.7",
     "phpunit/phpunit": "^10 || ^11",
     "rector/rector": "^1",
     "roave/security-advisories": "dev-master",
     "symfony/debug-bundle": "^6 || ^7",
     "symfony/stopwatch": "^6 || ^7",
+    "symfony/var-dumper": "^6 || ^7",
     "typhoon/reflection": "^0.4"
   },
   "autoload": {

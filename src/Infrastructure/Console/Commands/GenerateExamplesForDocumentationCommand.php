@@ -17,7 +17,9 @@ use Bitrix24\SDK\Core\Exceptions\FileNotFoundException;
 use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
+use DateTime;
 use InvalidArgumentException;
+use OpenAI;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -40,6 +42,8 @@ class GenerateExamplesForDocumentationCommand extends Command
 {
     const TARGET_FOLDER = 'folder';
     const PROMPT_TEMPLATE_FILE = 'prompt-template';
+    const OPEN_AI_API_KEY = 'openai-api-key';
+    const OPEN_AI_MODEL = 'openai-model';
 
     public function __construct(
         private TyphoonReflector          $typhoonReflector,
@@ -70,7 +74,21 @@ class GenerateExamplesForDocumentationCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 'master prompt template markdown file',
                 ''
-            );;
+            )
+            ->addOption(
+                self::OPEN_AI_MODEL,
+                null,
+                InputOption::VALUE_REQUIRED,
+                'open ai model code',
+                'gpt-4o-mini'
+            )
+            ->addOption(
+                self::OPEN_AI_API_KEY,
+                null,
+                InputOption::VALUE_REQUIRED,
+                'open ai API key',
+                ''
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -79,12 +97,22 @@ class GenerateExamplesForDocumentationCommand extends Command
         try {
             $targetFolder = (string)$input->getOption(self::TARGET_FOLDER);
             if ($targetFolder === '') {
-                throw new InvalidArgumentException('you must provide a folder to save generated examples');
+                throw new InvalidArgumentException(sprintf('you must provide a folder to save generated examples in option «%s»', self::TARGET_FOLDER));
             }
             $promptTemplateFile = (string)$input->getOption(self::PROMPT_TEMPLATE_FILE);
             if ($promptTemplateFile === '') {
-                throw new InvalidArgumentException('you must provide a markdown file with prompt template');
+                throw new InvalidArgumentException(sprintf('you must provide a markdown file with prompt template in option «%s»', self::PROMPT_TEMPLATE_FILE));
             }
+            $openAiModel = (string)$input->getOption(self::OPEN_AI_MODEL);
+            if ($openAiModel === '') {
+                throw new InvalidArgumentException(sprintf('you must provide an open ai model code in option «%s»', self::OPEN_AI_MODEL));
+            }
+            $openAiKey = (string)$input->getOption(self::OPEN_AI_API_KEY);
+            if ($openAiKey === '') {
+                throw new InvalidArgumentException(sprintf('you must provide an open ai api key in option «%s»', self::OPEN_AI_API_KEY));
+            }
+
+
             // get sdk root path, change magic number if move current file to another folder depth
             $sdkBasePath = dirname(__FILE__, 5) . '/';
             $this->logger->debug('GenerateExamplesForDocumentationCommand.start', [
@@ -94,27 +122,48 @@ class GenerateExamplesForDocumentationCommand extends Command
             ]);
             $io->info('Generate api examples...');
 
-            $promptTemplate = $this->loadPromptTemplateFromFile($promptTemplateFile);
-
-
             $methodName = 'crm.deal.list';
-            $data = $this->prepareDataForPromptByServiceMethod(
-                CRMServiceBuilder::class,
-                \Bitrix24\SDK\Services\CRM\Deal\Service\Deal::class,
-                'list'
-            );
-            $prompt = $this->generatePromptFromTemplate(
-                $promptTemplate,
-                $data
-            );
-
-            $promptFileName = sprintf('%s/prompts/%s/prompt-%s.md',
+            $attemptId = (new DateTime())->format('Y-m-d-H-i-s');
+            $promptFileName = sprintf('%s/prompts/%s/%s-%s.md',
                 $targetFolder,
                 $methodName,
+                $attemptId,
                 $methodName,
             );
+            $exampleFile = sprintf('%s/examples/%s/gpt-%s-%s.md',
+                $targetFolder,
+                $methodName,
+                $attemptId,
+                $methodName
+            );
 
-            $this->savePrompt($promptFileName, $prompt);
+            // generate prompt for target SDK API-method
+//            $promptTemplate = $this->loadPromptTemplateFromFile($promptTemplateFile);
+//            $data = $this->prepareDataForPromptByServiceMethod(
+//                CRMServiceBuilder::class,
+//                \Bitrix24\SDK\Services\CRM\Deal\Service\Deal::class,
+//                'list'
+//            );
+//            $prompt = $this->generatePromptFromTemplate(
+//                $promptTemplate,
+//                $data
+//            );
+//            $this->savePrompt($promptFileName, $prompt);
+
+
+//            exit();
+
+
+
+            $promptPath = $sdkBasePath . 'diplodoc/var/prompts/crm.deal.list/2024-10-19-19-46-30-crm.deal.list.md';
+
+
+            $promptBody = file_get_contents($promptPath);
+
+            $result = $this->generateExampleFromGpt($openAiModel, $openAiKey, $promptBody);
+
+
+            $this->saveExample($exampleFile, $result);
 
 
         } catch (Throwable $exception) {
@@ -124,6 +173,35 @@ class GenerateExamplesForDocumentationCommand extends Command
             return self::INVALID;
         }
         return self::SUCCESS;
+    }
+
+
+    private function saveExample(string $file, string $examplePayload): void
+    {
+        $this->filesystem->dumpFile($file, $examplePayload);
+    }
+
+    /**
+     * @param non-empty-string $model
+     * @param non-empty-string $apiKey
+     * @param non-empty-string $prompt
+     * @return ?string
+     */
+    private function generateExampleFromGpt(string $model, string $apiKey, string $prompt): ?string
+    {
+        $client = OpenAI::client($apiKey);
+        $result = $client->chat()->create([
+            'model' => $model,
+            'temperature' => 0,
+            'messages' => [
+                [
+                    'role' => 'system',
+                    'content' => $prompt
+                ],
+            ],
+        ]);
+
+        return $result->choices[0]->message->content;
     }
 
     private function savePrompt($fileName, $content): void
@@ -137,6 +215,9 @@ class GenerateExamplesForDocumentationCommand extends Command
         return str_replace(array_keys($data), array_values($data), $template);
     }
 
+    /**
+     * @throws FileNotFoundException
+     */
     private function loadPromptTemplateFromFile(string $fileName): string
     {
         if (!$this->filesystem->exists($fileName)) {
@@ -185,10 +266,19 @@ class GenerateExamplesForDocumentationCommand extends Command
                 ) . PHP_EOL;
         }
 
+        $returnResultClassName = $this->getMethodReturnResultType($serviceClassName, $serviceMethodName);
+
+        //todo get methods of result class and get results for subordinated classes
+        $subordinateClasses='';
+
+
         $result = [
             '#PHP_VERSION#' => PHP_VERSION,
             '#METHOD_NAME#' => $serviceMethodName,
             '#CLASS_NAME#' => $serviceClassName,
+            '#METHOD_RETURN_RESULT_TYPE#' => $returnResultClassName,
+            '#RETURN_RESULT_CLASS_SOURCE_CODE#' => $this->getClassSourceCode($returnResultClassName),
+            '#RETURN_RESULT_SUBORDINATE_CLASSES_SOURCE_CODE#' => $subordinateClasses,
             '#METHOD_PARAMETERS#' => $methodParameters,
             //todo cache?
             '#ROOT_SERVICE_BUILDER_METHODS#' => $rootSbMethods,
@@ -243,6 +333,18 @@ class GenerateExamplesForDocumentationCommand extends Command
             ];
         }
         return $methods;
+    }
+
+    /**
+     * @param non-empty-string $className
+     * @param non-empty-string $methodName
+     * @return string
+     */
+    private function getMethodReturnResultType(string $className, string $methodName): string
+    {
+        $class = $this->typhoonReflector->reflectClass($className);
+        $method = $class->methods()[$methodName];
+        return stringify($method->returnType());
     }
 
     /**
