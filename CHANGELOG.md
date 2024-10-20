@@ -6,11 +6,16 @@
 
 - Developer experience: added example `/examples/local-app-workflows` for demonstrate work
   with [workflows](https://apidocs.bitrix24.com/api-reference/bizproc/index.html).
+- Added methods for filtration entity fields in `Bitrix24\SDK\Core\Fields\FieldsFilter`:
+    - `Bitrix24\SDK\Core\Fields\FieldsFilter::filterUserFields`
+    - `Bitrix24\SDK\Core\Fields\FieldsFilter::filterSmartProcessFields`
 
 ### Fixed
 
 - Fixed errors in `Bitrix24\SDK\Services\Workflows\Common\WorkflowDocumentId`,
   see [parsing errors](https://github.com/bitrix24/b24phpsdk/issues/54).
+- Fixed error in `Bitrix24\SDK\Core\Fields\FieldsFilter::filterSystemFields`,
+  see [filtration errors](https://github.com/bitrix24/b24phpsdk/issues/65).
 
 <!--
 ## Unreleased
