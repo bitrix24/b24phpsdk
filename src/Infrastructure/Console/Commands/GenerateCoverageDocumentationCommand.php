@@ -27,7 +27,7 @@ use Symfony\Component\Finder\Finder;
 use Throwable;
 
 #[AsCommand(
-    name: 'b24:util:generate-coverage-documentation',
+    name: 'b24-dev:generate-coverage-documentation',
     description: 'generate coverage documentation for all api commands',
     hidden: false
 )]
