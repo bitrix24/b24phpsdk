@@ -6,6 +6,8 @@
 
 - Fixed errors in `Bitrix24\SDK\Services\Workflows\Common\WorkflowDocumentId`,
   see [parsing errors](https://github.com/bitrix24/b24phpsdk/issues/54).
+- Fixed the problem with mismatch Deals fields in API and SDK, see 
+  [Increasing code coverage with annotations](https://github.com/bitrix24/b24phpsdk/issues/60).
 
 <!--
 ## Unreleased
