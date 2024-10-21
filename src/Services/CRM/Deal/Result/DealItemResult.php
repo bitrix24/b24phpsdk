@@ -54,6 +54,16 @@ use Money\Currency;
  * @property-read string|null $UTM_CAMPAIGN
  * @property-read string|null $UTM_CONTENT
  * @property-read string|null $UTM_TERM
+ * @property-read int|null $ASSIGNED_BY_ID
+ * @property-read array|null $CONTACT_IDS
+ * @property-read int|null $CREATED_BY_ID
+ * @property-read CarbonImmutable $DATE_CREATE
+ * @property-read CarbonImmutable $DATE_MODIFY
+ * @property-read int|null $LAST_ACTIVITY_BY
+ * @property-read CarbonImmutable $LAST_ACTIVITY_TIME
+ * @property-read int|null $MODIFY_BY_ID
+ * @property-read int|null $MOVED_BY_ID
+ * @property-read CarbonImmutable $MOVED_TIME
  */
 class DealItemResult extends AbstractCrmItem
 {

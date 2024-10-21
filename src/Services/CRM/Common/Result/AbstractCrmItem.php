@@ -52,9 +52,12 @@ class AbstractCrmItem extends AbstractItem
         switch ($offset) {
             case 'ID':
             case 'ASSIGNED_BY_ID':
+            case 'CONTACT_IDS':
             case 'RESPONSIBLE_ID':
             case 'CREATED_BY_ID':
             case 'MODIFY_BY_ID':
+            case 'MOVED_BY_ID':
+            case 'MOVED_TIME':
             case 'createdBy':
             case 'updatedBy':
             case 'movedBy':
