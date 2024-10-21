@@ -1,0 +1,14 @@
+parameters:
+  level: 4
+  paths:
+    - bin/
+    - src/
+  bootstrapFiles:
+    - tests/bootstrap.php
+  parallel:
+    jobSize: 20
+    maximumNumberOfProcesses: 8
+    minimumNumberOfJobsPerProcess: 2
+  editorUrlTitle: '%%relFile%%:%%line%%'
+  editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
+  treatPhpDocTypesAsCertain: false
