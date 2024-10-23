@@ -138,24 +138,20 @@ class GenerateExamplesForDocumentationCommand extends Command
             );
 
             // generate prompt for target SDK API-method
-//            $promptTemplate = $this->loadPromptTemplateFromFile($promptTemplateFile);
-//            $data = $this->prepareDataForPromptByServiceMethod(
-//                CRMServiceBuilder::class,
-//                \Bitrix24\SDK\Services\CRM\Deal\Service\Deal::class,
-//                'list'
-//            );
-//            $prompt = $this->generatePromptFromTemplate(
-//                $promptTemplate,
-//                $data
-//            );
-//            $this->savePrompt($promptFileName, $prompt);
+            $promptTemplate = $this->loadPromptTemplateFromFile($promptTemplateFile);
+            $data = $this->prepareDataForPromptByServiceMethod(
+                CRMServiceBuilder::class,
+                \Bitrix24\SDK\Services\CRM\Deal\Service\Deal::class,
+                'list'
+            );
+            $prompt = $this->generatePromptFromTemplate(
+                $promptTemplate,
+                $data
+            );
+            $this->savePrompt($promptFileName, $prompt);
 
 
-//            exit();
-
-
-
-            $promptPath = $sdkBasePath . 'diplodoc/var/prompts/crm.deal.list/2024-10-19-19-46-30-crm.deal.list.md';
+            $promptPath = $sdkBasePath . 'diplodoc/var/prompts/crm.deal.list/2024-10-23-20-18-16-crm.deal.list.md';
 
 
             $promptBody = file_get_contents($promptPath);
@@ -192,7 +188,7 @@ class GenerateExamplesForDocumentationCommand extends Command
         $client = OpenAI::client($apiKey);
         $result = $client->chat()->create([
             'model' => $model,
-            'temperature' => 0,
+            'temperature' => 1,
             'messages' => [
                 [
                     'role' => 'system',
@@ -227,15 +223,17 @@ class GenerateExamplesForDocumentationCommand extends Command
         return file_get_contents($fileName);
     }
 
+    /**
+     * @throws FileNotFoundException
+     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     */
     protected function prepareDataForPromptByServiceMethod(
         string $serviceBuilderClassName,
         string $serviceClassName,
         string $serviceMethodName,
     ): array
     {
-        $this->logger->debug('generateGptPromptByServiceMethod.start', [
-
-        ]);
+        $this->logger->debug('generateGptPromptByServiceMethod.start');
 
         // pack method parameters
         $methodParameters = PHP_EOL;
@@ -268,17 +266,33 @@ class GenerateExamplesForDocumentationCommand extends Command
 
         $returnResultClassName = $this->getMethodReturnResultType($serviceClassName, $serviceMethodName);
 
-        //todo get methods of result class and get results for subordinated classes
-        $subordinateClasses='';
+        // get methods list for result class
+        $returnResultClassMethods = $this->getClassMethods($returnResultClassName);
+        $subordinateClassesSourceCode = '';
+        foreach ($returnResultClassMethods as $returnResultClassMethod) {
+            if (!$returnResultClassMethod['is_declared_in_current_file']) {
+                continue;
+            }
 
+            // it can be
+            //  - array
+            if ($this->isListType($returnResultClassMethod['method_return_type'])) {
+                $subordinateClassesSourceCode .= $this->getClassSourceCode(
+                    $this->extractItemTypeFromListType($returnResultClassMethod['method_return_type']),
+                    false
+                );
+            }
+            //  - one item
+            //  - null
+        }
 
         $result = [
             '#PHP_VERSION#' => PHP_VERSION,
             '#METHOD_NAME#' => $serviceMethodName,
             '#CLASS_NAME#' => $serviceClassName,
             '#METHOD_RETURN_RESULT_TYPE#' => $returnResultClassName,
-            '#RETURN_RESULT_CLASS_SOURCE_CODE#' => $this->getClassSourceCode($returnResultClassName),
-            '#RETURN_RESULT_SUBORDINATE_CLASSES_SOURCE_CODE#' => $subordinateClasses,
+            '#RETURN_RESULT_CLASS_SOURCE_CODE#' => $this->getClassSourceCode($returnResultClassName, false),
+            '#RETURN_RESULT_SUBORDINATE_CLASSES_SOURCE_CODE#' => $subordinateClassesSourceCode,
             '#METHOD_PARAMETERS#' => $methodParameters,
             //todo cache?
             '#ROOT_SERVICE_BUILDER_METHODS#' => $rootSbMethods,
@@ -296,9 +310,29 @@ class GenerateExamplesForDocumentationCommand extends Command
     }
 
     /**
+     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     */
+    private function extractItemTypeFromListType(string $listType): string
+    {
+        if (!$this->isListType($listType)) {
+            throw new \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException(sprintf('type «%s» is not list type', $listType));
+        }
+        // skip "array<" and ">"
+        return substr($listType, 6, -1);
+    }
+
+    /**
+     * @param non-empty-string $type
+     */
+    private function isListType(string $type): bool
+    {
+        return str_starts_with($type, 'array<');
+    }
+
+    /**
      * @throws FileNotFoundException
      */
-    private function getClassSourceCode(string $className): string
+    private function getClassSourceCode(string $className, bool $isSkipHeader = true): string
     {
         $typhoonClassMeta = $this->typhoonReflector->reflectClass($className);
         $fileName = $typhoonClassMeta->file();
@@ -308,8 +342,12 @@ class GenerateExamplesForDocumentationCommand extends Command
         }
 
         $source = file($fileName);
-        $length = $typhoonClassMeta->location()->endLine - $typhoonClassMeta->location()->startLine;
-        return implode("", array_slice($source, $typhoonClassMeta->location()->startLine - 1, $length));
+        if ($isSkipHeader) {
+            $length = $typhoonClassMeta->location()->endLine - $typhoonClassMeta->location()->startLine;
+            return implode("", array_slice($source, $typhoonClassMeta->location()->startLine - 1, $length + 1));
+        }
+
+        return implode("", array_slice($source, 1, $typhoonClassMeta->location()->endLine));
     }
 
     /**
@@ -330,6 +368,7 @@ class GenerateExamplesForDocumentationCommand extends Command
             $methods[] = [
                 'method_name' => str_replace('method ', '', $method->id->describe()),
                 'method_return_type' => stringify($method->returnType()),
+                'is_declared_in_current_file' => $method->file() === $typhoonClassMeta->file(),
             ];
         }
         return $methods;

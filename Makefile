@@ -71,6 +71,12 @@ debug-show-env:
 build-documentation:
 	php bin/console b24-dev:generate-coverage-documentation --webhook=$(BITRIX24_WEBHOOK) --repository-url=https://github.com/bitrix24/b24phpsdk --repository-branch=$(DOCUMENTATION_DEFAULT_TARGET_BRANCH) --file=docs/EN/Services/bitrix24-php-sdk-methods.md
 
+# build examples for rest-api documentation
+build-examples-for-documentation:
+	php bin/console b24-dev:generate-examples --folder=diplodoc/var/ --prompt-template=diplodoc/file-templates/gpt/master-prompt-template.md --openai-api-key=$(DOCUMENTATION_OPEN_AI_API_KEY)
+
+
+
 # linters
 lint-phpstan:
 	vendor/bin/phpstan --memory-limit=1G analyse
