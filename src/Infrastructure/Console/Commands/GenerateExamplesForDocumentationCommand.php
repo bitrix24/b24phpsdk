@@ -23,9 +23,11 @@ use OpenAI;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Filesystem\Filesystem;
@@ -43,13 +45,13 @@ class GenerateExamplesForDocumentationCommand extends Command
 {
     const TARGET_FOLDER = 'folder';
     const PROMPT_TEMPLATE_FILE = 'prompt-template';
+    const EXAMPLE_TEMPLATE_FILE = 'example-template';
     const OPEN_AI_API_KEY = 'openai-api-key';
     const OPEN_AI_MODEL = 'openai-model';
 
     public function __construct(
-        private TyphoonReflector          $typhoonReflector,
+        private readonly TyphoonReflector $typhoonReflector,
         private readonly AttributesParser $attributesParser,
-        private readonly Finder           $finder,
         private readonly Filesystem       $filesystem,
         private readonly LoggerInterface  $logger)
     {
@@ -74,6 +76,13 @@ class GenerateExamplesForDocumentationCommand extends Command
                 null,
                 InputOption::VALUE_REQUIRED,
                 'master prompt template markdown file',
+                ''
+            )
+            ->addOption(
+                self::EXAMPLE_TEMPLATE_FILE,
+                null,
+                InputOption::VALUE_REQUIRED,
+                'example template php file',
                 ''
             )
             ->addOption(
@@ -104,6 +113,10 @@ class GenerateExamplesForDocumentationCommand extends Command
             if ($promptTemplateFile === '') {
                 throw new InvalidArgumentException(sprintf('you must provide a markdown file with prompt template in option «%s»', self::PROMPT_TEMPLATE_FILE));
             }
+            $exampleTemplateFile = (string)$input->getOption(self::EXAMPLE_TEMPLATE_FILE);
+            if ($exampleTemplateFile === '') {
+                throw new InvalidArgumentException(sprintf('you must provide a example template file with php template in option «%s»', self::EXAMPLE_TEMPLATE_FILE));
+            }
             $openAiModel = (string)$input->getOption(self::OPEN_AI_MODEL);
             if ($openAiModel === '') {
                 throw new InvalidArgumentException(sprintf('you must provide an open ai model code in option «%s»', self::OPEN_AI_MODEL));
@@ -113,7 +126,6 @@ class GenerateExamplesForDocumentationCommand extends Command
                 throw new InvalidArgumentException(sprintf('you must provide an open ai api key in option «%s»', self::OPEN_AI_API_KEY));
             }
 
-
             // get sdk root path, change magic number if move current file to another folder depth
             $sdkBasePath = dirname(__FILE__, 5) . '/';
             $this->logger->debug('GenerateExamplesForDocumentationCommand.start', [
@@ -121,57 +133,111 @@ class GenerateExamplesForDocumentationCommand extends Command
                 'sdkBasePath' => $sdkBasePath,
                 'promptTemplateFile' => $promptTemplateFile
             ]);
-            $io->info('Generate api examples...');
+            $io->info('Generate prompts for each service api method...');
 
             // require all SDK services
             $this->requireAllClassesByPath('src/Services');
             $sdkClassNames = $this->getAllSdkClassNames();
             $supportedInSdkMethods = $this->attributesParser->getSupportedInSdkApiMethods($sdkClassNames, $sdkBasePath);
 
-            // generate prompts per method
-            $progressBar = new ProgressBar($output, count($supportedInSdkMethods));
-            $attemptId = (new DateTime())->format('Y-m-d-H-i-s');
-            $promptTemplate = $this->loadPromptTemplateFromFile($promptTemplateFile);
-            foreach ($supportedInSdkMethods as $apiMethod => $sdkMethod) {
-                $promptFileName = sprintf('%s/prompts/%s/%s-%s.md',
-                    $targetFolder,
-                    $apiMethod,
-                    $attemptId,
-                    $apiMethod,
+            while (true) {
+                $helper = $this->getHelper('question');
+                $question = new ChoiceQuestion(
+                    'Please select command',
+                    [
+                        1 => 'generate prompts',
+                        2 => 'generate examples with GPT',
+                        3 => 'build examples in php files',
+                        0 => 'exit🚪'
+                    ],
+                    null
                 );
-                $data = $this->prepareDataForPromptByServiceMethod(
-                    CRMServiceBuilder::class,
-                    $sdkMethod['sdk_class_name'],
-                    $sdkMethod['sdk_method_name']
-                );
-                $prompt = $this->generatePromptFromTemplate(
-                    $promptTemplate,
-                    $data
-                );
-                $this->savePrompt($promptFileName, $prompt);
-                $progressBar->advance();
+                $question->setErrorMessage('Menu item «%s» is invalid.');
+                $menuItem = $helper->ask($input, $output, $question);
+                $output->writeln(sprintf('You have just selected: %s', $menuItem));
+
+                switch ($menuItem) {
+                    case 'generate prompts':
+                        $output->writeln(['<info>Generate prompts for each supported in SDK method...</info>', '']);
+                        $progressBar = new ProgressBar($output, count($supportedInSdkMethods));
+                        $promptTemplate = $this->loadContentsFromFile($promptTemplateFile);
+                        foreach ($supportedInSdkMethods as $apiMethod => $sdkMethod) {
+                            $promptFileName = sprintf('%s/prompts/%s/%s.md',
+                                $targetFolder,
+                                $apiMethod,
+                                $apiMethod,
+                            );
+                            $data = $this->prepareDataForPromptByServiceMethod(
+                                CRMServiceBuilder::class,
+                                $sdkMethod['sdk_class_name'],
+                                $sdkMethod['sdk_method_name']
+                            );
+                            $prompt = $this->generatePromptFromTemplate(
+                                $promptTemplate,
+                                $data
+                            );
+                            $this->savePrompt($promptFileName, $prompt);
+                            $progressBar->advance();
+                        }
+                        $progressBar->finish();
+                        $output->writeln(['', sprintf('<comment>All prompts generated and stored in folder «%s»</comment>', $targetFolder), '']);
+                        break;
+                    case 'generate examples with GPT':
+                        // generate examples based on prompts
+                        $output->writeln(['<info>Generate examples based on prompts for each supported in SDK method...</info>', '']);
+                        $prompts = [];
+                        $promptsFolder = $sdkBasePath . $targetFolder . 'prompts';
+                        foreach ((new Finder())->in($promptsFolder)->directories()->sortByName() as $directory) {
+                            $methodName = $directory->getFilename();
+                            $prompts[$methodName] = sprintf('%s/%s.md', $methodName, $methodName);
+                        }
+
+                        // generate examples
+                        $progressBar = new ProgressBar($output, count($prompts));
+                        foreach ($prompts as $methodName => $promptPath) {
+                            $exampleFilePath = sprintf('%s/examples/%s/%s.md',
+                                $targetFolder,
+                                $methodName,
+                                $methodName
+                            );
+                            if ($this->filesystem->exists($exampleFilePath)) {
+                                $progressBar->advance();
+                                continue;
+                            }
+                            $promptFilePath = sprintf('%s%sprompts/%s',
+                                $sdkBasePath,
+                                $targetFolder,
+                                $promptPath
+                            );
+
+                            $promptBody = file_get_contents($promptFilePath);
+
+
+                            $result = $this->generateExampleFromGpt($openAiModel, $openAiKey, $promptBody);
+                            $this->saveExample($exampleFilePath, $result);
+                            $progressBar->advance();
+                        }
+                        $progressBar->finish();
+                        $output->writeln(['', sprintf('<comment>All examples generated and stored in folder «%s/examples»</comment>', $targetFolder), '']);
+                        break;
+                    case 'build examples in php files':
+                        $output->writeln(['<info>Generate examples from GPT-codegen results for each supported in SDK method...</info>', '']);
+                        $exampleTemplate = $this->loadContentsFromFile($exampleTemplateFile);
+
+                        $methodName ='app.info';
+                        $generatedExample = $this->loadContentsFromFile(
+                            $sdkBasePath . $targetFolder.'examples/app.info/app.info.md'
+                        );
+
+                        dd($generatedExample);
+                        // find generated example
+                        // build example file in result folder
+                        break;
+                    case 'exit🚪':
+                        $output->writeln('<info>See you later</info>');
+                        return Command::SUCCESS;
+                }
             }
-            $progressBar->finish();
-
-
-            // generate examples based on prompts
-//            $exampleFile = sprintf('%s/examples/%s/gpt-%s-%s.md',
-//                $targetFolder,
-//                $methodName,
-//                $attemptId,
-//                $methodName
-//            );
-//
-//
-//            $promptPath = $sdkBasePath . 'diplodoc/var/prompts/crm.deal.list/2024-10-23-20-18-16-crm.deal.list.md';
-//
-//
-//            $promptBody = file_get_contents($promptPath);
-//
-//            $result = $this->generateExampleFromGpt($openAiModel, $openAiKey, $promptBody);
-//
-//
-//            $this->saveExample($exampleFile, $result);
 
 
         } catch (Throwable $exception) {
@@ -180,7 +246,6 @@ class GenerateExamplesForDocumentationCommand extends Command
 
             return self::INVALID;
         }
-        return self::SUCCESS;
     }
 
     /**
@@ -196,12 +261,21 @@ class GenerateExamplesForDocumentationCommand extends Command
     }
 
     /**
+     * @param non-empty-string $targetNamespace
+     * @param non-empty-string $className
+     * @return bool
+     */
+    private function isClassInTargetNamespace(string $targetNamespace, string $className): bool
+    {
+        return strncmp($className, $targetNamespace, strlen($targetNamespace)) === 0;
+    }
+
+    /**
      * @param non-empty-string $path
      */
     private function requireAllClassesByPath(string $path): void
     {
-        $this->finder->files()->in($path)->name('*.php');
-        foreach ($this->finder as $file) {
+        foreach ((new Finder())->files()->in($path)->name('*.php') as $file) {
             if ($file->isDir()) {
                 continue;
             }
@@ -227,7 +301,7 @@ class GenerateExamplesForDocumentationCommand extends Command
         $client = OpenAI::client($apiKey);
         $result = $client->chat()->create([
             'model' => $model,
-            'temperature' => 1,
+            'temperature' => 0.5,
             'messages' => [
                 [
                     'role' => 'system',
@@ -254,10 +328,10 @@ class GenerateExamplesForDocumentationCommand extends Command
      * @param non-empty-string $fileName
      * @throws FileNotFoundException
      */
-    private function loadPromptTemplateFromFile(string $fileName): string
+    private function loadContentsFromFile(string $fileName): string
     {
         if (!$this->filesystem->exists($fileName)) {
-            throw new FileNotFoundException(sprintf('prompt template file not found: %s', $fileName));
+            throw new FileNotFoundException(sprintf('file not found: %s', $fileName));
         }
 
         return file_get_contents($fileName);
@@ -314,16 +388,19 @@ class GenerateExamplesForDocumentationCommand extends Command
                 continue;
             }
 
+            $itemType = $returnResultClassMethod['method_return_type'];
             // it can be
             //  - array
-            if ($this->isListType($returnResultClassMethod['method_return_type'])) {
-                $subordinateClassesSourceCode .= $this->getClassSourceCode(
-                    $this->extractItemTypeFromListType($returnResultClassMethod['method_return_type']),
-                    false
-                );
+            if ($this->isListType($itemType)) {
+                $itemType = $this->extractItemTypeFromListType($returnResultClassMethod['method_return_type']);
             }
             //  - one item
-            //  - null
+            // skip int, bool, string, CarbonImmutable etc
+            if (!$this->isClassInTargetNamespace('Bitrix24\SDK\Services', $itemType)) {
+                continue;
+            }
+
+            $subordinateClassesSourceCode .= $this->getClassSourceCode($itemType, false);
         }
 
         $result = [

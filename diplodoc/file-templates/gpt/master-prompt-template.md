@@ -14,7 +14,7 @@ Write php #PHP_VERSION# call example with requirements:
 5. For fields with type DateTime use date format Atom
 6. Use all essential fields described in phpdoc annotation for method «#METHOD_NAME#»
 7. Process return result with related method from class «#METHOD_RETURN_RESULT_TYPE#» 
-8. Use print function on public properties of result object *ItemResult
+8. Use print() function on public properties of result object *ItemResult
 9. Return only php code without markdown wrapper
 
 
