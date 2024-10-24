@@ -22,6 +22,7 @@ use InvalidArgumentException;
 use OpenAI;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -122,44 +123,55 @@ class GenerateExamplesForDocumentationCommand extends Command
             ]);
             $io->info('Generate api examples...');
 
-            $methodName = 'crm.deal.list';
+            // require all SDK services
+            $this->requireAllClassesByPath('src/Services');
+            $sdkClassNames = $this->getAllSdkClassNames();
+            $supportedInSdkMethods = $this->attributesParser->getSupportedInSdkApiMethods($sdkClassNames, $sdkBasePath);
+
+            // generate prompts per method
+            $progressBar = new ProgressBar($output, count($supportedInSdkMethods));
             $attemptId = (new DateTime())->format('Y-m-d-H-i-s');
-            $promptFileName = sprintf('%s/prompts/%s/%s-%s.md',
-                $targetFolder,
-                $methodName,
-                $attemptId,
-                $methodName,
-            );
-            $exampleFile = sprintf('%s/examples/%s/gpt-%s-%s.md',
-                $targetFolder,
-                $methodName,
-                $attemptId,
-                $methodName
-            );
-
-            // generate prompt for target SDK API-method
             $promptTemplate = $this->loadPromptTemplateFromFile($promptTemplateFile);
-            $data = $this->prepareDataForPromptByServiceMethod(
-                CRMServiceBuilder::class,
-                \Bitrix24\SDK\Services\CRM\Deal\Service\Deal::class,
-                'list'
-            );
-            $prompt = $this->generatePromptFromTemplate(
-                $promptTemplate,
-                $data
-            );
-            $this->savePrompt($promptFileName, $prompt);
+            foreach ($supportedInSdkMethods as $apiMethod => $sdkMethod) {
+                $promptFileName = sprintf('%s/prompts/%s/%s-%s.md',
+                    $targetFolder,
+                    $apiMethod,
+                    $attemptId,
+                    $apiMethod,
+                );
+                $data = $this->prepareDataForPromptByServiceMethod(
+                    CRMServiceBuilder::class,
+                    $sdkMethod['sdk_class_name'],
+                    $sdkMethod['sdk_method_name']
+                );
+                $prompt = $this->generatePromptFromTemplate(
+                    $promptTemplate,
+                    $data
+                );
+                $this->savePrompt($promptFileName, $prompt);
+                $progressBar->advance();
+            }
+            $progressBar->finish();
 
 
-            $promptPath = $sdkBasePath . 'diplodoc/var/prompts/crm.deal.list/2024-10-23-20-18-16-crm.deal.list.md';
-
-
-            $promptBody = file_get_contents($promptPath);
-
-            $result = $this->generateExampleFromGpt($openAiModel, $openAiKey, $promptBody);
-
-
-            $this->saveExample($exampleFile, $result);
+            // generate examples based on prompts
+//            $exampleFile = sprintf('%s/examples/%s/gpt-%s-%s.md',
+//                $targetFolder,
+//                $methodName,
+//                $attemptId,
+//                $methodName
+//            );
+//
+//
+//            $promptPath = $sdkBasePath . 'diplodoc/var/prompts/crm.deal.list/2024-10-23-20-18-16-crm.deal.list.md';
+//
+//
+//            $promptBody = file_get_contents($promptPath);
+//
+//            $result = $this->generateExampleFromGpt($openAiModel, $openAiKey, $promptBody);
+//
+//
+//            $this->saveExample($exampleFile, $result);
 
 
         } catch (Throwable $exception) {
@@ -171,6 +183,33 @@ class GenerateExamplesForDocumentationCommand extends Command
         return self::SUCCESS;
     }
 
+    /**
+     * @return array
+     */
+    private function getAllSdkClassNames(): array
+    {
+        $allClasses = get_declared_classes();
+        $namespace = 'Bitrix24\SDK\Services';
+        return array_filter($allClasses, static function ($class) use ($namespace) {
+            return strncmp($class, $namespace, 21) === 0;
+        });
+    }
+
+    /**
+     * @param non-empty-string $path
+     */
+    private function requireAllClassesByPath(string $path): void
+    {
+        $this->finder->files()->in($path)->name('*.php');
+        foreach ($this->finder as $file) {
+            if ($file->isDir()) {
+                continue;
+            }
+
+            $absoluteFilePath = $file->getRealPath();
+            require_once $absoluteFilePath;
+        }
+    }
 
     private function saveExample(string $file, string $examplePayload): void
     {
@@ -212,6 +251,7 @@ class GenerateExamplesForDocumentationCommand extends Command
     }
 
     /**
+     * @param non-empty-string $fileName
      * @throws FileNotFoundException
      */
     private function loadPromptTemplateFromFile(string $fileName): string
