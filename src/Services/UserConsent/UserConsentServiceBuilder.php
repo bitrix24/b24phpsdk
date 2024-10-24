@@ -13,9 +13,12 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\UserConsent;
 
+use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\UserConsent\Service\UserConsent;
 use Bitrix24\SDK\Services\UserConsent\Service\UserConsentAgreement;
+#[ApiServiceBuilderMetadata(new Scope(['user']))]
 
 class UserConsentServiceBuilder extends AbstractServiceBuilder
 {
