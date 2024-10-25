@@ -1,11 +1,10 @@
 <?php
 declare(strict_types=1);
 
-use Bitrix24\SDK\Services\ServiceBuilderFactory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 
-require_once dirname(__DIR__, 3) . 'vendor/autoload.php';
-
-$serviceBuilder = ServiceBuilderFactory::createServiceBuilderFromWebhook();
+require_once 'tests/bootstrap.php';
+$serviceBuilder = Fabric::getServiceBuilder(true);
 
 //generated_example_code_start
 
