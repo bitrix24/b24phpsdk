@@ -10,18 +10,18 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Infrastructure\Console\Commands;
+namespace Bitrix24\SDK\Infrastructure\Console\Commands\Documentation;
 
 use Bitrix24\SDK\Attributes\Services\AttributesParser;
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Throwable;
@@ -203,7 +203,7 @@ EOT;
             $this->loadAllServiceClasses();
             $sdkClassNames = $this->getAllSdkClassNames('Bitrix24\SDK');
             // get sdk root path, change magic number if move current file to another folder depth
-            $sdkBasePath = dirname(__FILE__, 5) . '/';
+            $sdkBasePath = dirname(__FILE__, 6) . '/';
 
             $supportedInSdkMethods = $this->attributesParser->getSupportedInSdkApiMethods($sdkClassNames, $sdkBasePath);
             $supportedInSdkBatchMethods = $this->attributesParser->getSupportedInSdkBatchMethods($sdkClassNames);

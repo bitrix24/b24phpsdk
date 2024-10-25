@@ -11,6 +11,5 @@ examples/logs
 diplodoc/var
 /var
 *.private.env.*
-*.log
 .env.local
 *.local
