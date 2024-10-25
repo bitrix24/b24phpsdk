@@ -7,7 +7,9 @@ composer.lock
 tools/.env.local
 tools/logs
 tests/ApplicationBridge/auth.json
-examples/logs
+/examples/*.log
+/examples/**/*.log
+/examples/**/*/*.log
 diplodoc/var
 /var
 *.private.env.*
