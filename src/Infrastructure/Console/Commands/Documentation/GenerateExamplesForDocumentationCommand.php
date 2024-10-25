@@ -33,6 +33,8 @@ use Symfony\Component\Finder\Finder;
 use Throwable;
 use Typhoon\Reflection\TyphoonReflector;
 use function Typhoon\Type\stringify;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 #[AsCommand(
     name: 'b24-dev:generate-examples',
@@ -149,6 +151,7 @@ class GenerateExamplesForDocumentationCommand extends Command
                         1 => 'generate prompts',
                         2 => 'generate examples with GPT',
                         3 => 'build examples in php files',
+                        4 => 'validate examples',
                         0 => 'exit🚪'
                     ],
                     null
@@ -260,6 +263,39 @@ class GenerateExamplesForDocumentationCommand extends Command
                         $progressBar->finish();
                         $output->writeln(['', sprintf('<comment>All examples generated and stored in folder «%s/result»</comment>', $targetFolder), '']);
                         break;
+                    case 'validate examples':
+                        $output->writeln(['<info>Validate examples with phpstan...</info>', '']);
+
+                        // collect result examples
+                        $generatedExamples = [];
+                        $generatedExamplesFolder = $sdkBasePath . $targetFolder . '/result';
+
+                        $i = 0;
+                        foreach ((new Finder())->in($generatedExamplesFolder)->directories()->sortByName() as $directory) {
+                            $methodName = $directory->getFilename();
+                            $generatedExamples[$methodName] = sprintf('%s/%s.php', $methodName, $methodName);
+
+                            $i++;
+                            if ($i > 10) {
+                                break;
+                            }
+                        }
+                        $concurrency = 6;
+
+                        $phpstanResults = $this->runPhpstanAnalysis($output, $generatedExamples, $concurrency);
+
+                        dump($phpstanResults);
+
+                        // todo add flags
+                        // code.valid
+                        // code.invalid
+                        // documentation.send
+
+
+                        // в статью как использовать примеры - добавить запись как инстанцировать сервис билдер
+
+
+                        break;
                     case 'exit🚪':
                         $output->writeln('<info>See you later</info>');
                         return Command::SUCCESS;
@@ -271,6 +307,46 @@ class GenerateExamplesForDocumentationCommand extends Command
 
             return self::INVALID;
         }
+    }
+
+    /**
+     * @param OutputInterface $output
+     * @param array $generatedExamples
+     * @param positive-int $concurrency
+     * @return array
+     */
+    private function runPhpstanAnalysis(OutputInterface $output, array $generatedExamples, int $concurrency): array
+    {
+        $phpstanResults = [];
+        $phpstanPath = 'vendor/bin/phpstan';
+        $phpstanAnalysisLevel = 8;
+
+        $progressBar = new ProgressBar($output, count($generatedExamples));
+        $runningProcesses = [];
+        foreach ($generatedExamples as $method => $file) {
+            $progressBar->advance();
+            // run first $concurrency processes
+            if (count($runningProcesses) <= $concurrency) {
+                $runningProcesses[$method] = new Process([$phpstanPath, 'analyse', sprintf('docs/api/result/%s', $file), '--level=' . $phpstanAnalysisLevel]);
+                $runningProcesses[$method]->start();
+
+                continue;
+            }
+
+            while (count($runningProcesses) > 0) {
+                foreach ($runningProcesses as $rMethod => $rProcess) {
+                    if (!$rProcess->isRunning()) {
+                        $phpstanResults[$rMethod] = $rProcess->getOutput();
+                        unset($runningProcesses[$rMethod]);
+
+                        break 2;
+                    }
+                }
+            }
+        }
+        $progressBar->finish();
+
+        return $phpstanResults;
     }
 
     /**

@@ -10,7 +10,7 @@ tests/ApplicationBridge/auth.json
 /examples/*.log
 /examples/**/*.log
 /examples/**/*/*.log
-diplodoc/var
+docs/api/var
 /var
 *.private.env.*
 .env.local

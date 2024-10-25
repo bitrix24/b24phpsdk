@@ -73,7 +73,7 @@ build-documentation:
 
 # build examples for rest-api documentation
 build-examples-for-documentation:
-	php bin/console b24-dev:generate-examples --folder=diplodoc --prompt-template=diplodoc/file-templates/gpt/master-prompt-template.md --example-template=diplodoc/file-templates/examples/master-example.php --openai-api-key=$(DOCUMENTATION_OPEN_AI_API_KEY)
+	php bin/console b24-dev:generate-examples --folder=docs/api --prompt-template=docs/api/file-templates/gpt/master-prompt-template.md --example-template=docs/api/file-templates/examples/master-example.php --openai-api-key=$(DOCUMENTATION_OPEN_AI_API_KEY)
 
 # linters
 lint-phpstan:
