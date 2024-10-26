@@ -257,7 +257,7 @@ class GenerateExamplesForDocumentationCommand extends Command
                                     '###GENERATED_EXAMPLE_CODE###' => $generatedExample
                                 ]
                             );
-                            $finalExampleFilePath = sprintf('%s/result/%s/%s.php',
+                            $finalExampleFilePath = sprintf('%s/examples/%s/%s.php',
                                 $targetFolder,
                                 $methodName,
                                 $methodName
@@ -266,7 +266,7 @@ class GenerateExamplesForDocumentationCommand extends Command
                             $progressBar->advance();
                         }
                         $progressBar->finish();
-                        $output->writeln(['', sprintf('<comment>All examples generated and stored in folder «%s/result»</comment>', $targetFolder), '']);
+                        $output->writeln(['', sprintf('<comment>All examples generated and stored in folder «%s/examples»</comment>', $targetFolder), '']);
                         break;
                     case 'validate examples':
                         $concurrency = 8;
@@ -274,7 +274,7 @@ class GenerateExamplesForDocumentationCommand extends Command
                             sprintf('<info>Validate examples with phpstan, run %s instances in parallel</info>', $concurrency),
                             '<info>Attention! Current status flags will be overwritten!</info>',
                             '']);
-                        $generatedExamplesFolder = $sdkBasePath . $targetFolder . '/result';
+                        $generatedExamplesFolder = $sdkBasePath . $targetFolder . '/examples';
                         // collect result examples
                         $generatedExamples = [];
                         foreach ((new Finder())->in($generatedExamplesFolder)->directories()->sortByName() as $directory) {
@@ -287,14 +287,14 @@ class GenerateExamplesForDocumentationCommand extends Command
                             ]);
                         }
                         // run phpstan
-                        $phpstanResults = $this->runPhpstanAnalysis($output, $generatedExamples, $concurrency);
+                        $phpstanResults = $this->runPhpstanAnalysis($output, $targetFolder, $generatedExamples, $concurrency);
                         $output->writeln(['', '<info>Process phpstan results...</info>', '']);
                         $this->processPhpstanResults($output, $generatedExamplesFolder, $phpstanResults);
-                        $this->showStatistics($targetFolder . '/result', $output);
+                        $this->showStatistics($targetFolder . '/examples', $output);
                         break;
                     case 'show statistics':
                         $output->writeln(['<info>calculating metrics, please wait...</info>', '']);
-                        $this->showStatistics($targetFolder . '/result', $output);
+                        $this->showStatistics($targetFolder . '/examples', $output);
                         break;
                     case 'exit🚪':
                         $output->writeln('<info>See you later</info>');
@@ -381,12 +381,13 @@ class GenerateExamplesForDocumentationCommand extends Command
 
     /**
      * @param OutputInterface $output
+     * @param non-empty-string $targetFolder
      * @param array $generatedExamples
      * @param positive-int $concurrency
      * @return array
      * @throws JsonException
      */
-    private function runPhpstanAnalysis(OutputInterface $output, array $generatedExamples, int $concurrency): array
+    private function runPhpstanAnalysis(OutputInterface $output, string $targetFolder, array $generatedExamples, int $concurrency): array
     {
         $phpstanResults = [];
         $phpstanPath = 'vendor/bin/phpstan';
@@ -405,7 +406,7 @@ class GenerateExamplesForDocumentationCommand extends Command
                 $runningProcesses[$method] = new Process([
                     $phpstanPath,
                     'analyse',
-                    sprintf('docs/api/result/%s', $file),
+                    sprintf('%s/examples/%s', $targetFolder, $file),
                     '--level=' . $phpstanAnalysisLevel,
                     '--error-format=json',
                 ]);
