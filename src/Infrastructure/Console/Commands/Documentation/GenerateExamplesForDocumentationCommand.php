@@ -17,12 +17,14 @@ use Bitrix24\SDK\Core\Exceptions\FileNotFoundException;
 use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use InvalidArgumentException;
+use JsonException;
 use OpenAI;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -33,7 +35,6 @@ use Symfony\Component\Finder\Finder;
 use Throwable;
 use Typhoon\Reflection\TyphoonReflector;
 use function Typhoon\Type\stringify;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 #[AsCommand(
@@ -43,11 +44,14 @@ use Symfony\Component\Process\Process;
 )]
 class GenerateExamplesForDocumentationCommand extends Command
 {
-    const TARGET_FOLDER = 'folder';
-    const PROMPT_TEMPLATE_FILE = 'prompt-template';
-    const EXAMPLE_TEMPLATE_FILE = 'example-template';
-    const OPEN_AI_API_KEY = 'openai-api-key';
-    const OPEN_AI_MODEL = 'openai-model';
+    private const TARGET_FOLDER = 'folder';
+    private const PROMPT_TEMPLATE_FILE = 'prompt-template';
+    private const EXAMPLE_TEMPLATE_FILE = 'example-template';
+    private const OPEN_AI_API_KEY = 'openai-api-key';
+    private const OPEN_AI_MODEL = 'openai-model';
+    private const VALID_EXAMPLE_MARKER = 'code.valid';
+    private const INVALID_EXAMPLE_MARKER = 'code.errors';
+    private const DOCUMENTED_MARKER = 'method.documented';
 
     public function __construct(
         private readonly TyphoonReflector $typhoonReflector,
@@ -152,6 +156,7 @@ class GenerateExamplesForDocumentationCommand extends Command
                         2 => 'generate examples with GPT',
                         3 => 'build examples in php files',
                         4 => 'validate examples',
+                        5 => 'show statistics',
                         0 => 'exit🚪'
                     ],
                     null
@@ -180,7 +185,7 @@ class GenerateExamplesForDocumentationCommand extends Command
                                 $promptTemplate,
                                 $data
                             );
-                            $this->savePrompt($promptFileName, $prompt);
+                            $this->saveToFile($promptFileName, $prompt);
                             $progressBar->advance();
                         }
                         $progressBar->finish();
@@ -264,37 +269,32 @@ class GenerateExamplesForDocumentationCommand extends Command
                         $output->writeln(['', sprintf('<comment>All examples generated and stored in folder «%s/result»</comment>', $targetFolder), '']);
                         break;
                     case 'validate examples':
-                        $output->writeln(['<info>Validate examples with phpstan...</info>', '']);
-
+                        $concurrency = 8;
+                        $output->writeln([
+                            sprintf('<info>Validate examples with phpstan, run %s instances in parallel</info>', $concurrency),
+                            '<info>Attention! Current status flags will be overwritten!</info>',
+                            '']);
+                        $generatedExamplesFolder = $sdkBasePath . $targetFolder . '/result';
                         // collect result examples
                         $generatedExamples = [];
-                        $generatedExamplesFolder = $sdkBasePath . $targetFolder . '/result';
-
-                        $i = 0;
                         foreach ((new Finder())->in($generatedExamplesFolder)->directories()->sortByName() as $directory) {
                             $methodName = $directory->getFilename();
                             $generatedExamples[$methodName] = sprintf('%s/%s.php', $methodName, $methodName);
-
-                            $i++;
-                            if ($i > 10) {
-                                break;
-                            }
+                            // remove status flags
+                            $this->filesystem->remove([
+                                sprintf('%s/%s', $methodName, self::INVALID_EXAMPLE_MARKER),
+                                sprintf('%s/%s', $methodName, self::VALID_EXAMPLE_MARKER),
+                            ]);
                         }
-                        $concurrency = 6;
-
+                        // run phpstan
                         $phpstanResults = $this->runPhpstanAnalysis($output, $generatedExamples, $concurrency);
-
-                        dump($phpstanResults);
-
-                        // todo add flags
-                        // code.valid
-                        // code.invalid
-                        // documentation.send
-
-
-                        // в статью как использовать примеры - добавить запись как инстанцировать сервис билдер
-
-
+                        $output->writeln(['', '<info>Process phpstan results...</info>', '']);
+                        $this->processPhpstanResults($output, $generatedExamplesFolder, $phpstanResults);
+                        $this->showStatistics($targetFolder . '/result', $output);
+                        break;
+                    case 'show statistics':
+                        $output->writeln(['<info>calculating metrics, please wait...</info>', '']);
+                        $this->showStatistics($targetFolder . '/result', $output);
                         break;
                     case 'exit🚪':
                         $output->writeln('<info>See you later</info>');
@@ -310,10 +310,81 @@ class GenerateExamplesForDocumentationCommand extends Command
     }
 
     /**
+     * @param non-empty-string $targetFolder
+     */
+    private function processPhpstanResults(OutputInterface $output, string $targetFolder, array $phpstanResults): void
+    {
+        foreach ($phpstanResults as $method => $result) {
+            // found errors
+            if ($result['totals']['file_errors'] !== 0) {
+                $this->saveToFile(sprintf('%s/%s/%s', $targetFolder, $method, self::INVALID_EXAMPLE_MARKER), '');
+
+                continue;
+            }
+            $this->saveToFile(sprintf('%s/%s/%s', $targetFolder, $method, self::VALID_EXAMPLE_MARKER), '');
+        }
+    }
+
+    /**
+     * @param non-empty-string $targetFolder
+     */
+    private function showStatistics(string $targetFolder, OutputInterface $output): void
+    {
+        // calculate metrics
+        // total
+        $totalCnt = 0;
+        foreach ((new Finder())->in($targetFolder)->directories()->sortByName() as $directory) {
+            $totalCnt++;
+        }
+
+        // invalid
+        $invalidCnt = 0;
+        $invalidPercentage = 0;
+        foreach ((new Finder())->in($targetFolder)->name(self::INVALID_EXAMPLE_MARKER)->sortByName() as $directory) {
+            $invalidCnt++;
+        }
+        if ($invalidCnt > 0) {
+            $invalidPercentage = ($invalidCnt * 100) / $totalCnt;
+        }
+
+        // valid
+        $validCnt = 0;
+        $validPercentage = 0;
+        foreach ((new Finder())->in($targetFolder)->name(self::VALID_EXAMPLE_MARKER)->sortByName() as $directory) {
+            $validCnt++;
+        }
+        if ($validCnt > 0) {
+            $validPercentage = ($validCnt * 100) / $totalCnt;
+        }
+
+        // documented
+        $documentedCnt = 0;
+        $documentedPercentage = 0;
+        foreach ((new Finder())->in($targetFolder)->name(self::DOCUMENTED_MARKER)->sortByName() as $directory) {
+            $documentedCnt++;
+        }
+        if ($validCnt > 0) {
+            $documentedPercentage = ($documentedCnt * 100) / $totalCnt;
+        }
+
+        $table = new Table($output);
+        $table
+            ->setHeaders(['Metric', 'Amount', 'Percentage'])
+            ->setRows([
+                ['examples total', $totalCnt, '100%'],
+                ['invalid code', $invalidCnt, sprintf('%s%%', round($invalidPercentage, 2))],
+                ['valid code', $validCnt, sprintf('%s%%', round($validPercentage, 2))],
+                ['pushed to documentation', $documentedCnt, sprintf('%s%%', round($documentedPercentage, 2))],
+            ]);
+        $table->render();
+    }
+
+    /**
      * @param OutputInterface $output
      * @param array $generatedExamples
      * @param positive-int $concurrency
      * @return array
+     * @throws JsonException
      */
     private function runPhpstanAnalysis(OutputInterface $output, array $generatedExamples, int $concurrency): array
     {
@@ -322,26 +393,35 @@ class GenerateExamplesForDocumentationCommand extends Command
         $phpstanAnalysisLevel = 8;
 
         $progressBar = new ProgressBar($output, count($generatedExamples));
+        /**
+         * @var array<non-empty-string, Process> $runningProcesses
+         */
         $runningProcesses = [];
-        foreach ($generatedExamples as $method => $file) {
-            $progressBar->advance();
-            // run first $concurrency processes
-            if (count($runningProcesses) <= $concurrency) {
-                $runningProcesses[$method] = new Process([$phpstanPath, 'analyse', sprintf('docs/api/result/%s', $file), '--level=' . $phpstanAnalysisLevel]);
+        $chunked = array_chunk($generatedExamples, $concurrency, true);
+        foreach ($chunked as $chunk) {
+            // run all processes in chunk
+            foreach ($chunk as $method => $file) {
+                $progressBar->advance();
+                $runningProcesses[$method] = new Process([
+                    $phpstanPath,
+                    'analyse',
+                    sprintf('docs/api/result/%s', $file),
+                    '--level=' . $phpstanAnalysisLevel,
+                    '--error-format=json',
+                ]);
                 $runningProcesses[$method]->start();
-
-                continue;
             }
 
+            //wait finishing all process in chunk
             while (count($runningProcesses) > 0) {
                 foreach ($runningProcesses as $rMethod => $rProcess) {
                     if (!$rProcess->isRunning()) {
-                        $phpstanResults[$rMethod] = $rProcess->getOutput();
+                        $phpstanResults[$rMethod] = json_decode($rProcess->getOutput(), true, 512, JSON_THROW_ON_ERROR);
                         unset($runningProcesses[$rMethod]);
-
-                        break 2;
+                        break;
                     }
                 }
+                usleep(50_000);
             }
         }
         $progressBar->finish();
@@ -388,12 +468,12 @@ class GenerateExamplesForDocumentationCommand extends Command
 
     /**
      * @param non-empty-string $filename
-     * @param string $examplePayload
+     * @param string $payload
      * @return void
      */
-    private function saveToFile(string $filename, string $examplePayload): void
+    private function saveToFile(string $filename, string $payload): void
     {
-        $this->filesystem->dumpFile($filename, $examplePayload);
+        $this->filesystem->dumpFile($filename, $payload);
     }
 
     /**
@@ -417,11 +497,6 @@ class GenerateExamplesForDocumentationCommand extends Command
         ]);
 
         return $result->choices[0]->message->content;
-    }
-
-    private function savePrompt($fileName, $content): void
-    {
-        $this->filesystem->dumpFile($fileName, $content);
     }
 
     private function fillDataToTemplate(string $template, array $data): string
