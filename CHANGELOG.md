@@ -9,12 +9,14 @@
 - Added methods for filtration entity fields in `Bitrix24\SDK\Core\Fields\FieldsFilter`:
     - `Bitrix24\SDK\Core\Fields\FieldsFilter::filterUserFields`
     - `Bitrix24\SDK\Core\Fields\FieldsFilter::filterSmartProcessFields`
+- Added method `Bitrix24AccountRepositoryInterface::findByApplicationToken` in contracts for
+  support «[Delete Application](https://github.com/bitrix24/b24phpsdk/issues/62)» use case
 
 ### Fixed
 
 - Fixed errors in `Bitrix24\SDK\Services\Workflows\Common\WorkflowDocumentId`,
   see [parsing errors](https://github.com/bitrix24/b24phpsdk/issues/54).
-- Fixed the problem with mismatch Deals fields in API and SDK, see 
+- Fixed the problem with mismatch Deals fields in API and SDK, see
   [Increasing code coverage with annotations](https://github.com/bitrix24/b24phpsdk/issues/60).
 - Fixed error in `Bitrix24\SDK\Core\Fields\FieldsFilter::filterSystemFields`,
   see [filtration errors](https://github.com/bitrix24/b24phpsdk/issues/65).
