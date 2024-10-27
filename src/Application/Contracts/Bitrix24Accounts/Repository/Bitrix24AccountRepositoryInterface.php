@@ -54,6 +54,14 @@ interface Bitrix24AccountRepositoryInterface
     public function findByMemberId(string $memberId, ?Bitrix24AccountStatus $bitrix24AccountStatus = null, ?bool $isAdmin = null): array;
 
     /**
+     * Find bitrix24 accounts by applicationToken
+     * @param non-empty-string $applicationToken
+     * @return Bitrix24AccountInterface[]
+     * @throws InvalidArgumentException
+     */
+    public function findByApplicationToken(string $applicationToken): array;
+
+    /**
      * Find bitrix24 accounts by domain url and filter by status adn isAdmin flag
      * @param non-empty-string $domainUrl
      * @return Bitrix24AccountInterface[]

@@ -121,6 +121,26 @@ class InMemoryBitrix24AccountRepositoryImplementation implements Bitrix24Account
         return $items;
     }
 
+    public function findByApplicationToken(string $applicationToken): array
+    {
+        $this->logger->debug('b24AccountRepository.findByApplicationToken', [
+            'applicationToken' => $applicationToken,
+        ]);
+
+        if ($applicationToken === '') {
+            throw new InvalidArgumentException('application token cannot be empty');
+        }
+
+        $items = [];
+        foreach ($this->items as $item) {
+            if ($item->isApplicationTokenValid($applicationToken)) {
+                $items[] = $item;
+            }
+        }
+
+        return $items;
+    }
+
     /**
      * @throws InvalidArgumentException
      */
