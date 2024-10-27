@@ -390,7 +390,7 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
 
-        $found = $bitrix24AccountRepository->findByMemberId($memberId, null, true);
+        $found = $bitrix24AccountRepository->findByMemberId($memberId, null, null, true);
         $this->assertEquals($acc, $found[0]);
     }
 
@@ -422,7 +422,39 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
 
-        $found = $bitrix24AccountRepository->findByMemberId($memberId, null, true);
+        $found = $bitrix24AccountRepository->findByMemberId($memberId, null, null, true);
+        $this->assertEquals([], $found);
+    }
+
+    /**
+     * @throws Bitrix24AccountNotFoundException
+     */
+    #[Test]
+    #[DataProvider('bitrix24AccountForInstallDataProvider')]
+    #[TestDox('test findByMemberId method with b24UserId - not found')]
+    final public function testFindByMemberIdWithB24UserIdNotFound(
+        Uuid                  $uuid,
+        int                   $bitrix24UserId,
+        bool                  $isBitrix24UserAdmin,
+        string                $memberId,
+        string                $domainUrl,
+        Bitrix24AccountStatus $bitrix24AccountStatus,
+        AuthToken             $authToken,
+        CarbonImmutable       $createdAt,
+        CarbonImmutable       $updatedAt,
+        int                   $applicationVersion,
+        Scope                 $applicationScope
+    ): void
+    {
+        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+
+        $bitrix24AccountRepository->save($bitrix24Account);
+
+        $acc = $bitrix24AccountRepository->getById($uuid);
+        $this->assertEquals($bitrix24Account, $acc);
+
+        $found = $bitrix24AccountRepository->findByMemberId($memberId, null, $bitrix24UserId + 1, $isBitrix24UserAdmin);
         $this->assertEquals([], $found);
     }
 
@@ -446,7 +478,7 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Scope                 $applicationScope
     ): void
     {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, false, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
 
         $bitrix24AccountRepository->save($bitrix24Account);
@@ -454,7 +486,7 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
 
-        $found = $bitrix24AccountRepository->findByMemberId($memberId, Bitrix24AccountStatus::new, false);
+        $found = $bitrix24AccountRepository->findByMemberId($memberId, Bitrix24AccountStatus::new, $bitrix24UserId, $isBitrix24UserAdmin);
         $this->assertEquals($acc, $found[0]);
     }
 
@@ -704,6 +736,7 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             $found[0]->getId()
         );
     }
+
     #[Test]
     #[TestDox('test FindByApplicationToken method with empty string')]
     final public function testFindByApplicationTokenWithEmptyString(): void

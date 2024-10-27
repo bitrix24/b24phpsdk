@@ -91,7 +91,11 @@ class InMemoryBitrix24AccountRepositoryImplementation implements Bitrix24Account
     /**
      * @throws InvalidArgumentException
      */
-    public function findByMemberId(string $memberId, ?Bitrix24AccountStatus $bitrix24AccountStatus = null, ?bool $isAdmin = null): array
+    public function findByMemberId(string                 $memberId,
+                                   ?Bitrix24AccountStatus $bitrix24AccountStatus = null,
+                                   ?int                   $bitrix24UserId = null,
+                                   ?bool                  $isAdmin = null
+    ): array
     {
         $this->logger->debug('b24AccountRepository.findByMemberId', [
             'memberId' => $memberId,
@@ -110,9 +114,10 @@ class InMemoryBitrix24AccountRepositoryImplementation implements Bitrix24Account
             }
 
             $isStatusMatch = (!$bitrix24AccountStatus instanceof Bitrix24AccountStatus || $bitrix24AccountStatus === $item->getStatus());
+            $b24UserMatch = ($bitrix24UserId === null || $bitrix24UserId === $item->getBitrix24UserId());
             $isAdminMatch = ($isAdmin === null || $isAdmin === $item->isBitrix24UserAdmin());
 
-            if ($isStatusMatch && $isAdminMatch) {
+            if ($isStatusMatch && $b24UserMatch && $isAdminMatch) {
                 $items[] = $item;
             }
 
