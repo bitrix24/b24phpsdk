@@ -11,6 +11,7 @@
     - `Bitrix24\SDK\Core\Fields\FieldsFilter::filterSmartProcessFields`
 - Added method `Bitrix24AccountRepositoryInterface::findByApplicationToken` in contracts for
   support «[Delete Application](https://github.com/bitrix24/b24phpsdk/issues/62)» use case
+- Added `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Exceptions\MultipleBitrix24AccountsFoundException`
 
 ### Changed
 
