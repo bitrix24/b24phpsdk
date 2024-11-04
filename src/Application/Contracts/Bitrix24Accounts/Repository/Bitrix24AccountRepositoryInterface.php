@@ -49,9 +49,23 @@ interface Bitrix24AccountRepositoryInterface
     /**
      * Find bitrix24 accounts by member_id and filter by status and isAdmin flag
      * @param non-empty-string $memberId
+     * @param positive-int $bitrix24UserId
      * @return Bitrix24AccountInterface[]
      */
-    public function findByMemberId(string $memberId, ?Bitrix24AccountStatus $bitrix24AccountStatus = null, ?bool $isAdmin = null): array;
+    public function findByMemberId(
+        string                 $memberId,
+        ?Bitrix24AccountStatus $bitrix24AccountStatus = null,
+        ?int                   $bitrix24UserId = null,
+        ?bool                  $isAdmin = null
+    ): array;
+
+    /**
+     * Find bitrix24 accounts by applicationToken
+     * @param non-empty-string $applicationToken
+     * @return Bitrix24AccountInterface[]
+     * @throws InvalidArgumentException
+     */
+    public function findByApplicationToken(string $applicationToken): array;
 
     /**
      * Find bitrix24 accounts by domain url and filter by status adn isAdmin flag

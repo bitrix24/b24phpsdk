@@ -390,7 +390,7 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
 
-        $found = $bitrix24AccountRepository->findByMemberId($memberId, null, true);
+        $found = $bitrix24AccountRepository->findByMemberId($memberId, null, null, true);
         $this->assertEquals($acc, $found[0]);
     }
 
@@ -422,7 +422,39 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
 
-        $found = $bitrix24AccountRepository->findByMemberId($memberId, null, true);
+        $found = $bitrix24AccountRepository->findByMemberId($memberId, null, null, true);
+        $this->assertEquals([], $found);
+    }
+
+    /**
+     * @throws Bitrix24AccountNotFoundException
+     */
+    #[Test]
+    #[DataProvider('bitrix24AccountForInstallDataProvider')]
+    #[TestDox('test findByMemberId method with b24UserId - not found')]
+    final public function testFindByMemberIdWithB24UserIdNotFound(
+        Uuid                  $uuid,
+        int                   $bitrix24UserId,
+        bool                  $isBitrix24UserAdmin,
+        string                $memberId,
+        string                $domainUrl,
+        Bitrix24AccountStatus $bitrix24AccountStatus,
+        AuthToken             $authToken,
+        CarbonImmutable       $createdAt,
+        CarbonImmutable       $updatedAt,
+        int                   $applicationVersion,
+        Scope                 $applicationScope
+    ): void
+    {
+        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+
+        $bitrix24AccountRepository->save($bitrix24Account);
+
+        $acc = $bitrix24AccountRepository->getById($uuid);
+        $this->assertEquals($bitrix24Account, $acc);
+
+        $found = $bitrix24AccountRepository->findByMemberId($memberId, null, $bitrix24UserId + 1, $isBitrix24UserAdmin);
         $this->assertEquals([], $found);
     }
 
@@ -446,7 +478,7 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Scope                 $applicationScope
     ): void
     {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, false, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
 
         $bitrix24AccountRepository->save($bitrix24Account);
@@ -454,7 +486,7 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
 
-        $found = $bitrix24AccountRepository->findByMemberId($memberId, Bitrix24AccountStatus::new, false);
+        $found = $bitrix24AccountRepository->findByMemberId($memberId, Bitrix24AccountStatus::new, $bitrix24UserId, $isBitrix24UserAdmin);
         $this->assertEquals($acc, $found[0]);
     }
 
@@ -673,164 +705,79 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         $this->assertEquals($acc, $found[0]);
     }
 
-    /**
-     * @throws UnknownScopeCodeException
-     */
-    public static function bitrix24AccountWithStatusNewDataProvider(): Generator
+    #[Test]
+    #[DataProvider('bitrix24AccountForInstallDataProvider')]
+    #[TestDox('test FindByApplicationToken method')]
+    final public function testFindByApplicationToken(
+        Uuid                  $uuid,
+        int                   $bitrix24UserId,
+        bool                  $isBitrix24UserAdmin,
+        string                $memberId,
+        string                $domainUrl,
+        Bitrix24AccountStatus $bitrix24AccountStatus,
+        AuthToken             $authToken,
+        CarbonImmutable       $createdAt,
+        CarbonImmutable       $updatedAt,
+        int                   $applicationVersion,
+        Scope                 $applicationScope
+    ): void
     {
-        yield 'valid-update' => [
-            Uuid::v7(),
-            12345,
-            true,
-            'member123',
-            'https://example.com',
-            Bitrix24AccountStatus::new,
-            new AuthToken('access_token', 'refresh_token', 1609459200),
-            CarbonImmutable::now(),
-            CarbonImmutable::now(),
-            1,
-            new Scope(['crm', 'task']),
-            'application_token',
-            2,
-            new Scope(['crm', 'task', 'telephony']),
-            null
-        ];
-        yield 'valid-update-same-scope' => [
-            Uuid::v7(),
-            12345,
-            true,
-            'member123',
-            'https://example.com',
-            Bitrix24AccountStatus::new,
-            new AuthToken('access_token', 'refresh_token', 1609459200),
-            CarbonImmutable::now(),
-            CarbonImmutable::now(),
-            1,
-            new Scope(['crm', 'task']),
-            'application_token',
-            2,
-            new Scope(['task', 'crm']),
-            null
-        ];
-        yield 'valid-downgrade-scope' => [
-            Uuid::v7(),
-            12345,
-            true,
-            'member123',
-            'https://example.com',
-            Bitrix24AccountStatus::new,
-            new AuthToken('access_token', 'refresh_token', 1609459200),
-            CarbonImmutable::now(),
-            CarbonImmutable::now(),
-            1,
-            new Scope([]),
-            'application_token',
-            2,
-            new Scope(['task', 'crm']),
-            null
-        ];
-        yield 'invalid-version' => [
-            Uuid::v7(),
-            12345,
-            true,
-            'member123',
-            'https://example.com',
-            Bitrix24AccountStatus::new,
-            new AuthToken('access_token', 'refresh_token', 1609459200),
-            CarbonImmutable::now(),
-            CarbonImmutable::now(),
-            1,
-            new Scope(['crm', 'task']),
-            'application_token',
-            1,
-            new Scope(['crm', 'task', 'telephony']),
-            new InvalidArgumentException()
-        ];
+        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, false, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+
+        $applicationToken = Uuid::v7()->toRfc4122();
+        $bitrix24Account->applicationInstalled($applicationToken);
+
+        $bitrix24AccountRepository->save($bitrix24Account);
+
+        $found = $bitrix24AccountRepository->findByApplicationToken($applicationToken);
+        $this->assertEquals(
+            $bitrix24Account->getId(),
+            $found[0]->getId()
+        );
     }
 
-    public static function bitrix24AccountForUninstallDataProvider(): Generator
+    #[Test]
+    #[TestDox('test FindByApplicationToken method with empty string')]
+    final public function testFindByApplicationTokenWithEmptyString(): void
     {
-        yield 'empty-application-token' => [
-            Uuid::v7(),
-            12345,
-            true,
-            'member123',
-            'https://example.com',
-            Bitrix24AccountStatus::active,
-            new AuthToken('access_token', 'refresh_token', 1609459200),
-            CarbonImmutable::now(),
-            CarbonImmutable::now(),
-            1,
-            new Scope(['crm', 'task']),
-            '',
-            new InvalidArgumentException()
-        ];
+        $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
 
-        yield 'account-status-new' => [
-            Uuid::v7(),
-            12345,
-            true,
-            'member123',
-            'https://example.com',
-            Bitrix24AccountStatus::new,
-            new AuthToken('access_token', 'refresh_token', 1609459200),
-            CarbonImmutable::now(),
-            CarbonImmutable::now(),
-            1,
-            new Scope(['crm', 'task']),
-            'application_token_value',
-            null
-        ];
-        yield 'account-status-active' => [
-            Uuid::v7(),
-            12345,
-            true,
-            'member123',
-            'https://example.com',
-            Bitrix24AccountStatus::active,
-            new AuthToken('access_token', 'refresh_token', 1609459200),
-            CarbonImmutable::now(),
-            CarbonImmutable::now(),
-            1,
-            new Scope(['crm', 'task']),
-            'application_token_value',
-            new InvalidArgumentException()
+        $this->expectException(InvalidArgumentException::class);
+        $bitrix24AccountRepository->findByApplicationToken('');
+    }
 
-        ];
-        yield 'account-status-blocked' => [
-            Uuid::v7(),
-            12345,
-            true,
-            'member123',
-            'https://example.com',
-            Bitrix24AccountStatus::blocked,
-            new AuthToken('access_token', 'refresh_token', 1609459200),
-            CarbonImmutable::now(),
-            CarbonImmutable::now(),
-            1,
-            new Scope(['crm', 'task']),
-            'application_token_value',
-            new InvalidArgumentException()
-        ];
-        yield 'account-status-deleted' => [
-            Uuid::v7(),
-            12345,
-            true,
-            'member123',
-            'https://example.com',
-            Bitrix24AccountStatus::deleted,
-            new AuthToken('access_token', 'refresh_token', 1609459200),
-            CarbonImmutable::now(),
-            CarbonImmutable::now(),
-            1,
-            new Scope(['crm', 'task']),
-            'application_token_value',
-            new InvalidArgumentException()
-        ];
+    #[Test]
+    #[DataProvider('bitrix24AccountForInstallDataProvider')]
+    #[TestDox('test FindByApplicationToken method with unknown token')]
+    final public function testFindByApplicationTokenWithUnknownToken(
+        Uuid                  $uuid,
+        int                   $bitrix24UserId,
+        bool                  $isBitrix24UserAdmin,
+        string                $memberId,
+        string                $domainUrl,
+        Bitrix24AccountStatus $bitrix24AccountStatus,
+        AuthToken             $authToken,
+        CarbonImmutable       $createdAt,
+        CarbonImmutable       $updatedAt,
+        int                   $applicationVersion,
+        Scope                 $applicationScope
+    ): void
+    {
+        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, false, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+
+        $applicationToken = Uuid::v7()->toRfc4122();
+        $bitrix24Account->applicationInstalled($applicationToken);
+
+        $bitrix24AccountRepository->save($bitrix24Account);
+
+        $found = $bitrix24AccountRepository->findByApplicationToken(Uuid::v7()->toRfc4122());
+        $this->assertEquals([], $found);
     }
 
     /**
-     * @throws UnknownScopeCodeException
+     * @throws UnknownScopeCodeException|InvalidArgumentException
      */
     public static function bitrix24AccountForInstallDataProvider(): Generator
     {
@@ -848,39 +795,6 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             new Scope(['crm', 'task']),
             'application_token_value',
             null
-        ];
-    }
-
-    /**
-     * @throws UnknownScopeCodeException
-     */
-    public static function bitrix24AccountDataProvider(): Generator
-    {
-        yield 'account-status-new' => [
-            Uuid::v7(),
-            12345,
-            true,
-            'member123',
-            'https://example.com',
-            Bitrix24AccountStatus::new,
-            new AuthToken('access_token', 'refresh_token', 1609459200),
-            CarbonImmutable::now(),
-            CarbonImmutable::now(),
-            1,
-            new Scope(['crm', 'task'])
-        ];
-        yield 'account-status-active' => [
-            Uuid::v7(),
-            12345,
-            true,
-            'member123',
-            'https://example.com',
-            Bitrix24AccountStatus::active,
-            new AuthToken('access_token', 'refresh_token', 1609459200),
-            CarbonImmutable::now(),
-            CarbonImmutable::now(),
-            1,
-            new Scope(['crm', 'task'])
         ];
     }
 }
