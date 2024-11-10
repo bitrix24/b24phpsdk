@@ -39,40 +39,38 @@ class FilterWithoutBatchWithoutCountOrder implements BulkItemsReaderInterface
             'limit'     => $limit,
         ]);
 
-        // Дефолтная стратегия из документации https://dev.1c-bitrix.ru/rest_help/rest_sum/start.php
+        // Default strategy from the documentation
         //
-        //Особенности:
-        //— ✅ отключён подсчёт количества элементов в выборке
-        //— ⚠️ ID элементов в выборке возрастает, т.е. была сделана сортировка результатов по ID
-        //— не используем batch
-        //— ❗️ парсим ответ сервера для получения следующего ID → проблемы с распараллеливанием запросов
-        //— последовательное выполнение запросов
+        //Features:
+        //— ✅ counting the number of elements in the sample is disabled
+        //— ⚠️ The ID of elements in the sample increases, i.e. the results were sorted by ID
+        //— do not use batch
+        //— ❗️ parse the server response to get the next ID → problems with parallelizing queries
+        //— sequential execution of queries
         //
-        //Задел по оптимизации
-        //— ограниченное использование параллельных запросов
+        //Backlog for optimization
+        //— limited use of parallel queries
         //
-        // Запросы отправляются к серверу последовательно с параметром "order": {"ID": "ASC"} (сортировка по возрастанию ID),
-        // и в каждом последующем запросе используются результаты предыдущего (фильтрация по ID, где ID > максимального ID в результатах
-        // предыдущего запроса).
+        // Queries are sent to the server sequentially with the "order" parameter: {"ID": "ASC"} (sorting in ascending order of ID),
+        // and each subsequent query uses the results of the previous one (filtering by ID, where ID > the maximum ID in the results
+        // of the previous query).
         //
-        // При этом для ускорения используется параметр start = -1 для отключения затратной по времени операции расчета общего
-        // количества записей (поле total), которое по умолчанию возвращается в каждом ответе сервера при вызове методов вида *.list.
+        // In this case, to speed things up, the start = -1 parameter is used to disable the time-consuming operation of calculating the total
+        // number of records (the total field), which is returned by default in each server response when calling methods of the *.list type.
         //
-        // В потенциале для ускорения можно попытаться параллельно передвигаться по списку сущностей в два потока:
-        // с начала списка и с конца, продолжая получать страницы, пока ID в двух потоках не пересекутся.
-        // Такой способ, возможно, будет давать двукратное ускорение до тех пор, пока не будет исчерпан пул запросов к серверу и не
-        // потребуется включить throttling.
-
+        // Potentially, to speed things up, you can try to move along the list of entities in two threads in parallel:
+        // from the beginning of the list and from the end, continuing to receive pages until the IDs in the two threads intersect.
+        // This method will probably provide a two-fold speedup until the pool of requests to the server is exhausted and throttling will
+        // need to be enabled.
 
         // get total elements count
 
-
-        // получили первый id элемента в выборке по фильтру
-        // todo проверили, что это *.list команда
-        // todo проверили, что в селекте есть ID, т.е. разработчик понимает, что ID используется
-        // todo проверили, что сортировка задана как "order": {"ID": "ASC"} т.е. разработчик понимает, что данные придут в таком порядке
-        // todo проверили, что если есть limit, то он >1
-        // todo проверили, что в фильтре нет поля ID, т.к. мы с ним будем работать
+        // got the first element ID in the selection by filter
+        // todo checked that this is a *.list command
+        // todo checked that the select contains an ID, i.e. the developer understands that the ID is used
+        // todo checked that the sorting is set as "order": {"ID": "ASC"} i.e. the developer understands that the data will come in this order
+        // todo checked that if there is a limit, then it is >1
+        // todo checked that there is no ID field in the filter, because we will work with it
 
 
         $firstElementId = $this->getFirstElementId($apiMethod, $filter, $select);
@@ -89,9 +87,9 @@ class FilterWithoutBatchWithoutCountOrder implements BulkItemsReaderInterface
             return;
         }
 
-        // делаем запросы к Б24
-        // todo учесть ретраии
-        // todo ограничения по количеству запросов в секунду + пул запросов
+        // make requests to B24
+        // todo take into account retraii
+        // todo limits on the number of requests per second + request pool
         $currentElementId = $firstElementId;
         $isStop = false;
         while (!$isStop) {
@@ -138,7 +136,6 @@ class FilterWithoutBatchWithoutCountOrder implements BulkItemsReaderInterface
      *
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
-     * @todo Кандидат на вынос
      */
     private function getFirstElementId(string $apiMethod, array $filter, array $select): ?int
     {
@@ -173,7 +170,6 @@ class FilterWithoutBatchWithoutCountOrder implements BulkItemsReaderInterface
      *
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
-     * @todo Кандидат на вынос
      */
     private function getLastElementId(string $apiMethod, array $filter, array $select): ?int
     {

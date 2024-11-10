@@ -26,6 +26,8 @@
   [Increasing code coverage with annotations](https://github.com/bitrix24/b24phpsdk/issues/60).
 - Fixed error in `Bitrix24\SDK\Core\Fields\FieldsFilter::filterSystemFields`,
   see [filtration errors](https://github.com/bitrix24/b24phpsdk/issues/65).
+- Fixed error in contract tests design,
+  see [bitrix24AccountRepositoryInterface has problem with contract tests design - can't add flusher](https://github.com/bitrix24/b24phpsdk/issues/74).
 
 <!--
 ## Unreleased

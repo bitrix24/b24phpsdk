@@ -21,6 +21,7 @@ use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException;
+use Bitrix24\SDK\Tests\Application\Contracts\TestRepositoryFlusherInterface;
 use Carbon\CarbonImmutable;
 use Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -30,7 +31,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(Bitrix24AccountInterface::class)]
+#[CoversClass(Bitrix24AccountRepositoryInterface::class)]
 abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
 {
     abstract protected function createBitrix24AccountImplementation(
@@ -48,6 +49,8 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     ): Bitrix24AccountInterface;
 
     abstract protected function createBitrix24AccountRepositoryImplementation(): Bitrix24AccountRepositoryInterface;
+
+    abstract protected function createRepositoryFlusherImplementation(): TestRepositoryFlusherInterface;
 
     /**
      * @throws Bitrix24AccountNotFoundException
@@ -70,10 +73,11 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     ): void
     {
         $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
-
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $bitrix24AccountRepository->save($bitrix24Account);
+        $flusher->flush();
 
         $acc = $bitrix24AccountRepository->getById($bitrix24Account->getId());
         $this->assertEquals($bitrix24Account, $acc);
@@ -111,19 +115,23 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     {
         $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         // application installed
         $applicationToken = 'application_token';
         $bitrix24Account->applicationInstalled($applicationToken);
         $bitrix24AccountRepository->save($bitrix24Account);
+        $flusher->flush();
 
         // a few moments later
         $account = $bitrix24AccountRepository->getById($uuid);
         $account->applicationUninstalled($applicationToken);
 
         $bitrix24AccountRepository->save($bitrix24Account);
+        $flusher->flush();
 
         $bitrix24AccountRepository->delete($uuid);
+        $flusher->flush();
 
         $this->expectException(Bitrix24AccountNotFoundException::class);
         $bitrix24AccountRepository->getById($uuid);
@@ -150,16 +158,18 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     ): void
     {
         $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
-
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $bitrix24AccountRepository->save($bitrix24Account);
+        $flusher->flush();
 
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
 
         $this->expectException(InvalidArgumentException::class);
         $bitrix24AccountRepository->delete($uuid);
+        $flusher->flush();
     }
 
     /**
@@ -206,12 +216,13 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     {
         $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $bitrix24AccountRepository->save($bitrix24Account);
+        $flusher->flush();
 
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
-
 
         $found = $bitrix24AccountRepository->findOneAdminByMemberId($memberId);
         $this->assertEquals($acc, $found);
@@ -236,8 +247,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     {
         $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, false, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $bitrix24AccountRepository->save($bitrix24Account);
+        $flusher->flush();
 
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
@@ -265,8 +278,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     {
         $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $bitrix24AccountRepository->save($bitrix24Account);
+        $flusher->flush();
 
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
@@ -317,13 +332,16 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     {
         $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $bitrix24AccountRepository->save($bitrix24Account);
+        $flusher->flush();
 
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
         $acc->markAsBlocked('block by admin');
         $bitrix24AccountRepository->save($acc);
+        $flusher->flush();
 
         $found = $bitrix24AccountRepository->findByMemberId($memberId, Bitrix24AccountStatus::blocked);
         $this->assertEquals($acc, $found[0]);
@@ -351,8 +369,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     {
         $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $bitrix24AccountRepository->save($bitrix24Account);
+        $flusher->flush();
 
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
@@ -384,8 +404,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     {
         $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $bitrix24AccountRepository->save($bitrix24Account);
+        $flusher->flush();
 
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
@@ -416,8 +438,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     {
         $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, false, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $bitrix24AccountRepository->save($bitrix24Account);
+        $flusher->flush();
 
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
@@ -448,8 +472,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     {
         $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $bitrix24AccountRepository->save($bitrix24Account);
+        $flusher->flush();
 
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
@@ -480,8 +506,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     {
         $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $bitrix24AccountRepository->save($bitrix24Account);
+        $flusher->flush();
 
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
@@ -512,8 +540,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     {
         $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $bitrix24AccountRepository->save($bitrix24Account);
+        $flusher->flush();
 
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
@@ -564,13 +594,16 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     {
         $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $bitrix24AccountRepository->save($bitrix24Account);
+        $flusher->flush();
 
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
         $acc->markAsBlocked('block by admin');
         $bitrix24AccountRepository->save($acc);
+        $flusher->flush();
 
         $found = $bitrix24AccountRepository->findByDomain($domainUrl, Bitrix24AccountStatus::blocked);
         $this->assertEquals($acc, $found[0]);
@@ -598,8 +631,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     {
         $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $bitrix24AccountRepository->save($bitrix24Account);
+        $flusher->flush();
 
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
@@ -631,8 +666,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     {
         $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $bitrix24AccountRepository->save($bitrix24Account);
+        $flusher->flush();
 
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
@@ -663,8 +700,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     {
         $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, false, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $bitrix24AccountRepository->save($bitrix24Account);
+        $flusher->flush();
 
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
@@ -695,8 +734,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     {
         $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, false, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $bitrix24AccountRepository->save($bitrix24Account);
+        $flusher->flush();
 
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
@@ -724,11 +765,13 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     {
         $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, false, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $applicationToken = Uuid::v7()->toRfc4122();
         $bitrix24Account->applicationInstalled($applicationToken);
 
         $bitrix24AccountRepository->save($bitrix24Account);
+        $flusher->flush();
 
         $found = $bitrix24AccountRepository->findByApplicationToken($applicationToken);
         $this->assertEquals(
@@ -766,11 +809,13 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     {
         $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, false, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $applicationToken = Uuid::v7()->toRfc4122();
         $bitrix24Account->applicationInstalled($applicationToken);
 
         $bitrix24AccountRepository->save($bitrix24Account);
+        $flusher->flush();
 
         $found = $bitrix24AccountRepository->findByApplicationToken(Uuid::v7()->toRfc4122());
         $this->assertEquals([], $found);
