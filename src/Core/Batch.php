@@ -354,31 +354,31 @@ class Batch implements BatchOperationsInterface
         );
 
         // strategy.3 — ID filter, batch, no count, order
-        // — ✅ отключён подсчёт количества элементов в выборке
-        // — ⚠️ ID элементов в выборке возрастает, т.е. была сделана сортировка результатов по ID
-        // — используем batch
-        // — последовательное выполнение запросов
+        // — ✅ counting of the number of elements in the selection is disabled
+        // — ⚠️ The ID of elements in the selection is increasing, i.e. the results were sorted by ID
+        // — using batch
+        // — sequential execution of queries
         //
-        // Задел по оптимизации
-        // — ограниченное использование параллельных запросов
+        // Optimization groundwork
+        // — limited use of parallel queries
         //
-        // Запросы отправляются к серверу последовательно с параметром "order": {"ID": "ASC"} (сортировка по возрастанию ID).
-        // Т.к. результаты отсортированы по возрастанию ID, то их можно объеденить в батч-запросы с отключённым подсчётом количества элементов в каждом.
+        // Queries are sent to the server sequentially with the "order" parameter: {"ID": "ASC"} (sorting in ascending ID).
+        // Since the results are sorted in ascending ID, they can be combined into batch queries with counting of the number of elements in each disabled.
         //
-        // Порядок формирования фильтра:
+        // Filter formation order:
         //
-        // взяли фильтр с «прямой» сортировкой и получили первый ID
-        // взяли фильтр с «обратной» сортировкой и получили последний ID
-        // Т.к. ID монотонно возрастает, то делаем предположение, что все страницы заполнены элементами равномерно, на самом деле там будут «дыры» из-за мастер-мастер репликации и удалённых элементов. т.е. в результирующих выборках не всегда будет ровно 50 элементов.
-        // из готовых фильтров формируем выборки и упаковываем их в батч-команды.
-        // по возможности, батч-запросы выполняются параллельно
+        // took a filter with "direct" sorting and got the first ID
+        // took a filter with "reverse" sorting and got the last ID
+        // Since ID increases monotonically, then we assume that all pages are filled with elements uniformly, in fact there will be "holes" due to master-master replication and deleted elements. i.e. the resulting selections will not always contain exactly 50 elements.
+        // we form selections from ready-made filters and pack them into batch commands.
+        // if possible, batch queries are executed in parallel
 
-        // получили первый id элемента в выборке по фильтру
-        // todo проверили, что это *.list команда
-        // todo проверили, что в селекте есть ID, т.е. разработчик понимает, что ID используется
-        // todo проверили, что сортировка задана как "order": {"ID": "ASC"} т.е. разработчик понимает, что данные придут в таком порядке
-        // todo проверили, что если есть limit, то он >1
-        // todo проверили, что в фильтре нет поля ID, т.к. мы с ним будем работать
+        // we got the first id of the element in the selection by filter
+        // todo checked that this is a *.list command
+        // todo checked that there is an ID in the select, i.e. the developer understands that ID is used
+        // todo checked that sorting is set as "order": {"ID": "ASC"} i.e. the developer understands that the data will arrive in this order
+        // todo checked that if there is a limit, then it is >1
+        // todo checked that there is no ID field in the filter, since we will work with it
 
         $params = [
             'order' => $order,
@@ -810,7 +810,6 @@ class Batch implements BatchOperationsInterface
         );
 
         // todo check unique names if exists
-        // конвертируем во внутренние представление батч-команд
         $apiCommands = $this->convertToApiCommands();
         $batchQueryCounter = 0;
         while (count($apiCommands)) {
