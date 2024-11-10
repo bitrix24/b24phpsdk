@@ -137,8 +137,18 @@ class GenerateExamplesForDocumentationCommand extends Command
                 'sdkBasePath' => $sdkBasePath,
                 'promptTemplateFile' => $promptTemplateFile
             ]);
-            $io->info('Generate prompts for each service api method...');
-
+            $io->writeln(
+                [
+                    "",
+                    "██████╗░██████╗░░░██╗██╗  ██████╗░██╗░░██╗██████╗░  ░██████╗██████╗░██╗░░██╗",
+                    "██╔══██╗╚════██╗░██╔╝██║  ██╔══██╗██║░░██║██╔══██╗  ██╔════╝██╔══██╗██║░██╔╝",
+                    "██████╦╝░░███╔═╝██╔╝░██║  ██████╔╝███████║██████╔╝  ╚█████╗░██║░░██║█████═╝░",
+                    "██╔══██╗██╔══╝░░███████║  ██╔═══╝░██╔══██║██╔═══╝░  ░╚═══██╗██║░░██║██╔═██╗░",
+                    "██████╦╝███████╗╚════██║  ██║░░░░░██║░░██║██║░░░░░  ██████╔╝██████╔╝██║░╚██╗",
+                    "╚═════╝░╚══════╝░░░░░╚═╝  ╚═╝░░░░░╚═╝░░╚═╝╚═╝░░░░░  ╚═════╝░╚═════╝░╚═╝░░╚═╝",
+                    ""
+                ]
+            );
             // require all SDK services
             $this->requireAllClassesByPath('src/Services');
             $sdkClassNames = $this->getAllSdkClassNames();
@@ -150,28 +160,29 @@ class GenerateExamplesForDocumentationCommand extends Command
                  */
                 $helper = $this->getHelper('question');
                 $question = new ChoiceQuestion(
-                    'Please select command',
+                    'Please, select command',
                     [
                         1 => 'generate prompts',
                         2 => 'generate examples with GPT',
                         3 => 'build examples in php files',
                         4 => 'validate examples',
-                        5 => 'show statistics',
+                        5 => 'add new examples to «b24-rest-docs» repository',
+                        6 => 'show statistics',
                         0 => 'exit🚪'
                     ],
                     null
                 );
-                $question->setErrorMessage('Menu item «%s» is invalid.');
+                $question->setErrorMessage('Menu item « % s» is invalid . ');
                 $menuItem = $helper->ask($input, $output, $question);
                 $output->writeln(sprintf('You have just selected: %s', $menuItem));
 
                 switch ($menuItem) {
                     case 'generate prompts':
-                        $output->writeln(['<info>Generate prompts for each supported in SDK method...</info>', '']);
+                        $output->writeln([' < info>Generate prompts for each supported in SDK method...</info > ', '']);
                         $progressBar = new ProgressBar($output, count($supportedInSdkMethods));
                         $promptTemplate = $this->loadContentsFromFile($promptTemplateFile);
                         foreach ($supportedInSdkMethods as $apiMethod => $sdkMethod) {
-                            $promptFileName = sprintf('%s/prompts/%s/%s.md',
+                            $promptFileName = sprintf(' % s / prompts /%s /%s . md',
                                 $targetFolder,
                                 $apiMethod,
                                 $apiMethod,
@@ -189,22 +200,22 @@ class GenerateExamplesForDocumentationCommand extends Command
                             $progressBar->advance();
                         }
                         $progressBar->finish();
-                        $output->writeln(['', sprintf('<comment>All prompts generated and stored in folder «%s»</comment>', $targetFolder), '']);
+                        $output->writeln(['', sprintf(' < comment>All prompts generated and stored in folder « % s» </comment > ', $targetFolder), '']);
                         break;
                     case 'generate examples with GPT':
                         // generate examples based on prompts
-                        $output->writeln(['<info>Generate examples based on prompts for each supported in SDK method...</info>', '']);
+                        $output->writeln([' < info>Generate examples based on prompts for each supported in SDK method...</info > ', '']);
                         $generatedExamples = [];
-                        $generatedExamplesFolder = $sdkBasePath . $targetFolder . '/var/prompts';
+                        $generatedExamplesFolder = $sdkBasePath . $targetFolder . ' /var/prompts';
                         foreach ((new Finder())->in($generatedExamplesFolder)->directories()->sortByName() as $directory) {
                             $methodName = $directory->getFilename();
-                            $generatedExamples[$methodName] = sprintf('%s/%s.md', $methodName, $methodName);
+                            $generatedExamples[$methodName] = sprintf(' % s /%s . md', $methodName, $methodName);
                         }
 
                         // generate examples
                         $progressBar = new ProgressBar($output, count($generatedExamples));
                         foreach ($generatedExamples as $methodName => $promptPath) {
-                            $exampleFilePath = sprintf('%s/var/examples/%s/%s.md',
+                            $exampleFilePath = sprintf(' % s /var/examples /%s /%s . md',
                                 $targetFolder,
                                 $methodName,
                                 $methodName
@@ -213,7 +224,7 @@ class GenerateExamplesForDocumentationCommand extends Command
                                 $progressBar->advance();
                                 continue;
                             }
-                            $promptFilePath = sprintf('%s%s/var/prompts/%s',
+                            $promptFilePath = sprintf(' % s % s /var/prompts /%s',
                                 $sdkBasePath,
                                 $targetFolder,
                                 $promptPath
@@ -227,23 +238,23 @@ class GenerateExamplesForDocumentationCommand extends Command
                             $progressBar->advance();
                         }
                         $progressBar->finish();
-                        $output->writeln(['', sprintf('<comment>All examples generated and stored in folder «%s/examples»</comment>', $targetFolder), '']);
+                        $output->writeln(['', sprintf(' < comment>All examples generated and stored in folder « % s / examples» </comment > ', $targetFolder), '']);
                         break;
                     case 'build examples in php files':
-                        $output->writeln(['<info>Generate examples from GPT-codegen results for each supported in SDK method...</info>', '']);
+                        $output->writeln([' < info>Generate examples from GPT - codegen results for each supported in SDK method...</info > ', '']);
                         $exampleTemplate = $this->loadContentsFromFile($exampleTemplateFile);
 
                         $generatedExamples = [];
-                        $generatedExamplesFolder = $sdkBasePath . $targetFolder . '/var/examples';
+                        $generatedExamplesFolder = $sdkBasePath . $targetFolder . ' /var/examples';
                         foreach ((new Finder())->in($generatedExamplesFolder)->directories()->sortByName() as $directory) {
                             $methodName = $directory->getFilename();
-                            $generatedExamples[$methodName] = sprintf('%s/%s.md', $methodName, $methodName);
+                            $generatedExamples[$methodName] = sprintf(' % s /%s . md', $methodName, $methodName);
                         }
 
                         // build examples
                         $progressBar = new ProgressBar($output, count($generatedExamples));
                         foreach ($generatedExamples as $methodName => $examplePath) {
-                            $generatedExamplePath = sprintf('%s%s/var/examples/%s',
+                            $generatedExamplePath = sprintf(' % s % s /var/examples /%s',
                                 $sdkBasePath,
                                 $targetFolder,
                                 $examplePath
@@ -296,12 +307,35 @@ class GenerateExamplesForDocumentationCommand extends Command
                         $output->writeln(['<info>calculating metrics, please wait...</info>', '']);
                         $this->showStatistics($targetFolder . '/examples', $output);
                         break;
+                    case 'add new examples to «b24-rest-docs» repository':
+                        $output->writeln(['<info>add new examples to «b24-rest-docs» repository, please wait...</info>', '']);
+
+                        // filter valid examples but not moved to documentation repo yet
+                        $generatedExamplesFolder = $sdkBasePath . $targetFolder . '/examples';
+                        $examplesToDocumentation = [];
+                        foreach ((new Finder())->in($generatedExamplesFolder)->directories()->sortByName() as $directory) {
+                            $methodName = $directory->getFilename();
+                            if ($this->filesystem->exists(sprintf('%s/%s/%s', $generatedExamplesFolder, $methodName, self::VALID_EXAMPLE_MARKER)) &&
+                                !$this->filesystem->exists(sprintf('%s/%s/%s', $generatedExamplesFolder, $methodName, self::DOCUMENTED_MARKER))
+                            ) {
+                                $examplesToDocumentation[$methodName] = sprintf('%s/%s.php', $methodName, $methodName);
+                            }
+                        }
+
+                        // find file in documentation repository
+
+
+                        dump($examplesToDocumentation);
+
+
+                        break;
                     case 'exit🚪':
                         $output->writeln('<info>See you later</info>');
                         return Command::SUCCESS;
                 }
             }
-        } catch (Throwable $exception) {
+        } catch
+        (Throwable $exception) {
             $io->error(sprintf('runtime error: %s', $exception->getMessage()));
             $io->info($exception->getTraceAsString());
 
