@@ -322,7 +322,6 @@ class GenerateExamplesForDocumentationCommand extends Command
                         $attemptId = (new CarbonImmutable())->format('Y-m-d-H-i-s');
                         // documentation templates
                         $docTplExampleNewTabPayload = $this->loadContentsFromFile($sdkBasePath . $targetFolder . '/file-templates/documentation/example-new-tab.md');
-                        $docTplExampleNewTabBlockPayload = $this->loadContentsFromFile($sdkBasePath . $targetFolder . '/file-templates/documentation/example-new-tab-block.md');
 
                         // filter valid examples but not moved to documentation repo yet
                         $generatedExamplesFolder = $sdkBasePath . $targetFolder . '/examples/';
@@ -333,13 +332,24 @@ class GenerateExamplesForDocumentationCommand extends Command
                         $progressBar = new ProgressBar($output, count($examplesToDocumentation));
                         foreach ($examplesToDocumentation as $method => $file) {
                             $progressBar->advance();
+
+                            // try to find current method page in documentation repository
                             $docFilePath = $this->findDocumentationPagePath($docsRepoFolder, $method);
                             if (null === $docFilePath) {
                                 // documentation page for method not found, we can't add example
                                 $notFoundDocumentationPages[] = $method;
                                 continue;
                             }
+                            $originalDocFilePayload = $this->loadContentsFromFile($docsRepoFolder . $docFilePath);
+                            $originalDocLines = explode(PHP_EOL, $originalDocFilePayload);
 
+                            // try to find position to inject example source code in documentation file
+                            $injectPos = $this->findPositionForInjectDocumentationExample($originalDocFilePayload);
+                            if (null === $injectPos) {
+                                // create examples section
+                                $docTplExampleNewTabPayload = $this->loadContentsFromFile($sdkBasePath . $targetFolder . '/file-templates/documentation/example-new-tab-block.md');
+                                $injectPos = count($originalDocLines);
+                            }
 
                             // fill documentation template
                             $exampleSrc = $this->getExampleSourceCode($generatedExamplesFolder . $file);
@@ -350,30 +360,14 @@ class GenerateExamplesForDocumentationCommand extends Command
                                 ]
                             );
 
-                            // find position to inject example source code in documentation file
-                            $originalDocFilePayload = $this->loadContentsFromFile($docsRepoFolder . $docFilePath);
-                            $injectPos = $this->findPositionForInjectDocumentationExample($originalDocFilePayload);
-
-                            // skip problem document
-                            if ($injectPos === null) {
-                                continue;
-                                //                                    throw new \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException(sprintf(
-                                //                                        'in file «%s» position for inject documentation example not found',
-                                //                                        $docsRepoFolder . $docFilePath));
-                            }
-
                             // try to inject generated example
-                            $originalDoc = explode(PHP_EOL, $originalDocFilePayload);
-                            $updatedDoc = $originalDoc;
+                            $updatedDoc = $originalDocLines;
                             array_splice($updatedDoc, $injectPos, 0, $generatedDocPayload);
                             $updatedDocPayload = implode(PHP_EOL, $updatedDoc);
-
                             // save updated file
                             $this->filesystem->dumpFile($docsRepoFolder . $docFilePath, $updatedDocPayload);
-
                             // add marker «documented»
                             $this->saveToFile($generatedExamplesFolder . $method . '/' . self::DOCUMENTED_MARKER, '');
-
                         }
                         $progressBar->finish();
                         $output->writeln(['', '<info>All new examples added to documentation repository</info>']);
@@ -402,17 +396,15 @@ class GenerateExamplesForDocumentationCommand extends Command
     }
 
     /**
-     * @param string $originalDocFilePayload
-     * @param string $docsRepoFolder
-     * @param string $docFilePath
-     * @return int
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @param non-empty-string $docFilePayload
+     * @return int|null
+     * @throws InvalidArgumentException
      */
-    public function findPositionForInjectDocumentationExample(string $originalDocFilePayload): ?int
+    public function findPositionForInjectDocumentationExample(string $docFilePayload): ?int
     {
         // list of examples, add new example to end of list
         $injectPos = $this->getLineNumberWithNeedleMarker(
-            $originalDocFilePayload,
+            $docFilePayload,
             '{% endlist %}'
         );
         if ($injectPos !== null) {
@@ -421,7 +413,7 @@ class GenerateExamplesForDocumentationCommand extends Command
 
         // list of examples not found, try to found php example
         $injectPos = $this->getLineNumberWithNeedleMarker(
-            $originalDocFilePayload,
+            $docFilePayload,
             '```php'
         );
         if ($injectPos !== null) {
@@ -429,7 +421,7 @@ class GenerateExamplesForDocumentationCommand extends Command
         }
         // php example not found, try to found js example
         $injectPos = $this->getLineNumberWithNeedleMarker(
-            $originalDocFilePayload,
+            $docFilePayload,
             '```javascript'
         );
         if ($injectPos !== null) {
@@ -437,14 +429,14 @@ class GenerateExamplesForDocumentationCommand extends Command
         }
         // try to found another js example
         $injectPos = $this->getLineNumberWithNeedleMarker(
-            $originalDocFilePayload,
+            $docFilePayload,
             '```js'
         );
         if ($injectPos !== null) {
             return $injectPos;
         }
 
-        return $injectPos;
+        return null;
     }
 
     /**
@@ -480,7 +472,11 @@ class GenerateExamplesForDocumentationCommand extends Command
 
         $exampleLen = $endLine - $startLine - 1;
         $example = array_slice(explode(PHP_EOL, $fileContents), $startLine + 1, $exampleLen);
-        return implode(PHP_EOL, $example);
+        // add offset to example source code
+        $paddedArray = array_map(static function ($line) {
+            return '    ' . $line;
+        }, $example);
+        return implode(PHP_EOL, $paddedArray);
     }
 
     /**
