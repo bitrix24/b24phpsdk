@@ -14,9 +14,9 @@ try {
 
     print("ID: " . $itemResult->ID . PHP_EOL);
     print("Code: " . $itemResult->CODE . PHP_EOL);
-    print("Scope: " . json_encode($itemResult->SCOPE) . PHP_EOL);
+    print("Scope: " . json_encode($itemResult->SCOPE, JSON_THROW_ON_ERROR) . PHP_EOL);
     print("Version: " . $itemResult->VERSION . PHP_EOL);
-//    print("Status: " . $itemResult->getStatus() . PHP_EOL);
+    print("Status: " . $itemResult->getStatus()->getStatusCode() . PHP_EOL);
     print("Installed: " . ($itemResult->INSTALLED ? 'true' : 'false') . PHP_EOL);
     print("Payment Expired: " . $itemResult->PAYMENT_EXPIRED . PHP_EOL);
     print("Days: " . $itemResult->DAYS . PHP_EOL);
