@@ -69,15 +69,24 @@ debug-show-env:
 
 # build documentation
 build-documentation:
-	php bin/console b24-dev:generate-coverage-documentation --webhook=$(BITRIX24_WEBHOOK) --repository-url=https://github.com/bitrix24/b24phpsdk --repository-branch=$(DOCUMENTATION_DEFAULT_TARGET_BRANCH) --file=docs/EN/Services/bitrix24-php-sdk-methods.md
+	php bin/console b24-dev:generate-coverage-documentation \
+	--webhook=$(BITRIX24_WEBHOOK) \
+	--repository-url=https://github.com/bitrix24/b24phpsdk \
+	--repository-branch=$(DOCUMENTATION_DEFAULT_TARGET_BRANCH) \
+	--file=docs/EN/Services/bitrix24-php-sdk-methods.md
 
 # build examples for rest-api documentation
 build-examples-for-documentation:
-	@php bin/console b24-dev:generate-examples --folder=docs/api --prompt-template=docs/api/file-templates/gpt/master-prompt-template.md --example-template=docs/api/file-templates/examples/master-example.php --openai-api-key=$(DOCUMENTATION_OPEN_AI_API_KEY)
+	@php bin/console b24-dev:generate-examples \
+	--examples-folder=docs/api \
+	--prompt-template=docs/api/file-templates/gpt/master-prompt-template.md \
+	--example-template=docs/api/file-templates/examples/master-example.php \
+	--openai-api-key=$(DOCUMENTATION_OPEN_AI_API_KEY) \
+	--docs-repo-folder=$(DOCUMENTATION_REPOSITORY_FOLDER)
 
 # linters
 lint-phpstan:
-	vendor/bin/phpstan --memory-limit=1G analyse
+	vendor/bin/phpstan --memory-limit=1G analyse -v
 lint-rector:
 	vendor/bin/rector process --dry-run
 lint-rector-fix:
