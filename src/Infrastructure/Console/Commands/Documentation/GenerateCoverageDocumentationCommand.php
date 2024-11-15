@@ -43,8 +43,8 @@ class GenerateCoverageDocumentationCommand extends Command
         private readonly ServiceBuilderFactory $serviceBuilderFactory,
         private readonly Finder                $finder,
         private readonly Filesystem            $filesystem,
-        private readonly LoggerInterface       $logger)
-    {
+        private readonly LoggerInterface       $logger
+    ) {
         // best practices recommend to call the parent constructor first and
         // then set your own properties. That wouldn't work in this case
         // because configure() needs the properties set in this constructor
@@ -116,8 +116,7 @@ class GenerateCoverageDocumentationCommand extends Command
         array  $supportedInSdkBatchMethods,
         string $publicRepoUrl,
         string $publicRepoBranch
-    ): string
-    {
+    ): string {
         $tableHeader = <<<EOT
 ## All bitrix24-php-sdk methods
 
@@ -132,26 +131,32 @@ EOT;
                 $batchMethodsHint = "<br/><br/>⚡️Batch methods: <br/>";
                 $batchMethodsHint .= "<ul>";
                 foreach ($supportedInSdkBatchMethods[$apiMethod['name']] as $method) {
-                    $batchMethodsHint .= sprintf("<li>`%s`<br/>",
-                        $method['sdk_class_name'] . '::' . $method['sdk_method_name']);
+                    $batchMethodsHint .= sprintf(
+                        "<li>`%s`<br/>",
+                        $method['sdk_class_name'] . '::' . $method['sdk_method_name']
+                    );
                     $batchMethodsHint .= sprintf("Return type: `%s`</li>", $method['sdk_method_return_type_typhoon']);
                 }
                 $batchMethodsHint .= "</ul>";
             }
 
-            $sdkMethodPublicUrl = sprintf('%s/%s/%s#L%s-L%s',
+            $sdkMethodPublicUrl = sprintf(
+                '%s/%s/%s#L%s-L%s',
                 $publicRepoUrl,
                 $publicRepoBranch,
                 $apiMethod['sdk_method_file_name'],
                 $apiMethod['sdk_method_file_start_line'],
                 $apiMethod['sdk_method_file_end_line'],
             );
-            $sdkMethodReturnTypePublicUrl = sprintf('%s/%s/%s',
+            $sdkMethodReturnTypePublicUrl = sprintf(
+                '%s/%s/%s',
                 $publicRepoUrl,
                 $publicRepoBranch,
-                $apiMethod['sdk_return_type_file_name']);
+                $apiMethod['sdk_return_type_file_name']
+            );
 
-            $table .= sprintf("\n|`%s`|[%s](%s)|%s|[`%s`](%s)<br/>Return type<br/>[`%s`](%s)%s|",
+            $table .= sprintf(
+                "\n|`%s`|[%s](%s)|%s|[`%s`](%s)<br/>Return type<br/>[`%s`](%s)%s|",
                 $apiMethod['sdk_scope'] === '' ? '–' : $apiMethod['sdk_scope'],
                 $apiMethod['name'],
                 $apiMethod['documentation_url'],
