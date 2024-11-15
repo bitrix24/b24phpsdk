@@ -36,9 +36,9 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Throwable;
 use Typhoon\Reflection\TyphoonReflector;
-use function Typhoon\Type\stringify;
 use Symfony\Component\Process\Process;
 
+use function Typhoon\Type\stringify;
 
 #[AsCommand(
     name: 'b24-dev:generate-examples',
@@ -63,8 +63,8 @@ class GenerateExamplesForDocumentationCommand extends Command
         private readonly TyphoonReflector $typhoonReflector,
         private readonly AttributesParser $attributesParser,
         private readonly Filesystem       $filesystem,
-        private readonly LoggerInterface  $logger)
-    {
+        private readonly LoggerInterface  $logger
+    ) {
         // best practices recommend to call the parent constructor first and
         // then set your own properties. That wouldn't work in this case
         // because configure() needs the properties set in this constructor
@@ -189,7 +189,8 @@ class GenerateExamplesForDocumentationCommand extends Command
                         $progressBar = new ProgressBar($output, count($supportedInSdkMethods));
                         $promptTemplate = $this->loadContentsFromFile($promptTemplateFile);
                         foreach ($supportedInSdkMethods as $apiMethod => $sdkMethod) {
-                            $promptFileName = sprintf(' % s / prompts /%s /%s . md',
+                            $promptFileName = sprintf(
+                                '%s/prompts/%s/%s.md',
                                 $targetFolder,
                                 $apiMethod,
                                 $apiMethod,
@@ -222,7 +223,8 @@ class GenerateExamplesForDocumentationCommand extends Command
                         // generate examples
                         $progressBar = new ProgressBar($output, count($generatedExamples));
                         foreach ($generatedExamples as $methodName => $promptPath) {
-                            $exampleFilePath = sprintf(' % s /var/examples /%s /%s . md',
+                            $exampleFilePath = sprintf(
+                                '%s/var/examples/%s/%s.md',
                                 $targetFolder,
                                 $methodName,
                                 $methodName
@@ -231,7 +233,8 @@ class GenerateExamplesForDocumentationCommand extends Command
                                 $progressBar->advance();
                                 continue;
                             }
-                            $promptFilePath = sprintf(' % s % s /var/prompts /%s',
+                            $promptFilePath = sprintf(
+                                '%s%s/var/prompts/%s',
                                 $sdkBasePath,
                                 $targetFolder,
                                 $promptPath
@@ -261,7 +264,8 @@ class GenerateExamplesForDocumentationCommand extends Command
                         // build examples
                         $progressBar = new ProgressBar($output, count($generatedExamples));
                         foreach ($generatedExamples as $methodName => $examplePath) {
-                            $generatedExamplePath = sprintf(' % s % s /var/examples /%s',
+                            $generatedExamplePath = sprintf(
+                                '%s%s/var/examples/%s',
                                 $sdkBasePath,
                                 $targetFolder,
                                 $examplePath
@@ -275,7 +279,8 @@ class GenerateExamplesForDocumentationCommand extends Command
                                     '###GENERATED_EXAMPLE_CODE###' => $generatedExample
                                 ]
                             );
-                            $finalExampleFilePath = sprintf('%s/examples/%s/%s.php',
+                            $finalExampleFilePath = sprintf(
+                                '%s/examples/%s/%s.php',
                                 $targetFolder,
                                 $methodName,
                                 $methodName
@@ -386,8 +391,7 @@ class GenerateExamplesForDocumentationCommand extends Command
                         return Command::SUCCESS;
                 }
             }
-        } catch
-        (Throwable $exception) {
+        } catch (Throwable $exception) {
             $io->error(sprintf('runtime error: %s', $exception->getMessage()));
             $io->info($exception->getTraceAsString());
 
@@ -402,16 +406,7 @@ class GenerateExamplesForDocumentationCommand extends Command
      */
     public function findPositionForInjectDocumentationExample(string $docFilePayload): ?int
     {
-        // list of examples, add new example to end of list
-        $injectPos = $this->getLineNumberWithNeedleMarker(
-            $docFilePayload,
-            '{% endlist %}'
-        );
-        if ($injectPos !== null) {
-            return $injectPos;
-        }
-
-        // list of examples not found, try to found php example
+        // try to found php example
         $injectPos = $this->getLineNumberWithNeedleMarker(
             $docFilePayload,
             '```php'
@@ -436,6 +431,15 @@ class GenerateExamplesForDocumentationCommand extends Command
             return $injectPos;
         }
 
+        // list of examples, add new example to end of list
+        $injectPos = $this->getLineNumberWithNeedleMarker(
+            $docFilePayload,
+            '{% endlist %}'
+        );
+        if ($injectPos !== null) {
+            return $injectPos;
+        }
+
         return null;
     }
 
@@ -450,20 +454,23 @@ class GenerateExamplesForDocumentationCommand extends Command
         $fileContents = $this->loadContentsFromFile($fileName);
         $startLine = $this->getLineNumberWithNeedleMarker($fileContents, self::SOURCE_CODE_EXAMPLE_START);
         if ($startLine === null) {
-            throw new InvalidArgumentException(sprintf('in file «%s» not found marker «%s»',
+            throw new InvalidArgumentException(sprintf(
+                'in file «%s» not found marker «%s»',
                 $fileName,
                 self::SOURCE_CODE_EXAMPLE_START
             ));
         }
         $endLine = $this->getLineNumberWithNeedleMarker($fileContents, self::SOURCE_CODE_EXAMPLE_FINISH);
         if ($endLine === null) {
-            throw new InvalidArgumentException(sprintf('in file «%s» not found marker «%s»',
+            throw new InvalidArgumentException(sprintf(
+                'in file «%s» not found marker «%s»',
                 $fileName,
                 self::SOURCE_CODE_EXAMPLE_FINISH
             ));
         }
         if ($startLine >= $endLine) {
-            throw new InvalidArgumentException(sprintf('wrong marker positions %s and %s in file %s',
+            throw new InvalidArgumentException(sprintf(
+                'wrong marker positions %s and %s in file %s',
                 $startLine,
                 $endLine,
                 $fileName
@@ -766,37 +773,38 @@ class GenerateExamplesForDocumentationCommand extends Command
         string $serviceBuilderClassName,
         string $serviceClassName,
         string $serviceMethodName,
-    ): array
-    {
+    ): array {
         $this->logger->debug('generateGptPromptByServiceMethod.start');
 
         // pack method parameters
         $methodParameters = PHP_EOL;
         foreach ($this->getMethodParameters($serviceClassName, $serviceMethodName) as $parameter) {
-            $methodParameters .= sprintf('%s%s $%s',
-                    $parameter['is_optional'] === true ? '?' : '',
-                    $parameter['type'],
-                    $parameter['name'],
-
-                ) . PHP_EOL;
+            $methodParameters .= sprintf(
+                '%s%s $%s',
+                $parameter['is_optional'] === true ? '?' : '',
+                $parameter['type'],
+                $parameter['name'],
+            ) . PHP_EOL;
         }
 
         // pack root service builder methods
         $rootSbMethods = '';
         foreach ($this->getClassMethods(ServiceBuilder::class) as $method) {
-            $rootSbMethods .= sprintf('%s:%s',
-                    $method['method_name'],
-                    $method['method_return_type']
-                ) . PHP_EOL;
+            $rootSbMethods .= sprintf(
+                '%s:%s',
+                $method['method_name'],
+                $method['method_return_type']
+            ) . PHP_EOL;
         }
 
         // pack service builder methods
         $sbMethods = '';
         foreach ($this->getClassMethods($serviceBuilderClassName) as $method) {
-            $sbMethods .= sprintf('%s:%s',
-                    $method['method_name'],
-                    $method['method_return_type']
-                ) . PHP_EOL;
+            $sbMethods .= sprintf(
+                '%s:%s',
+                $method['method_name'],
+                $method['method_return_type']
+            ) . PHP_EOL;
         }
 
         $returnResultClassName = $this->getMethodReturnResultType($serviceClassName, $serviceMethodName);
