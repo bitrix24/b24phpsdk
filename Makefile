@@ -84,7 +84,11 @@ build-examples-for-documentation:
 	--openai-api-key=$(DOCUMENTATION_OPEN_AI_API_KEY) \
 	--docs-repo-folder=$(DOCUMENTATION_REPOSITORY_FOLDER)
 
-# linters
+# linters & code style
+lint-cs-fixer:
+	vendor/bin/php-cs-fixer check --verbose --diff
+lint-cs-fixer-fix:
+	vendor/bin/php-cs-fixer fix --verbose --diff
 lint-phpstan:
 	vendor/bin/phpstan --memory-limit=1G analyse -v
 lint-rector:

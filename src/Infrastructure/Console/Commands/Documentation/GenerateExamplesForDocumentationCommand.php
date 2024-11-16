@@ -64,7 +64,8 @@ class GenerateExamplesForDocumentationCommand extends Command
         private readonly AttributesParser $attributesParser,
         private readonly Filesystem       $filesystem,
         private readonly LoggerInterface  $logger
-    ) {
+    )
+    {
         // best practices recommend to call the parent constructor first and
         // then set your own properties. That wouldn't work in this case
         // because configure() needs the properties set in this constructor
@@ -336,6 +337,10 @@ class GenerateExamplesForDocumentationCommand extends Command
                         $notFoundDocumentationPages = [];
                         $progressBar = new ProgressBar($output, count($examplesToDocumentation));
                         foreach ($examplesToDocumentation as $method => $file) {
+                            $this->logger->debug('GenerateExamplesForDocumentation.addNewExamplesToDocsRepository', [
+                                'method' => $method,
+                                'file' => $file
+                            ]);
                             $progressBar->advance();
 
                             // try to find current method page in documentation repository
@@ -349,17 +354,24 @@ class GenerateExamplesForDocumentationCommand extends Command
                             $originalDocLines = explode(PHP_EOL, $originalDocFilePayload);
 
                             // try to find position to inject example source code in documentation file
+                            $curTpl = $docTplExampleNewTabPayload;
                             $injectPos = $this->findPositionForInjectDocumentationExample($originalDocFilePayload);
+                            $this->logger->debug('GenerateExamplesForDocumentation.addNewExamplesToDocsRepository.injectPosition', [
+                                'position' => $injectPos
+                            ]);
                             if (null === $injectPos) {
+                                $this->logger->notice('GenerateExamplesForDocumentation.addNewExamplesToDocsRepository.injectPositionNotFound', [
+                                    'method' => $method,
+                                ]);
                                 // create examples section
-                                $docTplExampleNewTabPayload = $this->loadContentsFromFile($sdkBasePath . $targetFolder . '/file-templates/documentation/example-new-tab-block.md');
+                                $curTpl = $this->loadContentsFromFile($sdkBasePath . $targetFolder . '/file-templates/documentation/example-new-tab-block.md');
                                 $injectPos = count($originalDocLines);
                             }
 
                             // fill documentation template
                             $exampleSrc = $this->getExampleSourceCode($generatedExamplesFolder . $file);
                             $generatedDocPayload = $this->fillDataToTemplate(
-                                $docTplExampleNewTabPayload,
+                                $curTpl,
                                 [
                                     '###GENERATED_EXAMPLE###' => $exampleSrc
                                 ]
@@ -406,10 +418,10 @@ class GenerateExamplesForDocumentationCommand extends Command
      */
     public function findPositionForInjectDocumentationExample(string $docFilePayload): ?int
     {
-        // try to found php example
+        // try to found php example tab
         $injectPos = $this->getLineNumberWithNeedleMarker(
             $docFilePayload,
-            '```php'
+            '- PHP'
         );
         if ($injectPos !== null) {
             return $injectPos;
@@ -773,38 +785,39 @@ class GenerateExamplesForDocumentationCommand extends Command
         string $serviceBuilderClassName,
         string $serviceClassName,
         string $serviceMethodName,
-    ): array {
+    ): array
+    {
         $this->logger->debug('generateGptPromptByServiceMethod.start');
 
         // pack method parameters
         $methodParameters = PHP_EOL;
         foreach ($this->getMethodParameters($serviceClassName, $serviceMethodName) as $parameter) {
             $methodParameters .= sprintf(
-                '%s%s $%s',
-                $parameter['is_optional'] === true ? '?' : '',
-                $parameter['type'],
-                $parameter['name'],
-            ) . PHP_EOL;
+                    '%s%s $%s',
+                    $parameter['is_optional'] === true ? '?' : '',
+                    $parameter['type'],
+                    $parameter['name'],
+                ) . PHP_EOL;
         }
 
         // pack root service builder methods
         $rootSbMethods = '';
         foreach ($this->getClassMethods(ServiceBuilder::class) as $method) {
             $rootSbMethods .= sprintf(
-                '%s:%s',
-                $method['method_name'],
-                $method['method_return_type']
-            ) . PHP_EOL;
+                    '%s:%s',
+                    $method['method_name'],
+                    $method['method_return_type']
+                ) . PHP_EOL;
         }
 
         // pack service builder methods
         $sbMethods = '';
         foreach ($this->getClassMethods($serviceBuilderClassName) as $method) {
             $sbMethods .= sprintf(
-                '%s:%s',
-                $method['method_name'],
-                $method['method_return_type']
-            ) . PHP_EOL;
+                    '%s:%s',
+                    $method['method_name'],
+                    $method['method_return_type']
+                ) . PHP_EOL;
         }
 
         $returnResultClassName = $this->getMethodReturnResultType($serviceClassName, $serviceMethodName);
