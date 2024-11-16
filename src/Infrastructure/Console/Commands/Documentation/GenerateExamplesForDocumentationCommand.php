@@ -14,10 +14,10 @@ namespace Bitrix24\SDK\Infrastructure\Console\Commands\Documentation;
 
 use Bitrix24\SDK\Attributes\Services\AttributesParser;
 use Bitrix24\SDK\Core\Exceptions\FileNotFoundException;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Infrastructure\Console\Commands\SplashScreen;
 use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
 use Bitrix24\SDK\Services\ServiceBuilder;
-use Bitrix24\SDK\Infrastructure\Console\Commands\SplashScreen;
-use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Carbon\CarbonImmutable;
 use JsonException;
 use OpenAI;
@@ -34,9 +34,9 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Process\Process;
 use Throwable;
 use Typhoon\Reflection\TyphoonReflector;
-use Symfony\Component\Process\Process;
 
 use function Typhoon\Type\stringify;
 
@@ -62,8 +62,8 @@ class GenerateExamplesForDocumentationCommand extends Command
     public function __construct(
         private readonly TyphoonReflector $typhoonReflector,
         private readonly AttributesParser $attributesParser,
-        private readonly Filesystem       $filesystem,
-        private readonly LoggerInterface  $logger
+        private readonly Filesystem $filesystem,
+        private readonly LoggerInterface $logger
     ) {
         // best practices recommend to call the parent constructor first and
         // then set your own properties. That wouldn't work in this case
@@ -124,27 +124,48 @@ class GenerateExamplesForDocumentationCommand extends Command
         try {
             $targetFolder = (string)$input->getOption(self::TARGET_FOLDER);
             if ($targetFolder === '') {
-                throw new InvalidArgumentException(sprintf('you must provide a folder to save generated examples in option «%s»', self::TARGET_FOLDER));
+                throw new InvalidArgumentException(
+                    sprintf('you must provide a folder to save generated examples in option «%s»', self::TARGET_FOLDER)
+                );
             }
             $docsRepoFolder = (string)$input->getOption(self::DOCUMENTATION_REPO_FOLDER);
             if ($docsRepoFolder === '') {
-                throw new InvalidArgumentException(sprintf('you must provide a path to folder with checkouted «b24-rest-docs» repository in option «%s»', self::DOCUMENTATION_REPO_FOLDER));
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'you must provide a path to folder with checkouted «b24-rest-docs» repository in option «%s»',
+                        self::DOCUMENTATION_REPO_FOLDER
+                    )
+                );
             }
             $promptTemplateFile = (string)$input->getOption(self::PROMPT_TEMPLATE_FILE);
             if ($promptTemplateFile === '') {
-                throw new InvalidArgumentException(sprintf('you must provide a markdown file with prompt template in option «%s»', self::PROMPT_TEMPLATE_FILE));
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'you must provide a markdown file with prompt template in option «%s»',
+                        self::PROMPT_TEMPLATE_FILE
+                    )
+                );
             }
             $exampleTemplateFile = (string)$input->getOption(self::EXAMPLE_TEMPLATE_FILE);
             if ($exampleTemplateFile === '') {
-                throw new InvalidArgumentException(sprintf('you must provide a example template file with php template in option «%s»', self::EXAMPLE_TEMPLATE_FILE));
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'you must provide a example template file with php template in option «%s»',
+                        self::EXAMPLE_TEMPLATE_FILE
+                    )
+                );
             }
             $openAiModel = (string)$input->getOption(self::OPEN_AI_MODEL);
             if ($openAiModel === '') {
-                throw new InvalidArgumentException(sprintf('you must provide an open ai model code in option «%s»', self::OPEN_AI_MODEL));
+                throw new InvalidArgumentException(
+                    sprintf('you must provide an open ai model code in option «%s»', self::OPEN_AI_MODEL)
+                );
             }
             $openAiKey = (string)$input->getOption(self::OPEN_AI_API_KEY);
             if ($openAiKey === '') {
-                throw new InvalidArgumentException(sprintf('you must provide an open ai api key in option «%s»', self::OPEN_AI_API_KEY));
+                throw new InvalidArgumentException(
+                    sprintf('you must provide an open ai api key in option «%s»', self::OPEN_AI_API_KEY)
+                );
             }
 
             // get sdk root path, change magic number if move current file to another folder depth
@@ -208,14 +229,30 @@ class GenerateExamplesForDocumentationCommand extends Command
                             $progressBar->advance();
                         }
                         $progressBar->finish();
-                        $output->writeln(['', sprintf(' < comment>All prompts generated and stored in folder « % s» </comment > ', $targetFolder), '']);
+                        $output->writeln(
+                            [
+                                '',
+                                sprintf(
+                                    ' < comment>All prompts generated and stored in folder « % s» </comment > ',
+                                    $targetFolder
+                                ),
+                                ''
+                            ]
+                        );
                         break;
                     case 'generate examples with GPT':
                         // generate examples based on prompts
-                        $output->writeln([' < info>Generate examples based on prompts for each supported in SDK method...</info > ', '']);
+                        $output->writeln(
+                            [
+                                ' < info>Generate examples based on prompts for each supported in SDK method...</info > ',
+                                ''
+                            ]
+                        );
                         $generatedExamples = [];
                         $generatedExamplesFolder = $sdkBasePath . $targetFolder . ' /var/prompts';
-                        foreach ((new Finder())->in($generatedExamplesFolder)->directories()->sortByName() as $directory) {
+                        foreach (
+                            (new Finder())->in($generatedExamplesFolder)->directories()->sortByName() as $directory
+                        ) {
                             $methodName = $directory->getFilename();
                             $generatedExamples[$methodName] = sprintf(' % s /%s . md', $methodName, $methodName);
                         }
@@ -248,15 +285,31 @@ class GenerateExamplesForDocumentationCommand extends Command
                             $progressBar->advance();
                         }
                         $progressBar->finish();
-                        $output->writeln(['', sprintf(' < comment>All examples generated and stored in folder « % s / examples» </comment > ', $targetFolder), '']);
+                        $output->writeln(
+                            [
+                                '',
+                                sprintf(
+                                    ' < comment>All examples generated and stored in folder « % s / examples» </comment > ',
+                                    $targetFolder
+                                ),
+                                ''
+                            ]
+                        );
                         break;
                     case 'build examples in php files':
-                        $output->writeln([' < info>Generate examples from GPT - codegen results for each supported in SDK method...</info > ', '']);
+                        $output->writeln(
+                            [
+                                ' < info>Generate examples from GPT - codegen results for each supported in SDK method...</info > ',
+                                ''
+                            ]
+                        );
                         $exampleTemplate = $this->loadContentsFromFile($exampleTemplateFile);
 
                         $generatedExamples = [];
                         $generatedExamplesFolder = $sdkBasePath . $targetFolder . ' /var/examples';
-                        foreach ((new Finder())->in($generatedExamplesFolder)->directories()->sortByName() as $directory) {
+                        foreach (
+                            (new Finder())->in($generatedExamplesFolder)->directories()->sortByName() as $directory
+                        ) {
                             $methodName = $directory->getFilename();
                             $generatedExamples[$methodName] = sprintf(' % s /%s . md', $methodName, $methodName);
                         }
@@ -289,18 +342,33 @@ class GenerateExamplesForDocumentationCommand extends Command
                             $progressBar->advance();
                         }
                         $progressBar->finish();
-                        $output->writeln(['', sprintf('<comment>All examples generated and stored in folder «%s/examples»</comment>', $targetFolder), '']);
+                        $output->writeln(
+                            [
+                                '',
+                                sprintf(
+                                    '<comment>All examples generated and stored in folder «%s/examples»</comment>',
+                                    $targetFolder
+                                ),
+                                ''
+                            ]
+                        );
                         break;
                     case 'validate examples':
                         $concurrency = 8;
                         $output->writeln([
-                            sprintf('<info>Validate examples with phpstan, run %s instances in parallel</info>', $concurrency),
+                            sprintf(
+                                '<info>Validate examples with phpstan, run %s instances in parallel</info>',
+                                $concurrency
+                            ),
                             '<info>Attention! Current status flags will be overwritten!</info>',
-                            '']);
+                            ''
+                        ]);
                         $generatedExamplesFolder = $sdkBasePath . $targetFolder . '/examples';
                         // collect result examples
                         $generatedExamples = [];
-                        foreach ((new Finder())->in($generatedExamplesFolder)->directories()->sortByName() as $directory) {
+                        foreach (
+                            (new Finder())->in($generatedExamplesFolder)->directories()->sortByName() as $directory
+                        ) {
                             $methodName = $directory->getFilename();
                             $generatedExamples[$methodName] = sprintf('%s/%s.php', $methodName, $methodName);
                             // remove status flags
@@ -310,7 +378,12 @@ class GenerateExamplesForDocumentationCommand extends Command
                             ]);
                         }
                         // run phpstan
-                        $phpstanResults = $this->runPhpstanAnalysis($output, $targetFolder, $generatedExamples, $concurrency);
+                        $phpstanResults = $this->runPhpstanAnalysis(
+                            $output,
+                            $targetFolder,
+                            $generatedExamples,
+                            $concurrency
+                        );
                         $output->writeln(['', '<info>Process phpstan results...</info>', '']);
                         $this->processPhpstanResults($output, $generatedExamplesFolder, $phpstanResults);
                         $this->showStatistics($targetFolder . '/examples', $output);
@@ -320,18 +393,31 @@ class GenerateExamplesForDocumentationCommand extends Command
                         $this->showStatistics($targetFolder . '/examples', $output);
                         break;
                     case 'add new examples to «b24-rest-docs» repository':
-                        $output->writeln(['<info>add new examples to «b24-rest-docs» repository, please wait...</info>', '']);
+                        $output->writeln(
+                            ['<info>add new examples to «b24-rest-docs» repository, please wait...</info>', '']
+                        );
                         if (!$this->filesystem->exists($docsRepoFolder)) {
-                            throw new InvalidArgumentException(sprintf('documentation repository folder «%s» not found', $docsRepoFolder));
+                            throw new InvalidArgumentException(
+                                sprintf('documentation repository folder «%s» not found', $docsRepoFolder)
+                            );
                         }
                         $attemptId = (new CarbonImmutable())->format('Y-m-d-H-i-s');
                         // documentation templates
-                        $docTplExampleNewTabPayload = $this->loadContentsFromFile($sdkBasePath . $targetFolder . '/file-templates/documentation/example-new-tab.md');
+                        $docTplExampleNewTabPayload = $this->loadContentsFromFile(
+                            $sdkBasePath . $targetFolder . '/file-templates/documentation/example-new-tab.md'
+                        );
 
                         // filter valid examples but not moved to documentation repo yet
                         $generatedExamplesFolder = $sdkBasePath . $targetFolder . '/examples/';
-                        $examplesToDocumentation = $this->getValidExamplesNotAddedToDocumentation($generatedExamplesFolder);
-                        $output->writeln(sprintf('valid, but not added to documentation repository examples count: %s', count($examplesToDocumentation)));
+                        $examplesToDocumentation = $this->getValidExamplesNotAddedToDocumentation(
+                            $generatedExamplesFolder
+                        );
+                        $output->writeln(
+                            sprintf(
+                                'valid, but not added to documentation repository examples count: %s',
+                                count($examplesToDocumentation)
+                            )
+                        );
 
                         $notFoundDocumentationPages = [];
                         $progressBar = new ProgressBar($output, count($examplesToDocumentation));
@@ -355,15 +441,23 @@ class GenerateExamplesForDocumentationCommand extends Command
                             // try to find position to inject example source code in documentation file
                             $curTpl = $docTplExampleNewTabPayload;
                             $injectPos = $this->findPositionForInjectDocumentationExample($originalDocFilePayload);
-                            $this->logger->debug('GenerateExamplesForDocumentation.addNewExamplesToDocsRepository.injectPosition', [
-                                'position' => $injectPos
-                            ]);
+                            $this->logger->debug(
+                                'GenerateExamplesForDocumentation.addNewExamplesToDocsRepository.injectPosition',
+                                [
+                                    'position' => $injectPos
+                                ]
+                            );
                             if (null === $injectPos) {
-                                $this->logger->notice('GenerateExamplesForDocumentation.addNewExamplesToDocsRepository.injectPositionNotFound', [
-                                    'method' => $method,
-                                ]);
+                                $this->logger->notice(
+                                    'GenerateExamplesForDocumentation.addNewExamplesToDocsRepository.injectPositionNotFound',
+                                    [
+                                        'method' => $method,
+                                    ]
+                                );
                                 // create examples section
-                                $curTpl = $this->loadContentsFromFile($sdkBasePath . $targetFolder . '/file-templates/documentation/example-new-tab-block.md');
+                                $curTpl = $this->loadContentsFromFile(
+                                    $sdkBasePath . $targetFolder . '/file-templates/documentation/example-new-tab-block.md'
+                                );
                                 $injectPos = count($originalDocLines);
                             }
 
@@ -388,12 +482,22 @@ class GenerateExamplesForDocumentationCommand extends Command
                         $progressBar->finish();
                         $output->writeln(['', '<info>All new examples added to documentation repository</info>']);
                         if (count($notFoundDocumentationPages) > 0) {
-                            $output->writeln(sprintf('<error>found %s methods without pages in documentation repository, create issue</error>', count($notFoundDocumentationPages)));
+                            $output->writeln(
+                                sprintf(
+                                    '<error>found %s methods without pages in documentation repository, create issue</error>',
+                                    count($notFoundDocumentationPages)
+                                )
+                            );
                             $this->saveToFile(
                                 sprintf('%s/var/logs/%s-documentation-pages-not-found.log', $targetFolder, $attemptId),
                                 implode(PHP_EOL, $notFoundDocumentationPages)
                             );
-                            $output->writeln(sprintf('<info>methods without pages saved to «*.documentation-pages-not-found.log» file in «%s/var/logs/» folder</info>', $targetFolder));
+                            $output->writeln(
+                                sprintf(
+                                    '<info>methods without pages saved to «*.documentation-pages-not-found.log» file in «%s/var/logs/» folder</info>',
+                                    $targetFolder
+                                )
+                            );
                         }
 
                         break;
@@ -465,27 +569,33 @@ class GenerateExamplesForDocumentationCommand extends Command
         $fileContents = $this->loadContentsFromFile($fileName);
         $startLine = $this->getLineNumberWithNeedleMarker($fileContents, self::SOURCE_CODE_EXAMPLE_START);
         if ($startLine === null) {
-            throw new InvalidArgumentException(sprintf(
-                'in file «%s» not found marker «%s»',
-                $fileName,
-                self::SOURCE_CODE_EXAMPLE_START
-            ));
+            throw new InvalidArgumentException(
+                sprintf(
+                    'in file «%s» not found marker «%s»',
+                    $fileName,
+                    self::SOURCE_CODE_EXAMPLE_START
+                )
+            );
         }
         $endLine = $this->getLineNumberWithNeedleMarker($fileContents, self::SOURCE_CODE_EXAMPLE_FINISH);
         if ($endLine === null) {
-            throw new InvalidArgumentException(sprintf(
-                'in file «%s» not found marker «%s»',
-                $fileName,
-                self::SOURCE_CODE_EXAMPLE_FINISH
-            ));
+            throw new InvalidArgumentException(
+                sprintf(
+                    'in file «%s» not found marker «%s»',
+                    $fileName,
+                    self::SOURCE_CODE_EXAMPLE_FINISH
+                )
+            );
         }
         if ($startLine >= $endLine) {
-            throw new InvalidArgumentException(sprintf(
-                'wrong marker positions %s and %s in file %s',
-                $startLine,
-                $endLine,
-                $fileName
-            ));
+            throw new InvalidArgumentException(
+                sprintf(
+                    'wrong marker positions %s and %s in file %s',
+                    $startLine,
+                    $endLine,
+                    $fileName
+                )
+            );
         }
 
         $exampleLen = $endLine - $startLine - 1;
@@ -522,7 +632,6 @@ class GenerateExamplesForDocumentationCommand extends Command
      */
     private function findDocumentationPagePath(string $docsRepoFolder, string $methodName): ?string
     {
-
         $methodName = str_replace('.', '-', $methodName);
         $docsPage = null;
         foreach ((new Finder())->in($docsRepoFolder)->name($methodName . '.md')->files() as $item) {
@@ -546,14 +655,20 @@ class GenerateExamplesForDocumentationCommand extends Command
     public function getValidExamplesNotAddedToDocumentation(string $generatedExamplesFolder): array
     {
         if (!$this->filesystem->exists($generatedExamplesFolder)) {
-            throw new FileNotFoundException(sprintf('folder «%s» with generated examples not found ', $generatedExamplesFolder));
+            throw new FileNotFoundException(
+                sprintf('folder «%s» with generated examples not found ', $generatedExamplesFolder)
+            );
         }
 
         $examplesToDocumentation = [];
         foreach ((new Finder())->in($generatedExamplesFolder)->directories()->sortByName() as $directory) {
             $methodName = $directory->getFilename();
-            if ($this->filesystem->exists(sprintf('%s/%s/%s', $generatedExamplesFolder, $methodName, self::VALID_EXAMPLE_MARKER)) &&
-                !$this->filesystem->exists(sprintf('%s/%s/%s', $generatedExamplesFolder, $methodName, self::DOCUMENTED_MARKER))
+            if ($this->filesystem->exists(
+                sprintf('%s/%s/%s', $generatedExamplesFolder, $methodName, self::VALID_EXAMPLE_MARKER)
+            ) &&
+                !$this->filesystem->exists(
+                    sprintf('%s/%s/%s', $generatedExamplesFolder, $methodName, self::DOCUMENTED_MARKER)
+                )
             ) {
                 $examplesToDocumentation[$methodName] = sprintf('%s/%s.php', $methodName, $methodName);
             }
@@ -639,8 +754,12 @@ class GenerateExamplesForDocumentationCommand extends Command
      * @return array
      * @throws JsonException
      */
-    private function runPhpstanAnalysis(OutputInterface $output, string $targetFolder, array $generatedExamples, int $concurrency): array
-    {
+    private function runPhpstanAnalysis(
+        OutputInterface $output,
+        string $targetFolder,
+        array $generatedExamples,
+        int $concurrency
+    ): array {
         $phpstanResults = [];
         $phpstanPath = 'vendor/bin/phpstan';
         $phpstanAnalysisLevel = 8;
@@ -872,7 +991,9 @@ class GenerateExamplesForDocumentationCommand extends Command
     private function extractItemTypeFromListType(string $listType): string
     {
         if (!$this->isListType($listType)) {
-            throw new \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException(sprintf('type «%s» is not list type', $listType));
+            throw new \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException(
+                sprintf('type «%s» is not list type', $listType)
+            );
         }
         // skip "array<" and ">"
         return substr($listType, 6, -1);
