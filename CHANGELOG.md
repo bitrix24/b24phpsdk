@@ -12,6 +12,8 @@
 - Added method `Bitrix24AccountRepositoryInterface::findByApplicationToken` in contracts for
   support «[Delete Application](https://github.com/bitrix24/b24phpsdk/issues/62)» use case
 - Added `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Exceptions\MultipleBitrix24AccountsFoundException`
+- Added nullable comments in events `Bitrix24AccountBlockedEvent` and `Bitrix24AccountUnblockedEvent`,
+  see [add comment to events](https://github.com/bitrix24/b24phpsdk/issues/79).
 
 ### Changed
 

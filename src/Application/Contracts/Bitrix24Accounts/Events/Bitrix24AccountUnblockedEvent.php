@@ -20,8 +20,9 @@ use Symfony\Contracts\EventDispatcher\Event;
 class Bitrix24AccountUnblockedEvent extends Event
 {
     public function __construct(
-        public readonly Uuid            $bitrix24AccountId,
-        public readonly CarbonImmutable $timestamp)
-    {
+        public readonly Uuid $bitrix24AccountId,
+        public readonly CarbonImmutable $timestamp,
+        public readonly ?string $comment = null
+    ) {
     }
 }
