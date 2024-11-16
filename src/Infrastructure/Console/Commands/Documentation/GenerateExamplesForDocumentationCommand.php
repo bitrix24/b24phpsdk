@@ -64,8 +64,7 @@ class GenerateExamplesForDocumentationCommand extends Command
         private readonly AttributesParser $attributesParser,
         private readonly Filesystem       $filesystem,
         private readonly LoggerInterface  $logger
-    )
-    {
+    ) {
         // best practices recommend to call the parent constructor first and
         // then set your own properties. That wouldn't work in this case
         // because configure() needs the properties set in this constructor
@@ -785,39 +784,38 @@ class GenerateExamplesForDocumentationCommand extends Command
         string $serviceBuilderClassName,
         string $serviceClassName,
         string $serviceMethodName,
-    ): array
-    {
+    ): array {
         $this->logger->debug('generateGptPromptByServiceMethod.start');
 
         // pack method parameters
         $methodParameters = PHP_EOL;
         foreach ($this->getMethodParameters($serviceClassName, $serviceMethodName) as $parameter) {
             $methodParameters .= sprintf(
-                    '%s%s $%s',
-                    $parameter['is_optional'] === true ? '?' : '',
-                    $parameter['type'],
-                    $parameter['name'],
-                ) . PHP_EOL;
+                '%s%s $%s',
+                $parameter['is_optional'] === true ? '?' : '',
+                $parameter['type'],
+                $parameter['name'],
+            ) . PHP_EOL;
         }
 
         // pack root service builder methods
         $rootSbMethods = '';
         foreach ($this->getClassMethods(ServiceBuilder::class) as $method) {
             $rootSbMethods .= sprintf(
-                    '%s:%s',
-                    $method['method_name'],
-                    $method['method_return_type']
-                ) . PHP_EOL;
+                '%s:%s',
+                $method['method_name'],
+                $method['method_return_type']
+            ) . PHP_EOL;
         }
 
         // pack service builder methods
         $sbMethods = '';
         foreach ($this->getClassMethods($serviceBuilderClassName) as $method) {
             $sbMethods .= sprintf(
-                    '%s:%s',
-                    $method['method_name'],
-                    $method['method_return_type']
-                ) . PHP_EOL;
+                '%s:%s',
+                $method['method_name'],
+                $method['method_return_type']
+            ) . PHP_EOL;
         }
 
         $returnResultClassName = $this->getMethodReturnResultType($serviceClassName, $serviceMethodName);
