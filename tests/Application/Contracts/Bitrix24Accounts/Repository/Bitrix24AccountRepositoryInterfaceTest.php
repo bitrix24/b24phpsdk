@@ -35,17 +35,17 @@ use Symfony\Component\Uid\Uuid;
 abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
 {
     abstract protected function createBitrix24AccountImplementation(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        string                $memberId,
-        string                $domainUrl,
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        string $memberId,
+        string $domainUrl,
         Bitrix24AccountStatus $bitrix24AccountStatus,
-        AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
+        AuthToken $authToken,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        int $applicationVersion,
+        Scope $applicationScope
     ): Bitrix24AccountInterface;
 
     abstract protected function createBitrix24AccountRepositoryImplementation(): Bitrix24AccountRepositoryInterface;
@@ -59,20 +59,31 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     #[DataProvider('bitrix24AccountForInstallDataProvider')]
     #[TestDox('test save method for install start use case')]
     final public function testSave(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        string                $memberId,
-        string                $domainUrl,
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        string $memberId,
+        string $domainUrl,
         Bitrix24AccountStatus $bitrix24AccountStatus,
-        AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
-    ): void
-    {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        AuthToken $authToken,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): void {
+        $bitrix24Account = $this->createBitrix24AccountImplementation(
+            $uuid,
+            $bitrix24UserId,
+            $isBitrix24UserAdmin,
+            $memberId,
+            $domainUrl,
+            $bitrix24AccountStatus,
+            $authToken,
+            $createdAt,
+            $updatedAt,
+            $applicationVersion,
+            $applicationScope
+        );
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -100,20 +111,31 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     #[DataProvider('bitrix24AccountForInstallDataProvider')]
     #[TestDox('test delete method for happy path')]
     final public function testDeleteHappyPath(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        string                $memberId,
-        string                $domainUrl,
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        string $memberId,
+        string $domainUrl,
         Bitrix24AccountStatus $bitrix24AccountStatus,
-        AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
-    ): void
-    {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        AuthToken $authToken,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): void {
+        $bitrix24Account = $this->createBitrix24AccountImplementation(
+            $uuid,
+            $bitrix24UserId,
+            $isBitrix24UserAdmin,
+            $memberId,
+            $domainUrl,
+            $bitrix24AccountStatus,
+            $authToken,
+            $createdAt,
+            $updatedAt,
+            $applicationVersion,
+            $applicationScope
+        );
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -144,20 +166,31 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     #[DataProvider('bitrix24AccountForInstallDataProvider')]
     #[TestDox('test delete method for account not in deleted state')]
     final public function testDeleteNotInDeletedState(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        string                $memberId,
-        string                $domainUrl,
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        string $memberId,
+        string $domainUrl,
         Bitrix24AccountStatus $bitrix24AccountStatus,
-        AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
-    ): void
-    {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        AuthToken $authToken,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): void {
+        $bitrix24Account = $this->createBitrix24AccountImplementation(
+            $uuid,
+            $bitrix24UserId,
+            $isBitrix24UserAdmin,
+            $memberId,
+            $domainUrl,
+            $bitrix24AccountStatus,
+            $authToken,
+            $createdAt,
+            $updatedAt,
+            $applicationVersion,
+            $applicationScope
+        );
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -201,20 +234,31 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     #[DataProvider('bitrix24AccountForInstallDataProvider')]
     #[TestDox('test findOneAdminByMemberId method with happy path')]
     final public function testFindOneAdminByMemberIdWithHappyPath(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        string                $memberId,
-        string                $domainUrl,
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        string $memberId,
+        string $domainUrl,
         Bitrix24AccountStatus $bitrix24AccountStatus,
-        AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
-    ): void
-    {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        AuthToken $authToken,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): void {
+        $bitrix24Account = $this->createBitrix24AccountImplementation(
+            $uuid,
+            $bitrix24UserId,
+            $isBitrix24UserAdmin,
+            $memberId,
+            $domainUrl,
+            $bitrix24AccountStatus,
+            $authToken,
+            $createdAt,
+            $updatedAt,
+            $applicationVersion,
+            $applicationScope
+        );
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -232,20 +276,31 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     #[DataProvider('bitrix24AccountForInstallDataProvider')]
     #[TestDox('test findOneAdminByMemberId method with simple user')]
     final public function testFindOneAdminByMemberIdWithSimpleUser(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        string                $memberId,
-        string                $domainUrl,
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        string $memberId,
+        string $domainUrl,
         Bitrix24AccountStatus $bitrix24AccountStatus,
-        AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
-    ): void
-    {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, false, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        AuthToken $authToken,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): void {
+        $bitrix24Account = $this->createBitrix24AccountImplementation(
+            $uuid,
+            $bitrix24UserId,
+            false,
+            $memberId,
+            $domainUrl,
+            $bitrix24AccountStatus,
+            $authToken,
+            $createdAt,
+            $updatedAt,
+            $applicationVersion,
+            $applicationScope
+        );
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -263,20 +318,31 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     #[DataProvider('bitrix24AccountForInstallDataProvider')]
     #[TestDox('test findByMemberId method with happy path')]
     final public function testFindByMemberIdWithHappyPath(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        string                $memberId,
-        string                $domainUrl,
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        string $memberId,
+        string $domainUrl,
         Bitrix24AccountStatus $bitrix24AccountStatus,
-        AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
-    ): void
-    {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        AuthToken $authToken,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): void {
+        $bitrix24Account = $this->createBitrix24AccountImplementation(
+            $uuid,
+            $bitrix24UserId,
+            $isBitrix24UserAdmin,
+            $memberId,
+            $domainUrl,
+            $bitrix24AccountStatus,
+            $authToken,
+            $createdAt,
+            $updatedAt,
+            $applicationVersion,
+            $applicationScope
+        );
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -317,20 +383,31 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     #[DataProvider('bitrix24AccountForInstallDataProvider')]
     #[TestDox('test findByMemberId method with blocked account happy path')]
     final public function testFindByMemberIdWithBlockedAccountHappyPath(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        string                $memberId,
-        string                $domainUrl,
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        string $memberId,
+        string $domainUrl,
         Bitrix24AccountStatus $bitrix24AccountStatus,
-        AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
-    ): void
-    {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        AuthToken $authToken,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): void {
+        $bitrix24Account = $this->createBitrix24AccountImplementation(
+            $uuid,
+            $bitrix24UserId,
+            $isBitrix24UserAdmin,
+            $memberId,
+            $domainUrl,
+            $bitrix24AccountStatus,
+            $authToken,
+            $createdAt,
+            $updatedAt,
+            $applicationVersion,
+            $applicationScope
+        );
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -354,20 +431,31 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     #[DataProvider('bitrix24AccountForInstallDataProvider')]
     #[TestDox('test findByMemberId method with account status but account not found')]
     final public function testFindByMemberIdWithAccountStatusAccountNotFound(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        string                $memberId,
-        string                $domainUrl,
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        string $memberId,
+        string $domainUrl,
         Bitrix24AccountStatus $bitrix24AccountStatus,
-        AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
-    ): void
-    {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        AuthToken $authToken,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): void {
+        $bitrix24Account = $this->createBitrix24AccountImplementation(
+            $uuid,
+            $bitrix24UserId,
+            $isBitrix24UserAdmin,
+            $memberId,
+            $domainUrl,
+            $bitrix24AccountStatus,
+            $authToken,
+            $createdAt,
+            $updatedAt,
+            $applicationVersion,
+            $applicationScope
+        );
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -389,20 +477,31 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     #[DataProvider('bitrix24AccountForInstallDataProvider')]
     #[TestDox('test findByMemberId method with is admin happy path')]
     final public function testFindByMemberIdWithIsAdminHappyPath(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        string                $memberId,
-        string                $domainUrl,
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        string $memberId,
+        string $domainUrl,
         Bitrix24AccountStatus $bitrix24AccountStatus,
-        AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
-    ): void
-    {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        AuthToken $authToken,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): void {
+        $bitrix24Account = $this->createBitrix24AccountImplementation(
+            $uuid,
+            $bitrix24UserId,
+            $isBitrix24UserAdmin,
+            $memberId,
+            $domainUrl,
+            $bitrix24AccountStatus,
+            $authToken,
+            $createdAt,
+            $updatedAt,
+            $applicationVersion,
+            $applicationScope
+        );
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -423,20 +522,31 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     #[DataProvider('bitrix24AccountForInstallDataProvider')]
     #[TestDox('test findByMemberId method with is admin - not found')]
     final public function testFindByMemberIdWithIsAdminNotFound(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        string                $memberId,
-        string                $domainUrl,
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        string $memberId,
+        string $domainUrl,
         Bitrix24AccountStatus $bitrix24AccountStatus,
-        AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
-    ): void
-    {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, false, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        AuthToken $authToken,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): void {
+        $bitrix24Account = $this->createBitrix24AccountImplementation(
+            $uuid,
+            $bitrix24UserId,
+            false,
+            $memberId,
+            $domainUrl,
+            $bitrix24AccountStatus,
+            $authToken,
+            $createdAt,
+            $updatedAt,
+            $applicationVersion,
+            $applicationScope
+        );
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -457,20 +567,31 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     #[DataProvider('bitrix24AccountForInstallDataProvider')]
     #[TestDox('test findByMemberId method with b24UserId - not found')]
     final public function testFindByMemberIdWithB24UserIdNotFound(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        string                $memberId,
-        string                $domainUrl,
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        string $memberId,
+        string $domainUrl,
         Bitrix24AccountStatus $bitrix24AccountStatus,
-        AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
-    ): void
-    {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        AuthToken $authToken,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): void {
+        $bitrix24Account = $this->createBitrix24AccountImplementation(
+            $uuid,
+            $bitrix24UserId,
+            $isBitrix24UserAdmin,
+            $memberId,
+            $domainUrl,
+            $bitrix24AccountStatus,
+            $authToken,
+            $createdAt,
+            $updatedAt,
+            $applicationVersion,
+            $applicationScope
+        );
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -491,20 +612,31 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     #[DataProvider('bitrix24AccountForInstallDataProvider')]
     #[TestDox('test findByMemberId method with all args')]
     final public function testFindByMemberIdWithAllArgs(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        string                $memberId,
-        string                $domainUrl,
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        string $memberId,
+        string $domainUrl,
         Bitrix24AccountStatus $bitrix24AccountStatus,
-        AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
-    ): void
-    {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        AuthToken $authToken,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): void {
+        $bitrix24Account = $this->createBitrix24AccountImplementation(
+            $uuid,
+            $bitrix24UserId,
+            $isBitrix24UserAdmin,
+            $memberId,
+            $domainUrl,
+            $bitrix24AccountStatus,
+            $authToken,
+            $createdAt,
+            $updatedAt,
+            $applicationVersion,
+            $applicationScope
+        );
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -514,7 +646,12 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         $acc = $bitrix24AccountRepository->getById($uuid);
         $this->assertEquals($bitrix24Account, $acc);
 
-        $found = $bitrix24AccountRepository->findByMemberId($memberId, Bitrix24AccountStatus::new, $bitrix24UserId, $isBitrix24UserAdmin);
+        $found = $bitrix24AccountRepository->findByMemberId(
+            $memberId,
+            Bitrix24AccountStatus::new,
+            $bitrix24UserId,
+            $isBitrix24UserAdmin
+        );
         $this->assertEquals($acc, $found[0]);
     }
 
@@ -525,20 +662,31 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     #[DataProvider('bitrix24AccountForInstallDataProvider')]
     #[TestDox('test findByDomain method with happy path')]
     final public function testFindByDomainWithHappyPath(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        string                $memberId,
-        string                $domainUrl,
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        string $memberId,
+        string $domainUrl,
         Bitrix24AccountStatus $bitrix24AccountStatus,
-        AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
-    ): void
-    {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        AuthToken $authToken,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): void {
+        $bitrix24Account = $this->createBitrix24AccountImplementation(
+            $uuid,
+            $bitrix24UserId,
+            $isBitrix24UserAdmin,
+            $memberId,
+            $domainUrl,
+            $bitrix24AccountStatus,
+            $authToken,
+            $createdAt,
+            $updatedAt,
+            $applicationVersion,
+            $applicationScope
+        );
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -579,20 +727,31 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     #[DataProvider('bitrix24AccountForInstallDataProvider')]
     #[TestDox('test findByDomain method with blocked account happy path')]
     final public function testFindByDomainWithBlockedAccountHappyPath(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        string                $memberId,
-        string                $domainUrl,
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        string $memberId,
+        string $domainUrl,
         Bitrix24AccountStatus $bitrix24AccountStatus,
-        AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
-    ): void
-    {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        AuthToken $authToken,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): void {
+        $bitrix24Account = $this->createBitrix24AccountImplementation(
+            $uuid,
+            $bitrix24UserId,
+            $isBitrix24UserAdmin,
+            $memberId,
+            $domainUrl,
+            $bitrix24AccountStatus,
+            $authToken,
+            $createdAt,
+            $updatedAt,
+            $applicationVersion,
+            $applicationScope
+        );
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -616,20 +775,31 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     #[DataProvider('bitrix24AccountForInstallDataProvider')]
     #[TestDox('test findByDomain method with account status but account not found')]
     final public function testFindByDomainWithAccountStatusAccountNotFound(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        string                $memberId,
-        string                $domainUrl,
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        string $memberId,
+        string $domainUrl,
         Bitrix24AccountStatus $bitrix24AccountStatus,
-        AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
-    ): void
-    {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        AuthToken $authToken,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): void {
+        $bitrix24Account = $this->createBitrix24AccountImplementation(
+            $uuid,
+            $bitrix24UserId,
+            $isBitrix24UserAdmin,
+            $memberId,
+            $domainUrl,
+            $bitrix24AccountStatus,
+            $authToken,
+            $createdAt,
+            $updatedAt,
+            $applicationVersion,
+            $applicationScope
+        );
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -651,20 +821,31 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     #[DataProvider('bitrix24AccountForInstallDataProvider')]
     #[TestDox('test findByDomain method with is admin happy path')]
     final public function testFindByDomainWithIsAdminHappyPath(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        string                $memberId,
-        string                $domainUrl,
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        string $memberId,
+        string $domainUrl,
         Bitrix24AccountStatus $bitrix24AccountStatus,
-        AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
-    ): void
-    {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        AuthToken $authToken,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): void {
+        $bitrix24Account = $this->createBitrix24AccountImplementation(
+            $uuid,
+            $bitrix24UserId,
+            $isBitrix24UserAdmin,
+            $memberId,
+            $domainUrl,
+            $bitrix24AccountStatus,
+            $authToken,
+            $createdAt,
+            $updatedAt,
+            $applicationVersion,
+            $applicationScope
+        );
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -685,20 +866,31 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     #[DataProvider('bitrix24AccountForInstallDataProvider')]
     #[TestDox('test findByDomain method with is admin - not found')]
     final public function testFindByDomainWithIsAdminNotFound(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        string                $memberId,
-        string                $domainUrl,
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        string $memberId,
+        string $domainUrl,
         Bitrix24AccountStatus $bitrix24AccountStatus,
-        AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
-    ): void
-    {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, false, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        AuthToken $authToken,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): void {
+        $bitrix24Account = $this->createBitrix24AccountImplementation(
+            $uuid,
+            $bitrix24UserId,
+            false,
+            $memberId,
+            $domainUrl,
+            $bitrix24AccountStatus,
+            $authToken,
+            $createdAt,
+            $updatedAt,
+            $applicationVersion,
+            $applicationScope
+        );
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -719,20 +911,31 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     #[DataProvider('bitrix24AccountForInstallDataProvider')]
     #[TestDox('test findByDomain method with all args')]
     final public function testFindByDomainWithAllArgs(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        string                $memberId,
-        string                $domainUrl,
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        string $memberId,
+        string $domainUrl,
         Bitrix24AccountStatus $bitrix24AccountStatus,
-        AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
-    ): void
-    {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, false, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        AuthToken $authToken,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): void {
+        $bitrix24Account = $this->createBitrix24AccountImplementation(
+            $uuid,
+            $bitrix24UserId,
+            false,
+            $memberId,
+            $domainUrl,
+            $bitrix24AccountStatus,
+            $authToken,
+            $createdAt,
+            $updatedAt,
+            $applicationVersion,
+            $applicationScope
+        );
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -750,20 +953,31 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     #[DataProvider('bitrix24AccountForInstallDataProvider')]
     #[TestDox('test FindByApplicationToken method')]
     final public function testFindByApplicationToken(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        string                $memberId,
-        string                $domainUrl,
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        string $memberId,
+        string $domainUrl,
         Bitrix24AccountStatus $bitrix24AccountStatus,
-        AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
-    ): void
-    {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, false, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        AuthToken $authToken,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): void {
+        $bitrix24Account = $this->createBitrix24AccountImplementation(
+            $uuid,
+            $bitrix24UserId,
+            false,
+            $memberId,
+            $domainUrl,
+            $bitrix24AccountStatus,
+            $authToken,
+            $createdAt,
+            $updatedAt,
+            $applicationVersion,
+            $applicationScope
+        );
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -794,20 +1008,31 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
     #[DataProvider('bitrix24AccountForInstallDataProvider')]
     #[TestDox('test FindByApplicationToken method with unknown token')]
     final public function testFindByApplicationTokenWithUnknownToken(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        string                $memberId,
-        string                $domainUrl,
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        string $memberId,
+        string $domainUrl,
         Bitrix24AccountStatus $bitrix24AccountStatus,
-        AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
-    ): void
-    {
-        $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, false, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        AuthToken $authToken,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): void {
+        $bitrix24Account = $this->createBitrix24AccountImplementation(
+            $uuid,
+            $bitrix24UserId,
+            false,
+            $memberId,
+            $domainUrl,
+            $bitrix24AccountStatus,
+            $authToken,
+            $createdAt,
+            $updatedAt,
+            $applicationVersion,
+            $applicationScope
+        );
         $bitrix24AccountRepository = $this->createBitrix24AccountRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -830,8 +1055,8 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             Uuid::v7(),
             12345,
             true,
-            'member123',
-            'https://example.com',
+            Uuid::v7()->toRfc4122(),
+            sprintf('https://example-%s.com', Uuid::v7()->toRfc4122()),
             Bitrix24AccountStatus::new,
             new AuthToken('access_token', 'refresh_token', 1609459200),
             CarbonImmutable::now(),
