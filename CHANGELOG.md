@@ -12,6 +12,8 @@
 - Added method `Bitrix24AccountRepositoryInterface::findByApplicationToken` in contracts for
   support «[Delete Application](https://github.com/bitrix24/b24phpsdk/issues/62)» use case
 - Added `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Exceptions\MultipleBitrix24AccountsFoundException`
+- Added nullable comments in events `Bitrix24AccountBlockedEvent` and `Bitrix24AccountUnblockedEvent`,
+  see [add comment to events](https://github.com/bitrix24/b24phpsdk/issues/79).
 
 ### Changed
 
@@ -28,6 +30,8 @@
   see [filtration errors](https://github.com/bitrix24/b24phpsdk/issues/65).
 - Fixed error in contract tests design,
   see [bitrix24AccountRepositoryInterface has problem with contract tests design - can't add flusher](https://github.com/bitrix24/b24phpsdk/issues/74).
+- Fixed error in bitrix24 account contract test data provider,
+  see [incorrect data in data provider](https://github.com/bitrix24/b24phpsdk/issues/77).
 
 <!--
 ## Unreleased
