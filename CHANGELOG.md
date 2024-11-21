@@ -32,6 +32,8 @@
   see [bitrix24AccountRepositoryInterface has problem with contract tests design - can't add flusher](https://github.com/bitrix24/b24phpsdk/issues/74).
 - Fixed error in bitrix24 account contract test data provider,
   see [incorrect data in data provider](https://github.com/bitrix24/b24phpsdk/issues/77).
+- Fixed typehints in `ActivityItemResult`, `ContactItemResult`,
+  see [wrong type hints in ActivityItemResult](https://github.com/bitrix24/b24phpsdk/issues/81)
 
 <!--
 ## Unreleased

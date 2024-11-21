@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Contact\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Services\CRM\Activity\Result\ActivityItemResult;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\EmailValueType;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\InstantMessengerValueType;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\PhoneValueType;
@@ -23,6 +24,8 @@ use Bitrix24\SDK\Services\CRM\Contact\Result\ContactItemResult;
 use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 use Bitrix24\SDK\Tests\Integration\Fabric;
+use PHPUnit\Framework\Attributes\CoversFunction;
+use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 use Bitrix24\SDK\Core;
 use Faker;
@@ -32,6 +35,12 @@ use Faker;
  *
  * @package Bitrix24\SDK\Tests\Integration\Services\CRM\Contact\Service
  */
+#[CoversMethod(Contact::class,'add')]
+#[CoversMethod(Contact::class,'delete')]
+#[CoversMethod(Contact::class,'fields')]
+#[CoversMethod(Contact::class,'get')]
+#[CoversMethod(Contact::class,'list')]
+#[CoversMethod(Contact::class,'update')]
 class ContactTest extends TestCase
 {
     use CustomBitrix24Assertions;
@@ -42,8 +51,8 @@ class ContactTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Contact::add
      */
+
     public function testAdd(): void
     {
         self::assertGreaterThanOrEqual(1, $this->contactService->add(['NAME' => 'test contact'])->getId());
@@ -52,7 +61,6 @@ class ContactTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Contact::delete
      */
     public function testDelete(): void
     {
@@ -60,7 +68,6 @@ class ContactTest extends TestCase
     }
 
     /**
-     * @covers Contact::fields
      * @throws BaseException
      * @throws TransportException
      */
@@ -76,9 +83,25 @@ class ContactTest extends TestCase
     }
 
     /**
+     * @throws TransportException
+     * @throws BaseException
+     */
+    public function testAllSystemFieldsHasValidTypeAnnotation():void
+    {
+        $allFields = $this->contactService->fields()->getFieldsDescription();
+        $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
+        $systemFields = array_filter($allFields, static function ($code) use ($systemFieldsCodes) {
+            return in_array($code, $systemFieldsCodes, true);
+        }, ARRAY_FILTER_USE_KEY);
+
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
+            $systemFields,
+            ContactItemResult::class);
+    }
+
+    /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Contact::get
      */
     public function testGet(): void
     {
@@ -91,7 +114,6 @@ class ContactTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Contact::list
      */
     public function testList(): void
     {
@@ -102,7 +124,6 @@ class ContactTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Contact::update
      */
     public function testUpdate(): void
     {
@@ -138,8 +159,6 @@ class ContactTest extends TestCase
 
     /**
      * @return void
-     * @covers Contact::get
-     * @covers Contact::add
      * @throws Core\Exceptions\TransportException
      * @throws Core\Exceptions\BaseException
      */
@@ -161,8 +180,6 @@ class ContactTest extends TestCase
 
     /**
      * @return void
-     * @covers Contact::get
-     * @covers Contact::add
      * @throws Core\Exceptions\TransportException
      * @throws Core\Exceptions\BaseException
      */
@@ -184,8 +201,6 @@ class ContactTest extends TestCase
 
     /**
      * @return void
-     * @covers Contact::get
-     * @covers Contact::add
      * @throws Core\Exceptions\TransportException
      * @throws Core\Exceptions\BaseException
      */
@@ -207,8 +222,6 @@ class ContactTest extends TestCase
 
     /**
      * @return void
-     * @covers Contact::get
-     * @covers Contact::add
      * @throws Core\Exceptions\TransportException
      * @throws Core\Exceptions\BaseException
      */
