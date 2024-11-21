@@ -21,23 +21,88 @@ use Bitrix24\SDK\Services\CRM\Activity\Result\ActivityItemResult;
 use Bitrix24\SDK\Services\CRM\Activity\Service\Activity;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityType;
 use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
+use Bitrix24\SDK\Services\CRM\Deal\Result\DealItemResult;
 use Bitrix24\SDK\Services\CRM\Deal\Result\DealProductRowItemResult;
 use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
 use Bitrix24\SDK\Tests\Integration\Fabric;
+use PHPUnit\Framework\Attributes\CoversFunction;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Typhoon\Reflection\TyphoonReflector;
+use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
+use Bitrix24\SDK\Core;
 
+#[CoversClass(Activity::class)]
+#[CoversMethod(Activity::class, 'add')]
+#[CoversMethod(Activity::class, 'delete')]
+#[CoversMethod(Activity::class, 'fields')]
+#[CoversMethod(Activity::class, 'get')]
+#[CoversMethod(Activity::class, 'list')]
+#[CoversMethod(Activity::class, 'update')]
+#[CoversMethod(Activity::class, 'countByFilter')]
 class ActivityTest extends TestCase
 {
+    use CustomBitrix24Assertions;
+
     private Activity $activityService;
     private Contact $contactService;
     private array $contactId;
     private array $activityId;
 
+    public function testAllSystemFieldsAnnotated(): void
+    {
+        $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($this->activityService->fields()->getFieldsDescription()));
+        $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, ActivityItemResult::class);
+    }
+
+    public function testAllSystemFieldsHasValidTypeAnnotation():void
+    {
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
+            $this->activityService->fields()->getFieldsDescription(),
+            ActivityItemResult::class);
+    }
+
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers \Bitrix24\SDK\Services\CRM\Activity\Service\Activity::add
+     */
+    public function testGet(): void
+    {
+        $contactId = $this->contactService->add(['NAME' => 'test contact'])->getId();
+        $this->contactId[] = $contactId;
+
+        $newActivity = [
+            'OWNER_ID' => $contactId,
+            'OWNER_TYPE_ID' => 3,
+            'TYPE_ID' => ActivityType::call->value,
+            'PROVIDER_ID' => 'VOXIMPLANT_CALL',
+            'PROVIDER_TYPE_ID' => 'CALL',
+            'SUBJECT' => 'test activity',
+            'DESCRIPTION' => 'test activity description',
+            'DESCRIPTION_TYPE' => '1',
+            'DIRECTION' => '2',
+            'COMMUNICATIONS' => [
+                0 => [
+                    'TYPE' => 'PHONE',
+                    'VALUE' => DemoDataGenerator::getMobilePhone()->getNationalNumber(),
+                ],
+            ],
+            'RESULT_SUM' => 500,
+            'RESULT_CURRENCY_ID' => 'USD'
+        ];
+        $activityId = $this->activityService->add($newActivity)->getId();
+        $this->activityId[] = $activityId;
+
+        $activity = $this->activityService->get($activityId)->activity();
+
+        $this->assertEquals($newActivity['OWNER_ID'], $activity->OWNER_ID);
+        $this->assertEquals($newActivity['SUBJECT'], $activity->SUBJECT);
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
      */
     public function testAdd(): void
     {
@@ -69,7 +134,6 @@ class ActivityTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers \Bitrix24\SDK\Services\CRM\Activity\Service\Activity::delete
      */
     public function testDelete(): void
     {
@@ -110,43 +174,6 @@ class ActivityTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers \Bitrix24\SDK\Services\CRM\Activity\Service\Activity::get
-     */
-    public function testGet(): void
-    {
-        $contactId = $this->contactService->add(['NAME' => 'test contact'])->getId();
-        $this->contactId[] = $contactId;
-
-        $newActivity = [
-            'OWNER_ID' => $contactId,
-            'OWNER_TYPE_ID' => 3,
-            'TYPE_ID' => ActivityType::call->value,
-            'PROVIDER_ID' => 'VOXIMPLANT_CALL',
-            'PROVIDER_TYPE_ID' => 'CALL',
-            'SUBJECT' => 'test activity',
-            'DESCRIPTION' => 'test activity description',
-            'DESCRIPTION_TYPE' => '1',
-            'DIRECTION' => '2',
-            'COMMUNICATIONS' => [
-                0 => [
-                    'TYPE' => 'PHONE',
-                    'VALUE' => DemoDataGenerator::getMobilePhone()->getNationalNumber(),
-                ],
-            ],
-        ];
-        $activityId = $this->activityService->add($newActivity)->getId();
-        $this->activityId[] = $activityId;
-
-        $activity = $this->activityService->get($activityId)->activity();
-
-        $this->assertEquals($newActivity['OWNER_ID'], $activity->OWNER_ID);
-        $this->assertEquals($newActivity['SUBJECT'], $activity->SUBJECT);
-    }
-
-    /**
-     * @throws BaseException
-     * @throws TransportException
-     * @covers \Bitrix24\SDK\Services\CRM\Activity\Service\Activity::list
      */
     public function testList(): void
     {
@@ -183,13 +210,14 @@ class ActivityTest extends TestCase
             ["*", "COMMUNICATIONS"],
             0
         );
-        $this->assertEquals(count($newActivity), count($res->getActivities()));
+
+
+      $this->assertEquals(count($newActivity), count($res->getActivities()));
     }
 
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers \Bitrix24\SDK\Services\CRM\Activity\Service\Activity::update
      */
     public function testUpdate(): void
     {
