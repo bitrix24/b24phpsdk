@@ -4,8 +4,22 @@
 
 ### Added
 
-- Developer experience: added example `/examples/local-app-workflows` for demonstrate work
-  with [workflows](https://apidocs.bitrix24.com/api-reference/bizproc/index.html).
+- Added service `CRM\Enum\Service\Enum` with support methods:
+    - `activityStatus`
+    - `activityNotifyType`
+    - `activityPriority`
+    - `activityDirection`
+    - `activityType`
+    - `addressType`
+    - `contentType`
+    - `orderOwnerTypes`
+    - `settingsMode`
+    - `fields`
+    - `ownerType`
+- Added enums:
+    - `Bitrix24\SDK\Services\CRM\Enum\AddressType`
+    - `Bitrix24\SDK\Services\CRM\Enum\ContentType`
+    - `Bitrix24\SDK\Services\CRM\Enum\CrmSettingsMode`
 - Added methods for filtration entity fields in `Bitrix24\SDK\Core\Fields\FieldsFilter`:
     - `Bitrix24\SDK\Core\Fields\FieldsFilter::filterUserFields`
     - `Bitrix24\SDK\Core\Fields\FieldsFilter::filterSmartProcessFields`
@@ -14,6 +28,8 @@
 - Added `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Exceptions\MultipleBitrix24AccountsFoundException`
 - Added nullable comments in events `Bitrix24AccountBlockedEvent` and `Bitrix24AccountUnblockedEvent`,
   see [add comment to events](https://github.com/bitrix24/b24phpsdk/issues/79).
+- Developer experience: added example `/examples/local-app-workflows` for demonstrate work
+  with [workflows](https://apidocs.bitrix24.com/api-reference/bizproc/index.html).
 
 ### Changed
 
@@ -34,6 +50,37 @@
   see [incorrect data in data provider](https://github.com/bitrix24/b24phpsdk/issues/77).
 - Fixed typehints in `ActivityItemResult`, `ContactItemResult`,
   see [wrong type hints in ActivityItemResult](https://github.com/bitrix24/b24phpsdk/issues/81)
+- Fixed error in method `Bitrix24\SDK\Core\Fields\FieldsFilter::filterSystemFields` for product user fields case.
+- Fixed typehints in `Bitrix24\SDK\Services\CRM\Lead\Result\LeadItemResult`
+  see [wrong typehints in LeadItemResult](https://github.com/bitrix24/b24phpsdk/issues/82):
+    - `CURRENCY_ID` `string` → `Currency|null`
+    - `OPPORTUNITY` `string` → `Money|null`
+    - `IS_MANUAL_OPPORTUNITY` `string` → `bool|null`
+    - `OPENED` `string` → `bool|null`
+    - `HAS_PHONE` `string` → `bool|null`
+    - `HAS_EMAIL` `string` → `bool|null`
+    - `HAS_IMOL` `string` → `bool|null`
+    - `ASSIGNED_BY_ID` `string` → `int|null`
+    - `CREATED_BY_ID` `string` → `int|null`
+    - `MODIFY_BY_ID` `string` → `int|null`
+    - `MOVED_BY_ID` `string` → `int|null`
+    - `DATE_CREATE` `string` → `CarbonImmutable|null`
+    - `DATE_MODIFY` `string` → `CarbonImmutable|null`
+    - `MOVED_TIME` `string` → `CarbonImmutable|null`
+    - `COMPANY_ID` `string` → `int|null`
+    - `CONTACT_ID` `string` → `int|null`
+    - `CONTACT_IDS` `string` → `array|null`
+    - `IS_RETURN_CUSTOMER` `string` → `bool|null`
+    - `DATE_CLOSED` `string` → `CarbonImmutable|null`
+    - `LAST_ACTIVITY_BY` `string` → `int|null`
+    - `LAST_ACTIVITY_TIME` `string` → `CarbonImmutable|null`
+- Fixed typehints in `Bitrix24\SDK\Services\CRM\Product\Result\ProductItemResult`:
+    - `PRICE` `string` → `Money`
+    - `CURRENCY_ID` `string` → `Currency`
+    - `ACTIVE` `string` → `bool`
+    - `VAT_INCLUDED` `string` → `bool`
+    - `DATE_CREATE` `string` → `CarbonImmutable`
+    - `TIMESTAMP_X` `string` → `CarbonImmutable`
 
 <!--
 ## Unreleased

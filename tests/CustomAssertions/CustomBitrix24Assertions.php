@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -30,8 +31,10 @@ trait CustomBitrix24Assertions
      * @param class-string $resultItemClassName
      * @return void
      */
-    protected function assertBitrix24AllResultItemFieldsAnnotated(array $fieldCodesFromApi, string $resultItemClassName): void
-    {
+    protected function assertBitrix24AllResultItemFieldsAnnotated(
+        array $fieldCodesFromApi,
+        string $resultItemClassName
+    ): void {
         sort($fieldCodesFromApi);
 
         // parse keys from phpdoc annotation
@@ -44,36 +47,44 @@ trait CustomBitrix24Assertions
         }
         sort($propsFromAnnotations);
 
-        $this->assertEquals($fieldCodesFromApi, $propsFromAnnotations,
-            sprintf('in phpdocs annotations for class %s we not found fields from actual api response: %s',
+        $this->assertEquals(
+            $fieldCodesFromApi,
+            $propsFromAnnotations,
+            sprintf(
+                'in phpdocs annotations for class %s we not found fields from actual api response: %s',
                 $resultItemClassName,
                 implode(', ', array_values(array_diff($fieldCodesFromApi, $propsFromAnnotations)))
-            ));
+            )
+        );
     }
 
-    protected function assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(array $fieldCodesFromApi, string $resultItemClassName):void
-    {
+    protected function assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
+        array $fieldCodesFromApi,
+        string $resultItemClassName
+    ): void {
         // parse keys from phpdoc annotation
         $props = TyphoonReflector::build()->reflectClass($resultItemClassName)->properties();
         $propsFromAnnotations = [];
         foreach ($props as $meta) {
             if ($meta->isAnnotated() && !$meta->isNative()) {
-                $propsFromAnnotations[$meta->id->name]=stringify($meta->type());
+                $propsFromAnnotations[$meta->id->name] = stringify($meta->type());
             }
         }
 
         asort($propsFromAnnotations);
         asort($fieldCodesFromApi);
-        foreach($fieldCodesFromApi as $fieldCode => $fieldData){
+        foreach ($fieldCodesFromApi as $fieldCode => $fieldData) {
             // mapping internal bitrix24 types to bitrix24 sdk types
-            switch ($fieldData['type']){
+            switch ($fieldData['type']) {
                 case 'string':
+                case 'crm_currency':
                 case 'crm_status':
                     // if field code contains currency
-                    if(str_contains($fieldCode, 'CURRENCY_ID')){
+                    if (str_contains($fieldCode, 'CURRENCY_ID')) {
                         $this->assertTrue(
                             str_contains($propsFromAnnotations[$fieldCode], Currency::class),
-                            sprintf('class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                            sprintf(
+                                'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
                                 $resultItemClassName,
                                 $fieldCode,
                                 $propsFromAnnotations[$fieldCode],
@@ -81,12 +92,13 @@ trait CustomBitrix24Assertions
                                 Currency::class
                             )
                         );
-                        break;                        
+                        break;
                     }
-                    
+
                     $this->assertTrue(
-                        str_contains($propsFromAnnotations[$fieldCode], 'string',),
-                        sprintf('class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                        str_contains($propsFromAnnotations[$fieldCode], 'string'),
+                        sprintf(
+                            'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
                             $resultItemClassName,
                             $fieldCode,
                             $propsFromAnnotations[$fieldCode],
@@ -100,8 +112,9 @@ trait CustomBitrix24Assertions
                 case 'crm_lead':
                 case 'integer':
                     $this->assertTrue(
-                        str_contains($propsFromAnnotations[$fieldCode],'int'),
-                        sprintf('class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                        str_contains($propsFromAnnotations[$fieldCode], 'int'),
+                        sprintf(
+                            'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
                             $resultItemClassName,
                             $fieldCode,
                             $propsFromAnnotations[$fieldCode],
@@ -111,10 +124,10 @@ trait CustomBitrix24Assertions
                     );
                     break;
                 case 'double':
-                    $this->assertEquals(
-                        'Money\Money|null',
-                        $propsFromAnnotations[$fieldCode],
-                        sprintf('class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                    $this->assertTrue(
+                        str_contains($propsFromAnnotations[$fieldCode], 'Money\Money'),
+                        sprintf(
+                            'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
                             $resultItemClassName,
                             $fieldCode,
                             $propsFromAnnotations[$fieldCode],
@@ -126,8 +139,9 @@ trait CustomBitrix24Assertions
                 case 'date':
                 case 'datetime':
                     $this->assertTrue(
-                        str_contains($propsFromAnnotations[$fieldCode],CarbonImmutable::class),
-                        sprintf('class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                        str_contains($propsFromAnnotations[$fieldCode], CarbonImmutable::class),
+                        sprintf(
+                            'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
                             $resultItemClassName,
                             $fieldCode,
                             $propsFromAnnotations[$fieldCode],
@@ -140,7 +154,8 @@ trait CustomBitrix24Assertions
                     $this->assertEquals(
                         'bool',
                         $propsFromAnnotations[$fieldCode],
-                        sprintf('class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                        sprintf(
+                            'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
                             $resultItemClassName,
                             $fieldCode,
                             $propsFromAnnotations[$fieldCode],
@@ -153,10 +168,15 @@ trait CustomBitrix24Assertions
                 case 'object':
                 case 'file':
                 case 'crm_company':
-                    if(str_contains($fieldCode, '_IDS') || str_contains($fieldCode, 'PHOTO')) {
+                case 'crm_contact':
+                case 'product_file':
+                    if (str_contains($fieldCode, '_IDS') ||
+                        str_contains($fieldCode, 'PHOTO') ||
+                        str_contains($fieldCode, '_PICTURE')) {
                         $this->assertTrue(
                             str_contains($propsFromAnnotations[$fieldCode], 'array'),
-                            sprintf('class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                            sprintf(
+                                'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
                                 $resultItemClassName,
                                 $fieldCode,
                                 $propsFromAnnotations[$fieldCode],
@@ -168,7 +188,8 @@ trait CustomBitrix24Assertions
                     }
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'int'),
-                        sprintf('class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                        sprintf(
+                            'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
                             $resultItemClassName,
                             $fieldCode,
                             $propsFromAnnotations[$fieldCode],
@@ -181,7 +202,8 @@ trait CustomBitrix24Assertions
                     $this->assertEquals(
                         ActivityDirectionType::class,
                         $propsFromAnnotations[$fieldCode],
-                        sprintf('class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                        sprintf(
+                            'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
                             $resultItemClassName,
                             $fieldCode,
                             $propsFromAnnotations[$fieldCode],
@@ -191,23 +213,25 @@ trait CustomBitrix24Assertions
                     );
                     break;
                 case 'crm_enum_contenttype':
-                        $this->assertEquals(
-                            ActivityContentType::class,
+                    $this->assertEquals(
+                        ActivityContentType::class,
+                        $propsFromAnnotations[$fieldCode],
+                        sprintf(
+                            'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                            $resultItemClassName,
+                            $fieldCode,
                             $propsFromAnnotations[$fieldCode],
-                            sprintf('class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
-                                $resultItemClassName,
-                                $fieldCode,
-                                $propsFromAnnotations[$fieldCode],
-                                $fieldData['type'],
-                                ActivityContentType::class
-                            )
-                        );
-                        break;
+                            $fieldData['type'],
+                            ActivityContentType::class
+                        )
+                    );
+                    break;
                 case 'crm_enum_activitytype':
                     $this->assertEquals(
                         ActivityType::class,
                         $propsFromAnnotations[$fieldCode],
-                        sprintf('class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                        sprintf(
+                            'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
                             $resultItemClassName,
                             $fieldCode,
                             $propsFromAnnotations[$fieldCode],
@@ -220,7 +244,8 @@ trait CustomBitrix24Assertions
                     $this->assertEquals(
                         ActivityNotifyType::class,
                         $propsFromAnnotations[$fieldCode],
-                        sprintf('class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                        sprintf(
+                            'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
                             $resultItemClassName,
                             $fieldCode,
                             $propsFromAnnotations[$fieldCode],
@@ -233,7 +258,8 @@ trait CustomBitrix24Assertions
                     $this->assertEquals(
                         ActivityPriority::class,
                         $propsFromAnnotations[$fieldCode],
-                        sprintf('class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                        sprintf(
+                            'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
                             $resultItemClassName,
                             $fieldCode,
                             $propsFromAnnotations[$fieldCode],
@@ -246,7 +272,8 @@ trait CustomBitrix24Assertions
                     $this->assertEquals(
                         ActivityStatus::class,
                         $propsFromAnnotations[$fieldCode],
-                        sprintf('class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                        sprintf(
+                            'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
                             $resultItemClassName,
                             $fieldCode,
                             $propsFromAnnotations[$fieldCode],
@@ -258,20 +285,23 @@ trait CustomBitrix24Assertions
                 case 'crm_activity_binding':
                 case 'crm_activity_communication':
                 case 'crm_multifield':
-                        $this->assertTrue(
-                            str_contains($propsFromAnnotations[$fieldCode],'array'),
-                            sprintf('class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
-                                $resultItemClassName,
-                                $fieldCode,
-                                $propsFromAnnotations[$fieldCode],
-                                $fieldData['type'],
-                                'array'
-                            )
-                        );
+                    $this->assertTrue(
+                        str_contains($propsFromAnnotations[$fieldCode], 'array'),
+                        sprintf(
+                            'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                            $resultItemClassName,
+                            $fieldCode,
+                            $propsFromAnnotations[$fieldCode],
+                            $fieldData['type'],
+                            'array'
+                        )
+                    );
                     break;
                 default:
-                    $this->assertFalse(true,
-                        sprintf('class «%s» field «%s» has unknown field type from bitrix24 «%s», sdk-type from annotation «%s», fix type mapping map in integration test',
+                    $this->assertFalse(
+                        true,
+                        sprintf(
+                            'class «%s» field «%s» has unknown field type from bitrix24 «%s», sdk-type from annotation «%s», fix type mapping map in integration test',
                             $resultItemClassName,
                             $fieldCode,
                             $fieldData['type'],
