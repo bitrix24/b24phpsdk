@@ -15,18 +15,55 @@ namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Products\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Core;
+use Bitrix24\SDK\Services\CRM\Lead\Result\LeadItemResult;
+use Bitrix24\SDK\Services\CRM\Product\Result\ProductItemResult;
 use Bitrix24\SDK\Services\CRM\Product\Service\Product;
 use Bitrix24\SDK\Tests\Integration\Fabric;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
+use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 
+#[CoversClass(Product::class)]
+#[CoversMethod(Product::class,'add')]
+#[CoversMethod(Product::class,'delete')]
+#[CoversMethod(Product::class,'list')]
+#[CoversMethod(Product::class,'get')]
+#[CoversMethod(Product::class,'fields')]
+#[CoversMethod(Product::class,'update')]
+#[CoversMethod(Product::class,'countByFilter')]
 class ProductsTest extends TestCase
 {
+    use CustomBitrix24Assertions;
+
     protected Product $productService;
+
+    public function testAllSystemFieldsAnnotated(): void
+    {
+        $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(
+            array_keys($this->productService->fields()->getFieldsDescription())
+        );
+        $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, ProductItemResult::class);
+    }
+
+    public function testAllSystemFieldsHasValidTypeAnnotation(): void
+    {
+        $allFields = $this->productService->fields()->getFieldsDescription();
+        $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
+        $systemFields = array_filter($allFields, static function ($code) use ($systemFieldsCodes) {
+            return in_array($code, $systemFieldsCodes, true);
+        }, ARRAY_FILTER_USE_KEY);
+
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
+            $systemFields,
+            ProductItemResult::class
+        );
+    }
 
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers \Bitrix24\SDK\Services\CRM\Product\Service\Product::add
      */
     public function testAdd(): void
     {
@@ -36,17 +73,17 @@ class ProductsTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers \Bitrix24\SDK\Services\CRM\Product\Service\Product::delete
      */
     public function testDelete(): void
     {
-        self::assertTrue($this->productService->delete($this->productService->add(['NAME' => 'test product'])->getId())->isSuccess());
+        self::assertTrue(
+            $this->productService->delete($this->productService->add(['NAME' => 'test product'])->getId())->isSuccess()
+        );
     }
 
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers \Bitrix24\SDK\Services\CRM\Product\Service\Product::get
      */
     public function testGet(): void
     {
@@ -65,7 +102,6 @@ class ProductsTest extends TestCase
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Product\Service\Product::fields
      * @throws BaseException
      * @throws TransportException
      */
@@ -88,7 +124,6 @@ class ProductsTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers \Bitrix24\SDK\Services\CRM\Product\Service\Product::update
      */
     public function testUpdate(): void
     {
@@ -100,7 +135,6 @@ class ProductsTest extends TestCase
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Product\Service\Batch::list()
      * @throws BaseException
      * @throws TransportException
      */
@@ -115,9 +149,6 @@ class ProductsTest extends TestCase
         self::assertGreaterThanOrEqual(1, $cnt);
     }
 
-    /**
-     * @covers \Bitrix24\SDK\Services\CRM\Product\Service\Batch::add()
-     */
     public function testBatchAdd(): void
     {
         $products = [];
@@ -135,7 +166,6 @@ class ProductsTest extends TestCase
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
-     * @covers \Bitrix24\SDK\Services\CRM\Product\Service\Product::countByFilter
      */
     public function testCountByFilter(): void
     {

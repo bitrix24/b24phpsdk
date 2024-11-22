@@ -163,6 +163,14 @@ class FieldsFilterTest extends TestCase
             [
             ],
         ];
+        yield 'product fields' => [
+            [
+                'PROPERTY_106',
+                'PROPERTY_108',
+            ],
+            [
+            ],
+        ];
         yield 'UF' => [
             [
                 'UF_CRM_1728045441',
@@ -200,6 +208,21 @@ class FieldsFilterTest extends TestCase
                 'UF_CRM_1728045441',
                 'UF_CRM_1728045442',
                 'PARENT_ID_1032'
+            ],
+            [
+                'ID',
+                'NAME'
+            ],
+        ];
+        yield 'system fields + UF + smart process + product fields' => [
+            [
+                'ID',
+                'NAME',
+                'UF_CRM_1728045441',
+                'UF_CRM_1728045442',
+                'PARENT_ID_1032',
+                'PROPERTY_106',
+                'PROPERTY_108',
             ],
             [
                 'ID',
