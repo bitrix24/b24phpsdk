@@ -17,6 +17,18 @@ use Bitrix24\SDK\Services\AbstractServiceBuilder;
 
 class CRMServiceBuilder extends AbstractServiceBuilder
 {
+    public function company(): Company\Service\Company
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Company\Service\Company(
+                new Company\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function enum(): Enum\Service\Enum
     {
         if (!isset($this->serviceCache[__METHOD__])) {

@@ -4,6 +4,12 @@
 
 ### Added
 
+- Added service `CRM\Company\Service` with support methods, see [add crm.company.* methods](https://github.com/bitrix24/b24phpsdk/issues/85):
+    - `add` with batch support
+    - `delete` with batch support 
+    - `list`  with batch support
+    - `update`  with batch support
+    - `countByFilter`
 - Added service `CRM\Enum\Service\Enum` with support methods:
     - `activityStatus`
     - `activityNotifyType`
@@ -28,6 +34,7 @@
 - Added `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Exceptions\MultipleBitrix24AccountsFoundException`
 - Added nullable comments in events `Bitrix24AccountBlockedEvent` and `Bitrix24AccountUnblockedEvent`,
   see [add comment to events](https://github.com/bitrix24/b24phpsdk/issues/79).
+- Add result type `Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\File`
 - Developer experience: added example `/examples/local-app-workflows` for demonstrate work
   with [workflows](https://apidocs.bitrix24.com/api-reference/bizproc/index.html).
 - Developer experience: added cli make command `make dev-show-fields-description` for show typehints for methods arguments

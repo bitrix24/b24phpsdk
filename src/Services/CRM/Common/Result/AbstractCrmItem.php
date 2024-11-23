@@ -21,6 +21,7 @@ use Bitrix24\SDK\Services\CRM\Activity\ActivityPriority;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityStatus;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityType;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Email;
+use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\File;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\InstantMessenger;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Phone;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\PhoneValueType;
@@ -222,6 +223,8 @@ class AbstractCrmItem extends AbstractItem
                 return ActivityContentType::from((int)$this->data[$offset]);
             case 'DIRECTION':
                 return ActivityDirectionType::from((int)$this->data[$offset]);
+            case 'LOGO':
+                return new File($this->data[$offset]);
             default:
                 return $this->data[$offset] ?? null;
         }

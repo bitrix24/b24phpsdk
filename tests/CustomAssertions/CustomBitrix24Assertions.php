@@ -151,9 +151,8 @@ trait CustomBitrix24Assertions
                     );
                     break;
                 case 'char':
-                    $this->assertEquals(
-                        'bool',
-                        $propsFromAnnotations[$fieldCode],
+                    $this->assertTrue(
+                        str_contains($propsFromAnnotations[$fieldCode],'bool'),
                         sprintf(
                             'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
                             $resultItemClassName,
@@ -164,9 +163,21 @@ trait CustomBitrix24Assertions
                         )
                     );
                     break;
+                case 'file':
+                    $this->assertTrue(
+                        str_contains($propsFromAnnotations[$fieldCode],'File'),
+                        sprintf(
+                            'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                            $resultItemClassName,
+                            $fieldCode,
+                            $propsFromAnnotations[$fieldCode],
+                            $fieldData['type'],
+                            'File|null'
+                        )
+                    );
+                    break;
                 case 'diskfile':
                 case 'object':
-                case 'file':
                 case 'crm_company':
                 case 'crm_contact':
                 case 'product_file':
