@@ -5,11 +5,12 @@
 ### Added
 
 - Added service `CRM\Company\Service` with support methods, see [add crm.company.* methods](https://github.com/bitrix24/b24phpsdk/issues/85):
-    - `add` with batch support
-    - `delete` with batch support 
-    - `list`  with batch support
-    - `update`  with batch support
-    - `countByFilter`
+    - `get` get company by id
+    - `add` add new company with batch support
+    - `delete` delete company by id with batch support 
+    - `list`  get list of companies with batch support
+    - `update`  update companies with batch support
+    - `countByFilter` count companies count with filter
 - Added service `CRM\Enum\Service\Enum` with support methods:
     - `activityStatus`
     - `activityNotifyType`
