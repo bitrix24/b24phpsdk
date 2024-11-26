@@ -11,9 +11,8 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Deal\Service;
+namespace Bitrix24\SDK\Services\CRM\Company\Service;
 
-use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
@@ -21,16 +20,18 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\AddedItemResult;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
+use Bitrix24\SDK\Core\Result\FieldsResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
+use Bitrix24\SDK\Services\CRM\Company\Result\CompanyUserfieldsResult;
 use Bitrix24\SDK\Services\CRM\Deal\Result\DealUserfieldResult;
-use Bitrix24\SDK\Services\CRM\Deal\Result\DealUserfieldsResult;
 use Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNameIsTooLongException;
 use Bitrix24\SDK\Services\CRM\Userfield\Service\UserfieldConstraints;
 use Psr\Log\LoggerInterface;
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 
 #[ApiServiceMetadata(new Scope(['crm']))]
-class DealUserfield extends AbstractService
+class CompanyUserfield extends AbstractService
 {
     private UserfieldConstraints $userfieldConstraints;
 
@@ -39,121 +40,71 @@ class DealUserfield extends AbstractService
         $this->userfieldConstraints = $userfieldConstraints;
         parent::__construct($core, $log);
     }
+
     /**
-     * Returns list of user deal fields by filter.
+     * The method crm.company.userfield.list returns a list of custom company fields based on the filter.
      *
-     * @param array{
-     *   ID?: string,
-     *   ENTITY_ID?: string,
-     *   FIELD_NAME?: string,
-     *   USER_TYPE_ID?: string,
-     *   XML_ID?: string,
-     *   SORT?: string,
-     *   MULTIPLE?: string,
-     *   MANDATORY?: string,
-     *   SHOW_FILTER?: string,
-     *   SHOW_IN_LIST?: string,
-     *   EDIT_IN_LIST?: string,
-     *   IS_SEARCHABLE?: string,
-     *   EDIT_FORM_LABEL?: string,
-     *   LIST_COLUMN_LABEL?: string,
-     *   LIST_FILTER_LABEL?: string,
-     *   ERROR_MESSAGE?: string,
-     *   HELP_MESSAGE?: string,
-     *   LIST?: string,
-     *   SETTINGS?: string,
-     *   } $order
-     * @param array{
-     *   ID?: string,
-     *   ENTITY_ID?: string,
-     *   FIELD_NAME?: string,
-     *   USER_TYPE_ID?: string,
-     *   XML_ID?: string,
-     *   SORT?: string,
-     *   MULTIPLE?: string,
-     *   MANDATORY?: string,
-     *   SHOW_FILTER?: string,
-     *   SHOW_IN_LIST?: string,
-     *   EDIT_IN_LIST?: string,
-     *   IS_SEARCHABLE?: string,
-     *   EDIT_FORM_LABEL?: string,
-     *   LIST_COLUMN_LABEL?: string,
-     *   LIST_FILTER_LABEL?: string,
-     *   ERROR_MESSAGE?: string,
-     *   HELP_MESSAGE?: string,
-     *   LIST?: string,
-     *   SETTINGS?: string,
-     *   } $filter
+     * @link https://apidocs.bitrix24.com/api-reference/crm/companies/userfields/crm-company-userfield-list.html
      *
-     * @return \Bitrix24\SDK\Services\CRM\Deal\Result\DealUserfieldsResult
+     * @return CompanyUserfieldsResult
      * @throws BaseException
      * @throws TransportException
-     * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_list.php
      */
     #[ApiEndpointMetadata(
-        'crm.deal.userfield.list',
-        'https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_list.php',
-        'Returns list of user deal fields by filter.'
+        'crm.company.userfield.list',
+        'https://apidocs.bitrix24.com/api-reference/crm/companies/userfields/crm-company-userfield-list.html',
+        'The method crm.company.userfield.list returns a list of custom company fields based on the filter.'
     )]
-    public function list(array $order, array $filter): DealUserfieldsResult
+    public function list(array $order = [], array $filter = []): CompanyUserfieldsResult
     {
-        return new DealUserfieldsResult(
-            $this->core->call(
-                'crm.deal.userfield.list',
-                [
-                    'order'  => $order,
-                    'filter' => $filter,
-                ]
-            )
-        );
+        return new CompanyUserfieldsResult($this->core->call('crm.company.userfield.list'));
     }
 
     /**
-     * Created new user field for deals.
+     * Created new user field for company.
      *
      * System limitation for field name - 20 characters.
      * Prefix UF_CRM_is always added to the user field name.
      * As a result, the actual name length - 13 characters.
      *
      * @param array{
-     *   FIELD_NAME?: string,
-     *   USER_TYPE_ID?: string,
-     *   XML_ID?: string,
-     *   SORT?: string,
-     *   MULTIPLE?: string,
-     *   MANDATORY?: string,
-     *   SHOW_FILTER?: string,
-     *   SHOW_IN_LIST?: string,
-     *   EDIT_IN_LIST?: string,
-     *   IS_SEARCHABLE?: string,
-     *   EDIT_FORM_LABEL?: string,
-     *   LIST_COLUMN_LABEL?: string,
-     *   LIST_FILTER_LABEL?: string,
-     *   ERROR_MESSAGE?: string,
-     *   HELP_MESSAGE?: string,
-     *   LIST?: string,
-     *   SETTINGS?: string,
+     *   FIELD_NAME: string,
+     *   USER_TYPE_ID: string,
+     *   XML_ID: string,
+     *   SORT: string,
+     *   MULTIPLE: string,
+     *   MANDATORY: string,
+     *   SHOW_FILTER: string,
+     *   SHOW_IN_LIST: string,
+     *   EDIT_IN_LIST: string,
+     *   IS_SEARCHABLE: string,
+     *   EDIT_FORM_LABEL: string,
+     *   LIST_COLUMN_LABEL: string,
+     *   LIST_FILTER_LABEL: string,
+     *   ERROR_MESSAGE: string,
+     *   HELP_MESSAGE: string,
+     *   LIST?: array,
+     *   SETTINGS?: array,
      *   } $userfieldItemFields
      *
-     * @return \Bitrix24\SDK\Core\Result\AddedItemResult
+     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      * @throws UserfieldNameIsTooLongException
-     * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_add.php
+     * @link https://apidocs.bitrix24.com/api-reference/crm/companies/userfields/crm-company-userfield-add.html
      *
      */
     #[ApiEndpointMetadata(
-        'crm.deal.userfield.add',
-        'https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_add.php',
-        'Created new user field for deals.'
+        'crm.company.userfield.add',
+        'https://apidocs.bitrix24.com/api-reference/crm/companies/userfields/crm-company-userfield-add.html',
+        'The method crm.company.userfield.add creates a new custom field for companies.'
     )]
     public function add(array $userfieldItemFields): AddedItemResult
     {
         $this->userfieldConstraints->validName($userfieldItemFields['FIELD_NAME']);
-
         return new AddedItemResult(
             $this->core->call(
-                'crm.deal.userfield.add',
+                'crm.company.userfield.add',
                 [
                     'fields' => $userfieldItemFields,
                 ]
@@ -219,7 +170,7 @@ class DealUserfield extends AbstractService
     /**
      * Updates an existing user field for deals.
      *
-     * @param int   $userfieldItemId
+     * @param int $userfieldItemId
      * @param array $userfieldFieldsToUpdate
      *
      * @return \Bitrix24\SDK\Core\Result\UpdatedItemResult
@@ -238,7 +189,7 @@ class DealUserfield extends AbstractService
             $this->core->call(
                 'crm.deal.userfield.update',
                 [
-                    'id'     => $userfieldItemId,
+                    'id' => $userfieldItemId,
                     'fields' => $userfieldFieldsToUpdate,
                 ]
             )
