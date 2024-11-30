@@ -18,6 +18,18 @@ use Bitrix24\SDK\Services\CRM\Userfield\Service\UserfieldConstraints;
 
 class CRMServiceBuilder extends AbstractServiceBuilder
 {
+    public function companyContact(): Company\Service\CompanyContact
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Company\Service\CompanyContact(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function companyUserfield(): Company\Service\CompanyUserfield
     {
         if (!isset($this->serviceCache[__METHOD__])) {
