@@ -14,10 +14,20 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Deal\Service;
 
 use Bitrix24\SDK\Services\CRM\Deal\Service\DealUserfield;
+use Bitrix24\SDK\Tests\Builders\Services\CRM\Userfield\SystemUserfieldBuilder;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use Generator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(DealUserfield::class)]
+#[CoversMethod(DealUserfield::class, 'add')]
+#[CoversMethod(DealUserfield::class, 'get')]
+#[CoversMethod(DealUserfield::class, 'list')]
+#[CoversMethod(DealUserfield::class, 'delete')]
+#[CoversMethod(DealUserfield::class, 'update')]
 class DealUserfieldTest extends TestCase
 {
     protected DealUserfield $userfieldService;
@@ -25,76 +35,32 @@ class DealUserfieldTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function systemUserfieldsDemoDataDataProvider(): Generator
+    public static function systemUserfieldsDemoDataDataProvider(): Generator
     {
         yield 'user type id string' => [
-            [
-                'FIELD_NAME'        => sprintf('%s%s', substr((string)random_int(0, PHP_INT_MAX), 0, 3), time()),
-                'EDIT_FORM_LABEL'   => [
-                    'ru' => 'тест uf тип string',
-                    'en' => 'test uf type string',
-                ],
-                'LIST_COLUMN_LABEL' => [
-                    'ru' => 'тест uf тип string',
-                    'en' => 'test uf type string',
-                ],
-                'USER_TYPE_ID'      => 'string',
-                'XML_ID'            => 'b24phpsdk_type_string',
-                'SETTINGS'          => [],
-            ],
+            (new SystemUserfieldBuilder())->build(),
         ];
 
         mt_srand();
         yield 'user type id integer' => [
-            [
-                'FIELD_NAME'        => sprintf('%s%s', substr((string)random_int(0, PHP_INT_MAX), 0, 3), time()),
-                'EDIT_FORM_LABEL'   => [
-                    'ru' => 'тест uf тип integer',
-                    'en' => 'test uf type integer',
-                ],
-                'LIST_COLUMN_LABEL' => [
-                    'ru' => 'тест uf тип integer',
-                    'en' => 'test uf type integer',
-                ],
-                'USER_TYPE_ID'      => 'integer',
-                'XML_ID'            => 'b24phpsdk_type_integer',
-                'SETTINGS'          => [],
-            ],
+            (new SystemUserfieldBuilder('integer'))->build(),
         ];
     }
 
-    /**
-     * @param array $newUserFieldItem
-     *
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
-     * @throws \Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNameIsTooLongException
-     * @covers       ContactUserfield::add
-     * @dataProvider systemUserfieldsDemoDataDataProvider
-     */
+    #[DataProvider('systemUserfieldsDemoDataDataProvider')]
     public function testAdd(array $newUserFieldItem): void
     {
         self::assertGreaterThanOrEqual(1, $this->userfieldService->add($newUserFieldItem)->getId());
     }
 
-    /**
-     * @param array $newUserFieldItem
-     *
-     * @dataProvider systemUserfieldsDemoDataDataProvider
-     * @covers       ContactUserfield::delete
-     */
+    #[DataProvider('systemUserfieldsDemoDataDataProvider')]
     public function testDelete(array $newUserFieldItem): void
     {
         $newUserfieldId = $this->userfieldService->add($newUserFieldItem)->getId();
         $this->assertTrue($this->userfieldService->delete($newUserfieldId)->isSuccess());
     }
 
-    /**
-     * @param array $newUserFieldItem
-     *
-     * @dataProvider systemUserfieldsDemoDataDataProvider
-     * @covers       ContactUserfield::get
-     */
+    #[DataProvider('systemUserfieldsDemoDataDataProvider')]
     public function testGet(array $newUserFieldItem): void
     {
         $newUserfieldId = $this->userfieldService->add($newUserFieldItem)->getId();
@@ -105,12 +71,7 @@ class DealUserfieldTest extends TestCase
         $this->assertEquals($newUserFieldItem['XML_ID'], $ufField->XML_ID);
     }
 
-    /**
-     * @param array $newUserFieldItem
-     *
-     * @dataProvider systemUserfieldsDemoDataDataProvider
-     * @covers       ContactUserfield::update
-     */
+    #[DataProvider('systemUserfieldsDemoDataDataProvider')]
     public function testUpdate(array $newUserFieldItem): void
     {
         $newUserfieldId = $this->userfieldService->add($newUserFieldItem)->getId();
@@ -133,11 +94,6 @@ class DealUserfieldTest extends TestCase
         $this->assertEquals($ufFieldBefore->EDIT_FORM_LABEL['en'] . 'QQQ', $ufFieldAfter->EDIT_FORM_LABEL['en']);
     }
 
-    /**
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
-     * @covers \Bitrix24\SDK\Services\CRM\Contact\Service\ContactUserfield::list
-     */
     public function testList(): void
     {
         $ufFields = $this->userfieldService->list([], []);

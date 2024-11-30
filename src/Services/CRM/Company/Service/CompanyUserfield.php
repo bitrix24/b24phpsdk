@@ -20,11 +20,10 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\AddedItemResult;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
-use Bitrix24\SDK\Core\Result\FieldsResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
+use Bitrix24\SDK\Services\CRM\Company\Result\CompanyUserfieldResult;
 use Bitrix24\SDK\Services\CRM\Company\Result\CompanyUserfieldsResult;
-use Bitrix24\SDK\Services\CRM\Deal\Result\DealUserfieldResult;
 use Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNameIsTooLongException;
 use Bitrix24\SDK\Services\CRM\Userfield\Service\UserfieldConstraints;
 use Psr\Log\LoggerInterface;
@@ -39,25 +38,6 @@ class CompanyUserfield extends AbstractService
     {
         $this->userfieldConstraints = $userfieldConstraints;
         parent::__construct($core, $log);
-    }
-
-    /**
-     * The method crm.company.userfield.list returns a list of custom company fields based on the filter.
-     *
-     * @link https://apidocs.bitrix24.com/api-reference/crm/companies/userfields/crm-company-userfield-list.html
-     *
-     * @return CompanyUserfieldsResult
-     * @throws BaseException
-     * @throws TransportException
-     */
-    #[ApiEndpointMetadata(
-        'crm.company.userfield.list',
-        'https://apidocs.bitrix24.com/api-reference/crm/companies/userfields/crm-company-userfield-list.html',
-        'The method crm.company.userfield.list returns a list of custom company fields based on the filter.'
-    )]
-    public function list(array $order = [], array $filter = []): CompanyUserfieldsResult
-    {
-        return new CompanyUserfieldsResult($this->core->call('crm.company.userfield.list'));
     }
 
     /**
@@ -113,26 +93,115 @@ class CompanyUserfield extends AbstractService
     }
 
     /**
-     * Deleted userfield for deals
+     * Get Custom Company Field by ID
+     *
+     * @param int $userfieldItemId
+     *
+     * @return CompanyUserfieldResult
+     * @throws BaseException
+     * @throws TransportException
+     * @link  https://apidocs.bitrix24.com/api-reference/crm/companies/userfields/crm-company-userfield-get.html
+     */
+    #[ApiEndpointMetadata(
+        'crm.company.userfield.get',
+        'https://apidocs.bitrix24.com/api-reference/crm/companies/userfields/crm-company-userfield-get.html',
+        'Get Custom Company Field by ID'
+    )]
+    public function get(int $userfieldItemId): CompanyUserfieldResult
+    {
+        return new CompanyUserfieldResult(
+            $this->core->call(
+                'crm.company.userfield.get',
+                [
+                    'id' => $userfieldItemId,
+                ]
+            )
+        );
+    }
+
+    /**
+     * The method crm.company.userfield.list returns a list of custom company fields based on the filter.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/crm/companies/userfields/crm-company-userfield-list.html
+     * @param array{
+     *   ID?: string,
+     *   ENTITY_ID?: string,
+     *   FIELD_NAME?: string,
+     *   USER_TYPE_ID?: string,
+     *   XML_ID?: string,
+     *   SORT?: string,
+     *   MULTIPLE?: string,
+     *   MANDATORY?: string,
+     *   SHOW_FILTER?: string,
+     *   SHOW_IN_LIST?: string,
+     *   EDIT_IN_LIST?: string,
+     *   IS_SEARCHABLE?: string,
+     *   EDIT_FORM_LABEL?: string,
+     *   LIST_COLUMN_LABEL?: string,
+     *   LIST_FILTER_LABEL?: string,
+     *   ERROR_MESSAGE?: string,
+     *   HELP_MESSAGE?: string,
+     *   LIST?: string,
+     *   SETTINGS?: string,
+     *   } $order
+     * @param array{
+     *   ID?: string,
+     *   ENTITY_ID?: string,
+     *   FIELD_NAME?: string,
+     *   USER_TYPE_ID?: string,
+     *   XML_ID?: string,
+     *   SORT?: string,
+     *   MULTIPLE?: string,
+     *   MANDATORY?: string,
+     *   SHOW_FILTER?: string,
+     *   SHOW_IN_LIST?: string,
+     *   EDIT_IN_LIST?: string,
+     *   IS_SEARCHABLE?: string,
+     *   EDIT_FORM_LABEL?: string,
+     *   LIST_COLUMN_LABEL?: string,
+     *   LIST_FILTER_LABEL?: string,
+     *   ERROR_MESSAGE?: string,
+     *   HELP_MESSAGE?: string,
+     *   LIST?: string,
+     *   SETTINGS?: string,
+     *   } $filter
+     * @return CompanyUserfieldsResult
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'crm.company.userfield.list',
+        'https://apidocs.bitrix24.com/api-reference/crm/companies/userfields/crm-company-userfield-list.html',
+        'The method crm.company.userfield.list returns a list of custom company fields based on the filter.'
+    )]
+    public function list(array $order = [], array $filter = []): CompanyUserfieldsResult
+    {
+        return new CompanyUserfieldsResult(
+            $this->core->call('crm.company.userfield.list', ['order' => $order, 'filter' => $filter])
+        );
+    }
+
+    /**
+     * Delete Custom Field for Companies
      *
      * @param int $userfieldId
      *
-     * @return \Bitrix24\SDK\Core\Result\DeletedItemResult
+     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
-     * @link  https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_delete.php
+     * @link  https://apidocs.bitrix24.com/api-reference/crm/companies/userfields/crm-company-userfield-delete.html
      *
      */
     #[ApiEndpointMetadata(
-        'crm.deal.userfield.delete',
-        'https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_delete.php',
-        'Deleted userfield for deals'
+        'crm.company.userfield.delete',
+        'https://apidocs.bitrix24.com/api-reference/crm/companies/userfields/crm-company-userfield-delete.html',
+        'Delete Custom Field for Companies'
     )]
     public function delete(int $userfieldId): DeletedItemResult
     {
         return new DeletedItemResult(
             $this->core->call(
-                'crm.deal.userfield.delete',
+                'crm.company.userfield.delete',
                 [
                     'id' => $userfieldId,
                 ]
@@ -141,56 +210,50 @@ class CompanyUserfield extends AbstractService
     }
 
     /**
-     * Returns a userfield for deal by ID.
+     * Update Existing Custom Field for Companies
      *
      * @param int $userfieldItemId
-     *
-     * @return DealUserfieldResult
-     * @throws BaseException
-     * @throws TransportException
-     * @link  https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_get.php
-     */
-    #[ApiEndpointMetadata(
-        'crm.deal.userfield.get',
-        'https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_get.php',
-        'Returns a userfield for deal by ID.'
-    )]
-    public function get(int $userfieldItemId): DealUserfieldResult
-    {
-        return new DealUserfieldResult(
-            $this->core->call(
-                'crm.deal.userfield.get',
-                [
-                    'id' => $userfieldItemId,
-                ]
-            )
-        );
-    }
-
-    /**
-     * Updates an existing user field for deals.
-     *
-     * @param int $userfieldItemId
-     * @param array $userfieldFieldsToUpdate
-     *
+     * @param array{
+     *   ID?: string,
+     *   ENTITY_ID?: string,
+     *   FIELD_NAME?: string,
+     *   USER_TYPE_ID?: string,
+     *   XML_ID?: string,
+     *   SORT?: string,
+     *   MULTIPLE?: string,
+     *   MANDATORY?: string,
+     *   SHOW_FILTER?: string,
+     *   SHOW_IN_LIST?: string,
+     *   EDIT_IN_LIST?: string,
+     *   IS_SEARCHABLE?: string,
+     *   EDIT_FORM_LABEL?: string,
+     *   LIST_COLUMN_LABEL?: string,
+     *   LIST_FILTER_LABEL?: string,
+     *   ERROR_MESSAGE?: string,
+     *   HELP_MESSAGE?: string,
+     *   LIST?: string,
+     *   SETTINGS?: string,
+     *   } $userfieldFieldsToUpdate
+     * @param ?array $list
      * @return \Bitrix24\SDK\Core\Result\UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
-     * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_update.php
+     * @link https://apidocs.bitrix24.com/api-reference/crm/companies/userfields/crm-company-userfield-update.html
      */
     #[ApiEndpointMetadata(
-        'crm.deal.userfield.update',
-        'https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_update.php',
-        'Updates an existing user field for deals.'
+        'crm.company.userfield.update',
+        'https://apidocs.bitrix24.com/api-reference/crm/companies/userfields/crm-company-userfield-update.html',
+        'Update Existing Custom Field for Companies'
     )]
-    public function update(int $userfieldItemId, array $userfieldFieldsToUpdate): UpdatedItemResult
+    public function update(int $userfieldItemId, array $userfieldFieldsToUpdate, ?array $list = null): UpdatedItemResult
     {
         return new UpdatedItemResult(
             $this->core->call(
-                'crm.deal.userfield.update',
+                'crm.company.userfield.update',
                 [
                     'id' => $userfieldItemId,
                     'fields' => $userfieldFieldsToUpdate,
+                    'LIST' => $list,
                 ]
             )
         );

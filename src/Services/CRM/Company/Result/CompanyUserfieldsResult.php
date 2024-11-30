@@ -20,7 +20,7 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 class CompanyUserfieldsResult extends AbstractResult
 {
     /**
-     * @return CompanyUserfieldResult[]
+     * @return CompanyUserfieldItemResult[]
      * @throws BaseException
      */
     public function getUserfields(): array

@@ -28,7 +28,7 @@ class SystemUserfieldBuilder
     {
         $this->name = sprintf('%s%s', substr((string)random_int(0, PHP_INT_MAX), 0, 3), time());
         $this->userTypeId = $userTypeId;
-        $this->xmlId = sprintf('b24phpsdk_type_%s', $this->userTypeId);
+        $this->xmlId = sprintf('b24phpsdk_type_%s-%s', $this->userTypeId, $this->name);
     }
 
     public function build(): array
