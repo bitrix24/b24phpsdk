@@ -91,6 +91,15 @@
     - `VAT_INCLUDED` `string` → `bool`
     - `DATE_CREATE` `string` → `CarbonImmutable`
     - `TIMESTAMP_X` `string` → `CarbonImmutable`
+- Fixed typehints in `Bitrix24\SDK\Services\CRM\Userfield\Result\AbstractUserfieldItemResult`:
+    - `ID` `string` → `int`
+    - `SORT` `string` → `int`
+    - `MULTIPLE` `string` → `bool`
+    - `MANDATORY` `string` → `bool`
+    - `SHOW_FILTER` `string` → `bool`
+    - `SHOW_IN_LIST` `string` → `bool`
+    - `EDIT_IN_LIST` `string` → `bool`
+    - `IS_SEARCHABLE` `string` → `bool`
 
 <!--
 ## Unreleased

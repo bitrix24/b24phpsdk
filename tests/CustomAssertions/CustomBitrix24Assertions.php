@@ -94,6 +94,24 @@ trait CustomBitrix24Assertions
                         );
                         break;
                     }
+                    if (str_contains($fieldCode, 'EDIT_FORM_LABEL') ||
+                        str_contains($fieldCode, 'LIST_COLUMN_LABEL') ||
+                        str_contains($fieldCode, 'LIST_FILTER_LABEL')
+
+                    ) {
+                        $this->assertTrue(
+                            str_contains($propsFromAnnotations[$fieldCode], 'array'),
+                            sprintf(
+                                'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                                $resultItemClassName,
+                                $fieldCode,
+                                $propsFromAnnotations[$fieldCode],
+                                $fieldData['type'],
+                                'array'
+                            )
+                        );
+                        break;
+                    }
 
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'string'),
@@ -111,6 +129,7 @@ trait CustomBitrix24Assertions
                 case 'crm_enum_ownertype':
                 case 'crm_lead':
                 case 'integer':
+                case 'int':
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'int'),
                         sprintf(
@@ -152,7 +171,7 @@ trait CustomBitrix24Assertions
                     break;
                 case 'char':
                     $this->assertTrue(
-                        str_contains($propsFromAnnotations[$fieldCode],'bool'),
+                        str_contains($propsFromAnnotations[$fieldCode], 'bool'),
                         sprintf(
                             'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
                             $resultItemClassName,
@@ -165,7 +184,7 @@ trait CustomBitrix24Assertions
                     break;
                 case 'file':
                     $this->assertTrue(
-                        str_contains($propsFromAnnotations[$fieldCode],'File'),
+                        str_contains($propsFromAnnotations[$fieldCode], 'File'),
                         sprintf(
                             'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
                             $resultItemClassName,
@@ -183,6 +202,7 @@ trait CustomBitrix24Assertions
                 case 'product_file':
                     if (str_contains($fieldCode, '_IDS') ||
                         str_contains($fieldCode, 'PHOTO') ||
+                        str_contains($fieldCode, 'SETTINGS') ||
                         str_contains($fieldCode, '_PICTURE')) {
                         $this->assertTrue(
                             str_contains($propsFromAnnotations[$fieldCode], 'array'),
@@ -296,6 +316,7 @@ trait CustomBitrix24Assertions
                 case 'crm_activity_binding':
                 case 'crm_activity_communication':
                 case 'crm_multifield':
+                case 'uf_enum_element':
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'array'),
                         sprintf(

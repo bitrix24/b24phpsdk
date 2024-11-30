@@ -45,10 +45,9 @@ class AbstractCrmItem extends AbstractItem
      */
     public function __get($offset)
     {
-        // todo move to separate service
-        //
+        // todo move to separate service based on typhoon/reflection
         //  - add user fields with custom user types
-        //  - add inheritance for user types
+        //  - add inheritance for custom user types
 
         switch ($offset) {
             case 'ID':
@@ -114,6 +113,12 @@ class AbstractCrmItem extends AbstractItem
             case 'IS_RECURRING':
             case 'IS_RETURN_CUSTOMER':
             case 'IS_REPEATED_APPROACH':
+            case 'IS_SEARCHABLE':
+            case 'EDIT_IN_LIST':
+            case 'SHOW_FILTER':
+            case 'SHOW_IN_LIST':
+            case 'MULTIPLE':
+            case 'MANDATORY':
             case 'TAX_INCLUDED':
             case 'CUSTOMIZED':
             case 'COMPLETED':
