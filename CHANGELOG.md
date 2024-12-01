@@ -26,7 +26,16 @@
     - `get` get contacts related to company
     - `deleteItems` delete all relations for company
     - `add` add contact relation with company
-    - `delete` dlele contact relation with company
+    - `delete` delete contact relation with company
+- Added service `CRM\Company\Service\CompanyDetailsConfiguration` with support methods,
+  see [add crm.company.* methods](https://github.com/bitrix24/b24phpsdk/issues/85):
+  - `getPersonal` method retrieves the settings of company cards for personal user
+  - `getGeneral` method retrieves the settings of company cards for all users
+  - `resetPersonal` method reset for item user settings
+  - `resetGeneral` method reset all card settings for all users
+  - `setPersonal` method set card configuration
+  - `setGeneral` method set card configuration for all company
+  - `setForceCommonConfigForAll` method set common detail form for All Users
 - Added service `CRM\Enum\Service\Enum` with support methods:
     - `activityStatus`
     - `activityNotifyType`
@@ -56,8 +65,7 @@
 - Developer experience: added example `/examples/local-app-workflows` for demonstrate work
   with [workflows](https://apidocs.bitrix24.com/api-reference/bizproc/index.html).
 - Developer experience: added cli make command `make dev-show-fields-description` for show typehints for methods
-  arguments
-  from bitrix24 types from *.fields method
+  arguments from bitrix24 types from *.fields method
 
 ### Changed
 
