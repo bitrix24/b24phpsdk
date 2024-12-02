@@ -21,6 +21,7 @@ use Bitrix24\SDK\Services\CRM\Activity\ActivityPriority;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityStatus;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityType;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Email;
+use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\File;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\InstantMessenger;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Phone;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\PhoneValueType;
@@ -44,13 +45,13 @@ class AbstractCrmItem extends AbstractItem
      */
     public function __get($offset)
     {
-        // todo move to separate service
-        //
+        // todo move to separate service based on typhoon/reflection
         //  - add user fields with custom user types
-        //  - add inheritance for user types
+        //  - add inheritance for custom user types
 
         switch ($offset) {
             case 'ID':
+            case 'NOTIFY_VALUE':
             case 'ASSIGNED_BY_ID':
             case 'CONTACT_IDS':
             case 'RESPONSIBLE_ID':
@@ -85,6 +86,7 @@ class AbstractCrmItem extends AbstractItem
             case 'RESULT_STREAM':
             case 'LAST_ACTIVITY_BY':
             case 'ADDRESS_LOC_ADDR_ID':
+            case 'OWNER_TYPE_ID':
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                     return (int)$this->data[$offset];
                 }
@@ -111,9 +113,16 @@ class AbstractCrmItem extends AbstractItem
             case 'IS_RECURRING':
             case 'IS_RETURN_CUSTOMER':
             case 'IS_REPEATED_APPROACH':
+            case 'IS_SEARCHABLE':
+            case 'EDIT_IN_LIST':
+            case 'SHOW_FILTER':
+            case 'SHOW_IN_LIST':
+            case 'MULTIPLE':
+            case 'MANDATORY':
             case 'TAX_INCLUDED':
             case 'CUSTOMIZED':
             case 'COMPLETED':
+            case 'IS_INCOMING_CHANNEL':
                 return $this->data[$offset] === 'Y';
             case 'DATE_CREATE':
             case 'CREATED_DATE':
@@ -129,6 +138,9 @@ class AbstractCrmItem extends AbstractItem
             case 'movedTime':
             case 'lastActivityTime':
             case 'LAST_ACTIVITY_TIME':
+            case 'START_TIME':
+            case 'END_TIME':
+            case 'TIMESTAMP_X':
                 if ($this->data[$offset] !== '') {
                     return CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
                 }
@@ -140,6 +152,7 @@ class AbstractCrmItem extends AbstractItem
             case 'PRICE':
             case 'DISCOUNT_SUM':
             case 'RESULT_SUM':
+            case 'RESULT_VALUE':
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                     $var = $this->data[$offset] * 100;
                     return new Money((string)$var, new Currency($this->currency->getCode()));
@@ -215,6 +228,8 @@ class AbstractCrmItem extends AbstractItem
                 return ActivityContentType::from((int)$this->data[$offset]);
             case 'DIRECTION':
                 return ActivityDirectionType::from((int)$this->data[$offset]);
+            case 'LOGO':
+                return new File($this->data[$offset]);
             default:
                 return $this->data[$offset] ?? null;
         }

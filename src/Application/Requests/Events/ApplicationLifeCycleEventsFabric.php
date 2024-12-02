@@ -20,8 +20,13 @@ use Bitrix24\SDK\Core\Contracts\Events\EventsFabricInterface;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Contracts\Events\EventInterface;
 
+use Bitrix24\SDK\Services\Telephony\Events\TelephonyEventsFactory;
+use JetBrains\PhpStorm\Deprecated;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @deprecated wrong class name, class will be deleted, use ApplicationLifeCycleEventsFactory
+ */
 readonly class ApplicationLifeCycleEventsFabric implements EventsFabricInterface
 {
     public function isSupport(string $eventCode): bool

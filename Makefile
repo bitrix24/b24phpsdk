@@ -75,6 +75,9 @@ build-documentation:
 	--repository-branch=$(DOCUMENTATION_DEFAULT_TARGET_BRANCH) \
 	--file=docs/EN/Services/bitrix24-php-sdk-methods.md
 
+dev-show-fields-description:
+	php bin/console b24:util:show-fields-description --webhook=$(BITRIX24_WEBHOOK)
+
 # build examples for rest-api documentation
 build-examples-for-documentation:
 	@php bin/console b24-dev:generate-examples \

@@ -15,8 +15,14 @@ namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Lead\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Core;
+use Bitrix24\SDK\Services\CRM\Contact\Result\ContactItemResult;
+use Bitrix24\SDK\Services\CRM\Lead\Result\LeadItemResult;
 use Bitrix24\SDK\Services\CRM\Lead\Service\Lead;
+use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 use Bitrix24\SDK\Tests\Integration\Fabric;
+use PHPUnit\Framework\Attributes\CoversFunction;
+use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -24,14 +30,39 @@ use PHPUnit\Framework\TestCase;
  *
  * @package Bitrix24\SDK\Tests\Integration\Services\CRM\Lead\Service
  */
+#[CoversMethod(Lead::class,'add')]
+#[CoversMethod(Lead::class,'delete')]
+#[CoversMethod(Lead::class,'get')]
+#[CoversMethod(Lead::class,'list')]
+#[CoversMethod(Lead::class,'fields')]
+#[CoversMethod(Lead::class,'update')]
 class LeadTest extends TestCase
 {
+    use CustomBitrix24Assertions;
     protected Lead $leadService;
+
+    public function testAllSystemFieldsAnnotated(): void
+    {
+        $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($this->leadService->fields()->getFieldsDescription()));
+        $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, LeadItemResult::class);
+    }
+
+    public function testAllSystemFieldsHasValidTypeAnnotation():void
+    {
+        $allFields = $this->leadService->fields()->getFieldsDescription();
+        $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
+        $systemFields = array_filter($allFields, static function ($code) use ($systemFieldsCodes) {
+            return in_array($code, $systemFieldsCodes, true);
+        }, ARRAY_FILTER_USE_KEY);
+
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
+            $systemFields,
+            LeadItemResult::class);
+    }
 
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Lead::add
      */
     public function testAdd(): void
     {

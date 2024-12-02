@@ -11,12 +11,12 @@
  */
 
 use Bitrix24\SDK\Attributes\Services\AttributesParser;
-use Bitrix24\SDK\Infrastructure\Console\Commands;
+use Bitrix24\SDK\Infrastructure\Console\Commands\ShowFieldsDescriptionCommand;
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
 use Bitrix24\SDK\Tools\Commands\CopyPropertyValues;
 use Bitrix24\SDK\Tools\Commands\GenerateContactsCommand;
+use Bitrix24\SDK\Infrastructure\Console\Commands;
 use Bitrix24\SDK\Tools\Commands\PerformanceBenchmarks\ListCommand;
-use Bitrix24\SDK\Tools\Commands\ShowFieldsDescriptionCommand;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\MemoryUsageProcessor;

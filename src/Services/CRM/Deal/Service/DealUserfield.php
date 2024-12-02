@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Services\CRM\Deal\Service;
 
 use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
@@ -25,9 +26,19 @@ use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\CRM\Deal\Result\DealUserfieldResult;
 use Bitrix24\SDK\Services\CRM\Deal\Result\DealUserfieldsResult;
 use Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNameIsTooLongException;
+use Bitrix24\SDK\Services\CRM\Userfield\Service\UserfieldConstraints;
+use Psr\Log\LoggerInterface;
+
 #[ApiServiceMetadata(new Scope(['crm']))]
 class DealUserfield extends AbstractService
 {
+    private UserfieldConstraints $userfieldConstraints;
+
+    public function __construct(UserfieldConstraints $userfieldConstraints, CoreInterface $core, LoggerInterface $log)
+    {
+        $this->userfieldConstraints = $userfieldConstraints;
+        parent::__construct($core, $log);
+    }
     /**
      * Returns list of user deal fields by filter.
      *
@@ -138,15 +149,7 @@ class DealUserfield extends AbstractService
     )]
     public function add(array $userfieldItemFields): AddedItemResult
     {
-        if (strlen($userfieldItemFields['FIELD_NAME']) > 13) {
-            throw new UserfieldNameIsTooLongException(
-                sprintf(
-                    'userfield name %s is too long %s, maximum length - 13 characters',
-                    $userfieldItemFields['FIELD_NAME'],
-                    strlen($userfieldItemFields['FIELD_NAME'])
-                )
-            );
-        }
+        $this->userfieldConstraints->validName($userfieldItemFields['FIELD_NAME']);
 
         return new AddedItemResult(
             $this->core->call(
