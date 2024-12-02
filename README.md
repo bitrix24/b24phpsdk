@@ -3,24 +3,27 @@ Bitrix24 REST API PHP SDK
 [![Total Downloads](https://img.shields.io/packagist/dt/bitrix24/b24phpsdk.svg)](https://packagist.org/packages/bitrix24/b24phpsdk)
 [![Latest Stable Version](https://img.shields.io/packagist/v/bitrix24/b24phpsdk.svg)](https://packagist.org/packages/bitrix24/b24phpsdk)
 
-
 An official PHP library for the Bitrix24 REST API
 
 ## Build status
 
-| CI\CD [status](https://github.com/bitrix24/b24phpsdk/actions) on `master`                                                                                                  | 
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
-| [![phpstan check](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpstan.yml/badge.svg)](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpstan.yml)     | 
-| [![rector check](https://github.com/bitrix24/b24phpsdk/actions/workflows/rector.yml/badge.svg)](https://github.com/bitrix24/b24phpsdk/actions/workflows/rector.yml)        | 
-| [![unit-tests status](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpunit.yml/badge.svg)](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpunit.yml) | 
+| CI\CD [status](https://github.com/bitrix24/b24phpsdk/actions) on `master`                                                                                                                   | 
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
+| [![allowed licenses check](https://github.com/bitrix24/b24phpsdk/actions/workflows/license-check.yml/badge.svg)](https://github.com/bitrix24/b24phpsdk/actions/workflows/license-check.yml) | 
+| [![phpstan check](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpstan.yml/badge.svg)](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpstan.yml)                      | 
+| [![rector check](https://github.com/bitrix24/b24phpsdk/actions/workflows/rector.yml/badge.svg)](https://github.com/bitrix24/b24phpsdk/actions/workflows/rector.yml)                         | 
+| [![unit-tests status](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpunit.yml/badge.svg)](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpunit.yml)                  | 
 
 Integration tests run in GitHub actions with real Bitrix24 portal
 
 ## Installation
+
 Install the latest version with
+
 ```bash
 composer require bitrix24/b24phpsdk
 ```
+
 Or add `"bitrix24/b24phpsdk": "1.1.*"` to `composer.json` of your application.
 
 ## B24PhpSdk ✨FEATURES✨
@@ -98,7 +101,6 @@ Performance improvements 🚀
 - ext-json: *
 - ext-curl: *
 
-
 ## Examples
 
 ### Work with webhook
@@ -129,6 +131,7 @@ var_dump($b24Service->getMainScope()->main()->getApplicationInfo()->applicationI
 var_dump($b24Service->core->call('user.current'));
 
 ```
+
 5. Call php file in shell
 
 ```shell
@@ -169,15 +172,16 @@ x-powered-by: PHP/8.3.8
 ```
 
 6. Open Bitrix24 account: Developer resources → Other → Local application and create new local application:
-   - `type`: server
-   - `handler path`: `https://****.ngrok-free.app/index.php`
-   - `Initial installation path`: `https://****.ngrok-free.app/install.php`
-   - `Menu item text`: `Test local app`
-   - `scope`: `crm`
-7. Save application parameters in `index.php` file: 
-   - `Application ID (client_id)` — `BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID` 
-   - `Application key (client_secret)` — `BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET` 
-   - `Assing permitions (scope)` — `BITRIX24_PHP_SDK_APPLICATION_SCOPE`
+    - `type`: server
+    - `handler path`: `https://****.ngrok-free.app/index.php`
+    - `Initial installation path`: `https://****.ngrok-free.app/install.php`
+    - `Menu item text`: `Test local app`
+    - `scope`: `crm`
+7. Save application parameters in `index.php` file:
+    - `Application ID (client_id)` — `BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID`
+    - `Application key (client_secret)` — `BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET`
+    - `Assing permitions (scope)` — `BITRIX24_PHP_SDK_APPLICATION_SCOPE`
+
 <details>
   <summary>see index.php file</summary>
 
@@ -209,7 +213,6 @@ var_dump($b24Service->getMainScope()->main()->getCurrentUserProfile()->getUserPr
 
 </details>
 8. Save local application in Bitrix24 tab and press «OPEN APPLICATION» button.    
-
 
 ### Create application for Bitrix24 marketplace
 
