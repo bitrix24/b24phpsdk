@@ -13,16 +13,15 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Main;
 
+use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\Main\Service\EventManager;
 use Bitrix24\SDK\Services\Main\Service\Main;
 use Bitrix24\SDK\Services\Main\Service\Event;
 
-/**
- * Class MainServiceBuilder
- *
- * @package Bitrix24\SDK\Services\Main
- */
+#[ApiServiceBuilderMetadata(new Scope([]))]
+
 class MainServiceBuilder extends AbstractServiceBuilder
 {
     public function main(): Main

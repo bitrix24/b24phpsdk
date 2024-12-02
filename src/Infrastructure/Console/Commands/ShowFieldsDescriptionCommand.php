@@ -31,7 +31,6 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-
 #[AsCommand(
     name: 'b24:util:show-fields-description',
     description: 'show entity fields description with table or phpDoc output format',

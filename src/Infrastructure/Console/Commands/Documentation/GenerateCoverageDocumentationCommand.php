@@ -10,24 +10,24 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Infrastructure\Console\Commands;
+namespace Bitrix24\SDK\Infrastructure\Console\Commands\Documentation;
 
 use Bitrix24\SDK\Attributes\Services\AttributesParser;
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Throwable;
 
 #[AsCommand(
-    name: 'b24:util:generate-coverage-documentation',
+    name: 'b24-dev:generate-coverage-documentation',
     description: 'generate coverage documentation for all api commands',
     hidden: false
 )]
@@ -43,8 +43,8 @@ class GenerateCoverageDocumentationCommand extends Command
         private readonly ServiceBuilderFactory $serviceBuilderFactory,
         private readonly Finder                $finder,
         private readonly Filesystem            $filesystem,
-        private readonly LoggerInterface       $logger)
-    {
+        private readonly LoggerInterface       $logger
+    ) {
         // best practices recommend to call the parent constructor first and
         // then set your own properties. That wouldn't work in this case
         // because configure() needs the properties set in this constructor
@@ -116,8 +116,7 @@ class GenerateCoverageDocumentationCommand extends Command
         array  $supportedInSdkBatchMethods,
         string $publicRepoUrl,
         string $publicRepoBranch
-    ): string
-    {
+    ): string {
         $tableHeader = <<<EOT
 ## All bitrix24-php-sdk methods
 
@@ -132,26 +131,32 @@ EOT;
                 $batchMethodsHint = "<br/><br/>⚡️Batch methods: <br/>";
                 $batchMethodsHint .= "<ul>";
                 foreach ($supportedInSdkBatchMethods[$apiMethod['name']] as $method) {
-                    $batchMethodsHint .= sprintf("<li>`%s`<br/>",
-                        $method['sdk_class_name'] . '::' . $method['sdk_method_name']);
+                    $batchMethodsHint .= sprintf(
+                        "<li>`%s`<br/>",
+                        $method['sdk_class_name'] . '::' . $method['sdk_method_name']
+                    );
                     $batchMethodsHint .= sprintf("Return type: `%s`</li>", $method['sdk_method_return_type_typhoon']);
                 }
                 $batchMethodsHint .= "</ul>";
             }
 
-            $sdkMethodPublicUrl = sprintf('%s/%s/%s#L%s-L%s',
+            $sdkMethodPublicUrl = sprintf(
+                '%s/%s/%s#L%s-L%s',
                 $publicRepoUrl,
                 $publicRepoBranch,
                 $apiMethod['sdk_method_file_name'],
                 $apiMethod['sdk_method_file_start_line'],
                 $apiMethod['sdk_method_file_end_line'],
             );
-            $sdkMethodReturnTypePublicUrl = sprintf('%s/%s/%s',
+            $sdkMethodReturnTypePublicUrl = sprintf(
+                '%s/%s/%s',
                 $publicRepoUrl,
                 $publicRepoBranch,
-                $apiMethod['sdk_return_type_file_name']);
+                $apiMethod['sdk_return_type_file_name']
+            );
 
-            $table .= sprintf("\n|`%s`|[%s](%s)|%s|[`%s`](%s)<br/>Return type<br/>[`%s`](%s)%s|",
+            $table .= sprintf(
+                "\n|`%s`|[%s](%s)|%s|[`%s`](%s)<br/>Return type<br/>[`%s`](%s)%s|",
                 $apiMethod['sdk_scope'] === '' ? '–' : $apiMethod['sdk_scope'],
                 $apiMethod['name'],
                 $apiMethod['documentation_url'],
@@ -203,7 +208,7 @@ EOT;
             $this->loadAllServiceClasses();
             $sdkClassNames = $this->getAllSdkClassNames('Bitrix24\SDK');
             // get sdk root path, change magic number if move current file to another folder depth
-            $sdkBasePath = dirname(__FILE__, 5) . '/';
+            $sdkBasePath = dirname(__FILE__, 6) . '/';
 
             $supportedInSdkMethods = $this->attributesParser->getSupportedInSdkApiMethods($sdkClassNames, $sdkBasePath);
             $supportedInSdkBatchMethods = $this->attributesParser->getSupportedInSdkBatchMethods($sdkClassNames);

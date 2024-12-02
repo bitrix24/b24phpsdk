@@ -13,8 +13,11 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\IMOpenLines;
 
+use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\IMOpenLines\Service\Network;
+#[ApiServiceBuilderMetadata(new Scope(['imopenlines']))]
 
 class IMOpenLinesServiceBuilder extends AbstractServiceBuilder
 {
