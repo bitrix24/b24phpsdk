@@ -14,9 +14,60 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\CRM;
 
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
+use Bitrix24\SDK\Services\CRM\Userfield\Service\UserfieldConstraints;
 
 class CRMServiceBuilder extends AbstractServiceBuilder
 {
+    public function companyDetailsConfiguration(): Company\Service\CompanyDetailsConfiguration
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Company\Service\CompanyDetailsConfiguration(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function companyContact(): Company\Service\CompanyContact
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Company\Service\CompanyContact(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function companyUserfield(): Company\Service\CompanyUserfield
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Company\Service\CompanyUserfield(
+                new UserfieldConstraints(),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function company(): Company\Service\Company
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Company\Service\Company(
+                new Company\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function enum(): Enum\Service\Enum
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -70,6 +121,7 @@ class CRMServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Deal\Service\DealUserfield(
+                new UserfieldConstraints(),
                 $this->core,
                 $this->log
             );
@@ -95,6 +147,7 @@ class CRMServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Contact\Service\ContactUserfield(
+                new UserfieldConstraints(),
                 $this->core,
                 $this->log
             );

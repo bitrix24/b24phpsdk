@@ -21,6 +21,7 @@ use Bitrix24\SDK\Services\CRM\Activity\ActivityPriority;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityStatus;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityType;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Email;
+use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\File;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\InstantMessenger;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Phone;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\PhoneValueType;
@@ -44,10 +45,9 @@ class AbstractCrmItem extends AbstractItem
      */
     public function __get($offset)
     {
-        // todo move to separate service
-        //
+        // todo move to separate service based on typhoon/reflection
         //  - add user fields with custom user types
-        //  - add inheritance for user types
+        //  - add inheritance for custom user types
 
         switch ($offset) {
             case 'ID':
@@ -113,6 +113,12 @@ class AbstractCrmItem extends AbstractItem
             case 'IS_RECURRING':
             case 'IS_RETURN_CUSTOMER':
             case 'IS_REPEATED_APPROACH':
+            case 'IS_SEARCHABLE':
+            case 'EDIT_IN_LIST':
+            case 'SHOW_FILTER':
+            case 'SHOW_IN_LIST':
+            case 'MULTIPLE':
+            case 'MANDATORY':
             case 'TAX_INCLUDED':
             case 'CUSTOMIZED':
             case 'COMPLETED':
@@ -222,6 +228,8 @@ class AbstractCrmItem extends AbstractItem
                 return ActivityContentType::from((int)$this->data[$offset]);
             case 'DIRECTION':
                 return ActivityDirectionType::from((int)$this->data[$offset]);
+            case 'LOGO':
+                return new File($this->data[$offset]);
             default:
                 return $this->data[$offset] ?? null;
         }

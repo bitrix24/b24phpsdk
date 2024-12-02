@@ -17,9 +17,11 @@ debug-show-env:
 	@echo BITRIX24_WEBHOOK $(BITRIX24_WEBHOOK)
 	@echo DOCUMENTATION_DEFAULT_TARGET_BRANCH $(DOCUMENTATION_DEFAULT_TARGET_BRANCH)
 
-# build documentation
-build-documentation:
+# utils for build sdk documentation
+dev-build-documentation:
 	php bin/console b24:util:generate-coverage-documentation --webhook=$(BITRIX24_WEBHOOK) --repository-url=https://github.com/bitrix24/b24phpsdk --repository-branch=$(DOCUMENTATION_DEFAULT_TARGET_BRANCH) --file=docs/EN/Services/bitrix24-php-sdk-methods.md
+dev-show-fields-description:
+	php bin/console b24:util:show-fields-description --webhook=$(BITRIX24_WEBHOOK)
 
 # linters
 lint-phpstan:

@@ -4,6 +4,46 @@
 
 ### Added
 
+- Added service `CRM\Company\Service` with support methods,
+  see [add crm.company.* methods](https://github.com/bitrix24/b24phpsdk/issues/85):
+    - `get` get company by id
+    - `add` add new company with batch support
+    - `delete` delete company by id with batch support
+    - `list`  get list of companies with batch support
+    - `update`  update companies with batch support
+    - `countByFilter` count companies count with filter
+- Added service `CRM\Company\Service\CompanyUserfield` with support methods,
+  see [add crm.company.* methods](https://github.com/bitrix24/b24phpsdk/issues/85):
+    - `add` add userfield to company
+    - `get` get userfield to company
+    - `list` list userfields
+    - `delete` delete userfield
+    - `update` update userfield
+- Added service `CRM\Company\Service\CompanyCompanyContact` with support methods,
+  see [add crm.company.* methods](https://github.com/bitrix24/b24phpsdk/issues/85):
+    - `fields` get fiels for company contact connection
+    - `setItems` set contacts related with company
+    - `get` get contacts related to company
+    - `deleteItems` delete all relations for company
+    - `add` add contact relation with company
+    - `delete` delete contact relation with company
+- Added service `CRM\Company\Service\CompanyDetailsConfiguration` with support methods,
+  see [add crm.company.* methods](https://github.com/bitrix24/b24phpsdk/issues/85):
+    - `getPersonal` method retrieves the settings of company cards for personal user
+    - `getGeneral` method retrieves the settings of company cards for all users
+    - `resetPersonal` method reset for item user settings
+    - `resetGeneral` method reset all card settings for all users
+    - `setPersonal` method set card configuration
+    - `setGeneral` method set card configuration for all company
+    - `setForceCommonConfigForAll` method set common detail form for All Users
+- Added support for events:
+    - `OnCrmCompanyAdd`
+    - `OnCrmCompanyDelete`
+    - `OnCrmCompanyUpdate`
+    - `OnCrmCompanyUserFieldAdd`
+    - `OnCrmCompanyUserFieldDelete`
+    - `OnCrmCompanyUserFieldSetEnumValues`
+    - `OnCrmCompanyUserFieldUpdate`
 - Added service `CRM\Enum\Service\Enum` with support methods:
     - `activityStatus`
     - `activityNotifyType`
@@ -28,8 +68,12 @@
 - Added `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Exceptions\MultipleBitrix24AccountsFoundException`
 - Added nullable comments in events `Bitrix24AccountBlockedEvent` and `Bitrix24AccountUnblockedEvent`,
   see [add comment to events](https://github.com/bitrix24/b24phpsdk/issues/79).
+- Add result type `Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\File`
+- Add exception `Bitrix24\SDK\Core\Exceptions\ItemNotFoundException`
 - Developer experience: added example `/examples/local-app-workflows` for demonstrate work
   with [workflows](https://apidocs.bitrix24.com/api-reference/bizproc/index.html).
+- Developer experience: added cli make command `make dev-show-fields-description` for show typehints for methods
+  arguments from bitrix24 types from *.fields method
 
 ### Changed
 
@@ -48,10 +92,10 @@
   see [bitrix24AccountRepositoryInterface has problem with contract tests design - can't add flusher](https://github.com/bitrix24/b24phpsdk/issues/74).
 - Fixed error in bitrix24 account contract test data provider,
   see [incorrect data in data provider](https://github.com/bitrix24/b24phpsdk/issues/77).
-- Fixed typehints in `ActivityItemResult`, `ContactItemResult`,
+- ❗️**BC** Fixed typehints and return types in `ActivityItemResult`, `ContactItemResult`,
   see [wrong type hints in ActivityItemResult](https://github.com/bitrix24/b24phpsdk/issues/81)
 - Fixed error in method `Bitrix24\SDK\Core\Fields\FieldsFilter::filterSystemFields` for product user fields case.
-- Fixed typehints in `Bitrix24\SDK\Services\CRM\Lead\Result\LeadItemResult`
+- ❗️**BC** Fixed typehints and return types in `Bitrix24\SDK\Services\CRM\Lead\Result\LeadItemResult`
   see [wrong typehints in LeadItemResult](https://github.com/bitrix24/b24phpsdk/issues/82):
     - `CURRENCY_ID` `string` → `Currency|null`
     - `OPPORTUNITY` `string` → `Money|null`
@@ -74,19 +118,33 @@
     - `DATE_CLOSED` `string` → `CarbonImmutable|null`
     - `LAST_ACTIVITY_BY` `string` → `int|null`
     - `LAST_ACTIVITY_TIME` `string` → `CarbonImmutable|null`
-- Fixed typehints in `Bitrix24\SDK\Services\CRM\Product\Result\ProductItemResult`:
+- ❗️**BC** Fixed typehints and return types in `Bitrix24\SDK\Services\CRM\Product\Result\ProductItemResult`:
     - `PRICE` `string` → `Money`
     - `CURRENCY_ID` `string` → `Currency`
     - `ACTIVE` `string` → `bool`
     - `VAT_INCLUDED` `string` → `bool`
     - `DATE_CREATE` `string` → `CarbonImmutable`
     - `TIMESTAMP_X` `string` → `CarbonImmutable`
+- ❗️**BC** Fixed typehints and return types in `Bitrix24\SDK\Services\CRM\Userfield\Result\AbstractUserfieldItemResult`:
+    - `ID` `string` → `int`
+    - `SORT` `string` → `int`
+    - `MULTIPLE` `string` → `bool`
+    - `MANDATORY` `string` → `bool`
+    - `SHOW_FILTER` `string` → `bool`
+    - `SHOW_IN_LIST` `string` → `bool`
+    - `EDIT_IN_LIST` `string` → `bool`
+    - `IS_SEARCHABLE` `string` → `bool`
+
+### Deprecated
+
+- Deprecated class `RemoteEventsFabric` use `RemoteEventsFactory`
+- Deprecated class `ApplicationLifeCycleEventsFabric` use `ApplicationLifeCycleEventsFactory`
+- Deprecated class `TelephonyEventsFabric` use `TelephonyEventsFactory`
 
 <!--
 ## Unreleased
 ### Added
 ### Changed
-### Deprecated
 ### Removed
 ### Fixed
 ### Security

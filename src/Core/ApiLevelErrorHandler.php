@@ -16,6 +16,7 @@ namespace Bitrix24\SDK\Core;
 use Bitrix24\SDK\Core\Exceptions\AuthForbiddenException;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Exceptions\ItemNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\MethodNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\OperationTimeLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\PaymentRequiredException;
@@ -150,6 +151,8 @@ class ApiLevelErrorHandler
                 throw new PaymentRequiredException(sprintf('%s - %s', $errorCode, $errorDescription));
             case 'wrong_client':
                 throw new WrongClientException(sprintf('%s - %s', $errorCode, $errorDescription));
+            case 'error_not_found':
+                throw new ItemNotFoundException(sprintf('%s - %s', $errorCode, $errorDescription));
             default:
                 throw new BaseException(sprintf('%s - %s %s', $errorCode, $errorDescription, $batchErrorPrefix));
         }
