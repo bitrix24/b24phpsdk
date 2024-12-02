@@ -29,13 +29,21 @@
     - `delete` delete contact relation with company
 - Added service `CRM\Company\Service\CompanyDetailsConfiguration` with support methods,
   see [add crm.company.* methods](https://github.com/bitrix24/b24phpsdk/issues/85):
-  - `getPersonal` method retrieves the settings of company cards for personal user
-  - `getGeneral` method retrieves the settings of company cards for all users
-  - `resetPersonal` method reset for item user settings
-  - `resetGeneral` method reset all card settings for all users
-  - `setPersonal` method set card configuration
-  - `setGeneral` method set card configuration for all company
-  - `setForceCommonConfigForAll` method set common detail form for All Users
+    - `getPersonal` method retrieves the settings of company cards for personal user
+    - `getGeneral` method retrieves the settings of company cards for all users
+    - `resetPersonal` method reset for item user settings
+    - `resetGeneral` method reset all card settings for all users
+    - `setPersonal` method set card configuration
+    - `setGeneral` method set card configuration for all company
+    - `setForceCommonConfigForAll` method set common detail form for All Users
+- Added support for events:
+    - `OnCrmCompanyAdd`
+    - `OnCrmCompanyDelete`
+    - `OnCrmCompanyUpdate`
+    - `OnCrmCompanyUserFieldAdd`
+    - `OnCrmCompanyUserFieldDelete`
+    - `OnCrmCompanyUserFieldSetEnumValues`
+    - `OnCrmCompanyUserFieldUpdate`
 - Added service `CRM\Enum\Service\Enum` with support methods:
     - `activityStatus`
     - `activityNotifyType`
@@ -110,14 +118,14 @@
     - `DATE_CLOSED` `string` → `CarbonImmutable|null`
     - `LAST_ACTIVITY_BY` `string` → `int|null`
     - `LAST_ACTIVITY_TIME` `string` → `CarbonImmutable|null`
-- ❗️**BC** Fixed typehints and return types  in `Bitrix24\SDK\Services\CRM\Product\Result\ProductItemResult`:
+- ❗️**BC** Fixed typehints and return types in `Bitrix24\SDK\Services\CRM\Product\Result\ProductItemResult`:
     - `PRICE` `string` → `Money`
     - `CURRENCY_ID` `string` → `Currency`
     - `ACTIVE` `string` → `bool`
     - `VAT_INCLUDED` `string` → `bool`
     - `DATE_CREATE` `string` → `CarbonImmutable`
     - `TIMESTAMP_X` `string` → `CarbonImmutable`
-- ❗️**BC** Fixed typehints and return types  in `Bitrix24\SDK\Services\CRM\Userfield\Result\AbstractUserfieldItemResult`:
+- ❗️**BC** Fixed typehints and return types in `Bitrix24\SDK\Services\CRM\Userfield\Result\AbstractUserfieldItemResult`:
     - `ID` `string` → `int`
     - `SORT` `string` → `int`
     - `MULTIPLE` `string` → `bool`
@@ -127,11 +135,16 @@
     - `EDIT_IN_LIST` `string` → `bool`
     - `IS_SEARCHABLE` `string` → `bool`
 
+### Deprecated
+
+- Deprecated class `RemoteEventsFabric` use `RemoteEventsFactory`
+- Deprecated class `ApplicationLifeCycleEventsFabric` use `ApplicationLifeCycleEventsFactory`
+- Deprecated class `TelephonyEventsFabric` use `TelephonyEventsFactory`
+
 <!--
 ## Unreleased
 ### Added
 ### Changed
-### Deprecated
 ### Removed
 ### Fixed
 ### Security

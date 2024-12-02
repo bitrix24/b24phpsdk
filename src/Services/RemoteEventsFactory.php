@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services;
 
 use Bitrix24\SDK\Application\Requests\Events\ApplicationLifeCycleEventsFabric;
+use Bitrix24\SDK\Application\Requests\Events\ApplicationLifeCycleEventsFactory;
 use Bitrix24\SDK\Application\Requests\Events\OnApplicationInstall\OnApplicationInstall;
 use Bitrix24\SDK\Core\Contracts\Events\EventInterface;
 use Bitrix24\SDK\Core\Contracts\Events\EventsFabricInterface;
@@ -22,14 +23,11 @@ use Bitrix24\SDK\Core\Exceptions\WrongSecuritySignatureException;
 use Bitrix24\SDK\Core\Requests\Events\UnsupportedRemoteEvent;
 use Bitrix24\SDK\Services\CRM\Company\Events\CrmCompanyEventsFactory;
 use Bitrix24\SDK\Services\Telephony\Events\TelephonyEventsFabric;
-use JetBrains\PhpStorm\Deprecated;
+use Bitrix24\SDK\Services\Telephony\Events\TelephonyEventsFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * @deprecated wrong class name, class will be deleted, use RemoteEventsFactory
- */
-readonly class RemoteEventsFabric
+readonly class RemoteEventsFactory
 {
     /**
      * @throws InvalidArgumentException
@@ -146,8 +144,8 @@ readonly class RemoteEventsFabric
         return new self(
             [
                 // register events fabric by scope
-                new ApplicationLifeCycleEventsFabric(),
-                new TelephonyEventsFabric(),
+                new ApplicationLifeCycleEventsFactory(),
+                new TelephonyEventsFactory(),
                 new CrmCompanyEventsFactory(),
             ],
             $logger
