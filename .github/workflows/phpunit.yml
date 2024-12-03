@@ -19,11 +19,15 @@ jobs:
           - "8.2"
           - "8.3"
         dependencies: [ highest ]
-        operating-system: [ ubuntu-latest]
+        operating-system: [ ubuntu-latest, windows-2022]
 
     steps:
+      - name: "Set git config for NTFS (Windows only)"
+        if: runner.os == 'Windows'
+        run: git config --global core.protectNTFS false
+
       - name: "Checkout"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v4"
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
