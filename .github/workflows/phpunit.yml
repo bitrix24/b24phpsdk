@@ -22,12 +22,12 @@ jobs:
         operating-system: [ ubuntu-latest, windows-2022]
 
     steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v4"
-
       - name: "Set git config for NTFS (Windows only)"
         if: startsWith(matrix.os, 'windows')
         run: git config --global core.protectNTFS false
+
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
