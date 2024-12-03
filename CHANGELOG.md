@@ -74,7 +74,10 @@
   with [workflows](https://apidocs.bitrix24.com/api-reference/bizproc/index.html).
 - Developer experience: added cli make command `make dev-show-fields-description` for show typehints for methods
   arguments from bitrix24 types from *.fields method
-- Developer experience: added in CI pipeline check for allowed licenses in composer package dependencies: **only** MIT, BSD-3-Clause, Apache.  
+- Developer experience: added in CI pipeline check for allowed licenses in composer package dependencies: **only** MIT,
+  BSD-3-Clause, Apache.
+- Developer experience: added in CI pipeline unit-tests on Windows Server 2022 in GitHub actions and updated
+  [installation instructions](https://github.com/bitrix24/b24phpsdk/issues/52) for Windows-based systems.
 
 ### Changed
 
