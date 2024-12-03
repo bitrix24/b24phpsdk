@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: "Set git config for NTFS (Windows only)"
-        if: startsWith(matrix.os, 'windows')
+        runs-on: windows-2022
         run: git config --global core.protectNTFS false
 
       - name: "Checkout"
