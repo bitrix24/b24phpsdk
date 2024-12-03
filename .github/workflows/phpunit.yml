@@ -19,7 +19,7 @@ jobs:
           - "8.2"
           - "8.3"
         dependencies: [ highest ]
-        operating-system: [ ubuntu-latest]
+        operating-system: [ ubuntu-latest, windows-2022]
 
     steps:
       - name: "Checkout"
