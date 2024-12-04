@@ -70,6 +70,19 @@
   see [add comment to events](https://github.com/bitrix24/b24phpsdk/issues/79).
 - Add result type `Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\File`
 - Add exception `Bitrix24\SDK\Core\Exceptions\ItemNotFoundException`
+- In `ApiLevelErrorHandler` added processing API response `error_not_found` error code.
+- Added fields for `Bitrix24\SDK\Services\CRM\Deal\Result\DealItemResult`:
+    - `int|null $ASSIGNED_BY_ID`
+    - `array|null $CONTACT_IDS`
+    - `int|null $CREATED_BY_ID`
+    - `CarbonImmutable $DATE_CREATE`
+    - `CarbonImmutable $DATE_MODIFY`
+    - `int|null $LAST_ACTIVITY_BY`
+    - `CarbonImmutable $LAST_ACTIVITY_TIME`
+    - `int|null $MODIFY_BY_ID`
+    - `int|null $MOVED_BY_ID`
+    - `CarbonImmutable $MOVED_TIME`
+- Added service `Bitrix24\SDK\Services\CRM\Userfield\Service\UserfieldConstraints` for check userfield naming rules.
 - Developer experience: added example `/examples/local-app-workflows` for demonstrate work
   with [workflows](https://apidocs.bitrix24.com/api-reference/bizproc/index.html).
 - Developer experience: added cli make command `make dev-show-fields-description` for show typehints for methods
@@ -78,11 +91,24 @@
   BSD-3-Clause, Apache.
 - Developer experience: added in CI pipeline unit-tests on Windows Server 2022 in GitHub actions and updated
   [installation instructions](https://github.com/bitrix24/b24phpsdk/issues/52) for Windows-based systems.
+- Developer experience: start move make commands to docker
+- Developer experience: added attribute `Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata` for document service
+  builders per scope
+- Developer experience: added trait with asserts `Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions` for
+  additional checks in php-unit with methods:
+    - `assertBitrix24AllResultItemFieldsAnnotated` - for check phpdoc annotations and result of `*.fields` command
+    - `assertBitrix24AllResultItemFieldsHasValidTypeAnnotation` - for check phpdoc annotations and bitrix24 custom types
+      mapping
+- Developer experience: added file `.gitattributes` with config to export data when you use composer flags
+  `--prefer-source` and `--prefer-dist`
+- Developer experience: start use [PhpCsFixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer) in some project folders.
 
 ### Changed
 
 - Added nullable argument `bitrix24UserId` in method `Bitrix24AccountRepositoryInterface::findByMemberId` in contracts
   for support use case «[RenewAuthToken](https://github.com/bitrix24/b24phpsdk/issues/63)»
+- Developer experience: moved CLI-command `GenerateCoverageDocumentationCommand` to namespace
+  `Bitrix24\SDK\Infrastructure\Console\Commands\Documentation`
 
 ### Fixed
 
@@ -144,6 +170,15 @@
 - Deprecated class `RemoteEventsFabric` use `RemoteEventsFactory`
 - Deprecated class `ApplicationLifeCycleEventsFabric` use `ApplicationLifeCycleEventsFactory`
 - Deprecated class `TelephonyEventsFabric` use `TelephonyEventsFactory`
+
+### Statistics
+
+```
+Bitrix24 API-methods count: 1135
+Supported in bitrix24-php-sdk methods count: 191
+Coverage percentage: 16.83% 🚀
+Supported in bitrix24-php-sdk methods with batch wrapper count: 22
+```
 
 <!--
 ## Unreleased
