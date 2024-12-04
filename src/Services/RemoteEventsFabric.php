@@ -20,10 +20,15 @@ use Bitrix24\SDK\Core\Contracts\Events\EventsFabricInterface;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\WrongSecuritySignatureException;
 use Bitrix24\SDK\Core\Requests\Events\UnsupportedRemoteEvent;
+use Bitrix24\SDK\Services\CRM\Company\Events\CrmCompanyEventsFactory;
 use Bitrix24\SDK\Services\Telephony\Events\TelephonyEventsFabric;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @deprecated wrong class name, class will be deleted, use RemoteEventsFactory
+ */
 readonly class RemoteEventsFabric
 {
     /**
@@ -33,13 +38,14 @@ readonly class RemoteEventsFabric
         /**
          * @var  array<int, EventsFabricInterface> $eventsFabrics
          */
-        private array           $eventsFabrics,
+        private array $eventsFabrics,
         private LoggerInterface $logger
-    )
-    {
+    ) {
         foreach ($this->eventsFabrics as $eventFabric) {
             if (!$eventFabric instanceof EventsFabricInterface) {
-                throw new InvalidArgumentException(sprintf('object %s must implement interface %s', $eventFabric::class, EventsFabricInterface::class));
+                throw new InvalidArgumentException(
+                    sprintf('object %s must implement interface %s', $eventFabric::class, EventsFabricInterface::class)
+                );
             }
         }
     }
@@ -105,9 +111,12 @@ readonly class RemoteEventsFabric
         if (!$event instanceof OnApplicationInstall) {
             if ($applicationToken !== null) {
                 if ($applicationToken !== $event->getAuth()->application_token) {
-                    throw new WrongSecuritySignatureException(sprintf('local application token mismatch with application token from event %s',
-                        $event->getEventCode()
-                    ));
+                    throw new WrongSecuritySignatureException(
+                        sprintf(
+                            'local application token mismatch with application token from event %s',
+                            $event->getEventCode()
+                        )
+                    );
                 }
 
                 $this->logger->debug('createEvent.validSignature');
@@ -139,6 +148,7 @@ readonly class RemoteEventsFabric
                 // register events fabric by scope
                 new ApplicationLifeCycleEventsFabric(),
                 new TelephonyEventsFabric(),
+                new CrmCompanyEventsFactory(),
             ],
             $logger
         );

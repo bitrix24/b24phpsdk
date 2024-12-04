@@ -33,6 +33,11 @@ Full list of buzzwords, patterns and dependencies used in SDK.
 - [Strategy](https://refactoring.guru/design-patterns/strategy): Behavioral design pattern that lets you define a family
   of algorithms, put each of them into a separate class, and make their objects interchangeable.
 
+### Software architecture
+
+- [The Twelve-Factor App](https://12factor.net/): The twelve-factor app is a methodology for building
+  software-as-a-service apps.
+
 ### Infrastructure
 
 - [composer](https://getcomposer.org/doc/): PHP dependency management tool
@@ -118,7 +123,10 @@ $b24Service = ServiceBuilderFactory::createServiceBuilderFromWebhook('INSERT_HER
 // call core if method not implemented in services
 var_dump($b24Service->core->call('user.current')->getResponseData()->getResult());
 ```
-After that You can create new issue on GitHub – 🚀 [SDK Feature Request](https://github.com/bitrix24/b24phpsdk/issues/new?assignees=&labels=enhancement+in+SDK&projects=&template=2_feature_request_sdk.yaml), and we add new method support in services.
+
+After that You can create new issue on GitHub –
+🚀 [SDK Feature Request](https://github.com/bitrix24/b24phpsdk/issues/new?assignees=&labels=enhancement+in+SDK&projects=&template=2_feature_request_sdk.yaml),
+and we add new method support in services.
 
 ## Application development
 
@@ -135,8 +143,11 @@ Available contracts
   who installed application.
 - [Bitrix24Partners](/src/Application/Contracts/Bitrix24Partners/Docs/Bitrix24Partners.md) – Store information about
   Bitrix24 Partner who supports client portal and install or configure application.
+
 ## Errors handling
+
 In SDK implemented exceptions hierarchy, they stored in `Bitrix24\SDK\Core\Exceptions` folder.
+
 ```php
 declare(strict_types=1);
 

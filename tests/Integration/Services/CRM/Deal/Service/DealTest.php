@@ -18,6 +18,9 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Deal\Service\Deal;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
+use Bitrix24\SDK\Core;
+use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
+use Bitrix24\SDK\Services\CRM\Deal\Result\DealItemResult;
 
 /**
  * Class DealsTest
@@ -26,7 +29,14 @@ use PHPUnit\Framework\TestCase;
  */
 class DealTest extends TestCase
 {
+    use CustomBitrix24Assertions;
     protected Deal $dealService;
+
+    public function testAllSystemFieldsAnnotated(): void
+    {
+        $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($this->dealService->fields()->getFieldsDescription()));
+        $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, DealItemResult::class);
+    }
 
     /**
      * @throws BaseException

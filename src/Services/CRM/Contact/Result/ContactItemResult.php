@@ -52,16 +52,16 @@ use Carbon\CarbonImmutable;
  * @property-read CarbonImmutable $LAST_ACTIVITY_TIME
  * @property-read int $LAST_ACTIVITY_BY
  * @property-read string|null $LAST_NAME
- * @property-read string|null $LINK
+ * @property-read array|null $LINK
  * @property-read int $MODIFY_BY_ID
  * @property-read string $NAME
  * @property-read string|null $ORIGIN_ID
  * @property-read string|null $ORIGINATOR_ID
  * @property-read string|null $ORIGIN_VERSION
- * @property-read string $OPENED
+ * @property-read bool $OPENED
  * @property-read Phone[] $PHONE
  * @property-read string|null $POST
- * @property-read string|null $PHOTO
+ * @property-read array|null $PHOTO
  * @property-read string|null $SECOND_NAME
  * @property-read string|null $SOURCE_DESCRIPTION
  * @property-read string|null $SOURCE_ID

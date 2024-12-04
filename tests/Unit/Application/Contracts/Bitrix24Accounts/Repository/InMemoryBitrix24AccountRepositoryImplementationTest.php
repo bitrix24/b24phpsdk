@@ -19,6 +19,8 @@ use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Repository\Bitrix24Accou
 use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Tests\Application\Contracts\Bitrix24Accounts\Repository\Bitrix24AccountRepositoryInterfaceTest;
+use Bitrix24\SDK\Tests\Application\Contracts\NullableFlusher;
+use Bitrix24\SDK\Tests\Application\Contracts\TestRepositoryFlusherInterface;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountReferenceEntityImplementation;
 use Carbon\CarbonImmutable;
@@ -61,5 +63,10 @@ class InMemoryBitrix24AccountRepositoryImplementationTest extends Bitrix24Accoun
     protected function createBitrix24AccountRepositoryImplementation(): Bitrix24AccountRepositoryInterface
     {
         return new InMemoryBitrix24AccountRepositoryImplementation(new NullLogger());
+    }
+
+    protected function createRepositoryFlusherImplementation(): TestRepositoryFlusherInterface
+    {
+        return new NullableFlusher();
     }
 }

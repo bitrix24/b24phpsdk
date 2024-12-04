@@ -11,12 +11,12 @@
  */
 
 use Bitrix24\SDK\Attributes\Services\AttributesParser;
+use Bitrix24\SDK\Infrastructure\Console\Commands\ShowFieldsDescriptionCommand;
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
 use Bitrix24\SDK\Tools\Commands\CopyPropertyValues;
 use Bitrix24\SDK\Tools\Commands\GenerateContactsCommand;
 use Bitrix24\SDK\Infrastructure\Console\Commands;
 use Bitrix24\SDK\Tools\Commands\PerformanceBenchmarks\ListCommand;
-use Bitrix24\SDK\Tools\Commands\ShowFieldsDescriptionCommand;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\MemoryUsageProcessor;
@@ -48,7 +48,7 @@ if ($input->hasParameterOption('--no-debug', true)) {
     putenv('APP_DEBUG=' . $_SERVER['APP_DEBUG'] = $_ENV['APP_DEBUG'] = '0');
 }
 
-(new Dotenv())->bootEnv(dirname(__DIR__) . '/tools/.env');
+(new Dotenv())->bootEnv(dirname(__DIR__) . '/.env');
 
 if ($_SERVER['APP_DEBUG']) {
     umask(0000);
@@ -69,10 +69,15 @@ $application->add(new GenerateContactsCommand($log));
 $application->add(new ListCommand($log));
 $application->add(new ShowFieldsDescriptionCommand($log));
 $application->add(new CopyPropertyValues($log));
-$application->add(new Commands\GenerateCoverageDocumentationCommand(
+$application->add(new Commands\Documentation\GenerateCoverageDocumentationCommand(
     new AttributesParser(TyphoonReflector::build(), new Symfony\Component\Filesystem\Filesystem()),
     new ServiceBuilderFactory(new EventDispatcher(), $log),
     new Symfony\Component\Finder\Finder(),
+    new Symfony\Component\Filesystem\Filesystem(),
+    $log));
+$application->add(new Commands\Documentation\GenerateExamplesForDocumentationCommand(
+    TyphoonReflector::build(),
+    new AttributesParser(TyphoonReflector::build(), new Symfony\Component\Filesystem\Filesystem()),
     new Symfony\Component\Filesystem\Filesystem(),
     $log));
 $application->run($input);
