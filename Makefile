@@ -75,6 +75,10 @@ build-documentation:
 	--repository-branch=$(DOCUMENTATION_DEFAULT_TARGET_BRANCH) \
 	--file=docs/EN/Services/bitrix24-php-sdk-methods.md
 
+show-sdk-coverage-statistics:
+	php bin/console b24-dev:show-sdk-coverage-statistics \
+	--webhook=$(BITRIX24_WEBHOOK)
+
 dev-show-fields-description:
 	php bin/console b24:util:show-fields-description --webhook=$(BITRIX24_WEBHOOK)
 
