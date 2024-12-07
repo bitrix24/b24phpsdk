@@ -15,9 +15,18 @@ namespace Bitrix24\SDK\Tests\Unit\Core\Credentials;
 
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Core\Credentials\Scope::class)]
+#[CoversClass(Scope::class)]
+#[CoversMethod(Scope::class, 'getScopeCodes')]
+#[CoversMethod(Scope::class, 'initFromString')]
+#[CoversMethod(Scope::class, '__construct')]
+#[CoversMethod(Scope::class, 'contains')]
+#[CoversMethod(Scope::class, 'equal')]
+#[CoversMethod(Scope::class, 'getAvailableScopeCodes')]
 class ScopeTest extends TestCase
 {
     /**
@@ -88,6 +97,21 @@ class ScopeTest extends TestCase
         $this->assertFalse($scope->equal(Scope::initFromString('telephony')));
     }
 
+    public function testContains(): void
+    {
+        $scope = Scope::initFromString('crm,telephony');
+
+        $this->assertTrue($scope->contains('crm'));
+        $this->assertFalse($scope->contains('user'));
+    }
+
+    public function testContainsWithUnknownScopeCode(): void
+    {
+        $scope = Scope::initFromString('crm,telephony');
+        $this->expectException(UnknownScopeCodeException::class);
+        $scope->contains('fooo');
+    }
+
     /**
      * @throws UnknownScopeCodeException
      */
@@ -107,10 +131,15 @@ class ScopeTest extends TestCase
         $this->assertEquals(['call', 'crm', 'im'], $scope->getScopeCodes());
     }
 
+    public function testGetAvailableScopes(): void
+    {
+        $this->assertGreaterThan(1, count(Scope::getAvailableScopeCodes()));
+    }
+
     /**
      * @throws UnknownScopeCodeException
      */
-    #[\PHPUnit\Framework\Attributes\TestDox('Test init Scope from string')]
+    #[TestDox('Test init Scope from string')]
     public function testInitFromString(): void
     {
         $scopeList = ['crm', 'telephony', 'call', 'user_basic', 'placement', 'im', 'imopenlines'];
