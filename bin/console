@@ -64,20 +64,37 @@ $log = new Logger('bitrix24-php-sdk-cli');
 $log->pushHandler(new StreamHandler($_ENV['LOGS_FILE'], (int)$_ENV['LOGS_LEVEL']));
 $log->pushProcessor(new MemoryUsageProcessor(true, true));
 
+$attributesParser = new AttributesParser(TyphoonReflector::build(), new Symfony\Component\Filesystem\Filesystem());
+
 $application = new Application();
 $application->add(new GenerateContactsCommand($log));
 $application->add(new ListCommand($log));
 $application->add(new ShowFieldsDescriptionCommand($log));
 $application->add(new CopyPropertyValues($log));
-$application->add(new Commands\Documentation\GenerateCoverageDocumentationCommand(
-    new AttributesParser(TyphoonReflector::build(), new Symfony\Component\Filesystem\Filesystem()),
-    new ServiceBuilderFactory(new EventDispatcher(), $log),
-    new Symfony\Component\Finder\Finder(),
-    new Symfony\Component\Filesystem\Filesystem(),
-    $log));
-$application->add(new Commands\Documentation\GenerateExamplesForDocumentationCommand(
-    TyphoonReflector::build(),
-    new AttributesParser(TyphoonReflector::build(), new Symfony\Component\Filesystem\Filesystem()),
-    new Symfony\Component\Filesystem\Filesystem(),
-    $log));
+$application->add(
+    new Commands\Documentation\GenerateCoverageDocumentationCommand(
+        $attributesParser,
+        new ServiceBuilderFactory(new EventDispatcher(), $log),
+        new Symfony\Component\Finder\Finder(),
+        new Symfony\Component\Filesystem\Filesystem(),
+        $log
+    )
+);
+$application->add(
+    new Commands\Documentation\GenerateExamplesForDocumentationCommand(
+        TyphoonReflector::build(),
+        $attributesParser,
+        new Symfony\Component\Filesystem\Filesystem(),
+        $log
+    )
+);
+$application->add(
+    new Commands\Documentation\ShowCoverageStatisticsCommand(
+        $attributesParser,
+        new ServiceBuilderFactory(new EventDispatcher(), $log),
+        new Symfony\Component\Finder\Finder(),
+        new Commands\SplashScreen(),
+        $log
+    )
+);
 $application->run($input);
