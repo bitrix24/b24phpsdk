@@ -156,6 +156,7 @@ class ShowCoverageStatisticsCommand extends Command
                     'Please, select command',
                     [
                         1 => 'show stat by scope',
+                        2 => 'show not implemented methods in scope',
                         0 => 'exit🚪'
                     ],
                     null
@@ -215,6 +216,45 @@ class ShowCoverageStatisticsCommand extends Command
                                 sprintf('total methods supported in SDK count: %s', $supportedInSdkMethodsCnt)
                             ]
                         );
+                        break;
+                    case 'show not implemented methods in scope':
+                        $menuScope = Scope::getAvailableScopeCodes();
+                        array_unshift($menuScope, null);
+                        unset($menuScope[0]);
+                        $menuScope[0] = 'back ⬅️';
+
+                        $question = new ChoiceQuestion(
+                            'Please, select scope',
+                            $menuScope,
+                            null
+                        );
+                        $question->setErrorMessage('Menu item « % s» is invalid . ');
+                        $menuItem = $helper->ask($input, $output, $question);
+                        $output->writeln(sprintf('You have just selected: %s', $menuItem));
+
+                        $apiMethods = array_map(
+                            'strtolower',
+                            $sb->getMainScope()->main()->getMethodsByScope($menuItem)->getResponseData()->getResult()
+                        );
+                        $sdkMethods = array_map(
+                            'strtolower',
+                            array_column(
+                                $this->attributesParser->getSupportedInSdkApiMethods(
+                                    $sdkClassNames,
+                                    $sdkBasePath,
+                                    Scope::initFromString($menuItem),
+                                ),
+                                'name'
+                            )
+                        );
+                        sort($apiMethods);
+                        sort($sdkMethods);
+                        $unsupportedMethods = array_diff($apiMethods, $sdkMethods);
+
+                        $io->info('Unsupported in SDK methods:');
+                        $output->writeln($unsupportedMethods);
+                        $output->writeln('--------');
+
                         break;
                     case 'exit🚪':
                         $output->writeln('<info>See you later</info>');
