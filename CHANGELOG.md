@@ -1,5 +1,33 @@
 # b24-php-sdk change log
 
+## Unreleased 1.3.0 – 2025.01.07
+
+### Added
+
+- Added new application scope nodes `humanresources.hcmlink` and `sign.b2e`
+- Added method `Bitrix24\SDK\Core\Credentials\Scope::contains` for check is current scope code contains in scope, for
+  task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
+- Added method `Bitrix24\SDK\Core\Credentials\Scope::getAvailableScopeCodes` returned all available scope codes, for
+  task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
+- Developer experience: added cli command `b24-dev:show-sdk-coverage-statistics` for show actual SDK coverage for
+  REST-API, see task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
+- Developer experience: added class `Bitrix24\SDK\Deprecations\DeprecatedMethods` with list of
+  all [deprecated methods](https://github.com/bitrix24/b24phpsdk/issues/97)
+
+### Changed
+
+- Added nullable argument `$scope` in method `Bitrix24\SDK\Attributes\Services::getSupportedInSdkApiMethods`,
+  for task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
+
+<!--
+## Unreleased
+### Added
+### Changed
+### Removed
+### Fixed
+### Security
+-->
+
 ## 1.2.0 – 2024.12.7
 
 ### Added
@@ -179,15 +207,6 @@ Supported in bitrix24-php-sdk methods count: 191
 Coverage percentage: 16.83% 🚀
 Supported in bitrix24-php-sdk methods with batch wrapper count: 22
 ```
-
-<!--
-## Unreleased
-### Added
-### Changed
-### Removed
-### Fixed
-### Security
--->
 
 ## 1.1.0 – 2024.09.25
 
