@@ -11,6 +11,7 @@
  */
 
 use Bitrix24\SDK\Attributes\Services\AttributesParser;
+use Bitrix24\SDK\Deprecations\DeprecatedMethods;
 use Bitrix24\SDK\Infrastructure\Console\Commands\ShowFieldsDescriptionCommand;
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
 use Bitrix24\SDK\Tools\Commands\CopyPropertyValues;
@@ -94,6 +95,7 @@ $application->add(
         new ServiceBuilderFactory(new EventDispatcher(), $log),
         new Symfony\Component\Finder\Finder(),
         new Commands\SplashScreen(),
+        new DeprecatedMethods(),
         $log
     )
 );
