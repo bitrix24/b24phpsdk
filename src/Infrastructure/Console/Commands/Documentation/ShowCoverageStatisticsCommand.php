@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Infrastructure\Console\Commands\Documentation;
 
 use Bitrix24\SDK\Attributes\Services\AttributesParser;
+use Bitrix24\SDK\Deprecations\DeprecatedMethods;
 use Bitrix24\SDK\Infrastructure\Console\Commands\SplashScreen;
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
 use InvalidArgumentException;
@@ -47,6 +48,7 @@ class ShowCoverageStatisticsCommand extends Command
         private readonly ServiceBuilderFactory $serviceBuilderFactory,
         private readonly Finder $finder,
         private readonly SplashScreen $splashScreen,
+        private readonly DeprecatedMethods $deprecatedMethods,
         private readonly LoggerInterface $logger
     ) {
         // best practices recommend to call the parent constructor first and
@@ -249,9 +251,15 @@ class ShowCoverageStatisticsCommand extends Command
                         );
                         sort($apiMethods);
                         sort($sdkMethods);
-                        $unsupportedMethods = array_diff($apiMethods, $sdkMethods);
 
-                        $io->info('Unsupported in SDK methods:');
+                        $unsupportedMethods = array_diff($apiMethods, $sdkMethods);
+                        $io->info(sprintf('Unsupported in SDK methods (with deprecated): %s', count($unsupportedMethods)));
+                        $output->writeln($unsupportedMethods);
+
+                        $actualMethods = array_diff($apiMethods, $this->deprecatedMethods->get());
+                        $unsupportedMethods = array_diff($actualMethods, $sdkMethods);
+                        $io->info(sprintf('Unsupported in SDK methods: %s', count($unsupportedMethods)));
+
                         $output->writeln($unsupportedMethods);
                         $output->writeln('--------');
 

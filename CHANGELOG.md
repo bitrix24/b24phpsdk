@@ -3,6 +3,7 @@
 ## Unreleased 1.3.0 – 2025.01.07
 
 ### Added
+
 - Added new application scope nodes `humanresources.hcmlink` and `sign.b2e`
 - Added method `Bitrix24\SDK\Core\Credentials\Scope::contains` for check is current scope code contains in scope, for
   task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
@@ -10,6 +11,8 @@
   task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
 - Developer experience: added cli command `b24-dev:show-sdk-coverage-statistics` for show actual SDK coverage for
   REST-API, see task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
+- Developer experience: added class `Bitrix24\SDK\Deprecations\DeprecatedMethods` with list of
+  all [deprecated methods](https://github.com/bitrix24/b24phpsdk/issues/97)
 
 ### Changed
 
