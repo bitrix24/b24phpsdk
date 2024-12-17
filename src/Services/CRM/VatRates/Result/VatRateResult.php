@@ -12,19 +12,15 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Contact\Result;
+namespace Bitrix24\SDK\Services\CRM\VatRates\Result;
 
+use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
-/**
- * Class ContactResult
- *
- * @package Bitrix24\SDK\Services\CRM\Contact\Result
- */
-class ContactResult extends AbstractResult
+class VatRateResult extends AbstractResult
 {
-    public function contact(): ContactItemResult
+    public function getRate(): VatRateItemResult
     {
-        return new ContactItemResult($this->getCoreResponse()->getResponseData()->getResult());
+        return new VatRateItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }

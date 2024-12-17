@@ -17,22 +17,17 @@ namespace Bitrix24\SDK\Services\CRM\Contact\Result;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
-/**
- * Class ContactsResult
- *
- * @package Bitrix24\SDK\Services\CRM\Contact\Result
- */
-class ContactsResult extends AbstractResult
+class ContactCompanyConnectionResult extends AbstractResult
 {
     /**
-     * @return ContactItemResult[]
+     * @return ContactCompanyConnectionItemResult[]
      * @throws BaseException
      */
-    public function getContacts(): array
+    public function getCompanyConnections(): array
     {
         $res = [];
         foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
-            $res[] = new ContactItemResult($item);
+            $res[] = new ContactCompanyConnectionItemResult($item);
         }
 
         return $res;

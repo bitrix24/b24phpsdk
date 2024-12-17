@@ -18,14 +18,39 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\CRM\Userfield\Service\UserfieldConstraints;
 use Bitrix24\SDK\Services\CRM\Company;
+use Bitrix24\SDK\Services\CRM\VatRates\Service\Vat;
 
 #[ApiServiceBuilderMetadata(new Scope(['crm']))]
 class CRMServiceBuilder extends AbstractServiceBuilder
 {
+    public function contactCompany(): Contact\Service\ContactCompany
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Contact\Service\ContactCompany(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function companyDetailsConfiguration(): Company\Service\CompanyDetailsConfiguration
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Company\Service\CompanyDetailsConfiguration(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function vat(): VatRates\Service\Vat
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new VatRates\Service\Vat(
                 $this->core,
                 $this->log
             );

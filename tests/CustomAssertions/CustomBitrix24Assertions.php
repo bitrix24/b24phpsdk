@@ -20,6 +20,7 @@ use Bitrix24\SDK\Services\CRM\Activity\ActivityPriority;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityStatus;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityType;
 use Carbon\CarbonImmutable;
+use MoneyPHP\Percentage\Percentage;
 use Typhoon\Reflection\TyphoonReflector;
 use function Typhoon\Type\stringify;
 use Money\Currency;
@@ -79,6 +80,19 @@ trait CustomBitrix24Assertions
                 case 'string':
                 case 'crm_currency':
                 case 'crm_status':
+                    if (str_contains($fieldCode, 'ACTIVE')) {
+                        $this->assertTrue(
+                            str_contains($propsFromAnnotations[$fieldCode], 'bool'),
+                            sprintf(
+                                'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «bool»',
+                                $resultItemClassName,
+                                $fieldCode,
+                                $propsFromAnnotations[$fieldCode],
+                                $fieldData['type']
+                            )
+                        );
+                        break;
+                    }
                     // if field code contains currency
                     if (str_contains($fieldCode, 'CURRENCY_ID')) {
                         $this->assertTrue(
@@ -143,6 +157,20 @@ trait CustomBitrix24Assertions
                     );
                     break;
                 case 'double':
+                    if (str_contains($fieldCode, 'RATE')) {
+                        $this->assertTrue(
+                            str_contains($propsFromAnnotations[$fieldCode], Percentage::class),
+                            sprintf(
+                                'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                                $resultItemClassName,
+                                $fieldCode,
+                                $propsFromAnnotations[$fieldCode],
+                                $fieldData['type'],
+                                Percentage::class
+                            )
+                        );
+                        break;
+                    }
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'Money\Money'),
                         sprintf(
