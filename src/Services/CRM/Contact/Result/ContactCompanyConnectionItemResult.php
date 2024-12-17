@@ -9,22 +9,17 @@
  * file that was distributed with this source code.
  */
 
-
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Contact\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractResult;
+use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
 
 /**
- * Class ContactResult
- *
- * @package Bitrix24\SDK\Services\CRM\Contact\Result
+ * @property-read int $COMPANY_ID
+ * @property-read int $SORT
+ * @property-read bool $IS_PRIMARY
  */
-class ContactResult extends AbstractResult
+class ContactCompanyConnectionItemResult extends AbstractCrmItem
 {
-    public function contact(): ContactItemResult
-    {
-        return new ContactItemResult($this->getCoreResponse()->getResponseData()->getResult());
-    }
 }
