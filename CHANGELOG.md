@@ -16,6 +16,14 @@
   - `delete` delete vat rate
   - `list`  get list of vat rates
   - `update`  update vat rate
+- Added service `Services\CRM\Contact\Service\ContactCompany` with support methods,
+  see [add crm.vat.* methods](https://github.com/bitrix24/b24phpsdk/issues/20):
+  - `fields` get fields for contact with company connection
+  - `setItems` set companies related with contact
+  - `get` get companies related with contact
+  - `deleteItems` delete all relations for contact
+  - `add` add company relation with contact
+  - `delete` delete company relation with contact
 - Developer experience: added cli command `b24-dev:show-sdk-coverage-statistics` for show actual SDK coverage for
   REST-API, see task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
 - Developer experience: added class `Bitrix24\SDK\Deprecations\DeprecatedMethods` with list of
