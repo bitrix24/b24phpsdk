@@ -32,13 +32,12 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'b24:util:show-fields-description',
+    name: 'b24-dev:show-fields-description',
     description: 'show entity fields description with table or phpDoc output format',
     hidden: false
 )]
 class ShowFieldsDescriptionCommand extends Command
 {
-    protected LoggerInterface $logger;
     protected CoreInterface $core;
     protected const WEBHOOK_URL = 'webhook';
     protected const OUTPUT_FORMAT = 'output-format';
@@ -48,12 +47,13 @@ class ShowFieldsDescriptionCommand extends Command
      *
      * @param LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger)
-    {
+    public function __construct(
+        private readonly SplashScreen $splashScreen,
+        private readonly LoggerInterface $logger
+    ) {
         // best practices recommend to call the parent constructor first and
         // then set your own properties. That wouldn't work in this case
         // because configure() needs the properties set in this constructor
-        $this->logger = $logger;
         parent::__construct();
     }
 
@@ -91,6 +91,8 @@ class ShowFieldsDescriptionCommand extends Command
 
         $io = new SymfonyStyle($input, $output);
         try {
+            $io->writeln($this->splashScreen::get());
+
             $this->core = (new CoreBuilder())
                 ->withLogger($this->logger)
                 ->withCredentials(Credentials::createFromWebhook(new WebhookUrl($b24Webhook)))

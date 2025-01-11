@@ -12,29 +12,25 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Contact\Result;
+namespace Bitrix24\SDK\Services\CRM\Requisites\Result;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
+use Bitrix24\SDK\Services\CRM\Lead\Result\LeadItemResult;
 
-/**
- * Class ContactsResult
- *
- * @package Bitrix24\SDK\Services\CRM\Contact\Result
- */
-class ContactsResult extends AbstractResult
+class RequisitePresetsResult extends AbstractResult
 {
     /**
-     * @return ContactItemResult[]
+     * @return RequisitePresetItemResult[]
      * @throws BaseException
      */
-    public function getContacts(): array
+    public function getRequisitePresets(): array
     {
-        $res = [];
+        $items = [];
         foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
-            $res[] = new ContactItemResult($item);
+            $items[] = new RequisitePresetItemResult($item);
         }
 
-        return $res;
+        return $items;
     }
 }

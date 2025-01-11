@@ -12,29 +12,24 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Contact\Result;
+namespace Bitrix24\SDK\Services\CRM\VatRates\Result;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
-/**
- * Class ContactsResult
- *
- * @package Bitrix24\SDK\Services\CRM\Contact\Result
- */
-class ContactsResult extends AbstractResult
+class VatRatesResult extends AbstractResult
 {
     /**
-     * @return ContactItemResult[]
+     * @return VatRateItemResult[]
      * @throws BaseException
      */
-    public function getContacts(): array
+    public function getRates(): array
     {
-        $res = [];
+        $items = [];
         foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
-            $res[] = new ContactItemResult($item);
+            $items[] = new VatRateItemResult($item);
         }
 
-        return $res;
+        return $items;
     }
 }

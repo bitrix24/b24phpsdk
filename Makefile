@@ -80,7 +80,7 @@ show-sdk-coverage-statistics:
 	--webhook=$(BITRIX24_WEBHOOK)
 
 dev-show-fields-description:
-	php bin/console b24:util:show-fields-description --webhook=$(BITRIX24_WEBHOOK)
+	php bin/console b24-dev:show-fields-description --webhook=$(BITRIX24_WEBHOOK)
 
 # build examples for rest-api documentation
 build-examples-for-documentation:

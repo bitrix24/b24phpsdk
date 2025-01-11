@@ -12,29 +12,25 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Contact\Result;
+namespace Bitrix24\SDK\Services\CRM\Requisites\Result;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
+use Bitrix24\SDK\Services\CRM\Lead\Result\LeadItemResult;
 
-/**
- * Class ContactsResult
- *
- * @package Bitrix24\SDK\Services\CRM\Contact\Result
- */
-class ContactsResult extends AbstractResult
+class CountriesResult extends AbstractResult
 {
     /**
-     * @return ContactItemResult[]
+     * @return CountryItemResult[]
      * @throws BaseException
      */
-    public function getContacts(): array
+    public function getCountries(): iterable
     {
-        $res = [];
+        $items = [];
         foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
-            $res[] = new ContactItemResult($item);
+            $items[] = new CountryItemResult($item);
         }
 
-        return $res;
+        return $items;
     }
 }

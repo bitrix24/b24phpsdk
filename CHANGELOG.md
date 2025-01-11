@@ -1,6 +1,7 @@
 # b24-php-sdk change log
 
-## Unreleased 1.3.0 – 2025.01.07
+## Unreleased 1.3.0 – 2025.01.19
+
 
 ### Added
 
@@ -9,6 +10,38 @@
   task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
 - Added method `Bitrix24\SDK\Core\Credentials\Scope::getAvailableScopeCodes` returned all available scope codes, for
   task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
+- Added service `Services\CRM\VatRates\Service\Vat` with support methods,
+  see [add crm.vat.* methods](https://github.com/bitrix24/b24phpsdk/issues/20):
+  - `get` get vat rate by id
+  - `add` add new vat rate
+  - `delete` delete vat rate
+  - `list`  get list of vat rates
+  - `update`  update vat rate
+- Added service `Services\CRM\Contact\Service\ContactCompany` with support methods,
+  see [crm.contact.company.* methods](https://github.com/bitrix24/b24phpsdk/issues/20):
+  - `fields` get fields for contact with company connection
+  - `setItems` set companies related with contact
+  - `get` get companies related with contact
+  - `deleteItems` delete all relations for contact
+  - `add` add company relation with contact
+  - `delete` delete company relation with contact
+- Added service `Services\CRM\Requisites\Service\Requisite` with support methods,
+  see [crm.requisite.* methods](https://github.com/bitrix24/b24phpsdk/issues/20):
+  - `fields` get fields for requisite item
+  - `list` get requisites list
+  - `get` returns a requisite by the requisite id
+  - `add` add requisite
+  - `delete` delete requisite and related objects
+  - `update` delete requisite
+- Added service `Services\CRM\Requisites\Service\RequisitePreset` with support methods,
+  see [crm.requisite.preset.* methods](https://github.com/bitrix24/b24phpsdk/issues/20):
+  - `fields` get fields for requisite item
+  - `list` get requisites list
+  - `get` returns a requisite by the requisite id
+  - `add` add requisite
+  - `countries` get countries list
+  - `delete` delete requisite and related objects
+  - `update` delete requisite  
 - Developer experience: added cli command `b24-dev:show-sdk-coverage-statistics` for show actual SDK coverage for
   REST-API, see task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
 - Developer experience: added class `Bitrix24\SDK\Deprecations\DeprecatedMethods` with list of
@@ -19,6 +52,14 @@
 - Added nullable argument `$scope` in method `Bitrix24\SDK\Attributes\Services::getSupportedInSdkApiMethods`,
   for task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
 
+### Statistics
+
+```
+Bitrix24 API-methods count: 1145
+Supported in bitrix24-php-sdk methods count: 215
+Coverage percentage: 18.78% 🚀
+Supported in bitrix24-php-sdk methods with batch wrapper count: 23
+```
 <!--
 ## Unreleased
 ### Added

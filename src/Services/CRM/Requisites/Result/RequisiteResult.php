@@ -12,19 +12,14 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Contact\Result;
+namespace Bitrix24\SDK\Services\CRM\Requisites\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
-/**
- * Class ContactResult
- *
- * @package Bitrix24\SDK\Services\CRM\Contact\Result
- */
-class ContactResult extends AbstractResult
+class RequisiteResult extends AbstractResult
 {
-    public function contact(): ContactItemResult
+    public function requisite(): RequisiteItemResult
     {
-        return new ContactItemResult($this->getCoreResponse()->getResponseData()->getResult());
+        return new RequisiteItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }

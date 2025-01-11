@@ -11,10 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Contact\Result;
+namespace Bitrix24\SDK\Services\CRM\Requisites\Result;
 
-use Bitrix24\SDK\Services\CRM\Userfield\Result\AbstractUserfieldItemResult;
+use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
+use Carbon\CarbonImmutable;
 
-class ContactUserfieldItemResult extends AbstractUserfieldItemResult
+/**
+ * @property-read int $ID
+ * @property-read string $CODE
+ * @property-read string $TITLE
+ */
+class CountryItemResult extends AbstractCrmItem
 {
 }
