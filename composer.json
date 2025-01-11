@@ -63,7 +63,8 @@
     "symfony/process": "^6 || ^7",
     "symfony/stopwatch": "^6 || ^7",
     "symfony/var-dumper": "^6 || ^7",
-    "typhoon/reflection": "^0.4"
+    "typhoon/reflection": "^0.4",
+    "sentry/sentry":"*"
   },
   "autoload": {
     "psr-4": {

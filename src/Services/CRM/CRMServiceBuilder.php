@@ -23,6 +23,19 @@ use Bitrix24\SDK\Services\CRM\VatRates\Service\Vat;
 #[ApiServiceBuilderMetadata(new Scope(['crm']))]
 class CRMServiceBuilder extends AbstractServiceBuilder
 {
+    public function requisite(): Requisites\Service\Requisite
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Requisites\Service\Requisite(
+                new Requisites\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function contactCompany(): Contact\Service\ContactCompany
     {
         if (!isset($this->serviceCache[__METHOD__])) {

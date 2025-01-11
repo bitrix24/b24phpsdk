@@ -315,6 +315,12 @@ make test-integration-scope-user
 
 Bugs and feature request are tracked on [GitHub](https://github.com/bitrix24/b24phpsdk/issues)
 
+## Thanks to all the people who contributed so far!
+
+<a href="https://github.com/bitrix24/b24phpsdk/graphs/contributors">
+  <img src="https://contributors-img.web.app/image?repo=bitrix24/b24phpsdk" />
+</a>
+
 ## License
 
 B24PhpSdk is licensed under the MIT License - see the `MIT-LICENSE.txt` file for details

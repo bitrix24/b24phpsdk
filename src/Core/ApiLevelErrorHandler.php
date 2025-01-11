@@ -115,6 +115,10 @@ class ApiLevelErrorHandler
         if ($errorCode === '' && strtolower((string) $errorDescription) === strtolower('User is not found or is not active')) {
             $errorCode = 'user_not_found_or_is_not_active';
         }
+        // crm.requisite.get
+        if ($errorCode === '' && str_contains(strtolower((string)$errorDescription),'not found')) {
+            $errorCode = 'error_not_found';
+        }
 
         // todo check errors
         // EXPIRED_TOKEN

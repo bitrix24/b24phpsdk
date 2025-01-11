@@ -70,7 +70,12 @@ $attributesParser = new AttributesParser(TyphoonReflector::build(), new Symfony\
 $application = new Application();
 $application->add(new GenerateContactsCommand($log));
 $application->add(new ListCommand($log));
-$application->add(new ShowFieldsDescriptionCommand($log));
+$application->add(
+    new ShowFieldsDescriptionCommand(
+        new Commands\SplashScreen(),
+        $log
+    )
+);
 $application->add(new CopyPropertyValues($log));
 $application->add(
     new Commands\Documentation\GenerateCoverageDocumentationCommand(
