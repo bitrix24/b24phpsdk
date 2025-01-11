@@ -52,7 +52,7 @@ trait CustomBitrix24Assertions
             $fieldCodesFromApi,
             $propsFromAnnotations,
             sprintf(
-                'in phpdocs annotations for class %s we not found fields from actual api response: %s',
+                'in phpdocs annotations for class «%s» we not found fields from actual api response: %s',
                 $resultItemClassName,
                 implode(', ', array_values(array_diff($fieldCodesFromApi, $propsFromAnnotations)))
             )

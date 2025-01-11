@@ -36,6 +36,18 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    public function requisitePreset(): Requisites\Service\RequisitePreset
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Requisites\Service\RequisitePreset(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function contactCompany(): Contact\Service\ContactCompany
     {
         if (!isset($this->serviceCache[__METHOD__])) {
