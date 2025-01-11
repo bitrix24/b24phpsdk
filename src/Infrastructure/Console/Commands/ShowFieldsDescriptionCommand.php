@@ -50,8 +50,7 @@ class ShowFieldsDescriptionCommand extends Command
     public function __construct(
         private readonly SplashScreen $splashScreen,
         private readonly LoggerInterface $logger
-    )
-    {
+    ) {
         // best practices recommend to call the parent constructor first and
         // then set your own properties. That wouldn't work in this case
         // because configure() needs the properties set in this constructor
