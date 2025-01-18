@@ -18,8 +18,7 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\UserConsent\Service\UserConsent;
 use Bitrix24\SDK\Services\UserConsent\Service\UserConsentAgreement;
-#[ApiServiceBuilderMetadata(new Scope(['user']))]
-
+#[ApiServiceBuilderMetadata(new Scope(['userconsent']))]
 class UserConsentServiceBuilder extends AbstractServiceBuilder
 {
     /**
