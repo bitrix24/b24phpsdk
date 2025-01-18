@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Services\User\Service;
 
 use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
@@ -25,10 +26,19 @@ use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\User\Result\UserResult;
 use Bitrix24\SDK\Services\User\Result\UsersResult;
+use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['user']))]
 class User extends AbstractService
 {
+    public Batch $batch;
+
+    public function __construct(Batch $batch, CoreInterface $core, LoggerInterface $log)
+    {
+        parent::__construct($core, $log);
+        $this->batch = $batch;
+    }
+
     /**
      * Get user entity fields
      * @throws BaseException

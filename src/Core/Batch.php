@@ -257,12 +257,11 @@ class Batch implements BatchOperationsInterface
      * @throws \Exception
      */
     protected function registerCommand(
-        string   $apiMethod,
-        array    $parameters = [],
-        ?string  $commandName = null,
+        string $apiMethod,
+        array $parameters = [],
+        ?string $commandName = null,
         callable $callback = null
-    ): void
-    {
+    ): void {
         $this->logger->debug(
             'registerCommand.start',
             [
@@ -334,13 +333,13 @@ class Batch implements BatchOperationsInterface
      */
     public function getTraversableList(
         string $apiMethod,
-        array  $order,
-        array  $filter,
-        array  $select,
-        ?int   $limit = null,
+        array $order,
+        array $filter,
+        array $select,
+        ?int $limit = null,
         ?array $additionalParameters = null
-    ): Generator
-    {
+    ): Generator {
+        $apiMethod = strtolower($apiMethod);
         $this->logger->debug(
             'getTraversableList.start',
             [
@@ -452,12 +451,28 @@ class Batch implements BatchOperationsInterface
         }
 
         // getLastElementId in filtered result
-        $params = [
-            'order' => $this->getReverseOrder($order),
-            'filter' => $filter,
-            'select' => $select,
-            'start' => 0,
-        ];
+        // todo wait new api version
+        if ($apiMethod !== 'user.get') {
+            $params = [
+                'order' => $this->getReverseOrder($order),
+                'filter' => $filter,
+                'select' => $select,
+                'start' => 0,
+            ];
+
+        } else {
+            if ($order === []) {
+                $select = [];
+                // ID - ASC
+                $params = [
+                    'order' => 'DESC',
+                    'filter' => $filter,
+                    'select' => $select,
+                    'start' => 0,
+                ];
+            }
+        }
+
         if ($additionalParameters !== null) {
             $params = array_merge($params, $additionalParameters);
         }
@@ -557,7 +572,6 @@ class Batch implements BatchOperationsInterface
                     yield $listElement;
                 }
             }
-
         }
 
         $this->logger->debug('getTraversableList.finish');
@@ -568,8 +582,13 @@ class Batch implements BatchOperationsInterface
      *
      * @return array<string,mixed>
      */
-    protected function updateFilterForBatch(string $keyId, int $startElementId, int $lastElementId, bool $isLastPage, array $oldFilter): array
-    {
+    protected function updateFilterForBatch(
+        string $keyId,
+        int $startElementId,
+        int $lastElementId,
+        bool $isLastPage,
+        array $oldFilter
+    ): array {
         $this->logger->debug('updateFilterForBatch.start', [
             'startElementId' => $startElementId,
             'lastElementId' => $lastElementId,
@@ -612,12 +631,11 @@ class Batch implements BatchOperationsInterface
      */
     public function getTraversableListWithCount(
         string $apiMethod,
-        array  $order,
-        array  $filter,
-        array  $select,
-        ?int   $limit = null
-    ): Generator
-    {
+        array $order,
+        array $filter,
+        array $select,
+        ?int $limit = null
+    ): Generator {
         $this->logger->debug(
             'getTraversableListWithCount.start',
             [
