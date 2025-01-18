@@ -459,18 +459,15 @@ class Batch implements BatchOperationsInterface
                 'select' => $select,
                 'start' => 0,
             ];
-
-        } else {
-            if ($order === []) {
-                $select = [];
-                // ID - ASC
-                $params = [
-                    'order' => 'DESC',
-                    'filter' => $filter,
-                    'select' => $select,
-                    'start' => 0,
-                ];
-            }
+        } elseif ($order === []) {
+            $select = [];
+            // ID - ASC
+            $params = [
+                'order' => 'DESC',
+                'filter' => $filter,
+                'select' => $select,
+                'start' => 0,
+            ];
         }
 
         if ($additionalParameters !== null) {

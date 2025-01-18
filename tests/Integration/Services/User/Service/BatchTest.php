@@ -55,6 +55,7 @@ class BatchTest extends TestCase
         foreach ($this->userService->batch->get([], [], true, 160) as $user) {
             $users[] = $user;
         }
+
         $this->assertGreaterThan(1, count($users));
     }
 

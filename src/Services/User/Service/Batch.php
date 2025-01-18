@@ -25,19 +25,11 @@ use Psr\Log\LoggerInterface;
 #[ApiBatchServiceMetadata(new Scope(['user']))]
 class Batch
 {
-    protected BatchOperationsInterface $batch;
-    protected LoggerInterface $log;
-
     /**
      * Batch constructor.
-     *
-     * @param BatchOperationsInterface $batch
-     * @param LoggerInterface $log
      */
-    public function __construct(BatchOperationsInterface $batch, LoggerInterface $log)
+    public function __construct(protected BatchOperationsInterface $batch, protected LoggerInterface $log)
     {
-        $this->batch = $batch;
-        $this->log = $log;
     }
 
     #[ApiBatchMethodMetadata(
@@ -47,11 +39,7 @@ class Batch
     )]
     public function add(array $users): Generator
     {
-        $items = [];
-        foreach ($users as $user) {
-            $items[] = $user;
-        }
-
+        $items = $users;
         foreach ($this->batch->addEntityItems('user.add', $items) as $key => $item) {
             yield $key => new AddedItemBatchResult($item);
         }
