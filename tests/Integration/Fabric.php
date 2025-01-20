@@ -94,24 +94,29 @@ class Fabric
 
             $credentialsProvider = ApplicationCredentialsProvider::buildProviderForLocalApplication();
 
-            if ($credentialsProvider->isCredentialsAvailable()) {
-                // register event handler for store new tokens
-                $eventDispatcher = new EventDispatcher();
-                $eventDispatcher->addListener(AuthTokenRenewedEvent::class, [
-                    $credentialsProvider,
-                    'onAuthTokenRenewedEventListener'
-                ]);
-
-                $credentials = $credentialsProvider->getCredentials(
-                    ApplicationProfile::initFromArray($_ENV),
-                    $_ENV['BITRIX24_PHP_SDK_APPLICATION_DOMAIN_URL']);
-
-                return (new CoreBuilder())
-                    ->withLogger(self::getLogger())
-                    ->withEventDispatcher($eventDispatcher)
-                    ->withCredentials($credentials)
-                    ->build();
+            if (!$credentialsProvider->isCredentialsAvailable()) {
+                throw new InvalidArgumentException(
+                    'Application credentials for integration tests are not available. Go to «tests/ApplicationBridge/» and run application bridge.'
+                );
             }
+
+            // register event handler for store new tokens
+            $eventDispatcher = new EventDispatcher();
+            $eventDispatcher->addListener(AuthTokenRenewedEvent::class, [
+                $credentialsProvider,
+                'onAuthTokenRenewedEventListener'
+            ]);
+
+            $credentials = $credentialsProvider->getCredentials(
+                ApplicationProfile::initFromArray($_ENV),
+                $_ENV['BITRIX24_PHP_SDK_APPLICATION_DOMAIN_URL']
+            );
+
+            return (new CoreBuilder())
+                ->withLogger(self::getLogger())
+                ->withEventDispatcher($eventDispatcher)
+                ->withCredentials($credentials)
+                ->build();
         }
         return $default;
     }

@@ -55,4 +55,14 @@ abstract class AbstractService
             throw new InvalidArgumentException(sprintf('id must be positive, current value: %s', $id));
         }
     }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    protected function guardNonEmptyString(string $value, ?string $message = null): void
+    {
+        if (trim($value) === '') {
+            throw new InvalidArgumentException($message ?? 'value must be non empty');
+        }
+    }
 }
