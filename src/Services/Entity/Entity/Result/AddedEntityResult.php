@@ -11,9 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Core\Result;
+namespace Bitrix24\SDK\Services\Entity\Entity\Result;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Result\AbstractResult;
 
 class AddedEntityResult extends AbstractResult
 {
