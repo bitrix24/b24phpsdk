@@ -49,7 +49,7 @@ class Fabric
     {
         return new ServiceBuilder(
             self::getCore($isNeedApplicationCredentials),
-            self::getBatchService(),
+            self::getBatchService($isNeedApplicationCredentials),
             self::getBulkItemsReader(),
             self::getLogger()
         );
@@ -65,7 +65,7 @@ class Fabric
 
     /**
      * @return \Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function getBulkItemsReader(): BulkItemsReaderInterface
     {
@@ -111,7 +111,6 @@ class Fabric
                 ApplicationProfile::initFromArray($_ENV),
                 $_ENV['BITRIX24_PHP_SDK_APPLICATION_DOMAIN_URL']
             );
-
             return (new CoreBuilder())
                 ->withLogger(self::getLogger())
                 ->withEventDispatcher($eventDispatcher)
@@ -135,11 +134,12 @@ class Fabric
     }
 
     /**
-     * @return \Bitrix24\SDK\Core\Batch
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @param bool $isNeedApplicationCredentials
+     * @return Batch
+     * @throws InvalidArgumentException
      */
-    public static function getBatchService(): Batch
+    public static function getBatchService(bool $isNeedApplicationCredentials = false): Batch
     {
-        return new Batch(self::getCore(), self::getLogger());
+        return new Batch(self::getCore($isNeedApplicationCredentials), self::getLogger());
     }
 }

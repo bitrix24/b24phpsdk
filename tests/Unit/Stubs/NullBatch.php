@@ -27,8 +27,14 @@ class NullBatch implements BatchOperationsInterface
     /**
      * @inheritDoc
      */
-    public function getTraversableList(string $apiMethod, array $order, array $filter, array $select, ?int $limit = null, ?array $additionalParameters = null): Generator
-    {
+    public function getTraversableList(
+        string $apiMethod,
+        array $order,
+        array $filter,
+        array $select,
+        ?int $limit = null,
+        ?array $additionalParameters = null
+    ): Generator {
         yield [];
     }
 
@@ -50,15 +56,25 @@ class NullBatch implements BatchOperationsInterface
      */
     public function addEntityItems(string $apiMethod, array $entityItems): Generator
     {
-        yield new ResponseData([],new Time(0,0,0,0,0, new CarbonImmutable(),new CarbonImmutable(),0,),new Pagination());
+        yield new ResponseData([],
+            new Time(0, 0, 0, 0, 0, new CarbonImmutable(), new CarbonImmutable(), 0,),
+            new Pagination());
     }
 
     /**
+     * @param string $apiMethod
+     * @param array $entityItemId
+     * @param array|null $additionalParameters
      * @inheritDoc
      */
-    public function deleteEntityItems(string $apiMethod, array $entityItemId): Generator
-    {
-        yield new ResponseData([],new Time(0,0,0,0,0, new CarbonImmutable(),new CarbonImmutable(),0,),new Pagination());
+    public function deleteEntityItems(
+        string $apiMethod,
+        array $entityItemId,
+        ?array $additionalParameters = null
+    ): Generator {
+        yield new ResponseData([],
+            new Time(0, 0, 0, 0, 0, new CarbonImmutable(), new CarbonImmutable(), 0,),
+            new Pagination());
     }
 
     /**
@@ -66,6 +82,8 @@ class NullBatch implements BatchOperationsInterface
      */
     public function updateEntityItems(string $apiMethod, array $entityItems): Generator
     {
-        yield new ResponseData([],new Time(0,0,0,0,0, new CarbonImmutable(),new CarbonImmutable(),0,),new Pagination());
+        yield new ResponseData([],
+            new Time(0, 0, 0, 0, 0, new CarbonImmutable(), new CarbonImmutable(), 0,),
+            new Pagination());
     }
 }

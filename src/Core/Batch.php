@@ -108,18 +108,24 @@ class Batch implements BatchOperationsInterface
     /**
      * Delete entity items with batch call
      *
-     * @param array<int, int> $entityItemId
      *
+     * @param string $apiMethod
+     * @param array $entityItemId
+     * @param array|null $additionalParameters
      * @return Generator<int, ResponseData>|ResponseData[]
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    public function deleteEntityItems(string $apiMethod, array $entityItemId): Generator
-    {
+    public function deleteEntityItems(
+        string $apiMethod,
+        array $entityItemId,
+        ?array $additionalParameters = null
+    ): Generator {
         $this->logger->debug(
             'deleteEntityItems.start',
             [
                 'apiMethod' => $apiMethod,
                 'entityItems' => $entityItemId,
+                'additionalParameters' => $additionalParameters,
             ]
         );
 
@@ -137,7 +143,11 @@ class Batch implements BatchOperationsInterface
                     );
                 }
 
-                $this->registerCommand($apiMethod, ['ID' => $itemId]);
+                $parameters = ['ID' => $itemId];
+                if ($apiMethod === 'entity.item.delete') {
+                    $parameters = array_merge($parameters, $additionalParameters);
+                }
+                $this->registerCommand($apiMethod, $parameters);
             }
 
             foreach ($this->getTraversable(true) as $cnt => $deletedItemResult) {
