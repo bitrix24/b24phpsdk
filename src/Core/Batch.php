@@ -109,9 +109,6 @@ class Batch implements BatchOperationsInterface
      * Delete entity items with batch call
      *
      *
-     * @param string $apiMethod
-     * @param array $entityItemId
-     * @param array|null $additionalParameters
      * @return Generator<int, ResponseData>|ResponseData[]
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
@@ -147,6 +144,7 @@ class Batch implements BatchOperationsInterface
                 if ($apiMethod === 'entity.item.delete') {
                     $parameters = array_merge($parameters, $additionalParameters);
                 }
+
                 $this->registerCommand($apiMethod, $parameters);
             }
 

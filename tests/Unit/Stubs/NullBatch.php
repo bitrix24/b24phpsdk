@@ -62,9 +62,6 @@ class NullBatch implements BatchOperationsInterface
     }
 
     /**
-     * @param string $apiMethod
-     * @param array $entityItemId
-     * @param array|null $additionalParameters
      * @inheritDoc
      */
     public function deleteEntityItems(
