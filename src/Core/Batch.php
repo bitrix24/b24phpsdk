@@ -405,7 +405,10 @@ class Batch implements BatchOperationsInterface
         }
 
         $keyId = $isCrmItemsInBatch ? 'id' : 'ID';
-
+        $this->logger->debug('getTraversableList.getFirstPage', [
+            'apiMethod' => $apiMethod,
+            'params' => $params,
+        ]);
         $response = $this->core->call($apiMethod, $params);
         $totalElementsCount = $response->getResponseData()->getPagination()->getTotal();
         $this->logger->debug('getTraversableList.totalElementsCount', [
@@ -461,8 +464,15 @@ class Batch implements BatchOperationsInterface
         // getLastElementId in filtered result
         // todo wait new api version
         if ($apiMethod !== 'user.get') {
+            $defaultOrderKey = 'order';
+            if ($apiMethod === 'entity.item.get') {
+                $orderKey = 'SORT';
+            } else {
+                $orderKey = $defaultOrderKey;
+            }
+
             $params = [
-                'order' => $this->getReverseOrder($order),
+                $orderKey => $this->getReverseOrder($order),
                 'filter' => $filter,
                 'select' => $select,
                 'start' => 0,
@@ -481,25 +491,28 @@ class Batch implements BatchOperationsInterface
         if ($additionalParameters !== null) {
             $params = array_merge($params, $additionalParameters);
         }
-
+        $this->logger->debug('getTraversableList.getLastPage', [
+            'apiMethod' => $apiMethod,
+            'params' => $params,
+        ]);
         $lastResultPage = $this->core->call($apiMethod, $params);
         if ($isCrmItemsInBatch) {
             $lastElementId = (int)$lastResultPage->getResponseData()->getResult()['items'][0][$keyId];
         } else {
             $lastElementId = (int)$lastResultPage->getResponseData()->getResult()[0][$keyId];
         }
+        $this->logger->debug('getTraversableList.lastElementsId', [
+            'lastElementIdInFirstPage' => $lastElementIdInFirstPage,
+            'lastElementIdInLastPage' => $lastElementId,
+        ]);
 
-        // reverse order if you need
+
+        // reverse order if elements in batch ordered in DESC direction
         if ($lastElementIdInFirstPage > $lastElementId) {
             $tmp = $lastElementIdInFirstPage;
             $lastElementIdInFirstPage = $lastElementId;
             $lastElementId = $tmp;
         }
-
-        $this->logger->debug('getTraversableList.lastElementsId', [
-            'lastElementIdInFirstPage' => $lastElementIdInFirstPage,
-            'lastElementId' => $lastElementId,
-        ]);
 
         // register commands with updated filter
         //more than one page in results -  register list commands

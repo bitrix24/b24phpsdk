@@ -22,6 +22,7 @@ use Bitrix24\SDK\Core\Result\AddedItemResult;
 use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemBatchResult;
 use Bitrix24\SDK\Services\CRM\Deal\Result\DealItemResult;
+use Bitrix24\SDK\Services\Entity\Item\Result\ItemItemResult;
 use Generator;
 use Psr\Log\LoggerInterface;
 
@@ -31,6 +32,27 @@ readonly class Batch
         protected BatchOperationsInterface $batch,
         protected LoggerInterface $log
     ) {
+    }
+
+    #[ApiBatchMethodMetadata(
+        'entity.item.get',
+        'https://apidocs.bitrix24.com/api-reference/entity/items/entity-item-get.html',
+        'Get the list of storage items in batch mode'
+    )]
+    public function get(string $entity, array $sort = [], array $filter = [], int $limit = null): Generator
+    {
+        foreach (
+            $this->batch->getTraversableList(
+                'entity.item.get',
+                $sort,
+                $filter,
+                [],
+                $limit,
+                ['ENTITY' => $entity]
+            ) as $key => $value
+        ) {
+            yield $key => new ItemItemResult($value);
+        }
     }
 
     #[ApiBatchMethodMetadata(
