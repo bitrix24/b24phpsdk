@@ -141,6 +141,8 @@ class AbstractCrmItem extends AbstractItem
             case 'LAST_ACTIVITY_TIME':
             case 'START_TIME':
             case 'END_TIME':
+            case 'DATE_ACTIVE_FROM':
+            case 'DATE_ACTIVE_TO':
             case 'TIMESTAMP_X':
                 if ($this->data[$offset] !== '') {
                     return CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);

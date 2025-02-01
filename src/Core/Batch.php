@@ -108,18 +108,21 @@ class Batch implements BatchOperationsInterface
     /**
      * Delete entity items with batch call
      *
-     * @param array<int, int> $entityItemId
      *
      * @return Generator<int, ResponseData>|ResponseData[]
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    public function deleteEntityItems(string $apiMethod, array $entityItemId): Generator
-    {
+    public function deleteEntityItems(
+        string $apiMethod,
+        array $entityItemId,
+        ?array $additionalParameters = null
+    ): Generator {
         $this->logger->debug(
             'deleteEntityItems.start',
             [
                 'apiMethod' => $apiMethod,
                 'entityItems' => $entityItemId,
+                'additionalParameters' => $additionalParameters,
             ]
         );
 
@@ -137,7 +140,12 @@ class Batch implements BatchOperationsInterface
                     );
                 }
 
-                $this->registerCommand($apiMethod, ['ID' => $itemId]);
+                $parameters = ['ID' => $itemId];
+                if ($apiMethod === 'entity.item.delete') {
+                    $parameters = array_merge($parameters, $additionalParameters);
+                }
+
+                $this->registerCommand($apiMethod, $parameters);
             }
 
             foreach ($this->getTraversable(true) as $cnt => $deletedItemResult) {
@@ -204,18 +212,22 @@ class Batch implements BatchOperationsInterface
                     );
                 }
 
-                if (!array_key_exists('fields', $entityItem)) {
-                    throw new InvalidArgumentException(
-                        sprintf('array key «fields» not found in entity item with id %s', $entityItemId)
-                    );
-                }
+                if ($apiMethod !== 'entity.item.update') {
+                    if (!array_key_exists('fields', $entityItem)) {
+                        throw new InvalidArgumentException(
+                            sprintf('array key «fields» not found in entity item with id %s', $entityItemId)
+                        );
+                    }
 
-                $cmdArguments = [
-                    'id' => $entityItemId,
-                    'fields' => $entityItem['fields']
-                ];
-                if (array_key_exists('params', $entityItem)) {
-                    $cmdArguments['params'] = $entityItem['params'];
+                    $cmdArguments = [
+                        'id' => $entityItemId,
+                        'fields' => $entityItem['fields']
+                    ];
+                    if (array_key_exists('params', $entityItem)) {
+                        $cmdArguments['params'] = $entityItem['params'];
+                    }
+                } else {
+                    $cmdArguments = $entityItem;
                 }
 
                 $this->registerCommand($apiMethod, $cmdArguments);
@@ -397,7 +409,10 @@ class Batch implements BatchOperationsInterface
         }
 
         $keyId = $isCrmItemsInBatch ? 'id' : 'ID';
-
+        $this->logger->debug('getTraversableList.getFirstPage', [
+            'apiMethod' => $apiMethod,
+            'params' => $params,
+        ]);
         $response = $this->core->call($apiMethod, $params);
         $totalElementsCount = $response->getResponseData()->getPagination()->getTotal();
         $this->logger->debug('getTraversableList.totalElementsCount', [
@@ -453,8 +468,11 @@ class Batch implements BatchOperationsInterface
         // getLastElementId in filtered result
         // todo wait new api version
         if ($apiMethod !== 'user.get') {
+            $defaultOrderKey = 'order';
+            $orderKey = $apiMethod === 'entity.item.get' ? 'SORT' : $defaultOrderKey;
+
             $params = [
-                'order' => $this->getReverseOrder($order),
+                $orderKey => $this->getReverseOrder($order),
                 'filter' => $filter,
                 'select' => $select,
                 'start' => 0,
@@ -474,6 +492,10 @@ class Batch implements BatchOperationsInterface
             $params = array_merge($params, $additionalParameters);
         }
 
+        $this->logger->debug('getTraversableList.getLastPage', [
+            'apiMethod' => $apiMethod,
+            'params' => $params,
+        ]);
         $lastResultPage = $this->core->call($apiMethod, $params);
         if ($isCrmItemsInBatch) {
             $lastElementId = (int)$lastResultPage->getResponseData()->getResult()['items'][0][$keyId];
@@ -481,17 +503,18 @@ class Batch implements BatchOperationsInterface
             $lastElementId = (int)$lastResultPage->getResponseData()->getResult()[0][$keyId];
         }
 
-        // reverse order if you need
+        $this->logger->debug('getTraversableList.lastElementsId', [
+            'lastElementIdInFirstPage' => $lastElementIdInFirstPage,
+            'lastElementIdInLastPage' => $lastElementId,
+        ]);
+
+
+        // reverse order if elements in batch ordered in DESC direction
         if ($lastElementIdInFirstPage > $lastElementId) {
             $tmp = $lastElementIdInFirstPage;
             $lastElementIdInFirstPage = $lastElementId;
             $lastElementId = $tmp;
         }
-
-        $this->logger->debug('getTraversableList.lastElementsId', [
-            'lastElementIdInFirstPage' => $lastElementIdInFirstPage,
-            'lastElementId' => $lastElementId,
-        ]);
 
         // register commands with updated filter
         //more than one page in results -  register list commands

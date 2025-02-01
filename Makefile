@@ -128,3 +128,5 @@ test-integration-scope-user-consent:
 	vendor/bin/phpunit --testsuite integration_tests_scope_user_consent
 test-integration-core:
 	vendor/bin/phpunit --testsuite integration_tests_core
+test-integration-scope-entity:
+	vendor/bin/phpunit --testsuite integration_tests_scope_entity
