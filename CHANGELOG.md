@@ -75,6 +75,8 @@
   `user.get`, [see details](https://github.com/bitrix24/b24phpsdk/issues/103)
 - Fixed errors in `Bitrix24\SDK\Core\Batch` for methods `entity.item.get` and
   `entity.item.update`, [see details](https://github.com/bitrix24/b24phpsdk/issues/53)
+- Fixed errors in `Bitrix24\SDK\Core\ApiClient` for methods with strict arguments
+  order, [see details](https://github.com/bitrix24/b24phpsdk/issues/101)
 
 ### Statistics
 
