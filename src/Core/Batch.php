@@ -212,18 +212,22 @@ class Batch implements BatchOperationsInterface
                     );
                 }
 
-                if (!array_key_exists('fields', $entityItem)) {
-                    throw new InvalidArgumentException(
-                        sprintf('array key «fields» not found in entity item with id %s', $entityItemId)
-                    );
-                }
+                if ($apiMethod !== 'entity.item.update') {
+                    if (!array_key_exists('fields', $entityItem)) {
+                        throw new InvalidArgumentException(
+                            sprintf('array key «fields» not found in entity item with id %s', $entityItemId)
+                        );
+                    }
 
-                $cmdArguments = [
-                    'id' => $entityItemId,
-                    'fields' => $entityItem['fields']
-                ];
-                if (array_key_exists('params', $entityItem)) {
-                    $cmdArguments['params'] = $entityItem['params'];
+                    $cmdArguments = [
+                        'id' => $entityItemId,
+                        'fields' => $entityItem['fields']
+                    ];
+                    if (array_key_exists('params', $entityItem)) {
+                        $cmdArguments['params'] = $entityItem['params'];
+                    }
+                } else {
+                    $cmdArguments = $entityItem;
                 }
 
                 $this->registerCommand($apiMethod, $cmdArguments);
@@ -465,11 +469,7 @@ class Batch implements BatchOperationsInterface
         // todo wait new api version
         if ($apiMethod !== 'user.get') {
             $defaultOrderKey = 'order';
-            if ($apiMethod === 'entity.item.get') {
-                $orderKey = 'SORT';
-            } else {
-                $orderKey = $defaultOrderKey;
-            }
+            $orderKey = $apiMethod === 'entity.item.get' ? 'SORT' : $defaultOrderKey;
 
             $params = [
                 $orderKey => $this->getReverseOrder($order),
@@ -491,6 +491,7 @@ class Batch implements BatchOperationsInterface
         if ($additionalParameters !== null) {
             $params = array_merge($params, $additionalParameters);
         }
+
         $this->logger->debug('getTraversableList.getLastPage', [
             'apiMethod' => $apiMethod,
             'params' => $params,
@@ -501,6 +502,7 @@ class Batch implements BatchOperationsInterface
         } else {
             $lastElementId = (int)$lastResultPage->getResponseData()->getResult()[0][$keyId];
         }
+
         $this->logger->debug('getTraversableList.lastElementsId', [
             'lastElementIdInFirstPage' => $lastElementIdInFirstPage,
             'lastElementIdInLastPage' => $lastElementId,

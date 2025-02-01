@@ -14,18 +14,16 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\Entity\Item\Service;
 
 use Bitrix24\SDK\Attributes\ApiBatchMethodMetadata;
-use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiBatchServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
-use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
-use Bitrix24\SDK\Core\Result\AddedItemResult;
 use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
-use Bitrix24\SDK\Core\Result\UpdatedItemBatchResult;
-use Bitrix24\SDK\Services\CRM\Deal\Result\DealItemResult;
 use Bitrix24\SDK\Services\Entity\Item\Result\ItemItemResult;
 use Generator;
 use Psr\Log\LoggerInterface;
 
+#[ApiBatchServiceMetadata(new Scope(['entity']))]
 readonly class Batch
 {
     public function __construct(
@@ -90,6 +88,28 @@ readonly class Batch
                 ['ENTITY' => $entity]
             ) as $key => $item
         ) {
+            yield $key => new DeletedItemBatchResult($item);
+        }
+    }
+
+    #[ApiBatchMethodMetadata(
+        'entity.item.update',
+        'https://apidocs.bitrix24.com/api-reference/entity/items/entity-item-update.html',
+        'Update in batch mode a list of storage elements'
+    )]
+    public function update(string $entity, array $items): Generator
+    {
+        $dataForUpdate = [];
+        foreach ($items as $item) {
+            unset($item['ENTITY']);
+            $dataForUpdate[] = array_merge(
+                [
+                    'ENTITY' => $entity
+                ],
+                $item
+            );
+        }
+        foreach ($this->batch->updateEntityItems('entity.item.update', $dataForUpdate) as $key => $item) {
             yield $key => new DeletedItemBatchResult($item);
         }
     }

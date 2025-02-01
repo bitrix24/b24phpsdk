@@ -26,10 +26,9 @@ use Symfony\Component\Uid\Uuid;
 
 #[CoversClass(Batch::class)]
 #[CoversMethod(Batch::class, 'add')]
-#[CoversMethod(Item::class, 'delete')]
-
-//#[CoversMethod(Item::class, 'get')]
-//#[CoversMethod(Item::class, 'update')]
+#[CoversMethod(Batch::class, 'delete')]
+#[CoversMethod(Batch::class, 'get')]
+#[CoversMethod(Batch::class, 'update')]
 class BatchTest extends TestCase
 {
     private ServiceBuilder $sb;
@@ -51,12 +50,57 @@ class BatchTest extends TestCase
     }
 
     /**
+     * @throws TransportException
+     * @throws BaseException
+     */
+    public function testGet(): void
+    {
+        $elementsCount = 160;
+        $entity = (string)time();
+
+        $elements = [];
+        for ($i = 0; $i < $elementsCount; $i++) {
+            $elements[] = [
+                'NAME' => 'name ' . Uuid::v7()->toRfc4122(),
+            ];
+        }
+
+        //create entity
+        $this->assertTrue(
+            $this->sb->getEntityScope()->entity()->add(
+                $entity,
+                'test entity',
+                []
+            )->isSuccess()
+        );
+        $this->entities[] = $entity;
+
+        //add items in batch mode
+        $addedItemsIds = [];
+        foreach ($this->sb->getEntityScope()->item()->batch->add($entity, $elements) as $key => $result) {
+            $addedItemsIds[] = $result->getId();
+        }
+        $this->assertCount($elementsCount, $addedItemsIds);
+
+        // read elements in batch mode
+        $resultElements = [];
+        foreach ($this->sb->getEntityScope()->item()->batch->get($entity, [], []) as $key => $item) {
+            $resultElements[] = $item;
+        }
+
+        for ($i = 0; $i < $elementsCount; $i++) {
+            $this->assertArrayHasKey($i, $resultElements);
+            $this->assertEquals($addedItemsIds[$i], $resultElements[$i]->ID);
+        }
+    }
+
+    /**
      * @throws BaseException
      * @throws TransportException
      */
     public function testAdd(): void
     {
-        $elementsCount = 110;
+        $elementsCount = 160;
         $entity = (string)time();
 
         $elements = [];
@@ -82,6 +126,110 @@ class BatchTest extends TestCase
             $addedItemsIds[] = $result->getId();
         }
         $this->assertCount($elementsCount, $addedItemsIds);
+
+        // delete elements
+        foreach ($this->sb->getEntityScope()->item()->batch->delete($entity, $addedItemsIds) as $result) {
+            $this->assertTrue($result->isSuccess());
+        }
+    }
+
+    public function testDelete(): void
+    {
+        $elementsCount = 160;
+        $entity = (string)time();
+
+        $elements = [];
+        for ($i = 0; $i < $elementsCount; $i++) {
+            $elements[] = [
+                'NAME' => 'name ' . Uuid::v7()->toRfc4122(),
+            ];
+        }
+
+        //create entity
+        $this->assertTrue(
+            $this->sb->getEntityScope()->entity()->add(
+                $entity,
+                'test entity',
+                []
+            )->isSuccess()
+        );
+        $this->entities[] = $entity;
+
+        //add items in batch mode
+        $addedItemsIds = [];
+        foreach ($this->sb->getEntityScope()->item()->batch->add($entity, $elements) as $result) {
+            $addedItemsIds[] = $result->getId();
+        }
+        $this->assertCount($elementsCount, $addedItemsIds);
+
+        // delete elements
+        foreach ($this->sb->getEntityScope()->item()->batch->delete($entity, $addedItemsIds) as $result) {
+            $this->assertTrue($result->isSuccess());
+        }
+        $this->assertEquals([], $this->sb->getEntityScope()->item()->get($entity, [], ['ID' => $addedItemsIds])->getItems());
+    }
+
+    public function testUpdate(): void
+    {
+        $elementsCount = 160;
+        $entity = (string)time();
+
+        $elements = [];
+        for ($i = 0; $i < $elementsCount; $i++) {
+            $elements[] = [
+                'NAME' => 'name ' . Uuid::v7()->toRfc4122(),
+            ];
+        }
+
+        //create entity
+        $this->assertTrue(
+            $this->sb->getEntityScope()->entity()->add(
+                $entity,
+                'test entity',
+                []
+            )->isSuccess()
+        );
+        $this->entities[] = $entity;
+
+        //add items in batch mode
+        $addedItemsIds = [];
+        foreach ($this->sb->getEntityScope()->item()->batch->add($entity, $elements) as $result) {
+            $addedItemsIds[] = $result->getId();
+        }
+        $this->assertCount($elementsCount, $addedItemsIds);
+
+        // read elements in batch mode
+        $resultElements = [];
+        foreach ($this->sb->getEntityScope()->item()->batch->get($entity, [], []) as $key => $item) {
+            $resultElements[] = $item;
+        }
+
+        // prepare data for update
+        $modifiedElements = [];
+        foreach ($resultElements as $key => $item) {
+            $modifiedElements[] = [
+                'id' => $item->ID,
+                'NAME' => 'updated name ' . Uuid::v7()->toRfc4122(),
+            ];
+        }
+
+        // batch update elements
+        foreach ($this->sb->getEntityScope()->item()->batch->update($entity, $modifiedElements) as $result) {
+            $this->assertTrue($result->isSuccess());
+        }
+
+        // read elements in batch mode
+        $updatedElements = [];
+        foreach ($this->sb->getEntityScope()->item()->batch->get($entity, [], []) as $key => $item) {
+            $updatedElements[] = $item;
+        }
+
+        for ($i = 0; $i < $elementsCount; $i++) {
+            $this->assertEquals(
+                $modifiedElements[$i]['NAME'],
+                $updatedElements[$i]->NAME,
+            );
+        }
 
         // delete elements
         foreach ($this->sb->getEntityScope()->item()->batch->delete($entity, $addedItemsIds) as $result) {
