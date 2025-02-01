@@ -153,7 +153,7 @@ class Entity extends AbstractService
      * @throws BaseException
      */
     #[ApiEndpointMetadata(
-        'entity.get',
+        'entity.rights',
         'https://apidocs.bitrix24.com/api-reference/entity/entities/entity-rights.html',
         'Get or Change Access Permissions'
     )]

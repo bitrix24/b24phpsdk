@@ -1,9 +1,23 @@
 # b24-php-sdk change log
 
-## Unreleased 1.3.0 – 2025.01.19
+## Unreleased 1.3.0 – 2025.02.03
 
 ### Added
 
+- Added support new scope `entity`
+- Added service `Services\Entity\Service\Item` with support methods,
+  see [fix entity.item.* methods](https://github.com/bitrix24/b24phpsdk/issues/53):
+    - `get` get item, with batch calls support
+    - `add` add new item, with batch calls support
+    - `delete` delete item, with batch calls support
+    - `update`  update item, with batch calls support
+- Added service `Services\Entity\Service\Entity` with support methods,
+  see [fix entity.* methods](https://github.com/bitrix24/b24phpsdk/issues/53):
+    - `get` get entity
+    - `add` add new entity
+    - `delete` delete entity
+    - `update` update entity
+    - `rights` get or change access permissions
 - Added new application scope nodes `humanresources.hcmlink` and `sign.b2e`
 - Added method `Bitrix24\SDK\Core\Credentials\Scope::contains` for check is current scope code contains in scope, for
   task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
@@ -59,6 +73,8 @@
 
 - Fixed errors in `Bitrix24\SDK\Core\Batch` for method
   `user.get`, [see details](https://github.com/bitrix24/b24phpsdk/issues/103)
+- Fixed errors in `Bitrix24\SDK\Core\Batch` for methods `entity.item.get` and
+  `entity.item.update`, [see details](https://github.com/bitrix24/b24phpsdk/issues/53)
 
 ### Statistics
 
