@@ -3,7 +3,8 @@
 ## Unreleased 1.3.0 – 2025.02.09
 
 ### Added
-
+- Added method `Bitrix24\SDK\Services\Main\Service::guardValidateCurrentAuthToken` for validate current auth token with
+  api-call `app.info` on vendor OAUTH server.
 - Added support new scope `entity`
 - Added service `Services\Entity\Service\Item` with support methods,
   see [fix entity.item.* methods](https://github.com/bitrix24/b24phpsdk/issues/53):
@@ -78,13 +79,18 @@
 - Fixed errors in `Bitrix24\SDK\Core\ApiClient` for methods with strict arguments
   order, [see details](https://github.com/bitrix24/b24phpsdk/issues/101)
 
+### Security
+
+- Added method `Bitrix24\SDK\Services\Main\Service::guardValidateCurrentAuthToken` for validate current auth token with
+  api-call `app.info` on vendor OAUTH server. You can validate incoming tokens from placements and events
+
 ### Statistics
 
 ```
 Bitrix24 API-methods count: 1145
-Supported in bitrix24-php-sdk methods count: 215
-Coverage percentage: 18.78% 🚀
-Supported in bitrix24-php-sdk methods with batch wrapper count: 23
+Supported in bitrix24-php-sdk methods count: 224
+Coverage percentage: 19.56% 🚀
+Supported in bitrix24-php-sdk methods with batch wrapper count: 29
 ```
 
 <!--

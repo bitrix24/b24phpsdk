@@ -175,7 +175,21 @@ class ApiClient implements ApiClientInterface
         if ($this->getCredentials()->getWebhookUrl() instanceof WebhookUrl) {
             $url = sprintf('%s/%s/', $this->getCredentials()->getWebhookUrl()->getUrl(), $apiMethod);
         } else {
-            $url = sprintf('%s/rest/%s', $this->getCredentials()->getDomainUrl(), $apiMethod);
+            // all api calls work with current portal and credentials related with this portal,
+            // portal url stored in credentials, but if we work with on-premise installation we can't trust tokens from portal placement or portal event
+            // we must make sure that the token is alive that the token corresponds to the portal,
+            // "from which" came a request, and that the token corresponds to our application.
+            // that's why we call app.info on OAUTH server
+            if (($apiMethod === 'app.info') && array_key_exists(
+                    'IS_NEED_OAUTH_SECURE_CHECK',
+                    $parameters
+                ) && $parameters['IS_NEED_OAUTH_SECURE_CHECK']) {
+                // call method on vendor OAUTH server
+                $url = sprintf('%s/rest/%s', self::BITRIX24_OAUTH_SERVER_URL, $apiMethod);
+            } else {
+                // work with portal
+                $url = sprintf('%s/rest/%s', $this->getCredentials()->getDomainUrl(), $apiMethod);
+            }
 
             if (!$this->getCredentials()->getAuthToken() instanceof AuthToken) {
                 throw new InvalidArgumentException('access token in credentials not found ');

@@ -18,6 +18,7 @@ use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Core\Exceptions\WrongSecuritySignatureException;
 use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Main\Result\ApplicationInfoResult;
@@ -229,6 +230,30 @@ class Main extends AbstractService
     public function getApplicationInfo(): ApplicationInfoResult
     {
         return new ApplicationInfoResult($this->core->call('app.info'));
+    }
+
+    /**
+     * @throws TransportException
+     * @throws BaseException
+     */
+    #[ApiEndpointMetadata(
+        'app.info',
+        'https://training.bitrix24.com/rest_help/general/app_info.php',
+        'Call method app.info on oauth server'
+    )]
+    public function guardValidateCurrentAuthToken(): void
+    {
+        $responseFromVendorServer = $this->core->call('app.info', ['IS_NEED_OAUTH_SECURE_CHECK' => true]);
+        if ($this->core->getApiClient()->getCredentials()->getDomainUrl(
+            ) !== $responseFromVendorServer->getResponseData()->getResult()['install']['uri']) {
+            throw new WrongSecuritySignatureException(
+                sprintf(
+                    'domain url mismatch: domain from credentials %s and %s domain from vendor app.info response',
+                    $this->core->getApiClient()->getCredentials()->getDomainUrl(),
+                    $responseFromVendorServer->getResponseData()->getResult()['install']['uri']
+                )
+            );
+        }
     }
 
     /**
