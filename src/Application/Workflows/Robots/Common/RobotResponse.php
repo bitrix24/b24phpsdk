@@ -13,6 +13,15 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Application\Workflows\Robots\Common;
 
-interface RobotResultInterface
+/**
+ * DTO for store robot result
+ */
+readonly class RobotResponse
 {
+    public function __construct(
+        public string $eventToken,
+        public array $payload,
+        public ?string $logMessage
+    ) {
+    }
 }

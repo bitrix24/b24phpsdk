@@ -20,10 +20,10 @@ interface RobotHandlerInterface
     /**
      * Process robot request
      *
-     * @param IncomingRobotRequest $incomingRobotRequest
-     * @return RobotResultInterface
+     * @param RobotRequest $robotRequest
+     * @return RobotResponse
      */
-    public function handle(IncomingRobotRequest $incomingRobotRequest): RobotResultInterface;
+    public function handle(RobotRequest $robotRequest): RobotResponse;
 
     /**
      * Get robot metadata
