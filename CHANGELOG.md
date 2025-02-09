@@ -3,6 +3,7 @@
 ## Unreleased 1.3.0 – 2025.02.09
 
 ### Added
+
 - Added method `Bitrix24\SDK\Services\Main\Service::guardValidateCurrentAuthToken` for validate current auth token with
   api-call `app.info` on vendor OAUTH server.
 - Added support new scope `entity`
@@ -69,6 +70,8 @@
 
 - Added nullable argument `$scope` in method `Bitrix24\SDK\Attributes\Services::getSupportedInSdkApiMethods`,
   for task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
+- Changed method signature `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity::updateApplicationVersion`, for
+  task «[add bitrixUserId and AuthToken](https://github.com/bitrix24/b24phpsdk/issues/115)»
 
 ### Fixed
 
