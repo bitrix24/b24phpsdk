@@ -467,9 +467,11 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
 
         $bitrix24Account = $this->createBitrix24AccountImplementation($uuid, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $bitrix24Account->applicationInstalled($applicationToken);
-        $bitrix24Account->updateApplicationVersion($newApplicationVersion, $newApplicationScope);
+        $bitrix24Account->updateApplicationVersion($authToken, $bitrix24UserId, $newApplicationVersion, $newApplicationScope);
         $this->assertEquals($newApplicationVersion, $bitrix24Account->getApplicationVersion());
         $this->assertTrue($newApplicationScope->equal($bitrix24Account->getApplicationScope()));
+        $this->assertEquals($authToken, $bitrix24Account->getAuthToken());
+        $this->assertEquals($bitrix24UserId, $bitrix24Account->getBitrix24UserId());
     }
 
     /**
