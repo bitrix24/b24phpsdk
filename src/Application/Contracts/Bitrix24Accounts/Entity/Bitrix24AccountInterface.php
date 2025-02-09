@@ -108,11 +108,12 @@ interface Bitrix24AccountInterface
     /**
      * Update application version if application was updated in marketplace
      *
+     * @param positive-int $b24UserId bitrix24 user id
      * @param positive-int $version application version from marketplace
      * @param Scope|null $newScope new scope if scope was changed
      * @throws InvalidArgumentException
      */
-    public function updateApplicationVersion(int $version, ?Scope $newScope): void;
+    public function updateApplicationVersion(AuthToken $authToken, int $b24UserId, int $version, ?Scope $newScope): void;
 
     /**
      * Change account status to active
