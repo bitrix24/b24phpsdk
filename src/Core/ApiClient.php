@@ -205,6 +205,7 @@ class ApiClient implements ApiClientInterface
         // todo must be fixed by vendor in API v2
         // part of endpoints required strict order of arguments
         $strictApiMethods = [
+            'task.commentitem.add',
             'task.commentitem.getlist',
             'task.commentitem.update',
             'task.commentitem.getlist',
