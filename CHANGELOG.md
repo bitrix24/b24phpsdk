@@ -1,9 +1,9 @@
 # b24-php-sdk change log
 
-## Unreleased 1.3.0 – 2025.02.09
+## Unreleased 1.3.0 – 2025.02.28
 
 ### Added
-
+- Added **PHP 8.4** [support](https://github.com/bitrix24/b24phpsdk/issues/120) 🚀
 - Added method `Bitrix24\SDK\Services\Main\Service::guardValidateCurrentAuthToken` for validate current auth token with
   api-call `app.info` on vendor OAUTH server.
 - Added support new scope `entity`
@@ -65,6 +65,8 @@
   REST-API, see task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
 - Developer experience: added class `Bitrix24\SDK\Deprecations\DeprecatedMethods` with list of
   all [deprecated methods](https://github.com/bitrix24/b24phpsdk/issues/97)
+- Developer experience: commands from makefile now run inside docker container `php-cli`
+- Developer experience: added cache folder in phpstan config
 
 ### Changed
 

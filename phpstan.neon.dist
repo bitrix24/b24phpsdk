@@ -17,6 +17,7 @@ parameters:
     jobSize: 20
     maximumNumberOfProcesses: 8
     minimumNumberOfJobsPerProcess: 2
+  tmpDir: var/temp
   editorUrlTitle: '%%relFile%%:%%line%%'
   editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
   treatPhpDocTypesAsCertain: false
