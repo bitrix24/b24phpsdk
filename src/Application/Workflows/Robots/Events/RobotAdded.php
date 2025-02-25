@@ -18,11 +18,8 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class RobotAdded extends Event
 {
-    protected RobotMetadata $robotMetadata;
-
-    public function __construct(RobotMetadata $robotMetadata)
+    public function __construct(protected RobotMetadata $robotMetadata)
     {
-        $this->robotMetadata = $robotMetadata;
     }
 
     public function getRobotMetadata(): RobotMetadata

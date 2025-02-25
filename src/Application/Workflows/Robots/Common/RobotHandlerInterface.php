@@ -19,16 +19,11 @@ interface RobotHandlerInterface
 {
     /**
      * Process robot request
-     *
-     * @param RobotRequest $robotRequest
-     * @return RobotResponse
      */
     public function handle(RobotRequest $robotRequest): RobotResponse;
 
     /**
      * Get robot metadata
-     *
-     * @return RobotMetadata
      */
     public function getMetadata(): RobotMetadata;
 }

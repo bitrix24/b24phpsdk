@@ -15,15 +15,13 @@ namespace Bitrix24\SDK\Application\Workflows\Robots\Common;
 
 final readonly class RobotMetadata
 {
-
-
-    public function isInstalled(mixed $robot):bool
-    {
-        return true;
-    }
-
-    public function equal(RobotMetadata $robotMetadata): bool
-    {
-        return true;
-    }
+//    public function isInstalled(mixed $robot):bool
+//    {
+//        return true;
+//    }
+//
+//    public function equal(RobotMetadata $robotMetadata): bool
+//    {
+//        return true;
+//    }
 }
