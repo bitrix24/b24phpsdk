@@ -93,40 +93,40 @@ build-examples-for-documentation:
 
 # check allowed licenses
 lint-allowed-licenses:
-	vendor/bin/composer-license-checker
+	docker-compose run --rm php-cli vendor/bin/composer-license-checker
 
 # linters & code style
 lint-cs-fixer:
-	vendor/bin/php-cs-fixer check --verbose --diff
+	docker-compose run --rm php-cli vendor/bin/php-cs-fixer check --verbose --diff
 lint-cs-fixer-fix:
-	vendor/bin/php-cs-fixer fix --verbose --diff
+	docker-compose run --rm php-cli vendor/bin/php-cs-fixer fix --verbose --diff
 lint-phpstan:
-	vendor/bin/phpstan --memory-limit=1G analyse -v
+	docker-compose run --rm php-cli vendor/bin/phpstan --memory-limit=2G analyse -vvv
 lint-rector:
-	vendor/bin/rector process --dry-run
+	docker-compose run --rm php-cli vendor/bin/rector process --dry-run
 lint-rector-fix:
-	vendor/bin/rector process
+	docker-compose run --rm php-cli vendor/bin/rector process
 
 # unit tests
 test-unit:
-	vendor/bin/phpunit --testsuite unit_tests --display-warnings
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite unit_tests --display-warnings
 
 # integration tests with granularity by api-scope
 test-integration-scope-telephony:
-	vendor/bin/phpunit --testsuite integration_tests_scope_telephony
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_telephony
 test-integration-scope-workflows:
-	vendor/bin/phpunit --testsuite integration_tests_scope_workflows
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_workflows
 test-integration-scope-im:
-	vendor/bin/phpunit --testsuite integration_tests_scope_im
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im
 test-integration-scope-placement:
-	vendor/bin/phpunit --testsuite integration_tests_scope_placement
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_placement
 test-integration-scope-im-open-lines:
-	vendor/bin/phpunit --testsuite integration_tests_scope_im_open_lines
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im_open_lines
 test-integration-scope-user:
-	vendor/bin/phpunit --testsuite integration_tests_scope_user
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_user
 test-integration-scope-user-consent:
-	vendor/bin/phpunit --testsuite integration_tests_scope_user_consent
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_user_consent
 test-integration-core:
-	vendor/bin/phpunit --testsuite integration_tests_core
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_core
 test-integration-scope-entity:
-	vendor/bin/phpunit --testsuite integration_tests_scope_entity
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_entity

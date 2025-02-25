@@ -39,9 +39,6 @@ readonly class RobotRequest
 
     /**
      * Create from incoming robot request
-     *
-     * @param IncomingRobotRequest $incomingRobotRequest
-     * @return self
      */
     public function initFromIncomingRobotRequest(IncomingRobotRequest $incomingRobotRequest): self
     {

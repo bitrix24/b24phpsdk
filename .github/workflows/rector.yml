@@ -37,7 +37,7 @@ jobs:
           composer update ${{ env.COMPOSER_FLAGS }}
 
       - name: "run Rector"
-        run: "make lint-rector"
+        run: "vendor/bin/rector process --dry-run"
 
       - name: "is Rector check succeeded"
         if: ${{ success() }}
