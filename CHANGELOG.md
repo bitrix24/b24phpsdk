@@ -3,6 +3,7 @@
 ## Unreleased 1.3.0 – 2025.02.28
 
 ### Added
+
 - Added **PHP 8.4** [support](https://github.com/bitrix24/b24phpsdk/issues/120) 🚀
 - Added method `Bitrix24\SDK\Services\Main\Service::guardValidateCurrentAuthToken` for validate current auth token with
   api-call `app.info` on vendor OAUTH server.
@@ -74,7 +75,8 @@
   for task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
 - Changed method signature `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity::updateApplicationVersion`, for
   task «[add bitrixUserId and AuthToken](https://github.com/bitrix24/b24phpsdk/issues/115)»
-- Developer experience: webhook example moved to repository [bitrix24/b24sdk-examples](https://github.com/bitrix24/b24sdk-examples/tree/main/php/quick-start/simple/02-work-with-webhook)
+- Developer experience: webhook example moved to
+  repository [bitrix24/b24sdk-examples](https://github.com/bitrix24/b24sdk-examples/tree/main/php/quick-start/simple/02-work-with-webhook)
 
 ### Fixed
 
@@ -84,6 +86,7 @@
   `entity.item.update`, [see details](https://github.com/bitrix24/b24phpsdk/issues/53)
 - Fixed errors in `Bitrix24\SDK\Core\ApiClient` for methods with strict arguments
   order, [see details](https://github.com/bitrix24/b24phpsdk/issues/101)
+- Fixed errors in `ApplicationInstallationRepositoryInterfaceTest` for work with storage [see details](https://github.com/bitrix24/b24phpsdk/issues/123)
 
 ### Security
 
@@ -91,8 +94,10 @@
   api-call `app.info` on vendor OAUTH server. You can validate incoming tokens from placements and events
 
 ### Removed
-- Developer experience: removed example webhook-error-handling, see example [02-work-with-webhook](https://github.com/bitrix24/b24sdk-examples/tree/main/php/quick-start/simple/02-work-with-webhook)
- 
+
+- Developer experience: removed example webhook-error-handling, see
+  example [02-work-with-webhook](https://github.com/bitrix24/b24sdk-examples/tree/main/php/quick-start/simple/02-work-with-webhook)
+
 ### Statistics
 
 ```
