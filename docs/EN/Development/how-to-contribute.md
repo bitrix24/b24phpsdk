@@ -4,7 +4,7 @@ This guide provides step-by-step instructions for contributing to the Bitrix24 P
 
 ## Prerequisites
 
-- PHP `8.3`, or `8.4`
+- PHP `8.3`, `8.4`
 - Composer
 - Git
 - make
@@ -86,9 +86,16 @@ You **must** run integration tests in development environment.
    ```
     - Add application parameters to file `.env.local`
     - Install local application from `tests/ApplicationBridge`
+   
+      //todo add in make file start \ stop local server
+      //todo add in make file start \ stop ngrok
 
+3. **Run exists integration test with both tokens**
+      // todo add special test with make file target
+      
+    - Great! Now You can contribute and run tests  
 
-3. **Planning add new feature**
+4. **Planning add new feature**
     - Read [documentation](https://apidocs.bitrix24.com/) about adding method
    ```
    In this example we add this method and register new scope in service builder
@@ -97,23 +104,176 @@ You **must** run integration tests in development environment.
     - Create new issue with [feature](https://github.com/bitrix24/b24phpsdk/issues/new?template=2_feature_request_sdk.yaml) request in repository.
     - Try to describe some use cases for work with this method.
 
-2. **Create a New Branch**
+5. **Create a New Branch**
     - For new features:
       ```shell
       git checkout -b feature/issue-id-short-issue-name
       ```
-    - For bug fixes:
-      ```shell
-      git checkout -b bugfix/issue-id-short-issue-name
-      ```
-
 
 6. **Add the new scope in the Scope class**
     - check is scope exists in `Bitrix24\SDK\Core\Credentials\Scope` class in `src/Core/Credentials/Scope.php`
     - if the scope doesn't exist, add the new scope to this class
     - run `tests/Integration/Core/Credentials/ScopeTest.php`
 
-1. **Add the new scope in the Scope enum**
+7. **Create file structure for new service**
+    - Go to documentation and find list of methods for this scope
+    ```
+    Example:
+    ai.engine.register
+    ai.engine.list
+    ai.engine.unregister
+    ```
+    - Create scope level namespace for service
+    ```shell
+    mkdir src/Services/AI  
+    ```
+8. **Create scope level service builder for this scope**
+   - Your service builder must extend class `src/Services/AbstractServiceBuilder.php`
+   - Create empty scope level service builder
+   ```php 
+    declare(strict_types=1);
+    
+    namespace Bitrix24\SDK\Services\AI;
+    
+    use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
+    use Bitrix24\SDK\Core\Credentials\Scope;
+    use Bitrix24\SDK\Services\AbstractServiceBuilder;
+   
+    #[ApiServiceBuilderMetadata(new Scope(['ai_admin']))]
+    class AIServiceBuilder extends AbstractServiceBuilder
+    {
+    }
+   ```
+9. **Register new scope-level service builder in root service builder**
+   - Add getter method in file `src/Services/ServiceBuilder.php`
+   ```php
+    public function getAiAdminScope(): AIServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new AIServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+   ```
+10. **Implement the API service**
+   - Create folder structure for future service
+     ```shell
+     mkdir src/Services/AI/Engine
+     mkdir src/Services/AI/Engine/Result
+     mkdir src/Services/AI/Engine/Service
+     ```
+   - Create service for methods `ai.engine.*`
+   - You must extend class `src/Services/AbstractService.php`
+   ```php
+   declare(strict_types=1);
+   
+   namespace Bitrix24\SDK\Services\AI\Engine\Service;
+   
+   use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+   use Bitrix24\SDK\Core\Credentials\Scope;
+   use Bitrix24\SDK\Services\AbstractService;
+   
+   #[ApiServiceMetadata(new Scope(['ai_admin']))]
+   class Engine extends AbstractService
+   { 
+   }
+   ```
+   - Register service `Engine` in scope-level service builder
+   ```php
+    declare(strict_types=1);
+    
+    namespace Bitrix24\SDK\Services\AI;
+    
+    use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
+    use Bitrix24\SDK\Core\Credentials\Scope;
+    use Bitrix24\SDK\Services\AbstractServiceBuilder;
+    use Bitrix24\SDK\Services\AI;
+    #[ApiServiceBuilderMetadata(new Scope(['ai_admin']))]
+    
+    class AIServiceBuilder extends AbstractServiceBuilder
+    {
+        public function engine(): AI\Engine\Service\Engine
+        {
+            if (!isset($this->serviceCache[__METHOD__])) {
+                $this->serviceCache[__METHOD__] = new AI\Engine\Service\Engine(
+                    $this->core,
+                    $this->log
+                );
+            }
+    
+            return $this->serviceCache[__METHOD__];
+        }
+    }
+   ``` 
+11. **Implement methods for service**
+   - Go to documentation page for current endpoint  and get list of methods  
+   ```
+   https://apidocs.bitrix24.com/api-reference/ai/index.html
+   
+   we have methods:
+   ai.engine.register
+   ai.engine.list
+   ai.engine.unregister
+   ```
+   - Add first method to service `src/Services/AI/Engine/Service/Engine.php`
+   - Read documentation for [method](https://apidocs.bitrix24.com/api-reference/ai/ai-engine-register.html)
+   - Add method call 
+   ```php
+   declare(strict_types=1);
+
+   namespace Bitrix24\SDK\Services\AI\Engine\Service;
+   
+   use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+   use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+   use Bitrix24\SDK\Core\Credentials\Scope;
+   use Bitrix24\SDK\Core\Exceptions\BaseException;
+   use Bitrix24\SDK\Core\Exceptions\TransportException;
+   use Bitrix24\SDK\Services\AbstractService;
+   use Bitrix24\SDK\Services\AI\Engine\EngineSettings;
+   
+   #[ApiServiceMetadata(new Scope(['ai_admin']))]
+   class Engine extends AbstractService
+   {
+       /**
+        * Register the AI service
+        *
+        * @throws BaseException
+        * @throws TransportException
+        * @see https://apidocs.bitrix24.com/api-reference/ai/ai-engine-register.html
+        */
+       #[ApiEndpointMetadata(
+           'ai.engine.register',
+           'https://apidocs.bitrix24.com/api-reference/ai/ai-engine-register.html',
+           'REST method for adding a custom service. This method registers an engine and updates it upon subsequent calls. This is not quite an embedding location, as the endpoint of the partner must adhere to strict formats.'
+       )]
+       public function register(
+           string $name,
+           string $code,
+           string $category,
+           string $completionsUrl,
+           EngineSettings $settings,
+       ) {
+           return $this->core->call('ai.engine.register', [
+               'name' => $name,
+               'code' => $code,
+               'category' => $category,
+               'completions_url' => $completionsUrl,
+               'settings' => $settings->toArray(),
+           ]);
+       }
+   }
+   ```
+   - Add return type for method call  
+
+12. **Add integration test for new scope**
+
+
 
 
 2. **Make Your Changes**
@@ -159,113 +319,10 @@ You **must** run integration tests in development environment.
     - If your changes include BC breaks, mention this in the PR description
 
 
-2. **Create a service builder for the new scope**
-    - Create a new folder in `src/Services/` with the name of your scope (e.g., `MyNewScope`)
-    - Create a service builder class with the name format `{ScopeName}ServiceBuilder.php`:
-      ```php
-      <?php
- 
-      declare(strict_types=1);
- 
-      namespace Bitrix24\SDK\Services\MyNewScope;
- 
-      use Bitrix24\SDK\Services\AbstractServiceBuilder;
-      use Bitrix24\SDK\Core\Contracts\CoreInterface;
-      use Bitrix24\SDK\Core\Credentials\Credentials;
-      use Bitrix24\SDK\Core\Credentials\Scope;
-      use Psr\Log\LoggerInterface;
- 
-      /**
-       * Class MyNewScopeServiceBuilder
-       * 
-       * @package Bitrix24\SDK\Services\MyNewScope
-       */
-      class MyNewScopeServiceBuilder extends AbstractServiceBuilder
-      {
-          /**
-           * @param CoreInterface $core
-           * @param LoggerInterface $logger
-           * @param Credentials $credentials
-           */
-          public function __construct(CoreInterface $core, LoggerInterface $logger, Credentials $credentials)
-          {
-              parent::__construct($core, $logger, $credentials, Scope::MYNEWSCOPE);
-          }
- 
-          /**
-           * @return MyNewScopeService
-           */
-          public function myNewScopeService(): MyNewScopeService
-          {
-              if (!isset($this->serviceCache[MyNewScopeService::class])) {
-                  $this->serviceCache[MyNewScopeService::class] = new MyNewScopeService($this->core, $this->log);
-              }
- 
-              return $this->serviceCache[MyNewScopeService::class];
-          }
-      }
-      ```
 
-3. **Implement the API service**
-    - Create a service class in the same folder:
-      ```php
-      <?php
- 
-      declare(strict_types=1);
- 
-      namespace Bitrix24\SDK\Services\MyNewScope;
- 
-      use Bitrix24\SDK\Services\AbstractService;
-      use Bitrix24\SDK\Core\Exceptions\BaseException;
-      use Bitrix24\SDK\Core\Result\AddedItemResult;
- 
-      /**
-       * Class MyNewScopeService
-       * 
-       * @package Bitrix24\SDK\Services\MyNewScope
-       */
-      class MyNewScopeService extends AbstractService
-      {
-          /**
-           * Example method for the new scope
-           *
-           * @param array $fields
-           * 
-           * @return AddedItemResult
-           * @throws BaseException
-           */
-          public function add(array $fields): AddedItemResult
-          {
-              return new AddedItemResult(
-                  $this->core->call('mynewscope.item.add', [
-                      'fields' => $fields,
-                  ])
-              );
-          }
-      }
-      ```
 
-4. **Register the service builder in the ServiceBuilderFactory**
-    - Open `src/Services/ServiceBuilderFactory.php`
-    - Add your service builder to the class imports
-    - Add a new method to get your service builder:
-      ```php
-      /**
-       * @return MyNewScopeServiceBuilder
-       */
-      public function myNewScope(): MyNewScopeServiceBuilder
-      {
-          return new MyNewScopeServiceBuilder(
-              $this->core,
-              $this->log,
-              $this->credentials
-          );
-      }
-      ```
-    - Alternatively, run the following make command to automatically generate the service builder registration:
-      ```shell
-      make generate-service-builder SCOPE=mynewscope
-      ```
+
+
 
 5. **Create integration tests**
     - Create a corresponding test folder in `tests/Integration/Services/MyNewScope`
