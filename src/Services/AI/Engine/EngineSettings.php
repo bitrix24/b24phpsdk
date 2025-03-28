@@ -17,16 +17,25 @@ readonly class EngineSettings
 {
     public function __construct(
         public string $codeAlias,
-        public string $modelContextType,
-        public int $modelContextLimit
+        public ModelContextType $modelContextType = ModelContextType::token,
+        public int $modelContextLimit = 16000
     ) {
     }
 
+
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['code_alias'],
+            ModelContextType::from($data['model_context_type']),
+            $data['model_context_limit']
+        );
+    }
     public function toArray(): array
     {
         return [
             'code_alias' => $this->codeAlias,
-            'model_context_type' => $this->modelContextType,
+            'model_context_type' => $this->modelContextType->value,
             'model_context_limit' => $this->modelContextLimit,
         ];
     }

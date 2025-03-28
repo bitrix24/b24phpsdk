@@ -18,7 +18,9 @@ use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Core\Result\AddedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
+use Bitrix24\SDK\Services\AI\Engine\EngineCategory;
 use Bitrix24\SDK\Services\AI\Engine\EngineSettings;
 
 #[ApiServiceMetadata(new Scope(['ai_admin']))]
@@ -39,16 +41,21 @@ class Engine extends AbstractService
     public function register(
         string $name,
         string $code,
-        string $category,
+        EngineCategory $category,
         string $completionsUrl,
         EngineSettings $settings,
-    ) {
-        return $this->core->call('ai.engine.register', [
+    ): AddedItemResult {
+        return new AddedItemResult($this->core->call('ai.engine.register', [
             'name' => $name,
             'code' => $code,
-            'category' => $category,
+            'category' => $category->value,
             'completions_url' => $completionsUrl,
             'settings' => $settings->toArray(),
-        ]);
+        ]));
+    }
+
+    public function list()
+    {
+        return $this->core->call('ai.engine.list');
     }
 }

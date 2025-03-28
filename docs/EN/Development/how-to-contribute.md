@@ -86,14 +86,14 @@ You **must** run integration tests in development environment.
    ```
     - Add application parameters to file `.env.local`
     - Install local application from `tests/ApplicationBridge`
-   
+
       //todo add in make file start \ stop local server
       //todo add in make file start \ stop ngrok
 
 3. **Run exists integration test with both tokens**
-      // todo add special test with make file target
-      
-    - Great! Now You can contribute and run tests  
+   // todo add special test with make file target
+
+    - Great! Now You can contribute and run tests
 
 4. **Planning add new feature**
     - Read [documentation](https://apidocs.bitrix24.com/) about adding method
@@ -128,8 +128,8 @@ You **must** run integration tests in development environment.
     mkdir src/Services/AI  
     ```
 8. **Create scope level service builder for this scope**
-   - Your service builder must extend class `src/Services/AbstractServiceBuilder.php`
-   - Create empty scope level service builder
+    - Your service builder must extend class `src/Services/AbstractServiceBuilder.php`
+    - Create empty scope level service builder
    ```php 
     declare(strict_types=1);
     
@@ -145,7 +145,7 @@ You **must** run integration tests in development environment.
     }
    ```
 9. **Register new scope-level service builder in root service builder**
-   - Add getter method in file `src/Services/ServiceBuilder.php`
+    - Add getter method in file `src/Services/ServiceBuilder.php`
    ```php
     public function getAiAdminScope(): AIServiceBuilder
     {
@@ -162,14 +162,15 @@ You **must** run integration tests in development environment.
     }
    ```
 10. **Implement the API service**
-   - Create folder structure for future service
-     ```shell
-     mkdir src/Services/AI/Engine
-     mkdir src/Services/AI/Engine/Result
-     mkdir src/Services/AI/Engine/Service
-     ```
-   - Create service for methods `ai.engine.*`
-   - You must extend class `src/Services/AbstractService.php`
+
+- Create folder structure for future service
+  ```shell
+  mkdir src/Services/AI/Engine
+  mkdir src/Services/AI/Engine/Result
+  mkdir src/Services/AI/Engine/Service
+  ```
+- Create service for methods `ai.engine.*`
+- You must extend class `src/Services/AbstractService.php`
    ```php
    declare(strict_types=1);
    
@@ -184,7 +185,7 @@ You **must** run integration tests in development environment.
    { 
    }
    ```
-   - Register service `Engine` in scope-level service builder
+- Register service `Engine` in scope-level service builder
    ```php
     declare(strict_types=1);
     
@@ -211,8 +212,11 @@ You **must** run integration tests in development environment.
         }
     }
    ``` 
+
 11. **Implement methods for service**
-   - Go to documentation page for current endpoint  and get list of methods  
+
+    - Go to documentation page for current endpoint and get list of methods
+
    ```
    https://apidocs.bitrix24.com/api-reference/ai/index.html
    
@@ -221,59 +225,97 @@ You **must** run integration tests in development environment.
    ai.engine.list
    ai.engine.unregister
    ```
-   - Add first method to service `src/Services/AI/Engine/Service/Engine.php`
-   - Read documentation for [method](https://apidocs.bitrix24.com/api-reference/ai/ai-engine-register.html)
-   - Add method call 
-   ```php
-   declare(strict_types=1);
 
-   namespace Bitrix24\SDK\Services\AI\Engine\Service;
-   
-   use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
-   use Bitrix24\SDK\Attributes\ApiServiceMetadata;
-   use Bitrix24\SDK\Core\Credentials\Scope;
-   use Bitrix24\SDK\Core\Exceptions\BaseException;
-   use Bitrix24\SDK\Core\Exceptions\TransportException;
-   use Bitrix24\SDK\Services\AbstractService;
-   use Bitrix24\SDK\Services\AI\Engine\EngineSettings;
-   
-   #[ApiServiceMetadata(new Scope(['ai_admin']))]
-   class Engine extends AbstractService
-   {
-       /**
-        * Register the AI service
-        *
-        * @throws BaseException
-        * @throws TransportException
-        * @see https://apidocs.bitrix24.com/api-reference/ai/ai-engine-register.html
-        */
-       #[ApiEndpointMetadata(
-           'ai.engine.register',
-           'https://apidocs.bitrix24.com/api-reference/ai/ai-engine-register.html',
-           'REST method for adding a custom service. This method registers an engine and updates it upon subsequent calls. This is not quite an embedding location, as the endpoint of the partner must adhere to strict formats.'
-       )]
-       public function register(
-           string $name,
-           string $code,
-           string $category,
-           string $completionsUrl,
-           EngineSettings $settings,
-       ) {
-           return $this->core->call('ai.engine.register', [
-               'name' => $name,
-               'code' => $code,
-               'category' => $category,
-               'completions_url' => $completionsUrl,
-               'settings' => $settings->toArray(),
-           ]);
-       }
-   }
-   ```
-   - Add return type for method call  
+- Add first method to service `src/Services/AI/Engine/Service/Engine.php`
+- Read documentation for [method](https://apidocs.bitrix24.com/api-reference/ai/ai-engine-register.html)
+- Add method call
+
+```php
+declare(strict_types=1);
+
+namespace Bitrix24\SDK\Services\AI\Engine\Service;
+
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+use Bitrix24\SDK\Core\Credentials\Scope;
+use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Services\AbstractService;
+use Bitrix24\SDK\Services\AI\Engine\EngineSettings;
+
+#[ApiServiceMetadata(new Scope(['ai_admin']))]
+class Engine extends AbstractService
+{
+    /**
+     * Register the AI service
+     *
+     * @throws BaseException
+     * @throws TransportException
+     * @see https://apidocs.bitrix24.com/api-reference/ai/ai-engine-register.html
+     */
+    #[ApiEndpointMetadata(
+        'ai.engine.register',
+        'https://apidocs.bitrix24.com/api-reference/ai/ai-engine-register.html',
+        'REST method for adding a custom service. This method registers an engine and updates it upon subsequent calls. This is not quite an embedding location, as the endpoint of the partner must adhere to strict formats.'
+    )]
+    public function register(
+        string $name,
+        string $code,
+        string $category,
+        string $completionsUrl,
+        EngineSettings $settings,
+    ) {
+        return $this->core->call('ai.engine.register', [
+            'name' => $name,
+            'code' => $code,
+            'category' => $category,
+            'completions_url' => $completionsUrl,
+            'settings' => $settings->toArray(),
+        ]);
+    }
+}
+```
+
+- Add return types to method calls  
+  If the method performs standard CRUD operations, you can use standardized result types from `src/Core/Result`.
+  Add return result for method `register`
+  ```php
+      public function register(
+        string $name,
+        string $code,
+        EngineCategory $category,
+        string $completionsUrl,
+        EngineSettings $settings,
+    ): AddedItemResult {
+        return new AddedItemResult($this->core->call('ai.engine.register', [
+            'name' => $name,
+            'code' => $code,
+            'category' => $category->value,
+            'completions_url' => $completionsUrl,
+            'settings' => $settings->toArray(),
+        ]));
+    }
+  ``` 
+  If method needs return specialized result, you can add result to related folder - `Result` for current service.
+  
+  In our example target folder is `src/Services/AI/Engine/Result`, let's implement custom result for method.
+  
+  Results for methods returned one item and list methods are use same approach - «lazy DTO». 
+  
+  For both methods list and item you must use prefix `Result`.
+  
+  For result container with «lazy DTO» you must add prefix `ItemResult`.  
+  
+  Lets create return result for method `Engine::list`
+  Add 
+
+ ```php
+
+
+
+ ```
 
 12. **Add integration test for new scope**
-
-
 
 
 2. **Make Your Changes**
@@ -317,11 +359,6 @@ You **must** run integration tests in development environment.
     - Select the appropriate branches
     - Provide a clear description of your changes
     - If your changes include BC breaks, mention this in the PR description
-
-
-
-
-
 
 
 5. **Create integration tests**
