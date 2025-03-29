@@ -13,26 +13,10 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\AI\Engine\Result;
 
+use Bitrix24\SDK\Core\Result\AbstractItem;
 use Bitrix24\SDK\Services\AI\Engine\EngineCategory;
 use Bitrix24\SDK\Services\AI\Engine\EngineSettings;
-use Bitrix24\SDK\Services\CRM\Activity\ActivityContentType;
-use Bitrix24\SDK\Services\CRM\Activity\ActivityDirectionType;
-use Bitrix24\SDK\Services\CRM\Activity\ActivityNotifyType;
-use Bitrix24\SDK\Services\CRM\Activity\ActivityPriority;
-use Bitrix24\SDK\Services\CRM\Activity\ActivityStatus;
-use Bitrix24\SDK\Services\CRM\Activity\ActivityType;
-use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
-use Bitrix24\SDK\Services\CRM\Common\Result\DiscountType;
-use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Email;
-use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\File;
-use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\InstantMessenger;
-use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Phone;
-use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Website;
-use Bitrix24\SDK\Services\CRM\Deal\Result\DealSemanticStage;
 use Carbon\CarbonImmutable;
-use Money\Currency;
-use Money\Money;
-use MoneyPHP\Percentage\Percentage;
 
 /**
  * @property-read int $id
@@ -44,7 +28,7 @@ use MoneyPHP\Percentage\Percentage;
  * @property-read EngineSettings $settings
  * @property-read CarbonImmutable $dateCreate
  */
-class EngineItemResult extends AbstractCrmItem
+class EngineItemResult extends AbstractItem
 {
     /**
      * @param int|string $offset

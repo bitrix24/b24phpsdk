@@ -16,19 +16,18 @@ namespace Bitrix24\SDK\Services\AI\Engine\Result;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
-use Bitrix24\SDK\Services\CRM\Deal\Result\DealItemResult;
 
 class EnginesResult extends AbstractResult
 {
     /**
-     * @return DealItemResult[]
+     * @return EngineItemResult[]
      * @throws BaseException
      */
     public function getEngines(): array
     {
         $res = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $deal) {
-            $res[] = new DealItemResult($deal);
+        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
+            $res[] = new EngineItemResult($item);
         }
 
         return $res;

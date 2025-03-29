@@ -20,11 +20,6 @@ use Money\Currencies\ISOCurrencies;
 use Money\Parser\DecimalMoneyParser;
 use Traversable;
 
-/**
- * Class AbstractItem
- *
- * @package Bitrix24\SDK\Core\Result
- */
 abstract class AbstractItem implements IteratorAggregate
 {
     protected DecimalMoneyParser $decimalMoneyParser;
