@@ -1,6 +1,6 @@
 # b24-php-sdk change log
 
-## Unreleased 1.3.0 – 2025.02.28
+## Unreleased 1.3.0 – 2025.03.31
 
 ### Added
 
@@ -62,13 +62,17 @@
   with [support methods](https://github.com/bitrix24/b24phpsdk/issues/103):
     - `add` add (invite) users
     - `get` get users list
+Added service `Services\AI\Engine\Service\Engine` with support methods:
+  - `ai.engine.register` - method registers an engine and updates it upon subsequent calls
+  - `ai.engine.list` - get the list of ai services
+  - `ai.engine.unregister` - Delete registered ai service 
 - Developer experience: added cli command `b24-dev:show-sdk-coverage-statistics` for show actual SDK coverage for
   REST-API, see task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
 - Developer experience: added class `Bitrix24\SDK\Deprecations\DeprecatedMethods` with list of
   all [deprecated methods](https://github.com/bitrix24/b24phpsdk/issues/97)
 - Developer experience: commands from makefile now run inside docker container `php-cli`
 - Developer experience: added cache folder in phpstan config
-
+- Developer experience: added article «[How to Contribute to Bitrix24 PHP SDK](docs/EN/Development/how-to-contribute.md)»
 ### Changed
 
 - Added nullable argument `$scope` in method `Bitrix24\SDK\Attributes\Services::getSupportedInSdkApiMethods`,
@@ -101,9 +105,9 @@
 ### Statistics
 
 ```
-Bitrix24 API-methods count: 1145
-Supported in bitrix24-php-sdk methods count: 224
-Coverage percentage: 19.56% 🚀
+Bitrix24 API-methods count: 1146
+Supported in bitrix24-php-sdk methods count: 227
+Coverage percentage: 19.81% 🚀
 Supported in bitrix24-php-sdk methods with batch wrapper count: 29
 ```
 

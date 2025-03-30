@@ -40,6 +40,9 @@
         <testsuite name="integration_tests_scope_entity">
             <directory>./tests/Integration/Services/Entity/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_ai_admin">
+            <directory>./tests/Integration/Services/AI/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>
