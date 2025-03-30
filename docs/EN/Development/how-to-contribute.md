@@ -87,12 +87,7 @@ You **must** run integration tests in development environment.
     - Add application parameters to file `.env.local`
     - Install local application from `tests/ApplicationBridge`
 
-      //todo add in make file start \ stop local server
-      //todo add in make file start \ stop ngrok
-
 3. **Run exists integration test with both tokens**
-   // todo add special test with make file target
-
     - Great! Now You can contribute and run tests
 
 4. **Planning add new feature**
@@ -231,49 +226,49 @@ You **must** run integration tests in development environment.
 - Add method call
 
 ```php
-declare(strict_types=1);
-
-namespace Bitrix24\SDK\Services\AI\Engine\Service;
-
-use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
-use Bitrix24\SDK\Attributes\ApiServiceMetadata;
-use Bitrix24\SDK\Core\Credentials\Scope;
-use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Services\AbstractService;
-use Bitrix24\SDK\Services\AI\Engine\EngineSettings;
-
-#[ApiServiceMetadata(new Scope(['ai_admin']))]
-class Engine extends AbstractService
-{
-    /**
-     * Register the AI service
-     *
-     * @throws BaseException
-     * @throws TransportException
-     * @see https://apidocs.bitrix24.com/api-reference/ai/ai-engine-register.html
-     */
-    #[ApiEndpointMetadata(
-        'ai.engine.register',
-        'https://apidocs.bitrix24.com/api-reference/ai/ai-engine-register.html',
-        'REST method for adding a custom service. This method registers an engine and updates it upon subsequent calls. This is not quite an embedding location, as the endpoint of the partner must adhere to strict formats.'
-    )]
-    public function register(
-        string $name,
-        string $code,
-        string $category,
-        string $completionsUrl,
-        EngineSettings $settings,
-    ) {
-        return $this->core->call('ai.engine.register', [
-            'name' => $name,
-            'code' => $code,
-            'category' => $category,
-            'completions_url' => $completionsUrl,
-            'settings' => $settings->toArray(),
-        ]);
-    }
-}
+     declare(strict_types=1);
+     
+     namespace Bitrix24\SDK\Services\AI\Engine\Service;
+     
+     use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+     use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+     use Bitrix24\SDK\Core\Credentials\Scope;
+     use Bitrix24\SDK\Core\Exceptions\BaseException;
+     use Bitrix24\SDK\Core\Exceptions\TransportException;
+     use Bitrix24\SDK\Services\AbstractService;
+     use Bitrix24\SDK\Services\AI\Engine\EngineSettings;
+     
+     #[ApiServiceMetadata(new Scope(['ai_admin']))]
+     class Engine extends AbstractService
+     {
+         /**
+          * Register the AI service
+          *
+          * @throws BaseException
+          * @throws TransportException
+          * @see https://apidocs.bitrix24.com/api-reference/ai/ai-engine-register.html
+          */
+         #[ApiEndpointMetadata(
+             'ai.engine.register',
+             'https://apidocs.bitrix24.com/api-reference/ai/ai-engine-register.html',
+             'REST method for adding a custom service. This method registers an engine and updates it upon subsequent calls. This is not quite an embedding location, as the endpoint of the partner must adhere to strict formats.'
+         )]
+         public function register(
+             string $name,
+             string $code,
+             string $category,
+             string $completionsUrl,
+             EngineSettings $settings,
+         ) {
+             return $this->core->call('ai.engine.register', [
+                 'name' => $name,
+                 'code' => $code,
+                 'category' => $category,
+                 'completions_url' => $completionsUrl,
+                 'settings' => $settings->toArray(),
+             ]);
+         }
+     }
 ```
 
 - Add return types to method calls  
@@ -297,119 +292,263 @@ class Engine extends AbstractService
     }
   ``` 
   If method needs return specialized result, you can add result to related folder - `Result` for current service.
-  
+
   In our example target folder is `src/Services/AI/Engine/Result`, let's implement custom result for method.
-  
-  Results for methods returned one item and list methods are use same approach - «lazy DTO». 
-  
+
+  Results for methods returned one item and list methods are use same approach - «lazy DTO».
+
   For both methods list and item you must use prefix `Result`.
-  
-  For result container with «lazy DTO» you must add prefix `ItemResult`.  
-  
-  Lets create return result for method `Engine::list`
-  Add 
 
- ```php
+  For result container with «lazy DTO» you must add prefix `ItemResult`.
 
+  Let's create return result for method `Engine::list`
+  Add files:
+  ```
+  - EnginesResult.php result for list items
+  - EngineResult.php restul for one item
+  - EngineItemResult.php result data storage for registered AI Engine data structure
+  ```
+  Files `EnginesResult` and `EngineResult` must extend `Bitrix24\SDK\Core\Response\Response\AbstractResult`
+  File `EngineItemResult` must extend `Bitrix24\SDK\Core\Result\AbstractItem` or his inheritor
+  Results for EnginesResult.php
+  ```php
+    declare(strict_types=1);
 
+    namespace Bitrix24\SDK\Services\AI\Engine\Result;
+    
+    use Bitrix24\SDK\Core\Exceptions\BaseException;
+    use Bitrix24\SDK\Core\Result\AbstractResult;
+    
+    class EnginesResult extends AbstractResult
+    {
+       /**
+       * @return EngineItemResult[]
+       * @throws BaseException
+       */
+       public function getEngines(): array
+       {
+           $res = [];
+           foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
+              $res[] = new EngineItemResult($item);
+           }
+       
+           return $res;
+       }
+    }
+  ```
+  File EngineResult.php in current example not implemented because we don't have method `ai.engine.get`  
+  Results for file `EngineItemResult.php`
+  ```php
+   declare(strict_types=1);
 
- ```
+   namespace Bitrix24\SDK\Services\AI\Engine\Result;
+   
+   use Bitrix24\SDK\Core\Result\AbstractItem;
+   use Bitrix24\SDK\Services\AI\Engine\EngineCategory;
+   use Bitrix24\SDK\Services\AI\Engine\EngineSettings;
+   use Carbon\CarbonImmutable;
+   
+     /**
+     * @property-read int $id
+     * @property-read non-empty-string $app_code
+     * @property-read non-empty-string $name
+     * @property-read non-empty-string $code
+     * @property-read EngineCategory $category
+     * @property-read non-empty-string $completionsUrl
+     * @property-read EngineSettings $settings
+     * @property-read CarbonImmutable $dateCreate
+     */
+     class EngineItemResult extends AbstractItem
+     {
+         /**
+         * @param int|string $offset
+         *
+         * @return bool|CarbonImmutable|int|mixed|null
+         */
+         public function __get($offset)
+         {
+            switch ($offset) {
+               case 'id':
+                  if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
+                     return (int)$this->data[$offset];
+                  }
+   
+                  return null;
+              case 'category':
+                  return EngineCategory::from($this->data[$offset]);
+              case 'settings':
+                  return EngineSettings::fromArray($this->data[$offset]);
+              case 'dateCreate':
+                  return CarbonImmutable::createFromTimestamp($this->data[$offset]);
+              default:
+                  return $this->data[$offset] ?? null;
+           }
+         }
+   }
+  ``` 
+  Pay attention to the cap with php-dooc comments
+  ```php
+     /**
+     * @property-read int $id
+     * @property-read non-empty-string $app_code
+     * @property-read non-empty-string $name
+     * @property-read non-empty-string $code
+     * @property-read EngineCategory $category
+     * @property-read non-empty-string $completionsUrl
+     * @property-read EngineSettings $settings
+     * @property-read CarbonImmutable $dateCreate
+     */
+  ```
+  Thanks to these comments, IDE can make tips on the structure of data that Bitrix24 returns.
+  You can generate such comments by automatically calling the command and following the instructions of the wizard.
+  ```shell
+  make dev-show-fields-description
+  ```
+  Unfortunately, the `ai_admin` scope does not have a method of` fields` so you will have to watch the data structure in the result of the call of the
+  API-method and documentation, and not use the call `make dev-show-fields-description`
 
 12. **Add integration test for new scope**
+    - Go to folder `tests/Integration/Services` and create folder `tests/Integration/Services/AI/Engine/Service/`
+    - In folder create integration test `EngineTest.php` for all implemented methods
 
+  ```php
+     declare(strict_types=1);
+     
+     namespace Bitrix24\SDK\Tests\Integration\Services\AI\Engine\Service;
+     
+     use Bitrix24\SDK\Services\AI\Engine\EngineCategory;
+     use Bitrix24\SDK\Services\AI\Engine\EngineSettings;
+     use Bitrix24\SDK\Services\AI\Engine\Service\Engine;
+     use Bitrix24\SDK\Services\ServiceBuilder;
+     use Bitrix24\SDK\Tests\Integration\Fabric;
+     use PHPUnit\Framework\Attributes\CoversClass;
+     use PHPUnit\Framework\Attributes\CoversMethod;
+     use PHPUnit\Framework\Attributes\TestDox;
+     use PHPUnit\Framework\TestCase;
+     use Symfony\Component\Uid\Uuid;
+     
+     #[CoversClass(Engine::class)]
+     #[CoversMethod(Engine::class,'register')]
+     #[CoversMethod(Engine::class,'list')]
+     #[CoversMethod(Engine::class,'unregister')]
+     class EngineTest extends TestCase
+     {
+         protected ServiceBuilder $serviceBuilder;
+         protected array $engineCodes = [];
+     
+         #[TestDox('Test Engine::list method')]
+         public function testList(): void
+         {
+             $engineCode = Uuid::v7()->toRfc4122();
+             $engineId = $this->serviceBuilder->getAiAdminScope()->engine()->register(
+                 'test-llm-1',
+                 $engineCode,
+                 EngineCategory::text,
+                 'https://bitrix24.com/',
+                 new EngineSettings(
+                     'custom llm'
+                 )
+             )->getId();
+             $this->engineCodes[] = $engineCode;
+     
+             $this->assertGreaterThanOrEqual(1, count($this->serviceBuilder->getAiAdminScope()->engine()->list()->getEngines()));
+         }
+     
+         public function testRegister(): void
+         {
+             $engineCode = Uuid::v7()->toRfc4122();
+             $engineId = $this->serviceBuilder->getAiAdminScope()->engine()->register(
+                 'test-llm-1',
+                 $engineCode,
+                 EngineCategory::text,
+                 'https://bitrix24.com/',
+                 new EngineSettings(
+                     'custom llm'
+                 )
+             )->getId();
+             $this->engineCodes[] = $engineCode;
+     
+             $this->assertGreaterThanOrEqual(1, $engineId);
+         }
+         
+         public function testUnregister(): void
+         {
+             $engineCode = Uuid::v7()->toRfc4122();
+     
+             // Register a test engine
+             $this->serviceBuilder->getAiAdminScope()->engine()->register(
+                 'test-llm-unregister',
+                 $engineCode,
+                 EngineCategory::text,
+                 'https://bitrix24.com/',
+                 new EngineSettings('test engine for unregister')
+             );
+     
+             // Unregister the engine
+             $result = $this->serviceBuilder->getAiAdminScope()->engine()->unregister($engineCode);
+             $this->assertTrue($result->isSuccess(), 'Engine should be successfully unregistered.');
+     
+             $this->assertNotContains(
+                 $engineCode,
+                 array_map(
+                     static fn($engine) => $engine->code,
+                     $this->serviceBuilder->getAiAdminScope()->engine()->list()->getEngines()
+                 ),
+                 'Engine code should not exist after unregistration.'
+             );
+         }
+     
+         protected function setUp(): void
+         {
+             $this->serviceBuilder = Fabric::getServiceBuilder();
+         }
+     
+         protected function tearDown(): void
+         {
+             foreach ($this->engineCodes as $code) {
+                 $this->serviceBuilder->getAiAdminScope()->engine()->unregister($code);
+             }
+         }
+     }
+  ```
 
-2. **Make Your Changes**
-    - Write your code
-    - Add tests for your changes
-    - Run tests frequently to ensure your code works as expected
-
-3. **Run Code Quality Checks**
-   Using the Makefile commands:
-   ```shell
-   make lint-phpstan     # Static analysis
-   make lint-rector      # Code upgrades check
-   make lint-rector-fix  # Apply code upgrades
-   make lint-cs-fixer    # Code style check
-   ```
-
-4. **Run Tests**
-   ```shell
-   make test-unit              # Run unit tests
-   make test-integration-core  # Run core integration tests
-   ```
-
-   To run all tests:
-   ```shell
-   vendor/bin/phpunit
-   ```
-
-5. **Commit Your Changes**
-   ```shell
-   git commit -am "Your descriptive commit message"
-   ```
-
-6. **Push to Your Fork**
-   ```shell
-   git push origin your-branch-name
-   ```
-
-7. **Create a Pull Request**
-    - Go to your fork on GitHub
-    - Click "New Pull Request"
-    - Select the appropriate branches
-    - Provide a clear description of your changes
-    - If your changes include BC breaks, mention this in the PR description
-
-
-5. **Create integration tests**
-    - Create a corresponding test folder in `tests/Integration/Services/MyNewScope`
-    - Create test class for your service:
-      ```php
-      <?php
- 
-      declare(strict_types=1);
- 
-      namespace Bitrix24\SDK\Tests\Integration\Services\MyNewScope;
- 
-      use Bitrix24\SDK\Tests\Integration\Fabric;
-      use PHPUnit\Framework\TestCase;
- 
-      class MyNewScopeServiceTest extends TestCase
-      {
-          public function testAdd(): void
-          {
-              $b24App = Fabric::getB24App();
-              
-              $addResult = $b24App->myNewScope()
-                  ->myNewScopeService()
-                  ->add(['TITLE' => 'Test Item']);
-              
-              $this->assertGreaterThan(0, $addResult->getId());
-          }
-      }
-      ```
-
-6. **Update testsuite in PHPUnit configuration**
-    - Open `phpunit.xml.dist`
-    - Add your test folder to the appropriate testsuite:
-      ```xml
-      <testsuite name="integration-services">
-          <!-- other test directories -->
-          <directory>./tests/Integration/Services/MyNewScope</directory>
-      </testsuite>
-      ```
-
-7. **Update the Makefile**
-    - Add a new target for your scope-specific integration tests:
-      ```makefile
-      test-integration-mynewscope: ## run integration tests for MyNewScope
-         docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration-mynewscope
-      ```
-    - Add your target to the `test-integration` target dependencies
-
-8. **Add documentation**
+    - Run test in IDE – all checks are passed
+    - Add new testsuite in `phpunit.xml.dist`
+  ```
+<testsuite name="integration_tests_scope_ai_admin">
+    <directory>./tests/Integration/Services/AI/</directory>
+</testsuite>  
+  ```
+    - Add new target in make file in root folder
+  ```
+    test-integration-scope-ai-admin:
+      docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_ai_admin
+  ```
+13. **Run checks**
+    - Allowed license 
+    ```shell
+    make lint-allowed-licenses 
+    ```
+    - PHP CS fixer
+    ```shell 
+    make lint-cs-fixer
+    ```
+    - phpstan
+    ```shell 
+    make lint-phpstan
+    ```
+    - Rector
+    ```shell 
+    make lint-rector
+    ```
+    - if all checks passed you can commit changes.
+    
+14. **Update documentation**
     - Document your new scope and its available methods
     - Run `make build-documentation` to update the API documentation
+    - Commit changes
+    
+15. **Open Pull Request**      
 
 ## Code Standards
 
@@ -418,16 +557,6 @@ class Engine extends AbstractService
 - Write clear, descriptive docblocks for all classes and methods
 - Keep methods small and focused on a single responsibility
 - Use meaningful variable and method names
-
-## Documentation
-
-If your changes require documentation updates:
-
-1. Update the relevant markdown files in the `docs/` directory
-2. For documentation of API methods, run:
-   ```shell
-   make build-documentation
-   ```
 
 ## Getting Help
 

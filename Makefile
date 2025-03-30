@@ -130,3 +130,5 @@ test-integration-core:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_core
 test-integration-scope-entity:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_entity
+test-integration-scope-ai-admin:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_ai_admin

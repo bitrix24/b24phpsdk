@@ -13,20 +13,21 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Services\AI\Engine\Service;
 
-use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\AI\Engine\EngineCategory;
 use Bitrix24\SDK\Services\AI\Engine\EngineSettings;
 use Bitrix24\SDK\Services\AI\Engine\Service\Engine;
-use Bitrix24\SDK\Services\Catalog\Catalog\Service\Catalog;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\Uuid;
 
 #[CoversClass(Engine::class)]
+#[CoversMethod(Engine::class,'register')]
+#[CoversMethod(Engine::class,'list')]
+#[CoversMethod(Engine::class,'unregister')]
 class EngineTest extends TestCase
 {
     protected ServiceBuilder $serviceBuilder;
@@ -35,7 +36,19 @@ class EngineTest extends TestCase
     #[TestDox('Test Engine::list method')]
     public function testList(): void
     {
-        
+        $engineCode = Uuid::v7()->toRfc4122();
+        $this->serviceBuilder->getAiAdminScope()->engine()->register(
+            'test-llm-1',
+            $engineCode,
+            EngineCategory::text,
+            'https://bitrix24.com/',
+            new EngineSettings(
+                'custom llm'
+            )
+        )->getId();
+        $this->engineCodes[] = $engineCode;
+
+        $this->assertGreaterThanOrEqual(1, count($this->serviceBuilder->getAiAdminScope()->engine()->list()->getEngines()));
     }
 
     public function testRegister(): void
@@ -47,7 +60,7 @@ class EngineTest extends TestCase
             EngineCategory::text,
             'https://bitrix24.com/',
             new EngineSettings(
-                'custom lllm'
+                'custom llm'
             )
         )->getId();
         $this->engineCodes[] = $engineCode;
