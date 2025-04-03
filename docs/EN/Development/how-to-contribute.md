@@ -4,35 +4,12 @@ This guide provides step-by-step instructions for contributing to the Bitrix24 P
 
 ## Prerequisites
 
-- PHP `8.3`, `8.4`
+- PHP `8.3` or `8.4`
 - Composer
 - Git
 - make
-- Docker (optional, but strong **recommended**)
-
-## Setting Up Your Development Environment
-
-1. **Fork the Repository**
-    - Visit the [Bitrix24 PHP SDK repository](https://github.com/bitrix24/bitrix24-php-sdk)
-    - Click the "Fork" button in the top-right corner
-    - This creates your own copy of the repository under your GitHub account
-
-2. **Clone Your Fork**
-   ```shell
-   git clone https://github.com/YOUR-USERNAME/bitrix24-php-sdk.git
-   cd bitrix24-php-sdk
-   ```
-
-3. **Add the Original Repository as Upstream**
-   ```shell
-   git remote add upstream https://github.com/bitrix24/bitrix24-php-sdk.git
-   ```
-
-4. **Install Dependencies**
-   ```shell
-   make init
-   make composer-update
-   ```
+- Docker
+- PhpStorm or other IDE
 
 ## Guidelines for Different Types of Contributions
 
@@ -52,15 +29,43 @@ This guide provides step-by-step instructions for contributing to the Bitrix24 P
 ### Default development workflow
 
 1. Planning add new feature
-2. Create a New Branch
-3. Make Your Changes
-4. Update documentation
-4. Run Code Quality Checks
-5. Run Tests
-6. Commit Your Changes
-7. Push to Your Fork
-8. Create a Pull Request to main repository
-9. Release new version of SDK
+2. Fork main repository
+3. Create a New Branch
+4. Make Your Changes
+5. Update documentation
+6. Run Code Quality Checks
+7. Run Tests
+8. Commit Your Changes
+9. Push to Your Fork
+10. Create a Pull Request to main repository
+11. Wait for review for Your Pull Request form maintainers.
+12. Wait for shipping new release with your changes.
+
+## Setting Up Your Development Environment
+
+1. **Fork the Repository**
+    - Visit the [Bitrix24 PHP SDK repository](https://github.com/bitrix24/b24phpsdk)
+    - Click the "Fork" button in the top-right corner
+    - This creates your own copy of the repository under your GitHub account
+    - disable checkbox "Copy the main branch only", because last actual code in dev-branch.
+
+2. **Clone Your Fork on your computer**
+   ```shell
+   git clone https://github.com/YOUR-USERNAME/b24phpsdk.git
+   cd b24phpsdk
+   ```
+   or in PhpStorm You can create new project from version control dialog.
+
+3. **Switch to branch `dev` and get latest changes**
+
+   In main branch You have the latest release version, example - `1.3.0`, but in branch dev you have a code for upcoming release, for example - `1.4.0`.
+   That's why You **must** get code from `dev` branch.
+
+4. **Init developer environment**
+   ```shell
+   make docker-init
+   ```
+5. **That's all, let's contribute! 🚀**
 
 ## Step-by-Step Guide for Adding a new feature with new scope
 
@@ -101,9 +106,9 @@ You **must** run integration tests in development environment.
 
 5. **Create a New Branch**
     - For new features:
-      ```shell
-      git checkout -b feature/issue-id-short-issue-name
-      ```
+   ```shell
+   git checkout -b feature/issue-id-short-issue-name
+   ```
 
 6. **Add the new scope in the Scope class**
     - check is scope exists in `Bitrix24\SDK\Core\Credentials\Scope` class in `src/Core/Credentials/Scope.php`
@@ -157,15 +162,16 @@ You **must** run integration tests in development environment.
     }
    ```
 10. **Implement the API service**
+    - Create folder structure for future service
 
-- Create folder structure for future service
-  ```shell
-  mkdir src/Services/AI/Engine
-  mkdir src/Services/AI/Engine/Result
-  mkdir src/Services/AI/Engine/Service
-  ```
-- Create service for methods `ai.engine.*`
-- You must extend class `src/Services/AbstractService.php`
+   ```shell
+   mkdir src/Services/AI/Engine
+   mkdir src/Services/AI/Engine/Result
+   mkdir src/Services/AI/Engine/Service
+   ```
+   
+   - Create service for methods `ai.engine.*`
+   - You must extend class `src/Services/AbstractService.php`
    ```php
    declare(strict_types=1);
    
@@ -180,46 +186,46 @@ You **must** run integration tests in development environment.
    { 
    }
    ```
-- Register service `Engine` in scope-level service builder
-   ```php
-    declare(strict_types=1);
-    
-    namespace Bitrix24\SDK\Services\AI;
-    
-    use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
-    use Bitrix24\SDK\Core\Credentials\Scope;
-    use Bitrix24\SDK\Services\AbstractServiceBuilder;
-    use Bitrix24\SDK\Services\AI;
-    #[ApiServiceBuilderMetadata(new Scope(['ai_admin']))]
-    
-    class AIServiceBuilder extends AbstractServiceBuilder
-    {
-        public function engine(): AI\Engine\Service\Engine
-        {
-            if (!isset($this->serviceCache[__METHOD__])) {
-                $this->serviceCache[__METHOD__] = new AI\Engine\Service\Engine(
-                    $this->core,
-                    $this->log
-                );
-            }
-    
-            return $this->serviceCache[__METHOD__];
-        }
-    }
-   ``` 
+    - Register service `Engine` in scope-level service builder
+```php
+ declare(strict_types=1);
+ 
+ namespace Bitrix24\SDK\Services\AI;
+ 
+ use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
+ use Bitrix24\SDK\Core\Credentials\Scope;
+ use Bitrix24\SDK\Services\AbstractServiceBuilder;
+ use Bitrix24\SDK\Services\AI;
+ #[ApiServiceBuilderMetadata(new Scope(['ai_admin']))]
+ 
+ class AIServiceBuilder extends AbstractServiceBuilder
+ {
+     public function engine(): AI\Engine\Service\Engine
+     {
+         if (!isset($this->serviceCache[__METHOD__])) {
+             $this->serviceCache[__METHOD__] = new AI\Engine\Service\Engine(
+                 $this->core,
+                 $this->log
+             );
+         }
+ 
+         return $this->serviceCache[__METHOD__];
+     }
+ }
+``` 
 
 11. **Implement methods for service**
 
     - Go to documentation page for current endpoint and get list of methods
 
-   ```
-   https://apidocs.bitrix24.com/api-reference/ai/index.html
-   
-   we have methods:
-   ai.engine.register
-   ai.engine.list
-   ai.engine.unregister
-   ```
+```
+https://apidocs.bitrix24.com/api-reference/ai/index.html
+
+we have methods:
+ai.engine.register
+ai.engine.list
+ai.engine.unregister
+```
 
 - Add first method to service `src/Services/AI/Engine/Service/Engine.php`
 - Read documentation for [method](https://apidocs.bitrix24.com/api-reference/ai/ai-engine-register.html)
@@ -274,6 +280,7 @@ You **must** run integration tests in development environment.
 - Add return types to method calls  
   If the method performs standard CRUD operations, you can use standardized result types from `src/Core/Result`.
   Add return result for method `register`
+
   ```php
       public function register(
         string $name,
@@ -291,26 +298,30 @@ You **must** run integration tests in development environment.
         ]));
     }
   ``` 
-  If method needs return specialized result, you can add result to related folder - `Result` for current service.
 
-  In our example target folder is `src/Services/AI/Engine/Result`, let's implement custom result for method.
+If method needs return specialized result, you can add result to related folder - `Result` for current service.
 
-  Results for methods returned one item and list methods are use same approach - «lazy DTO».
+In our example target folder is `src/Services/AI/Engine/Result`, let's implement custom result for method.
 
-  For both methods list and item you must use prefix `Result`.
+Results for methods returned one item and list methods are use same approach - «lazy DTO».
 
-  For result container with «lazy DTO» you must add prefix `ItemResult`.
+For both methods list and item you must use prefix `Result`.
 
-  Let's create return result for method `Engine::list`
-  Add files:
+For result container with «lazy DTO» you must add prefix `ItemResult`.
+
+Let's create return result for method `Engine::list`
+Add files:
+
   ```
   - EnginesResult.php result for list items
   - EngineResult.php restul for one item
   - EngineItemResult.php result data storage for registered AI Engine data structure
   ```
-  Files `EnginesResult` and `EngineResult` must extend `Bitrix24\SDK\Core\Response\Response\AbstractResult`
-  File `EngineItemResult` must extend `Bitrix24\SDK\Core\Result\AbstractItem` or his inheritor
-  Results for EnginesResult.php
+
+Files `EnginesResult` and `EngineResult` must extend `Bitrix24\SDK\Core\Response\Response\AbstractResult`
+File `EngineItemResult` must extend `Bitrix24\SDK\Core\Result\AbstractItem` or his inheritor
+Results for EnginesResult.php
+
   ```php
     declare(strict_types=1);
 
@@ -336,8 +347,10 @@ You **must** run integration tests in development environment.
        }
     }
   ```
-  File EngineResult.php in current example not implemented because we don't have method `ai.engine.get`  
-  Results for file `EngineItemResult.php`
+
+File EngineResult.php in current example not implemented because we don't have method `ai.engine.get`  
+Results for file `EngineItemResult.php`
+
   ```php
    declare(strict_types=1);
 
@@ -386,7 +399,9 @@ You **must** run integration tests in development environment.
          }
    }
   ``` 
-  Pay attention to the cap with php-dooc comments
+
+Pay attention to the cap with php-dooc comments
+
   ```php
      /**
      * @property-read int $id
@@ -399,13 +414,16 @@ You **must** run integration tests in development environment.
      * @property-read CarbonImmutable $dateCreate
      */
   ```
-  Thanks to these comments, IDE can make tips on the structure of data that Bitrix24 returns.
-  You can generate such comments by automatically calling the command and following the instructions of the wizard.
+
+Thanks to these comments, IDE can make tips on the structure of data that Bitrix24 returns.
+You can generate such comments by automatically calling the command and following the instructions of the wizard.
+
   ```shell
   make dev-show-fields-description
   ```
-  Unfortunately, the `ai_admin` scope does not have a method of` fields` so you will have to watch the data structure in the result of the call of the
-  API-method and documentation, and not use the call `make dev-show-fields-description`
+
+Unfortunately, the `ai_admin` scope does not have a method of` fields` so you will have to watch the data structure in the result of the call of the
+API-method and documentation, and not use the call `make dev-show-fields-description`
 
 12. **Add integration test for new scope**
     - Go to folder `tests/Integration/Services` and create folder `tests/Integration/Services/AI/Engine/Service/`
@@ -514,18 +532,22 @@ You **must** run integration tests in development environment.
 
     - Run test in IDE – all checks are passed
     - Add new testsuite in `phpunit.xml.dist`
+
   ```
 <testsuite name="integration_tests_scope_ai_admin">
     <directory>./tests/Integration/Services/AI/</directory>
 </testsuite>  
   ```
+
     - Add new target in make file in root folder
+
   ```
     test-integration-scope-ai-admin:
       docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_ai_admin
   ```
+
 13. **Run checks**
-    - Allowed license 
+    - Allowed license
     ```shell
     make lint-allowed-licenses 
     ```
@@ -540,15 +562,31 @@ You **must** run integration tests in development environment.
     - Rector
     ```shell 
     make lint-rector
+    ```                
+    - Run unit tests
+    ```shell
+    make test-unit
     ```
+    - Run integration tests, scope by scope and core
     - if all checks passed you can commit changes.
-    
+
 14. **Update documentation**
     - Document your new scope and its available methods
     - Run `make build-documentation` to update the API documentation
     - Commit changes
-    
-15. **Open Pull Request**      
+
+16. **Update changelog**
+
+    ```
+    Added service `Services\AI\Engine\Service\Engine` with support methods:
+      - `ai.engine.register` - method registers an engine and updates it upon subsequent calls
+      - `ai.engine.list` - get the list of ai services
+      - `ai.engine.unregister` - Delete registered ai service 
+    ```
+17. **Commit changes**
+
+18. **Open Pull Request to the main repository**
+    - You must open Pull Request to main repository into branch `bitrix:dev` from your feature or bugfix branch         
 
 ## Code Standards
 
