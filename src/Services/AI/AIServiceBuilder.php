@@ -17,8 +17,8 @@ use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\AI;
-#[ApiServiceBuilderMetadata(new Scope(['ai_admin']))]
 
+#[ApiServiceBuilderMetadata(new Scope(['ai_admin']))]
 class AIServiceBuilder extends AbstractServiceBuilder
 {
     public function engine(): AI\Engine\Service\Engine

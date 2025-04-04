@@ -92,7 +92,7 @@ You **must** run integration tests in development environment.
     - Add application parameters to file `.env.local`
     - Install local application from `tests/ApplicationBridge`
 
-3. **Run exists integration test with both tokens**
+3. **Run exists integration test with both auth contexts: incoming webhook and application auth tokens**
     - Great! Now You can contribute and run tests
 
 4. **Planning add new feature**
