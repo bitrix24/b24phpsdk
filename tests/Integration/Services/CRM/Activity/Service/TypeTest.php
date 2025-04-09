@@ -18,6 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityContentType;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityDirectionType;
 use Bitrix24\SDK\Services\CRM\Activity\Result\ActivityItemResult;
+use Bitrix24\SDK\Services\CRM\Activity\Result\ActivitiesResult;
 use Bitrix24\SDK\Services\CRM\Activity\Service\Activity;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityType;
 use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
@@ -33,10 +34,10 @@ use Typhoon\Reflection\TyphoonReflector;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 use Bitrix24\SDK\Core;
 
-#[CoversClass(Type::class)]
-#[CoversMethod(Type::class, 'add')]
-#[CoversMethod(Type::class, 'delete')]
-#[CoversMethod(Type::class, 'list')]
+#[CoversClass(ActivityType::class)]
+#[CoversMethod(ActivityType::class, 'add')]
+#[CoversMethod(ActivityType::class, 'delete')]
+#[CoversMethod(ActivityType::class, 'list')]
 class TypeTest extends TestCase
 {
     use CustomBitrix24Assertions;
@@ -69,8 +70,14 @@ class TypeTest extends TestCase
                 'IS_CONFIGURABLE_TYPE' => 'N'
             ]
         )->getId();
-        // successfully add activity type
-        $this->assertTrue(true);
+
+        $listOfActivityTypes = $this->activityTypeService->list();
+
+        foreach ($listOfActivityTypes as $item) {
+            // successfully add activity type and get list
+            $this->assertTrue(!empty($activityTypeId) && $item->NAME == 'TestActivityType');
+        }
+        
     }
 
     /**
@@ -109,8 +116,6 @@ class TypeTest extends TestCase
 
         $res = $this->activityTypeService->list();
 
-        // Что за getActivities ?
-        // Скорее всего, тут должно быть не getActivities
         $isResCountGreatherThenZero = (count($res->getActivities()) > 0) ? true : fasle;
 
         $this->assertTrue($isResCountGreatherThenZero);
