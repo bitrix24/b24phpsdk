@@ -26,7 +26,7 @@ use Bitrix24\SDK\Services\CRM\Activity\Result\ActivitiesResult;
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['crm']))]
-class Type extends AbstractService
+class ActivityType extends AbstractService
 {
     public Batch $batch;
 
@@ -101,7 +101,7 @@ class Type extends AbstractService
     #[ApiEndpointMetadata(
         'crm.activity.type.add',
         'https://apidocs.bitrix24.ru/api-reference/crm/timeline/activities/types/crm-activity-type-add',
-        'The method registers a custom case type with a name and icon.'
+        'The method registers a custom activity type with a name and icon.'
     )]
     public function add(array $fields): AddedItemResult
     {
@@ -129,7 +129,7 @@ class Type extends AbstractService
     #[ApiEndpointMetadata(
         'crm.activity.type.delete',
         'https://apidocs.bitrix24.ru/api-reference/crm/timeline/activities/types/crm-activity-type-delete.html',
-        'Delete a custom case type.'
+        'Delete a custom activity type.'
     )]
     public function delete(int $itemId): DeletedItemResult
     {

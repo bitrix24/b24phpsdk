@@ -3,6 +3,12 @@
 ## Unreleased 1.3.0 – 2025.03.31
 
 ### Added
+- Added service `Services\AI\Engine\Service\Type` with support methods:
+    - `crm.activity.type.add` - method registers a custom activity type with a name and icon
+    - `crm.activity.type.delete` - delete a custom activity type
+    - `crm.activity.type.list` - get a list of custom task types
+- Added service `Services\AI\Engine\Service\Communication` with support methods:
+    - `crm.activity.communication.fields` - get a description of the communication
 
 - Added **PHP 8.4** [support](https://github.com/bitrix24/b24phpsdk/issues/120) 🚀
 - Added method `Bitrix24\SDK\Services\Main\Service::guardValidateCurrentAuthToken` for validate current auth token with
