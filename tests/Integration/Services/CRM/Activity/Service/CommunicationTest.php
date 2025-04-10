@@ -42,6 +42,11 @@ class CommunicationTest extends TestCase
 
     private Communication $communicationService;
 
+    public function setUp(): void
+    {
+        $this->communicationService = Fabric::getServiceBuilder()->getCRMScope()->communication();
+    }
+
     public function testAllSystemFieldsAnnotated(): void
     {
         $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($this->communicationService->fields()->getFieldsDescription()));
