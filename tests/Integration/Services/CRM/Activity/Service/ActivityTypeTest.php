@@ -97,21 +97,17 @@ class ActivityTypeTest extends TestCase
 
         $this->assertNotEmpty($res, 'List of activity types should not be empty.');
 
-        if ($res !== []) {
-            // successfully add activity type and get lis
-            $found = false;
+        // successfully add activity type and get lis
+        $found = false;
 
-            foreach ($res as $re) {
-                if ($re->NAME == 'NAME_' . $int) {
-                    $found = true;
-                    break;
-                }
+        foreach ($res as $re) {
+            if ($re->NAME == 'NAME_' . $int) {
+                $found = true;
+                break;
             }
-
-            $this->assertTrue($found, 'Expected activity type not found in the list.');
-        } else {
-            $this->assertFalse(true);
         }
+
+        $this->assertTrue($found, 'Expected activity type not found in the list.');
     }
 
     /**

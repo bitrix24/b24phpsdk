@@ -37,55 +37,9 @@ class ActivityType extends AbstractService
     }
 
     /**
-     * The method registers a custom case type with a name and icon.
+     * The method registers a custom activity type with a name and icon.
      *
      * @link https://apidocs.bitrix24.ru/api-reference/crm/timeline/activities/types/crm-activity-type-add
-     *
-     * @param array{
-     *   ID?: int,
-     *   OWNER_ID?: int,
-     *   OWNER_TYPE_ID?: int,
-     *   TYPE_ID?: int,
-     *   PROVIDER_ID?: string,
-     *   PROVIDER_TYPE_ID?: string,
-     *   PROVIDER_GROUP_ID?: string,
-     *   ASSOCIATED_ENTITY_ID?: int,
-     *   SUBJECT?: string,
-     *   START_TIME?: string,
-     *   END_TIME?: string,
-     *   DEADLINE?: string,
-     *   COMPLETED?: string,
-     *   STATUS?: string,
-     *   RESPONSIBLE_ID?: string,
-     *   PRIORITY?: string,
-     *   NOTIFY_TYPE?: string,
-     *   NOTIFY_VALUE?: int,
-     *   DESCRIPTION?: string,
-     *   DESCRIPTION_TYPE?: string,
-     *   DIRECTION?: string,
-     *   LOCATION?: string,
-     *   CREATED?: string,
-     *   AUTHOR_ID?: string,
-     *   LAST_UPDATED?: string,
-     *   EDITOR_ID?: string,
-     *   SETTINGS?: string,
-     *   ORIGIN_ID?: string,
-     *   ORIGINATOR_ID?: string,
-     *   RESULT_STATUS?: int,
-     *   RESULT_STREAM?: int,
-     *   RESULT_SOURCE_ID?: string,
-     *   PROVIDER_PARAMS?: string,
-     *   PROVIDER_DATA?: string,
-     *   RESULT_MARK?: int,
-     *   RESULT_VALUE?: string,
-     *   RESULT_SUM?: string,
-     *   RESULT_CURRENCY_ID?: string,
-     *   AUTOCOMPLETE_RULE?: int,
-     *   BINDINGS?: string,
-     *   COMMUNICATIONS?: string,
-     *   FILES?: string,
-     *   WEBDAV_ELEMENTS?: string,
-     *   } $fields
      *
      * @throws BaseException
      * @throws TransportException
@@ -111,7 +65,6 @@ class ActivityType extends AbstractService
      * Delete a custom case type.
      *
      * @link https://apidocs.bitrix24.ru/api-reference/crm/timeline/activities/types/crm-activity-type-delete.html
-     *
      *
      * @throws BaseException
      * @throws TransportException
