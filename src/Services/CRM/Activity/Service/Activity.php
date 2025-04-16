@@ -32,19 +32,12 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['crm']))]
 class Activity extends AbstractService
 {
-    public Batch $batch;
-
     /**
      * Contact constructor.
-     *
-     * @param Batch $batch
-     * @param CoreInterface $core
-     * @param LoggerInterface $log
      */
-    public function __construct(Batch $batch, CoreInterface $core, LoggerInterface $log)
+    public function __construct(public Batch $batch, CoreInterface $core, LoggerInterface $logger)
     {
-        parent::__construct($core, $log);
-        $this->batch = $batch;
+        parent::__construct($core, $logger);
     }
 
     /**
@@ -98,7 +91,6 @@ class Activity extends AbstractService
      *   WEBDAV_ELEMENTS?: string,
      *   } $fields
      *
-     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -124,9 +116,7 @@ class Activity extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/rest_activity/crm_activity_delete.php
      *
-     * @param int $itemId
      *
-     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -152,7 +142,6 @@ class Activity extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/rest_activity/crm_activity_fields.php
      *
-     * @return FieldsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -171,9 +160,7 @@ class Activity extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/rest_activity/crm_activity_get.php
      *
-     * @param int $entityId
      *
-     * @return ActivityResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -292,9 +279,7 @@ class Activity extends AbstractService
      *   } $filter
      *
      * @param array $select = ['ID','OWNER_ID','OWNER_TYPE_ID','TYPE_ID','PROVIDER_ID','PROVIDER_TYPE_ID','PROVIDER_GROUP_ID','ASSOCIATED_ENTITY_ID','SUBJECT','START_TIME','END_TIME','DEADLINE','COMPLETED','STATUS','RESPONSIBLE_ID','PRIORITY','NOTIFY_TYPE','NOTIFY_VALUE','DESCRIPTION','DESCRIPTION_TYPE','DIRECTION','LOCATION','CREATED','AUTHOR_ID','LAST_UPDATED','EDITOR_ID','SETTINGS','ORIGIN_ID','ORIGINATOR_ID','RESULT_STATUS','RESULT_STREAM','RESULT_SOURCE_ID','PROVIDER_PARAMS','PROVIDER_DATA','RESULT_MARK','RESULT_VALUE','RESULT_SUM','RESULT_CURRENCY_ID','AUTOCOMPLETE_RULE','BINDINGS','COMMUNICATIONS','FILES','WEBDAV_ELEMENTS','COMMUNICATIONS']
-     * @param int $start
      *
-     * @return ActivitiesResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -323,7 +308,6 @@ class Activity extends AbstractService
      *
      * @see https://training.bitrix24.com/rest_help/crm/rest_activity/crm_activity_update.php
      *
-     * @param int $itemId
      * @param array{
      *   ID?: int,
      *   OWNER_ID?: int,
@@ -370,7 +354,6 @@ class Activity extends AbstractService
      *   WEBDAV_ELEMENTS?: string,
      *   } $fields
      *
-     * @return UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -441,7 +424,6 @@ class Activity extends AbstractService
      *   WEBDAV_ELEMENTS?: string,
      *   } $filter
      *
-     * @return int
      * @throws BaseException
      * @throws TransportException
      */

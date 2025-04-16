@@ -23,4 +23,3 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
 class VisitedPageItem extends AbstractItem
 {
 }
-
