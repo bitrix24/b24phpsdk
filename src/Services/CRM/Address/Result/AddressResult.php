@@ -17,7 +17,7 @@ namespace Bitrix24\SDK\Services\CRM\Address\Result;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
 /**
- * Class LeadResult
+ * Class AddressResult
  *
  * @package Bitrix24\SDK\Services\CRM\Address\Result
  */
