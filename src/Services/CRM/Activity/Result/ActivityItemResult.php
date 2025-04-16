@@ -38,7 +38,7 @@ use Money\Money;
  * @property-read ActivityDirectionType $DIRECTION // with crm_enum_activity direction type
  * @property-read int $EDITOR_ID                 // Editor
  * @property-read CarbonImmutable $END_TIME               // Completion time
- * @property-read array $FILES                   // Added files with diskfile type
+ * @property-read int $FILES                   // Added files with diskfile type
  * @property-read int $ID                        // Activity ID
  * @property-read boolean $IS_INCOMING_CHANNEL
  * @property-read CarbonImmutable $LAST_UPDATED  // Date of the last update date
@@ -67,7 +67,10 @@ use Money\Money;
  * @property-read ActivityStatus $STATUS
  * @property-read string $SUBJECT
  * @property-read ActivityType $TYPE_ID
- * @property-read array $WEBDAV_ELEMENTS
+ * @property-read int $WEBDAV_ELEMENTS
+ * @property-read int $AUTHOR_ID
+ * @property-read int $AUTOCOMPLETE_RULE
+ * @property-read ActivityPriority $PRIORITY
  */
 class ActivityItemResult extends AbstractCrmItem
 {

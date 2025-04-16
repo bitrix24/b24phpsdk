@@ -22,25 +22,18 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\AddedItemResult;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
-use Bitrix24\SDK\Services\CRM\Activity\Result\ActivitiesResult;
+use Bitrix24\SDK\Services\CRM\Activity\Result\ActivityTypesResult;
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['crm']))]
 class ActivityType extends AbstractService
 {
-    public Batch $batch;
-
     /**
      * Contact constructor.
-     *
-     * @param Batch $batch
-     * @param CoreInterface $core
-     * @param LoggerInterface $log
      */
-    public function __construct(Batch $batch, CoreInterface $core, LoggerInterface $log)
+    public function __construct(public Batch $batch, CoreInterface $core, LoggerInterface $logger)
     {
-        parent::__construct($core, $log);
-        $this->batch = $batch;
+        parent::__construct($core, $logger);
     }
 
     /**
@@ -94,7 +87,6 @@ class ActivityType extends AbstractService
      *   WEBDAV_ELEMENTS?: string,
      *   } $fields
      *
-     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -120,9 +112,7 @@ class ActivityType extends AbstractService
      *
      * @link https://apidocs.bitrix24.ru/api-reference/crm/timeline/activities/types/crm-activity-type-delete.html
      *
-     * @param int $itemId
      *
-     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -131,7 +121,7 @@ class ActivityType extends AbstractService
         'https://apidocs.bitrix24.ru/api-reference/crm/timeline/activities/types/crm-activity-type-delete.html',
         'Delete a custom activity type.'
     )]
-    public function delete(int $itemId): DeletedItemResult
+    public function delete(string $itemId): DeletedItemResult
     {
         return new DeletedItemResult(
             $this->core->call(
@@ -148,7 +138,6 @@ class ActivityType extends AbstractService
      *
      * @link https://apidocs.bitrix24.ru/api-reference/crm/timeline/activities/types/crm-activity-type-list.html
      *
-     * @return ActivitiesResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -157,10 +146,78 @@ class ActivityType extends AbstractService
         'https://apidocs.bitrix24.ru/api-reference/crm/timeline/activities/types/crm-activity-type-list.html',
         'Get a list of custom task types.'
     )]
-    public function list(): ActivitiesResult
+    public function list(): ActivityTypesResult
     {
-        return new ActivitiesResult(
+        return new ActivityTypesResult(
             $this->core->call('crm.activity.type.list')
         );
+    }
+
+    /**
+     * Get task type fields.
+     *
+     * @link https://apidocs.bitrix24.ru/api-reference/crm/timeline/activities/types/crm-activity-type-add.html
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        '',
+        '',
+        'Get task type fields.'
+    )]
+    public function getFields(): array
+    {
+        $list = $this->list()->getActivityTypes();
+        $fields = [];
+
+        if ($list !== [] && is_array($list)) {
+
+            $res = $list[0]->getData();
+
+            $i = 0;
+            foreach (array_keys($res) as $key) {
+                $fields[$i] = $key;
+                $i++;
+            }
+
+            unset($i);
+        }
+
+        return $fields;
+    }
+
+    public function getFieldsDescription(): array
+    {
+        $list = $this->list()->getActivityTypes();
+        $fields = [];
+
+        if ($list !== [] && is_array($list)) {
+
+            $res = $list[0]->getData();
+
+            $i = 0;
+            foreach ($res as $key => $value) {
+                $type = '';
+
+                if (is_string($value)) {
+                    $type = 'string';
+                } elseif (is_int($value)) {
+                    $type = 'int';
+                } elseif (is_bool($value)) {
+                    $type = 'bool';
+                } elseif (is_array($value)) {
+                    $type = 'array';
+                }
+
+                $fields[$key] = ['type' => $type];
+
+                $i++;
+            }
+
+            unset($i);
+        }
+
+        return $fields;
     }
 }

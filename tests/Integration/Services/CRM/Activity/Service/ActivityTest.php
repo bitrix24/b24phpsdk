@@ -15,21 +15,15 @@ namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Activity\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Services\CRM\Activity\ActivityContentType;
-use Bitrix24\SDK\Services\CRM\Activity\ActivityDirectionType;
 use Bitrix24\SDK\Services\CRM\Activity\Result\ActivityItemResult;
 use Bitrix24\SDK\Services\CRM\Activity\Service\Activity;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityType;
 use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
-use Bitrix24\SDK\Services\CRM\Deal\Result\DealItemResult;
-use Bitrix24\SDK\Services\CRM\Deal\Result\DealProductRowItemResult;
 use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
 use Bitrix24\SDK\Tests\Integration\Fabric;
-use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Typhoon\Reflection\TyphoonReflector;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 use Bitrix24\SDK\Core;
 
@@ -46,13 +40,18 @@ class ActivityTest extends TestCase
     use CustomBitrix24Assertions;
 
     private Activity $activityService;
+
     private Contact $contactService;
+
     private array $contactId;
+
     private array $activityId;
 
     public function testAllSystemFieldsAnnotated(): void
     {
-        $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($this->activityService->fields()->getFieldsDescription()));
+        $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(
+            array_keys($this->activityService->fields()->getFieldsDescription())
+        );
         $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, ActivityItemResult::class);
     }
 
@@ -162,7 +161,6 @@ class ActivityTest extends TestCase
     }
 
     /**
-     * @covers Contact::fields
      * @throws BaseException
      * @throws TransportException
      */
@@ -202,7 +200,7 @@ class ActivityTest extends TestCase
             $this->activityId[] = $this->activityService->add($newActivity[$i])->getId();;
         }
 
-        $res = $this->activityService->list(
+        $activitiesResult = $this->activityService->list(
             ['ID' => 'DESC'],
             [
                 'OWNER_ID' => $contactId,
@@ -212,7 +210,7 @@ class ActivityTest extends TestCase
         );
 
 
-      $this->assertEquals(count($newActivity), count($res->getActivities()));
+      $this->assertEquals(count($newActivity), count($activitiesResult->getActivities()));
     }
 
     /**
@@ -293,15 +291,11 @@ class ActivityTest extends TestCase
         );
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
-        foreach ($this->activityService->batch->delete($this->activityId) as $result) {
-        }
-        foreach ($this->contactService->batch->delete($this->contactId) as $result) {
-        }
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->activityService = Fabric::getServiceBuilder()->getCRMScope()->activity();
         $this->contactService = Fabric::getServiceBuilder()->getCRMScope()->contact();

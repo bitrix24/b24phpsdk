@@ -210,9 +210,6 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return Deal\Service\DealProductRows
-     */
     public function dealProductRows(): Deal\Service\DealProductRows
     {
         if (!isset($this->serviceCache[__METHOD__])) {

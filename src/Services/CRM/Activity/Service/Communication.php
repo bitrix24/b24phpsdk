@@ -26,19 +26,12 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['crm']))]
 class Communication extends AbstractService
 {
-    public Batch $batch;
-
     /**
      * Contact constructor.
-     *
-     * @param Batch $batch
-     * @param CoreInterface $core
-     * @param LoggerInterface $log
      */
-    public function __construct(Batch $batch, CoreInterface $core, LoggerInterface $log)
+    public function __construct(public Batch $batch, CoreInterface $core, LoggerInterface $logger)
     {
-        parent::__construct($core, $log);
-        $this->batch = $batch;
+        parent::__construct($core, $logger);
     }
 
     /**
@@ -46,7 +39,6 @@ class Communication extends AbstractService
      *
      * @link https://apidocs.bitrix24.ru/api-reference/crm/timeline/activities/activity-base/crm-activity-communication-fields.html
      *
-     * @return FieldsResult
      * @throws BaseException
      * @throws TransportException
      */
