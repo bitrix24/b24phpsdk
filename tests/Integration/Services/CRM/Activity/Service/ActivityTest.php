@@ -43,10 +43,6 @@ class ActivityTest extends TestCase
 
     private Contact $contactService;
 
-    private array $contactId;
-
-    private array $activityId;
-
     public function testAllSystemFieldsAnnotated(): void
     {
         $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(
@@ -69,7 +65,6 @@ class ActivityTest extends TestCase
     public function testGet(): void
     {
         $contactId = $this->contactService->add(['NAME' => 'test contact'])->getId();
-        $this->contactId[] = $contactId;
 
         $newActivity = [
             'OWNER_ID' => $contactId,
@@ -91,7 +86,6 @@ class ActivityTest extends TestCase
             'RESULT_CURRENCY_ID' => 'USD'
         ];
         $activityId = $this->activityService->add($newActivity)->getId();
-        $this->activityId[] = $activityId;
 
         $activity = $this->activityService->get($activityId)->activity();
 
@@ -106,8 +100,7 @@ class ActivityTest extends TestCase
     public function testAdd(): void
     {
         $contactId = $this->contactService->add(['NAME' => 'test contact'])->getId();
-        $this->contactId[] = $contactId;
-        $this->activityId[] = $this->activityService->add(
+        $this->activityService->add(
             [
                 'OWNER_ID' => $contactId,
                 'OWNER_TYPE_ID' => 3,
@@ -137,7 +130,6 @@ class ActivityTest extends TestCase
     public function testDelete(): void
     {
         $contactId = $this->contactService->add(['NAME' => 'test contact'])->getId();
-        $this->contactId[] = $contactId;
         $activityId = $this->activityService->add(
             [
                 'OWNER_ID' => $contactId,
@@ -176,7 +168,6 @@ class ActivityTest extends TestCase
     public function testList(): void
     {
         $contactId = $this->contactService->add(['NAME' => 'test contact'])->getId();
-        $this->contactId[] = $contactId;
 
         $newActivity = [];
         for ($i = 1; $i < 10; $i++) {
@@ -197,7 +188,7 @@ class ActivityTest extends TestCase
                     ],
                 ],
             ];
-            $this->activityId[] = $this->activityService->add($newActivity[$i])->getId();;
+            $this->activityService->add($newActivity[$i])->getId();;
         }
 
         $activitiesResult = $this->activityService->list(
@@ -220,7 +211,6 @@ class ActivityTest extends TestCase
     public function testUpdate(): void
     {
         $contactId = $this->contactService->add(['NAME' => 'test contact'])->getId();
-        $this->contactId[] = $contactId;
 
         $newActivity = [
             'OWNER_ID' => $contactId,
@@ -240,7 +230,6 @@ class ActivityTest extends TestCase
             ],
         ];
         $activityId = $this->activityService->add($newActivity)->getId();
-        $this->activityId[] = $activityId;
 
         $subject = 'qqqqq';
         $this->activityService->update($activityId, [
@@ -257,7 +246,6 @@ class ActivityTest extends TestCase
     public function testCountByFilter(): void
     {
         $contactId = $this->contactService->add(['NAME' => 'test contact'])->getId();
-        $this->contactId[] = $contactId;
 
         $newActivity = [];
         for ($i = 1; $i < 10; $i++) {
@@ -278,7 +266,7 @@ class ActivityTest extends TestCase
                     ],
                 ],
             ];
-            $this->activityId[] = $this->activityService->add($newActivity[$i])->getId();;
+            $this->activityService->add($newActivity[$i])->getId();;
         }
 
         $this->assertEquals(
@@ -299,7 +287,5 @@ class ActivityTest extends TestCase
     {
         $this->activityService = Fabric::getServiceBuilder()->getCRMScope()->activity();
         $this->contactService = Fabric::getServiceBuilder()->getCRMScope()->contact();
-        $this->contactId = [];
-        $this->activityId = [];
     }
 }

@@ -53,7 +53,7 @@ use Money\Money;
  * @property-read string $PROVIDER_ID
  * @property-read string|null $PROVIDER_DATA
  * @property-read string|null $PROVIDER_GROUP_ID
- * @property-read array $PROVIDER_PARAMS
+ * @property-read int $PROVIDER_PARAMS
  * @property-read string $PROVIDER_TYPE_ID
  * @property-read int $RESULT_MARK
  * @property-read Currency|null $RESULT_CURRENCY_ID
