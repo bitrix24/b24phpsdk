@@ -32,13 +32,11 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['crm']))]
 class DealUserfield extends AbstractService
 {
-    private UserfieldConstraints $userfieldConstraints;
-
-    public function __construct(UserfieldConstraints $userfieldConstraints, CoreInterface $core, LoggerInterface $log)
+    public function __construct(private readonly UserfieldConstraints $userfieldConstraints, CoreInterface $core, LoggerInterface $logger)
     {
-        $this->userfieldConstraints = $userfieldConstraints;
-        parent::__construct($core, $log);
+        parent::__construct($core, $logger);
     }
+
     /**
      * Returns list of user deal fields by filter.
      *
@@ -85,7 +83,6 @@ class DealUserfield extends AbstractService
      *   SETTINGS?: string,
      *   } $filter
      *
-     * @return \Bitrix24\SDK\Services\CRM\Deal\Result\DealUserfieldsResult
      * @throws BaseException
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_list.php
@@ -135,7 +132,6 @@ class DealUserfield extends AbstractService
      *   SETTINGS?: string,
      *   } $userfieldItemFields
      *
-     * @return \Bitrix24\SDK\Core\Result\AddedItemResult
      * @throws BaseException
      * @throws TransportException
      * @throws UserfieldNameIsTooLongException
@@ -164,9 +160,7 @@ class DealUserfield extends AbstractService
     /**
      * Deleted userfield for deals
      *
-     * @param int $userfieldId
      *
-     * @return \Bitrix24\SDK\Core\Result\DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      * @link  https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_delete.php
@@ -192,9 +186,7 @@ class DealUserfield extends AbstractService
     /**
      * Returns a userfield for deal by ID.
      *
-     * @param int $userfieldItemId
      *
-     * @return DealUserfieldResult
      * @throws BaseException
      * @throws TransportException
      * @link  https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_get.php
@@ -219,10 +211,7 @@ class DealUserfield extends AbstractService
     /**
      * Updates an existing user field for deals.
      *
-     * @param int   $userfieldItemId
-     * @param array $userfieldFieldsToUpdate
      *
-     * @return \Bitrix24\SDK\Core\Result\UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_update.php

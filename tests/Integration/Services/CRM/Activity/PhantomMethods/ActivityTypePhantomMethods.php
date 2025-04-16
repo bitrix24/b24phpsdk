@@ -18,7 +18,7 @@ use Bitrix24\SDK\Tests\Integration\Fabric;
 
 class ActivityTypePhantomMethods
 {
-    private ActivityType $activityTypeService;
+    private readonly ActivityType $activityTypeService;
 
     /**
      * ActivityTypePhantomMethods constructor.

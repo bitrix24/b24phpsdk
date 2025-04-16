@@ -33,12 +33,9 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['crm']))]
 class Requisite extends AbstractService
 {
-    public Batch $batch;
-
-    public function __construct(Batch $batch, CoreInterface $core, LoggerInterface $log)
+    public function __construct(public Batch $batch, CoreInterface $core, LoggerInterface $logger)
     {
-        parent::__construct($core, $log);
-        $this->batch = $batch;
+        parent::__construct($core, $logger);
     }
 
     /**
@@ -46,7 +43,6 @@ class Requisite extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/requisite/crm_requisite_fields.php
      *
-     * @return FieldsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -146,7 +142,6 @@ class Requisite extends AbstractService
      * @param array $select = ['ID','ENTITY_TYPE_ID','ENTITY_ID','PRESET_ID','DATE_CREATE','DATE_MODIFY','CREATED_BY_ID','MODIFY_BY_ID','NAME','CODE','XML_ID','ORIGINATOR_ID','ACTIVE','ADDRESS_ONLY','SORT','RQ_NAME','RQ_FIRST_NAME','RQ_LAST_NAME','RQ_SECOND_NAME','RQ_COMPANY_ID','RQ_COMPANY_NAME','RQ_COMPANY_FULL_NAME','RQ_COMPANY_REG_DATE','RQ_DIRECTOR','RQ_ACCOUNTANT','RQ_CEO_NAME','RQ_CEO_WORK_POS','RQ_CONTACT','RQ_EMAIL','RQ_PHONE','RQ_FAX','RQ_IDENT_TYPE','RQ_IDENT_DOC','RQ_IDENT_DOC_SER','RQ_IDENT_DOC_NUM','RQ_IDENT_DOC_PERS_NUM','RQ_IDENT_DOC_DATE','RQ_IDENT_DOC_ISSUED_BY','RQ_IDENT_DOC_DEP_CODE','RQ_INN','RQ_KPP','RQ_USRLE','RQ_IFNS','RQ_OGRN','RQ_OGRNIP','RQ_OKPO','RQ_OKTMO','RQ_OKVED','RQ_EDRPOU','RQ_DRFO','RQ_KBE','RQ_IIN','RQ_BIN','RQ_ST_CERT_SER','RQ_ST_CERT_NUM','RQ_ST_CERT_DATE','RQ_VAT_PAYER','RQ_VAT_ID','RQ_VAT_CERT_SER','RQ_VAT_CERT_NUM','RQ_VAT_CERT_DATE','RQ_RESIDENCE_COUNTRY','RQ_BASE_DOC','RQ_REGON','RQ_KRS','RQ_PESEL','RQ_LEGAL_FORM','RQ_SIRET','RQ_SIREN','RQ_CAPITAL','RQ_RCS','RQ_CNPJ','RQ_STATE_REG','RQ_MNPL_REG','RQ_CPF']
      * @param integer $startItem - entity number to start from (usually returned in 'next' field of previous 'crm.requisite.list' API call)
      *
-     * @return RequisitesResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -232,7 +227,6 @@ class Requisite extends AbstractService
      *   IM?: string,
      *   LINK?: string
      *   } $fields
-     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -291,7 +285,6 @@ class Requisite extends AbstractService
      *
      * @param non-negative-int $id
      *
-     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -318,7 +311,6 @@ class Requisite extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/universal/crm-requisite-update.html
      *
-     * @param int $id
      * @param array{
      * ID?: int,
      * TITLE?: string,
@@ -377,7 +369,6 @@ class Requisite extends AbstractService
      * LINK?: string
      * } $fields
      *
-     * @return UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      */

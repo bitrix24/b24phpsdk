@@ -34,7 +34,6 @@ class ContactCompany extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/contacts/company/crm-contact-company-fields.html
      *
-     * @return FieldsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -64,19 +63,20 @@ class ContactCompany extends AbstractService
     public function setItems(int $contactId, array $companyConnections): UpdatedItemResult
     {
         $items = [];
-        foreach ($companyConnections as $item) {
-            if (!$item instanceof CompanyConnection) {
+        foreach ($companyConnections as $companyConnection) {
+            if (!$companyConnection instanceof CompanyConnection) {
                 throw new InvalidArgumentException(
-                    sprintf('array item «%s» must be «%s» type', gettype($item), CompanyConnection::class)
+                    sprintf('array item «%s» must be «%s» type', gettype($companyConnection), CompanyConnection::class)
                 );
             }
 
             $items[] = [
-                'COMPANY_ID' => $item->companyId,
-                'SORT' => $item->sort,
-                'IS_PRIMARY' => $item->isPrimary ? 'Y' : 'N'
+                'COMPANY_ID' => $companyConnection->companyId,
+                'SORT' => $companyConnection->sort,
+                'IS_PRIMARY' => $companyConnection->isPrimary ? 'Y' : 'N'
             ];
         }
+
         if ($items === []) {
             throw new InvalidArgumentException('empty company connections array');
         }
@@ -118,14 +118,14 @@ class ContactCompany extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/contacts/company/crm-contact-company-add.html',
         'Add a Company to the Specified Contact'
     )]
-    public function add(int $contactId, CompanyConnection $connection): UpdatedItemResult
+    public function add(int $contactId, CompanyConnection $companyConnection): UpdatedItemResult
     {
         return new UpdatedItemResult($this->core->call('crm.contact.company.add', [
             'id' => $contactId,
             'fields' => [
-                'COMPANY_ID' => $connection->companyId,
-                'SORT' => $connection->sort,
-                'IS_PRIMARY' => $connection->isPrimary ? 'Y' : 'N'
+                'COMPANY_ID' => $companyConnection->companyId,
+                'SORT' => $companyConnection->sort,
+                'IS_PRIMARY' => $companyConnection->isPrimary ? 'Y' : 'N'
             ]
         ]));
     }

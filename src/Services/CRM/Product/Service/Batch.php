@@ -36,7 +36,6 @@ class Batch extends AbstractBatchService
      *                         ID?: int
      *                         } $filter
      * @param array    $select = ['ID','CATALOG_ID','PRICE','CURRENCY_ID','NAME','CODE','DESCRIPTION','DESCRIPTION_TYPE','ACTIVE','SECTION_ID','SORT','VAT_ID','VAT_INCLUDED','MEASURE','XML_ID','PREVIEW_PICTURE','DETAIL_PICTURE','DATE_CREATE','TIMESTAMP_X','MODIFIED_BY','CREATED_BY']
-     * @param int|null $limit
      *
      * @return Generator<int, ProductItemResult>
      * @throws BaseException
@@ -104,6 +103,7 @@ class Batch extends AbstractBatchService
                 'fields' => $product,
             ];
         }
+
         foreach ($this->batch->addEntityItems('crm.product.add', $items) as $key => $item) {
             yield $key => new AddedItemBatchResult($item);
         }

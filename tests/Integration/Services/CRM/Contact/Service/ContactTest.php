@@ -46,6 +46,7 @@ class ContactTest extends TestCase
     use CustomBitrix24Assertions;
 
     private Contact $contactService;
+
     private Faker\Generator $faker;
 
     /**
@@ -90,9 +91,7 @@ class ContactTest extends TestCase
     {
         $allFields = $this->contactService->fields()->getFieldsDescription();
         $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
-        $systemFields = array_filter($allFields, static function ($code) use ($systemFieldsCodes) {
-            return in_array($code, $systemFieldsCodes, true);
-        }, ARRAY_FILTER_USE_KEY);
+        $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
 
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
             $systemFields,
@@ -127,11 +126,11 @@ class ContactTest extends TestCase
      */
     public function testUpdate(): void
     {
-        $contact = $this->contactService->add(['NAME' => 'test']);
+        $addedItemResult = $this->contactService->add(['NAME' => 'test']);
         $newName = 'test2';
 
-        self::assertTrue($this->contactService->update($contact->getId(), ['NAME' => $newName], [])->isSuccess());
-        self::assertEquals($newName, $this->contactService->get($contact->getId())->contact()->NAME);
+        self::assertTrue($this->contactService->update($addedItemResult->getId(), ['NAME' => $newName], [])->isSuccess());
+        self::assertEquals($newName, $this->contactService->get($addedItemResult->getId())->contact()->NAME);
     }
 
     /**
@@ -149,16 +148,12 @@ class ContactTest extends TestCase
             $contacts[] = ['NAME' => 'name-' . $i];
         }
 
-        foreach ($this->contactService->batch->add($contacts) as $item) {
-        }
-
         $totalAfter = $this->contactService->countByFilter();
 
         $this->assertEquals($totalBefore + $newContactsCount, $totalAfter);
     }
 
     /**
-     * @return void
      * @throws Core\Exceptions\TransportException
      * @throws Core\Exceptions\BaseException
      */
@@ -179,7 +174,6 @@ class ContactTest extends TestCase
     }
 
     /**
-     * @return void
      * @throws Core\Exceptions\TransportException
      * @throws Core\Exceptions\BaseException
      */
@@ -200,7 +194,6 @@ class ContactTest extends TestCase
     }
 
     /**
-     * @return void
      * @throws Core\Exceptions\TransportException
      * @throws Core\Exceptions\BaseException
      */
@@ -221,7 +214,6 @@ class ContactTest extends TestCase
     }
 
     /**
-     * @return void
      * @throws Core\Exceptions\TransportException
      * @throws Core\Exceptions\BaseException
      */
@@ -241,7 +233,7 @@ class ContactTest extends TestCase
                 ])->getId())->contact()->WEB[0]->VALUE);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->contactService = Fabric::getServiceBuilder()->getCRMScope()->contact();
         $this->faker = Faker\Factory::create();

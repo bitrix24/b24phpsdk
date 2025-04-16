@@ -15,12 +15,10 @@ namespace Bitrix24\SDK\Services\CRM\Common;
 
 readonly class CardFieldConfiguration
 {
-    public string $name;
     /**
      * @param non-empty-string $name
      */
-    public function __construct(string $name)
+    public function __construct(public string $name)
     {
-        $this->name = $name;
     }
 }

@@ -76,7 +76,6 @@ use Carbon\CarbonImmutable;
 class ContactItemResult extends AbstractCrmItem
 {
     /**
-     * @param string $userfieldName
      *
      * @return mixed|null
      * @throws UserfieldNotFoundException

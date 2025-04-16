@@ -23,6 +23,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 use Bitrix24\SDK\Tests\CustomAssertions\AnnotationsParser;
+use Bitrix24\SDK\Tests\Integration\Services\CRM\Activity\PhantomMethods\ActivityTypePhantomMethods;
 
 
 #[CoversClass(ActivityType::class)]
@@ -53,7 +54,7 @@ class ActivityTypeTest extends TestCase
     public function testAllSystemFieldsAnnotated(): void
     {
         
-        $b24fields = $this->activityTypeService->getFields();
+        $b24fields = (new ActivityTypePhantomMethods())->getFields();
         $annotationFields = (new AnnotationsParser())->parse(ActivityTypeResult::class);
 
         $this->assertEqualsCanonicalizing(
@@ -69,10 +70,8 @@ class ActivityTypeTest extends TestCase
 
     public function testAllSystemFieldsHasValidTypeAnnotation():void
     {
-        print_r($this->activityTypeService->getFieldsDescription());
-
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
-            $this->activityTypeService->getFieldsDescription(),
+            (new ActivityTypePhantomMethods())->getFieldsDescription(),
             ActivityTypeResult::class
         );
     }
