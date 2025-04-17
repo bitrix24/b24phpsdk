@@ -21,6 +21,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
 use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
 use Bitrix24\SDK\Services\CRM\Address\Result\AddressItemResult;
+use Bitrix24\SDK\Core\Result\UpdatedItemBatchResult;
 use Generator;
 use Psr\Log\LoggerInterface;
 
@@ -48,7 +49,7 @@ class Batch
      * @param array{
      *                          TYPE_ID?: int,
      *                          ENTITY_TYPE_ID?: int,
-     *                          ENTITY_ID?: string,
+     *                          ENTITY_ID?: int,
      *                          ADDRESS_1?: string,
      *                          ADDRESS_2?: string,
      *                          CITY?: string,
@@ -65,7 +66,7 @@ class Batch
      * @param array{
      *                          TYPE_ID?: int,
      *                          ENTITY_TYPE_ID?: int,
-     *                          ENTITY_ID?: string,
+     *                          ENTITY_ID?: int,
      *                          ADDRESS_1?: string,
      *                          ADDRESS_2?: string,
      *                          CITY?: string,
@@ -111,7 +112,7 @@ class Batch
      * @param array <int, array{
      *                          TYPE_ID?: int,
      *                          ENTITY_TYPE_ID?: int,
-     *                          ENTITY_ID?: string,
+     *                          ENTITY_ID?: int,
      *                          ADDRESS_1?: string,
      *                          ADDRESS_2?: string,
      *                          CITY?: string,
@@ -150,7 +151,7 @@ class Batch
      * @param array <int, array{
      *                          TYPE_ID?: int,
      *                          ENTITY_TYPE_ID?: int,
-     *                          ENTITY_ID?: string,
+     *                          ENTITY_ID?: int,
      *   }> $addressKeys
      *
      * @return Generator<int, DeletedItemBatchResult>
@@ -165,6 +166,41 @@ class Batch
     {
         foreach ($this->batch->deleteEntityItems('crm.address.delete', $addressKeys) as $key => $item) {
             yield $key => new DeletedItemBatchResult($item);
+        }
+    }
+    
+    /**
+     * Batch update addresses
+     *
+     * @param array <int, array{
+     *                      fields: array(
+     *                          TYPE_ID?: int,
+     *                          ENTITY_TYPE_ID?: int,
+     *                          ENTITY_ID?: int,
+     *                          ADDRESS_1?: string,
+     *                          ADDRESS_2?: string,
+     *                          CITY?: string,
+     *                          POSTAL_CODE?: string,
+     *                          REGION?: string,
+     *                          PROVINCE?: string,
+     *                          COUNTRY?: string,
+     *                          COUNTRY_CODE?: string,
+     *                          LOC_ADDR_ID?: int,
+     *                      )
+     *   }> $fields
+     *
+     * @return Generator<int, UpdatedItemBatchResult>
+     * @throws BaseException
+     */
+    #[ApiBatchMethodMetadata(
+        'crm.address.update',
+        'https://apidocs.bitrix24.com/api-reference/crm/requisites/addresses/crm-address-update.html',
+        'Batch update addresses'
+    )]
+    public function update(array $fields): Generator
+    {
+        foreach ($this->batch->updateEntityItems('crm.address.update', $fields) as $key => $item) {
+            yield $key => new UpdatedItemBatchResult($item);
         }
     }
     

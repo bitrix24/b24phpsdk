@@ -18,11 +18,11 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
 /**
- * Class AddressResult
+ * Class AddressesResult
  *
  * @package Bitrix24\SDK\Services\CRM\Address\Result
  */
-class AddressResult extends AbstractResult
+class AddressesResult extends AbstractResult
 {
     /**
      * @return AddressItemResult[]

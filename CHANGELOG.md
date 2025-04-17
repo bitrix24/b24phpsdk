@@ -9,7 +9,7 @@
     - `list` get item list, with batch calls support
     - `add` add new item, with batch calls support
     - `delete` delete item, with batch calls support
-    - `update` update item
+    - `update` update item, with batch calls support
 - Added enum `Services\CRM\Enum\OwnerType`
 - Added **PHP 8.4** [support](https://github.com/bitrix24/b24phpsdk/issues/120) 🚀
 - Added method `Bitrix24\SDK\Services\Main\Service::guardValidateCurrentAuthToken` for validate current auth token with
@@ -19,8 +19,8 @@
   see [fix entity.item.* methods](https://github.com/bitrix24/b24phpsdk/issues/53):
     - `get` get item, with batch calls support
     - `add` add new item, with batch calls support
-    - `delete` delete item, with batch calls support
-    - `update`  update item, with batch calls support
+    - `delete` delete item
+    - `update`  update item
 - Added service `Services\Entity\Service\Entity` with support methods,
   see [fix entity.* methods](https://github.com/bitrix24/b24phpsdk/issues/53):
     - `get` get entity

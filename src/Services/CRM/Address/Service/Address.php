@@ -53,7 +53,7 @@ class Address extends AbstractService
      * @param array{
      *   TYPE_ID?: int,
      *   ENTITY_TYPE_ID?: int,
-     *   ENTITY_ID?: string,
+     *   ENTITY_ID?: int,
      *   ADDRESS_1?: string,
      *   ADDRESS_2?: string,
      *   CITY?: string,
@@ -93,7 +93,7 @@ class Address extends AbstractService
      *
      * @param int $typeId
      * @param int $entityTypeId
-     * @param string $entityId
+     * @param int $entityId
      *
      * @return DeletedItemResult
      * @throws BaseException
@@ -104,7 +104,7 @@ class Address extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/requisites/addresses/crm-address-delete.html',
         'Deletes the specified address.'
     )]
-    public function delete(int $typeId, int $entityTypeId, string $entityId): DeletedItemResult
+    public function delete(int $typeId, int $entityTypeId, int $entityId): DeletedItemResult
     {
         return new DeletedItemResult(
             $this->core->call(
@@ -181,7 +181,7 @@ class Address extends AbstractService
      * @param array{
      *   TYPE_ID?: int,
      *   ENTITY_TYPE_ID?: int,
-     *   ENTITY_ID?: string,
+     *   ENTITY_ID?: int,
      *   ADDRESS_1?: string,
      *   ADDRESS_2?: string,
      *   CITY?: string,
@@ -220,7 +220,7 @@ class Address extends AbstractService
      * @param array{
      *   TYPE_ID?: int,
      *   ENTITY_TYPE_ID?: int,
-     *   ENTITY_ID?: string,
+     *   ENTITY_ID?: int,
      *   ADDRESS_1?: string,
      *   ADDRESS_2?: string,
      *   CITY?: string,
