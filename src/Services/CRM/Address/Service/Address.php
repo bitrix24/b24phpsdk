@@ -3,7 +3,7 @@
 /**
  * This file is part of the bitrix24-php-sdk package.
  *
- * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ * © Vadim Soluyanov <vadimsallee@gmail.com>
  *
  * For the full copyright and license information, please view the MIT-LICENSE.txt
  * file that was distributed with this source code.
@@ -91,7 +91,9 @@ class Address extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/addresses/crm-address-delete.html
      *
-     * @param int $id
+     * @param int $typeId
+     * @param int $entityTypeId
+     * @param string $entityId
      *
      * @return DeletedItemResult
      * @throws BaseException
@@ -102,13 +104,17 @@ class Address extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/requisites/addresses/crm-address-delete.html',
         'Deletes the specified address.'
     )]
-    public function delete(array $fields): DeletedItemResult
+    public function delete(int $typeId, int $entityTypeId, string $entityId): DeletedItemResult
     {
         return new DeletedItemResult(
             $this->core->call(
                 'crm.address.delete',
                 [
-                    'fields' => $fields,
+                    'fields' => [
+                        'TYPE_ID' => $typeId,
+                        'ENTITY_TYPE_ID' => $entityTypeId,
+                        'ENTITY_ID' => $entityId,
+                    ],
                 ]
             )
         );

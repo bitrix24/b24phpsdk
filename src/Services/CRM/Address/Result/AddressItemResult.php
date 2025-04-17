@@ -3,7 +3,7 @@
 /**
  * This file is part of the bitrix24-php-sdk package.
  *
- * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ * © Vadim Soluyanov <vadimsallee@gmail.com>
  *
  * For the full copyright and license information, please view the MIT-LICENSE.txt
  * file that was distributed with this source code.
@@ -35,14 +35,5 @@ use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
  */
 class AddressItemResult extends AbstractCrmItem
 {
-    /**
-     * @param string $userfieldName
-     *
-     * @return null
-     * @throws \Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException
-     */
-    public function getUserfieldByFieldName(string $userfieldName)
-    {
-        return;
-    }
+    
 }

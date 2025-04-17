@@ -4,6 +4,13 @@
 
 ### Added
 
+- Added service `Services\CRM\Address\Service\Address` with support methods,
+  see [add crm.address REST methods](https://github.com/bitrix24/b24phpsdk/issues/138):
+    - `list` get item list, with batch calls support
+    - `add` add new item, with batch calls support
+    - `delete` delete item, with batch calls support
+    - `update` update item
+- Added enum `Services\CRM\Enum\OwnerType`
 - Added **PHP 8.4** [support](https://github.com/bitrix24/b24phpsdk/issues/120) 🚀
 - Added method `Bitrix24\SDK\Services\Main\Service::guardValidateCurrentAuthToken` for validate current auth token with
   api-call `app.info` on vendor OAUTH server.
