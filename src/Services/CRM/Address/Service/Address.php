@@ -234,6 +234,6 @@ class Address extends AbstractService
      */
     public function countByFilter(array $filter = []): int
     {
-        return $this->list([], $filter, ['ID'], 1)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
+        return $this->list([], $filter, ['TYPE_ID'], 1)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
     }
 }
