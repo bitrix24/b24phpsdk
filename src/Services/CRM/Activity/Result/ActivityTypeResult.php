@@ -3,7 +3,7 @@
 /**
  * This file is part of the bitrix24-php-sdk package.
  *
- * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ * © Gleb Starikov <gleb.starikov1998@mail.ru>
  *
  * For the full copyright and license information, please view the MIT-LICENSE.txt
  * file that was distributed with this source code.
@@ -25,8 +25,4 @@ use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
  */
 class ActivityTypeResult extends AbstractCrmItem
 {
-    public function getData(): array
-    {
-        return $this->data;
-    }
 }

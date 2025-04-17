@@ -3,7 +3,7 @@
 /**
  * This file is part of the bitrix24-php-sdk package.
  *
- * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ * © Gleb Starikov <gleb.starikov1998@mail.ru>
  *
  * For the full copyright and license information, please view the MIT-LICENSE.txt
  * file that was distributed with this source code.
@@ -22,7 +22,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 use Bitrix24\SDK\Core;
-use Bitrix24\SDK\Services\CRM\Activity\Result\CommunicationResult;
+use Bitrix24\SDK\Services\CRM\Activity\Result\CommunicationItemResult;
 
 #[CoversClass(Communication::class)]
 #[CoversMethod(Communication::class, 'fields')]
@@ -40,14 +40,14 @@ class CommunicationTest extends TestCase
     public function testAllSystemFieldsAnnotated(): void
     {
         $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($this->communicationService->fields()->getFieldsDescription()));
-        $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, CommunicationResult::class);
+        $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, CommunicationItemResult::class);
     }
 
     public function testAllSystemFieldsHasValidTypeAnnotation():void
     {
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
             $this->communicationService->fields()->getFieldsDescription(),
-            CommunicationResult::class);
+            CommunicationItemResult::class);
     }
 
     /**

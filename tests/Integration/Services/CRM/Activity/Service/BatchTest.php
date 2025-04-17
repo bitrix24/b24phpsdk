@@ -36,7 +36,7 @@ class BatchTest extends TestCase
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    #[\PHPUnit\Framework\Attributes\TestDox('Batch add deals')]
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch add activities')]
     public function testBatchAdd(): void
     {
         $contactId = $this->contactService->add(['NAME' => 'test contact'])->getId();
@@ -141,7 +141,7 @@ class BatchTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
-    #[\PHPUnit\Framework\Attributes\TestDox('Batch list deals')]
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch list activities')]
     public function testBatchList(): void
     {
         $contactId = $this->contactService->add(['NAME' => 'test contact'])->getId();

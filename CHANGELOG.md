@@ -10,6 +10,9 @@
 - Added service `Services\AI\Engine\Service\Communication` with support methods:
     - `crm.activity.communication.fields` - get a description of the communication
 
+### Fixed
+- Fix typehint errors in `src/Services/CRM/Activity/Result/ActivityItemResult.php`
+
 - Added **PHP 8.4** [support](https://github.com/bitrix24/b24phpsdk/issues/120) 🚀
 - Added method `Bitrix24\SDK\Services\Main\Service::guardValidateCurrentAuthToken` for validate current auth token with
   api-call `app.info` on vendor OAUTH server.
