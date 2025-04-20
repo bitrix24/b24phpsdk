@@ -39,6 +39,12 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
 
     private array $applicationScope;
 
+    private Bitrix24AccountStatus $accountStatus = Bitrix24AccountStatus::new;
+
+    private readonly CarbonImmutable $createdAt;
+
+    private CarbonImmutable $updatedAt;
+
     private ?string $applicationToken = null;
 
     private ?string $comment = null;
@@ -49,10 +55,7 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
         private readonly bool $isBitrix24UserAdmin,
         private readonly string $memberId,
         private string $domainUrl,
-        private Bitrix24AccountStatus $accountStatus,
         AuthToken $authToken,
-        private readonly CarbonImmutable $createdAt,
-        private CarbonImmutable $updatedAt,
         private int $applicationVersion,
         Scope $applicationScope,
     ) {
@@ -60,6 +63,8 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
         $this->refreshToken = $authToken->refreshToken;
         $this->expires = $authToken->expires;
         $this->applicationScope = $applicationScope->getScopeCodes();
+        $this->createdAt = new CarbonImmutable();
+        $this->updatedAt = new CarbonImmutable();
     }
 
     public function getId(): Uuid

@@ -1,6 +1,6 @@
 # b24-php-sdk change log
 
-## Unreleased 1.3.0 – 2025.03.31
+## Unreleased 1.3.0 – 2025.04.21
 
 ### Added
 
@@ -91,6 +91,7 @@ Added service `Services\AI\Engine\Service\Engine` with support methods:
 - Fixed errors in `Bitrix24\SDK\Core\ApiClient` for methods with strict arguments
   order, [see details](https://github.com/bitrix24/b24phpsdk/issues/101)
 - Fixed errors in `ApplicationInstallationRepositoryInterfaceTest` for work with storage [see details](https://github.com/bitrix24/b24phpsdk/issues/123)
+- Fixed errors in `Bitrix24AccountInterfaceTest`, remove some [arguments in constructor](https://github.com/bitrix24/b24phpsdk/issues/141)
 
 ### Security
 
