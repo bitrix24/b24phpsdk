@@ -32,10 +32,7 @@ Bitrix24AccountInterfaceReferenceImplementationTest extends Bitrix24AccountInter
         bool                  $isBitrix24UserAdmin,
         string                $memberId,
         string                $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
         int                   $applicationVersion,
         Scope                 $applicationScope
     ): Bitrix24AccountInterface
@@ -46,10 +43,7 @@ Bitrix24AccountInterfaceReferenceImplementationTest extends Bitrix24AccountInter
             $isBitrix24UserAdmin,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );
