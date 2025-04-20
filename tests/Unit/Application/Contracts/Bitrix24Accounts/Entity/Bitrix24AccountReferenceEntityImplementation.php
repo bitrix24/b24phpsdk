@@ -38,8 +38,11 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
     private int $expires;
 
     private array $applicationScope;
-    private Bitrix24AccountStatus $accountStatus;
-    private CarbonImmutable $createdAt;
+
+    private Bitrix24AccountStatus $accountStatus = Bitrix24AccountStatus::new;
+
+    private readonly CarbonImmutable $createdAt;
+
     private CarbonImmutable $updatedAt;
 
     private ?string $applicationToken = null;
@@ -60,7 +63,6 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
         $this->refreshToken = $authToken->refreshToken;
         $this->expires = $authToken->expires;
         $this->applicationScope = $applicationScope->getScopeCodes();
-        $this->accountStatus = Bitrix24AccountStatus::new;
         $this->createdAt = new CarbonImmutable();
         $this->updatedAt = new CarbonImmutable();
     }
