@@ -20,7 +20,7 @@ use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
  *
  * @property-read int $TYPE_ID
  * @property-read int $ENTITY_TYPE_ID
- * @property-read string $ENTITY_ID
+ * @property-read int $ENTITY_ID
  * @property-read string|null $ADDRESS_1
  * @property-read string|null $ADDRESS_2
  * @property-read string|null $CITY
@@ -35,5 +35,4 @@ use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
  */
 class AddressItemResult extends AbstractCrmItem
 {
-    
 }

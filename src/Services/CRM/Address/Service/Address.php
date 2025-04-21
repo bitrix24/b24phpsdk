@@ -27,6 +27,7 @@ use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\CRM\Address\Result\AddressResult;
 use Bitrix24\SDK\Services\CRM\Address\Result\AddressesResult;
 use Psr\Log\LoggerInterface;
+
 #[ApiServiceMetadata(new Scope(['crm']))]
 class Address extends AbstractService
 {
@@ -240,6 +241,6 @@ class Address extends AbstractService
      */
     public function countByFilter(array $filter = []): int
     {
-        return $this->list([], $filter, ['TYPE_ID'], 1)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
+        return $this->list([], $filter, ['TYPE_ID'], -1)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
     }
 }

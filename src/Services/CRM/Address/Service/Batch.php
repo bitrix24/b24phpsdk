@@ -82,7 +82,7 @@ class Batch
      * @param array    $select = ['TYPE_ID','ENTITY_TYPE_ID','ENTITY_ID','ADDRESS_1','ADDRESS_2','CITY','POSTAL_CODE','REGION','PROVINCE','COUNTRY','COUNTRY_CODE','LOC_ADDR_ID','ANCHOR_TYPE_ID','ANCHOR_ID']
      * @param int|null $limit
      *
-     * @return Generator<int, DealItemResult>
+     * @return Generator<int, AddressItemResult>
      * @throws BaseException
      */
     #[ApiBatchMethodMetadata(
@@ -168,12 +168,12 @@ class Batch
             yield $key => new DeletedItemBatchResult($item);
         }
     }
-    
+
     /**
      * Batch update addresses
      *
      * @param array <int, array{
-     *                      fields: array(
+     *                      fields: array{
      *                          TYPE_ID?: int,
      *                          ENTITY_TYPE_ID?: int,
      *                          ENTITY_ID?: int,
@@ -186,7 +186,7 @@ class Batch
      *                          COUNTRY?: string,
      *                          COUNTRY_CODE?: string,
      *                          LOC_ADDR_ID?: int,
-     *                      )
+     *                      }
      *   }> $fields
      *
      * @return Generator<int, UpdatedItemBatchResult>
@@ -203,5 +203,5 @@ class Batch
             yield $key => new UpdatedItemBatchResult($item);
         }
     }
-    
+
 }
