@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services;
 
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Money\Currencies\ISOCurrencies;
 use Money\Formatter\DecimalMoneyFormatter;
 use Psr\Log\LoggerInterface;
@@ -43,5 +44,25 @@ abstract class AbstractService
         $this->core = $core;
         $this->log = $log;
         $this->decimalMoneyFormatter = new DecimalMoneyFormatter(new ISOCurrencies());
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    protected function guardPositiveId(int $id): void
+    {
+        if ($id <= 0) {
+            throw new InvalidArgumentException(sprintf('id must be positive, current value: %s', $id));
+        }
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    protected function guardNonEmptyString(string $value, ?string $message = null): void
+    {
+        if (trim($value) === '') {
+            throw new InvalidArgumentException($message ?? 'value must be non empty');
+        }
     }
 }

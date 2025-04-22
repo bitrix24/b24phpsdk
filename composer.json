@@ -25,7 +25,7 @@
     }
   },
   "require": {
-    "php": "8.2.* || 8.3.*",
+    "php": "8.2.* || 8.3.* || 8.4.*",
     "ext-json": "*",
     "ext-curl": "*",
     "ext-intl": "*",
@@ -51,19 +51,20 @@
     "ergebnis/composer-normalize": "^2",
     "fakerphp/faker": "^1",
     "friendsofphp/php-cs-fixer": "^3",
-    "lendable/composer-license-checker": "^1.2",
+    "lendable/composer-license-checker": "^1",
     "monolog/monolog": "^3",
     "nyholm/psr7": "^1.8",
     "openai-php/client": "0.10.*",
     "phpstan/phpstan": "1.11.7",
-    "phpunit/phpunit": "^10 || ^11",
+    "phpunit/phpunit": "^10 || ^11|| ^12",
     "rector/rector": "^1",
     "roave/security-advisories": "dev-master",
     "symfony/debug-bundle": "^6 || ^7",
     "symfony/process": "^6 || ^7",
     "symfony/stopwatch": "^6 || ^7",
     "symfony/var-dumper": "^6 || ^7",
-    "typhoon/reflection": "^0.4"
+    "typhoon/reflection": "^0.4",
+    "sentry/sentry":"^4"
   },
   "autoload": {
     "psr-4": {

@@ -79,6 +79,19 @@ class MainTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
+     */
+    public function testGuardValidateCurrentAuthToken(): void
+    {
+        // get service builder with application credentials
+        $serviceBuilder = Fabric::getServiceBuilder(true);
+        // call app.info on OAUTH server
+        $serviceBuilder->getMainScope()->main()->guardValidateCurrentAuthToken();
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
      * @throws UnknownScopeCodeException
      */
     public function testGetAvailableScope(): void

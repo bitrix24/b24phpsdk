@@ -20,6 +20,7 @@ use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Exceptions\Appli
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Repository\ApplicationInstallationRepositoryInterface;
 use Bitrix24\SDK\Application\PortalLicenseFamily;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Tests\Application\Contracts\TestRepositoryFlusherInterface;
 use Carbon\CarbonImmutable;
 use DateInterval;
 use DateTime;
@@ -50,7 +51,7 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
     ): ApplicationInstallationInterface;
 
     abstract protected function createApplicationInstallationRepositoryImplementation(): ApplicationInstallationRepositoryInterface;
-
+    abstract protected function createRepositoryFlusherImplementation(): TestRepositoryFlusherInterface;
     /**
      * @throws ApplicationInstallationNotFoundException
      */
@@ -73,9 +74,11 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
     ): void
     {
         $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
         $appInstallationRepo->save($installation);
+        $flusher->flush();
 
         $this->assertEquals($installation, $appInstallationRepo->getById($installation->getId()));
     }
@@ -99,9 +102,11 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
     ): void
     {
         $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
         $appInstallationRepo->save($installation);
+        $flusher->flush();
 
         $this->assertEquals($installation, $appInstallationRepo->getById($installation->getId()));
     }
@@ -153,6 +158,7 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
     ): void
     {
         $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
         // successfully finish installation flow
@@ -162,9 +168,11 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
         // we receive ON_APPLICATION_UNINSTALL event and mark application installation as uninstalled: status = deleted
         $installation->applicationUninstalled();
         $appInstallationRepo->save($installation);
+        $flusher->flush();
 
         // if we want we can delete application installation from repository
         $appInstallationRepo->delete($installation->getId());
+        $flusher->flush();
 
         $this->expectException(ApplicationInstallationNotFoundException::class);
         $appInstallationRepo->getById($installation->getId());
@@ -217,9 +225,11 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
     ): void
     {
         $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
         $appInstallationRepo->save($installation);
+        $flusher->flush();
 
         $this->expectException(InvalidArgumentException::class);
         $appInstallationRepo->delete($installation->getId());
@@ -244,9 +254,11 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
     ): void
     {
         $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
         $appInstallationRepo->save($installation);
+        $flusher->flush();
 
         $this->assertEquals([$installation], $appInstallationRepo->findByBitrix24AccountId($bitrix24AccountUuid));
     }
@@ -296,11 +308,13 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
     ): void
     {
         $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
         $externalId = Uuid::v7()->toRfc4122();
         $installation->setExternalId($externalId);
         $appInstallationRepo->save($installation);
+        $flusher->flush();
 
         $this->assertEquals([$installation], $appInstallationRepo->findByExternalId($externalId));
     }

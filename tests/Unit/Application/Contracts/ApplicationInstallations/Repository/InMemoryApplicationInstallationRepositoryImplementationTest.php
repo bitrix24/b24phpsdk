@@ -19,6 +19,8 @@ use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\Applicati
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Repository\ApplicationInstallationRepositoryInterface;
 use Bitrix24\SDK\Application\PortalLicenseFamily;
 use Bitrix24\SDK\Tests\Application\Contracts\ApplicationInstallations\Repository\ApplicationInstallationRepositoryInterfaceTest;
+use Bitrix24\SDK\Tests\Application\Contracts\NullableFlusher;
+use Bitrix24\SDK\Tests\Application\Contracts\TestRepositoryFlusherInterface;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationReferenceEntityImplementation;
 use Carbon\CarbonImmutable;
@@ -45,6 +47,11 @@ class InMemoryApplicationInstallationRepositoryImplementationTest extends Applic
             $partnerUuid,
             $externalId,
         );
+    }
+
+    protected function createRepositoryFlusherImplementation(): TestRepositoryFlusherInterface
+    {
+        return new NullableFlusher();
     }
 
     protected function createApplicationInstallationRepositoryImplementation(): ApplicationInstallationRepositoryInterface

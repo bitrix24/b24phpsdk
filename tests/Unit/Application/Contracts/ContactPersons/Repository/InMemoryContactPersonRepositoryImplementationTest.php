@@ -40,10 +40,7 @@ class InMemoryContactPersonRepositoryImplementationTest extends ContactPersonRep
         bool                  $isBitrix24UserAdmin,
         string                $memberId,
         string                $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken             $authToken,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
         int                   $applicationVersion,
         Scope                 $applicationScope
     ): Bitrix24AccountInterface
@@ -54,10 +51,7 @@ class InMemoryContactPersonRepositoryImplementationTest extends ContactPersonRep
             $isBitrix24UserAdmin,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );

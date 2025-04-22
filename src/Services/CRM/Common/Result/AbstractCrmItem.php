@@ -123,6 +123,7 @@ class AbstractCrmItem extends AbstractItem
             case 'CUSTOMIZED':
             case 'COMPLETED':
             case 'IS_INCOMING_CHANNEL':
+            case 'ACTIVE':
                 return $this->data[$offset] === 'Y';
             case 'DATE_CREATE':
             case 'CREATED_DATE':
@@ -140,6 +141,8 @@ class AbstractCrmItem extends AbstractItem
             case 'LAST_ACTIVITY_TIME':
             case 'START_TIME':
             case 'END_TIME':
+            case 'DATE_ACTIVE_FROM':
+            case 'DATE_ACTIVE_TO':
             case 'TIMESTAMP_X':
                 if ($this->data[$offset] !== '') {
                     return CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
@@ -215,6 +218,7 @@ class AbstractCrmItem extends AbstractItem
             case 'DISCOUNT_TYPE_ID':
                 return DiscountType::from($this->data[$offset]);
             case 'DISCOUNT_RATE':
+            case 'RATE':
                 return new Percentage((string)$this->data[$offset]);
             case 'TYPE_ID':
                 return ActivityType::from((int)$this->data[$offset]);

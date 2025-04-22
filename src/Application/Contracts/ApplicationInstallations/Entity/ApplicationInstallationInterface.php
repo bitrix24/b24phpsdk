@@ -17,6 +17,7 @@ namespace Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity;
 use Bitrix24\SDK\Application\ApplicationStatus;
 use Bitrix24\SDK\Application\PortalLicenseFamily;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Exceptions\LogicException;
 use Carbon\CarbonImmutable;
 use Symfony\Component\Uid\Uuid;
 
@@ -118,7 +119,7 @@ interface ApplicationInstallationInterface
      * Finish application installation
      *
      * Installation can be finished only for state «new»
-     * @throws InvalidArgumentException
+     * @throws LogicException
      */
     public function applicationInstalled(): void;
 
@@ -128,7 +129,7 @@ interface ApplicationInstallationInterface
      * Application can be uninstalled by:
      * - admin on portal active → deleted statuses
      * - if installation will not complete new → blocked → deleted by background task
-     * @throws InvalidArgumentException
+     * @throws LogicException
      */
     public function applicationUninstalled(): void;
 
@@ -138,7 +139,7 @@ interface ApplicationInstallationInterface
      * You can activate accounts only blocked state
      *
      * @param non-empty-string|null $comment
-     * @throws InvalidArgumentException
+     * @throws LogicException
      */
     public function markAsActive(?string $comment): void;
 
@@ -148,7 +149,7 @@ interface ApplicationInstallationInterface
      *  You can block installation account if you need temporally  stop installation work
      *
      * @param non-empty-string|null $comment
-     * @throws InvalidArgumentException
+     * @throws LogicException
      */
     public function markAsBlocked(?string $comment): void;
 

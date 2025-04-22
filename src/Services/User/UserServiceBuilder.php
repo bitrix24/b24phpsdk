@@ -16,15 +16,20 @@ namespace Bitrix24\SDK\Services\User;
 use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
+use Bitrix24\SDK\Services\User\Service\Batch;
 use Bitrix24\SDK\Services\User\Service\User;
-#[ApiServiceBuilderMetadata(new Scope(['userconsent']))]
 
+#[ApiServiceBuilderMetadata(new Scope(['user']))]
 class UserServiceBuilder extends AbstractServiceBuilder
 {
     public function user(): User
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new User($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new User(
+                new Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
         }
 
         return $this->serviceCache[__METHOD__];

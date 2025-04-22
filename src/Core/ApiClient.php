@@ -38,7 +38,7 @@ class ApiClient implements ApiClientInterface
     /**
      * @const string
      */
-    protected const SDK_VERSION = '1.2.0';
+    protected const SDK_VERSION = '1.3.0';
 
     protected const SDK_USER_AGENT = 'b24-php-sdk';
 
@@ -46,12 +46,12 @@ class ApiClient implements ApiClientInterface
      * ApiClient constructor.
      */
     public function __construct(
-        protected Credentials                 $credentials,
-        protected HttpClientInterface         $client,
+        protected Credentials $credentials,
+        protected HttpClientInterface $client,
         protected RequestIdGeneratorInterface $requestIdGenerator,
-        protected ApiLevelErrorHandler        $apiLevelErrorHandler,
-        protected LoggerInterface             $logger)
-    {
+        protected ApiLevelErrorHandler $apiLevelErrorHandler,
+        protected LoggerInterface $logger
+    ) {
         $this->logger->debug(
             'ApiClient.init',
             [
@@ -124,7 +124,7 @@ class ApiClient implements ApiClientInterface
         $response = $this->client->request($method, $url, $requestOptions);
         $responseData = $response->toArray(false);
         $this->logger->debug('getNewAuthToken.response', [
-            'httpStatus'=>$response->getStatusCode(),
+            'httpStatus' => $response->getStatusCode(),
             'responseData' => $responseData,
             'requestId' => $requestId
         ]);
@@ -140,13 +140,16 @@ class ApiClient implements ApiClientInterface
         }
 
         if ($response->getStatusCode() === StatusCodeInterface::STATUS_BAD_REQUEST) {
-            $this->logger->warning('getNewAuthToken.badRequest',[
-                'url'=> $url
+            $this->logger->warning('getNewAuthToken.badRequest', [
+                'url' => $url
             ]);
             throw new TransportException(sprintf('getting new access token failure: %s', $responseData['error']));
         }
 
-        throw new TransportException('getting new access token failure with unknown http-status code %s', $response->getStatusCode());
+        throw new TransportException(
+            'getting new access token failure with unknown http-status code %s',
+            $response->getStatusCode()
+        );
     }
 
     /**
@@ -167,12 +170,26 @@ class ApiClient implements ApiClientInterface
                 'requestId' => $requestId
             ]
         );
-
+        $apiMethod = strtolower($apiMethod);
         $method = 'POST';
         if ($this->getCredentials()->getWebhookUrl() instanceof WebhookUrl) {
             $url = sprintf('%s/%s/', $this->getCredentials()->getWebhookUrl()->getUrl(), $apiMethod);
         } else {
-            $url = sprintf('%s/rest/%s', $this->getCredentials()->getDomainUrl(), $apiMethod);
+            // all api calls work with current portal and credentials related with this portal,
+            // portal url stored in credentials, but if we work with on-premise installation we can't trust tokens from portal placement or portal event
+            // we must make sure that the token is alive that the token corresponds to the portal,
+            // "from which" came a request, and that the token corresponds to our application.
+            // that's why we call app.info on OAUTH server
+            if (($apiMethod === 'app.info') && array_key_exists(
+                    'IS_NEED_OAUTH_SECURE_CHECK',
+                    $parameters
+                ) && $parameters['IS_NEED_OAUTH_SECURE_CHECK']) {
+                // call method on vendor OAUTH server
+                $url = sprintf('%s/rest/%s', self::BITRIX24_OAUTH_SERVER_URL, $apiMethod);
+            } else {
+                // work with portal
+                $url = sprintf('%s/rest/%s', $this->getCredentials()->getDomainUrl(), $apiMethod);
+            }
 
             if (!$this->getCredentials()->getAuthToken() instanceof AuthToken) {
                 throw new InvalidArgumentException('access token in credentials not found ');
@@ -181,9 +198,24 @@ class ApiClient implements ApiClientInterface
             $parameters['auth'] = $this->getCredentials()->getAuthToken()->accessToken;
         }
 
+        // todo must be fixed by vendor in API v2
         // duplicate request id in query string for current version of bitrix24 api
         // vendor don't use request id from headers =(
-        $url .= '?' . $this->requestIdGenerator->getQueryStringParameterName() . '=' . $requestId;
+
+        // todo must be fixed by vendor in API v2
+        // part of endpoints required strict order of arguments
+        $strictApiMethods = [
+            'task.commentitem.add',
+            'task.commentitem.getlist',
+            'task.commentitem.update',
+            'task.commentitem.getlist',
+            'task.commentitem.delete',
+            'task.commentitem.isactionallowed'
+        ];
+        if (!in_array($apiMethod, $strictApiMethods, true)) {
+            $url .= '?' . $this->requestIdGenerator->getQueryStringParameterName() . '=' . $requestId;
+        }
+
         $requestOptions = [
             'json' => $parameters,
             'headers' => array_merge(
@@ -195,6 +227,11 @@ class ApiClient implements ApiClientInterface
             // disable redirects, try to catch portal change domain name event
             'max_redirects' => 0,
         ];
+        $this->logger->debug('getResponse.requestPayload', [
+            'method' => $method,
+            'url' => $url,
+            'requestOptions' => $requestOptions
+        ]);
         $response = $this->client->request($method, $url, $requestOptions);
 
         $this->logger->info(

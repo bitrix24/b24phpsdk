@@ -76,7 +76,11 @@ interface BatchOperationsInterface
      * @return Generator<int, ResponseData>|ResponseData[]
      * @throws BaseException
      */
-    public function deleteEntityItems(string $apiMethod, array $entityItemId): Generator;
+    public function deleteEntityItems(
+        string $apiMethod,
+        array $entityItemId,
+        ?array $additionalParameters = null
+    ): Generator;
 
     /**
      * Update entity items with batch call

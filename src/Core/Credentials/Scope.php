@@ -20,18 +20,18 @@ class Scope
     /**
      * @var string[]
      */
-    protected array $availableScope = [
+    protected static array $availableScope = [
         'ai_admin',
         'appform',
         'baas',
-        'bizproc',
         'biconnector',
+        'bizproc',
         'calendar',
         'calendarmobile',
-        'catalogmobile',
         'call',
         'cashbox',
         'catalog',
+        'catalogmobile',
         'configuration.import',
         'contact_center',
         'crm',
@@ -42,12 +42,13 @@ class Scope
         'entity',
         'faceid',
         'forum',
+        'humanresources.hcmlink',
         'iblock',
         'im',
-        'imbot',
-        'imopenlines',
         'im.import',
+        'imbot',
         'imconnector',
+        'imopenlines',
         'intranet',
         'landing',
         'landing_cloud',
@@ -65,6 +66,7 @@ class Scope
         'rpa',
         'sale',
         'salescenter',
+        'sign.b2e',
         'smile',
         'socialnetwork',
         'sonet_group',
@@ -75,9 +77,9 @@ class Scope
         'telephony',
         'timeman',
         'user',
+        'user.userfield',
         'user_basic',
         'user_brief',
-        'user.userfield',
         'userconsent',
         'userfieldconfig',
     ];
@@ -98,7 +100,7 @@ class Scope
             $scope = [];
         } else {
             foreach ($scope as $item) {
-                if (!in_array($item, $this->availableScope, true)) {
+                if (!in_array($item, $this::$availableScope, true)) {
                     throw new UnknownScopeCodeException(sprintf('unknown application scope code - %s', $item));
                 }
             }
@@ -112,9 +114,31 @@ class Scope
         return $this->currentScope === $scope->getScopeCodes();
     }
 
+    /**
+     * @param non-empty-string $scopeCode
+     * @throws UnknownScopeCodeException
+     */
+    public function contains(string $scopeCode): bool
+    {
+        $scopeCode = strtolower($scopeCode);
+        if (!in_array($scopeCode, $this::$availableScope, true)) {
+            throw new UnknownScopeCodeException(sprintf('unknown application scope code - %s', $scopeCode));
+        }
+
+        return in_array($scopeCode, $this->currentScope, true);
+    }
+
     public function getScopeCodes(): array
     {
         return $this->currentScope;
+    }
+
+    /**
+     * @return non-empty-string[]
+     */
+    public static function getAvailableScopeCodes(): array
+    {
+        return self::$availableScope;
     }
 
     /**

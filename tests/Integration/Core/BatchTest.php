@@ -14,13 +14,23 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Integration\Core;
 
 use Bitrix24\SDK\Core\Batch;
+use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
 use Bitrix24\SDK\Tests\Integration\Fabric;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Stopwatch\Stopwatch;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
+#[CoversClass(Batch::class)]
+#[CoversMethod(Batch::class, 'getTraversableList')]
+#[CoversMethod(Batch::class, 'addEntityItems')]
+#[CoversMethod(Batch::class, 'deleteEntityItems')]
 class BatchTest extends TestCase
 {
     private Batch $batch;
@@ -32,13 +42,12 @@ class BatchTest extends TestCase
 
     /**
      * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      * @throws \Exception
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @covers  \Bitrix24\SDK\Core\Batch::getTraversableList
-     * @testdox Get traversable list items in batch mode with more than max batch page count elements
+     * @throws TransportExceptionInterface
      */
+    #[TestDox("Get traversable list items in batch mode with more than max batch page count elements")]
     public function testGetTraversableListWithMoreThanMaxBatchPageCountWithoutLimit(): void
     {
         // prepare demo data
@@ -122,13 +131,12 @@ class BatchTest extends TestCase
 
     /**
      * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      * @throws \Exception
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @covers  \Bitrix24\SDK\Core\Batch::getTraversableList
-     * @testdox Get traversable list items in batch mode with less than one page with limit elements
+     * @throws TransportExceptionInterface
      */
+    #[TestDox("Get traversable list items in batch mode with less than one page with limit elements")]
     public function testGetTraversableListWithLessThanPageSizeWithLimit(): void
     {
         // prepare demo data
@@ -199,13 +207,12 @@ class BatchTest extends TestCase
 
     /**
      * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      * @throws \Exception
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @covers  \Bitrix24\SDK\Core\Batch::getTraversableList
-     * @testdox Get traversable list items in batch mode with count more than one page without limit
+     * @throws TransportExceptionInterface
      */
+    #[TestDox("Get traversable list items in batch mode with count more than one page without limit")]
     public function testGetTraversableListWithLessThanPageSizeWithoutLimit(): void
     {
         // prepare demo data
@@ -275,8 +282,8 @@ class BatchTest extends TestCase
 
     /**
      * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      * @throws \Exception
      * @covers  \Bitrix24\SDK\Core\Batch::addEntityItems
      * @testdox Add items in batch mode
@@ -313,13 +320,11 @@ class BatchTest extends TestCase
 
     /**
      * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      * @throws \Exception
-     * @covers  \Bitrix24\SDK\Core\Batch::addEntityItems
-     * @covers  \Bitrix24\SDK\Core\Batch::deleteEntityItems
-     * @testdox Delete items in batch mode
      */
+    #[TestDox("Delete items in batch mode")]
     public function testBatchDeleteEntityItems(): void
     {
         // prepare demo data
@@ -359,9 +364,9 @@ class BatchTest extends TestCase
 
     /**
      * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @testdox Delete items in batch mode with wrong type of entity id
+     * @throws BaseException
      */
+    #[TestDox("Delete items in batch mode with wrong type of entity id")]
     public function testBatchDeleteEntityItemsWithWrongTypeOfEntityId(): void
     {
         $this->expectException(InvalidArgumentException::class);

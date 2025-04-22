@@ -1,5 +1,129 @@
 # b24-php-sdk change log
 
+## 1.3.0 – 2025.04.23
+
+### Added
+
+- Added **PHP 8.4** [support](https://github.com/bitrix24/b24phpsdk/issues/120) 🚀
+- Added method `Bitrix24\SDK\Services\Main\Service::guardValidateCurrentAuthToken` for validate current auth token with
+  api-call `app.info` on vendor OAUTH server.
+- Added support new scope `entity`
+- Added service `Services\Entity\Service\Item` with support methods,
+  see [fix entity.item.* methods](https://github.com/bitrix24/b24phpsdk/issues/53):
+    - `get` get item, with batch calls support
+    - `add` add new item, with batch calls support
+    - `delete` delete item, with batch calls support
+    - `update`  update item, with batch calls support
+- Added service `Services\Entity\Service\Entity` with support methods,
+  see [fix entity.* methods](https://github.com/bitrix24/b24phpsdk/issues/53):
+    - `get` get entity
+    - `add` add new entity
+    - `delete` delete entity
+    - `update` update entity
+    - `rights` get or change access permissions
+- Added new application scope nodes `humanresources.hcmlink` and `sign.b2e`
+- Added method `Bitrix24\SDK\Core\Credentials\Scope::contains` for check is current scope code contains in scope, for
+  task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
+- Added method `Bitrix24\SDK\Core\Credentials\Scope::getAvailableScopeCodes` returned all available scope codes, for
+  task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
+- Added service `Services\CRM\VatRates\Service\Vat` with support methods,
+  see [add crm.vat.* methods](https://github.com/bitrix24/b24phpsdk/issues/20):
+    - `get` get vat rate by id
+    - `add` add new vat rate
+    - `delete` delete vat rate
+    - `list`  get list of vat rates
+    - `update`  update vat rate
+- Added service `Services\CRM\Contact\Service\ContactCompany` with support methods,
+  see [crm.contact.company.* methods](https://github.com/bitrix24/b24phpsdk/issues/20):
+    - `fields` get fields for contact with company connection
+    - `setItems` set companies related with contact
+    - `get` get companies related with contact
+    - `deleteItems` delete all relations for contact
+    - `add` add company relation with contact
+    - `delete` delete company relation with contact
+- Added service `Services\CRM\Requisites\Service\Requisite` with support methods,
+  see [crm.requisite.* methods](https://github.com/bitrix24/b24phpsdk/issues/20):
+    - `fields` get fields for requisite item
+    - `list` get requisites list
+    - `get` returns a requisite by the requisite id
+    - `add` add requisite
+    - `delete` delete requisite and related objects
+    - `update` delete requisite
+- Added service `Services\CRM\Requisites\Service\RequisitePreset` with support methods,
+  see [crm.requisite.preset.* methods](https://github.com/bitrix24/b24phpsdk/issues/20):
+    - `fields` get fields for requisite item
+    - `list` get requisites list
+    - `get` returns a requisite by the requisite id
+    - `add` add requisite
+    - `countries` get countries list
+    - `delete` delete requisite and related objects
+    - `update` delete requisite
+- Added batch service `Bitrix24\SDK\Services\User\Service\Batch`
+  with [support methods](https://github.com/bitrix24/b24phpsdk/issues/103):
+    - `add` add (invite) users
+    - `get` get users list
+Added service `Services\AI\Engine\Service\Engine` with support methods:
+  - `ai.engine.register` - method registers an engine and updates it upon subsequent calls
+  - `ai.engine.list` - get the list of ai services
+  - `ai.engine.unregister` - Delete registered ai service
+Added class `Bitrix24\SDK\Core\Exceptions\LogicException` for logic exceptions   
+- Developer experience: added cli command `b24-dev:show-sdk-coverage-statistics` for show actual SDK coverage for
+  REST-API, see task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
+- Developer experience: added class `Bitrix24\SDK\Deprecations\DeprecatedMethods` with list of
+  all [deprecated methods](https://github.com/bitrix24/b24phpsdk/issues/97)
+- Developer experience: commands from makefile now run inside docker container `php-cli`
+- Developer experience: added cache folder in phpstan config
+- Developer experience: added article «[How to Contribute to Bitrix24 PHP SDK](docs/EN/Development/how-to-contribute.md)»
+### Changed
+
+- Added nullable argument `$scope` in method `Bitrix24\SDK\Attributes\Services::getSupportedInSdkApiMethods`,
+  for task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
+- Added class `Bitrix24\SDK\Core\Exceptions\LogicException` for logic exceptions,
+  for task «[fix contract tests](https://github.com/bitrix24/b24phpsdk/issues/129)»
+- Changed method signature `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity::updateApplicationVersion`, for
+  task «[add bitrixUserId and AuthToken](https://github.com/bitrix24/b24phpsdk/issues/115)»
+- Developer experience: webhook example moved to
+  repository [bitrix24/b24sdk-examples](https://github.com/bitrix24/b24sdk-examples/tree/main/php/quick-start/simple/02-work-with-webhook)
+
+### Fixed
+
+- Fixed errors in `Bitrix24\SDK\Core\Batch` for method
+  `user.get`, [see details](https://github.com/bitrix24/b24phpsdk/issues/103)
+- Fixed errors in `Bitrix24\SDK\Core\Batch` for methods `entity.item.get` and
+  `entity.item.update`, [see details](https://github.com/bitrix24/b24phpsdk/issues/53)
+- Fixed errors in `Bitrix24\SDK\Core\ApiClient` for methods with strict arguments
+  order, [see details](https://github.com/bitrix24/b24phpsdk/issues/101)
+- Fixed errors in `ApplicationInstallationRepositoryInterfaceTest` for work with storage [see details](https://github.com/bitrix24/b24phpsdk/issues/123)
+- Fixed errors in `Bitrix24AccountInterfaceTest`, remove some [arguments in constructor](https://github.com/bitrix24/b24phpsdk/issues/141)
+
+### Security
+
+- Added method `Bitrix24\SDK\Services\Main\Service::guardValidateCurrentAuthToken` for validate current auth token with
+  api-call `app.info` on vendor OAUTH server. You can validate incoming tokens from placements and events
+
+### Removed
+
+- Developer experience: removed example webhook-error-handling, see
+  example [02-work-with-webhook](https://github.com/bitrix24/b24sdk-examples/tree/main/php/quick-start/simple/02-work-with-webhook)
+
+### Statistics
+
+```
+Bitrix24 API-methods count: 1146
+Supported in bitrix24-php-sdk methods count: 227
+Coverage percentage: 19.81% 🚀
+Supported in bitrix24-php-sdk methods with batch wrapper count: 29
+```
+
+<!--
+## Unreleased
+### Added
+### Changed
+### Removed
+### Fixed
+### Security
+-->
+
 ## 1.2.0 – 2024.12.7
 
 ### Added
@@ -179,15 +303,6 @@ Supported in bitrix24-php-sdk methods count: 191
 Coverage percentage: 16.83% 🚀
 Supported in bitrix24-php-sdk methods with batch wrapper count: 22
 ```
-
-<!--
-## Unreleased
-### Added
-### Changed
-### Removed
-### Fixed
-### Security
--->
 
 ## 1.1.0 – 2024.09.25
 

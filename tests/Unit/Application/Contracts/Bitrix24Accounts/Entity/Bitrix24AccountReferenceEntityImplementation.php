@@ -39,28 +39,32 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
 
     private array $applicationScope;
 
+    private Bitrix24AccountStatus $accountStatus = Bitrix24AccountStatus::new;
+
+    private readonly CarbonImmutable $createdAt;
+
+    private CarbonImmutable $updatedAt;
+
     private ?string $applicationToken = null;
 
     private ?string $comment = null;
 
     public function __construct(
-        private readonly Uuid            $id,
-        private readonly int             $bitrix24UserId,
-        private readonly bool            $isBitrix24UserAdmin,
-        private readonly string          $memberId,
-        private string                   $domainUrl,
-        private Bitrix24AccountStatus    $accountStatus,
-        AuthToken                        $authToken,
-        private readonly CarbonImmutable $createdAt,
-        private CarbonImmutable          $updatedAt,
-        private int                      $applicationVersion,
-        Scope                            $applicationScope,
-    )
-    {
+        private readonly Uuid $id,
+        private int $bitrix24UserId,
+        private readonly bool $isBitrix24UserAdmin,
+        private readonly string $memberId,
+        private string $domainUrl,
+        AuthToken $authToken,
+        private int $applicationVersion,
+        Scope $applicationScope,
+    ) {
         $this->accessToken = $authToken->accessToken;
         $this->refreshToken = $authToken->refreshToken;
         $this->expires = $authToken->expires;
         $this->applicationScope = $applicationScope->getScopeCodes();
+        $this->createdAt = new CarbonImmutable();
+        $this->updatedAt = new CarbonImmutable();
     }
 
     public function getId(): Uuid
@@ -164,9 +168,12 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
     public function applicationInstalled(string $applicationToken): void
     {
         if (Bitrix24AccountStatus::new !== $this->accountStatus) {
-            throw new InvalidArgumentException(sprintf(
-                'for finish installation bitrix24 account must be in status «new», current status - «%s»',
-                $this->accountStatus->name));
+            throw new InvalidArgumentException(
+                sprintf(
+                    'for finish installation bitrix24 account must be in status «new», current status - «%s»',
+                    $this->accountStatus->name
+                )
+            );
         }
 
         if ($applicationToken === '') {
@@ -188,9 +195,12 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
         }
 
         if (Bitrix24AccountStatus::active !== $this->accountStatus) {
-            throw new InvalidArgumentException(sprintf(
-                'for uninstall account must be in status «active», current status - «%s»',
-                $this->accountStatus->name));
+            throw new InvalidArgumentException(
+                sprintf(
+                    'for uninstall account must be in status «active», current status - «%s»',
+                    $this->accountStatus->name
+                )
+            );
         }
 
         if ($this->applicationToken !== $applicationToken) {
@@ -227,18 +237,32 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
     /**
      * @throws InvalidArgumentException
      */
-    public function updateApplicationVersion(int $version, ?Scope $newScope): void
+    public function updateApplicationVersion(AuthToken $authToken, int $b24UserId, int $version, ?Scope $newScope): void
     {
         if (Bitrix24AccountStatus::active !== $this->accountStatus) {
-            throw new InvalidArgumentException(sprintf('account must be in status «active», but now account in status «%s»', $this->accountStatus->name));
+            throw new InvalidArgumentException(
+                sprintf(
+                    'account must be in status «active», but now account in status «%s»',
+                    $this->accountStatus->name
+                )
+            );
         }
 
         if ($this->applicationVersion >= $version) {
             throw new InvalidArgumentException(
-                sprintf('you cannot downgrade application version or set some version, current version «%s», but you try to upgrade to «%s»',
+                sprintf(
+                    'you cannot downgrade application version or set some version, current version «%s», but you try to upgrade to «%s»',
                     $this->applicationVersion,
-                    $version));
+                    $version
+                )
+            );
         }
+
+        $this->accessToken = $authToken->accessToken;
+        $this->refreshToken = $authToken->refreshToken;
+        $this->expires = $authToken->expires;
+
+        $this->bitrix24UserId = $b24UserId;
 
         $this->applicationVersion = $version;
         if ($newScope instanceof \Bitrix24\SDK\Core\Credentials\Scope) {
@@ -255,8 +279,11 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
     {
         if (Bitrix24AccountStatus::blocked !== $this->accountStatus) {
             throw new InvalidArgumentException(
-                sprintf('you can activate account only in status blocked, now account in status %s',
-                    $this->accountStatus->name));
+                sprintf(
+                    'you can activate account only in status blocked, now account in status %s',
+                    $this->accountStatus->name
+                )
+            );
         }
 
         $this->accountStatus = Bitrix24AccountStatus::active;
