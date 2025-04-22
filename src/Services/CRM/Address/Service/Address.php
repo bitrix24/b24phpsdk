@@ -217,6 +217,10 @@ class Address extends AbstractService
 
     /**
      * Count Addresses by filter
+     * 
+     * Meanwhile this method works with an error
+     * because of a bug in bx24 rest-api.
+     * Issue: https://github.com/bitrix24/b24phpsdk/issues/144
      *
      * @param array{
      *   TYPE_ID?: int,
@@ -241,6 +245,6 @@ class Address extends AbstractService
      */
     public function countByFilter(array $filter = []): int
     {
-        return $this->list([], $filter, ['TYPE_ID'], -1)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
+        return $this->list([], $filter, ['TYPE_ID'], 1)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
     }
 }

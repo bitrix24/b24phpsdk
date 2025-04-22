@@ -39,16 +39,17 @@ class VatTest extends TestCase
     use CustomBitrix24Assertions;
 
     private ServiceBuilder $sb;
+
     private array $addedVatRates = [];
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
-        foreach ($this->addedVatRates as $rateId) {
-            $this->sb->getCRMScope()->vat()->delete($rateId);
+        foreach ($this->addedVatRates as $addedVatRate) {
+            $this->sb->getCRMScope()->vat()->delete($addedVatRate);
         }
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->sb = Fabric::getServiceBuilder();
     }
@@ -75,9 +76,7 @@ class VatTest extends TestCase
     {
         $allFields = $this->sb->getCRMScope()->vat()->fields()->getFieldsDescription();
         $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
-        $systemFields = array_filter($allFields, static function ($code) use ($systemFieldsCodes) {
-            return in_array($code, $systemFieldsCodes, true);
-        }, ARRAY_FILTER_USE_KEY);
+        $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
 
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
             $systemFields,
@@ -88,19 +87,19 @@ class VatTest extends TestCase
     public function testAddAndGet(): void
     {
         $name = sprintf('test vat name %s', time());
-        $rate = new Percentage((string)random_int(1, 99));
+        $percentage = new Percentage((string)random_int(1, 99));
         $sort = random_int(1, 500);
         $isActive = (bool)random_int(0, 1);
 
-        $newVatRateId = $this->sb->getCRMScope()->vat()->add($name, $rate, $sort, $isActive)->getId();
+        $newVatRateId = $this->sb->getCRMScope()->vat()->add($name, $percentage, $sort, $isActive)->getId();
         $this->addedVatRates[] = $newVatRateId;
 
-        $addedRate = $this->sb->getCRMScope()->vat()->get($newVatRateId)->getRate();
+        $vatRateItemResult = $this->sb->getCRMScope()->vat()->get($newVatRateId)->getRate();
 
-        $this->assertEquals($name, $addedRate->NAME);
-        $this->assertTrue($rate->equals($addedRate->RATE));
-        $this->assertEquals($sort, $addedRate->C_SORT);
-        $this->assertEquals($isActive, $addedRate->ACTIVE);
+        $this->assertEquals($name, $vatRateItemResult->NAME);
+        $this->assertTrue($percentage->equals($vatRateItemResult->RATE));
+        $this->assertEquals($sort, $vatRateItemResult->C_SORT);
+        $this->assertEquals($isActive, $vatRateItemResult->ACTIVE);
     }
 
     public function testDelete(): void
@@ -124,8 +123,8 @@ class VatTest extends TestCase
     public function testUpdate(): void
     {
         $title = sprintf('test vat name %s', time());
-        $rate = new Percentage((string)random_int(20, 30));
-        $newVatRateId = $this->sb->getCRMScope()->vat()->add($title, $rate)->getId();
+        $percentage = new Percentage((string)random_int(20, 30));
+        $newVatRateId = $this->sb->getCRMScope()->vat()->add($title, $percentage)->getId();
         $this->addedVatRates[] = $newVatRateId;
 
         $newTitle = 'new' . $title;
@@ -136,8 +135,8 @@ class VatTest extends TestCase
             )->isSuccess()
         );
 
-        $updated = $this->sb->getCRMScope()->vat()->get($newVatRateId)->getRate();
-        $this->assertEquals($newTitle, $updated->NAME);
+        $vatRateItemResult = $this->sb->getCRMScope()->vat()->get($newVatRateId)->getRate();
+        $this->assertEquals($newTitle, $vatRateItemResult->NAME);
     }
 
     public function testList(): void

@@ -31,40 +31,46 @@ use PHPUnit\Framework\TestCase;
  *
  * @package Bitrix24\SDK\Tests\Integration\Services\CRM\Address\Service
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Address\Service\Batch::class)]
 class BatchTest extends TestCase
 {
     protected ServiceBuilder $sb;
+
     protected Address $addressService;
+
     protected Company $companyService;
+
     protected Requisite $requisiteService;
+
     protected array   $addressTypes = [];
+
     protected array   $presets = [];
-    
-    public function setUp(): void
+
+    protected function setUp(): void
     {
         $this->sb = Fabric::getServiceBuilder();
         $this->addressService = $this->sb->getCRMScope()->address();
         $this->companyService = $this->sb->getCRMScope()->company();
         $this->requisiteService = $this->sb->getCRMScope()->requisite();
         $requisitePreset = $this->sb->getCRMScope()->requisitePreset();
-        foreach ($requisitePreset->list()->getRequisitePresets() as $item) {
-            $this->presets[] = $item->ID;
+        foreach ($requisitePreset->list()->getRequisitePresets() as $addressTypeFieldItemResult) {
+            $this->presets[] = $addressTypeFieldItemResult->ID;
         }
+
         $enum = Fabric::getServiceBuilder()->getCRMScope()->enum();
-        foreach ($enum->addressType()->getItems() as $item) {
-            $this->addressTypes[] = $item->ID;
+        foreach ($enum->addressType()->getItems() as $addressTypeFieldItemResult) {
+            $this->addressTypes[] = $addressTypeFieldItemResult->ID;
         }
     }
 
     /**
-     * @testdox Batch list addresses
-     * @covers  \Bitrix24\SDK\Services\CRM\Address\Service\Batch::list()
      * @throws BaseException
      * @throws TransportException
      */
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch list addresses')]
     public function testBatchList(): void
     {
-        list($companyId, $requisiteId) = $this->addCompanyAndRequisite();
+        [$companyId, $requisiteId] = $this->addCompanyAndRequisite();
         $fields = [
             'TYPE_ID' => $this->addressTypes[1],
             'ENTITY_TYPE_ID' => OwnerType::requisite->value,
@@ -77,52 +83,52 @@ class BatchTest extends TestCase
         foreach ($list as $item) {
             $cnt++;
         }
+
         self::assertGreaterThanOrEqual(1, $cnt);
-        
+
         $this->companyService->delete($companyId);
     }
 
     /**
-     * @testdox Batch add address
-     * @covers  \Bitrix24\SDK\Services\CRM\Address\Service\Batch::add()
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch add address')]
     public function testBatchAdd(): void
     {
-        list($companyId, $requisiteId) = $this->addCompanyAndRequisite();
+        [$companyId, $requisiteId] = $this->addCompanyAndRequisite();
         $fields = [
             'TYPE_ID' => 0,
             'ENTITY_TYPE_ID' => OwnerType::requisite->value,
             'ENTITY_ID' => $requisiteId,
             'ADDRESS_1' => '0, Test str.'
         ];
-        
+
         $items = [];
-        foreach ($this->addressTypes as $typeId) {
+        foreach ($this->addressTypes as $addressType) {
             $stepFields = $fields;
-            $stepFields['TYPE_ID'] = $typeId;
-            $stepFields['ADDRESS_1'] = $typeId . $stepFields['ADDRESS_1'];
+            $stepFields['TYPE_ID'] = $addressType;
+            $stepFields['ADDRESS_1'] = $addressType . $stepFields['ADDRESS_1'];
             $items[] = $stepFields;
         }
-        
+
         $cnt = 0;
         foreach ($this->addressService->batch->add($items) as $item) {
             $cnt++;
         }
+
         self::assertEquals(count($items), $cnt);
 
         $this->companyService->delete($companyId);
     }
 
     /**
-     * @testdox Batch delete address
-     * @covers  \Bitrix24\SDK\Services\CRM\Address\Service\Batch::add()
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch delete address')]
     public function testBatchDelete(): void
     {
         $items = [];
-        list($companyId, $requisiteId) = $this->addCompanyAndRequisite();
+        [$companyId, $requisiteId] = $this->addCompanyAndRequisite();
         $fields = [
             'TYPE_ID' => 0,
             'ENTITY_TYPE_ID' => OwnerType::requisite->value,
@@ -135,38 +141,40 @@ class BatchTest extends TestCase
             $stepFields['ADDRESS_1'] = $typeId . $stepFields['ADDRESS_1'];
             $items[] = $stepFields;
         }
-        
+
         $cnt = 0;
         foreach ($this->addressService->batch->add($items) as $item) {
             $cnt++;
         }
+
         self::assertEquals(count($items), $cnt);
 
         $cnt = 0;
         $items = [];
-        foreach ($this->addressTypes as $typeId) {
+        foreach ($this->addressTypes as $addressType) {
             $stepFields = $fields;
-            $stepFields['TYPE_ID'] = $typeId;
+            $stepFields['TYPE_ID'] = $addressType;
             unset($stepFields['ADDRESS_1']);
             $items[] = $stepFields;
         }
+
         foreach ($this->addressService->batch->delete($items) as $cnt => $deleteResult) {
             $cnt++;
         }
+
         self::assertEquals(count($items), $cnt);
-        
+
         $this->companyService->delete($companyId);
     }
-    
+
     /**
-     * @testdox Batch update address
-     * @covers  \Bitrix24\SDK\Services\CRM\Address\Service\Batch::update()
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch update address')]
     public function testBatchUpdate(): void
     {
         $items = [];
-        list($companyId, $requisiteId) = $this->addCompanyAndRequisite();
+        [$companyId, $requisiteId] = $this->addCompanyAndRequisite();
         $fields = [
             'TYPE_ID' => 0,
             'ENTITY_TYPE_ID' => OwnerType::requisite->value,
@@ -179,32 +187,35 @@ class BatchTest extends TestCase
             $stepFields['ADDRESS_1'] = $typeId . $stepFields['ADDRESS_1'];
             $items[] = $stepFields;
         }
-        
+
         $cnt = 0;
         foreach ($this->addressService->batch->add($items) as $item) {
             $cnt++;
         }
+
         self::assertEquals(count($items), $cnt);
 
         $cnt = 0;
         $items = [];
         $newAddress1 = 'Updated address 1';
-        foreach ($this->addressTypes as $typeId) {
+        foreach ($this->addressTypes as $addressType) {
             $stepFields = $fields;
-            $stepFields['TYPE_ID'] = $typeId;
+            $stepFields['TYPE_ID'] = $addressType;
             $stepFields['ADDRESS_1'] = $newAddress1;
             $stepFields = ['fields' => $stepFields];
-            
+
             $items[] = $stepFields;
         }
+
         foreach ($this->addressService->batch->update($items) as $cnt => $updateResult) {
             $cnt++;
         }
+
         self::assertEquals(count($items), $cnt);
-        
+
         $this->companyService->delete($companyId);
     }
-    
+
     protected function addCompanyAndRequisite(): array {
         $companyId = $this->companyService->add((new CompanyBuilder())->build())->getId();
         $requisiteId = $this->requisiteService->add(
@@ -214,7 +225,7 @@ class BatchTest extends TestCase
             'Test requisite',
             (new RequisiteBuilder(OwnerType::company->value, $companyId, $this->presets[0]))->build()
         )->getId();
-        
+
         return [$companyId, $requisiteId];
     }
 }

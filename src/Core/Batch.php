@@ -126,7 +126,7 @@ class Batch implements BatchOperationsInterface
             ]
         );
         
-        $useFieldsInsteadOfId = in_array($apiMethod, ['crm.address.delete',]);
+        $useFieldsInsteadOfId = $apiMethod === 'crm.address.delete';
 
         try {
             $this->clearCommands();
@@ -205,7 +205,7 @@ class Batch implements BatchOperationsInterface
         try {
             $this->clearCommands();
             
-            $useFieldsInsteadOfId = in_array($apiMethod, ['crm.address.update',]);
+            $useFieldsInsteadOfId = $apiMethod === 'crm.address.update';
             
             foreach ($entityItems as $entityItemId => $entityItem) {
                 if (!$useFieldsInsteadOfId && !is_int($entityItemId)) {
@@ -235,6 +235,7 @@ class Batch implements BatchOperationsInterface
                             'fields' => $entityItem['fields']
                         ];
                     }
+
                     if (array_key_exists('params', $entityItem)) {
                         $cmdArguments['params'] = $entityItem['params'];
                     }

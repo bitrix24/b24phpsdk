@@ -43,30 +43,37 @@ use PHPUnit\Framework\TestCase;
 #[CoversMethod(Address::class,'list')]
 #[CoversMethod(Address::class,'fields')]
 #[CoversMethod(Address::class,'update')]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Address\Service\Address::class)]
 class AddressTest extends TestCase
 {
     use CustomBitrix24Assertions;
-    
+
     protected ServiceBuilder $sb;
+
     protected Address $addressService;
+
     protected Company $companyService;
+
     protected Requisite $requisiteService;
+
     protected array   $addressTypes = [];
+
     protected array   $presets = [];
-    
-    public function setUp(): void
+
+    protected function setUp(): void
     {
         $this->sb = Fabric::getServiceBuilder();
         $this->addressService = $this->sb->getCRMScope()->address();
         $this->companyService = $this->sb->getCRMScope()->company();
         $this->requisiteService = $this->sb->getCRMScope()->requisite();
         $requisitePreset = $this->sb->getCRMScope()->requisitePreset();
-        foreach ($requisitePreset->list()->getRequisitePresets() as $item) {
-            $this->presets[] = $item->ID;
+        foreach ($requisitePreset->list()->getRequisitePresets() as $addressTypeFieldItemResult) {
+            $this->presets[] = $addressTypeFieldItemResult->ID;
         }
+
         $enum = $this->sb->getCRMScope()->enum();
-        foreach ($enum->addressType()->getItems() as $item) {
-            $this->addressTypes[] = $item->ID;
+        foreach ($enum->addressType()->getItems() as $addressTypeFieldItemResult) {
+            $this->addressTypes[] = $addressTypeFieldItemResult->ID;
         }
     }
 
@@ -80,9 +87,7 @@ class AddressTest extends TestCase
     {
         $allFields = $this->addressService->fields()->getFieldsDescription();
         $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
-        $systemFields = array_filter($allFields, static function ($code) use ($systemFieldsCodes) {
-            return in_array($code, $systemFieldsCodes, true);
-        }, ARRAY_FILTER_USE_KEY);
+        $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
 
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
             $systemFields,
@@ -92,11 +97,10 @@ class AddressTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Address::add
      */
     public function testAdd(): void
     {
-        list($companyId, $requisiteId) = $this->addCompanyAndRequisite();
+        [$companyId, $requisiteId] = $this->addCompanyAndRequisite();
         $fields = [
             'TYPE_ID' => $this->addressTypes[1],
             'ENTITY_TYPE_ID' => OwnerType::requisite->value,
@@ -107,26 +111,25 @@ class AddressTest extends TestCase
             1,
             $this->addressService->add($fields)->getCoreResponse()->getResponseData()->getResult()[0]
         );
-        
+
         $this->companyService->delete($companyId);
     }
 
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Address::delete
      */
     public function testDelete(): void
     {
-        list($companyId, $requisiteId) = $this->addCompanyAndRequisite();
+        [$companyId, $requisiteId] = $this->addCompanyAndRequisite();
         $fields = [
             'TYPE_ID' => $this->addressTypes[1],
             'ENTITY_TYPE_ID' => OwnerType::requisite->value,
             'ENTITY_ID' => $requisiteId,
             'ADDRESS_1' => 'Test str.'
         ];
-        
-        $addRes = $this->addressService->add($fields)->getCoreResponse()->getResponseData()->getResult();
+
+        $this->addressService->add($fields)->getCoreResponse()->getResponseData()->getResult();
         self::assertTrue(
             $this->addressService->delete(
                 $fields['TYPE_ID'],
@@ -138,7 +141,6 @@ class AddressTest extends TestCase
     }
 
     /**
-     * @covers Address::fields
      * @throws BaseException
      * @throws TransportException
      */
@@ -150,11 +152,10 @@ class AddressTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Address::list
      */
     public function testList(): void
     {
-        list($companyId, $requisiteId) = $this->addCompanyAndRequisite();
+        [$companyId, $requisiteId] = $this->addCompanyAndRequisite();
         $fields = [
             'TYPE_ID' => $this->addressTypes[1],
             'ENTITY_TYPE_ID' => OwnerType::requisite->value,
@@ -170,12 +171,11 @@ class AddressTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Address::update
      */
     public function testUpdate(): void
     {
-        list($companyId, $requisiteId) = $this->addCompanyAndRequisite();
-        $address = $this->addressService->add([
+        [$companyId, $requisiteId] = $this->addCompanyAndRequisite();
+        $this->addressService->add([
             'TYPE_ID' => $this->addressTypes[1],
             'ENTITY_TYPE_ID' => OwnerType::requisite->value,
             'ENTITY_ID' => $requisiteId,
@@ -201,20 +201,21 @@ class AddressTest extends TestCase
             ['ADDRESS_1']
         )->getCoreResponse()->getResponseData()->getResult()[0]['ADDRESS_1'];
         self::assertEquals($newAddress, $response);
-        
+
         $this->companyService->delete($companyId);
     }
 
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
-     * @covers \Bitrix24\SDK\Services\CRM\Address\Service\Address::countByFilter
      */
+    /*
+    // restApi bug. Issue: https://github.com/bitrix24/b24phpsdk/issues/144
     public function testCountByFilter(): void
     {
         $before = $this->addressService->countByFilter();
 
-        list($companyId, $requisiteId) = $this->addCompanyAndRequisite();
+        [$companyId, $requisiteId] = $this->addCompanyAndRequisite();
         $fields = [
             'TYPE_ID' => $this->addressTypes[1],
             'ENTITY_TYPE_ID' => OwnerType::requisite->value,
@@ -222,25 +223,28 @@ class AddressTest extends TestCase
             'ADDRESS_1' => '0, Test str.'
         ];
         $items = [];
-        foreach ($this->addressTypes as $typeId) {
+        foreach ($this->addressTypes as $addressType) {
             $stepFields = $fields;
-            $stepFields['TYPE_ID'] = $typeId;
-            $stepFields['ADDRESS_1'] = $typeId . $stepFields['ADDRESS_1'];
+            $stepFields['TYPE_ID'] = $addressType;
+            $stepFields['ADDRESS_1'] = $addressType . $stepFields['ADDRESS_1'];
             $items[] = $stepFields;
         }
+
         $cnt = 0;
         foreach ($this->addressService->batch->add($items) as $item) {
             $cnt++;
         }
+
         self::assertEquals(count($items), $cnt);
 
         $after = $this->addressService->countByFilter();
 
         $this->assertEquals($before + count($this->addressTypes), $after);
-        
+
         $this->companyService->delete($companyId);
     }
-    
+    */
+
     protected function addCompanyAndRequisite(): array {
         $companyId = $this->companyService->add((new CompanyBuilder())->build())->getId();
         $requisiteId = $this->requisiteService->add(
@@ -250,7 +254,7 @@ class AddressTest extends TestCase
             'Test requisite',
             (new RequisiteBuilder(OwnerType::company->value, $companyId, $this->presets[0]))->build()
         )->getId();
-        
+
         return [$companyId, $requisiteId];
     }
 }

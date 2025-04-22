@@ -27,6 +27,7 @@ use Bitrix24\SDK\Services\CRM\Deal\Result\DealItemResult;
  *
  * @package Bitrix24\SDK\Tests\Integration\Services\CRM\Deals\Service
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Deal\Service\Deal::class)]
 class DealTest extends TestCase
 {
     use CustomBitrix24Assertions;
@@ -41,7 +42,6 @@ class DealTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Deal::add
      */
     public function testAdd(): void
     {
@@ -51,7 +51,6 @@ class DealTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Deal::delete
      */
     public function testDelete(): void
     {
@@ -59,7 +58,6 @@ class DealTest extends TestCase
     }
 
     /**
-     * @covers Deal::fields
      * @throws BaseException
      * @throws TransportException
      */
@@ -71,7 +69,6 @@ class DealTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Deal::get
      */
     public function testGet(): void
     {
@@ -84,7 +81,6 @@ class DealTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Deal::list
      */
     public function testList(): void
     {
@@ -94,17 +90,16 @@ class DealTest extends TestCase
 
     public function testUpdate(): void
     {
-        $deal = $this->dealService->add(['TITLE' => 'test']);
+        $addedItemResult = $this->dealService->add(['TITLE' => 'test']);
         $newTitle = 'test2';
 
-        self::assertTrue($this->dealService->update($deal->getId(), ['TITLE' => $newTitle], [])->isSuccess());
-        self::assertEquals($newTitle, $this->dealService->get($deal->getId())->deal()->TITLE);
+        self::assertTrue($this->dealService->update($addedItemResult->getId(), ['TITLE' => $newTitle], [])->isSuccess());
+        self::assertEquals($newTitle, $this->dealService->get($addedItemResult->getId())->deal()->TITLE);
     }
 
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\Deal::countByFilter
      */
     public function testCountByFilter(): void
     {
@@ -115,10 +110,12 @@ class DealTest extends TestCase
         for ($i = 1; $i <= $newDealsCount; $i++) {
             $deals[] = ['TITLE' => 'TITLE-' . $i];
         }
+
         $cnt = 0;
         foreach ($this->dealService->batch->add($deals) as $item) {
             $cnt++;
         }
+
         self::assertEquals(count($deals), $cnt);
 
         $after = $this->dealService->countByFilter();
@@ -126,7 +123,7 @@ class DealTest extends TestCase
         $this->assertEquals($before + $newDealsCount, $after);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->dealService = Fabric::getServiceBuilder()->getCRMScope()->deal();
     }
