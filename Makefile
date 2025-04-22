@@ -178,7 +178,7 @@ test-integration-scope-ai-admin:
 # work dev environment
 .PHONY: php-dev-server-up
 php-dev-server-up:
-	docker-compose run --rm -p 10080:10080 php-cli php -S 0.0.0.0:10080 -t public
+	docker-compose run --rm -p 10080:10080 php-cli php -S 0.0.0.0:10080 -t tests/ApplicationBridge
 
 .PHONY: php-dev-server-down
 php-dev-server-down:
