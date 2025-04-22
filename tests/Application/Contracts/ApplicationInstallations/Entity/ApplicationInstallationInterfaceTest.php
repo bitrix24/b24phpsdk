@@ -18,6 +18,7 @@ use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\Applicati
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationStatus;
 use Bitrix24\SDK\Application\PortalLicenseFamily;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Exceptions\LogicException;
 use Carbon\CarbonImmutable;
 use DateInterval;
 use DateTime;
@@ -359,7 +360,7 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $this->assertFalse($installation->getCreatedAt()->equalTo($installation->getUpdatedAt()));
 
         // try to finish installation in wrong state
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(LogicException::class);
         $installation->applicationInstalled();
     }
 
@@ -389,7 +390,7 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $this->assertFalse($installation->getCreatedAt()->equalTo($installation->getUpdatedAt()));
 
         // try to finish installation in wrong state
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(LogicException::class);
         $installation->applicationUninstalled();
     }
 
@@ -424,7 +425,7 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
 
 
         // try to activate installation in wrong state
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(LogicException::class);
         $installation->markAsActive('activate installation in wrong state');
     }
 
@@ -454,7 +455,7 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $this->assertEquals(ApplicationInstallationStatus::blocked, $installation->getStatus());
 
         // try to activate installation in wrong state
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(LogicException::class);
         $installation->markAsBlocked('activate installation in wrong state');
     }
 

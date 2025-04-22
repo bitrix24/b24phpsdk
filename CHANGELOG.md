@@ -1,6 +1,6 @@
 # b24-php-sdk change log
 
-## Unreleased 1.3.0 – 2025.04.21
+## Unreleased 1.3.0 – 2025.04.22
 
 ### Added
 
@@ -65,7 +65,8 @@
 Added service `Services\AI\Engine\Service\Engine` with support methods:
   - `ai.engine.register` - method registers an engine and updates it upon subsequent calls
   - `ai.engine.list` - get the list of ai services
-  - `ai.engine.unregister` - Delete registered ai service 
+  - `ai.engine.unregister` - Delete registered ai service
+Added class `Bitrix24\SDK\Core\Exceptions\LogicException` for logic exceptions   
 - Developer experience: added cli command `b24-dev:show-sdk-coverage-statistics` for show actual SDK coverage for
   REST-API, see task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
 - Developer experience: added class `Bitrix24\SDK\Deprecations\DeprecatedMethods` with list of
@@ -77,6 +78,8 @@ Added service `Services\AI\Engine\Service\Engine` with support methods:
 
 - Added nullable argument `$scope` in method `Bitrix24\SDK\Attributes\Services::getSupportedInSdkApiMethods`,
   for task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
+- Added class `Bitrix24\SDK\Core\Exceptions\LogicException` for logic exceptions,
+  for task «[fix contract tests](https://github.com/bitrix24/b24phpsdk/issues/129)»
 - Changed method signature `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity::updateApplicationVersion`, for
   task «[add bitrixUserId and AuthToken](https://github.com/bitrix24/b24phpsdk/issues/115)»
 - Developer experience: webhook example moved to

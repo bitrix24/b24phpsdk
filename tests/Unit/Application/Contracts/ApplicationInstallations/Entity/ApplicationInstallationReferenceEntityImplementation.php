@@ -18,6 +18,7 @@ use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\Applicati
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationStatus;
 use Bitrix24\SDK\Application\PortalLicenseFamily;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Exceptions\LogicException;
 use Carbon\CarbonImmutable;
 use Symfony\Component\Uid\Uuid;
 
@@ -154,7 +155,7 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     public function applicationInstalled(): void
     {
         if ($this->applicationInstallationStatus !== ApplicationInstallationStatus::new) {
-            throw new InvalidArgumentException(sprintf('application installation must be in status «%s», current state «%s»',
+            throw new LogicException(sprintf('application installation must be in status «%s», current state «%s»',
                 ApplicationInstallationStatus::new->name,
                 $this->applicationInstallationStatus->name
             ));
@@ -170,7 +171,7 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     public function applicationUninstalled(): void
     {
         if ($this->applicationInstallationStatus === ApplicationInstallationStatus::new || $this->applicationInstallationStatus === ApplicationInstallationStatus::deleted) {
-            throw new InvalidArgumentException(sprintf('application installation must be in status «%s» or «%s», current state «%s»',
+            throw new LogicException(sprintf('application installation must be in status «%s» or «%s», current state «%s»',
                 ApplicationInstallationStatus::active->name,
                 ApplicationInstallationStatus::blocked->name,
                 $this->applicationInstallationStatus->name
@@ -184,7 +185,7 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     public function markAsActive(?string $comment): void
     {
         if ($this->applicationInstallationStatus !== ApplicationInstallationStatus::blocked) {
-            throw new InvalidArgumentException(sprintf('you can activate application install only in state «%s», current state «%s»',
+            throw new LogicException(sprintf('you can activate application install only in state «%s», current state «%s»',
                 ApplicationInstallationStatus::blocked->name,
                 $this->applicationInstallationStatus->name
             ));
@@ -198,7 +199,7 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     public function markAsBlocked(?string $comment): void
     {
         if ($this->applicationInstallationStatus === ApplicationInstallationStatus::blocked || $this->applicationInstallationStatus === ApplicationInstallationStatus::deleted) {
-            throw new InvalidArgumentException(sprintf('you can block application install only in state «%s» or «%s», current state «%s»',
+            throw new LogicException(sprintf('you can block application install only in state «%s» or «%s», current state «%s»',
                 ApplicationInstallationStatus::new->name,
                 ApplicationInstallationStatus::active->name,
                 $this->applicationInstallationStatus->name
