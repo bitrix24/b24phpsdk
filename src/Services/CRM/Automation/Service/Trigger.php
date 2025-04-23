@@ -76,265 +76,87 @@ class Trigger extends AbstractService
     }
 
     /**
-     * Deletes the specified lead and all the associated objects.
+     * Deletes the specified trigger
      *
-     * @link https://training.bitrix24.com/rest_help/crm/leads/crm_lead_delete.php
+     * @link https://apidocs.bitrix24.com/api-reference/crm/automation/triggers/crm-automation-trigger-delete.html
      *
-     * @param int $id
+     * @param string $code
      *
      * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      */
     #[ApiEndpointMetadata(
-        'crm.lead.delete',
-        'https://training.bitrix24.com/rest_help/crm/leads/crm_lead_delete.php',
-        'Deletes the specified lead and all the associated objects.'
+        'crm.automation.trigger.delete',
+        'https://apidocs.bitrix24.com/api-reference/crm/automation/triggers/crm-automation-trigger-delete.html',
+        'Deletes the specified trigger.'
     )]
-    public function delete(int $id): DeletedItemResult
+    public function delete(string $code): DeletedItemResult
     {
         return new DeletedItemResult(
             $this->core->call(
-                'crm.lead.delete',
+                'crm.automation.trigger.delete',
                 [
-                    'id' => $id,
+                    'CODE' => $code,
                 ]
             )
         );
     }
 
     /**
-     * Returns the description of the lead fields, including user fields.
+     * Get list of trigger items.
      *
-     * @link https://training.bitrix24.com/rest_help/crm/leads/crm_lead_fields.php
-     *
-     * @return FieldsResult
-     * @throws BaseException
-     * @throws TransportException
-     */
-    #[ApiEndpointMetadata(
-        'crm.lead.fields',
-        'https://training.bitrix24.com/rest_help/crm/leads/crm_lead_fields.php',
-        'Returns the description of the lead fields, including user fields.'
-    )]
-    public function fields(): FieldsResult
-    {
-        return new FieldsResult($this->core->call('crm.lead.fields'));
-    }
-
-    /**
-     * Returns a lead by the lead ID.
-     *
-     * @link https://training.bitrix24.com/rest_help/crm/leads/crm_lead_get.php
-     *
-     * @param int $id
-     *
-     * @return LeadResult
-     * @throws BaseException
-     * @throws TransportException
-     */
-    #[ApiEndpointMetadata(
-        'crm.lead.get',
-        'https://training.bitrix24.com/rest_help/crm/leads/crm_lead_get.php',
-        'Returns a lead by the lead ID.'
-    )]
-    public function get(int $id): LeadResult
-    {
-        return new LeadResult($this->core->call('crm.lead.get', ['id' => $id]));
-    }
-
-    /**
-     * Get list of lead items.
-     *
-     * @link https://training.bitrix24.com/rest_help/crm/leads/crm_lead_list.php
-     *
-     * @param array   $order     - order of lead items
-     * @param array   $filter    - filter array
-     * @param array   $select    = ['ID','TITLE','HONORIFIC','NAME','SECOND_NAME','LAST_NAME','BIRTHDATE','COMPANY_TITLE','SOURCE_ID','SOURCE_DESCRIPTION','STATUS_ID','STATUS_DESCRIPTION','STATUS_SEMANTIC_ID','POST','ADDRESS','ADDRESS_2','ADDRESS_CITY','ADDRESS_POSTAL_CODE','ADDRESS_REGION','ADDRESS_PROVINCE','ADDRESS_COUNTRY','ADDRESS_COUNTRY_CODE','ADDRESS_LOC_ADDR_ID','CURRENCY_ID','OPPORTUNITY','IS_MANUAL_OPPORTUNITY','OPENED','COMMENTS','HAS_PHONE','HAS_EMAIL','HAS_IMOL','ASSIGNED_BY_ID','CREATED_BY_ID','MODIFY_BY_ID','MOVED_BY_ID','DATE_CREATE','DATE_MODIFY','MOVED_TIME','COMPANY_ID','CONTACT_ID','CONTACT_IDS','IS_RETURN_CUSTOMER','DATE_CLOSED','ORIGINATOR_ID','ORIGIN_ID','UTM_SOURCE','UTM_MEDIUM','UTM_CAMPAIGN','UTM_CONTENT','UTM_TERM','PHONE','EMAIL','WEB','IM','LINK']
-     * @param integer $startItem - entity number to start from (usually returned in 'next' field of previous 'crm.lead.list' API call)
+     * @link https://apidocs.bitrix24.com/api-reference/crm/automation/triggers/crm-automation-trigger-list.html
      *
      * @throws BaseException
      * @throws TransportException
-     * @return LeadsResult
+     * @return TriggerResult
      */
     #[ApiEndpointMetadata(
-        'crm.lead.list',
-        'https://training.bitrix24.com/rest_help/crm/leads/crm_lead_list.php',
-        'Get list of lead items.'
+        'crm.automation.trigger.list',
+        'https://apidocs.bitrix24.com/api-reference/crm/automation/triggers/crm-automation-trigger-list.html',
+        'Get list of trigger items.'
     )]
-    public function list(array $order, array $filter, array $select, int $startItem = 0): LeadsResult
+    public function list(): TriggerResult
     {
-        return new LeadsResult(
+        return new TriggerResult(
             $this->core->call(
-                'crm.lead.list',
-                [
-                    'order'  => $order,
-                    'filter' => $filter,
-                    'select' => $select,
-                    'start'  => $startItem,
-                ]
+                'crm.automation.trigger.list',
+                []
             )
         );
     }
-
+    
     /**
-     * Updates the specified (existing) lead.
+     * Execute trigger
      *
-     * @link https://training.bitrix24.com/rest_help/crm/leads/crm_lead_update.php
+     * @link https://apidocs.bitrix24.com/api-reference/crm/automation/triggers/crm-automation-trigger-execute.html
      *
-     * @param int $id
-     * @param array{
-     *   ID?: int,
-     *   TITLE?: string,
-     *   HONORIFIC?: string,
-     *   NAME?: string,
-     *   SECOND_NAME?: string,
-     *   LAST_NAME?: string,
-     *   BIRTHDATE?: string,
-     *   COMPANY_TITLE?: string,
-     *   SOURCE_ID?: string,
-     *   SOURCE_DESCRIPTION?: string,
-     *   STATUS_ID?: string,
-     *   STATUS_DESCRIPTION?: string,
-     *   STATUS_SEMANTIC_ID?: string,
-     *   POST?: string,
-     *   ADDRESS?: string,
-     *   ADDRESS_2?: string,
-     *   ADDRESS_CITY?: string,
-     *   ADDRESS_POSTAL_CODE?: string,
-     *   ADDRESS_REGION?: string,
-     *   ADDRESS_PROVINCE?: string,
-     *   ADDRESS_COUNTRY?: string,
-     *   ADDRESS_COUNTRY_CODE?: string,
-     *   ADDRESS_LOC_ADDR_ID?: int,
-     *   CURRENCY_ID?: string,
-     *   OPPORTUNITY?: string,
-     *   IS_MANUAL_OPPORTUNITY?: string,
-     *   OPENED?: string,
-     *   COMMENTS?: string,
-     *   HAS_PHONE?: string,
-     *   HAS_EMAIL?: string,
-     *   HAS_IMOL?: string,
-     *   ASSIGNED_BY_ID?: string,
-     *   CREATED_BY_ID?: string,
-     *   MODIFY_BY_ID?: string,
-     *   MOVED_BY_ID?: string,
-     *   DATE_CREATE?: string,
-     *   DATE_MODIFY?: string,
-     *   MOVED_TIME?: string,
-     *   COMPANY_ID?: string,
-     *   CONTACT_ID?: string,
-     *   CONTACT_IDS?: string,
-     *   IS_RETURN_CUSTOMER?: string,
-     *   DATE_CLOSED?: string,
-     *   ORIGINATOR_ID?: string,
-     *   ORIGIN_ID?: string,
-     *   UTM_SOURCE?: string,
-     *   UTM_MEDIUM?: string,
-     *   UTM_CAMPAIGN?: string,
-     *   UTM_CONTENT?: string,
-     *   UTM_TERM?: string,
-     *   PHONE?: string,
-     *   EMAIL?: string,
-     *   WEB?: string,
-     *   IM?: string,
-     *   LINK?: string
-     *   }        $fields
+     * @param string $code
+     * @param int    $ownerTypeId
+     * @param int    $ownerId
      *
-     * @param array{
-     *   REGISTER_SONET_EVENT?: string
-     *   }        $params
-     *
-     * @return UpdatedItemResult
+     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      */
     #[ApiEndpointMetadata(
-        'crm.lead.update',
-        'https://training.bitrix24.com/rest_help/crm/leads/crm_lead_update.php',
-        'Updates the specified (existing) lead.'
+        'crm.automation.trigger.execute',
+        'https://apidocs.bitrix24.com/api-reference/crm/automation/triggers/crm-automation-trigger-execute.html',
+        'Method adds new trigger'
     )]
-    public function update(int $id, array $fields, array $params = []): UpdatedItemResult
+    public function execute(string $code, int $ownerTypeId, int $ownerId): AddedItemResult
     {
-        return new UpdatedItemResult(
+        return new AddedItemResult(
             $this->core->call(
-                'crm.lead.update',
+                'crm.automation.trigger.execute',
                 [
-                    'id'     => $id,
-                    'fields' => $fields,
-                    'params' => $params,
+                    'CODE' => $code,
+                    'OWNER_TYPE_ID' => $ownerTypeId,
+                    'OWNER_ID' => $ownerId,
                 ]
             )
         );
     }
 
-    /**
-     * Count leads by filter
-     *
-     * @param array{
-     *   ID?: int,
-     *   TITLE?: string,
-     *   HONORIFIC?: string,
-     *   NAME?: string,
-     *   SECOND_NAME?: string,
-     *   LAST_NAME?: string,
-     *   BIRTHDATE?: string,
-     *   COMPANY_TITLE?: string,
-     *   SOURCE_ID?: string,
-     *   SOURCE_DESCRIPTION?: string,
-     *   STATUS_ID?: string,
-     *   STATUS_DESCRIPTION?: string,
-     *   STATUS_SEMANTIC_ID?: string,
-     *   POST?: string,
-     *   ADDRESS?: string,
-     *   ADDRESS_2?: string,
-     *   ADDRESS_CITY?: string,
-     *   ADDRESS_POSTAL_CODE?: string,
-     *   ADDRESS_REGION?: string,
-     *   ADDRESS_PROVINCE?: string,
-     *   ADDRESS_COUNTRY?: string,
-     *   ADDRESS_COUNTRY_CODE?: string,
-     *   ADDRESS_LOC_ADDR_ID?: int,
-     *   CURRENCY_ID?: string,
-     *   OPPORTUNITY?: string,
-     *   IS_MANUAL_OPPORTUNITY?: string,
-     *   OPENED?: string,
-     *   COMMENTS?: string,
-     *   HAS_PHONE?: string,
-     *   HAS_EMAIL?: string,
-     *   HAS_IMOL?: string,
-     *   ASSIGNED_BY_ID?: string,
-     *   CREATED_BY_ID?: string,
-     *   MODIFY_BY_ID?: string,
-     *   MOVED_BY_ID?: string,
-     *   DATE_CREATE?: string,
-     *   DATE_MODIFY?: string,
-     *   MOVED_TIME?: string,
-     *   COMPANY_ID?: string,
-     *   CONTACT_ID?: string,
-     *   CONTACT_IDS?: string,
-     *   IS_RETURN_CUSTOMER?: string,
-     *   DATE_CLOSED?: string,
-     *   ORIGINATOR_ID?: string,
-     *   ORIGIN_ID?: string,
-     *   UTM_SOURCE?: string,
-     *   UTM_MEDIUM?: string,
-     *   UTM_CAMPAIGN?: string,
-     *   UTM_CONTENT?: string,
-     *   UTM_TERM?: string,
-     *   PHONE?: string,
-     *   EMAIL?: string,
-     *   WEB?: string,
-     *   IM?: string,
-     *   LINK?: string
-     *   } $filter
-     *
-     * @return int
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
-     */
-    public function countByFilter(array $filter = []): int
-    {
-        return $this->list([], $filter, ['ID'], 1)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
-    }
 }
