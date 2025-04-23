@@ -26,7 +26,7 @@ class TriggerResult extends AbstractResult
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    public function trigger(): LeadItemResult
+    public function trigger(): TriggerItemResult
     {
         return new TriggerItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }

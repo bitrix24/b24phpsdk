@@ -87,7 +87,9 @@ class Batch
     /**
      * Batch delete triggers
      *
-     * @param string[] $codes
+     * @param array <int, array{
+     *                          CODE?: string
+     *   }> $codes
      *
      * @return Generator<int, DeletedItemBatchResult>
      * @throws BaseException
