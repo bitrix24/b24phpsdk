@@ -12,27 +12,27 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Lead\Result;
+namespace Bitrix24\SDK\Services\CRM\Automation\Result;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
 /**
- * Class LeadsResult
+ * Class TriggersResult
  *
- * @package Bitrix24\SDK\Services\CRM\Lead\Result
+ * @package Bitrix24\SDK\Services\CRM\Automation\Result
  */
-class LeadsResult extends AbstractResult
+class TriggersResult extends AbstractResult
 {
     /**
-     * @return LeadItemResult[]
+     * @return TriggerItemResult[]
      * @throws BaseException
      */
-    public function getLeads(): array
+    public function getTriggers(): array
     {
         $items = [];
         foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
-            $items[] = new LeadItemResult($item);
+            $items[] = new TriggerItemResult($item);
         }
 
         return $items;

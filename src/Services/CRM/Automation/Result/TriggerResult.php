@@ -12,22 +12,22 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Lead\Result;
+namespace Bitrix24\SDK\Services\CRM\Automation\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
 /**
- * Class LeadResult
+ * Class TriggerResult
  *
- * @package Bitrix24\SDK\Services\CRM\Lead\Result
+ * @package Bitrix24\SDK\Services\CRM\Automation\Result
  */
-class LeadResult extends AbstractResult
+class TriggerResult extends AbstractResult
 {
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    public function lead(): LeadItemResult
+    public function trigger(): LeadItemResult
     {
-        return new LeadItemResult($this->getCoreResponse()->getResponseData()->getResult());
+        return new TriggerItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }
