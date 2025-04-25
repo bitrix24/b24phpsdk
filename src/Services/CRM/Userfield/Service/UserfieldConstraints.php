@@ -28,14 +28,13 @@ readonly class UserfieldConstraints
 {
     /**
      * @param non-empty-string $userfieldName
-     * @return void
      * @throws UserfieldNameIsTooLongException
      * @throws InvalidArgumentException
      */
     public function validName(string $userfieldName): void
     {
         $userfieldName = trim($userfieldName);
-        if (empty($userfieldName)) {
+        if ($userfieldName === '' || $userfieldName === '0') {
             throw new InvalidArgumentException('userfield name can not be empty');
         }
 

@@ -17,9 +17,6 @@ use Bitrix24\SDK\Services\CRM\Activity\Result\ActivityItemResult;
 
 class WebFormActivityItemResult extends ActivityItemResult
 {
-    /**
-     * @return \Bitrix24\SDK\Services\CRM\Activity\Result\WebForm\WebFormProviderParams
-     */
     public function getProviderParams(): WebFormProviderParams
     {
         return new WebFormProviderParams(

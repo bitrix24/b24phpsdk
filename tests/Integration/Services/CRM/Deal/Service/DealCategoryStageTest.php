@@ -29,24 +29,24 @@ use PHPUnit\Framework\TestCase;
 class DealCategoryStageTest extends TestCase
 {
     protected DealCategoryStage $dealCategoryStage;
+
     protected DealCategory $dealCategory;
 
     /**
-     * @covers DealCategoryStage::list()
      * @throws BaseException
      * @throws TransportException
      */
     public function testList(): void
     {
-        $newCategoryId = (int)$this->dealCategory->add(['NAME' => 'php unit test'])->getId();
-        $res = $this->dealCategoryStage->list($newCategoryId);
-        $this::assertGreaterThan(1, count($res->getDealCategoryStages()));
+        $newCategoryId = $this->dealCategory->add(['NAME' => 'php unit test'])->getId();
+        $dealCategoryStagesResult = $this->dealCategoryStage->list($newCategoryId);
+        $this::assertGreaterThan(1, count($dealCategoryStagesResult->getDealCategoryStages()));
     }
 
     /**
      * @throws InvalidArgumentException
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->dealCategoryStage = Fabric::getServiceBuilder()->getCRMScope()->dealCategoryStage();
         $this->dealCategory = Fabric::getServiceBuilder()->getCRMScope()->dealCategory();

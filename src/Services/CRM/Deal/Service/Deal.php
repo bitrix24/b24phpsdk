@@ -31,19 +31,12 @@ use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 #[ApiServiceMetadata(new Scope(['crm']))]
 class Deal extends AbstractService
 {
-    public Batch $batch;
-
     /**
      * Deal constructor.
-     *
-     * @param Batch $batch
-     * @param CoreInterface $core
-     * @param LoggerInterface $log
      */
-    public function __construct(Batch $batch, CoreInterface $core, LoggerInterface $log)
+    public function __construct(public Batch $batch, CoreInterface $core, LoggerInterface $logger)
     {
-        parent::__construct($core, $log);
-        $this->batch = $batch;
+        parent::__construct($core, $logger);
     }
 
     /**
@@ -93,7 +86,6 @@ class Deal extends AbstractService
      *   REGISTER_SONET_EVENT?: string
      *   } $params
      *
-     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -120,9 +112,7 @@ class Deal extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_delete.php
      *
-     * @param int $id
      *
-     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -148,7 +138,6 @@ class Deal extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_fields.php
      *
-     * @return FieldsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -167,9 +156,7 @@ class Deal extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_get.php
      *
-     * @param int $id
      *
-     * @return DealResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -195,7 +182,6 @@ class Deal extends AbstractService
      *
      * @throws BaseException
      * @throws TransportException
-     * @return DealsResult
      */
     #[ApiEndpointMetadata(
         'crm.deal.list',
@@ -222,7 +208,6 @@ class Deal extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_update.php
      *
-     * @param int $id
      * @param array{
      *   ID?: int,
      *   TITLE?: string,
@@ -265,7 +250,6 @@ class Deal extends AbstractService
      *   REGISTER_SONET_EVENT?: string
      *   } $params
      *
-     * @return UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -329,7 +313,6 @@ class Deal extends AbstractService
      *   UTM_TERM?: string
      *   } $filter
      *
-     * @return int
      * @throws BaseException
      * @throws TransportException
      */

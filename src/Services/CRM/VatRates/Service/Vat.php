@@ -48,16 +48,16 @@ class Vat extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/auxiliary/vat/crm-vat-add.html',
         'Add VAT Rate crm.vat.add'
     )]
-    public function add(string $name, Percentage $rate, int $sort = 100, bool $isActive = true): AddedItemResult
+    public function add(string $name, Percentage $percentage, int $sort = 100, bool $isActive = true): AddedItemResult
     {
         return new AddedItemResult(
             $this->core->call('crm.vat.add', [
             'fields' => [
                 'TIMESTAMP_X' => (new DateTime())->format(DATE_ATOM),
-                'ACTIVE' => $isActive === true ? 'Y' : 'N',
+                'ACTIVE' => $isActive ? 'Y' : 'N',
                 'C_SORT' => $sort,
                 'NAME' => $name,
-                'RATE' => (string)$rate
+                'RATE' => (string)$percentage
             ]
         ])
         );
@@ -76,7 +76,7 @@ class Vat extends AbstractService
     public function update(
         int $vatId,
         ?string $name = null,
-        ?Percentage $rate = null,
+        ?Percentage $percentage = null,
         ?int $sort = null,
         ?bool $isActive = null
     ): UpdatedItemResult {
@@ -84,15 +84,19 @@ class Vat extends AbstractService
         if ($name !== null) {
             $data['NAME'] = $name;
         }
-        if ($rate !== null) {
-            $data['RATE'] = (string)$rate;
+
+        if ($percentage instanceof \MoneyPHP\Percentage\Percentage) {
+            $data['RATE'] = (string)$percentage;
         }
+
         if ($sort !== null) {
             $data['SORT'] = $sort;
         }
+
         if ($isActive !== null) {
             $data['ACTIVE'] = $isActive ? 'Y' : 'N';
         }
+
         if ($data === []) {
             throw new InvalidArgumentException('you must set minimum one argument to update');
         }

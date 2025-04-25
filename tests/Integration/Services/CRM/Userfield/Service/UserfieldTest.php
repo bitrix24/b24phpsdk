@@ -60,9 +60,7 @@ class UserfieldTest extends TestCase
     {
         $allFields = $this->sb->getCRMScope()->userfield()->fields()->getFieldsDescription();
         $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
-        $systemFields = array_filter($allFields, static function ($code) use ($systemFieldsCodes) {
-            return in_array($code, $systemFieldsCodes, true);
-        }, ARRAY_FILTER_USE_KEY);
+        $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
 
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
             $systemFields,
@@ -85,8 +83,8 @@ class UserfieldTest extends TestCase
      */
     public function testSettingsFields(): void
     {
-        foreach ($this->sb->getCRMScope()->userfield()->types()->getTypes() as $typeItem) {
-            self::assertIsArray($this->sb->getCRMScope()->userfield()->settingsFields($typeItem->ID)->getFieldsDescription());
+        foreach ($this->sb->getCRMScope()->userfield()->types()->getTypes() as $userfieldTypeItemResult) {
+            self::assertIsArray($this->sb->getCRMScope()->userfield()->settingsFields($userfieldTypeItemResult->ID)->getFieldsDescription());
         }
     }
 
@@ -96,11 +94,11 @@ class UserfieldTest extends TestCase
      */
     public function testTypes(): void
     {
-        $ufTypes = $this->sb->getCRMScope()->userfield()->types();
-        $this->assertGreaterThan(10, $ufTypes->getTypes());
+        $userfieldTypesResult = $this->sb->getCRMScope()->userfield()->types();
+        $this->assertGreaterThan(10, $userfieldTypesResult->getTypes());
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->sb = Fabric::getServiceBuilder();
     }

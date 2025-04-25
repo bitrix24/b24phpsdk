@@ -21,18 +21,22 @@ use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
 
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Activity\Service\Batch::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Contact\Service\Batch::class)]
 class BatchTest extends TestCase
 {
     private Contact $contactService;
+
     private Activity $activityService;
+
     private const BATCH_TEST_ELEMENTS_COUNT = 60;
+
     private array $contactId;
 
     /**
-     * @testdox Batch add deals
-     * @covers  \Bitrix24\SDK\Services\CRM\Activity\Service\Batch::add()
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch add activities')]
     public function testBatchAdd(): void
     {
         $contactId = $this->contactService->add(['NAME' => 'test contact'])->getId();
@@ -65,20 +69,21 @@ class BatchTest extends TestCase
             $cnt++;
             $activityId[] = $item->getId();
         }
+
         self::assertEquals(count($items), $cnt);
 
         $cnt = 0;
         foreach ($this->activityService->batch->delete($activityId) as $cnt => $deleteResult) {
             $cnt++;
         }
+
         self::assertEquals(count($items), $cnt);
     }
 
     /**
-     * @testdox Batch delete activities
-     * @covers  \Bitrix24\SDK\Services\CRM\Activity\Service\Batch::delete()
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch delete activities')]
     public function testBatchDelete(): void
     {
         $contactId = $this->contactService->add(['NAME' => 'test contact'])->getId();
@@ -111,12 +116,14 @@ class BatchTest extends TestCase
             $cnt++;
             $activityId[] = $item->getId();
         }
+
         self::assertEquals(count($items), $cnt);
 
         $cnt = 0;
         foreach ($this->activityService->batch->delete($activityId) as $cnt => $deleteResult) {
             $cnt++;
         }
+
         self::assertEquals(count($items), $cnt);
 
 
@@ -131,11 +138,10 @@ class BatchTest extends TestCase
     }
 
     /**
-     * @testdox Batch list deals
-     * @covers  \Bitrix24\SDK\Services\CRM\Contact\Service\Batch::list()
      * @throws BaseException
      * @throws TransportException
      */
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch list activities')]
     public function testBatchList(): void
     {
         $contactId = $this->contactService->add(['NAME' => 'test contact'])->getId();
@@ -174,6 +180,7 @@ class BatchTest extends TestCase
         foreach ($this->activityService->batch->list(['ID' => 'DESC'], ['OWNER_ID' => $contactId], ['*']) as $item) {
             $itemsCnt++;
         }
+
         $this->assertEquals(
             count($activityId),
             $itemsCnt,
@@ -185,12 +192,12 @@ class BatchTest extends TestCase
         );
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->contactService->batch->delete($this->contactId);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->activityService = Fabric::getServiceBuilder()->getCRMScope()->activity();
         $this->contactService = Fabric::getServiceBuilder()->getCRMScope()->contact();

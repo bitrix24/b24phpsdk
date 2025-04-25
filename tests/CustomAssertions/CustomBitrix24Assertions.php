@@ -231,7 +231,8 @@ trait CustomBitrix24Assertions
                     if (str_contains($fieldCode, '_IDS') ||
                         str_contains($fieldCode, 'PHOTO') ||
                         str_contains($fieldCode, 'SETTINGS') ||
-                        str_contains($fieldCode, '_PICTURE')) {
+                        str_contains($fieldCode, '_PICTURE') ||
+                        str_contains($fieldCode, '_PARAMS')) {
                         $this->assertTrue(
                             str_contains($propsFromAnnotations[$fieldCode], 'array'),
                             sprintf(

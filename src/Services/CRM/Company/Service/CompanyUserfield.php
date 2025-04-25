@@ -32,12 +32,9 @@ use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 #[ApiServiceMetadata(new Scope(['crm']))]
 class CompanyUserfield extends AbstractService
 {
-    private UserfieldConstraints $userfieldConstraints;
-
-    public function __construct(UserfieldConstraints $userfieldConstraints, CoreInterface $core, LoggerInterface $log)
+    public function __construct(private readonly UserfieldConstraints $userfieldConstraints, CoreInterface $core, LoggerInterface $logger)
     {
-        $this->userfieldConstraints = $userfieldConstraints;
-        parent::__construct($core, $log);
+        parent::__construct($core, $logger);
     }
 
     /**
@@ -67,7 +64,6 @@ class CompanyUserfield extends AbstractService
      *   SETTINGS?: array,
      *   } $userfieldItemFields
      *
-     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      * @throws UserfieldNameIsTooLongException
@@ -95,9 +91,7 @@ class CompanyUserfield extends AbstractService
     /**
      * Get Custom Company Field by ID
      *
-     * @param int $userfieldItemId
      *
-     * @return CompanyUserfieldResult
      * @throws BaseException
      * @throws TransportException
      * @link  https://apidocs.bitrix24.com/api-reference/crm/companies/userfields/crm-company-userfield-get.html
@@ -165,7 +159,6 @@ class CompanyUserfield extends AbstractService
      *   LIST?: string,
      *   SETTINGS?: string,
      *   } $filter
-     * @return CompanyUserfieldsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -184,9 +177,7 @@ class CompanyUserfield extends AbstractService
     /**
      * Delete Custom Field for Companies
      *
-     * @param int $userfieldId
      *
-     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      * @link  https://apidocs.bitrix24.com/api-reference/crm/companies/userfields/crm-company-userfield-delete.html
@@ -212,7 +203,6 @@ class CompanyUserfield extends AbstractService
     /**
      * Update Existing Custom Field for Companies
      *
-     * @param int $userfieldItemId
      * @param array{
      *   ID?: string,
      *   ENTITY_ID?: string,
@@ -234,8 +224,6 @@ class CompanyUserfield extends AbstractService
      *   LIST?: string,
      *   SETTINGS?: string,
      *   } $userfieldFieldsToUpdate
-     * @param ?array $list
-     * @return \Bitrix24\SDK\Core\Result\UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      * @link https://apidocs.bitrix24.com/api-reference/crm/companies/userfields/crm-company-userfield-update.html

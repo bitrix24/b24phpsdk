@@ -85,7 +85,6 @@ use Money\Money;
 class CompanyItemResult extends AbstractCrmItem
 {
     /**
-     * @param string $userfieldName
      *
      * @return mixed|null
      * @throws UserfieldNotFoundException

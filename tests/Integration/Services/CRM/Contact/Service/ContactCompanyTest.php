@@ -44,20 +44,16 @@ class ContactCompanyTest extends TestCase
     private ServiceBuilder $sb;
 
     private array $createdCompanies = [];
+
     private array $createdContacts = [];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->sb = Fabric::getServiceBuilder();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
-        foreach ($this->sb->getCRMScope()->company()->batch->delete($this->createdCompanies) as $result) {
-        }
-
-        foreach ($this->sb->getCRMScope()->contact()->batch->delete($this->createdContacts) as $result) {
-        }
     }
 
 
@@ -86,9 +82,7 @@ class ContactCompanyTest extends TestCase
     {
         $allFields = $this->sb->getCRMScope()->contactCompany()->fields()->getFieldsDescription();
         $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
-        $systemFields = array_filter($allFields, static function ($code) use ($systemFieldsCodes) {
-            return in_array($code, $systemFieldsCodes, true);
-        }, ARRAY_FILTER_USE_KEY);
+        $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
 
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
             $systemFields,
@@ -121,8 +115,8 @@ class ContactCompanyTest extends TestCase
 
         // read and check
         $companies = $this->sb->getCRMScope()->contactCompany()->get($contactId)->getCompanyConnections();
-        foreach ($companies as $item) {
-            $this->assertContains($item->COMPANY_ID, $newCompanyId);
+        foreach ($companies as $company) {
+            $this->assertContains($company->COMPANY_ID, $newCompanyId);
         }
     }
 
@@ -161,8 +155,8 @@ class ContactCompanyTest extends TestCase
 
         // read and check
         $companies = $this->sb->getCRMScope()->contactCompany()->get($contactId)->getCompanyConnections();
-        foreach ($companies as $item) {
-            $this->assertContains($item->COMPANY_ID, $newCompanyId);
+        foreach ($companies as $company) {
+            $this->assertContains($company->COMPANY_ID, $newCompanyId);
         }
     }
 

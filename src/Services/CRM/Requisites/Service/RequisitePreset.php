@@ -35,9 +35,9 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['crm']))]
 class RequisitePreset extends AbstractService
 {
-    public function __construct(CoreInterface $core, LoggerInterface $log)
+    public function __construct(CoreInterface $core, LoggerInterface $logger)
     {
-        parent::__construct($core, $log);
+        parent::__construct($core, $logger);
     }
 
     /**
@@ -112,7 +112,6 @@ class RequisitePreset extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/presets/crm-requisite-preset-add.html
      *
-     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -149,7 +148,6 @@ class RequisitePreset extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/presets/crm-requisite-preset-countries.html
      *
-     * @return CountriesResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -168,9 +166,7 @@ class RequisitePreset extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/presets/crm-requisite-preset-delete.html
      *
-     * @param int $id
      *
-     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -196,7 +192,6 @@ class RequisitePreset extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/presets/crm-requisite-preset-get.html
      *
-     * @param int $id
      *
      * @throws BaseException
      * @throws TransportException
@@ -216,7 +211,6 @@ class RequisitePreset extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/presets/crm-requisite-preset-update.html
      *
-     * @param int $id
      * @param array{
      *  ID?: int,
      *  ENTITY_TYPE_ID?: int,
@@ -230,7 +224,6 @@ class RequisitePreset extends AbstractService
      *  SORT?: int,
      *  XML_ID?: string,
      *  } $fields
-     * @return UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      */

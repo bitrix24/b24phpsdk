@@ -122,7 +122,6 @@ class Batch extends AbstractBatchService
      *   WEBDAV_ELEMENTS?: string,
      *   } $filter
      * @param array $select = ['ID','OWNER_ID','OWNER_TYPE_ID','TYPE_ID','PROVIDER_ID','PROVIDER_TYPE_ID','PROVIDER_GROUP_ID','ASSOCIATED_ENTITY_ID','SUBJECT','START_TIME','END_TIME','DEADLINE','COMPLETED','STATUS','RESPONSIBLE_ID','PRIORITY','NOTIFY_TYPE','NOTIFY_VALUE','DESCRIPTION','DESCRIPTION_TYPE','DIRECTION','LOCATION','CREATED','AUTHOR_ID','LAST_UPDATED','EDITOR_ID','SETTINGS','ORIGIN_ID','ORIGINATOR_ID','RESULT_STATUS','RESULT_STREAM','RESULT_SOURCE_ID','PROVIDER_PARAMS','PROVIDER_DATA','RESULT_MARK','RESULT_VALUE','RESULT_SUM','RESULT_CURRENCY_ID','AUTOCOMPLETE_RULE','BINDINGS','COMMUNICATIONS','FILES','WEBDAV_ELEMENTS','COMMUNICATIONS']
-     * @param int|null $limit
      *
      * @return Generator<positive-int, ActivityItemResult>
      * @throws BaseException
@@ -213,6 +212,7 @@ class Batch extends AbstractBatchService
                 'fields' => $activity,
             ];
         }
+
         foreach ($this->batch->addEntityItems('crm.activity.add', $items) as $key => $item) {
             yield $key => new AddedItemBatchResult($item);
         }

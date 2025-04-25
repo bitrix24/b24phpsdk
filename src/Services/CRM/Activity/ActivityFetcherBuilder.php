@@ -22,9 +22,6 @@ use Bitrix24\SDK\Services\CRM\Activity;
 
 class ActivityFetcherBuilder extends AbstractServiceBuilder
 {
-    /**
-     * @return \Bitrix24\SDK\Services\CRM\Activity\ReadModel\EmailFetcher
-     */
     public function emailFetcher(): Activity\ReadModel\EmailFetcher
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -34,9 +31,6 @@ class ActivityFetcherBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return \Bitrix24\SDK\Services\CRM\Activity\ReadModel\OpenLineFetcher
-     */
     public function openLineFetcher(): Activity\ReadModel\OpenLineFetcher
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -46,9 +40,6 @@ class ActivityFetcherBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return \Bitrix24\SDK\Services\CRM\Activity\ReadModel\VoximplantFetcher
-     */
     public function voximplantFetcher(): Activity\ReadModel\VoximplantFetcher
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -58,9 +49,6 @@ class ActivityFetcherBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return \Bitrix24\SDK\Services\CRM\Activity\ReadModel\WebFormFetcher
-     */
     public function webFormFetcher(): Activity\ReadModel\WebFormFetcher
     {
         if (!isset($this->serviceCache[__METHOD__])) {

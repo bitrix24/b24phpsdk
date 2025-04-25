@@ -26,12 +26,9 @@ use Money\Currency;
  */
 class DealProductRowItemsResult extends AbstractResult
 {
-    private Currency $currency;
-
-    public function __construct(Response $coreResponse,Currency $currency)
+    public function __construct(Response $coreResponse,private readonly Currency $currency)
     {
         parent::__construct($coreResponse);
-        $this->currency = $currency;
     }
 
     /**

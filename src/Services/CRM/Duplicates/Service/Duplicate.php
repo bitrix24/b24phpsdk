@@ -26,7 +26,6 @@ class Duplicate extends AbstractService
 {
     /**
      * @param array<string> $phones
-     * @param EntityType|null $entityType
      * @return DuplicateResult
      * @throws BaseException
      * @throws TransportException
@@ -48,8 +47,6 @@ class Duplicate extends AbstractService
 
     /**
      * @param array<string> $emails
-     * @param EntityType|null $entityType
-     * @return DuplicateResult
      * @throws BaseException
      * @throws TransportException
      */

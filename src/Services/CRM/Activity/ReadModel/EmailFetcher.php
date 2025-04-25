@@ -25,14 +25,8 @@ use Generator;
 #[ApiBatchServiceMetadata(new Scope(['crm']))]
 class EmailFetcher
 {
-    private BulkItemsReaderInterface $bulkItemsReader;
-
-    /**
-     * @param BulkItemsReaderInterface $bulkItemsReader
-     */
-    public function __construct(BulkItemsReaderInterface $bulkItemsReader)
+    public function __construct(private readonly BulkItemsReaderInterface $bulkItemsReader)
     {
-        $this->bulkItemsReader = $bulkItemsReader;
     }
 
     /**

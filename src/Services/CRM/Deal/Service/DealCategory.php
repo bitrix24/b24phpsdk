@@ -43,7 +43,6 @@ class DealCategory extends AbstractService
      *   SORT?: int,
      *   } $fields
      *
-     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -69,9 +68,7 @@ class DealCategory extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/category/crm_dealcategory_delete.php
      *
-     * @param int $categoryId
      *
-     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -97,7 +94,6 @@ class DealCategory extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/category/crm_dealcategory_fields.php
      *
-     * @return FieldsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -115,7 +111,6 @@ class DealCategory extends AbstractService
      * The method reads settings for general deal category
      *
      * @link https://training.bitrix24.com/rest_help/crm/category/crm_dealcategory_default_get.php
-     * @return DealCategoryResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -138,7 +133,6 @@ class DealCategory extends AbstractService
      *      NAME?: string,
      *      } $parameters
      *
-     * @return UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -158,9 +152,7 @@ class DealCategory extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/category/crm_dealcategory_get.php
      *
-     * @param int $categoryId
      *
-     * @return DealCategoryResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -186,12 +178,7 @@ class DealCategory extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/category/crm_dealcategory_list.php
      *
-     * @param array $order
-     * @param array $filter
-     * @param array $select
-     * @param int $start
      *
-     * @return DealCategoriesResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -220,9 +207,7 @@ class DealCategory extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/category/crm_dealcategory_status.php
      *
-     * @param int $categoryId
      *
-     * @return DealCategoryStatusResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -248,7 +233,6 @@ class DealCategory extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/category/crm_dealcategory_update.php
      *
-     * @param int $categoryId
      * @param array{
      *   ID?: int,
      *   CREATED_DATE?: string,
@@ -257,7 +241,6 @@ class DealCategory extends AbstractService
      *   SORT?: int,
      *   } $fields
      *
-     * @return UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      */

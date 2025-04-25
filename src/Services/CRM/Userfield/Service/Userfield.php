@@ -29,7 +29,6 @@ class Userfield extends AbstractService
      * Returns list of user field types.
      *
      * @link https://training.bitrix24.com/rest_help/crm/userfields/crm_userfield_types.php
-     * @return UserfieldTypesResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -47,7 +46,6 @@ class Userfield extends AbstractService
      * Returns field description for user fields.
      *
      * @link https://training.bitrix24.com/rest_help/crm/userfields/crm_userfield_fields.php
-     * @return \Bitrix24\SDK\Core\Result\FieldsResult
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      */
@@ -65,7 +63,6 @@ class Userfield extends AbstractService
      * Returns field description for "enumeration" user field type (list).
      *
      * @link https://training.bitrix24.com/rest_help/crm/userfields/crm_userfield_enumeration_fields.php
-     * @return \Bitrix24\SDK\Core\Result\FieldsResult
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      */
@@ -84,9 +81,7 @@ class Userfield extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/userfields/crm_userfield_settings_fields.php
      *
-     * @param string $userfieldTypeId
      *
-     * @return \Bitrix24\SDK\Core\Result\FieldsResult
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      */

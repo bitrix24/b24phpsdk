@@ -33,6 +33,7 @@ use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 #[CoversMethod(Product::class,'fields')]
 #[CoversMethod(Product::class,'update')]
 #[CoversMethod(Product::class,'countByFilter')]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Product\Service\Product::class)]
 class ProductsTest extends TestCase
 {
     use CustomBitrix24Assertions;
@@ -51,9 +52,7 @@ class ProductsTest extends TestCase
     {
         $allFields = $this->productService->fields()->getFieldsDescription();
         $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
-        $systemFields = array_filter($allFields, static function ($code) use ($systemFieldsCodes) {
-            return in_array($code, $systemFieldsCodes, true);
-        }, ARRAY_FILTER_USE_KEY);
+        $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
 
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
             $systemFields,
@@ -113,7 +112,6 @@ class ProductsTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers \Bitrix24\SDK\Services\CRM\Product\Service\Product::list
      */
     public function testList(): void
     {
@@ -127,11 +125,11 @@ class ProductsTest extends TestCase
      */
     public function testUpdate(): void
     {
-        $product = $this->productService->add(['NAME' => 'test']);
+        $addedItemResult = $this->productService->add(['NAME' => 'test']);
         $newName = 'test2';
 
-        self::assertTrue($this->productService->update($product->getId(), ['NAME' => $newName])->isSuccess());
-        self::assertEquals($newName, $this->productService->get($product->getId())->product()->NAME);
+        self::assertTrue($this->productService->update($addedItemResult->getId(), ['NAME' => $newName])->isSuccess());
+        self::assertEquals($newName, $this->productService->get($addedItemResult->getId())->product()->NAME);
     }
 
     /**
@@ -146,6 +144,7 @@ class ProductsTest extends TestCase
         foreach ($this->productService->batch->list([], ['>ID' => '1'], ['ID', 'NAME'], 1) as $item) {
             $cnt++;
         }
+
         self::assertGreaterThanOrEqual(1, $cnt);
     }
 
@@ -155,6 +154,7 @@ class ProductsTest extends TestCase
         for ($i = 1; $i < 60; $i++) {
             $products[] = ['NAME' => 'NAME-' . $i];
         }
+
         $cnt = 0;
         foreach ($this->productService->batch->add($products) as $item) {
             $cnt++;
@@ -175,6 +175,7 @@ class ProductsTest extends TestCase
         for ($i = 1; $i <= $newProductsCount; $i++) {
             $products[] = ['NAME' => 'NAME-' . $i];
         }
+
         $cnt = 0;
         foreach ($this->productService->batch->add($products) as $item) {
             $cnt++;
@@ -186,7 +187,7 @@ class ProductsTest extends TestCase
         $this->assertEquals($productsCountBefore + $newProductsCount, $productsCountAfter);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->productService = Fabric::getServiceBuilder()->getCRMScope()->product();
     }

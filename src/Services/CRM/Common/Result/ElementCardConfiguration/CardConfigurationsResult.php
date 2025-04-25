@@ -31,6 +31,7 @@ class CardConfigurationsResult extends AbstractResult
             if ($item === null) {
                 continue;
             }
+
             $res[] = new ConfigurationItemResult($item);
         }
 

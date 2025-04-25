@@ -15,19 +15,11 @@ namespace Bitrix24\SDK\Services\CRM\Common;
 
 readonly class ContactConnection
 {
-    public int $contactId;
-    public int $sort;
-    public bool $isPrimary;
-
     /**
      * @param positive-int $contactId
      * @param positive-int $sort
-     * @param bool $isPrimary
      */
-    public function __construct(int $contactId, int $sort = 100, bool $isPrimary = false)
+    public function __construct(public int $contactId, public int $sort = 100, public bool $isPrimary = false)
     {
-        $this->contactId = $contactId;
-        $this->sort = $sort;
-        $this->isPrimary = $isPrimary;
     }
 }

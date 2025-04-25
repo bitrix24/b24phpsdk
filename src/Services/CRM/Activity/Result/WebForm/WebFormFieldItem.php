@@ -26,4 +26,3 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
 class WebFormFieldItem extends AbstractItem
 {
 }
-

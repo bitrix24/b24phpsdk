@@ -25,14 +25,8 @@ use Generator;
 #[ApiBatchServiceMetadata(new Scope(['crm']))]
 class WebFormFetcher
 {
-    private BulkItemsReaderInterface $bulkItemsReader;
-
-    /**
-     * @param BulkItemsReaderInterface $bulkItemsReader
-     */
-    public function __construct(BulkItemsReaderInterface $bulkItemsReader)
+    public function __construct(private readonly BulkItemsReaderInterface $bulkItemsReader)
     {
-        $this->bulkItemsReader = $bulkItemsReader;
     }
 
     /**
@@ -55,6 +49,7 @@ class WebFormFetcher
         } else {
             $filter = array_merge($filter, ['PROVIDER_ID' => 'CRM_WEBFORM']);
         }
+
         foreach ($this->bulkItemsReader->getTraversableList('crm.activity.list', $order, $filter, $select, $limit) as $cnt => $item) {
             yield $cnt => new WebFormActivityItemResult($item);
         }
