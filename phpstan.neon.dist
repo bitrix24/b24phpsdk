@@ -11,6 +11,7 @@ parameters:
     - tests/Integration/Services/IMOpenLines
     - tests/Integration/Services/Main
     - tests/Integration/Services/Placement
+    - tests/Integration/Services/CRM
   bootstrapFiles:
     - tests/bootstrap.php
   parallel:
