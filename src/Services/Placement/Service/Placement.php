@@ -23,6 +23,7 @@ use Bitrix24\SDK\Services\Placement\Result\PlacementBindResult;
 use Bitrix24\SDK\Services\Placement\Result\PlacementLocationCodesResult;
 use Bitrix24\SDK\Services\Placement\Result\PlacementsLocationInformationResult;
 use Bitrix24\SDK\Services\Placement\Result\PlacementUnbindResult;
+
 #[ApiServiceMetadata(new Scope(['placement']))]
 class Placement extends AbstractService
 {
@@ -32,22 +33,29 @@ class Placement extends AbstractService
      *
      * @throws BaseException
      * @throws TransportException
-     * @link https://training.bitrix24.com/rest_help/application_embedding/metods/placement_bind.php
+     * @link https://apidocs.bitrix24.com/api-reference/widgets/placement-bind.html
      */
     #[ApiEndpointMetadata(
         'placement.bind',
-        'https://training.bitrix24.com/rest_help/application_embedding/metods/placement_bind.php',
+        'https://apidocs.bitrix24.com/api-reference/widgets/placement-bind.html',
         'Installs the embedding location handler'
     )]
-    public function bind(string $placementCode, string $handlerUrl, array $lang): PlacementBindResult
-    {
+    public function bind(
+        string $placementCode,
+        string $handlerUrl,
+        array $lang,
+        array $options = [],
+        ?int $b24UserId = null,
+    ): PlacementBindResult {
         return new PlacementBindResult(
             $this->core->call(
                 'placement.bind',
                 [
                     'PLACEMENT' => $placementCode,
-                    'HANDLER'   => $handlerUrl,
-                    'LANG_ALL'  => $lang,
+                    'HANDLER' => $handlerUrl,
+                    'LANG_ALL' => $lang,
+                    'OPTIONS' => $options,
+                    'USER_ID' => $b24UserId,
                 ]
             )
         );
@@ -72,7 +80,7 @@ class Placement extends AbstractService
                 'placement.unbind',
                 [
                     'PLACEMENT' => $placementCode,
-                    'HANDLER'   => $handlerUrl,
+                    'HANDLER' => $handlerUrl,
                 ]
             )
         );
