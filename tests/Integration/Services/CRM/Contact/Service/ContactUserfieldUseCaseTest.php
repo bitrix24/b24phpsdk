@@ -23,20 +23,21 @@ use PHPUnit\Framework\TestCase;
 class ContactUserfieldUseCaseTest extends TestCase
 {
     protected Contact $contactService;
+
     protected ContactUserfield $contactUserfieldService;
+
     protected int $contactUserfieldId;
 
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Contact::add
      */
     public function testOperationsWithUserfieldFromContactItem(): void
     {
         // get userfield metadata
-        $ufMetadata = $this->contactUserfieldService->get($this->contactUserfieldId)->userfieldItem();
-        $ufOriginalFieldName = $ufMetadata->getOriginalFieldName();
-        $ufFieldName = $ufMetadata->FIELD_NAME;
+        $contactUserfieldItemResult = $this->contactUserfieldService->get($this->contactUserfieldId)->userfieldItem();
+        $ufOriginalFieldName = $contactUserfieldItemResult->getOriginalFieldName();
+        $ufFieldName = $contactUserfieldItemResult->FIELD_NAME;
 
         // add contact with uf value
         $fieldNameValue = 'test field value';
@@ -59,8 +60,8 @@ class ContactUserfieldUseCaseTest extends TestCase
                 ]
             )->isSuccess()
         );
-        $updatedContact = $this->contactService->get($contact->ID)->contact();
-        $this->assertEquals($newUfValue, $updatedContact->getUserfieldByFieldName($ufOriginalFieldName));
+        $contactItemResult = $this->contactService->get($contact->ID)->contact();
+        $this->assertEquals($newUfValue, $contactItemResult->getUserfieldByFieldName($ufOriginalFieldName));
     }
 
     /**
@@ -69,7 +70,7 @@ class ContactUserfieldUseCaseTest extends TestCase
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->contactService = Fabric::getServiceBuilder()->getCRMScope()->contact();
         $this->contactUserfieldService = Fabric::getServiceBuilder()->getCRMScope()->contactUserfield();
@@ -94,7 +95,7 @@ class ContactUserfieldUseCaseTest extends TestCase
         )->getId();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->contactUserfieldService->delete($this->contactUserfieldId);
     }

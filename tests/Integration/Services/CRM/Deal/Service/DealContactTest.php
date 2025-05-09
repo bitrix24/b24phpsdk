@@ -26,14 +26,16 @@ use PHPUnit\Framework\TestCase;
  *
  * @package Bitrix24\SDK\Tests\Integration\Services\CRM\Deals\Service
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Deal\Service\DealContact::class)]
 class DealContactTest extends TestCase
 {
     protected Deal $dealService;
+
     protected Contact $contactService;
+
     private DealContact $dealContactService;
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealContact::add
      * @throws BaseException
      * @throws TransportException
      */
@@ -51,7 +53,6 @@ class DealContactTest extends TestCase
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealContact::add
      * @throws BaseException
      * @throws TransportException
      */
@@ -70,7 +71,6 @@ class DealContactTest extends TestCase
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealContact::itemsGet
      * @throws BaseException
      * @throws TransportException
      */
@@ -99,7 +99,6 @@ class DealContactTest extends TestCase
 
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealContact::itemsDelete
      * @throws BaseException
      * @throws TransportException
      */
@@ -128,7 +127,6 @@ class DealContactTest extends TestCase
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealContact::itemsSet
      * @throws BaseException
      * @throws TransportException
      */
@@ -163,7 +161,6 @@ class DealContactTest extends TestCase
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealContact::delete
      * @throws BaseException
      * @throws TransportException
      */
@@ -189,7 +186,7 @@ class DealContactTest extends TestCase
         $this::assertCount(1, $this->dealContactService->itemsGet($dealId)->getDealContacts());
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->dealService = Fabric::getServiceBuilder()->getCRMScope()->deal();
         $this->dealContactService = Fabric::getServiceBuilder()->getCRMScope()->dealContact();

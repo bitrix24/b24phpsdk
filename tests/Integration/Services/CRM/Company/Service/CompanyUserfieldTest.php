@@ -40,20 +40,18 @@ class CompanyUserfieldTest extends TestCase
     private ServiceBuilder $sb;
 
     private array $createdCompanies = [];
+
     private array $createdUserfields = [];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->sb = Fabric::getServiceBuilder();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
-        foreach ($this->sb->getCRMScope()->company()->batch->delete($this->createdCompanies) as $result) {
-        }
-
-        foreach ($this->createdUserfields as $fieldId) {
-            $this->sb->getCRMScope()->companyUserfield()->delete($fieldId);
+        foreach ($this->createdUserfields as $createdUserfield) {
+            $this->sb->getCRMScope()->companyUserfield()->delete($createdUserfield);
         }
     }
 
@@ -68,11 +66,11 @@ class CompanyUserfieldTest extends TestCase
     {
         $fieldId = $this->sb->getCRMScope()->companyUserfield()->add($uf)->getId();
         $this->createdUserfields[] = $fieldId;
-        $addedField = $this->sb->getCRMScope()->companyUserfield()->get($fieldId)->userfieldItem();
+        $companyUserfieldItemResult = $this->sb->getCRMScope()->companyUserfield()->get($fieldId)->userfieldItem();
 
-        $this->assertTrue(str_contains($addedField->FIELD_NAME, $uf['FIELD_NAME']));
-        $this->assertEquals($uf['USER_TYPE_ID'], $addedField->USER_TYPE_ID);
-        $this->assertEquals($uf['XML_ID'], $addedField->XML_ID);
+        $this->assertTrue(str_contains($companyUserfieldItemResult->FIELD_NAME, (string) $uf['FIELD_NAME']));
+        $this->assertEquals($uf['USER_TYPE_ID'], $companyUserfieldItemResult->USER_TYPE_ID);
+        $this->assertEquals($uf['XML_ID'], $companyUserfieldItemResult->XML_ID);
     }
 
     #[TestDox('crm.company.userfield.get')]
@@ -80,11 +78,11 @@ class CompanyUserfieldTest extends TestCase
     public function testCompanyUserfieldGet(array $uf): void
     {
         $fieldId = $this->sb->getCRMScope()->companyUserfield()->add($uf)->getId();
-        $addedField = $this->sb->getCRMScope()->companyUserfield()->get($fieldId)->userfieldItem();
+        $companyUserfieldItemResult = $this->sb->getCRMScope()->companyUserfield()->get($fieldId)->userfieldItem();
 
-        $this->assertTrue(str_contains($addedField->FIELD_NAME, $uf['FIELD_NAME']));
-        $this->assertEquals($uf['USER_TYPE_ID'], $addedField->USER_TYPE_ID);
-        $this->assertEquals($uf['XML_ID'], $addedField->XML_ID);
+        $this->assertTrue(str_contains($companyUserfieldItemResult->FIELD_NAME, (string) $uf['FIELD_NAME']));
+        $this->assertEquals($uf['USER_TYPE_ID'], $companyUserfieldItemResult->USER_TYPE_ID);
+        $this->assertEquals($uf['XML_ID'], $companyUserfieldItemResult->XML_ID);
     }
 
     #[TestDox('crm.company.userfield.list')]
@@ -93,13 +91,13 @@ class CompanyUserfieldTest extends TestCase
         $newFields[] = (new SystemUserfieldBuilder())->build();
         $newFields[] = (new SystemUserfieldBuilder('integer'))->build();
 
-        foreach ($newFields as $field) {
-            $addedResult = $this->sb->getCRMScope()->companyUserfield()->add($field);
+        foreach ($newFields as $newField) {
+            $addedResult = $this->sb->getCRMScope()->companyUserfield()->add($newField);
             $this->createdUserfields[] = $addedResult->getId();
         }
 
-        $fields = $this->sb->getCRMScope()->companyUserfield()->list();
-        $this->assertGreaterThanOrEqual(2, $fields->getUserfields());
+        $companyUserfieldsResult = $this->sb->getCRMScope()->companyUserfield()->list();
+        $this->assertGreaterThanOrEqual(2, $companyUserfieldsResult->getUserfields());
     }
 
     #[TestDox('crm.company.userfield.delete')]
@@ -107,8 +105,8 @@ class CompanyUserfieldTest extends TestCase
     public function testCompanyUserfieldDelete(array $uf): void
     {
         $fieldId = $this->sb->getCRMScope()->companyUserfield()->add($uf)->getId();
-        $addedField = $this->sb->getCRMScope()->companyUserfield()->get($fieldId)->userfieldItem();
-        $this->assertTrue(str_contains($addedField->FIELD_NAME, $uf['FIELD_NAME']));
+        $companyUserfieldItemResult = $this->sb->getCRMScope()->companyUserfield()->get($fieldId)->userfieldItem();
+        $this->assertTrue(str_contains($companyUserfieldItemResult->FIELD_NAME, (string) $uf['FIELD_NAME']));
 
         $this->assertTrue($this->sb->getCRMScope()->companyUserfield()->delete($fieldId)->isSuccess());
 
@@ -122,13 +120,13 @@ class CompanyUserfieldTest extends TestCase
     {
         $fieldId = $this->sb->getCRMScope()->companyUserfield()->add($uf)->getId();
         $this->createdUserfields[] = $fieldId;
-        $addedField = $this->sb->getCRMScope()->companyUserfield()->get($fieldId)->userfieldItem();
+        $companyUserfieldItemResult = $this->sb->getCRMScope()->companyUserfield()->get($fieldId)->userfieldItem();
 
-        $this->assertTrue(str_contains($addedField->FIELD_NAME, $uf['FIELD_NAME']));
-        $this->assertEquals($uf['USER_TYPE_ID'], $addedField->USER_TYPE_ID);
-        $this->assertEquals($uf['XML_ID'], $addedField->XML_ID);
+        $this->assertTrue(str_contains($companyUserfieldItemResult->FIELD_NAME, (string) $uf['FIELD_NAME']));
+        $this->assertEquals($uf['USER_TYPE_ID'], $companyUserfieldItemResult->USER_TYPE_ID);
+        $this->assertEquals($uf['XML_ID'], $companyUserfieldItemResult->XML_ID);
 
-        $newXmlId = 'new' . $addedField->XML_ID;
+        $newXmlId = 'new' . $companyUserfieldItemResult->XML_ID;
 
         $this->assertTrue(
             $this->sb->getCRMScope()->companyUserfield()->update(

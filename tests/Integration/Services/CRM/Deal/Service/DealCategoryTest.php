@@ -24,12 +24,12 @@ use PHPUnit\Framework\TestCase;
  *
  * @package Bitrix24\SDK\Tests\Integration\Services\CRM\Deals\Service
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Deal\Service\DealCategory::class)]
 class DealCategoryTest extends TestCase
 {
     protected DealCategory $dealCategory;
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealCategory::add
      *
      * @throws BaseException
      * @throws TransportException
@@ -52,7 +52,6 @@ class DealCategoryTest extends TestCase
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealCategory::delete
      * @throws BaseException
      * @throws TransportException
      */
@@ -70,7 +69,6 @@ class DealCategoryTest extends TestCase
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealCategory::fields
      * @throws BaseException
      * @throws TransportException
      */
@@ -80,7 +78,6 @@ class DealCategoryTest extends TestCase
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealCategory::getDefaultCategorySettings
      * @throws BaseException
      * @throws TransportException
      */
@@ -90,7 +87,6 @@ class DealCategoryTest extends TestCase
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealCategory::setDefaultCategorySettings
      * @throws BaseException
      * @throws TransportException
      */
@@ -103,7 +99,6 @@ class DealCategoryTest extends TestCase
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealCategory::get
      * @throws BaseException
      * @throws TransportException
      */
@@ -115,26 +110,24 @@ class DealCategoryTest extends TestCase
         ];
 
         $newCategoryId = $this->dealCategory->add($newCategory)->getId();
-        $category = $this->dealCategory->get($newCategoryId);
+        $dealCategoryResult = $this->dealCategory->get($newCategoryId);
 
-        $this::assertEquals($newCategory['NAME'], $category->getDealCategoryFields()->NAME);
-        $this::assertEquals($newCategory['SORT'], $category->getDealCategoryFields()->SORT);
+        $this::assertEquals($newCategory['NAME'], $dealCategoryResult->getDealCategoryFields()->NAME);
+        $this::assertEquals($newCategory['SORT'], $dealCategoryResult->getDealCategoryFields()->SORT);
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealCategory::list
      *
      * @throws BaseException
      * @throws TransportException
      */
     public function testList(): void
     {
-        $res = $this->dealCategory->list([], [], [], 0);
-        $this::assertGreaterThanOrEqual(1, count($res->getDealCategories()));
+        $dealCategoriesResult = $this->dealCategory->list([], [], [], 0);
+        $this::assertGreaterThanOrEqual(1, count($dealCategoriesResult->getDealCategories()));
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealCategory::getStatus
      * @throws BaseException
      * @throws TransportException
      */
@@ -145,12 +138,11 @@ class DealCategoryTest extends TestCase
             'SORT' => 300,
         ];
         $newCategoryId = $this->dealCategory->add($newCategory)->getId();
-        $status = $this->dealCategory->getStatus($newCategoryId);
-        $this::assertGreaterThan(1, strlen($status->getDealCategoryTypeId()));
+        $dealCategoryStatusResult = $this->dealCategory->getStatus($newCategoryId);
+        $this::assertGreaterThan(1, strlen($dealCategoryStatusResult->getDealCategoryTypeId()));
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealCategory::update
      * @throws BaseException
      * @throws TransportException
      */
@@ -165,7 +157,7 @@ class DealCategoryTest extends TestCase
         $this::assertEquals('updated', $this->dealCategory->get($newCategoryId)->getDealCategoryFields()->NAME);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->dealCategory = Fabric::getServiceBuilder()->getCRMScope()->dealCategory();
     }

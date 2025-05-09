@@ -46,47 +46,43 @@ class RequisitePresetTest extends TestCase
     use CustomBitrix24Assertions;
 
     protected ServiceBuilder $sb;
+
     private array $createdCompanies = [];
+
     private int $requisitePresetId;
+
     private int $entityTypeRequisiteId;
+
     private int $countryId;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->sb = Fabric::getServiceBuilder();
         $this->requisitePresetId = current(
             array_filter(
                 $this->sb->getCRMScope()->requisitePreset()->list()->getRequisitePresets(),
-                function ($item) {
-                    return str_contains($item->XML_ID, 'COMPANY#');
-                }
+                fn($item): bool => str_contains($item->XML_ID, 'COMPANY#')
             )
         )->ID;
         $this->entityTypeRequisiteId = current(
             array_filter(
                 $this->sb->getCRMScope()->enum()->ownerType()->getItems(),
-                function ($item) {
-                    return $item->SYMBOL_CODE === 'REQUISITE';
-                }
+                fn($item): bool => $item->SYMBOL_CODE === 'REQUISITE'
             )
         )->ID;
         $this->countryId = current(
             array_column(
                 array_filter(
                     $this->sb->getCRMScope()->requisitePreset()->countries()->getCountries(),
-                    function ($item) {
-                        return $item->CODE === 'US';
-                    }
+                    fn($item): bool => $item->CODE === 'US'
                 ),
                 'ID'
             )
         );
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
-        foreach ($this->sb->getCRMScope()->company()->batch->delete($this->createdCompanies) as $result) {
-        }
     }
 
     public function testFields(): void
@@ -106,9 +102,7 @@ class RequisitePresetTest extends TestCase
     {
         $allFields = $this->sb->getCRMScope()->requisitePreset()->fields()->getFieldsDescription();
         $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
-        $systemFields = array_filter($allFields, static function ($code) use ($systemFieldsCodes) {
-            return in_array($code, $systemFieldsCodes, true);
-        }, ARRAY_FILTER_USE_KEY);
+        $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
 
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation($systemFields, RequisitePresetItemResult::class);
     }
@@ -136,8 +130,8 @@ class RequisitePresetTest extends TestCase
                 'ACTIVE' => 'Y',
             ]
         )->getId();
-        $addedItem = $this->sb->getCRMScope()->requisitePreset()->get($tplId)->requisitePreset();
-        $this->assertEquals($name, $addedItem->NAME);
+        $requisitePresetItemResult = $this->sb->getCRMScope()->requisitePreset()->get($tplId)->requisitePreset();
+        $this->assertEquals($name, $requisitePresetItemResult->NAME);
         $this->assertTrue($this->sb->getCRMScope()->requisitePreset()->delete($tplId)->isSuccess());
     }
 
@@ -156,7 +150,7 @@ class RequisitePresetTest extends TestCase
         $this->assertTrue($this->sb->getCRMScope()->requisitePreset()->delete($tplId)->isSuccess());
 
         $this->expectException(ItemNotFoundException::class);
-        $addedReq = $this->sb->getCRMScope()->requisitePreset()->get($tplId)->requisite();
+        $this->sb->getCRMScope()->requisitePreset()->get($tplId)->requisite();
     }
 
     public function testUpdate(): void
