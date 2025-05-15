@@ -43,7 +43,7 @@ class Batch implements BatchOperationsInterface
     /**
      * Batch constructor.
      */
-    public function __construct(private readonly CoreInterface $core, private readonly LoggerInterface $logger)
+    public function __construct(protected readonly CoreInterface $core, protected readonly LoggerInterface $logger)
     {
         $this->commands = new CommandCollection();
     }
@@ -331,6 +331,7 @@ class Batch implements BatchOperationsInterface
     /**
      * Get traversable list without count elements
      *
+     * @param string $apiMethod
      * @param array<string,string> $order
      * @param array<string,mixed> $filter
      * @param array<string,mixed> $select
@@ -345,9 +346,9 @@ class Batch implements BatchOperationsInterface
      */
     public function getTraversableList(
         string $apiMethod,
-        array $order,
-        array $filter,
-        array $select,
+        ?array $order = [],
+        ?array $filter = [],
+        ?array $select = [],
         ?int $limit = null,
         ?array $additionalParameters = null
     ): Generator {

@@ -32,7 +32,7 @@ class BatchTest extends TestCase
 
     public function setUp(): void
     {
-        $this->triggerService = Fabric::getServiceBuilder()->getCRMScope()->trigger();
+        $this->triggerService = Fabric::getServiceBuilder(true)->getCRMScope()->trigger();
     }
     
     /**
@@ -43,14 +43,14 @@ class BatchTest extends TestCase
      */
     public function testBatchList(): void
     {
-        $this->triggerService->add(['CODE' => self::TRIGGER_CODE, 'NAME' => 'B24phpsdk trigger']);
+        $this->triggerService->add(self::TRIGGER_CODE, 'B24phpsdk trigger');
         $cnt = 0;
 
         foreach ($this->triggerService->batch->list() as $item) {
             $cnt++;
         }
         self::assertGreaterThanOrEqual(1, $cnt);
-        $this->triggerService->delete(['CODE' => self::TRIGGER_CODE]);
+        $this->triggerService->delete(self::TRIGGER_CODE);
     }
 
     /**
@@ -72,7 +72,7 @@ class BatchTest extends TestCase
         self::assertEquals(count($items), $cnt);
 
         for ($i = 0; $i < $max; $i++) {
-            $this->triggerService->delete(['CODE' => self::TRIGGER_CODE . $i]);
+            $this->triggerService->delete(self::TRIGGER_CODE . $i);
         }
     }
 
@@ -95,7 +95,7 @@ class BatchTest extends TestCase
 
         $items = [];
         for ($i = 0; $i < $max; $i++) {
-            $items[] = ['CODE' => self::TRIGGER_CODE . $i];
+            $items[] = self::TRIGGER_CODE . $i;
         }
         $cnt = 0;
         foreach ($this->triggerService->batch->delete($items) as $deleteResult) {

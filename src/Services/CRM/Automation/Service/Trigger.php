@@ -110,16 +110,16 @@ class Trigger extends AbstractService
      *
      * @throws BaseException
      * @throws TransportException
-     * @return TriggerResult
+     * @return TriggersResult
      */
     #[ApiEndpointMetadata(
         'crm.automation.trigger.list',
         'https://apidocs.bitrix24.com/api-reference/crm/automation/triggers/crm-automation-trigger-list.html',
         'Get list of trigger items.'
     )]
-    public function list(): TriggerResult
+    public function list(): TriggersResult
     {
-        return new TriggerResult(
+        return new TriggersResult(
             $this->core->call(
                 'crm.automation.trigger.list',
                 []

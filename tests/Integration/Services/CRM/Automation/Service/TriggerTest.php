@@ -43,7 +43,7 @@ class TriggerTest extends TestCase
 
     public function setUp(): void
     {
-        $this->triggerService = Fabric::getServiceBuilder()->getCRMScope()->trigger();
+        $this->triggerService = Fabric::getServiceBuilder(true)->getCRMScope()->trigger();
     }
     
     public function testAllSystemFieldsAnnotated(): void
@@ -73,11 +73,14 @@ class TriggerTest extends TestCase
      */
     public function testAdd(): void
     {
-        self::assertGreaterThan(
+        self::assertEquals(
             1,
-            $this->triggerService->add(['CODE' => self::TRIGGER_CODE, 'NAME' => 'B24phpsdk trigger'])->getId()
+            $this->triggerService->add(
+                self::TRIGGER_CODE,
+                'B24phpsdk trigger')
+                ->getCoreResponse()->getResponseData()->getResult()[0]
         );
-        $this->triggerService->delete(['CODE' => self::TRIGGER_CODE]);
+        $this->triggerService->delete(self::TRIGGER_CODE);
     }
 
     /**
@@ -87,18 +90,8 @@ class TriggerTest extends TestCase
      */
     public function testDelete(): void
     {
-        $this->triggerService->add(['CODE' => self::TRIGGER_CODE, 'NAME' => 'B24phpsdk trigger']);
-        self::assertTrue($this->triggerService->delete(['CODE' => self::TRIGGER_CODE])->getId())->isSuccess());
-    }
-
-    /**
-     * @covers Lead::fields
-     * @throws BaseException
-     * @throws TransportException
-     */
-    public function testFields(): void
-    {
-        self::assertIsArray($this->triggerService->fields()->getFieldsDescription());
+        $this->triggerService->add(self::TRIGGER_CODE, 'B24phpsdk trigger');
+        self::assertTrue($this->triggerService->delete(self::TRIGGER_CODE)->isSuccess());
     }
 
     /**
@@ -108,35 +101,9 @@ class TriggerTest extends TestCase
      */
     public function testList(): void
     {
-        $this->triggerService->add(['CODE' => self::TRIGGER_CODE, 'NAME' => 'B24phpsdk trigger']);
+        $this->triggerService->add(self::TRIGGER_CODE, 'B24phpsdk trigger');
         self::assertGreaterThanOrEqual(1, $this->triggerService->list()->getTriggers());
-    }
-
-    
-
-    /**
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\Deal::countByFilter
-     */
-    public function testCountByFilter(): void
-    {
-        $before = $this->triggerService->countByFilter();
-
-        $newItemsCount = 60;
-        $items = [];
-        for ($i = 1; $i <= $newItemsCount; $i++) {
-            $items[] = ['TITLE' => 'TITLE-' . $i];
-        }
-        $cnt = 0;
-        foreach ($this->triggerService->batch->add($items) as $item) {
-            $cnt++;
-        }
-        self::assertEquals(count($items), $cnt);
-
-        $after = $this->triggerService->countByFilter();
-
-        $this->assertEquals($before + $newItemsCount, $after);
+        $this->triggerService->delete(self::TRIGGER_CODE);
     }
 
     /**
@@ -145,10 +112,10 @@ class TriggerTest extends TestCase
     protected function getFields(): array
     {
         // add trigger
-        $this->triggerService->add(['CODE' => self::TRIGGER_CODE, 'NAME' => 'B24phpsdk trigger']);
+        $this->triggerService->add(self::TRIGGER_CODE, 'B24phpsdk trigger');
         $list = $this->triggerService->list()->getTriggers();
         // delete trigger
-        $this->triggerService->delete(['CODE' => self::TRIGGER_CODE]);
+        $this->triggerService->delete(self::TRIGGER_CODE);
         $res = $list[0]->getIterator()->getArrayCopy();
         
         $fields = [];
@@ -165,10 +132,10 @@ class TriggerTest extends TestCase
     protected function getFieldsDescription(): array
     {
         // add trigger
-        $this->triggerService->add(['CODE' => self::TRIGGER_CODE, 'NAME' => 'B24phpsdk trigger']);
+        $this->triggerService->add(self::TRIGGER_CODE, 'B24phpsdk trigger');
         $list = $this->triggerService->list()->getTriggers();
         // delete trigger
-        $this->triggerService->delete(['CODE' => self::TRIGGER_CODE]);
+        $this->triggerService->delete(self::TRIGGER_CODE);
         $res = $list[0]->getIterator()->getArrayCopy();
 
         $fields = [];

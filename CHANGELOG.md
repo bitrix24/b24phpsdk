@@ -1,15 +1,15 @@
 # b24-php-sdk change log
 
-## 1.3.0 – 2025.04.23
+## 1.3.0 – 2025.05.15
 
 ### Added
 
 - Added service `Services\CRM\Automation\Service\Trigger` with support methods,
   see [add crm.automation.trigger* methods](https://github.com/bitrix24/b24phpsdk/issues/148):
-    - `add` add new trigger
-    - `delete` delete trigger
-    - `list`  get list of triggers
-    - `execute` execute trigger
+    - `add` add new trigger, with batch calls support
+    - `delete` delete trigger, with batch calls support
+    - `list`  get list of triggers, with batch calls support
+    - `execute` execute trigger, with batch calls support
 - Added **PHP 8.4** [support](https://github.com/bitrix24/b24phpsdk/issues/120) 🚀
 - Added method `Bitrix24\SDK\Services\Main\Service::guardValidateCurrentAuthToken` for validate current auth token with
   api-call `app.info` on vendor OAUTH server.

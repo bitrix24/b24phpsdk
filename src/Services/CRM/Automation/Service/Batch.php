@@ -105,4 +105,28 @@ class Batch
             yield $key => new DeletedItemBatchResult($item);
         }
     }
+    
+    /**
+     * Batch execute triggers
+     *
+     * @param array <int, array{
+     *                          CODE?: string,
+     *                          OWNER_TYPE_ID?: string,
+     *                          OWNER_ID?: int,
+     *   }> $triggers
+     *
+     * @return Generator<int, DeletedItemBatchResult>
+     * @throws BaseException
+     */
+    #[ApiBatchMethodMetadata(
+        'crm.automation.trigger.execute',
+        'https://apidocs.bitrix24.com/api-reference/crm/automation/triggers/crm-automation-trigger-delete.html',
+        'Batch execute triggers'
+    )]
+    public function execute(array $triggers): Generator
+    {
+        foreach ($this->batch->executeItems('crm.automation.trigger.execute', $triggers) as $key => $item) {
+            yield $key => new DeletedItemBatchResult($item);
+        }
+    }
 }

@@ -285,8 +285,12 @@ class CRMServiceBuilder extends AbstractServiceBuilder
     public function trigger(): Automation\Service\Trigger
     {
         if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new Automation\Batch(
+                $this->core,
+                $this->log
+            );
             $this->serviceCache[__METHOD__] = new Automation\Service\Trigger(
-                new Automation\Service\Batch($this->batch, $this->log),
+                new Automation\Service\Batch($batch, $this->log),
                 $this->core,
                 $this->log
             );
