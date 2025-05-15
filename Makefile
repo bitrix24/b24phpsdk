@@ -174,6 +174,10 @@ test-integration-scope-entity:
 .PHONY: test-integration-scope-ai-admin
 test-integration-scope-ai-admin:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_ai_admin
+	
+.PHONY: integration_tests_scope_automation
+integration_tests_scope_automation:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_automation
 
 # work dev environment
 .PHONY: php-dev-server-up

@@ -71,7 +71,7 @@ interface BatchOperationsInterface
     /**
      * Delete entity items with batch call
      *
-     * @param array<int, int> $entityItemId
+     * @param array<int, mixed> $entityItemId
      *
      * @return Generator<int, ResponseData>|ResponseData[]
      * @throws BaseException
