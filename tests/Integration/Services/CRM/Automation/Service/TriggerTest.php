@@ -36,12 +36,12 @@ use PHPUnit\Framework\TestCase;
 #[CoversMethod(Trigger::class,'execute')]
 class TriggerTest extends TestCase
 {
-    const TRIGGER_CODE = 'b24phpsdk';
+    public const TRIGGER_CODE = 'b24phpsdk';
     
     use CustomBitrix24Assertions;
     protected Trigger $triggerService;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->triggerService = Fabric::getServiceBuilder(true)->getCRMScope()->trigger();
     }
@@ -57,9 +57,7 @@ class TriggerTest extends TestCase
     {
         $allFields = $this->getFieldsDescription();
         $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
-        $systemFields = array_filter($allFields, static function ($code) use ($systemFieldsCodes) {
-            return in_array($code, $systemFieldsCodes, true);
-        }, ARRAY_FILTER_USE_KEY);
+        $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
 
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
             $systemFields,
@@ -69,7 +67,6 @@ class TriggerTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Trigger::add
      */
     public function testAdd(): void
     {
@@ -86,7 +83,6 @@ class TriggerTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Trigger::delete
      */
     public function testDelete(): void
     {
@@ -97,7 +93,6 @@ class TriggerTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Trigger::list
      */
     public function testList(): void
     {
@@ -117,13 +112,8 @@ class TriggerTest extends TestCase
         // delete trigger
         $this->triggerService->delete(self::TRIGGER_CODE);
         $res = $list[0]->getIterator()->getArrayCopy();
-        
-        $fields = [];
-        foreach (array_keys($res) as $key) {
-            $fields[] = $key;
-        }
 
-        return $fields;
+        return array_keys($res);
     }
 
     /**

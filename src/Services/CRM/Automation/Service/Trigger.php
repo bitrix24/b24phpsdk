@@ -27,6 +27,7 @@ use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\CRM\Automation\Result\TriggerResult;
 use Bitrix24\SDK\Services\CRM\Automation\Result\TriggersResult;
 use Psr\Log\LoggerInterface;
+
 #[ApiServiceMetadata(new Scope(['crm']))]
 class Trigger extends AbstractService
 {
@@ -126,7 +127,7 @@ class Trigger extends AbstractService
             )
         );
     }
-    
+
     /**
      * Execute trigger
      *

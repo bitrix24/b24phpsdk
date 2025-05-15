@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Automation\Service;
 
+use Bitrix24\SDK\Services\CRM\Automation;
 use Bitrix24\SDK\Attributes\ApiBatchMethodMetadata;
 use Bitrix24\SDK\Attributes\ApiBatchServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
@@ -27,16 +28,16 @@ use Psr\Log\LoggerInterface;
 #[ApiBatchServiceMetadata(new Scope(['crm']))]
 class Batch
 {
-    protected BatchOperationsInterface $batch;
+    protected Automation\Batch $batch;
     protected LoggerInterface $log;
 
     /**
      * Batch constructor.
      *
-     * @param BatchOperationsInterface $batch
+     * @param Automation\Batch $batch
      * @param LoggerInterface          $log
      */
-    public function __construct(BatchOperationsInterface $batch, LoggerInterface $log)
+    public function __construct(Automation\Batch $batch, LoggerInterface $log)
     {
         $this->batch = $batch;
         $this->log = $log;
@@ -87,9 +88,7 @@ class Batch
     /**
      * Batch delete triggers
      *
-     * @param array <int, array{
-     *                          CODE?: string
-     *   }> $codes
+     * @param array <int, string> $codes
      *
      * @return Generator<int, DeletedItemBatchResult>
      * @throws BaseException
@@ -105,7 +104,7 @@ class Batch
             yield $key => new DeletedItemBatchResult($item);
         }
     }
-    
+
     /**
      * Batch execute triggers
      *

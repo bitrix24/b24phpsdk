@@ -24,23 +24,25 @@ use PHPUnit\Framework\TestCase;
  *
  * @package Bitrix24\SDK\Tests\Integration\Services\CRM\Automation\Service
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Automation\Service\Batch::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Lead\Service\Batch::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Deal\Service\Batch::class)]
 class BatchTest extends TestCase
 {
-    const TRIGGER_CODE = 'b24phpsdk';
+    public const TRIGGER_CODE = 'b24phpsdk';
     
     protected Trigger $triggerService;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->triggerService = Fabric::getServiceBuilder(true)->getCRMScope()->trigger();
     }
     
     /**
-     * @testdox Batch list triggers
-     * @covers  \Bitrix24\SDK\Services\CRM\Automation\Service\Batch::list()
      * @throws BaseException
      * @throws TransportException
      */
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch list triggers')]
     public function testBatchList(): void
     {
         $this->triggerService->add(self::TRIGGER_CODE, 'B24phpsdk trigger');
@@ -49,15 +51,15 @@ class BatchTest extends TestCase
         foreach ($this->triggerService->batch->list() as $item) {
             $cnt++;
         }
+
         self::assertGreaterThanOrEqual(1, $cnt);
         $this->triggerService->delete(self::TRIGGER_CODE);
     }
 
     /**
-     * @testdox Batch add lead
-     * @covers  \Bitrix24\SDK\Services\CRM\Lead\Service\Batch::add()
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch add lead')]
     public function testBatchAdd(): void
     {
         $items = [];
@@ -65,10 +67,12 @@ class BatchTest extends TestCase
         for ($i = 0; $i < $max; $i++) {
             $items[] = ['CODE' => self::TRIGGER_CODE . $i, 'NAME' => 'B24phpsdk trigger ' . $i];
         }
+
         $cnt = 0;
         foreach ($this->triggerService->batch->add($items) as $item) {
             $cnt++;
         }
+
         self::assertEquals(count($items), $cnt);
 
         for ($i = 0; $i < $max; $i++) {
@@ -77,10 +81,9 @@ class BatchTest extends TestCase
     }
 
     /**
-     * @testdox Batch delete deals
-     * @covers  \Bitrix24\SDK\Services\CRM\Deal\Service\Batch::add()
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch delete deals')]
     public function testBatchDelete(): void
     {
         $items = [];
@@ -88,6 +91,7 @@ class BatchTest extends TestCase
         for ($i = 0; $i < $max; $i++) {
             $items[] = ['CODE' => self::TRIGGER_CODE . $i, 'NAME' => 'B24phpsdk trigger ' . $i];
         }
+
         $cnt = 0;
         foreach ($this->triggerService->batch->add($items) as $item) {
             $cnt++;
@@ -97,10 +101,12 @@ class BatchTest extends TestCase
         for ($i = 0; $i < $max; $i++) {
             $items[] = self::TRIGGER_CODE . $i;
         }
+
         $cnt = 0;
         foreach ($this->triggerService->batch->delete($items) as $deleteResult) {
             $cnt++;
         }
+
         self::assertEquals(count($items), $cnt);
     }
 
