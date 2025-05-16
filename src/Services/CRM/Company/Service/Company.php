@@ -31,19 +31,12 @@ use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 #[ApiServiceMetadata(new Scope(['crm']))]
 class Company extends AbstractService
 {
-    public Batch $batch;
-
     /**
      * Deal constructor.
-     *
-     * @param Batch $batch
-     * @param CoreInterface $core
-     * @param LoggerInterface $log
      */
-    public function __construct(Batch $batch, CoreInterface $core, LoggerInterface $log)
+    public function __construct(public Batch $batch, CoreInterface $core, LoggerInterface $logger)
     {
-        parent::__construct($core, $log);
-        $this->batch = $batch;
+        parent::__construct($core, $logger);
     }
 
     /**
@@ -51,7 +44,6 @@ class Company extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/companies/crm-company-fields.html
      *
-     * @return FieldsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -131,7 +123,6 @@ class Company extends AbstractService
      *   REGISTER_SONET_EVENT?: string
      *   } $params
      *
-     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -158,9 +149,7 @@ class Company extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/companies/crm-company-get.html
      *
-     * @param int $id
      *
-     * @return CompanyResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -179,9 +168,7 @@ class Company extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/companies/crm-company-delete.html
      *
-     * @param int $id
      *
-     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -214,7 +201,6 @@ class Company extends AbstractService
      *
      * @throws BaseException
      * @throws TransportException
-     * @return CompaniesResult
      */
     #[ApiEndpointMetadata(
         'crm.company.list',
@@ -241,7 +227,6 @@ class Company extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_update.php
      *
-     * @param int $id
      * @param array{
      *   TITLE?: string,
      *   COMPANY_TYPE?: string,
@@ -304,7 +289,6 @@ class Company extends AbstractService
      *   REGISTER_SONET_EVENT?: string
      *   } $params
      *
-     * @return UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -386,7 +370,6 @@ class Company extends AbstractService
      *   IM?: string,
      *   LINK?: string,
      *   } $filter
-     * @return int
      * @throws BaseException
      * @throws TransportException
      */

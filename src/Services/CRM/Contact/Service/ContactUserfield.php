@@ -32,12 +32,9 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['crm']))]
 class ContactUserfield extends AbstractService
 {
-    private UserfieldConstraints $userfieldConstraints;
-
-    public function __construct(UserfieldConstraints $userfieldConstraints, CoreInterface $core, LoggerInterface $log)
+    public function __construct(private readonly UserfieldConstraints $userfieldConstraints, CoreInterface $core, LoggerInterface $logger)
     {
-        $this->userfieldConstraints = $userfieldConstraints;
-        parent::__construct($core, $log);
+        parent::__construct($core, $logger);
     }
 
     /**
@@ -84,7 +81,6 @@ class ContactUserfield extends AbstractService
      *   SETTINGS?: string,
      *   } $filter
      *
-     * @return ContactUserfieldsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -133,7 +129,6 @@ class ContactUserfield extends AbstractService
      *   SETTINGS?: string,
      *   } $userfieldItemFields
      *
-     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      * @throws UserfieldNameIsTooLongException
@@ -162,9 +157,7 @@ class ContactUserfield extends AbstractService
     /**
      * Deleted user field for contacts.
      *
-     * @param int $userfieldId
      *
-     * @return \Bitrix24\SDK\Core\Result\DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      * @link  https://training.bitrix24.com/rest_help/crm/contacts/crm_contact_userfield_delete.php
@@ -190,9 +183,7 @@ class ContactUserfield extends AbstractService
     /**
      * Returns a user field for contacts by ID.
      *
-     * @param int $contactUserfieldItemId
      *
-     * @return ContactUserfieldResult
      * @throws BaseException
      * @throws TransportException
      * @link  https://training.bitrix24.com/rest_help/crm/contacts/crm_contact_userfield_get.php
@@ -217,10 +208,7 @@ class ContactUserfield extends AbstractService
     /**
      * Updates an existing user field for contacts.
      *
-     * @param int $contactUserfieldItemId
-     * @param array $userfieldFieldsToUpdate
      *
-     * @return UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/crm/contacts/crm_contact_userfield_update.php

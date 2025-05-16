@@ -46,20 +46,19 @@ class CompanyTest extends TestCase
     use CustomBitrix24Assertions;
 
     private ServiceBuilder $sb;
+
     private Faker\Generator $faker;
 
     private array $createdCompanies = [];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->sb = Fabric::getServiceBuilder();
         $this->faker = Faker\Factory::create();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
-        foreach ($this->sb->getCRMScope()->company()->batch->delete($this->createdCompanies) as $result) {
-        }
     }
 
     #[TestDox('method crm.company.fields')]
@@ -75,9 +74,7 @@ class CompanyTest extends TestCase
     {
         $allFields = $this->sb->getCRMScope()->company()->fields()->getFieldsDescription();
         $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
-        $systemFields = array_filter($allFields, static function ($code) use ($systemFieldsCodes) {
-            return in_array($code, $systemFieldsCodes, true);
-        }, ARRAY_FILTER_USE_KEY);
+        $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
 
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
             $systemFields,
@@ -120,11 +117,11 @@ class CompanyTest extends TestCase
         $this->createdCompanies[] = $companyId;
 
         $this->assertGreaterThan(1, $companyId);
-        $addedCompany = $this->sb->getCRMScope()->company()->get($companyId)->company();
+        $companyItemResult = $this->sb->getCRMScope()->company()->get($companyId)->company();
 
-        $this->assertEquals($companyTitle, $addedCompany->TITLE);
-        $this->assertEquals($email, $addedCompany->EMAIL[0]->VALUE);
-        $this->assertEquals($phone, $addedCompany->PHONE[0]->VALUE);
+        $this->assertEquals($companyTitle, $companyItemResult->TITLE);
+        $this->assertEquals($email, $companyItemResult->EMAIL[0]->VALUE);
+        $this->assertEquals($phone, $companyItemResult->PHONE[0]->VALUE);
     }
 
     #[TestDox('method crm.company.get')]
@@ -140,8 +137,8 @@ class CompanyTest extends TestCase
         $this->createdCompanies[] = $companyId;
 
         $this->assertGreaterThan(1, $companyId);
-        $addedCompany = $this->sb->getCRMScope()->company()->get($companyId)->company();
-        $this->assertEquals($companyTitle, $addedCompany->TITLE);
+        $companyItemResult = $this->sb->getCRMScope()->company()->get($companyId)->company();
+        $this->assertEquals($companyTitle, $companyItemResult->TITLE);
     }
 
     #[TestDox('method crm.company.delete')]
@@ -171,8 +168,8 @@ class CompanyTest extends TestCase
         )->getId();
         $this->createdCompanies[] = $companyId;
 
-        $companies = $this->sb->getCRMScope()->company()->list();
-        $this->assertGreaterThan(1, count($companies->getCompanies()));
+        $companiesResult = $this->sb->getCRMScope()->company()->list();
+        $this->assertGreaterThan(1, count($companiesResult->getCompanies()));
     }
 
     #[TestDox('method crm.company.update')]
@@ -200,11 +197,13 @@ class CompanyTest extends TestCase
         for ($i = 1; $i <= $newCompaniesCount; $i++) {
             $companies[] = ['TITLE' => 'TITLE-' . sprintf('Acme Inc - %s', time()), 'UTM_SOURCE' => $utmSource];
         }
+
         $cnt = 0;
         foreach ($this->sb->getCRMScope()->company()->batch->add($companies) as $item) {
             $this->createdCompanies[] = $item->getId();
             $cnt++;
         }
+
         self::assertEquals(count($companies), $cnt);
 
         $this->assertEquals(

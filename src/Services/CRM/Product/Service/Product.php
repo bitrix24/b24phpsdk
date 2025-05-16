@@ -31,19 +31,12 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['crm']))]
 class Product extends AbstractService
 {
-    public Batch $batch;
-
     /**
      * Product constructor.
-     *
-     * @param Batch           $batch
-     * @param CoreInterface   $core
-     * @param LoggerInterface $log
      */
-    public function __construct(Batch $batch, CoreInterface $core, LoggerInterface $log)
+    public function __construct(public Batch $batch, CoreInterface $core, LoggerInterface $logger)
     {
-        parent::__construct($core, $log);
-        $this->batch = $batch;
+        parent::__construct($core, $logger);
     }
 
     /**
@@ -75,7 +68,6 @@ class Product extends AbstractService
      *   CREATED_BY?: int
      *   } $fields
      *
-     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -101,9 +93,7 @@ class Product extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/products/crm_product_delete.php
      *
-     * @param int $productId
      *
-     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -129,9 +119,7 @@ class Product extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/products/crm_product_get.php
      *
-     * @param int $id
      *
-     * @return ProductResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -150,7 +138,6 @@ class Product extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/products/crm_product_fields.php
      *
-     * @return FieldsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -174,7 +161,6 @@ class Product extends AbstractService
      * @param array $select    = ['ID','CATALOG_ID','PRICE','CURRENCY_ID','NAME','CODE','DESCRIPTION','DESCRIPTION_TYPE','ACTIVE','SECTION_ID','SORT','VAT_ID','VAT_INCLUDED','MEASURE','XML_ID','PREVIEW_PICTURE','DETAIL_PICTURE','DATE_CREATE','TIMESTAMP_X','MODIFIED_BY','CREATED_BY']
      * @param int   $startItem - entity number to start from (usually returned in 'next' field of previous 'crm.product.list' API call)
      *
-     * @return ProductsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -203,7 +189,6 @@ class Product extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/products/crm_product_update.php
      *
-     * @param int $id
      * @param array{
      *   ID?: int,
      *   CATALOG_ID?: int,
@@ -228,7 +213,6 @@ class Product extends AbstractService
      *   CREATED_BY?: int
      *   } $fields
      *
-     * @return UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -277,7 +261,6 @@ class Product extends AbstractService
      *   CREATED_BY?: int
      *   } $filter
      *
-     * @return int
      * @throws BaseException
      * @throws TransportException
      */

@@ -29,11 +29,15 @@ use MoneyPHP\Percentage\Percentage;
 use PHPUnit\Framework\TestCase;
 use Typhoon\Reflection\TyphoonReflector;
 
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Deal\Service\DealProductRows::class)]
 class DealProductRowsTest extends TestCase
 {
     private Deal $dealService;
+
     private DealProductRows $dealProductRowsService;
+
     private DecimalMoneyFormatter $decimalMoneyFormatter;
+
     private TyphoonReflector $typhoonReflector;
 
     public function testAllSystemPropertiesAnnotated(): void
@@ -51,9 +55,9 @@ class DealProductRowsTest extends TestCase
         // get response from server with actual keys
         $propListFromApi = array_keys($this->dealProductRowsService->get($dealId)->getCoreResponse()->getResponseData()->getResult()['result']['rows'][0]);
         // parse keys from phpdoc annotation
-        $props = $this->typhoonReflector->reflectClass(DealProductRowItemResult::class)->properties();
+        $collection = $this->typhoonReflector->reflectClass(DealProductRowItemResult::class)->properties();
         $propsFromAnnotations = [];
-        foreach ($props as $meta) {
+        foreach ($collection as $meta) {
             if ($meta->isAnnotated() && !$meta->isNative()) {
                 $propsFromAnnotations[] = $meta->id->name;
             }
@@ -69,7 +73,6 @@ class DealProductRowsTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealProductRows::set
      */
     public function testSet(): void
     {
@@ -90,9 +93,9 @@ class DealProductRowsTest extends TestCase
                 ]
             )->isSuccess()
         );
-        $productRows = $this->dealProductRowsService->get($dealId);
-        $this->assertCount(1, $productRows->getProductRows());
-        $productRow = $productRows->getProductRows()[0];
+        $dealProductRowItemsResult = $this->dealProductRowsService->get($dealId);
+        $this->assertCount(1, $dealProductRowItemsResult->getProductRows());
+        $productRow = $dealProductRowItemsResult->getProductRows()[0];
         $this->assertEquals($price, $productRow->PRICE);
         $this->assertEquals(DiscountType::monetary, $productRow->DISCOUNT_TYPE_ID);
         $this->assertEquals($discount, $productRow->DISCOUNT_SUM);
@@ -118,16 +121,16 @@ class DealProductRowsTest extends TestCase
                 ]
             )->isSuccess()
         );
-        $productRows = $this->dealProductRowsService->get($dealId);
-        $this->assertCount(1, $productRows->getProductRows());
-        $productRow = $productRows->getProductRows()[0];
+        $dealProductRowItemsResult = $this->dealProductRowsService->get($dealId);
+        $this->assertCount(1, $dealProductRowItemsResult->getProductRows());
+        $productRow = $dealProductRowItemsResult->getProductRows()[0];
         $this->assertEquals($price, $productRow->PRICE);
         $this->assertEquals(DiscountType::percentage, $productRow->DISCOUNT_TYPE_ID);
         $this->assertEquals($discount, $productRow->DISCOUNT_SUM);
         $this->assertEquals(Percentage::zero(), $productRow->DISCOUNT_RATE);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->dealService = Fabric::getServiceBuilder()->getCRMScope()->deal();
         $this->dealProductRowsService = Fabric::getServiceBuilder()->getCRMScope()->dealProductRows();

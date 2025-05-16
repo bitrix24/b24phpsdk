@@ -16,20 +16,8 @@ namespace Bitrix24\SDK\Services\CRM\Activity\Result\WebForm;
 
 class WebFormProviderParams
 {
-    private array $fields;
-    private WebFormMetadata $webForm;
-    private array $visitedPages;
-
-    /**
-     * @param array                                                              $fields
-     * @param \Bitrix24\SDK\Services\CRM\Activity\Result\WebForm\WebFormMetadata $webForm
-     * @param array                                                              $visitedPages
-     */
-    public function __construct(array $fields, WebFormMetadata $webForm, array $visitedPages)
+    public function __construct(private readonly array $fields, private readonly WebFormMetadata $webForm, private readonly array $visitedPages)
     {
-        $this->fields = $fields;
-        $this->webForm = $webForm;
-        $this->visitedPages = $visitedPages;
     }
 
     /**
@@ -45,9 +33,6 @@ class WebFormProviderParams
         return $res;
     }
 
-    /**
-     * @return \Bitrix24\SDK\Services\CRM\Activity\Result\WebForm\WebFormMetadata
-     */
     public function getWebForm(): WebFormMetadata
     {
         return $this->webForm;
@@ -59,8 +44,8 @@ class WebFormProviderParams
     public function getVisitedPages(): array
     {
         $res = [];
-        foreach ($this->visitedPages as $page) {
-            $res[] = new VisitedPageItem($page);
+        foreach ($this->visitedPages as $visitedPage) {
+            $res[] = new VisitedPageItem($visitedPage);
         }
 
         return $res;

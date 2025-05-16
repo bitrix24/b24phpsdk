@@ -17,9 +17,6 @@ use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 
 readonly class CardSectionConfiguration
 {
-    public string $name;
-    public string $title;
-    public string $type;
     public array $elements;
 
     /**
@@ -29,7 +26,7 @@ readonly class CardSectionConfiguration
      * @param non-empty-string $type
      * @throws InvalidArgumentException
      */
-    public function __construct(string $name, string $title, array $elements, string $type = 'section')
+    public function __construct(public string $name, public string $title, array $elements, public string $type = 'section')
     {
         foreach ($elements as $element) {
             if (!$element instanceof CardFieldConfiguration) {
@@ -43,9 +40,6 @@ readonly class CardSectionConfiguration
             }
         }
 
-        $this->name = $name;
-        $this->title = $title;
-        $this->type = $type;
         $this->elements = $elements;
     }
 

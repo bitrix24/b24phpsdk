@@ -25,7 +25,6 @@ use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 class Settings extends AbstractService
 {
     /**
-     * @return SettingsModeResult
      * @throws BaseException
      * @throws TransportException
      */

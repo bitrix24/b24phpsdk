@@ -122,6 +122,7 @@ class CompanyDetailsConfiguration extends AbstractService
                     )
                 );
             }
+
             $rawData[] = $sectionItem->toArray();
         }
 
@@ -156,6 +157,7 @@ class CompanyDetailsConfiguration extends AbstractService
                     )
                 );
             }
+
             $rawData[] = $sectionItem->toArray();
         }
 

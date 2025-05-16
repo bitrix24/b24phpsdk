@@ -25,14 +25,8 @@ use Generator;
 #[ApiBatchServiceMetadata(new Scope(['crm']))]
 class OpenLineFetcher
 {
-    private BulkItemsReaderInterface $bulkItemsReader;
-
-    /**
-     * @param BulkItemsReaderInterface $bulkItemsReader
-     */
-    public function __construct(BulkItemsReaderInterface $bulkItemsReader)
+    public function __construct(private readonly BulkItemsReaderInterface $bulkItemsReader)
     {
-        $this->bulkItemsReader = $bulkItemsReader;
     }
 
     /**

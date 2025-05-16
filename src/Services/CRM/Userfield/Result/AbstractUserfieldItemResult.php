@@ -43,8 +43,6 @@ class AbstractUserfieldItemResult extends AbstractCrmItem
 
     /**
      * get userfield name without prefix UF_CRM_
-     *
-     * @return string
      */
     public function getOriginalFieldName(): string
     {

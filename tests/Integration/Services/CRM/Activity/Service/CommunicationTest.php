@@ -1,0 +1,61 @@
+<?php
+
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Gleb Starikov <gleb.starikov1998@mail.ru>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Activity\Service;
+
+use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Services\CRM\Activity\Service\Communication;
+use Bitrix24\SDK\Tests\Integration\Fabric;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
+use Bitrix24\SDK\Core;
+use Bitrix24\SDK\Services\CRM\Activity\Result\CommunicationItemResult;
+
+#[CoversClass(Communication::class)]
+#[CoversMethod(Communication::class, 'fields')]
+class CommunicationTest extends TestCase
+{
+    use CustomBitrix24Assertions;
+
+    private Communication $communicationService;
+
+    protected function setUp(): void
+    {
+        $this->communicationService = Fabric::getServiceBuilder()->getCRMScope()->communication();
+    }
+
+    public function testAllSystemFieldsAnnotated(): void
+    {
+        $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($this->communicationService->fields()->getFieldsDescription()));
+        $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, CommunicationItemResult::class);
+    }
+
+    public function testAllSystemFieldsHasValidTypeAnnotation():void
+    {
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
+            $this->communicationService->fields()->getFieldsDescription(),
+            CommunicationItemResult::class);
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testFields(): void
+    {
+        self::assertIsArray($this->communicationService->fields()->getFieldsDescription());
+    }
+}

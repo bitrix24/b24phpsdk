@@ -24,11 +24,7 @@ class DuplicateResult extends AbstractResult
             return false;
         }
 
-        if (count($this->getCoreResponse()->getResponseData()->getResult()['CONTACT']) > 1) {
-            return true;
-        }
-
-        return false;
+        return count($this->getCoreResponse()->getResponseData()->getResult()['CONTACT']) > 1;
     }
 
     public function hasOneContact(): bool
@@ -37,11 +33,7 @@ class DuplicateResult extends AbstractResult
             return false;
         }
 
-        if (count($this->getCoreResponse()->getResponseData()->getResult()['CONTACT']) === 1) {
-            return true;
-        }
-
-        return false;
+        return count($this->getCoreResponse()->getResponseData()->getResult()['CONTACT']) === 1;
     }
 
     /**

@@ -31,19 +31,12 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['crm']))]
 class Contact extends AbstractService
 {
-    public Batch $batch;
-
     /**
      * Contact constructor.
-     *
-     * @param Batch $batch
-     * @param CoreInterface $core
-     * @param LoggerInterface $log
      */
-    public function __construct(Batch $batch, CoreInterface $core, LoggerInterface $log)
+    public function __construct(public Batch $batch, CoreInterface $core, LoggerInterface $logger)
     {
-        parent::__construct($core, $log);
-        $this->batch = $batch;
+        parent::__construct($core, $logger);
     }
 
     /**
@@ -105,7 +98,6 @@ class Contact extends AbstractService
      *   REGISTER_SONET_EVENT?: string
      *   } $params
      *
-     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -132,9 +124,7 @@ class Contact extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/contacts/crm_contact_delete.php
      *
-     * @param int $contactId
      *
-     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -160,7 +150,6 @@ class Contact extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/contacts/crm_contact_fields.php
      *
-     * @return FieldsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -179,9 +168,7 @@ class Contact extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/contacts/crm_contact_get.php
      *
-     * @param int $contactId
      *
-     * @return ContactResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -307,9 +294,7 @@ class Contact extends AbstractService
      *                      IM?: string,
      *                      } $filter
      * @param array $select = ['ID','HONORIFIC','NAME','SECOND_NAME','LAST_NAME','PHOTO','BIRTHDATE','TYPE_ID','SOURCE_ID','SOURCE_DESCRIPTION','POST','ADDRESS','ADDRESS_2','ADDRESS_CITY','ADDRESS_POSTAL_CODE','ADDRESS_REGION','ADDRESS_PROVINCE','ADDRESS_COUNTRY','ADDRESS_COUNTRY_CODE','ADDRESS_LOC_ADDR_ID','COMMENTS','OPENED','EXPORT','HAS_PHONE','HAS_EMAIL','HAS_IMOL','ASSIGNED_BY_ID','CREATED_BY_ID','MODIFY_BY_ID','DATE_CREATE','DATE_MODIFY','COMPANY_ID','COMPANY_IDS','LEAD_ID','ORIGINATOR_ID','ORIGIN_ID','ORIGIN_VERSION','FACE_ID','UTM_SOURCE','UTM_MEDIUM','UTM_CAMPAIGN','UTM_CONTENT','UTM_TERM','PHONE','EMAIL','WEB','IM']
-     * @param int $start
      *
-     * @return ContactsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -334,7 +319,6 @@ class Contact extends AbstractService
     }
 
     /**
-     * @param int $contactId
      * @param array{
      *                      ID?: int,
      *                      HONORIFIC?: string,
@@ -389,7 +373,6 @@ class Contact extends AbstractService
      *                      REGISTER_SONET_EVENT?: string
      *                      } $params
      *
-     * @return UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -463,7 +446,6 @@ class Contact extends AbstractService
      *                      IM?: string,
      *                      } $filter
      *
-     * @return int
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      */

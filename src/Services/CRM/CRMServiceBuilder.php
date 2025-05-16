@@ -210,9 +210,6 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return Deal\Service\DealProductRows
-     */
     public function dealProductRows(): Deal\Service\DealProductRows
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -289,6 +286,32 @@ class CRMServiceBuilder extends AbstractServiceBuilder
                 $this->core,
                 $this->batch,
                 $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function activityType(): Activity\Service\ActivityType
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Activity\Service\ActivityType(
+                new Activity\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function communication(): Activity\Service\Communication
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Activity\Service\Communication(
+                new Activity\Service\Batch($this->batch, $this->log),
+                $this->core,
                 $this->log
             );
         }
