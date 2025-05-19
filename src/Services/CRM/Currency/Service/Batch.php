@@ -49,7 +49,7 @@ class Batch
      *   CURRENCY?: string,
      *   BASE?: string,
      *   AMOUNT_CNT?: int,
-     *   AMOUNT?: double,
+     *   AMOUNT?: float,
      *   SORT?: int,
      *   } $order
      *
@@ -81,7 +81,7 @@ class Batch
      *   CURRENCY?: string,
      *   BASE?: string,
      *   AMOUNT_CNT?: int,
-     *   AMOUNT?: double,
+     *   AMOUNT?: float,
      *   SORT?: int,
      *   LANG?: array,
      *   }> $currencies

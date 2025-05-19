@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Currency\Localization\Service;
+namespace Bitrix24\SDK\Services\CRM\Currency\Localizations\Service;
 
 use Bitrix24\SDK\Attributes\ApiBatchMethodMetadata;
 use Bitrix24\SDK\Attributes\ApiBatchServiceMetadata;
@@ -49,7 +49,7 @@ class Batch
      *   CURRENCY?: string,
      *   BASE?: string,
      *   AMOUNT_CNT?: int,
-     *   AMOUNT?: double,
+     *   AMOUNT?: float,
      *   SORT?: int,
      *   } $order
      *

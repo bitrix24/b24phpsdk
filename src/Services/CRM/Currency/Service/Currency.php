@@ -54,7 +54,7 @@ class Currency extends AbstractService
      *   CURRENCY?: string,
      *   BASE?: string,
      *   AMOUNT_CNT?: int,
-     *   AMOUNT?: double,
+     *   AMOUNT?: float,
      *   SORT?: int,
      *   LANG?: array,
      *   } $fields
@@ -96,7 +96,7 @@ class Currency extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/currency/crm-currency-delete.html',
         'Deletes the specified currency'
     )]
-    public function delete(int $id): DeletedItemResult
+    public function delete(string $id): DeletedItemResult
     {
         return new DeletedItemResult(
             $this->core->call(
@@ -185,7 +185,7 @@ class Currency extends AbstractService
      * @param array{
      *   BASE?: string,
      *   AMOUNT_CNT?: int,
-     *   AMOUNT?: double,
+     *   AMOUNT?: float,
      *   SORT?: int,
      *   LANG?: array,
      *   } $fields
@@ -199,7 +199,7 @@ class Currency extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/currency/crm-currency-update.html',
         'Updates the specified (existing) currency.'
     )]
-    public function update(int $id, array $fields): UpdatedItemResult
+    public function update(string $id, array $fields): UpdatedItemResult
     {
         return new UpdatedItemResult(
             $this->core->call(
