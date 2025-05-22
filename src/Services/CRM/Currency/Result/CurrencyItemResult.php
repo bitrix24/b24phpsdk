@@ -21,11 +21,10 @@ use Carbon\CarbonImmutable;
  * Class CurrencyItemResult
  *
  * @property-read string $CURRENCY
- * @property-read string|null $HONORIFIC
- * @property-read bool|null $BASE
  * @property-read int|null $AMOUNT_CNT
  * @property-read float|null $AMOUNT
  * @property-read int|null $SORT
+ * @property-read bool|null $BASE
  * @property-read string|null $FULL_NAME
  * @property-read string|null $LID
  * @property-read string|null $FORMAT_STRING
