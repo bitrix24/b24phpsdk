@@ -43,7 +43,7 @@ class Batch implements BatchOperationsInterface
     /**
      * Batch constructor.
      */
-    public function __construct(private readonly CoreInterface $core, private readonly LoggerInterface $logger)
+    public function __construct(protected readonly CoreInterface $core, protected readonly LoggerInterface $logger)
     {
         $this->commands = new CommandCollection();
     }
