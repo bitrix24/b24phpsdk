@@ -20,7 +20,7 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
 use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
-use Bitrix24\SDK\Services\CRM\Currency\Result\CurrencyItemResult;
+use Bitrix24\SDK\Core\Result\UpdatedItemBatchResult;
 use Generator;
 use Psr\Log\LoggerInterface;
 
@@ -40,38 +40,6 @@ class Batch
     {
         $this->batch = $batch;
         $this->log = $log;
-    }
-
-    /**
-     * Batch list method for currencies
-     *
-     * @param array{
-     *   CURRENCY?: string,
-     *   BASE?: string,
-     *   AMOUNT_CNT?: int,
-     *   AMOUNT?: float,
-     *   SORT?: int,
-     *   } $order
-     *
-     * @return Generator<int, CurrencyItemResult>
-     * @throws BaseException
-     */
-    #[ApiBatchMethodMetadata(
-        'crm.currency.list',
-        'https://apidocs.bitrix24.com/api-reference/crm/currency/crm-currency-list.html',
-        'Batch list method for currencies'
-    )]
-    public function list(array $order): Generator
-    {
-        $this->log->debug(
-            'batchList',
-            [
-                'order'  => $order,
-            ]
-        );
-        foreach ($this->batch->getTraversableList('crm.currency.list', $order) as $key => $value) {
-            yield $key => new CurrencyItemResult($value);
-        }
     }
 
     /**
@@ -117,13 +85,39 @@ class Batch
      */
     #[ApiBatchMethodMetadata(
         'crm.currency.delete',
-        'https://training.bitrix24.com/rest_help/crm/leads/crm_lead_delete.php',
+        'https://apidocs.bitrix24.com/api-reference/crm/currency/crm-currency-delete.html',
         'Batch delete currencies'
     )]
     public function delete(array $currencyId): Generator
     {
         foreach ($this->batch->deleteEntityItems('crm.currency.delete', $currencyId) as $key => $item) {
             yield $key => new DeletedItemBatchResult($item);
+        }
+    }
+    
+    /**
+     * Batch update currencies
+     *
+     * @param array <int, array> $currencies
+     *
+     * @return Generator<int, UpdatedItemBatchResult>
+     * @throws BaseException
+     */
+    #[ApiBatchMethodMetadata(
+        'crm.currency.update',
+        'https://apidocs.bitrix24.com/api-reference/crm/currency/crm-currency-update.html',
+        'Batch update currencies'
+    )]
+    public function update(array $currencies): Generator
+    {
+        $items = [];
+        foreach ($currencies as $id => $currency) {
+            $items[$id] = [
+                'fields' => $currency,
+            ];
+        }
+        foreach ($this->batch->updateEntityItems('crm.currency.update', $items) as $key => $item) {
+            yield $key => new UpdatedItemBatchResult($item);
         }
     }
 }

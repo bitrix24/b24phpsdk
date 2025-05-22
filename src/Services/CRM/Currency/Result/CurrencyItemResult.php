@@ -14,35 +14,28 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\CRM\Currency\Result;
 
 use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
-use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Email;
-use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\InstantMessenger;
-use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Phone;
-use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Website;
+use Bitrix24\SDK\Services\CRM\Currency\Localizations\Result\LocalizationItemResult;
 use Carbon\CarbonImmutable;
-use Money\Currency;
-use Money\Money;
 
 /**
  * Class CurrencyItemResult
  *
  * @property-read string $CURRENCY
  * @property-read string|null $HONORIFIC
- * @property-read string|null $BASE
+ * @property-read bool|null $BASE
  * @property-read int|null $AMOUNT_CNT
- * @property-read double|null $AMOUNT
+ * @property-read float|null $AMOUNT
  * @property-read int|null $SORT
- * @property-read array|null $LANG
+ * @property-read string|null $FULL_NAME
+ * @property-read string|null $LID
+ * @property-read string|null $FORMAT_STRING
+ * @property-read string|null $DEC_POINT
+ * @property-read string|null $THOUSANDS_SEP
+ * @property-read int|null $DECIMALS
+ * @property-read CarbonImmutable|null $DATE_UPDATE
+ * @property-read LocalizationItemResult[]|null $LANG
  */
 class CurrencyItemResult extends AbstractCrmItem
 {
-    /**
-     * @param string $userfieldName
-     *
-     * @return mixed|null
-     * @throws \Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException
-     */
-    public function getUserfieldByFieldName(string $userfieldName)
-    {
-        return $this->getKeyWithUserfieldByFieldName($userfieldName);
-    }
+    
 }

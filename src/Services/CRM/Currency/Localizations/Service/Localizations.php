@@ -24,8 +24,7 @@ use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Core\Result\FieldsResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
-use Bitrix24\SDK\Services\CRM\Currency\Result\CurrencyResult;
-use Bitrix24\SDK\Services\CRM\Currency\Result\CurrenciesResult;
+use Bitrix24\SDK\Services\CRM\Currency\Localizations\Result\LocalizationsResult;
 use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['crm']))]
 class Localizations extends AbstractService
@@ -127,18 +126,18 @@ class Localizations extends AbstractService
     /**
      * Returns localizations by the currency ID.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/crm/currency/crm-currency-get.html
+     * @link https://apidocs.bitrix24.com/api-reference/crm/currency/localizations/crm-currency-localizations-get.html
      *
      * @param string $id
      *
-     * @return CurrencyResult
+     * @return LocalizationResult
      * @throws BaseException
      * @throws TransportException
      */
     #[ApiEndpointMetadata(
         'crm.currency.get',
-        'https://apidocs.bitrix24.com/api-reference/crm/currency/crm-currency-get.html',
-        'Returns a currency by the currency ID.'
+        'https://apidocs.bitrix24.com/api-reference/crm/currency/localizations/crm-currency-localizations-get.html',
+        'Returns localizations by the currency ID.'
     )]
     public function get(string $id): LocalizationsResult
     {

@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Currency\Result;
+namespace Bitrix24\SDK\Services\CRM\Currency\Localizations\Result;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
@@ -20,19 +20,19 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 /**
  * Class CurrenciesResult
  *
- * @package Bitrix24\SDK\Services\CRM\Currency\Result
+ * @package Bitrix24\SDK\Services\CRM\Currency\Localizations\Result
  */
-class CurrenciesResult extends AbstractResult
+class LocalizationsResult extends AbstractResult
 {
     /**
-     * @return CurrencyItemResult[]
+     * @return LocalizationItemResult[]
      * @throws BaseException
      */
-    public function getCurrencies(): array
+    public function getLocalizations(): array
     {
         $items = [];
         foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
-            $items[] = new CurrencyItemResult($item);
+            $items[] = new LocalizationItemResult($item);
         }
 
         return $items;
