@@ -40,13 +40,13 @@ class Batch extends \Bitrix24\SDK\Core\Batch
      * @return Generator<int, ResponseData>|ResponseData[]
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    public function deleteEntityItems(
+    public function deleteCurrencyItems(
         string $apiMethod,
         array $entityItemId,
         ?array $additionalParameters = null
     ): Generator {
         $this->logger->debug(
-            'deleteEntityItems.start',
+            'deleteCurrencyItems.start',
             [
                 'apiMethod' => $apiMethod,
                 'entityItems' => $entityItemId,
@@ -96,7 +96,7 @@ class Batch extends \Bitrix24\SDK\Core\Batch
             throw new BaseException($errorMessage, $exception->getCode(), $exception);
         }
 
-        $this->logger->debug('deleteEntityItems.finish');
+        $this->logger->debug('deleteCurrencyItems.finish');
     }
 
     /**
@@ -108,15 +108,15 @@ class Batch extends \Bitrix24\SDK\Core\Batch
      *  'params' => []  // optional fields
      * ]
      *
-     * @param array<int, array<string, mixed>> $entityItems
+     * @param array<string, array<string, mixed>> $entityItems
      *
      * @return Generator<int, ResponseData>|ResponseData[]
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    public function updateEntityItems(string $apiMethod, array $entityItems): Generator
+    public function updateCurrencyItems(string $apiMethod, array $entityItems): Generator
     {
         $this->logger->debug(
-            'updateEntityItems.start',
+            'updateCurrencyItems.start',
             [
                 'apiMethod' => $apiMethod,
                 'entityItems' => $entityItems,
@@ -181,7 +181,7 @@ class Batch extends \Bitrix24\SDK\Core\Batch
             throw new BaseException($errorMessage, $exception->getCode(), $exception);
         }
 
-        $this->logger->debug('updateEntityItems.finish');
+        $this->logger->debug('updateCurrencyItems.finish');
     }
 
 

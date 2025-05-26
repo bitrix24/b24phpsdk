@@ -15,7 +15,6 @@ namespace Bitrix24\SDK\Services\CRM\Currency\Service;
 
 use Bitrix24\SDK\Attributes\ApiBatchMethodMetadata;
 use Bitrix24\SDK\Attributes\ApiBatchServiceMetadata;
-use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
@@ -28,13 +27,13 @@ use Psr\Log\LoggerInterface;
 #[ApiBatchServiceMetadata(new Scope(['crm']))]
 class Batch
 {
-    protected BatchOperationsInterface $batch;
+    protected Currency\Batch $batch;
     protected LoggerInterface $log;
 
     /**
      * Batch constructor.
      *
-     * @param BatchOperationsInterface $batch
+     * @param Currency\Batch $batch
      * @param LoggerInterface          $log
      */
     public function __construct(Currency\Batch $batch, LoggerInterface $log)
@@ -91,7 +90,7 @@ class Batch
     )]
     public function delete(array $currencyId): Generator
     {
-        foreach ($this->batch->deleteEntityItems('crm.currency.delete', $currencyId) as $key => $item) {
+        foreach ($this->batch->deleteCurrencyItems('crm.currency.delete', $currencyId) as $key => $item) {
             yield $key => new DeletedItemBatchResult($item);
         }
     }
@@ -99,7 +98,7 @@ class Batch
     /**
      * Batch update currencies
      *
-     * @param array <int, array> $currencies
+     * @param array <string, array> $currencies
      *
      * @return Generator<int, UpdatedItemBatchResult>
      * @throws BaseException
@@ -117,7 +116,7 @@ class Batch
                 'fields' => $currency,
             ];
         }
-        foreach ($this->batch->updateEntityItems('crm.currency.update', $items) as $key => $item) {
+        foreach ($this->batch->updateCurrencyItems('crm.currency.update', $items) as $key => $item) {
             yield $key => new UpdatedItemBatchResult($item);
         }
     }

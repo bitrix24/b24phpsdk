@@ -40,13 +40,13 @@ class Batch extends \Bitrix24\SDK\Core\Batch
      * @return Generator<int, ResponseData>|ResponseData[]
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    public function deleteEntityItems(
+    public function deleteLocalizationItems(
         string $apiMethod,
         array $entityItemId,
         ?array $additionalParameters = null
     ): Generator {
         $this->logger->debug(
-            'deleteEntityItems.start',
+            'deleteLocalizationItems.start',
             [
                 'apiMethod' => $apiMethod,
                 'entityItems' => $entityItemId,
@@ -62,7 +62,7 @@ class Batch extends \Bitrix24\SDK\Core\Batch
                         sprintf(
                             'invalid type «%s» of currency localizations «%s» at position %s, the value must be array type',
                             gettype($code),
-                            $code,
+                            print_r($code, true),
                             $cnt
                         )
                     );
@@ -72,7 +72,7 @@ class Batch extends \Bitrix24\SDK\Core\Batch
                         sprintf(
                             'invalid type «%s» of currency code «%s» at position %s, the code must be string type',
                             gettype($code),
-                            $code,
+                            print_r($code),
                             $cnt
                         )
                     );
@@ -82,7 +82,7 @@ class Batch extends \Bitrix24\SDK\Core\Batch
                         sprintf(
                             'invalid type «%s» of localization codes «%s» at position %s, the codes must be array type',
                             gettype($code),
-                            $code,
+                            print_r($code),
                             $cnt
                         )
                     );
@@ -116,7 +116,7 @@ class Batch extends \Bitrix24\SDK\Core\Batch
             throw new BaseException($errorMessage, $exception->getCode(), $exception);
         }
 
-        $this->logger->debug('deleteEntityItems.finish');
+        $this->logger->debug('deleteLocalizationItems.finish');
     }
 
 }

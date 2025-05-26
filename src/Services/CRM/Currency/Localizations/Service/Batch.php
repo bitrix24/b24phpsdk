@@ -15,28 +15,28 @@ namespace Bitrix24\SDK\Services\CRM\Currency\Localizations\Service;
 
 use Bitrix24\SDK\Attributes\ApiBatchMethodMetadata;
 use Bitrix24\SDK\Attributes\ApiBatchServiceMetadata;
-use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
 use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
 use Bitrix24\SDK\Services\CRM\Currency\Localizations\Result\LocalizationItemResult;
+use Bitrix24\SDK\Services\CRM\Currency\Localizations;
 use Generator;
 use Psr\Log\LoggerInterface;
 
 #[ApiBatchServiceMetadata(new Scope(['crm']))]
 class Batch
 {
-    protected BatchOperationsInterface $batch;
+    protected Localizations\Batch $batch;
     protected LoggerInterface $log;
 
     /**
      * Batch constructor.
      *
-     * @param BatchOperationsInterface $batch
+     * @param Localizations\Batch $batch
      * @param LoggerInterface          $log
      */
-    public function __construct(BatchOperationsInterface $batch, LoggerInterface $log)
+    public function __construct(Localizations\Batch $batch, LoggerInterface $log)
     {
         $this->batch = $batch;
         $this->log = $log;
@@ -47,7 +47,7 @@ class Batch
      *
      * @param array <int, array{
      *   id?: string,
-     *   localizations?: array <int, LocalizationItemResult>
+     *   localizations?: array <string, array>
      *   }> $localizations
      *
      * @return Generator<int, AddedItemBatchResult>
@@ -83,7 +83,7 @@ class Batch
     )]
     public function delete(array $id): Generator
     {
-        foreach ($this->batch->deleteEntityItems('crm.currency.localizations.delete', $id) as $key => $item) {
+        foreach ($this->batch->deleteLocalizationItems('crm.currency.localizations.delete', $id) as $key => $item) {
             yield $key => new DeletedItemBatchResult($item);
         }
     }

@@ -11,14 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Company\Events\OnCrmCompanyUpdate;
+namespace Bitrix24\SDK\Services\CRM\Currency\Events\OnCrmCurrencyUpdate;
 
 use Bitrix24\SDK\Core\Result\AbstractItem;
-use Bitrix24\SDK\Services\Telephony\Common\CrmEntityType;
 
 /**
- * @property-read  positive-int $ID
+ * @property-read  string $ID
  */
-class OnCrmCompanyUpdatePayload extends AbstractItem
+class OnCrmCurrencyUpdatePayload extends AbstractItem
 {
 }
