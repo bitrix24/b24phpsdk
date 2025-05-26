@@ -26,7 +26,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class LeadTest
+ * Class CurrencyTest
  *
  * @package Bitrix24\SDK\Tests\Integration\Services\CRM\Currency\Service
  */
@@ -60,6 +60,7 @@ class CurrencyTest extends TestCase
 
     public function testAllSystemFieldsHasValidTypeAnnotation():void
     {
+        
         $allFields = $this->currencyService->fields()->getFieldsDescription();
         $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
         $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);

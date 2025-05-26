@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\CRM\Currency\Result;
 
 use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
-use Bitrix24\SDK\Services\CRM\Currency\Localizations\Result\LocalizationItemResult;
 use Carbon\CarbonImmutable;
 
 /**
@@ -22,7 +21,7 @@ use Carbon\CarbonImmutable;
  *
  * @property-read string $CURRENCY
  * @property-read int|null $AMOUNT_CNT
- * @property-read float|null $AMOUNT
+ * @property-read Money\Money|null $AMOUNT
  * @property-read int|null $SORT
  * @property-read bool|null $BASE
  * @property-read string|null $FULL_NAME
@@ -32,7 +31,7 @@ use Carbon\CarbonImmutable;
  * @property-read string|null $THOUSANDS_SEP
  * @property-read int|null $DECIMALS
  * @property-read CarbonImmutable|null $DATE_UPDATE
- * @property-read LocalizationItemResult[]|null $LANG
+ * @property-read array|null $LANG
  */
 class CurrencyItemResult extends AbstractCrmItem
 {

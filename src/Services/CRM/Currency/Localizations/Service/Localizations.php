@@ -130,7 +130,7 @@ class Localizations extends AbstractService
      *
      * @param string $id
      *
-     * @return LocalizationResult
+     * @return LocalizationsResult
      * @throws BaseException
      * @throws TransportException
      */
