@@ -28,12 +28,14 @@ use PHPUnit\Framework\TestCase;
 #[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Currency\Service\Batch::class)]
 class BatchTest extends TestCase
 {
-    const CURRENCY_PREFIX = 'XX';
-    const TEST_LETTERS = [
+    public const CURRENCY_PREFIX = 'XX';
+
+    public const TEST_LETTERS = [
         'A', 'B', 'C', 'D',
     ];
-    
+
     protected ServiceBuilder $sb;
+
     protected Currency $currencyService;
 
     protected function setUp(): void
@@ -104,6 +106,7 @@ class BatchTest extends TestCase
         foreach (self::TEST_LETTERS as $letter) {
             $items[] = $this->getCurrencyFields($letter);
         }
+
         foreach ($this->currencyService->batch->add($items) as $item) {
             // nothing
         }
@@ -115,6 +118,7 @@ class BatchTest extends TestCase
                 'SORT' => 100+($add++)
             ];
         }
+
         $cnt = 0;
         foreach ($this->currencyService->batch->update($items) as $updateResult) {
             $cnt++;

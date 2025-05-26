@@ -39,11 +39,13 @@ use PHPUnit\Framework\TestCase;
 class LocalizationsTest extends TestCase
 {
     use CustomBitrix24Assertions;
-    
-    const CURRENCY_CODE = 'XXX';
+
+    public const CURRENCY_CODE = 'XXX';
 
     protected ServiceBuilder $sb;
+
     protected Currency $currencyService;
+
     protected Localizations $localizationsService;
 
     protected function setUp(): void
@@ -71,7 +73,7 @@ class LocalizationsTest extends TestCase
         ];
         $this->currencyService->add($fields);
     }
-    
+
     protected function tearDown(): void
     {
         $this->currencyService->delete(self::CURRENCY_CODE);
@@ -120,8 +122,8 @@ class LocalizationsTest extends TestCase
             'en' => $this->getLocalizationFields('en'),
             'de' => $this->getLocalizationFields('de'),
         ];
-        $res = $this->localizationsService->set(self::CURRENCY_CODE, $fields)->getCoreResponse()->getResponseData()->getResult();
-        
+        $this->localizationsService->set(self::CURRENCY_CODE, $fields)->getCoreResponse()->getResponseData()->getResult();
+
         self::assertTrue(
             $this->localizationsService->delete(
                 self::CURRENCY_CODE,
@@ -148,7 +150,7 @@ class LocalizationsTest extends TestCase
         self::assertIsArray($this->localizationsService->get(self::CURRENCY_CODE)->getCoreResponse()->getResponseData()->getResult()['en']);
     }
 
-    protected function getLocalizationFields($lang): array {
+    protected function getLocalizationFields(string $lang): array {
         return [
             'DECIMALS'=> 2,
             'DEC_POINT' => '.',

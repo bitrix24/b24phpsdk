@@ -67,7 +67,8 @@ class Batch extends \Bitrix24\SDK\Core\Batch
                         )
                     );
                 }
-                if (is_array($code) && !is_string($code['id'])) {
+
+                if (!is_string($code['id'])) {
                     throw new InvalidArgumentException(
                         sprintf(
                             'invalid type «%s» of currency code «%s» at position %s, the code must be string type',
@@ -77,7 +78,8 @@ class Batch extends \Bitrix24\SDK\Core\Batch
                         )
                     );
                 }
-                if (is_array($code) && !is_array($code['lids'])) {
+
+                if (!is_array($code['lids'])) {
                     throw new InvalidArgumentException(
                         sprintf(
                             'invalid type «%s» of localization codes «%s» at position %s, the codes must be array type',

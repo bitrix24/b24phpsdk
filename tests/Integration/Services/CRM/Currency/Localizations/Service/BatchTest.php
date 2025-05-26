@@ -29,13 +29,16 @@ use PHPUnit\Framework\TestCase;
 #[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Currency\Service\Batch::class)]
 class BatchTest extends TestCase
 {
-    const CURRENCY_PREFIX = 'XX';
-    const TEST_LETTERS = [
+    public const CURRENCY_PREFIX = 'XX';
+
+    public const TEST_LETTERS = [
         'A', 'B', 'C', 'D',
     ];
-    
+
     protected ServiceBuilder $sb;
+
     protected Currency $currencyService;
+
     protected Localizations $localizationsService;
 
     protected function setUp(): void
@@ -48,7 +51,7 @@ class BatchTest extends TestCase
             $this->currencyService->add($fields);
         }
     }
-    
+
     protected function tearDown(): void
     {
         foreach (self::TEST_LETTERS as $letter) {
@@ -142,8 +145,8 @@ class BatchTest extends TestCase
             ],
         ];
     }
-    
-    protected function getLocalizationFields($lang): array {
+
+    protected function getLocalizationFields(string $lang): array {
         return [
             'DECIMALS'=> 2,
             'DEC_POINT' => '.',

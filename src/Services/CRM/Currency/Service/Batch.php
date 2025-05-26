@@ -27,19 +27,11 @@ use Psr\Log\LoggerInterface;
 #[ApiBatchServiceMetadata(new Scope(['crm']))]
 class Batch
 {
-    protected Currency\Batch $batch;
-    protected LoggerInterface $log;
-
     /**
      * Batch constructor.
-     *
-     * @param Currency\Batch $batch
-     * @param LoggerInterface          $log
      */
-    public function __construct(Currency\Batch $batch, LoggerInterface $log)
+    public function __construct(protected Currency\Batch $batch, protected LoggerInterface $log)
     {
-        $this->batch = $batch;
-        $this->log = $log;
     }
 
     /**
@@ -70,6 +62,7 @@ class Batch
                 'fields' => $currency,
             ];
         }
+
         foreach ($this->batch->addEntityItems('crm.currency.add', $items) as $key => $item) {
             yield $key => new AddedItemBatchResult($item);
         }
@@ -116,6 +109,7 @@ class Batch
                 'fields' => $currency,
             ];
         }
+
         foreach ($this->batch->updateCurrencyItems('crm.currency.update', $items) as $key => $item) {
             yield $key => new UpdatedItemBatchResult($item);
         }

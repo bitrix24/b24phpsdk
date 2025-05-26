@@ -31,19 +31,12 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['crm']))]
 class Currency extends AbstractService
 {
-    public Batch $batch;
-
     /**
      * Currency constructor.
-     *
-     * @param Batch           $batch
-     * @param CoreInterface   $core
-     * @param LoggerInterface $log
      */
-    public function __construct(Batch $batch, CoreInterface $core, LoggerInterface $log)
+    public function __construct(public Batch $batch, CoreInterface $core, LoggerInterface $logger)
     {
-        parent::__construct($core, $log);
-        $this->batch = $batch;
+        parent::__construct($core, $logger);
     }
 
     /**
@@ -60,7 +53,6 @@ class Currency extends AbstractService
      *   LANG?: array,
      *   } $fields
      *
-     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -86,9 +78,7 @@ class Currency extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/currency/crm-currency-delete.html
      *
-     * @param string $id
      *
-     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -114,7 +104,6 @@ class Currency extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/currency/crm-currency-fields.html
      *
-     * @return FieldsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -133,9 +122,7 @@ class Currency extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/currency/crm-currency-get.html
      *
-     * @param string $id
      *
-     * @return CurrencyResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -158,7 +145,6 @@ class Currency extends AbstractService
      *
      * @throws BaseException
      * @throws TransportException
-     * @return CurrenciesResult
      */
     #[ApiEndpointMetadata(
         'crm.currency.list',
@@ -182,7 +168,6 @@ class Currency extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/currency/crm-currency-update.html
      *
-     * @param string $id
      * @param array{
      *   BASE?: string,
      *   AMOUNT_CNT?: int,
@@ -191,7 +176,6 @@ class Currency extends AbstractService
      *   LANG?: array,
      *   } $fields
      *
-     * @return UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      */

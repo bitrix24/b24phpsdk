@@ -40,10 +40,11 @@ use PHPUnit\Framework\TestCase;
 class CurrencyTest extends TestCase
 {
     use CustomBitrix24Assertions;
-    
-    const CURRENCY_CODE = 'XXX';
+
+    public const CURRENCY_CODE = 'XXX';
 
     protected ServiceBuilder $sb;
+
     protected Currency $currencyService;
 
     protected function setUp(): void
@@ -60,7 +61,7 @@ class CurrencyTest extends TestCase
 
     public function testAllSystemFieldsHasValidTypeAnnotation():void
     {
-        
+
         $allFields = $this->currencyService->fields()->getFieldsDescription();
         $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
         $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
@@ -93,7 +94,7 @@ class CurrencyTest extends TestCase
     {
         $fields = $this->getCurrencyFields();
         $this->currencyService->add($fields);
-        
+
         self::assertTrue(
             $this->currencyService->delete(
                 self::CURRENCY_CODE
@@ -122,7 +123,7 @@ class CurrencyTest extends TestCase
 
         $this->currencyService->delete(self::CURRENCY_CODE);
     }
-    
+
     /**
      * @throws BaseException
      * @throws TransportException
@@ -157,7 +158,7 @@ class CurrencyTest extends TestCase
             $currencyCode
         )->getCoreResponse()->getResponseData()->getResult()['SORT'];
         self::assertEquals($sort, $response);
-        
+
         $this->currencyService->delete($currencyCode);
     }
 
