@@ -6,6 +6,24 @@
 
 - Fixed error in arguments in service for method `placement.bind`, [see details](https://github.com/bitrix24/b24phpsdk/issues/151)
 
+### Added
+
+- Added service `Services\CRM\Currency` with support methods,
+  see [Add crm.currency.* methods](https://github.com/bitrix24/b24phpsdk/issues/155):
+    - `get` get currency
+    - `fields` get currency fields
+    - `list` get currency list
+    - `add` add new currency, with batch calls support
+    - `delete` delete currency, with batch calls support
+    - `update`  update currency, with batch calls support
+    
+- Added service `Services\CRM\Currency\Localizations` with support methods,
+  see [Add crm.currency.* methods](https://github.com/bitrix24/b24phpsdk/issues/155):
+    - `set` set localizations, with batch calls support
+    - `get` get localizations
+    - `fields` get localization fields
+    - `delete` delete currency, with batch calls support
+
 ## 1.3.0 – 2025.04.23
 
 ### Added
