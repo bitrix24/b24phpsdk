@@ -31,7 +31,7 @@ use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(Requisite::class, 'fields')]
+#[CoversMethod(Requisite::class, 'fields')]
 #[CoversMethod(Requisite::class, 'add')]
 #[CoversMethod(Requisite::class, 'delete')]
 #[CoversMethod(Requisite::class, 'get')]
