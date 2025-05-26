@@ -47,7 +47,7 @@ class Batch
      *
      * @param array <int, array{
      *   id?: string,
-     *   localizations?: array <string, LocalizationItemResult>
+     *   localizations?: array <int, LocalizationItemResult>
      *   }> $localizations
      *
      * @return Generator<int, AddedItemBatchResult>
@@ -69,7 +69,7 @@ class Batch
      * Batch delete localizations
      *
      * @param array <int, array{
-     *      id: string
+     *      id: string,
      *      lids: string[]
      * }> $id
      *

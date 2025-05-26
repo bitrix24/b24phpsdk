@@ -26,6 +26,7 @@ use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\CRM\Currency\Localizations\Result\LocalizationsResult;
 use Psr\Log\LoggerInterface;
+
 #[ApiServiceMetadata(new Scope(['crm']))]
 class Localizations extends AbstractService
 {

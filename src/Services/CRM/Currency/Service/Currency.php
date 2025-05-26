@@ -27,6 +27,7 @@ use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\CRM\Currency\Result\CurrencyResult;
 use Bitrix24\SDK\Services\CRM\Currency\Result\CurrenciesResult;
 use Psr\Log\LoggerInterface;
+
 #[ApiServiceMetadata(new Scope(['crm']))]
 class Currency extends AbstractService
 {

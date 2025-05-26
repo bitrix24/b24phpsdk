@@ -28,5 +28,4 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  */
 class LocalizationItemResult extends AbstractItem
 {
-    
 }

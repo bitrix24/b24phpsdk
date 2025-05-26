@@ -21,6 +21,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
 use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemBatchResult;
+use Bitrix24\SDK\Services\CRM\Currency;
 use Generator;
 use Psr\Log\LoggerInterface;
 
@@ -36,7 +37,7 @@ class Batch
      * @param BatchOperationsInterface $batch
      * @param LoggerInterface          $log
      */
-    public function __construct(BatchOperationsInterface $batch, LoggerInterface $log)
+    public function __construct(Currency\Batch $batch, LoggerInterface $log)
     {
         $this->batch = $batch;
         $this->log = $log;
@@ -94,7 +95,7 @@ class Batch
             yield $key => new DeletedItemBatchResult($item);
         }
     }
-    
+
     /**
      * Batch update currencies
      *

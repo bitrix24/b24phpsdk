@@ -19,7 +19,7 @@ class OnCrmCurrencyUpdate extends AbstractEventRequest
 {
     public const CODE = 'ONCRMCURRENCYUPDATE';
 
-    public function getPayload(): OnCrmCompanyUpdatePayload
+    public function getPayload(): OnCrmCurrencyUpdatePayload
     {
         return new OnCrmCurrencyUpdatePayload($this->eventPayload['data']);
     }

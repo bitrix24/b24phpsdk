@@ -35,5 +35,4 @@ use Carbon\CarbonImmutable;
  */
 class CurrencyItemResult extends AbstractCrmItem
 {
-    
 }
