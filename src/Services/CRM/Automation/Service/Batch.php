@@ -28,19 +28,11 @@ use Psr\Log\LoggerInterface;
 #[ApiBatchServiceMetadata(new Scope(['crm']))]
 class Batch
 {
-    protected Automation\Batch $batch;
-    protected LoggerInterface $log;
-
     /**
      * Batch constructor.
-     *
-     * @param Automation\Batch $batch
-     * @param LoggerInterface          $log
      */
-    public function __construct(Automation\Batch $batch, LoggerInterface $log)
+    public function __construct(protected Automation\Batch $batch, protected LoggerInterface $log)
     {
-        $this->batch = $batch;
-        $this->log = $log;
     }
 
     /**

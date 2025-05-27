@@ -331,7 +331,6 @@ class Batch implements BatchOperationsInterface
     /**
      * Get traversable list without count elements
      *
-     * @param string $apiMethod
      * @param array<string,string> $order
      * @param array<string,mixed> $filter
      * @param array<string,mixed> $select

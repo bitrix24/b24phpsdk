@@ -108,10 +108,11 @@ class TriggerTest extends TestCase
     {
         // add trigger
         $this->triggerService->add(self::TRIGGER_CODE, 'B24phpsdk trigger');
-        $list = $this->triggerService->list()->getTriggers();
+        $list = $this->triggerService->list()->getTriggersArray();
         // delete trigger
         $this->triggerService->delete(self::TRIGGER_CODE);
-        $res = $list[0]->getIterator()->getArrayCopy();
+        //$res = $list[0]->getIterator()->getArrayCopy();
+        $res = $list[0];
 
         return array_keys($res);
     }
@@ -123,10 +124,10 @@ class TriggerTest extends TestCase
     {
         // add trigger
         $this->triggerService->add(self::TRIGGER_CODE, 'B24phpsdk trigger');
-        $list = $this->triggerService->list()->getTriggers();
+        $list = $this->triggerService->list()->getTriggersArray();
         // delete trigger
         $this->triggerService->delete(self::TRIGGER_CODE);
-        $res = $list[0]->getIterator()->getArrayCopy();
+        $res = $list[0];
 
         $fields = [];
         foreach ($res as $key => $value) {

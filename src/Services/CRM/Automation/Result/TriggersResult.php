@@ -37,4 +37,12 @@ class TriggersResult extends AbstractResult
 
         return $items;
     }
+    
+    /**
+     * @throws BaseException
+     */
+    public function getTriggersArray(): array
+    {
+        return $this->getCoreResponse()->getResponseData()->getResult();
+    }
 }

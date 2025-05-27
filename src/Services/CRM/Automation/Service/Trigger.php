@@ -31,19 +31,12 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['crm']))]
 class Trigger extends AbstractService
 {
-    public Batch $batch;
-
     /**
      * Lead constructor.
-     *
-     * @param Batch           $batch
-     * @param CoreInterface   $core
-     * @param LoggerInterface $log
      */
-    public function __construct(Batch $batch, CoreInterface $core, LoggerInterface $log)
+    public function __construct(public Batch $batch, CoreInterface $core, LoggerInterface $logger)
     {
-        parent::__construct($core, $log);
-        $this->batch = $batch;
+        parent::__construct($core, $logger);
     }
 
     /**
@@ -51,10 +44,7 @@ class Trigger extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/automation/triggers/crm-automation-trigger-add.html
      *
-     * @param string $code
-     * @param string $name
      *
-     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -81,9 +71,7 @@ class Trigger extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/automation/triggers/crm-automation-trigger-delete.html
      *
-     * @param string $code
      *
-     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -111,7 +99,6 @@ class Trigger extends AbstractService
      *
      * @throws BaseException
      * @throws TransportException
-     * @return TriggersResult
      */
     #[ApiEndpointMetadata(
         'crm.automation.trigger.list',
@@ -133,11 +120,7 @@ class Trigger extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/automation/triggers/crm-automation-trigger-execute.html
      *
-     * @param string $code
-     * @param int    $ownerTypeId
-     * @param int    $ownerId
      *
-     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      */
