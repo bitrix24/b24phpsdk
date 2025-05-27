@@ -37,7 +37,7 @@ class TriggersResult extends AbstractResult
 
         return $items;
     }
-    
+
     /**
      * @throws BaseException
      */
