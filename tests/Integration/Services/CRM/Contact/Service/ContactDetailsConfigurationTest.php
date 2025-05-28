@@ -39,15 +39,16 @@ class ContactDetailsConfigurationTest extends TestCase
     use CustomBitrix24Assertions;
 
     private ServiceBuilder $sb;
+
     private ContactDetailsConfiguration $contactConfig;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->sb = Fabric::getServiceBuilder();
         $this->contactConfig = $this->sb->getCRMScope()->contactDetailsConfiguration();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
           $this->contactConfig->resetGeneral();
     }
@@ -141,10 +142,7 @@ class ContactDetailsConfigurationTest extends TestCase
 
 
         $currentUserId = $this->sb->getMainScope()->main()->getCurrentUserProfile()->getUserProfile()->ID;
-        $cardConfig = $this->contactConfig->getGeneral($currentUserId);
-
-        // todo fix after we get valid cardConfig
-        $this->assertTrue(true);
-
+        $cardConfigurationsResult = $this->contactConfig->getPersonal($currentUserId);
+        $this->assertIsArray($cardConfigurationsResult->getSections());
     }
 }
