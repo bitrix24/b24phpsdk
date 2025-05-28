@@ -54,7 +54,7 @@ class DealProductRows extends AbstractService
             ]);
             $data = $res->getResponseData()->getResult();
             $currency = new Currency($data['result']['deal']['CURRENCY_ID']);
-            return new DealProductRowItemsResult($res,$currency);
+            return new DealProductRowItemsResult($res, $currency);
         }
         return new DealProductRowItemsResult(
             $this->core->call(
@@ -63,7 +63,7 @@ class DealProductRows extends AbstractService
                     'id' => $dealId,
                 ]
             ),
-           $currency
+            $currency
         );
     }
 

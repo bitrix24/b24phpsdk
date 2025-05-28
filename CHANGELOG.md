@@ -6,6 +6,18 @@
 
 - Fixed error in arguments in service for method `placement.bind`, [see details](https://github.com/bitrix24/b24phpsdk/issues/151)
 
+### Added
+
+- Added service `CRM\Deal\Service\DealDetailsConfiguration` with support methods,
+  see [add crm.deal.details.* methods](https://github.com/bitrix24/b24phpsdk/issues/158):
+    - `getPersonal` method retrieves the settings of deal cards for personal user
+    - `getGeneral` method retrieves the settings of deal cards for all users
+    - `resetPersonal` method reset for item user settings
+    - `resetGeneral` method reset all card settings for all users
+    - `setPersonal` method set card configuration
+    - `setGeneral` method set card configuration for all users
+    - `setForceCommonConfigForAll` method set common detail form for All Users
+
 ## 1.3.0 – 2025.04.23
 
 ### Added

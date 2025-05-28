@@ -28,7 +28,7 @@ class DealProductRowItemsResult extends AbstractResult
 {
     private Currency $currency;
 
-    public function __construct(Response $coreResponse,Currency $currency)
+    public function __construct(Response $coreResponse, Currency $currency)
     {
         parent::__construct($coreResponse);
         $this->currency = $currency;
@@ -41,7 +41,7 @@ class DealProductRowItemsResult extends AbstractResult
     public function getProductRows(): array
     {
         $res = [];
-        if(!empty($this->getCoreResponse()->getResponseData()->getResult()['result']['rows'])) {
+        if (!empty($this->getCoreResponse()->getResponseData()->getResult()['result']['rows'])) {
             foreach ($this->getCoreResponse()->getResponseData()->getResult()['result']['rows'] as $productRow) {
                 $res[] = new DealProductRowItemResult($productRow, $this->currency);
             }
