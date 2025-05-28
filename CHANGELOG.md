@@ -1,5 +1,23 @@
 # b24-php-sdk change log
 
+## 1.4.0 – 2025
+
+### Fixed
+
+- Fixed error in arguments in service for method `placement.bind`, [see details](https://github.com/bitrix24/b24phpsdk/issues/151)
+
+### Added
+
+- Added service `CRM\Deal\Service\DealDetailsConfiguration` with support methods,
+  see [add crm.deal.details.* methods](https://github.com/bitrix24/b24phpsdk/issues/158):
+    - `getPersonal` method retrieves the settings of deal cards for personal user
+    - `getGeneral` method retrieves the settings of deal cards for all users
+    - `resetPersonal` method reset for item user settings
+    - `resetGeneral` method reset all card settings for all users
+    - `setPersonal` method set card configuration
+    - `setGeneral` method set card configuration for all users
+    - `setForceCommonConfigForAll` method set common detail form for All Users
+
 ## 1.3.0 – 2025.04.23
 
 ### Added
@@ -62,11 +80,11 @@
   with [support methods](https://github.com/bitrix24/b24phpsdk/issues/103):
     - `add` add (invite) users
     - `get` get users list
-Added service `Services\AI\Engine\Service\Engine` with support methods:
-  - `ai.engine.register` - method registers an engine and updates it upon subsequent calls
-  - `ai.engine.list` - get the list of ai services
-  - `ai.engine.unregister` - Delete registered ai service
-Added class `Bitrix24\SDK\Core\Exceptions\LogicException` for logic exceptions   
+      Added service `Services\AI\Engine\Service\Engine` with support methods:
+    - `ai.engine.register` - method registers an engine and updates it upon subsequent calls
+    - `ai.engine.list` - get the list of ai services
+    - `ai.engine.unregister` - Delete registered ai service
+      Added class `Bitrix24\SDK\Core\Exceptions\LogicException` for logic exceptions
 - Developer experience: added cli command `b24-dev:show-sdk-coverage-statistics` for show actual SDK coverage for
   REST-API, see task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
 - Developer experience: added class `Bitrix24\SDK\Deprecations\DeprecatedMethods` with list of
@@ -74,6 +92,7 @@ Added class `Bitrix24\SDK\Core\Exceptions\LogicException` for logic exceptions
 - Developer experience: commands from makefile now run inside docker container `php-cli`
 - Developer experience: added cache folder in phpstan config
 - Developer experience: added article «[How to Contribute to Bitrix24 PHP SDK](docs/EN/Development/how-to-contribute.md)»
+
 ### Changed
 
 - Added nullable argument `$scope` in method `Bitrix24\SDK\Attributes\Services::getSupportedInSdkApiMethods`,
