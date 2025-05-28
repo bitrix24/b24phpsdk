@@ -133,7 +133,7 @@ class ContactDetailsConfiguration extends AbstractService
     }
 
     /**
-     * Set Parameters of CRM Company Detail Card Configuration for all users
+     * Set Parameters of CRM Contact Detail Card Configuration for all users
      * @param CardSectionConfiguration[] $cardConfiguration
      * @throws InvalidArgumentException
      * @link https://apidocs.bitrix24.com/api-reference/crm/contacts/custom-form/crm-contact-details-configuration-set.html
@@ -141,7 +141,7 @@ class ContactDetailsConfiguration extends AbstractService
     #[ApiEndpointMetadata(
         'crm.contact.details.configuration.set',
         'https://apidocs.bitrix24.com/api-reference/crm/contacts/custom-form/crm-contact-details-configuration-set.html',
-        'Set Parameters of CRM Company Detail Card Configuration for all users'
+        'Set Parameters of CRM Contact Detail Card Configuration for all users'
     )]
     public function setGeneral(array $cardConfiguration): UpdatedItemResult
     {
