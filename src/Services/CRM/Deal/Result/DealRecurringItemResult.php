@@ -21,6 +21,7 @@ use Carbon\CarbonImmutable;
  *
  * @property int             $ID
  * @property int             $DEAL_ID
+ * @property int             $BASED_ID
  * @property bool            $ACTIVE
  * @property CarbonImmutable $NEXT_EXECUTION
  * @property CarbonImmutable $LAST_EXECUTION

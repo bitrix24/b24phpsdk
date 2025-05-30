@@ -25,20 +25,21 @@ use PHPUnit\Framework\TestCase;
  *
  * @package Bitrix24\SDK\Tests\Integration\Services\CRM\Deals\Service
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Deal\Service\DealRecurring::class)]
 class DealRecurringTest extends TestCase
 {
     protected DealRecurring $dealRecurring;
+
     protected Deal $dealService;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->dealRecurring = Fabric::getServiceBuilder()->getCRMScope()->dealRecurring();
         $this->dealService = Fabric::getServiceBuilder()->getCRMScope()->deal();
-        
+
     }
-    
+
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealRecurring::add
      *
      * @throws BaseException
      * @throws TransportException
@@ -55,14 +56,13 @@ class DealRecurringTest extends TestCase
         $countAfter = $this->dealRecurring->list([], [], [], 0)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
 
         $this::assertEquals($countBefore + 1, $countAfter);
-        
+
         $recurring = $this->dealRecurring->get($recurringId)->recurring();
         $this->dealService->delete(intval($recurring->DEAL_ID));
         $this->dealService->delete(intval($recurring->BASED_ID));
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealRecurring::fields
      * @throws BaseException
      * @throws TransportException
      */
@@ -72,7 +72,6 @@ class DealRecurringTest extends TestCase
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealRecurring::get
      * @throws BaseException
      * @throws TransportException
      */
@@ -82,16 +81,15 @@ class DealRecurringTest extends TestCase
         $newRecurring = $this->getRecurringFields($dealId);
         $newRecurringId = $this->dealRecurring->add($newRecurring)->getId();
         $recurring = $this->dealRecurring->get($newRecurringId)->recurring();
-        
+
         $this::assertEquals($newRecurring['DEAL_ID'], $recurring->BASED_ID);
-        
+
         $recurring = $this->dealRecurring->get($newRecurringId)->recurring();
         $this->dealService->delete(intval($recurring->DEAL_ID));
         $this->dealService->delete(intval($recurring->BASED_ID));
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealRecurring::list
      *
      * @throws BaseException
      * @throws TransportException
@@ -100,17 +98,16 @@ class DealRecurringTest extends TestCase
     {
         $dealId = $this->dealService->add(['TITLE' => 'test recurring deal'])->getId();
         $newRecurringId = $this->dealRecurring->add($this->getRecurringFields($dealId))->getId();
-        $res = $this->dealRecurring->list([], [], [], 0);
-        
-        $this::assertGreaterThanOrEqual(1, count($res->getDealRecurrings()));
-        
+        $dealRecurringsResult = $this->dealRecurring->list([], [], [], 0);
+
+        $this::assertGreaterThanOrEqual(1, count($dealRecurringsResult->getDealRecurrings()));
+
         $recurring = $this->dealRecurring->get($newRecurringId)->recurring();
         $this->dealService->delete(intval($recurring->DEAL_ID));
         $this->dealService->delete(intval($recurring->BASED_ID));
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealRecurring::expose
      * @throws BaseException
      * @throws TransportException
      */
@@ -118,18 +115,17 @@ class DealRecurringTest extends TestCase
     {
         $dealId = $this->dealService->add(['TITLE' => 'test recurring deal'])->getId();
         $newRecurringId = $this->dealRecurring->add($this->getRecurringFields($dealId))->getId();
-        $result = $this->dealRecurring->expose($newRecurringId);
-        
-        $this::assertGreaterThan(1, $result->getDealId());
-        
+        $dealRecurringExposeResult = $this->dealRecurring->expose($newRecurringId);
+
+        $this::assertGreaterThan(1, $dealRecurringExposeResult->getDealId());
+
         $recurring = $this->dealRecurring->get($newRecurringId)->recurring();
         $this->dealService->delete(intval($recurring->DEAL_ID));
         $this->dealService->delete(intval($recurring->BASED_ID));
-        $this->dealService->delete($result->getDealId());
+        $this->dealService->delete($dealRecurringExposeResult->getDealId());
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealRecurring::update
      * @throws BaseException
      * @throws TransportException
      */
@@ -143,19 +139,21 @@ class DealRecurringTest extends TestCase
         $this::assertTrue($this->dealRecurring->update($newRecurringId, [ 'PARAMS' => $newRecurring['PARAMS'] ])->isSuccess());
         $recurring = $this->dealRecurring->get($newRecurringId)->recurring();
         $this::assertEquals($newInterval, $recurring->PARAMS['MULTIPLE_INTERVAL']);
-        
+
         $this->dealService->delete(intval($recurring->DEAL_ID));
         $this->dealService->delete(intval($recurring->BASED_ID));
     }
-    
-    protected function getRecurringFields(int $dealId) {
+
+    protected function getRecurringFields(int $dealId): array {
         $dateLimit = new \DateTime();
         $dateLimit->modify('+1 year');
+
         $dateLimitStr = $dateLimit->format(\DateTime::ATOM);
         $dateStart = new \DateTime();
         $dateStart->modify('+1 month');
+
         $dateStartStr = $dateStart->format(\DateTime::ATOM);
-        
+
         return [
             'DEAL_ID' => $dealId,
             'CATEGORY_ID' => 0,

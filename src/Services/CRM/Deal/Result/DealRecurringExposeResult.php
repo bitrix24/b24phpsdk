@@ -25,7 +25,6 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 class DealRecurringExposeResult extends AbstractResult
 {
     /**
-     * @return int
      * @throws BaseException
      */
     public function getDealId(): int

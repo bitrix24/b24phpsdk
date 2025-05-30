@@ -60,7 +60,6 @@ class DealRecurring extends AbstractService
      *      },
      *   } $fields
      *
-     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -86,9 +85,7 @@ class DealRecurring extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/deals/recurring-deals/crm-deal-recurring-delete.html
      *
-     * @param int $id
      *
-     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -114,7 +111,6 @@ class DealRecurring extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/deals/recurring-deals/crm-deal-recurring-fields.html
      *
-     * @return FieldsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -133,9 +129,7 @@ class DealRecurring extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/deals/recurring-deals/crm-deal-recurring-get.html
      *
-     * @param int $id
      *
-     * @return DealRecurringResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -161,12 +155,7 @@ class DealRecurring extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/deals/recurring-deals/crm-deal-recurring-list.html
      *
-     * @param array $order
-     * @param array $filter
-     * @param array $select
-     * @param int $start
      *
-     * @return DealRecurringResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -195,9 +184,7 @@ class DealRecurring extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/deals/recurring-deals/crm-deal-recurring-expose.html
      *
-     * @param int $id
      *
-     * @return DealRecurringExposeResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -223,7 +210,6 @@ class DealRecurring extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/deals/recurring-deals/crm-deal-recurring-update.html
      *
-     * @param int $id
      * @param array{
      *   ID?: int,
      *   DEAL_ID?: int,
@@ -250,7 +236,6 @@ class DealRecurring extends AbstractService
      *      },
      *   } $fields
      *
-     * @return UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      */

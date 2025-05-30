@@ -20,23 +20,25 @@ use Bitrix24\SDK\Services\CRM\Deal\Service\DealUserfield;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
 
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Deal\Service\Deal::class)]
 class DealUserfieldUseCaseTest extends TestCase
 {
     protected Deal $dealService;
+
     protected DealUserfield $dealUserfieldService;
+
     protected int $dealUserfieldId;
 
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\Deal::add
      */
     public function testOperationsWithUserfieldFromDealItem(): void
     {
         // get userfield metadata
-        $ufMetadata = $this->dealUserfieldService->get($this->dealUserfieldId)->userfieldItem();
-        $ufOriginalFieldName = $ufMetadata->getOriginalFieldName();
-        $ufFieldName = $ufMetadata->FIELD_NAME;
+        $dealUserfieldItemResult = $this->dealUserfieldService->get($this->dealUserfieldId)->userfieldItem();
+        $ufOriginalFieldName = $dealUserfieldItemResult->getOriginalFieldName();
+        $ufFieldName = $dealUserfieldItemResult->FIELD_NAME;
 
         // add deal with uf value
         $fieldNameValue = 'test field value';
@@ -59,8 +61,8 @@ class DealUserfieldUseCaseTest extends TestCase
                 ]
             )->isSuccess()
         );
-        $updatedDeal = $this->dealService->get($deal->ID)->deal();
-        $this->assertEquals($newUfValue, $updatedDeal->getUserfieldByFieldName($ufOriginalFieldName));
+        $dealItemResult = $this->dealService->get($deal->ID)->deal();
+        $this->assertEquals($newUfValue, $dealItemResult->getUserfieldByFieldName($ufOriginalFieldName));
     }
 
     /**
@@ -69,7 +71,7 @@ class DealUserfieldUseCaseTest extends TestCase
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->dealService = Fabric::getServiceBuilder()->getCRMScope()->deal();
         $this->dealUserfieldService = Fabric::getServiceBuilder()->getCRMScope()->dealUserfield();
@@ -94,7 +96,7 @@ class DealUserfieldUseCaseTest extends TestCase
         )->getId();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->dealUserfieldService->delete($this->dealUserfieldId);
     }
