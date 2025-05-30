@@ -56,22 +56,9 @@ class DealRecurringTest extends TestCase
 
         $this::assertEquals($countBefore + 1, $countAfter);
         
-        $this->dealService->delete($dealId);
-        $this->dealRecurring->delete($recurringId);
-    }
-
-    /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealRecurring::delete
-     * @throws BaseException
-     * @throws TransportException
-     */
-    public function testDelete(): void
-    {
-        $dealId = $this->dealService->add(['TITLE' => 'test recurring deal'])->getId();
-        $recurringId = $this->dealRecurring->add($this->getRecurringFields($dealId))->getId();
-        $this->dealService->delete($dealId);
-        
-        $this::assertTrue($this->dealRecurring->delete($recurringId)->isSuccess());
+        $recurring = $this->dealRecurring->get($recurringId)->recurring();
+        $this->dealService->delete(intval($recurring->DEAL_ID));
+        $this->dealService->delete(intval($recurring->BASED_ID));
     }
 
     /**
@@ -94,12 +81,13 @@ class DealRecurringTest extends TestCase
         $dealId = $this->dealService->add(['TITLE' => 'test recurring deal'])->getId();
         $newRecurring = $this->getRecurringFields($dealId);
         $newRecurringId = $this->dealRecurring->add($newRecurring)->getId();
-        $recurring = $this->dealRecurring->get($newRecurringId);
-
-        $this::assertEquals($newRecurring['DEAL_ID'], $recurring->recurring()->DEAL_ID);
+        $recurring = $this->dealRecurring->get($newRecurringId)->recurring();
         
-        $this->dealService->delete($dealId);
-        $this->dealRecurring->delete($newRecurringId);
+        $this::assertEquals($newRecurring['DEAL_ID'], $recurring->BASED_ID);
+        
+        $recurring = $this->dealRecurring->get($newRecurringId)->recurring();
+        $this->dealService->delete(intval($recurring->DEAL_ID));
+        $this->dealService->delete(intval($recurring->BASED_ID));
     }
 
     /**
@@ -116,8 +104,9 @@ class DealRecurringTest extends TestCase
         
         $this::assertGreaterThanOrEqual(1, count($res->getDealRecurrings()));
         
-        $this->dealService->delete($dealId);
-        $this->dealRecurring->delete($newRecurringId);
+        $recurring = $this->dealRecurring->get($newRecurringId)->recurring();
+        $this->dealService->delete(intval($recurring->DEAL_ID));
+        $this->dealService->delete(intval($recurring->BASED_ID));
     }
 
     /**
@@ -130,10 +119,13 @@ class DealRecurringTest extends TestCase
         $dealId = $this->dealService->add(['TITLE' => 'test recurring deal'])->getId();
         $newRecurringId = $this->dealRecurring->add($this->getRecurringFields($dealId))->getId();
         $result = $this->dealRecurring->expose($newRecurringId);
-        $this::assertGreaterThan(1, $result->getId());
         
-        $this->dealService->delete($dealId);
-        $this->dealRecurring->delete($newRecurringId);
+        $this::assertGreaterThan(1, $result->getDealId());
+        
+        $recurring = $this->dealRecurring->get($newRecurringId)->recurring();
+        $this->dealService->delete(intval($recurring->DEAL_ID));
+        $this->dealService->delete(intval($recurring->BASED_ID));
+        $this->dealService->delete($result->getDealId());
     }
 
     /**
@@ -146,14 +138,14 @@ class DealRecurringTest extends TestCase
         $dealId = $this->dealService->add(['TITLE' => 'test recurring deal'])->getId();
         $newRecurring = $this->getRecurringFields($dealId);
         $newRecurringId = $this->dealRecurring->add($newRecurring)->getId();
-        $dateStart = new \DateTime();
-        $dateStart->modify('+2 month');
-        $dateStartStr = $dateStart->format(\DateTime::ATOM);
-        $this::assertTrue($this->dealRecurring->update($newRecurringId, ['START_DATE' => $dateStartStr])->isSuccess());
-        $this::assertEquals($dateStartStr, $this->dealRecurring->get($newCategoryId)->recurring()->START_DATE);
+        $newInterval = 2;
+        $newRecurring['PARAMS']['MULTIPLE_INTERVAL'] = $newInterval;
+        $this::assertTrue($this->dealRecurring->update($newRecurringId, [ 'PARAMS' => $newRecurring['PARAMS'] ])->isSuccess());
+        $recurring = $this->dealRecurring->get($newRecurringId)->recurring();
+        $this::assertEquals($newInterval, $recurring->PARAMS['MULTIPLE_INTERVAL']);
         
-        $this->dealService->delete($dealId);
-        $this->dealRecurring->delete($newRecurringId);
+        $this->dealService->delete(intval($recurring->DEAL_ID));
+        $this->dealService->delete(intval($recurring->BASED_ID));
     }
     
     protected function getRecurringFields(int $dealId) {

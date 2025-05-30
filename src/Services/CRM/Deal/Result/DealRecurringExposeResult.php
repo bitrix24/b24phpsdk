@@ -28,8 +28,8 @@ class DealRecurringExposeResult extends AbstractResult
      * @return int
      * @throws BaseException
      */
-    public function getId(): int
+    public function getDealId(): int
     {
-        return $this->getCoreResponse()->getResponseData()->getResult()[0];
+        return intval($this->getCoreResponse()->getResponseData()->getResult()['DEAL_ID']);
     }
 }
