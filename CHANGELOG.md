@@ -6,6 +6,18 @@
 
 - Fixed error in arguments in service for method `placement.bind`, [see details](https://github.com/bitrix24/b24phpsdk/issues/151)
 
+### Added
+
+- Added service `Services\CRM\Deal\Service\DealRecurring` with support methods,
+  see [crm.deal.recurring.* methods](https://github.com/bitrix24/b24phpsdk/issues/160):
+    - `fields` returns a list of fields for the recurring deal template
+    - `get` returns the settings of the recurring deal template by Id
+    - `list` returns a list of recurring deal templates
+    - `add` creates a new recurring deal template
+    - `delete` deletes a recurring deal template
+    - `update` modifies the settings of the recurring deal template
+    - `expose` creates a new deal based on the template
+
 ## 1.3.0 – 2025.04.23
 
 ### Added
