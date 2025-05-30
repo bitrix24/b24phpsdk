@@ -12,12 +12,13 @@
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Deal\Result;
+
 use Money\Money;
 use MoneyPHP\Percentage\Percentage;
-
 use Bitrix24\SDK\Services\CRM\Common\Result\DiscountType;
 use Carbon\CarbonImmutable;
 use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
+
 /**
  * @property-read int $ID
  * @property-read int $OWNER_ID

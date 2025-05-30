@@ -9,14 +9,18 @@
  * file that was distributed with this source code.
  */
 
-
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Deal\Result;
+namespace Bitrix24\SDK\Services\CRM\Deal\Events\OnCrmDealRecurringUpdate;
 
-enum DealSemanticStage: string
+use Bitrix24\SDK\Core\Result\AbstractItem;
+
+/**
+ * @property-read  array{
+ *	 	ID: int,
+ * 		RECURRING_DEAL_ID: int,
+ *	 } $FIELDS
+ */
+class OnCrmDealRecurringUpdatePayload extends AbstractItem
 {
-    case underway = 'P';
-    case successful = 'S';
-    case failed = 'F';
 }

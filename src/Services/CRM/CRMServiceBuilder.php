@@ -157,6 +157,15 @@ class CRMServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+    
+    public function dealRecurring(): Deal\Service\DealRecurring
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Deal\Service\DealRecurring($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 
     public function deal(): Deal\Service\Deal
     {

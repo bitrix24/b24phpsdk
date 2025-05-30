@@ -3,7 +3,7 @@
 /**
  * This file is part of the bitrix24-php-sdk package.
  *
- * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ * © Vadim Soluyanov <vadimsallee@gmail.com>
  *
  * For the full copyright and license information, please view the MIT-LICENSE.txt
  * file that was distributed with this source code.
@@ -16,14 +16,14 @@ namespace Bitrix24\SDK\Services\CRM\Deal\Result;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
 /**
- * Class DealCategoryResult
+ * Class DealRecurringResult
  *
  * @package Bitrix24\SDK\Services\CRM\Deal\Result
  */
-class DealCategoryResult extends AbstractResult
+class DealRecurringResult extends AbstractResult
 {
-    public function getDealCategoryFields(): DealCategoryItemResult
+    public function recurring(): DealRecurringItemResult
     {
-        return new DealCategoryItemResult($this->getCoreResponse()->getResponseData()->getResult());
+        return new DealRecurringItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }

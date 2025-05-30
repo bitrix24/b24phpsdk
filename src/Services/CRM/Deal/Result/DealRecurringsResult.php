@@ -3,7 +3,7 @@
 /**
  * This file is part of the bitrix24-php-sdk package.
  *
- * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ * © Vadim Soluyanov <vadimsallee@gmail.com>
  *
  * For the full copyright and license information, please view the MIT-LICENSE.txt
  * file that was distributed with this source code.
@@ -17,17 +17,22 @@ namespace Bitrix24\SDK\Services\CRM\Deal\Result;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
-class DealUserfieldsResult extends AbstractResult
+/**
+ * Class DealRecurringsResult
+ *
+ * @package Bitrix24\SDK\Services\CRM\Deal\Result
+ */
+class DealRecurringsResult extends AbstractResult
 {
     /**
-     * @return \Bitrix24\SDK\Services\CRM\Deal\Result\DealUserfieldItemResult[]
+     * @return DealRecurringItemResult[]
      * @throws BaseException
      */
-    public function getUserfields(): array
+    public function getDealRecurrings(): array
     {
         $res = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
-            $res[] = new DealUserfieldItemResult($item);
+        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $dealRecurring) {
+            $res[] = new DealRecurringItemResult($dealRecurring);
         }
 
         return $res;

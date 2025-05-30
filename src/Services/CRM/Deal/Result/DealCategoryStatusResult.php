@@ -25,7 +25,6 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 class DealCategoryStatusResult extends AbstractResult
 {
     /**
-     * @return string
      * @throws BaseException
      */
     public function getDealCategoryTypeId(): string

@@ -32,7 +32,6 @@ class DealProductRows extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_productrows_get.php
      *
-     * @param int $dealId
      * @param Currency|null $currency
      * @throws BaseException
      * @throws TransportException
@@ -44,7 +43,7 @@ class DealProductRows extends AbstractService
     )]
     public function get(int $dealId, Currency $currency = null): DealProductRowItemsResult
     {
-        if ($currency === null) {
+        if (!$currency instanceof \Money\Currency) {
             $res = $this->core->call('batch', [
                 'halt' => 0,
                 'cmd' => [
@@ -54,8 +53,9 @@ class DealProductRows extends AbstractService
             ]);
             $data = $res->getResponseData()->getResult();
             $currency = new Currency($data['result']['deal']['CURRENCY_ID']);
-            return new DealProductRowItemsResult($res,$currency);
+            return new DealProductRowItemsResult($res, $currency);
         }
+
         return new DealProductRowItemsResult(
             $this->core->call(
                 'crm.deal.productrows.get',
@@ -63,7 +63,7 @@ class DealProductRows extends AbstractService
                     'id' => $dealId,
                 ]
             ),
-           $currency
+            $currency
         );
     }
 
@@ -73,7 +73,6 @@ class DealProductRows extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_productrows_set.php
      *
-     * @param int $dealId
      * @param array<int, array{
      *   ID?: int,
      *   OWNER_ID?: int,
@@ -96,7 +95,6 @@ class DealProductRows extends AbstractService
      *   SORT?: int
      *   }> $productRows
      *
-     * @return UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      */

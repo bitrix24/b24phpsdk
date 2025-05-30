@@ -24,16 +24,17 @@ use PHPUnit\Framework\TestCase;
  *
  * @package Bitrix24\SDK\Tests\Integration\Services\CRM\Deals\Service
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Contact\Service\Batch::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Deal\Service\Batch::class)]
 class BatchTest extends TestCase
 {
     protected Deal $dealService;
 
     /**
-     * @testdox Batch list deals
-     * @covers  \Bitrix24\SDK\Services\CRM\Contact\Service\Batch::list()
      * @throws BaseException
      * @throws TransportException
      */
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch list deals')]
     public function testBatchList(): void
     {
         $dealId = $this->dealService->add(['TITLE' => 'test deal'])->getId();
@@ -42,69 +43,73 @@ class BatchTest extends TestCase
         foreach ($this->dealService->batch->list([], ['ID' => $dealId], ['ID', 'NAME'], 1) as $item) {
             $cnt++;
         }
+
         self::assertGreaterThanOrEqual(1, $cnt);
 
         $this->dealService->delete($dealId);
     }
 
     /**
-     * @testdox Batch add deals
-     * @covers  \Bitrix24\SDK\Services\CRM\Deal\Service\Batch::add()
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch add deals')]
     public function testBatchAdd(): void
     {
         $deals = [];
         for ($i = 1; $i < 60; $i++) {
             $deals[] = ['TITLE' => 'TITLE-' . $i];
         }
+
         $cnt = 0;
         $dealId = [];
         foreach ($this->dealService->batch->add($deals) as $item) {
             $cnt++;
             $dealId[] = $item->getId();
         }
+
         self::assertEquals(count($deals), $cnt);
 
         $cnt = 0;
         foreach ($this->dealService->batch->delete($dealId) as $cnt => $deleteResult) {
             $cnt++;
         }
+
         self::assertEquals(count($deals), $cnt);
     }
 
     /**
-     * @testdox Batch delete deals
-     * @covers  \Bitrix24\SDK\Services\CRM\Deal\Service\Batch::add()
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch delete deals')]
     public function testBatchDelete(): void
     {
         $deals = [];
         for ($i = 1; $i < 60; $i++) {
             $deals[] = ['TITLE' => 'TITLE-' . $i];
         }
+
         $cnt = 0;
         $dealId = [];
         foreach ($this->dealService->batch->add($deals) as $item) {
             $cnt++;
             $dealId[] = $item->getId();
         }
+
         self::assertEquals(count($deals), $cnt);
 
         $cnt = 0;
         foreach ($this->dealService->batch->delete($dealId) as $cnt => $deleteResult) {
             $cnt++;
         }
+
         self::assertEquals(count($deals), $cnt);
     }
 
     /**
-     * @testdox Batch delete deals
-     * @covers  \Bitrix24\SDK\Services\CRM\Deal\Service\Batch::update()
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Exception
      */
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch delete deals')]
     public function testBatchUpdate(): void
     {
         // add deals
@@ -112,12 +117,14 @@ class BatchTest extends TestCase
         for ($i = 1; $i < 60; $i++) {
             $deals[] = ['TITLE' => 'TITLE-' . $i];
         }
+
         $cnt = 0;
         $dealId = [];
         foreach ($this->dealService->batch->add($deals) as $item) {
             $cnt++;
             $dealId[] = $item->getId();
         }
+
         self::assertEquals(count($deals), $cnt);
 
         // read deals and prepare update information
@@ -148,7 +155,7 @@ class BatchTest extends TestCase
         $this->assertEquals($resultDeals, $updateResult);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->dealService = Fabric::getServiceBuilder()->getCRMScope()->deal();
     }
