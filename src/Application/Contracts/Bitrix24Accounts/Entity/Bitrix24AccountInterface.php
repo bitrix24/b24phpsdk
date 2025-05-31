@@ -38,6 +38,17 @@ interface Bitrix24AccountInterface
     public function isBitrix24UserAdmin(): bool;
 
     /**
+     * Is current account is the master account
+     *
+     * Master account is an account created by with application installation flow.
+     * In some cases we need to save auth tokens from multiple user accounts per one portal.
+     * Only one account in this collection can be a master account.
+     *
+     * @return bool
+     */
+    public function isMasterAccount(): bool;
+
+    /**
      * @return non-empty-string unique portal id
      */
     public function getMemberId(): string;
