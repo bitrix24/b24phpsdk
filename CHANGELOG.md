@@ -1,19 +1,6 @@
 # b24-php-sdk change log
 
-## 1.4.0 – 2025
-
-### Fixed
-
-- Fixed error in arguments in service for method `placement.bind`, [see details](https://github.com/bitrix24/b24phpsdk/issues/151)
-
-### Changed
-
-- ❗**️️BC** Changed contract `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface`, this changes need to process corner cases
-  when [installed application with UI or without UI](https://github.com/bitrix24/b24phpsdk/issues/150):
-    - changed method public `function applicationInstalled(?string $applicationToken): void` application token now is nullable
-    - added method `public function setApplicationToken(string $applicationToken): void;`
-
-## 1.3.0 – 2025.04.23
+## ⏳ UPCOMING 1.4.0 – 2025.07.01
 
 ### Added
 
@@ -23,6 +10,28 @@
     - `delete` delete trigger, with batch calls support
     - `list`  get list of triggers, with batch calls support
     - `execute` execute trigger, with batch calls support
+
+### Fixed
+
+- Fixed error in arguments in service for method `placement.bind`, [see details](https://github.com/bitrix24/b24phpsdk/issues/151)
+
+### Changed
+
+- ❗**️️BC** Changed contract `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface`, this change needs to process corner cases
+  when [installed application with UI or without UI](https://github.com/bitrix24/b24phpsdk/issues/150):
+    - changed method public `function applicationInstalled(?string $applicationToken): void` application token now is nullable
+    - added method `public function setApplicationToken(string $applicationToken): void;`
+- ❗**️️BC** Changed contract `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface`, this change needs to process corner cases
+  when we need to store [multiple accounts from one Bitrix24 portal](https://github.com/bitrix24/b24phpsdk/issues/161).
+
+### Statistics
+
+work in progress
+
+## 1.3.0 – 2025.04.23
+
+### Added
+
 - Added **PHP 8.4** [support](https://github.com/bitrix24/b24phpsdk/issues/120) 🚀
 - Added method `Bitrix24\SDK\Services\Main\Service::guardValidateCurrentAuthToken` for validate current auth token with
   api-call `app.info` on vendor OAUTH server.
