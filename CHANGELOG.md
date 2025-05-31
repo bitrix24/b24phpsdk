@@ -6,6 +6,15 @@
 
 - Fixed error in arguments in service for method `placement.bind`, [see details](https://github.com/bitrix24/b24phpsdk/issues/151)
 
+### Changed
+
+- ❗**️️BC** Changed contract `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface`, this changes need to process corner cases
+  when [installed application with UI or without UI](https://github.com/bitrix24/b24phpsdk/issues/150):
+    - changed method public `function applicationInstalled(?string $applicationToken): void` application token now is nullable
+    - added method `public function setApplicationToken(string $applicationToken): void;`
+
+## 1.3.0 – 2025.04.23
+
 ### Added
 
 - Added service `Services\CRM\Automation\Service\Trigger` with support methods,
