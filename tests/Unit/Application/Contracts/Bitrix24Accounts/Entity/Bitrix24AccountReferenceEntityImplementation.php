@@ -97,6 +97,18 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
         return $this->accountStatus;
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function setApplicationToken(string $applicationToken): void
+    {
+        if ($applicationToken === '') {
+            throw new InvalidArgumentException('application token cannot be empty');
+        }
+
+        $this->applicationToken = $applicationToken;
+    }
+
     public function getAuthToken(): AuthToken
     {
         return new AuthToken($this->accessToken, $this->refreshToken, $this->expires);
@@ -165,7 +177,7 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
     /**
      * @throws InvalidArgumentException
      */
-    public function applicationInstalled(string $applicationToken): void
+    public function applicationInstalled(?string $applicationToken): void
     {
         if (Bitrix24AccountStatus::new !== $this->accountStatus) {
             throw new InvalidArgumentException(
@@ -181,8 +193,10 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
         }
 
         $this->accountStatus = Bitrix24AccountStatus::active;
-        $this->applicationToken = $applicationToken;
         $this->updatedAt = new CarbonImmutable();
+        if ($applicationToken !== null) {
+            $this->applicationToken = $applicationToken;
+        }
     }
 
     /**
