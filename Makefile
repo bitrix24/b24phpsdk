@@ -29,15 +29,18 @@ help:
 	@echo "docker-down-clear         - stop docker and remove orphaned containers"
 	@echo "docker-pull               - download images and ignore pull failures"
 	@echo "docker-restart            - restart containers"
+	@echo ""
 	@echo "composer-install          - install dependencies from composer"
 	@echo "composer-update           - update dependencies from composer"
 	@echo "composer-dumpautoload     - regenerate composer autoload file"
 	@echo "composer                  - run composer and pass arguments"
+	@echo ""
 	@echo "php-dev-server-up         - start php dev-server"
 	@echo "php-dev-server-down       - stop php dev-server"
 	@echo "php-cli-bash              - run container php-cli and open shell with arguments"
 	@echo "ngrok-up                  - start ngrok"
 	@echo "ngrok-down                - stop ngrok"
+	@echo ""
 	@echo "lint-allowed-licenses     - lint dependencies for valid licenses"
 	@echo "lint-cs-fixer             - lint source code with php-cs-fixer"
 	@echo "lint-cs-fixer-fix         - fix source code with php-cs-fixer"
@@ -45,6 +48,7 @@ help:
 	@echo "lint-rector               - lint source code with rector"
 	@echo "lint-rector-fix           - fix source code with rector"
 	@echo ""
+	@echo "test-unit                 - run unit tests"
 
 
 .PHONY: docker-init

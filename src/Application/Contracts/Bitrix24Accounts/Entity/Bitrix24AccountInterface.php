@@ -93,15 +93,14 @@ interface Bitrix24AccountInterface
      * You must before finish installation with call applicationInstalled method
      *
      * @param non-empty-string $applicationToken
-     * @return void
      */
     public function setApplicationToken(string $applicationToken): void;
 
     /**
-     * @param string $applicationToken Application uninstalled from portal, set status «deleted»
+     * @param string|null $applicationToken Application uninstalled from portal, set status «deleted»
      * @throws InvalidArgumentException
      */
-    public function applicationUninstalled(string $applicationToken): void;
+    public function applicationUninstalled(?string $applicationToken): void;
 
     /**
      * Check is application token valid

@@ -403,7 +403,7 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         AuthToken $authToken,
         int $applicationVersion,
         Scope $applicationScope,
-        string $applicationToken,
+        ?string $applicationToken,
         ?Throwable $throwable
     ): void {
         if ($throwable instanceof \Throwable) {
@@ -547,7 +547,7 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         AuthToken $authToken,
         int $applicationVersion,
         Scope $applicationScope,
-        string $applicationToken,
+        ?string $applicationToken,
         ?Throwable $throwable
     ): void {
         if ($throwable instanceof \Throwable) {
@@ -587,7 +587,7 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         AuthToken $authToken,
         int $applicationVersion,
         Scope $applicationScope,
-        string $applicationToken,
+        ?string $applicationToken,
         ?Throwable $throwable
     ): void {
         if ($throwable instanceof \Throwable) {

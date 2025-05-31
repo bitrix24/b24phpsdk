@@ -202,7 +202,7 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
     /**
      * @throws InvalidArgumentException
      */
-    public function applicationUninstalled(string $applicationToken): void
+    public function applicationUninstalled(?string $applicationToken): void
     {
         if ($applicationToken === '') {
             throw new InvalidArgumentException('application token cannot be empty');
