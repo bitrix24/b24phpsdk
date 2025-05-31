@@ -53,6 +53,7 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
         private readonly Uuid $id,
         private int $bitrix24UserId,
         private readonly bool $isBitrix24UserAdmin,
+        private readonly bool $isMasterAccount,
         private readonly string $memberId,
         private string $domainUrl,
         AuthToken $authToken,
@@ -80,6 +81,11 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
     public function isBitrix24UserAdmin(): bool
     {
         return $this->isBitrix24UserAdmin;
+    }
+
+    public function isMasterAccount(): bool
+    {
+        return $this->isMasterAccount;
     }
 
     public function getMemberId(): string
