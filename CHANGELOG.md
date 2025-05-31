@@ -6,10 +6,10 @@
 
 - Added service `Services\CRM\Automation\Service\Trigger` with support methods,
   see [add crm.automation.trigger* methods](https://github.com/bitrix24/b24phpsdk/issues/148):
-  - `add` add new trigger, with batch calls support
-  - `delete` delete trigger, with batch calls support
-  - `list`  get list of triggers, with batch calls support
-  - `execute` execute trigger, with batch calls support
+    - `add` add new trigger, with batch calls support
+    - `delete` delete trigger, with batch calls support
+    - `list`  get list of triggers, with batch calls support
+    - `execute` execute trigger, with batch calls support
 
 ### Fixed
 
@@ -17,13 +17,16 @@
 
 ### Changed
 
-- ❗**️️BC** Changed contract `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface`, this changes need to process corner cases
+- ❗**️️BC** Changed contract `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface`, this change needs to process corner cases
   when [installed application with UI or without UI](https://github.com/bitrix24/b24phpsdk/issues/150):
     - changed method public `function applicationInstalled(?string $applicationToken): void` application token now is nullable
     - added method `public function setApplicationToken(string $applicationToken): void;`
+- ❗**️️BC** Changed contract `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface`, this change needs to process corner cases
+  when we need to store [multiple accounts from one Bitrix24 portal](https://github.com/bitrix24/b24phpsdk/issues/161).
 
 ### Statistics
- work in progress
+
+work in progress
 
 ## 1.3.0 – 2025.04.23
 

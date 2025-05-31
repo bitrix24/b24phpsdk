@@ -43,8 +43,6 @@ interface Bitrix24AccountInterface
      * Master account is an account created by with application installation flow.
      * In some cases we need to save auth tokens from multiple user accounts per one portal.
      * Only one account in this collection can be a master account.
-     *
-     * @return bool
      */
     public function isMasterAccount(): bool;
 
