@@ -132,6 +132,34 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
 
     #[Test]
     #[DataProvider('bitrix24AccountDataProvider')]
+    #[TestDox('test isBitrix24UserAdmin method')]
+    final public function testIsMasterAccount(
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
+        string $memberId,
+        string $domainUrl,
+        AuthToken $authToken,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): void {
+        $bitrix24Account = $this->createBitrix24AccountImplementation(
+            $uuid,
+            $bitrix24UserId,
+            $isBitrix24UserAdmin,
+            $isMasterAccount,
+            $memberId,
+            $domainUrl,
+            $authToken,
+            $applicationVersion,
+            $applicationScope
+        );
+        $this->assertEquals($isMasterAccount, $bitrix24Account->isMasterAccount());
+    }
+
+    #[Test]
+    #[DataProvider('bitrix24AccountDataProvider')]
     #[TestDox('test getMemberId method')]
     final public function testGetMemberId(
         Uuid $uuid,
@@ -843,6 +871,17 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
             12345,
             true,
             true,
+            'member123',
+            'https://example.com',
+            new AuthToken('access_token', 'refresh_token', 1609459200),
+            1,
+            new Scope(['crm', 'task'])
+        ];
+        yield 'account-not-master-account' => [
+            Uuid::v7(),
+            12345,
+            true,
+            false,
             'member123',
             'https://example.com',
             new AuthToken('access_token', 'refresh_token', 1609459200),
