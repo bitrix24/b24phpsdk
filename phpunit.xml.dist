@@ -43,6 +43,9 @@
         <testsuite name="integration_tests_scope_ai_admin">
             <directory>./tests/Integration/Services/AI/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_automation">
+            <directory>./tests/Integration/Services/CRM/Automation/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>

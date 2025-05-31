@@ -7,6 +7,7 @@ composer.lock
 tools/.env.local
 tools/logs
 tests/ApplicationBridge/auth.json
+tests/ApplicationBridge/*.log
 /examples/*.log
 /examples/**/*.log
 /examples/**/*/*.log
