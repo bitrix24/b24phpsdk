@@ -6,7 +6,7 @@ use PhpCsFixer\Finder;
 
 $finder = Finder::create()
     ->in(__DIR__ . '/src/Infrastructure/Console/Commands/')
-    ->in(__DIR__ . '/src/Services/CRM/Automation/')
+    ->in(__DIR__ . '/src/Services/CRM/Deal/')
     ->name('*.php')
     ->exclude(['vendor', 'storage', 'docker', 'docs']) // Exclude directories
     ->ignoreDotFiles(true)
