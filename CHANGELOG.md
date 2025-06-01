@@ -25,8 +25,7 @@
   when we need to store [multiple accounts from one Bitrix24 portal](https://github.com/bitrix24/b24phpsdk/issues/161).
     - added method `isMasterAccount`
 - ❗**️️BC** Changed contract `Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationInterface`, this change needs to process
-  corner cases
-  when [installed application with UI or without UI](https://github.com/bitrix24/b24phpsdk/issues/137).
+  corner cases when [installed application with UI or without UI](https://github.com/bitrix24/b24phpsdk/issues/137).
     - added method `setApplicationToken`
     - added method `isApplicationTokenValid`
     - changed method `public function applicationInstalled(?string $applicationToken): void` application token now is nullable
