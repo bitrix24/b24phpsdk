@@ -99,9 +99,11 @@ interface Bitrix24AccountInterface
     /**
      * Set application token from OnApplicationInstall event
      *
-     * You must before finish installation with call applicationInstalled method
+     * If the application is installed without UI, You already have an application token in OnApplicationInstall event
+     * If the application is installed with UI, You can finish the installation flow without a token and receive it in a separate request with OnApplicationInstall event
      *
      * @param non-empty-string $applicationToken
+     * @throws InvalidArgumentException
      */
     public function setApplicationToken(string $applicationToken): void;
 
