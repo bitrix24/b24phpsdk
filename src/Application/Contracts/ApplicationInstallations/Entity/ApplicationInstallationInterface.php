@@ -125,7 +125,7 @@ interface ApplicationInstallationInterface
      * @param non-empty-string|null $applicationToken
      * @throws InvalidArgumentException
      */
-    public function applicationInstalled(?string $applicationToken): void;
+    public function applicationInstalled(?string $applicationToken = null): void;
 
     /**
      * Application uninstalled
@@ -136,7 +136,7 @@ interface ApplicationInstallationInterface
      * @param string|null $applicationToken Application uninstalled from portal, set status «deleted»
      * @throws InvalidArgumentException
      */
-    public function applicationUninstalled(?string $applicationToken): void;
+    public function applicationUninstalled(?string $applicationToken = null): void;
 
     /**
      * Check is application token valid
