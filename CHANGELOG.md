@@ -13,11 +13,6 @@
     - `delete` deletes a recurring deal template
     - `update` modifies the settings of the recurring deal template
     - `expose` creates a new deal based on the template
-
-## 1.3.0 – 2025.04.23
-
-### Added
-
 - Added service `Services\CRM\Automation\Service\Trigger` with support methods,
   see [add crm.automation.trigger* methods](https://github.com/bitrix24/b24phpsdk/issues/148):
     - `add` add new trigger, with batch calls support
