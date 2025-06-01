@@ -33,6 +33,8 @@ Optional can store links to:
 | `getPortalUsersCount()`                | `?int`                          | Returns Bitrix24 portal users count stored in persistence storage                      |                            |
 | `changePortalUsersCount()`             | `void`                          | Changes Bitrix24 portal users count                                                    |                            |
 | `getComment()`                         | `?string`                       | Returns comment                                                                        |                            |
+| `setApplicationToken()`                | `void`                          | Sets application token.                                                                | InvalidArgumentException   |
+| `isApplicationTokenValid()`            | `bool`                          | Checks if the provided application token is valid.                                     | -                          |
 
 ## Application installation state diagram
 
@@ -128,7 +130,9 @@ timeline
     section Application uninstall period
         Administrator Uninstalled Application : «Application Installation Uninstalled Event»
 ```
+
 ## Background periodical tasks
+
 - check portal license type
 - check application status
 - check users count

@@ -118,10 +118,14 @@ interface ApplicationInstallationInterface
     /**
      * Finish application installation
      *
-     * Installation can be finished only for state «new»
-     * @throws LogicException
+     * Application installed on portal and finish installation flow. Method must set the status from «new» to «active»
+     * If You installed application without UI, You already have an application token in OnApplicationInstall event
+     * If You installed application with UI, You can finish the installation flow without a token and receive it in a separate request with OnApplicationInstall event
+     *
+     * @param non-empty-string|null $applicationToken
+     * @throws InvalidArgumentException
      */
-    public function applicationInstalled(): void;
+    public function applicationInstalled(?string $applicationToken): void;
 
     /**
      * Application uninstalled
@@ -129,9 +133,29 @@ interface ApplicationInstallationInterface
      * Application can be uninstalled by:
      * - admin on portal active → deleted statuses
      * - if installation will not complete new → blocked → deleted by background task
-     * @throws LogicException
+     * @param string|null $applicationToken Application uninstalled from portal, set status «deleted»
+     * @throws InvalidArgumentException
      */
-    public function applicationUninstalled(): void;
+    public function applicationUninstalled(?string $applicationToken): void;
+
+    /**
+     * Check is application token valid
+     *
+     * @param non-empty-string $applicationToken
+     * @link https://training.bitrix24.com/rest_help/general/events/event_safe.php
+     */
+    public function isApplicationTokenValid(string $applicationToken): bool;
+
+    /**
+     * Set application token from OnApplicationInstall event
+     *
+     * If the application is installed without UI, You already have an application token in OnApplicationInstall event
+     * If the application is installed with UI, You can finish the installation flow without a token and receive it in a separate request with OnApplicationInstall event
+     *
+     * @param non-empty-string $applicationToken
+     * @throws InvalidArgumentException
+     */
+    public function setApplicationToken(string $applicationToken): void;
 
     /**
      * Change status to active for blocked application installation accounts
