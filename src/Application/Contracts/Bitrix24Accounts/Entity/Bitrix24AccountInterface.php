@@ -38,6 +38,15 @@ interface Bitrix24AccountInterface
     public function isBitrix24UserAdmin(): bool;
 
     /**
+     * Is current account is the master account
+     *
+     * Master account is an account created by with application installation flow.
+     * In some cases we need to save auth tokens from multiple user accounts per one portal.
+     * Only one account in this collection can be a master account.
+     */
+    public function isMasterAccount(): bool;
+
+    /**
      * @return non-empty-string unique portal id
      */
     public function getMemberId(): string;
@@ -57,7 +66,7 @@ interface Bitrix24AccountInterface
      */
     public function getAuthToken(): AuthToken;
 
-    
+
     public function renewAuthToken(RenewedAuthToken $renewedAuthToken): void;
 
     /**
@@ -76,16 +85,33 @@ interface Bitrix24AccountInterface
     public function changeDomainUrl(string $newDomainUrl): void;
 
     /**
-     * @param non-empty-string $applicationToken Application installed on portal and finish installation flow,  set status «active»
+     * Finish application installation
+     *
+     * Application installed on portal and finish installation flow, method must set status to «active»
+     * If You installed application without UI, You already have application token in OnApplicationInstall event
+     * If You installed application with UI, You can finish installation flow without a token and receive it in a separate request with OnApplicationInstall event
+     *
+     * @param non-empty-string|null $applicationToken
      * @throws InvalidArgumentException
      */
-    public function applicationInstalled(string $applicationToken): void;
+    public function applicationInstalled(?string $applicationToken): void;
 
     /**
-     * @param string $applicationToken Application uninstalled from portal, set status «deleted»
+     * Set application token from OnApplicationInstall event
+     *
+     * If the application is installed without UI, You already have an application token in OnApplicationInstall event
+     * If the application is installed with UI, You can finish the installation flow without a token and receive it in a separate request with OnApplicationInstall event
+     *
+     * @param non-empty-string $applicationToken
      * @throws InvalidArgumentException
      */
-    public function applicationUninstalled(string $applicationToken): void;
+    public function setApplicationToken(string $applicationToken): void;
+
+    /**
+     * @param string|null $applicationToken Application uninstalled from portal, set status «deleted»
+     * @throws InvalidArgumentException
+     */
+    public function applicationUninstalled(?string $applicationToken): void;
 
     /**
      * Check is application token valid

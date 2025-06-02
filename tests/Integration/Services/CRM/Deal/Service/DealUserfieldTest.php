@@ -64,22 +64,22 @@ class DealUserfieldTest extends TestCase
     public function testGet(array $newUserFieldItem): void
     {
         $newUserfieldId = $this->userfieldService->add($newUserFieldItem)->getId();
-        $ufField = $this->userfieldService->get($newUserfieldId)->userfieldItem();
-        $this->assertEquals($newUserfieldId, $ufField->ID);
-        $this->assertEquals($newUserFieldItem['USER_TYPE_ID'], $ufField->USER_TYPE_ID);
-        $this->assertEquals('UF_CRM_' . $newUserFieldItem['FIELD_NAME'], $ufField->FIELD_NAME);
-        $this->assertEquals($newUserFieldItem['XML_ID'], $ufField->XML_ID);
+        $dealUserfieldItemResult = $this->userfieldService->get($newUserfieldId)->userfieldItem();
+        $this->assertEquals($newUserfieldId, $dealUserfieldItemResult->ID);
+        $this->assertEquals($newUserFieldItem['USER_TYPE_ID'], $dealUserfieldItemResult->USER_TYPE_ID);
+        $this->assertEquals('UF_CRM_' . $newUserFieldItem['FIELD_NAME'], $dealUserfieldItemResult->FIELD_NAME);
+        $this->assertEquals($newUserFieldItem['XML_ID'], $dealUserfieldItemResult->XML_ID);
     }
 
     #[DataProvider('systemUserfieldsDemoDataDataProvider')]
     public function testUpdate(array $newUserFieldItem): void
     {
         $newUserfieldId = $this->userfieldService->add($newUserFieldItem)->getId();
-        $ufFieldBefore = $this->userfieldService->get($newUserfieldId)->userfieldItem();
-        $this->assertEquals($newUserfieldId, $ufFieldBefore->ID);
-        $this->assertEquals($newUserFieldItem['USER_TYPE_ID'], $ufFieldBefore->USER_TYPE_ID);
-        $this->assertEquals('UF_CRM_' . $newUserFieldItem['FIELD_NAME'], $ufFieldBefore->FIELD_NAME);
-        $this->assertEquals($newUserFieldItem['XML_ID'], $ufFieldBefore->XML_ID);
+        $dealUserfieldItemResult = $this->userfieldService->get($newUserfieldId)->userfieldItem();
+        $this->assertEquals($newUserfieldId, $dealUserfieldItemResult->ID);
+        $this->assertEquals($newUserFieldItem['USER_TYPE_ID'], $dealUserfieldItemResult->USER_TYPE_ID);
+        $this->assertEquals('UF_CRM_' . $newUserFieldItem['FIELD_NAME'], $dealUserfieldItemResult->FIELD_NAME);
+        $this->assertEquals($newUserFieldItem['XML_ID'], $dealUserfieldItemResult->XML_ID);
 
         $this->assertTrue(
             $this->userfieldService->update(
@@ -91,16 +91,16 @@ class DealUserfieldTest extends TestCase
         );
 
         $ufFieldAfter = $this->userfieldService->get($newUserfieldId)->userfieldItem();
-        $this->assertEquals($ufFieldBefore->EDIT_FORM_LABEL['en'] . 'QQQ', $ufFieldAfter->EDIT_FORM_LABEL['en']);
+        $this->assertEquals($dealUserfieldItemResult->EDIT_FORM_LABEL['en'] . 'QQQ', $ufFieldAfter->EDIT_FORM_LABEL['en']);
     }
 
     public function testList(): void
     {
-        $ufFields = $this->userfieldService->list([], []);
-        $this->assertGreaterThanOrEqual(0, count($ufFields->getUserfields()));
+        $dealUserfieldsResult = $this->userfieldService->list([], []);
+        $this->assertGreaterThanOrEqual(0, count($dealUserfieldsResult->getUserfields()));
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->userfieldService = Fabric::getServiceBuilder()->getCRMScope()->dealUserfield();
     }

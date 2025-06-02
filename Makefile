@@ -29,15 +29,18 @@ help:
 	@echo "docker-down-clear         - stop docker and remove orphaned containers"
 	@echo "docker-pull               - download images and ignore pull failures"
 	@echo "docker-restart            - restart containers"
+	@echo ""
 	@echo "composer-install          - install dependencies from composer"
 	@echo "composer-update           - update dependencies from composer"
 	@echo "composer-dumpautoload     - regenerate composer autoload file"
 	@echo "composer                  - run composer and pass arguments"
+	@echo ""
 	@echo "php-dev-server-up         - start php dev-server"
 	@echo "php-dev-server-down       - stop php dev-server"
 	@echo "php-cli-bash              - run container php-cli and open shell with arguments"
 	@echo "ngrok-up                  - start ngrok"
 	@echo "ngrok-down                - stop ngrok"
+	@echo ""
 	@echo "lint-allowed-licenses     - lint dependencies for valid licenses"
 	@echo "lint-cs-fixer             - lint source code with php-cs-fixer"
 	@echo "lint-cs-fixer-fix         - fix source code with php-cs-fixer"
@@ -45,6 +48,7 @@ help:
 	@echo "lint-rector               - lint source code with rector"
 	@echo "lint-rector-fix           - fix source code with rector"
 	@echo ""
+	@echo "test-unit                 - run unit tests"
 
 
 .PHONY: docker-init
@@ -178,6 +182,14 @@ test-integration-scope-ai-admin:
 .PHONY: integration_tests_scope_crm_contact_details
 integration_tests_scope_crm_contact_details:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_contact_details
+
+.PHONY: integration_tests_deal_recurring
+integration_tests_deal_recurring:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_deal_recurring
+
+.PHONY: integration_tests_scope_automation
+integration_tests_scope_automation:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_automation
 
 # work dev environment
 .PHONY: php-dev-server-up
