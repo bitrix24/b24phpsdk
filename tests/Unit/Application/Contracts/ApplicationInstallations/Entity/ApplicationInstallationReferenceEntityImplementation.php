@@ -32,6 +32,8 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
 {
     private ?string $comment = null;
 
+    private ?string $applicationToken = null;
+
     public function __construct(
         private readonly Uuid                 $id,
         private ApplicationInstallationStatus $applicationInstallationStatus,
@@ -152,13 +154,17 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     /**
      * @throws InvalidArgumentException
      */
-    public function applicationInstalled(): void
+    public function applicationInstalled(?string $applicationToken = null): void
     {
         if ($this->applicationInstallationStatus !== ApplicationInstallationStatus::new) {
             throw new LogicException(sprintf('application installation must be in status «%s», current state «%s»',
                 ApplicationInstallationStatus::new->name,
                 $this->applicationInstallationStatus->name
             ));
+        }
+
+        if ($applicationToken !== null) {
+            $this->setApplicationToken($applicationToken);
         }
 
         $this->applicationInstallationStatus = ApplicationInstallationStatus::active;
@@ -168,7 +174,7 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     /**
      * @throws InvalidArgumentException
      */
-    public function applicationUninstalled(): void
+    public function applicationUninstalled(?string $applicationToken = null): void
     {
         if ($this->applicationInstallationStatus === ApplicationInstallationStatus::new || $this->applicationInstallationStatus === ApplicationInstallationStatus::deleted) {
             throw new LogicException(sprintf('application installation must be in status «%s» or «%s», current state «%s»',
@@ -176,6 +182,10 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
                 ApplicationInstallationStatus::blocked->name,
                 $this->applicationInstallationStatus->name
             ));
+        }
+
+        if ($applicationToken !== null) {
+            $this->setApplicationToken($applicationToken);
         }
 
         $this->applicationInstallationStatus = ApplicationInstallationStatus::deleted;
@@ -220,5 +230,31 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     public function getComment(): ?string
     {
         return $this->comment;
+    }
+
+    /**
+     * @param non-empty-string $applicationToken
+     * @throws InvalidArgumentException
+     */
+    public function setApplicationToken(string $applicationToken): void
+    {
+        if (trim($applicationToken) === '') {
+            throw new InvalidArgumentException('applicationToken cannot be empty string');
+        }
+
+        $this->applicationToken = $applicationToken;
+        $this->updatedAt = new CarbonImmutable();
+    }
+
+    /**
+     * @param non-empty-string $applicationToken
+     */
+    public function isApplicationTokenValid(string $applicationToken): bool
+    {
+        if ($this->applicationToken === null) {
+            return false;
+        }
+
+        return $this->applicationToken === $applicationToken;
     }
 }
