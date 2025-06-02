@@ -1,6 +1,50 @@
 # b24-php-sdk change log
 
-## Unreleased 1.3.0 – 2025.03.31
+## ⏳ UPCOMING 1.4.0 – 2025.07.01
+
+### Added
+
+- Added service `Services\CRM\Deal\Service\DealRecurring` with support methods,
+  see [crm.deal.recurring.* methods](https://github.com/bitrix24/b24phpsdk/issues/160):
+    - `fields` returns a list of fields for the recurring deal template
+    - `get` returns the settings of the recurring deal template by Id
+    - `list` returns a list of recurring deal templates
+    - `add` creates a new recurring deal template
+    - `delete` deletes a recurring deal template
+    - `update` modifies the settings of the recurring deal template
+    - `expose` creates a new deal based on the template
+- Added service `Services\CRM\Automation\Service\Trigger` with support methods,
+  see [add crm.automation.trigger* methods](https://github.com/bitrix24/b24phpsdk/issues/148):
+    - `add` add new trigger, with batch calls support
+    - `delete` delete trigger, with batch calls support
+    - `list`  get list of triggers, with batch calls support
+    - `execute` execute trigger, with batch calls support
+
+### Fixed
+
+- Fixed error in arguments in service for method `placement.bind`, [see details](https://github.com/bitrix24/b24phpsdk/issues/151)
+
+### Changed
+
+- ❗**️️BC** Changed contract `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface`, this change needs to process corner cases
+  when [installed application with UI or without UI](https://github.com/bitrix24/b24phpsdk/issues/150):
+    - changed method `public function applicationInstalled(?string $applicationToken): void` application token now is nullable
+    - added method `public function setApplicationToken(string $applicationToken): void;`
+- ❗**️️BC** Changed contract `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface`, this change needs to process corner cases
+  when we need to store [multiple accounts from one Bitrix24 portal](https://github.com/bitrix24/b24phpsdk/issues/161).
+    - added method `isMasterAccount`
+- ❗**️️BC** Changed contract `Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationInterface`, this change needs to process
+  corner cases when [installed application with UI or without UI](https://github.com/bitrix24/b24phpsdk/issues/137).
+    - added method `setApplicationToken`
+    - added method `isApplicationTokenValid`
+    - changed method `public function applicationInstalled(?string $applicationToken): void` application token now is nullable
+    - changed method `public function applicationUninstalled(?string $applicationToken): void` application token now is nullable
+
+### Statistics
+
+work in progress
+
+## 1.3.0 – 2025.04.23
 
 ### Added
 
@@ -69,10 +113,11 @@
   with [support methods](https://github.com/bitrix24/b24phpsdk/issues/103):
     - `add` add (invite) users
     - `get` get users list
-Added service `Services\AI\Engine\Service\Engine` with support methods:
-  - `ai.engine.register` - method registers an engine and updates it upon subsequent calls
-  - `ai.engine.list` - get the list of ai services
-  - `ai.engine.unregister` - Delete registered ai service 
+      Added service `Services\AI\Engine\Service\Engine` with support methods:
+    - `ai.engine.register` - method registers an engine and updates it upon subsequent calls
+    - `ai.engine.list` - get the list of ai services
+    - `ai.engine.unregister` - Delete registered ai service
+      Added class `Bitrix24\SDK\Core\Exceptions\LogicException` for logic exceptions
 - Developer experience: added cli command `b24-dev:show-sdk-coverage-statistics` for show actual SDK coverage for
   REST-API, see task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
 - Developer experience: added class `Bitrix24\SDK\Deprecations\DeprecatedMethods` with list of
@@ -80,10 +125,13 @@ Added service `Services\AI\Engine\Service\Engine` with support methods:
 - Developer experience: commands from makefile now run inside docker container `php-cli`
 - Developer experience: added cache folder in phpstan config
 - Developer experience: added article «[How to Contribute to Bitrix24 PHP SDK](docs/EN/Development/how-to-contribute.md)»
+
 ### Changed
 
 - Added nullable argument `$scope` in method `Bitrix24\SDK\Attributes\Services::getSupportedInSdkApiMethods`,
   for task «[split cli commands](https://github.com/bitrix24/b24phpsdk/issues/92)»
+- Added class `Bitrix24\SDK\Core\Exceptions\LogicException` for logic exceptions,
+  for task «[fix contract tests](https://github.com/bitrix24/b24phpsdk/issues/129)»
 - Changed method signature `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity::updateApplicationVersion`, for
   task «[add bitrixUserId and AuthToken](https://github.com/bitrix24/b24phpsdk/issues/115)»
 - Developer experience: webhook example moved to
@@ -98,6 +146,7 @@ Added service `Services\AI\Engine\Service\Engine` with support methods:
 - Fixed errors in `Bitrix24\SDK\Core\ApiClient` for methods with strict arguments
   order, [see details](https://github.com/bitrix24/b24phpsdk/issues/101)
 - Fixed errors in `ApplicationInstallationRepositoryInterfaceTest` for work with storage [see details](https://github.com/bitrix24/b24phpsdk/issues/123)
+- Fixed errors in `Bitrix24AccountInterfaceTest`, remove some [arguments in constructor](https://github.com/bitrix24/b24phpsdk/issues/141)
 
 ### Security
 

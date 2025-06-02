@@ -31,10 +31,14 @@ return RectorConfig::configure()
         __DIR__ . '/src/Services/IMOpenLines',
         __DIR__ . '/tests/Integration/Services/IMOpenLines',
         __DIR__ . '/tests/Integration/Services/CRM',
+        __DIR__ . '/src/Services/CRM/Automation',
+        __DIR__ . '/tests/Integration/Services/CRM/Automation',
         __DIR__ . '/src/Services/Main',
         __DIR__ . '/tests/Integration/Services/Main',
         __DIR__ . '/src/Services/Placement',
         __DIR__ . '/tests/Integration/Services/Placement',
+        __DIR__ . '/src/Services/CRM/Deal',
+        __DIR__ . '/tests/Integration/Services/CRM/Deal/Service',
         __DIR__ . '/tests/Unit/',
     ])
     ->withCache(cacheDirectory: __DIR__ . '.cache/rector')

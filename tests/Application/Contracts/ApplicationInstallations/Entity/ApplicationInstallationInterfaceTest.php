@@ -18,6 +18,7 @@ use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\Applicati
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationStatus;
 use Bitrix24\SDK\Application\PortalLicenseFamily;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Exceptions\LogicException;
 use Carbon\CarbonImmutable;
 use DateInterval;
 use DateTime;
@@ -359,7 +360,7 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $this->assertFalse($installation->getCreatedAt()->equalTo($installation->getUpdatedAt()));
 
         // try to finish installation in wrong state
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(LogicException::class);
         $installation->applicationInstalled();
     }
 
@@ -389,7 +390,7 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $this->assertFalse($installation->getCreatedAt()->equalTo($installation->getUpdatedAt()));
 
         // try to finish installation in wrong state
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(LogicException::class);
         $installation->applicationUninstalled();
     }
 
@@ -424,7 +425,7 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
 
 
         // try to activate installation in wrong state
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(LogicException::class);
         $installation->markAsActive('activate installation in wrong state');
     }
 
@@ -454,7 +455,7 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $this->assertEquals(ApplicationInstallationStatus::blocked, $installation->getStatus());
 
         // try to activate installation in wrong state
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(LogicException::class);
         $installation->markAsBlocked('activate installation in wrong state');
     }
 
@@ -625,6 +626,90 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation->applicationInstalled();
         $installation->markAsBlocked($comment);
         $this->assertEquals($comment, $installation->getComment());
+    }
+
+    #[Test]
+    #[DataProvider('applicationInstallationDataProvider')]
+    #[TestDox('test getBitrix24PartnerId method')]
+    final public function testGetBitrix24PartnerId(
+        Uuid                          $uuid,
+        ApplicationInstallationStatus $applicationInstallationStatus,
+        CarbonImmutable               $createdAt,
+        CarbonImmutable               $updatedAt,
+        Uuid                          $bitrix24AccountUuid,
+        ApplicationStatus             $applicationStatus,
+        PortalLicenseFamily           $portalLicenseFamily,
+        ?int                          $portalUsersCount,
+        ?Uuid                         $clientContactPersonUuid,
+        ?Uuid                         $partnerContactPersonUuid,
+        ?Uuid                         $partnerUuid,
+        ?string                       $externalId
+    ): void
+    {
+        $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
+        $this->assertEquals($partnerUuid, $installation->getBitrix24PartnerId());
+    }
+
+    #[Test]
+    #[DataProvider('applicationInstallationDataProvider')]
+    #[TestDox('test isApplicationTokenValid method')]
+    final public function testIsApplicationTokenValid(
+        Uuid                          $uuid,
+        ApplicationInstallationStatus $applicationInstallationStatus,
+        CarbonImmutable               $createdAt,
+        CarbonImmutable               $updatedAt,
+        Uuid                          $bitrix24AccountUuid,
+        ApplicationStatus             $applicationStatus,
+        PortalLicenseFamily           $portalLicenseFamily,
+        ?int                          $portalUsersCount,
+        ?Uuid                         $clientContactPersonUuid,
+        ?Uuid                         $partnerContactPersonUuid,
+        ?Uuid                         $partnerUuid,
+        ?string                       $externalId
+    ): void
+    {
+        $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
+
+        // First set a valid token
+        $validToken = 'valid_application_token_' . uniqid('', true);
+        $installation->setApplicationToken($validToken);
+
+        // Test that the token is valid
+        $this->assertTrue($installation->isApplicationTokenValid($validToken));
+
+        // Test that an invalid token is not valid
+        $this->assertFalse($installation->isApplicationTokenValid('invalid_token'));
+    }
+
+    #[Test]
+    #[DataProvider('applicationInstallationDataProvider')]
+    #[TestDox('test setApplicationToken method')]
+    final public function testSetApplicationToken(
+        Uuid                          $uuid,
+        ApplicationInstallationStatus $applicationInstallationStatus,
+        CarbonImmutable               $createdAt,
+        CarbonImmutable               $updatedAt,
+        Uuid                          $bitrix24AccountUuid,
+        ApplicationStatus             $applicationStatus,
+        PortalLicenseFamily           $portalLicenseFamily,
+        ?int                          $portalUsersCount,
+        ?Uuid                         $clientContactPersonUuid,
+        ?Uuid                         $partnerContactPersonUuid,
+        ?Uuid                         $partnerUuid,
+        ?string                       $externalId
+    ): void
+    {
+        $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
+
+        $applicationToken = 'application_token_' . uniqid('', true);
+        $installation->setApplicationToken($applicationToken);
+
+        // Verify the token is set correctly by checking if it's valid
+        $this->assertTrue($installation->isApplicationTokenValid($applicationToken));
+
+        // Test that empty token throws exception
+        $this->expectException(InvalidArgumentException::class);
+        $installation->setApplicationToken('');
     }
 
     public static function applicationInstallationDataProvider(): Generator

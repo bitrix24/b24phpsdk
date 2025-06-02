@@ -18,6 +18,7 @@ use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\Applicati
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationStatus;
 use Bitrix24\SDK\Application\PortalLicenseFamily;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Exceptions\LogicException;
 use Carbon\CarbonImmutable;
 use Symfony\Component\Uid\Uuid;
 
@@ -30,6 +31,8 @@ use Symfony\Component\Uid\Uuid;
 final class ApplicationInstallationReferenceEntityImplementation implements ApplicationInstallationInterface
 {
     private ?string $comment = null;
+
+    private ?string $applicationToken = null;
 
     public function __construct(
         private readonly Uuid                 $id,
@@ -151,13 +154,17 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     /**
      * @throws InvalidArgumentException
      */
-    public function applicationInstalled(): void
+    public function applicationInstalled(?string $applicationToken = null): void
     {
         if ($this->applicationInstallationStatus !== ApplicationInstallationStatus::new) {
-            throw new InvalidArgumentException(sprintf('application installation must be in status «%s», current state «%s»',
+            throw new LogicException(sprintf('application installation must be in status «%s», current state «%s»',
                 ApplicationInstallationStatus::new->name,
                 $this->applicationInstallationStatus->name
             ));
+        }
+
+        if ($applicationToken !== null) {
+            $this->setApplicationToken($applicationToken);
         }
 
         $this->applicationInstallationStatus = ApplicationInstallationStatus::active;
@@ -167,14 +174,18 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     /**
      * @throws InvalidArgumentException
      */
-    public function applicationUninstalled(): void
+    public function applicationUninstalled(?string $applicationToken = null): void
     {
         if ($this->applicationInstallationStatus === ApplicationInstallationStatus::new || $this->applicationInstallationStatus === ApplicationInstallationStatus::deleted) {
-            throw new InvalidArgumentException(sprintf('application installation must be in status «%s» or «%s», current state «%s»',
+            throw new LogicException(sprintf('application installation must be in status «%s» or «%s», current state «%s»',
                 ApplicationInstallationStatus::active->name,
                 ApplicationInstallationStatus::blocked->name,
                 $this->applicationInstallationStatus->name
             ));
+        }
+
+        if ($applicationToken !== null) {
+            $this->setApplicationToken($applicationToken);
         }
 
         $this->applicationInstallationStatus = ApplicationInstallationStatus::deleted;
@@ -184,7 +195,7 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     public function markAsActive(?string $comment): void
     {
         if ($this->applicationInstallationStatus !== ApplicationInstallationStatus::blocked) {
-            throw new InvalidArgumentException(sprintf('you can activate application install only in state «%s», current state «%s»',
+            throw new LogicException(sprintf('you can activate application install only in state «%s», current state «%s»',
                 ApplicationInstallationStatus::blocked->name,
                 $this->applicationInstallationStatus->name
             ));
@@ -198,7 +209,7 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     public function markAsBlocked(?string $comment): void
     {
         if ($this->applicationInstallationStatus === ApplicationInstallationStatus::blocked || $this->applicationInstallationStatus === ApplicationInstallationStatus::deleted) {
-            throw new InvalidArgumentException(sprintf('you can block application install only in state «%s» or «%s», current state «%s»',
+            throw new LogicException(sprintf('you can block application install only in state «%s» or «%s», current state «%s»',
                 ApplicationInstallationStatus::new->name,
                 ApplicationInstallationStatus::active->name,
                 $this->applicationInstallationStatus->name
@@ -219,5 +230,31 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     public function getComment(): ?string
     {
         return $this->comment;
+    }
+
+    /**
+     * @param non-empty-string $applicationToken
+     * @throws InvalidArgumentException
+     */
+    public function setApplicationToken(string $applicationToken): void
+    {
+        if (trim($applicationToken) === '') {
+            throw new InvalidArgumentException('applicationToken cannot be empty string');
+        }
+
+        $this->applicationToken = $applicationToken;
+        $this->updatedAt = new CarbonImmutable();
+    }
+
+    /**
+     * @param non-empty-string $applicationToken
+     */
+    public function isApplicationTokenValid(string $applicationToken): bool
+    {
+        if ($this->applicationToken === null) {
+            return false;
+        }
+
+        return $this->applicationToken === $applicationToken;
     }
 }

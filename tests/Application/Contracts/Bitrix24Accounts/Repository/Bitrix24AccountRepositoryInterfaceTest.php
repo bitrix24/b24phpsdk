@@ -38,12 +38,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken $authToken,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         int $applicationVersion,
         Scope $applicationScope
     ): Bitrix24AccountInterface;
@@ -62,12 +60,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken $authToken,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         int $applicationVersion,
         Scope $applicationScope
     ): void {
@@ -75,12 +71,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );
@@ -114,12 +108,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken $authToken,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         int $applicationVersion,
         Scope $applicationScope
     ): void {
@@ -127,12 +119,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );
@@ -169,12 +159,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken $authToken,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         int $applicationVersion,
         Scope $applicationScope
     ): void {
@@ -182,12 +170,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );
@@ -237,12 +223,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken $authToken,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         int $applicationVersion,
         Scope $applicationScope
     ): void {
@@ -250,12 +234,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );
@@ -279,12 +261,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken $authToken,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         int $applicationVersion,
         Scope $applicationScope
     ): void {
@@ -292,12 +272,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             $uuid,
             $bitrix24UserId,
             false,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );
@@ -321,12 +299,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken $authToken,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         int $applicationVersion,
         Scope $applicationScope
     ): void {
@@ -334,12 +310,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );
@@ -386,12 +360,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken $authToken,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         int $applicationVersion,
         Scope $applicationScope
     ): void {
@@ -399,12 +371,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );
@@ -434,12 +404,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken $authToken,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         int $applicationVersion,
         Scope $applicationScope
     ): void {
@@ -447,12 +415,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );
@@ -480,12 +446,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken $authToken,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         int $applicationVersion,
         Scope $applicationScope
     ): void {
@@ -493,12 +457,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );
@@ -525,12 +487,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken $authToken,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         int $applicationVersion,
         Scope $applicationScope
     ): void {
@@ -538,12 +498,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             $uuid,
             $bitrix24UserId,
             false,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );
@@ -570,12 +528,11 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
+
         string $memberId,
         string $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken $authToken,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         int $applicationVersion,
         Scope $applicationScope
     ): void {
@@ -583,12 +540,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );
@@ -615,12 +570,11 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
+
         string $memberId,
         string $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken $authToken,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         int $applicationVersion,
         Scope $applicationScope
     ): void {
@@ -628,12 +582,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );
@@ -665,12 +617,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken $authToken,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         int $applicationVersion,
         Scope $applicationScope
     ): void {
@@ -678,12 +628,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );
@@ -730,12 +678,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken $authToken,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         int $applicationVersion,
         Scope $applicationScope
     ): void {
@@ -743,12 +689,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );
@@ -778,12 +722,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken $authToken,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         int $applicationVersion,
         Scope $applicationScope
     ): void {
@@ -791,12 +733,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );
@@ -824,12 +764,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken $authToken,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         int $applicationVersion,
         Scope $applicationScope
     ): void {
@@ -837,12 +775,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );
@@ -869,12 +805,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken $authToken,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         int $applicationVersion,
         Scope $applicationScope
     ): void {
@@ -882,12 +816,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             $uuid,
             $bitrix24UserId,
             false,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );
@@ -914,12 +846,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken $authToken,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         int $applicationVersion,
         Scope $applicationScope
     ): void {
@@ -927,12 +857,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             $uuid,
             $bitrix24UserId,
             false,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );
@@ -956,12 +884,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken $authToken,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         int $applicationVersion,
         Scope $applicationScope
     ): void {
@@ -969,12 +895,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             $uuid,
             $bitrix24UserId,
             false,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );
@@ -1011,12 +935,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
-        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken $authToken,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         int $applicationVersion,
         Scope $applicationScope
     ): void {
@@ -1024,12 +946,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             $uuid,
             $bitrix24UserId,
             false,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
-            $bitrix24AccountStatus,
             $authToken,
-            $createdAt,
-            $updatedAt,
             $applicationVersion,
             $applicationScope
         );
@@ -1055,12 +975,10 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
             Uuid::v7(),
             12345,
             true,
+            true,
             Uuid::v7()->toRfc4122(),
             sprintf('https://example-%s.com', Uuid::v7()->toRfc4122()),
-            Bitrix24AccountStatus::new,
             new AuthToken('access_token', 'refresh_token', 1609459200),
-            CarbonImmutable::now(),
-            CarbonImmutable::now(),
             1,
             new Scope(['crm', 'task']),
             'application_token_value',

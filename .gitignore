@@ -7,11 +7,12 @@ composer.lock
 tools/.env.local
 tools/logs
 tests/ApplicationBridge/auth.json
+tests/ApplicationBridge/*.log
 /examples/*.log
 /examples/**/*.log
 /examples/**/*/*.log
 docs/api/var
-/var
+/var/*
 *.private.env.*
 .env.local
 *.local

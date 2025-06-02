@@ -29,15 +29,18 @@ help:
 	@echo "docker-down-clear         - stop docker and remove orphaned containers"
 	@echo "docker-pull               - download images and ignore pull failures"
 	@echo "docker-restart            - restart containers"
+	@echo ""
 	@echo "composer-install          - install dependencies from composer"
 	@echo "composer-update           - update dependencies from composer"
 	@echo "composer-dumpautoload     - regenerate composer autoload file"
 	@echo "composer                  - run composer and pass arguments"
+	@echo ""
 	@echo "php-dev-server-up         - start php dev-server"
 	@echo "php-dev-server-down       - stop php dev-server"
 	@echo "php-cli-bash              - run container php-cli and open shell with arguments"
 	@echo "ngrok-up                  - start ngrok"
 	@echo "ngrok-down                - stop ngrok"
+	@echo ""
 	@echo "lint-allowed-licenses     - lint dependencies for valid licenses"
 	@echo "lint-cs-fixer             - lint source code with php-cs-fixer"
 	@echo "lint-cs-fixer-fix         - fix source code with php-cs-fixer"
@@ -45,6 +48,7 @@ help:
 	@echo "lint-rector               - lint source code with rector"
 	@echo "lint-rector-fix           - fix source code with rector"
 	@echo ""
+	@echo "test-unit                 - run unit tests"
 
 
 .PHONY: docker-init
@@ -174,18 +178,27 @@ test-integration-scope-entity:
 .PHONY: test-integration-scope-ai-admin
 test-integration-scope-ai-admin:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_ai_admin
-	
+ 
 .PHONY: test-integration-scope-crm
 test-integration-scope-crm:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm
+  
 .PHONY: test-integration-scope-crm-address
 test-integration-scope-crm-address:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_address
+  
+.PHONY: integration_tests_deal_recurring
+integration_tests_deal_recurring:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_deal_recurring
+
+.PHONY: integration_tests_scope_automation
+integration_tests_scope_automation:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_automation
 
 # work dev environment
 .PHONY: php-dev-server-up
 php-dev-server-up:
-	docker-compose run --rm -p 10080:10080 php-cli php -S 0.0.0.0:10080 -t public
+	docker-compose run --rm -p 10080:10080 php-cli php -S 0.0.0.0:10080 -t tests/ApplicationBridge
 
 .PHONY: php-dev-server-down
 php-dev-server-down:

@@ -12,6 +12,8 @@ parameters:
     - tests/Integration/Services/Main
     - tests/Integration/Services/Placement
     - tests/Integration/Services/CRM
+    - tests/Integration/Services/CRM/Deal/Service/DealRecurringTest.php
+
   bootstrapFiles:
     - tests/bootstrap.php
   parallel:

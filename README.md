@@ -28,7 +28,7 @@ If You work on Windows:
 - please use [WSL - Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/) 
 - if your filesystem is NTFS, You can disable flag `git config --global core.protectNTFS false` for checkout folders started with dot.
 
-Or add `"bitrix24/b24phpsdk": "1.2.*"` to `composer.json` of your application.
+Or add `"bitrix24/b24phpsdk": "1.3.*"` to `composer.json` of your application.
 
 ## B24PhpSdk ✨FEATURES✨
 
