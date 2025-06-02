@@ -42,38 +42,34 @@ class RequisiteTest extends TestCase
     use CustomBitrix24Assertions;
 
     protected ServiceBuilder $sb;
+
     private array $createdCompanies = [];
+
     private array $createdRequisites = [];
+
     private int $requisitePresetId;
+
     private int $entityTypeIdCompany;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->sb = Fabric::getServiceBuilder();
         $this->requisitePresetId = current(
             array_filter(
                 $this->sb->getCRMScope()->requisitePreset()->list()->getRequisitePresets(),
-                function ($item) {
-                    return str_contains($item->XML_ID, 'COMPANY#');
-                }
+                fn($item): bool => str_contains($item->XML_ID, 'COMPANY#')
             )
         )->ID;
         $this->entityTypeIdCompany = current(
             array_filter(
                 $this->sb->getCRMScope()->enum()->ownerType()->getItems(),
-                function ($item) {
-                    return $item->SYMBOL_CODE === 'COMPANY';
-                }
+                fn($item): bool => $item->SYMBOL_CODE === 'COMPANY'
             )
         )->ID;
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
-        foreach ($this->sb->getCRMScope()->requisite()->batch->delete($this->createdRequisites) as $result) {
-        }
-        foreach ($this->sb->getCRMScope()->company()->batch->delete($this->createdCompanies) as $result) {
-        }
     }
 
     public function testFields(): void
@@ -93,9 +89,7 @@ class RequisiteTest extends TestCase
     {
         $allFields = $this->sb->getCRMScope()->requisite()->fields()->getFieldsDescription();
         $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
-        $systemFields = array_filter($allFields, static function ($code) use ($systemFieldsCodes) {
-            return in_array($code, $systemFieldsCodes, true);
-        }, ARRAY_FILTER_USE_KEY);
+        $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
 
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation($systemFields, RequisiteItemResult::class);
     }
@@ -116,11 +110,11 @@ class RequisiteTest extends TestCase
         )->getId();
         $this->createdRequisites[] = $reqId;
 
-        $addedReq = $this->sb->getCRMScope()->requisite()->get($reqId)->requisite();
+        $requisiteItemResult = $this->sb->getCRMScope()->requisite()->get($reqId)->requisite();
 
-        $this->assertEquals($reqName, $addedReq->NAME);
-        $this->assertEquals($this->entityTypeIdCompany, $addedReq->ENTITY_TYPE_ID);
-        $this->assertEquals($this->requisitePresetId, $addedReq->PRESET_ID);
+        $this->assertEquals($reqName, $requisiteItemResult->NAME);
+        $this->assertEquals($this->entityTypeIdCompany, $requisiteItemResult->ENTITY_TYPE_ID);
+        $this->assertEquals($this->requisitePresetId, $requisiteItemResult->PRESET_ID);
     }
 
     public function testDelete(): void
@@ -141,7 +135,7 @@ class RequisiteTest extends TestCase
         $this->assertTrue($this->sb->getCRMScope()->requisite()->delete($reqId)->isSuccess());
 
         $this->expectException(ItemNotFoundException::class);
-        $addedReq = $this->sb->getCRMScope()->requisite()->get($reqId)->requisite();
+        $this->sb->getCRMScope()->requisite()->get($reqId)->requisite();
     }
 
     public function testList(): void
@@ -185,11 +179,11 @@ class RequisiteTest extends TestCase
         )->getId();
         $this->createdRequisites[] = $reqId;
 
-        $addedReq = $this->sb->getCRMScope()->requisite()->get($reqId)->requisite();
+        $requisiteItemResult = $this->sb->getCRMScope()->requisite()->get($reqId)->requisite();
 
-        $this->assertEquals($reqName, $addedReq->NAME);
-        $this->assertEquals($this->entityTypeIdCompany, $addedReq->ENTITY_TYPE_ID);
-        $this->assertEquals($this->requisitePresetId, $addedReq->PRESET_ID);
+        $this->assertEquals($reqName, $requisiteItemResult->NAME);
+        $this->assertEquals($this->entityTypeIdCompany, $requisiteItemResult->ENTITY_TYPE_ID);
+        $this->assertEquals($this->requisitePresetId, $requisiteItemResult->PRESET_ID);
 
         $newName = 'new name';
         $this->assertTrue($this->sb->getCRMScope()->requisite()->update($reqId, ['NAME' => $newName])->isSuccess());

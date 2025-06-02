@@ -26,6 +26,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @package Bitrix24\SDK\Tests\Integration\Services\CRM\Contact\Service
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Contact\Service\Batch::class)]
 class ContactBatchTest extends TestCase
 {
     private const TEST_SEGMENT_ELEMENTS_COUNT = 400;
@@ -35,7 +36,6 @@ class ContactBatchTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers \Bitrix24\SDK\Services\CRM\Contact\Service\Batch::list()
      */
     public function testBatchList(): void
     {
@@ -45,13 +45,13 @@ class ContactBatchTest extends TestCase
         foreach ($this->contactService->batch->list([], ['>ID' => '1'], ['ID', 'NAME'], 1) as $item) {
             $cnt++;
         }
+
         self::assertGreaterThanOrEqual(1, $cnt);
     }
 
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers \Bitrix24\SDK\Services\CRM\Contact\Service\Batch::add()
      */
     public function testBatchAdd(): void
     {
@@ -59,6 +59,7 @@ class ContactBatchTest extends TestCase
         for ($i = 1; $i < 60; $i++) {
             $contacts[] = ['NAME' => 'name-' . $i];
         }
+
         $cnt = 0;
         foreach ($this->contactService->batch->add($contacts) as $item) {
             $cnt++;
@@ -68,9 +69,7 @@ class ContactBatchTest extends TestCase
     }
 
     /**
-     * @return void
      * @throws BaseException
-     * @covers \Bitrix24\SDK\Services\CRM\Contact\Service\Batch::update()
      */
     public function testBatchUpdate(): void
     {
@@ -89,12 +88,14 @@ class ContactBatchTest extends TestCase
                 ]
             ];
         }
+
         $cnt = 0;
         $contactId = [];
         foreach ($this->contactService->batch->add($contacts) as $item) {
             $cnt++;
             $contactId[] = $item->getId();
         }
+
         self::assertEquals(count($contacts), $cnt);
 
         // generate update data
@@ -113,6 +114,7 @@ class ContactBatchTest extends TestCase
             $cnt++;
             $this->assertTrue($item->isSuccess());
         }
+
         self::assertEquals(count($contacts), $cnt);
 
         // delete contacts
@@ -121,10 +123,11 @@ class ContactBatchTest extends TestCase
             $cnt++;
             $this->assertTrue($item->isSuccess());
         }
+
         self::assertEquals(count($contacts), $cnt);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->contactService = Fabric::getServiceBuilder()->getCRMScope()->contact();
     }
