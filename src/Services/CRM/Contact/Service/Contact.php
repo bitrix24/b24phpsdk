@@ -95,10 +95,10 @@ class Contact extends AbstractService
      *   UTM_CAMPAIGN?: string,
      *   UTM_CONTENT?: string,
      *   UTM_TERM?: string,
-     *   PHONE?: string,
-     *   EMAIL?: string,
-     *   WEB?: string,
-     *   IM?: string,
+     *   PHONE?: array,
+     *   EMAIL?: array,
+     *   WEB?: array,
+     *   IM?: array,
      *   } $fields
      *
      * @param array{
