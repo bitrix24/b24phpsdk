@@ -1,13 +1,24 @@
 # b24-php-sdk change log
 
-## 1.4.0 – 2025
-
-### Fixed
-
-- Fixed error in arguments in service for method `placement.bind`, [see details](https://github.com/bitrix24/b24phpsdk/issues/151)
+## ⏳ UPCOMING 1.4.0 – 2025.07.01
 
 ### Added
 
+- Added service `Services\CRM\Deal\Service\DealRecurring` with support methods,
+  see [crm.deal.recurring.* methods](https://github.com/bitrix24/b24phpsdk/issues/160):
+    - `fields` returns a list of fields for the recurring deal template
+    - `get` returns the settings of the recurring deal template by Id
+    - `list` returns a list of recurring deal templates
+    - `add` creates a new recurring deal template
+    - `delete` deletes a recurring deal template
+    - `update` modifies the settings of the recurring deal template
+    - `expose` creates a new deal based on the template
+- Added service `Services\CRM\Automation\Service\Trigger` with support methods,
+  see [add crm.automation.trigger* methods](https://github.com/bitrix24/b24phpsdk/issues/148):
+    - `add` add new trigger, with batch calls support
+    - `delete` delete trigger, with batch calls support
+    - `list`  get list of triggers, with batch calls support
+    - `execute` execute trigger, with batch calls support
 - Added service `Services\CRM\Currency` with support methods,
   see [Add crm.currency.* methods](https://github.com/bitrix24/b24phpsdk/issues/155):
     - `get` get currency
@@ -16,13 +27,36 @@
     - `add` add new currency, with batch calls support
     - `delete` delete currency, with batch calls support
     - `update`  update currency, with batch calls support
-    
 - Added service `Services\CRM\Currency\Localizations` with support methods,
   see [Add crm.currency.* methods](https://github.com/bitrix24/b24phpsdk/issues/155):
     - `set` set localizations, with batch calls support
     - `get` get localizations
     - `fields` get localization fields
     - `delete` delete currency, with batch calls support
+
+### Fixed
+
+- Fixed error in arguments in service for method `placement.bind`, [see details](https://github.com/bitrix24/b24phpsdk/issues/151)
+
+### Changed
+
+- ❗**️️BC** Changed contract `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface`, this change needs to process corner cases
+  when [installed application with UI or without UI](https://github.com/bitrix24/b24phpsdk/issues/150):
+    - changed method `public function applicationInstalled(?string $applicationToken): void` application token now is nullable
+    - added method `public function setApplicationToken(string $applicationToken): void;`
+- ❗**️️BC** Changed contract `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface`, this change needs to process corner cases
+  when we need to store [multiple accounts from one Bitrix24 portal](https://github.com/bitrix24/b24phpsdk/issues/161).
+    - added method `isMasterAccount`
+- ❗**️️BC** Changed contract `Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationInterface`, this change needs to process
+  corner cases when [installed application with UI or without UI](https://github.com/bitrix24/b24phpsdk/issues/137).
+    - added method `setApplicationToken`
+    - added method `isApplicationTokenValid`
+    - changed method `public function applicationInstalled(?string $applicationToken): void` application token now is nullable
+    - changed method `public function applicationUninstalled(?string $applicationToken): void` application token now is nullable
+
+### Statistics
+
+work in progress
 
 ## 1.3.0 – 2025.04.23
 

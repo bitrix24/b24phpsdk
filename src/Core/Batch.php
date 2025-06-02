@@ -345,9 +345,9 @@ class Batch implements BatchOperationsInterface
      */
     public function getTraversableList(
         string $apiMethod,
-        array $order,
-        array $filter,
-        array $select,
+        ?array $order = [],
+        ?array $filter = [],
+        ?array $select = [],
         ?int $limit = null,
         ?array $additionalParameters = null
     ): Generator {

@@ -191,6 +191,15 @@ class CRMServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+    
+    public function dealRecurring(): Deal\Service\DealRecurring
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Deal\Service\DealRecurring($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 
     public function deal(): Deal\Service\Deal
     {
@@ -308,6 +317,23 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Activity\Service\Activity(
                 new Activity\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+    
+    public function trigger(): Automation\Service\Trigger
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new Automation\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Automation\Service\Trigger(
+                new Automation\Service\Batch($batch, $this->log),
                 $this->core,
                 $this->log
             );

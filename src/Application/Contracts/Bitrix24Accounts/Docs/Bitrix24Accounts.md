@@ -7,6 +7,7 @@ Store auth tokens and provides methods for work with Bitrix24 account.
 | `getId()`                    | `Uuid`                  | Returns the unique account ID.                              | -                        |
 | `getBitrix24UserId()`        | `int`                   | Returns the Bitrix24 user ID who installed the application. | -                        |
 | `isBitrix24UserAdmin()`      | `bool`                  | Checks if the Bitrix24 user has admin rights.               | -                        |
+| `isMasterAccount()`          | `bool`                  | Checks is current account are master account.               | -                        |
 | `getMemberId()`              | `string`                | Returns the unique portal ID.                               | -                        |
 | `getDomainUrl()`             | `string`                | Returns the portal domain URL.                              | -                        |
 | `getStatus()`                | `Bitrix24AccountStatus` | Returns the account status.                                 | -                        |
@@ -16,6 +17,7 @@ Store auth tokens and provides methods for work with Bitrix24 account.
 | `getApplicationScope()`      | `Scope`                 | Returns the application scope (permissions).                | -                        |
 | `changeDomainUrl()`          | `void`                  | Changes the domain URL after a portal rename.               | -                        |
 | `applicationInstalled()`     | `void`                  | Sets the account status to "active".                        | InvalidArgumentException |
+| `setApplicationToken()`      | `void`                  | Sets application token.                                     | InvalidArgumentException |
 | `applicationUninstalled()`   | `void`                  | Sets the account status to "deleted".                       | InvalidArgumentException |
 | `isApplicationTokenValid()`  | `bool`                  | Checks if the provided application token is valid.          | -                        |
 | `getCreatedAt()`             | `CarbonImmutable`       | Returns the account creation date and time.                 | -                        |
