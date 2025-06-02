@@ -28,19 +28,11 @@ use Psr\Log\LoggerInterface;
 #[ApiBatchServiceMetadata(new Scope(['crm']))]
 class Batch
 {
-    protected BatchOperationsInterface $batch;
-    protected LoggerInterface $log;
-
     /**
      * Batch constructor.
-     *
-     * @param BatchOperationsInterface $batch
-     * @param LoggerInterface          $log
      */
-    public function __construct(BatchOperationsInterface $batch, LoggerInterface $log)
+    public function __construct(protected BatchOperationsInterface $batch, protected LoggerInterface $log)
     {
-        $this->batch = $batch;
-        $this->log = $log;
     }
 
     /**
@@ -80,7 +72,6 @@ class Batch
      *                          ANCHOR_ID?: int,
      *                         } $filter
      * @param array    $select = ['TYPE_ID','ENTITY_TYPE_ID','ENTITY_ID','ADDRESS_1','ADDRESS_2','CITY','POSTAL_CODE','REGION','PROVINCE','COUNTRY','COUNTRY_CODE','LOC_ADDR_ID','ANCHOR_TYPE_ID','ANCHOR_ID']
-     * @param int|null $limit
      *
      * @return Generator<int, AddressItemResult>
      * @throws BaseException
@@ -140,6 +131,7 @@ class Batch
                 'fields' => $address,
             ];
         }
+
         foreach ($this->batch->addEntityItems('crm.address.add', $items) as $key => $item) {
             yield $key => new AddedItemBatchResult($item);
         }

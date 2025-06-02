@@ -31,19 +31,12 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['crm']))]
 class Address extends AbstractService
 {
-    public Batch $batch;
-
     /**
      * Address constructor.
-     *
-     * @param Batch           $batch
-     * @param CoreInterface   $core
-     * @param LoggerInterface $log
      */
-    public function __construct(Batch $batch, CoreInterface $core, LoggerInterface $log)
+    public function __construct(public Batch $batch, CoreInterface $core, LoggerInterface $logger)
     {
-        parent::__construct($core, $log);
-        $this->batch = $batch;
+        parent::__construct($core, $logger);
     }
 
     /**
@@ -66,7 +59,6 @@ class Address extends AbstractService
      *   LOC_ADDR_ID?: int,
      *   } $fields
      *
-     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -92,11 +84,7 @@ class Address extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/addresses/crm-address-delete.html
      *
-     * @param int $typeId
-     * @param int $entityTypeId
-     * @param int $entityId
      *
-     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -126,7 +114,6 @@ class Address extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/addresses/crm-address-fields.html
      *
-     * @return FieldsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -152,7 +139,6 @@ class Address extends AbstractService
      *
      * @throws BaseException
      * @throws TransportException
-     * @return AddressesResult
      */
     #[ApiEndpointMetadata(
         'crm.address.list',
@@ -194,7 +180,6 @@ class Address extends AbstractService
      *   LOC_ADDR_ID?: int,
      *   }        $fields
      *
-     * @return UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -217,7 +202,7 @@ class Address extends AbstractService
 
     /**
      * Count Addresses by filter
-     * 
+     *
      * Meanwhile this method works with an error
      * because of a bug in bx24 rest-api.
      * Issue: https://github.com/bitrix24/b24phpsdk/issues/144
@@ -239,7 +224,6 @@ class Address extends AbstractService
      *   ANCHOR_ID?: int,
      *   } $filter
      *
-     * @return int
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      */
