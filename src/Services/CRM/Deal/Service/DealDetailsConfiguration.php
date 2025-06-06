@@ -126,7 +126,7 @@ class DealDetailsConfiguration extends AbstractService
             $rawData[] = $sectionItem->toArray();
         }
 
-        return new UpdatedItemResult($this->core->call('crm.deal.details.configuration.reset', [
+        return new UpdatedItemResult($this->core->call('crm.deal.details.configuration.set', [
             'scope' => 'P',
             'userId' => $userId,
             'data' => $rawData
@@ -140,7 +140,7 @@ class DealDetailsConfiguration extends AbstractService
      * @link https://apidocs.bitrix24.com/api-reference/crm/deals/custom-form/crm-deal-details-configuration-set.html
      */
     #[ApiEndpointMetadata(
-        'crm.deal.details.configuration.reset',
+        'crm.deal.details.configuration.set',
         'https://apidocs.bitrix24.com/api-reference/crm/deals/custom-form/crm-deal-details-configuration-set.html',
         'Set CRM Deal Detail Card Configuration for all users'
     )]
@@ -161,7 +161,7 @@ class DealDetailsConfiguration extends AbstractService
             $rawData[] = $sectionItem->toArray();
         }
 
-        return new UpdatedItemResult($this->core->call('crm.deal.details.configuration.reset', [
+        return new UpdatedItemResult($this->core->call('crm.deal.details.configuration.set', [
             'scope' => 'C',
             'data' => $rawData
         ]));
