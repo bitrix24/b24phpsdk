@@ -35,7 +35,7 @@ class DealDetailsConfiguration extends AbstractService
     #[ApiEndpointMetadata(
         'crm.deal.details.configuration.get',
         'https://apidocs.bitrix24.com/api-reference/crm/deals/custom-form/crm-deal-details-configuration-get.html',
-        'The method crm.deal.details.configuration.get retrieves the settings of deal cards for personal user'
+        'The method crm.deal.details.configuration.get retrieves the settings of deal cards for personal user.'
     )]
     public function getPersonal(?int $userId = null): CardConfigurationsResult
     {
@@ -53,7 +53,7 @@ class DealDetailsConfiguration extends AbstractService
     #[ApiEndpointMetadata(
         'crm.deal.details.configuration.get',
         'https://apidocs.bitrix24.com/api-reference/crm/deals/custom-form/crm-deal-details-configuration-get.html',
-        'The method crm.deal.details.configuration.get retrieves the settings of deal cards for all users'
+        'The method crm.deal.details.configuration.get retrieves the settings of deal cards for all users.'
     )]
     public function getGeneral(): CardConfigurationsResult
     {
@@ -71,7 +71,7 @@ class DealDetailsConfiguration extends AbstractService
     #[ApiEndpointMetadata(
         'crm.deal.details.configuration.reset',
         'https://apidocs.bitrix24.com/api-reference/crm/deals/custom-form/crm-deal-details-configuration-reset.html',
-        'The method crm.deal.details.configuration.get retrieves the settings of deal cards for personal user'
+        'The method crm.deal.details.configuration.get retrieves the settings of deal cards for personal user.'
     )]
     public function resetPersonal(?int $userId = null): UpdatedItemResult
     {
@@ -89,7 +89,7 @@ class DealDetailsConfiguration extends AbstractService
     #[ApiEndpointMetadata(
         'crm.deal.details.configuration.reset',
         'https://apidocs.bitrix24.com/api-reference/crm/deals/custom-form/crm-deal-details-configuration-reset.html',
-        'The method crm.deal.details.configuration.get retrieves the settings of deal cards for all users'
+        'The method crm.deal.details.configuration.get retrieves the settings of deal cards for all users.'
     )]
     public function resetGeneral(): UpdatedItemResult
     {
@@ -107,7 +107,7 @@ class DealDetailsConfiguration extends AbstractService
     #[ApiEndpointMetadata(
         'crm.deal.details.configuration.set',
         'https://apidocs.bitrix24.com/api-reference/crm/deals/custom-form/crm-deal-details-configuration-set.html',
-        'Set Parameters for Individual CRM Deal Detail Card Configuration'
+        'Set Parameters for Individual CRM Deal Detail Card Configuration.'
     )]
     public function setPersonal(array $cardConfiguration, ?int $userId = null): UpdatedItemResult
     {
@@ -142,7 +142,7 @@ class DealDetailsConfiguration extends AbstractService
     #[ApiEndpointMetadata(
         'crm.deal.details.configuration.set',
         'https://apidocs.bitrix24.com/api-reference/crm/deals/custom-form/crm-deal-details-configuration-set.html',
-        'Set CRM Deal Detail Card Configuration for all users'
+        'Set CRM Deal Detail Card Configuration for all users.'
     )]
     public function setGeneral(array $cardConfiguration): UpdatedItemResult
     {
@@ -175,7 +175,7 @@ class DealDetailsConfiguration extends AbstractService
     #[ApiEndpointMetadata(
         'crm.deal.details.configuration.forceCommonScopeForAll',
         'https://apidocs.bitrix24.com/api-reference/crm/deals/custom-form/crm-deal-details-configuration-force-common-scope-for-all.html',
-        'Set Common Detail Form for All Users '
+        'Set Common Detail Form for All Users.'
     )]
     public function setForceCommonConfigForAll(): UpdatedItemResult
     {
