@@ -41,24 +41,22 @@ class LeadContactTest extends TestCase
     private ServiceBuilder $sb;
 
     private array $createdLeads = [];
+
     private Lead  $leadService;
+
     private array $createdContacts = [];
+
     private Contact  $contactService;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->sb = Fabric::getServiceBuilder();
         $this->leadService = $this->sb->getCRMScope()->lead();
         $this->contactService = $this->sb->getCRMScope()->contact();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
-        foreach ($this->leadService->batch->delete($this->createdLeads) as $result) {
-        }
-
-        foreach ($this->contactService->batch->delete($this->createdContacts) as $result) {
-        }
     }
 
     public function testSet(): void
@@ -79,8 +77,8 @@ class LeadContactTest extends TestCase
         $connectedId = [$contactIdOne, $contactIdTwo];
         $connectedContacts = $this->sb->getCRMScope()->leadContact()->get($leadId)->getContactConnections();
 
-        foreach ($connectedContacts as $item) {
-            $this->assertContains($item->CONTACT_ID, $connectedId);
+        foreach ($connectedContacts as $connectedContact) {
+            $this->assertContains($connectedContact->CONTACT_ID, $connectedId);
         }
     }
 
@@ -112,8 +110,8 @@ class LeadContactTest extends TestCase
         $connectedId = [$contactIdOne, $contactIdTwo];
         $connectedContacts = $this->sb->getCRMScope()->leadContact()->get($leadId)->getContactConnections();
 
-        foreach ($connectedContacts as $item) {
-            $this->assertContains($item->CONTACT_ID, $connectedId);
+        foreach ($connectedContacts as $connectedContact) {
+            $this->assertContains($connectedContact->CONTACT_ID, $connectedId);
         }
     }
 
@@ -170,7 +168,7 @@ class LeadContactTest extends TestCase
     public function testSetWithWrongType(): void
     {
         $this->expectException(Core\Exceptions\InvalidArgumentException::class);
-        /** @phpstan-ignore */
+        /** @phpstan-ignore-next-line */
         $this->sb->getCRMScope()->leadContact()->setItems(1, [new \DateTime()]);
     }
 }
