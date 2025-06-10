@@ -46,6 +46,9 @@
         <testsuite name="integration_tests_deal_recurring">
             <file>./tests/Integration/Services/CRM/Deal/Service/DealRecurringTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_lead_contacts">
+            <file>./tests/Integration/Services/CRM/Lead/Service/LeadContactTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_scope_automation">
             <directory>./tests/Integration/Services/CRM/Automation/</directory>
         </testsuite>
