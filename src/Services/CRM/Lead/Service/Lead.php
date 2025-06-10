@@ -27,6 +27,7 @@ use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\CRM\Lead\Result\LeadResult;
 use Bitrix24\SDK\Services\CRM\Lead\Result\LeadsResult;
 use Psr\Log\LoggerInterface;
+
 #[ApiServiceMetadata(new Scope(['crm']))]
 class Lead extends AbstractService
 {

@@ -38,6 +38,7 @@ return RectorConfig::configure()
         __DIR__ . '/tests/Integration/Services/Placement',
         __DIR__ . '/src/Services/CRM/Deal',
         __DIR__ . '/tests/Integration/Services/CRM/Deal/Service',
+        __DIR__ . '/tests/Integration/Services/CRM/Lead/Service',
         __DIR__ . '/tests/Unit/',
     ])
     ->withCache(cacheDirectory: __DIR__ . '.cache/rector')
