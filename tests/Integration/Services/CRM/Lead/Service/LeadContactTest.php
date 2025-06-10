@@ -57,6 +57,13 @@ class LeadContactTest extends TestCase
 
     protected function tearDown(): void
     {
+        foreach ($this->leadService->batch->delete($this->createdLeads) as $result) {
+            // ###
+        }
+
+        foreach ($this->contactService->batch->delete($this->createdContacts) as $result) {
+            // ###
+        }
     }
 
     public function testSet(): void
