@@ -24,7 +24,7 @@ use Bitrix24\SDK\Core\Result\FieldsResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\CRM\Common\ContactConnection;
-use Bitrix24\SDK\Services\CRM\Company\Result\LeadContactConnectionResult;
+use Bitrix24\SDK\Services\CRM\Lead\Result\LeadContactConnectionResult;
 use Psr\Log\LoggerInterface;
 use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 

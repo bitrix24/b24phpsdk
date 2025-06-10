@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Lead\Service;
 
 
 use Bitrix24\SDK\Services\CRM\Common\ContactConnection;
+use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
 use Bitrix24\SDK\Services\CRM\Lead\Service\Lead;
 use Bitrix24\SDK\Services\CRM\Lead\Service\LeadContact;
 use Bitrix24\SDK\Services\ServiceBuilder;
@@ -42,13 +43,13 @@ class LeadContactTest extends TestCase
     private array $createdLeads = [];
     private Lead  $leadService;
     private array $createdContacts = [];
-    private Lead  $contactService;
+    private Contact  $contactService;
 
     public function setUp(): void
     {
         $this->sb = Fabric::getServiceBuilder();
         $this->leadService = $this->sb->getCRMScope()->lead();
-        $this->contactService = $this->contactService;
+        $this->contactService = $this->sb->getCRMScope()->contact();
     }
 
     public function tearDown(): void
@@ -85,7 +86,7 @@ class LeadContactTest extends TestCase
 
     public function testAdd(): void
     {
-        $leadId = $this->leadService->add((['TITLE' => 'test LeadContact Add'])->build())->getId();
+        $leadId = $this->leadService->add(['TITLE' => 'test LeadContact Add'])->getId();
         $this->createdLeads[] = $leadId;
 
         $contactIdOne = $this->contactService->add((new ContactBuilder())->build())->getId();
@@ -118,7 +119,7 @@ class LeadContactTest extends TestCase
 
     public function testDeleteItems(): void
     {
-        $leadId = $this->leadService->add((['TITLE' => 'test LeadContact Del items'])->build())->getId();
+        $leadId = $this->leadService->add(['TITLE' => 'test LeadContact Del items'])->getId();
         $this->createdLeads[] = $leadId;
 
         $contactIdOne = $this->contactService->add((new ContactBuilder())->build())->getId();
@@ -140,7 +141,7 @@ class LeadContactTest extends TestCase
 
     public function testDelete(): void
     {
-        $leadId = $this->leadService->add((['TITLE' => 'test LeadContact Del'])->build())->getId();
+        $leadId = $this->leadService->add(['TITLE' => 'test LeadContact Del'])->getId();
         $this->createdLeads[] = $leadId;
 
         $contactIdOne = $this->contactService->add((new ContactBuilder())->build())->getId();
