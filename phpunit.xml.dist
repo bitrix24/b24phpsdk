@@ -43,8 +43,8 @@
         <testsuite name="integration_tests_scope_ai_admin">
             <directory>./tests/Integration/Services/AI/</directory>
         </testsuite>
-        <testsuite name="integration_tests_deal_recurring">
-            <file>./tests/Integration/Services/CRM/Deal/Service/DealRecurringTest.php</file>
+        <testsuite name="integration_tests_lead_productrows">
+            <file>./tests/Integration/Services/CRM/Lead/Service/LeadProductRowsTest.php</file>
         </testsuite>
         <testsuite name="integration_tests_scope_automation">
             <directory>./tests/Integration/Services/CRM/Automation/</directory>

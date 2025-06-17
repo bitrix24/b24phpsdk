@@ -4,6 +4,10 @@
 
 ### Added
 
+- Added service `Services\CRM\Lead\Service\LeadProductRows` with support methods,
+  see [add crm.lead.productrows* methods](https://github.com/bitrix24/b24phpsdk/issues/175):
+    - `set` Adds products to a lead
+    - `get` Returns the products of a lead
 - Added service `Services\CRM\Deal\Service\DealRecurring` with support methods,
   see [crm.deal.recurring.* methods](https://github.com/bitrix24/b24phpsdk/issues/160):
     - `fields` returns a list of fields for the recurring deal template

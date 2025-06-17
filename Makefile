@@ -186,6 +186,10 @@ integration_tests_deal_recurring:
 .PHONY: integration_tests_scope_automation
 integration_tests_scope_automation:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_automation
+	
+.PHONY: integration_tests_lead_productrows
+integration_tests_lead_productrows:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_productrows
 
 # work dev environment
 .PHONY: php-dev-server-up

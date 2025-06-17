@@ -277,6 +277,18 @@ class CRMServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+    
+    /**
+     * @return Lead\Service\LeadProductRows
+     */
+    public function leadProductRows(): Lead\Service\LeadProductRows
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Lead\Service\LeadProductRows($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 
     public function activity(): Activity\Service\Activity
     {
