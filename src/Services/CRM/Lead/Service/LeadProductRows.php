@@ -31,7 +31,6 @@ class LeadProductRows extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/leads/crm-lead-get.html
      *
-     * @param int $leadId
      * @param Currency|null $currency
      * @throws BaseException
      * @throws TransportException
@@ -73,7 +72,6 @@ class LeadProductRows extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/leads/crm-lead-productrows-set.html
      *
-     * @param int $leadId
      * @param array<int, array{
      *   ID?: int,
      *   OWNER_ID?: int,
