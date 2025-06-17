@@ -3,7 +3,7 @@
 /**
  * This file is part of the bitrix24-php-sdk package.
  *
- * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ * © Vadim Soluyanov <vadimsallee@gmail.com>
  *
  * For the full copyright and license information, please view the MIT-LICENSE.txt
  * file that was distributed with this source code.
@@ -17,24 +17,19 @@ namespace Bitrix24\SDK\Services\CRM\Lead\Result;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
-/**
- * Class LeadsResult
- *
- * @package Bitrix24\SDK\Services\CRM\Lead\Result
- */
-class LeadsResult extends AbstractResult
+class LeadUserfieldsResult extends AbstractResult
 {
     /**
-     * @return LeadItemResult[]
+     * @return \Bitrix24\SDK\Services\CRM\Lead\Result\LeadUserfieldItemResult[]
      * @throws BaseException
      */
-    public function getLeads(): array
+    public function getUserfields(): array
     {
-        $items = [];
+        $res = [];
         foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
-            $items[] = new LeadItemResult($item);
+            $res[] = new LeadUserfieldItemResult($item);
         }
 
-        return $items;
+        return $res;
     }
 }

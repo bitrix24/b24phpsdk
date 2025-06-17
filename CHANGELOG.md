@@ -4,6 +4,13 @@
 
 ### Added
 
+- Added service `CRM\Lead\Service\LeadUserfield` with support methods,
+  see [add crm.lead.userfield.* methods](https://github.com/bitrix24/b24phpsdk/issues/177):
+    - `add` add userfield to lead
+    - `get` get userfield to lead
+    - `list` list userfields
+    - `delete` delete userfield
+    - `update` update userfield
 - Added service `Services\CRM\Deal\Service\DealRecurring` with support methods,
   see [crm.deal.recurring.* methods](https://github.com/bitrix24/b24phpsdk/issues/160):
     - `fields` returns a list of fields for the recurring deal template
