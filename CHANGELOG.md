@@ -4,6 +4,15 @@
 
 ### Added
 
+- Added service `CRM\Lead\Service\LeadDetailsConfiguration` with support methods,
+  see [add crm.lead.details.* methods](https://github.com/bitrix24/b24phpsdk/issues/172):
+    - `getPersonal` method retrieves the settings of lead cards for personal user
+    - `getGeneral` method retrieves the settings of lead cards for all users
+    - `resetPersonal` method reset for item user settings
+    - `resetGeneral` method reset all card settings for all users
+    - `setPersonal` method set card configuration
+    - `setGeneral` method set card configuration for all users
+    - `setForceCommonConfigForAll` method set common detail form for All Users
 - Added service `Services\CRM\Deal\Service\DealRecurring` with support methods,
   see [crm.deal.recurring.* methods](https://github.com/bitrix24/b24phpsdk/issues/160):
     - `fields` returns a list of fields for the recurring deal template
