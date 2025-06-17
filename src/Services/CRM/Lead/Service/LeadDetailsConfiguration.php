@@ -182,7 +182,7 @@ class LeadDetailsConfiguration extends AbstractService
 
     /**
      * Set Common Detail Form for All Users
-     * 
+     *
      * @param array $extras
      * @throws InvalidArgumentException
      * @link https://apidocs.bitrix24.com/api-reference/crm/leads/custom-form/crm-lead-details-configuration-force-common-scope-for-all.html
