@@ -12,7 +12,6 @@ parameters:
     - tests/Integration/Services/Main
     - tests/Integration/Services/Placement
     - tests/Integration/Services/CRM/Lead/Service/LeadUserfieldTest.php
-    - tests/Integration/Services/CRM/Lead/Service/LeadUserfieldUseCaseTest.php
   bootstrapFiles:
     - tests/bootstrap.php
   parallel:
