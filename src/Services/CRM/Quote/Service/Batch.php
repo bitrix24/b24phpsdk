@@ -20,6 +20,7 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
 use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
+use Bitrix24\SDK\Core\Result\UpdatedItemBatchResult;
 use Bitrix24\SDK\Services\CRM\Quote\Result\QuoteItemResult;
 use Generator;
 use Psr\Log\LoggerInterface;
@@ -46,93 +47,77 @@ class Batch
      * Batch list method for quotes
      *
      * @param array{
-     *                         ID?: string,
-     *                         TITLE?: string,
-     *                         TYPE_ID?: string,
-     *                         CATEGORY_ID?: string,
-     *                         STAGE_ID?: string,
-     *                         STAGE_SEMANTIC_ID?: string,
-     *                         IS_NEW?: string,
-     *                         IS_RECURRING?: string,
-     *                         IS_RETURN_CUSTOMER?: string,
-     *                         IS_REPEATED_APPROACH?: string,
-     *                         PROBABILITY?: string,
-     *                         CURRENCY_ID?: string,
-     *                         OPPORTUNITY?: string,
-     *                         IS_MANUAL_OPPORTUNITY?: string,
-     *                         TAX_VALUE?: string,
-     *                         COMPANY_ID?: string,
-     *                         CONTACT_ID?: string,
-     *                         CONTACT_IDS?: string,
-     *                         QUOTE_ID?: string,
-     *                         BEGINDATE?: string,
-     *                         CLOSEDATE?: string,
-     *                         OPENED?: string,
-     *                         CLOSED?: string,
-     *                         COMMENTS?: string,
-     *                         ASSIGNED_BY_ID?: string,
-     *                         CREATED_BY_ID?: string,
-     *                         MODIFY_BY_ID?: string,
-     *                         DATE_CREATE?: string,
-     *                         DATE_MODIFY?: string,
-     *                         SOURCE_ID?: string,
-     *                         SOURCE_DESCRIPTION?: string,
-     *                         LEAD_ID?: string,
-     *                         ADDITIONAL_INFO?: string,
-     *                         LOCATION_ID?: string,
-     *                         ORIGINATOR_ID?: string,
-     *                         ORIGIN_ID?: string,
-     *                         UTM_SOURCE?: string,
-     *                         UTM_MEDIUM?: string,
-     *                         UTM_CAMPAIGN?: string,
-     *                         UTM_CONTENT?: string,
-     *                         UTM_TERM?: string,
-     *                         } $order
+     *   ID?: int,
+     *   ASSIGNED_BY_ID?: int,
+     *   BEGINDATA?: string,
+     *   CLIENT_ADDR?: string,
+     *   CLOSED?: bool,
+     *   CLOSEDATA?: string,
+     *   COMMENTS?: string,
+     *   COMPANY_ID?: int,
+     *   CONTACT_ID?: int,
+     *   CONTACT_IDS?: int[],
+     *   CONTENT?: string,
+     *   CREATED_BY_ID?: int,
+     *   CURRENCY_ID?: string,
+     *   DATE_CREATE?: string,
+     *   DATE_MODIFY?: string,
+     *   DEAL_ID?: int,
+     *   LEAD_ID?: int,
+     *   LOCATION_ID?: int,
+     *   MODIFY_BY_ID?: int,
+     *   MYCOMPANY_ID?: int,
+     *   OPENED?: bool,
+     *   OPPORTUNITY?: string,
+     *   PERSON_TYPE_ID?: int,
+     *   QUOTE_NUMBER?: string,
+     *   STATUS_ID?: string,
+     *   TAX_VALUE?: string,
+     *   TERMS?: string,
+     *   TITLE?: string,
+     *   UTM_CAMPAIGN?: string,
+     *   UTM_CONTENT?: string,
+     *   UTM_MEDIUM?: string,
+     *   UTM_SOURCE?: string,
+     *   UTM_TERM?: string,
+     *   } $order
      *
      * @param array{
-     *                         ID?: int,
-     *                         TITLE?: string,
-     *                         TYPE_ID?: string,
-     *                         CATEGORY_ID?: string,
-     *                         STAGE_ID?: string,
-     *                         STAGE_SEMANTIC_ID?: string,
-     *                         IS_NEW?: string,
-     *                         IS_RECURRING?: string,
-     *                         IS_RETURN_CUSTOMER?: string,
-     *                         IS_REPEATED_APPROACH?: string,
-     *                         PROBABILITY?: int,
-     *                         CURRENCY_ID?: string,
-     *                         OPPORTUNITY?: string,
-     *                         IS_MANUAL_OPPORTUNITY?: string,
-     *                         TAX_VALUE?: string,
-     *                         COMPANY_ID?: string,
-     *                         CONTACT_ID?: string,
-     *                         CONTACT_IDS?: string,
-     *                         QUOTE_ID?: string,
-     *                         BEGINDATE?: string,
-     *                         CLOSEDATE?: string,
-     *                         OPENED?: string,
-     *                         CLOSED?: string,
-     *                         COMMENTS?: string,
-     *                         ASSIGNED_BY_ID?: string,
-     *                         CREATED_BY_ID?: string,
-     *                         MODIFY_BY_ID?: string,
-     *                         DATE_CREATE?: string,
-     *                         DATE_MODIFY?: string,
-     *                         SOURCE_ID?: string,
-     *                         SOURCE_DESCRIPTION?: string,
-     *                         LEAD_ID?: string,
-     *                         ADDITIONAL_INFO?: string,
-     *                         LOCATION_ID?: string,
-     *                         ORIGINATOR_ID?: string,
-     *                         ORIGIN_ID?: string,
-     *                         UTM_SOURCE?: string,
-     *                         UTM_MEDIUM?: string,
-     *                         UTM_CAMPAIGN?: string,
-     *                         UTM_CONTENT?: string,
-     *                         UTM_TERM?: string,
-     *                         } $filter
-     * @param array    $select = ['ID','TITLE','TYPE_ID','CATEGORY_ID','STAGE_ID','STAGE_SEMANTIC_ID','IS_NEW','IS_RECURRING','IS_RETURN_CUSTOMER','IS_REPEATED_APPROACH','PROBABILITY','CURRENCY_ID','OPPORTUNITY','IS_MANUAL_OPPORTUNITY','TAX_VALUE','COMPANY_ID','CONTACT_ID','CONTACT_IDS','QUOTE_ID','BEGINDATE','CLOSEDATE','OPENED','CLOSED','COMMENTS','ASSIGNED_BY_ID','CREATED_BY_ID','MODIFY_BY_ID','DATE_CREATE','DATE_MODIFY','SOURCE_ID','SOURCE_DESCRIPTION','LEAD_ID','ADDITIONAL_INFO','LOCATION_ID','ORIGINATOR_ID','ORIGIN_ID','UTM_SOURCE','UTM_MEDIUM','UTM_CAMPAIGN','UTM_CONTENT','UTM_TERM']
+     *   ID?: int,
+     *   ASSIGNED_BY_ID?: int,
+     *   BEGINDATA?: string,
+     *   CLIENT_ADDR?: string,
+     *   CLOSED?: bool,
+     *   CLOSEDATA?: string,
+     *   COMMENTS?: string,
+     *   COMPANY_ID?: int,
+     *   CONTACT_ID?: int,
+     *   CONTACT_IDS?: int[],
+     *   CONTENT?: string,
+     *   CREATED_BY_ID?: int,
+     *   CURRENCY_ID?: string,
+     *   DATE_CREATE?: string,
+     *   DATE_MODIFY?: string,
+     *   DEAL_ID?: int,
+     *   LEAD_ID?: int,
+     *   LOCATION_ID?: int,
+     *   MODIFY_BY_ID?: int,
+     *   MYCOMPANY_ID?: int,
+     *   OPENED?: bool,
+     *   OPPORTUNITY?: string,
+     *   PERSON_TYPE_ID?: int,
+     *   QUOTE_NUMBER?: string,
+     *   STATUS_ID?: string,
+     *   TAX_VALUE?: string,
+     *   TERMS?: string,
+     *   TITLE?: string,
+     *   UTM_CAMPAIGN?: string,
+     *   UTM_CONTENT?: string,
+     *   UTM_MEDIUM?: string,
+     *   UTM_SOURCE?: string,
+     *   UTM_TERM?: string,
+     *   } $filter
+     * @param array    $select = ['ID','ASSIGNED_BY_ID','BEGINDATA','CLIENT_ADDR','CLOSED','CLOSEDATA','COMMENTS','COMPANY_ID','CONTACT_ID','CONTACT_IDS','CONTENT','CREATED_BY_ID','CURRENCY_ID','DATE_CREATE','DATE_MODIFY','DEAL_ID','LEAD_ID','LOCATION_ID','MODIFY_BY_ID','MYCOMPANY_ID','OPENED','OPPORTUNITY','PERSON_TYPE_ID','QUOTE_NUMBER','STATUS_ID','TAX_VALUE','TERMS','TITLE','UTM_CAMPAIGN','UTM_CONTENT','UTM_MEDIUM','UTM_SOURCE','UTM_TERM']
      * @param int|null $limit
      *
      * @return Generator<int, QuoteItemResult>
@@ -140,7 +125,7 @@ class Batch
      */
     #[ApiBatchMethodMetadata(
         'crm.quote.list',
-        'https://training.bitrix24.com/rest_help/crm/quotes/crm_quote_list.php',
+        'https://apidocs.bitrix24.com/api-reference/crm/quote/crm-quote-list.html',
         'Batch list method for quotes'
     )]
     public function list(array $order, array $filter, array $select, ?int $limit = null): Generator
@@ -164,45 +149,37 @@ class Batch
      *
      * @param array <int, array{
      *   ID?: int,
-     *   TITLE?: string,
-     *   TYPE_ID?: string,
-     *   CATEGORY_ID?: string,
-     *   STAGE_ID?: string,
-     *   STAGE_SEMANTIC_ID?: string,
-     *   IS_NEW?: string,
-     *   IS_RECURRING?: string,
-     *   IS_RETURN_CUSTOMER?: string,
-     *   IS_REPEATED_APPROACH?: string,
-     *   PROBABILITY?: int,
-     *   CURRENCY_ID?: string,
-     *   OPPORTUNITY?: string,
-     *   IS_MANUAL_OPPORTUNITY?: string,
-     *   TAX_VALUE?: string,
-     *   COMPANY_ID?: string,
-     *   CONTACT_ID?: string,
-     *   CONTACT_IDS?: string,
-     *   QUOTE_ID?: string,
-     *   BEGINDATE?: string,
-     *   CLOSEDATE?: string,
-     *   OPENED?: string,
-     *   CLOSED?: string,
+     *   ASSIGNED_BY_ID?: int,
+     *   BEGINDATA?: string,
+     *   CLIENT_ADDR?: string,
+     *   CLOSED?: bool,
+     *   CLOSEDATA?: string,
      *   COMMENTS?: string,
-     *   ASSIGNED_BY_ID?: string,
-     *   CREATED_BY_ID?: string,
-     *   MODIFY_BY_ID?: string,
+     *   COMPANY_ID?: int,
+     *   CONTACT_ID?: int,
+     *   CONTACT_IDS?: int[],
+     *   CONTENT?: string,
+     *   CREATED_BY_ID?: int,
+     *   CURRENCY_ID?: string,
      *   DATE_CREATE?: string,
      *   DATE_MODIFY?: string,
-     *   SOURCE_ID?: string,
-     *   SOURCE_DESCRIPTION?: string,
-     *   LEAD_ID?: string,
-     *   ADDITIONAL_INFO?: string,
-     *   LOCATION_ID?: string,
-     *   ORIGINATOR_ID?: string,
-     *   ORIGIN_ID?: string,
-     *   UTM_SOURCE?: string,
-     *   UTM_MEDIUM?: string,
+     *   DEAL_ID?: int,
+     *   LEAD_ID?: int,
+     *   LOCATION_ID?: int,
+     *   MODIFY_BY_ID?: int,
+     *   MYCOMPANY_ID?: int,
+     *   OPENED?: bool,
+     *   OPPORTUNITY?: string,
+     *   PERSON_TYPE_ID?: int,
+     *   QUOTE_NUMBER?: string,
+     *   STATUS_ID?: string,
+     *   TAX_VALUE?: string,
+     *   TERMS?: string,
+     *   TITLE?: string,
      *   UTM_CAMPAIGN?: string,
      *   UTM_CONTENT?: string,
+     *   UTM_MEDIUM?: string,
+     *   UTM_SOURCE?: string,
      *   UTM_TERM?: string,
      *   }> $quotes
      *
@@ -211,7 +188,7 @@ class Batch
      */
     #[ApiBatchMethodMetadata(
         'crm.quote.add',
-        'https://training.bitrix24.com/rest_help/crm/quotes/crm_quote_add.php',
+        'https://apidocs.bitrix24.com/api-reference/crm/quote/crm-quote-add.html',
         'Batch adding quotes'
     )]
     public function add(array $quotes): Generator
@@ -226,6 +203,30 @@ class Batch
             yield $key => new AddedItemBatchResult($item);
         }
     }
+    
+    /**
+     * Batch update quotes
+     *
+     * Update elements in array with structure
+     * element_id => [  // quote id
+     *  'fields' => [] // quote fields to update
+     * ]
+     *
+     * @param array<int, array> $entityItems
+     * @return Generator<int, UpdatedItemBatchResult>
+     * @throws BaseException
+     */
+    #[ApiBatchMethodMetadata(
+        'crm.quote.update',
+        'https://apidocs.bitrix24.com/api-reference/crm/quote/crm-quote-update.html',
+        'Update in batch mode a list of quotes'
+    )]
+    public function update(array $entityItems): Generator
+    {
+        foreach ($this->batch->updateEntityItems('crm.quote.update', $entityItems) as $key => $item) {
+            yield $key => new UpdatedItemBatchResult($item);
+        }
+    }
 
     /**
      * Batch delete quotes
@@ -237,7 +238,7 @@ class Batch
      */
     #[ApiBatchMethodMetadata(
         'crm.quote.delete',
-        'https://training.bitrix24.com/rest_help/crm/quotes/crm_quote_delete.php',
+        'https://apidocs.bitrix24.com/api-reference/crm/quote/crm-quote-delete.html',
         'Batch delete quotes'
     )]
     public function delete(array $quoteId): Generator
