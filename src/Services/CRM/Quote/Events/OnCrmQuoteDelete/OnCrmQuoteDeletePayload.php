@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Deal\Events\OnCrmDealRecurringDelete;
+namespace Bitrix24\SDK\Services\CRM\Quote\Events\OnCrmQuoteDelete;
 
 use Bitrix24\SDK\Core\Result\AbstractItem;
 
@@ -20,6 +20,6 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  *	 	ID: int,
  *	 } $FIELDS
  */
-class OnCrmDealRecurringDeletePayload extends AbstractItem
+class OnCrmQuoteDeletePayload extends AbstractItem
 {
 }

@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Deal\Events\OnCrmDealRecurringAdd;
+namespace Bitrix24\SDK\Services\CRM\Quote\Events\OnCrmQuoteAdd;
 
 use Bitrix24\SDK\Application\Requests\Events\AbstractEventRequest;
 
-class OnCrmDealRecurringAdd extends AbstractEventRequest
+class OnCrmQuoteAdd extends AbstractEventRequest
 {
-    public const CODE = 'ONCRMDEALRECURRINGADD';
+    public const CODE = 'ONCRMQUOTEADD';
 
-    public function getPayload(): OnCrmDealRecurringAddPayload
+    public function getPayload(): OnCrmQuoteAddPayload
     {
-        return new OnCrmDealRecurringAddPayload($this->eventPayload['data']);
+        return new OnCrmQuoteAddPayload($this->eventPayload['data']);
     }
 }

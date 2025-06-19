@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Quote\Events\OnCrmQuoteAdd;
+namespace Bitrix24\SDK\Services\CRM\Quote\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractItem;
+use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
 
 /**
- * @property-read  array{
- *	 	ID: int,
- *	 } $FIELDS
+ * @property-read int $CONTACT_ID
+ * @property-read int $SORT
+ * @property-read bool $IS_PRIMARY
  */
-class OnCrmQuoteAddPayload extends AbstractItem
+class QuoteContactConnectionItemResult extends AbstractCrmItem
 {
 }

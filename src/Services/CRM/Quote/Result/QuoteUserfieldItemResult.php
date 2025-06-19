@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Lead\Result;
+namespace Bitrix24\SDK\Services\CRM\Quote\Result;
 
 use Bitrix24\SDK\Services\CRM\Userfield\Result\AbstractUserfieldItemResult;
 
-class LeadUserfieldItemResult extends AbstractUserfieldItemResult
+class QuoteUserfieldItemResult extends AbstractUserfieldItemResult
 {
 }

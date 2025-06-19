@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Deal\Events\OnCrmDealRecurringDelete;
+namespace Bitrix24\SDK\Services\CRM\Quote\Events\OnCrmQuoteDelete;
 
 use Bitrix24\SDK\Application\Requests\Events\AbstractEventRequest;
 
-class OnCrmDealRecurringDelete extends AbstractEventRequest
+class OnCrmQuoteDelete extends AbstractEventRequest
 {
-    public const CODE = 'ONCRMDEALRECURRINGDELETE';
+    public const CODE = 'ONCRMQUOTEDELETE';
 
-    public function getPayload(): OnCrmDealRecurringDeletePayload
+    public function getPayload(): OnCrmQuoteDeletePayload
     {
-        return new OnCrmDealRecurringDeletePayload($this->eventPayload['data']);
+        return new OnCrmQuoteDeletePayload($this->eventPayload['data']);
     }
 }

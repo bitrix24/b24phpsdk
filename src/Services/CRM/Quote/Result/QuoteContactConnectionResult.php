@@ -17,17 +17,17 @@ namespace Bitrix24\SDK\Services\CRM\Quote\Result;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
-class QuoteUserfieldsResult extends AbstractResult
+class QuoteContactConnectionResult extends AbstractResult
 {
     /**
-     * @return \Bitrix24\SDK\Services\CRM\Quote\Result\QuoteUserfieldItemResult[]
+     * @return QuoteContactConnectionItemResult[]
      * @throws BaseException
      */
-    public function getUserfields(): array
+    public function getContactConnections(): array
     {
         $res = [];
         foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
-            $res[] = new QuoteUserfieldItemResult($item);
+            $res[] = new QuoteContactConnectionItemResult($item);
         }
 
         return $res;

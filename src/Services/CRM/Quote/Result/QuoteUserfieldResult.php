@@ -12,17 +12,17 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Lead\Result;
+namespace Bitrix24\SDK\Services\CRM\Quote\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
-class LeadUserfieldResult extends AbstractResult
+class QuoteUserfieldResult extends AbstractResult
 {
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    public function userfieldItem(): LeadUserfieldItemResult
+    public function userfieldItem(): QuoteUserfieldItemResult
     {
-        return new LeadUserfieldItemResult($this->getCoreResponse()->getResponseData()->getResult());
+        return new QuoteUserfieldItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }
