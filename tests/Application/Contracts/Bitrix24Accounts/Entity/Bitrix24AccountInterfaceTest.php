@@ -484,7 +484,7 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
      * @throws InvalidArgumentException
      */
     #[Test]
-    #[DataProvider('bitrix24AccountWithStatusNewDataProvider')]
+    #[DataProvider('bitrix24AccountWithWalidTokenDataProvider')]
     #[TestDox('test isApplicationTokenValid method')]
     final public function testIsApplicationTokenValid(
         Uuid $uuid,
@@ -679,6 +679,25 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         $bitrix24Account->markAsActive($comment);
         $this->assertEquals(Bitrix24AccountStatus::active, $bitrix24Account->getStatus());
         $this->assertEquals($comment, $bitrix24Account->getComment());
+    }
+
+    public static function bitrix24AccountWithWalidTokenDataProvider(): Generator
+    {
+        yield 'valid-update' => [
+            Uuid::v7(),
+            12345,
+            true,
+            true,
+            'member123',
+            'https://example.com',
+            new AuthToken('access_token', 'refresh_token', 1609459200),
+            1,
+            new Scope(['crm', 'task']),
+            'application_token',
+            2,
+            new Scope(['crm', 'task', 'telephony']),
+            null
+        ];
     }
 
     /**
