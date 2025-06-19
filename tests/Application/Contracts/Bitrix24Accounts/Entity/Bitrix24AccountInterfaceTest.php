@@ -693,10 +693,7 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
             new AuthToken('access_token', 'refresh_token', 1609459200),
             1,
             new Scope(['crm', 'task']),
-            'application_token',
-            2,
-            new Scope(['crm', 'task', 'telephony']),
-            null
+            'application_token'
         ];
     }
 
