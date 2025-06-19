@@ -11,7 +11,11 @@ parameters:
     - tests/Integration/Services/IMOpenLines
     - tests/Integration/Services/Main
     - tests/Integration/Services/Placement
-    - tests/Integration/Services/CRM/Deal/Service/DealRecurringTest.php
+    - tests/Integration/Services/CRM/Quote/Service/QuoteTest.php
+    - tests/Integration/Services/CRM/Quote/Service/BatchTest.php
+    - tests/Integration/Services/CRM/Quote/Service/QuoteContactTest.php
+    - tests/Integration/Services/CRM/Quote/Service/QuoteUserfieldTest.php
+    - tests/Integration/Services/CRM/Quote/Service/QuoteProductRowsTest.php
   bootstrapFiles:
     - tests/bootstrap.php
   parallel:

@@ -49,6 +49,9 @@
         <testsuite name="integration_tests_scope_automation">
             <directory>./tests/Integration/Services/CRM/Automation/</directory>
         </testsuite>
+        <testsuite name="integration_tests_crm_quote">
+            <directory>./tests/Integration/Services/CRM/Quote/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>

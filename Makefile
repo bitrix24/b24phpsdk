@@ -183,9 +183,9 @@ test-integration-scope-ai-admin:
 integration_tests_deal_recurring:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_deal_recurring
 
-.PHONY: integration_tests_scope_automation
-integration_tests_scope_automation:
-	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_automation
+.PHONY: integration_tests_crm_quote
+integration_tests_crm_quote:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_quote
 
 # work dev environment
 .PHONY: php-dev-server-up

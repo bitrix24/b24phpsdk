@@ -277,6 +277,56 @@ class CRMServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+    
+    public function quote(): Quote\Service\Quote
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Quote\Service\Quote(
+                new Quote\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+    
+    public function quoteContact(): Quote\Service\QuoteContact
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Quote\Service\QuoteContact(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+    
+    /**
+     * @return Quote\Service\QuoteProductRows
+     */
+    public function quoteProductRows(): Quote\Service\QuoteProductRows
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Quote\Service\QuoteProductRows($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+    
+    public function quoteUserfield(): Quote\Service\QuoteUserfield
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Quote\Service\QuoteUserfield(
+                new UserfieldConstraints(),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 
     public function activity(): Activity\Service\Activity
     {
