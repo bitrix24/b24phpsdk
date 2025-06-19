@@ -4,6 +4,14 @@
 
 ### Added
 
+- Added service `Services\CRM\Lead\Service\LeadContact` with support methods,
+  see [crm.lead.contact.* methods](https://github.com/bitrix24/b24phpsdk/issues/170):
+    - `fields` get fiels for lead contact connection
+    - `setItems` set contacts related with lead
+    - `get` get contacts related to lead
+    - `deleteItems` delete all relations for lead
+    - `add` add contact relation with lead
+    - `delete` delete contact relation with lead
 - Added service `Services\CRM\Deal\Service\DealRecurring` with support methods,
   see [crm.deal.recurring.* methods](https://github.com/bitrix24/b24phpsdk/issues/160):
     - `fields` returns a list of fields for the recurring deal template
