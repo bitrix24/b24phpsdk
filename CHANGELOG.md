@@ -4,6 +4,50 @@
 
 ### Added
 
+- Added service `Services\CRM\Lead\Service\LeadProductRows` with support methods,
+  see [add crm.lead.productrows* methods](https://github.com/bitrix24/b24phpsdk/issues/175):
+    - `set` Adds products to a lead
+    - `get` Returns the products of a lead
+- Added service `Services\CRM\Quote\Service\Quote` with support methods,
+  see [crm.quote.* methods](https://github.com/bitrix24/b24phpsdk/issues/179):
+    - `fields` returns a list of fields for the quote
+    - `get` returns the settings of the quote by Id
+    - `list` returns a list of quote
+    - `add` creates a new quote
+    - `delete` deletes a quote
+    - `update` modifies the quote
+    - `countByFilter` count quotes by filter
+- Added support for events:
+    - `OnCrmQuoteAdd`
+    - `OnCrmQuoteDelete`
+    - `OnCrmQuoteUpdate`
+    - `OnCrmQuoteUserFieldAdd`
+    - `OnCrmQuoteUserFieldDelete`
+    - `OnCrmQuoteUserFieldSetEnumValues`
+    - `OnCrmQuoteUserFieldUpdate`
+- Added service `Services\CRM\Quote\Service\QuoteUserfield` with support methods:
+    - `add` add userfield to a quote
+    - `get` get userfield to a quote
+    - `list` list userfields
+    - `delete` delete userfield
+    - `update` update userfield
+- Added service `Services\CRM\Quote\Service\QuoteProductRows` with support methods:
+    - `set` Adds products to a quote
+    - `get` Returns the products of a quote
+- Added service `Services\CRM\Quote\Service\QuoteContact` with support methods,
+    - `fields` get fiels for quote contact connection
+    - `setItems` set contacts related with quote
+    - `get` get contacts related to quote
+    - `deleteItems` delete all relations for quote
+    - `add` add contact relation with quote
+    - `delete` delete contact relation with quote
+- Added service `CRM\Lead\Service\LeadUserfield` with support methods,
+  see [add crm.lead.userfield.* methods](https://github.com/bitrix24/b24phpsdk/issues/177):
+    - `add` add userfield to lead
+    - `get` get userfield to lead
+    - `list` list userfields
+    - `delete` delete userfield
+    - `update` update userfield
 - Added service `Services\CRM\Deal\Service\DealRecurring` with support methods,
   see [crm.deal.recurring.* methods](https://github.com/bitrix24/b24phpsdk/issues/160):
     - `fields` returns a list of fields for the recurring deal template
@@ -19,11 +63,25 @@
     - `delete` delete trigger, with batch calls support
     - `list`  get list of triggers, with batch calls support
     - `execute` execute trigger, with batch calls support
+- Added service `Services\CRM\Currency` with support methods,
+  see [Add crm.currency.* methods](https://github.com/bitrix24/b24phpsdk/issues/155):
+    - `get` get currency
+    - `fields` get currency fields
+    - `list` get currency list
+    - `add` add new currency, with batch calls support
+    - `delete` delete currency, with batch calls support
+    - `update`  update currency, with batch calls support
+- Added service `Services\CRM\Currency\Localizations` with support methods,
+  see [Add crm.currency.* methods](https://github.com/bitrix24/b24phpsdk/issues/155):
+    - `set` set localizations, with batch calls support
+    - `get` get localizations
+    - `fields` get localization fields
+    - `delete` delete currency, with batch calls support
 
 ### Fixed
 
 - Fixed error in arguments in service for method `placement.bind`, [see details](https://github.com/bitrix24/b24phpsdk/issues/151)
-
+- Fixed errors in `task.elapseditem.*` call in ApiClient [see details](https://github.com/bitrix24/b24phpsdk/issues/180) 
 ### Changed
 
 - ❗**️️BC** Changed contract `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface`, this change needs to process corner cases
