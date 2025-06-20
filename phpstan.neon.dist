@@ -12,6 +12,14 @@ parameters:
     - tests/Integration/Services/Main
     - tests/Integration/Services/Placement
     - tests/Integration/Services/CRM/Lead/Service/LeadDetailsConfigurationTest.php
+    - tests/Integration/Services/CRM/Contact/Service/ContactDetailsConfigurationTest.php
+    - tests/Integration/Services/CRM/Lead/Service/LeadProductRowsTest.php
+    - tests/Integration/Services/CRM/Quote/Service/QuoteTest.php
+    - tests/Integration/Services/CRM/Quote/Service/BatchTest.php
+    - tests/Integration/Services/CRM/Quote/Service/QuoteContactTest.php
+    - tests/Integration/Services/CRM/Quote/Service/QuoteUserfieldTest.php
+    - tests/Integration/Services/CRM/Quote/Service/QuoteProductRowsTest.php
+    - tests/Integration/Services/CRM/Lead/Service/LeadUserfieldTest.php
     - tests/Integration/Services/CRM/Currency
   bootstrapFiles:
     - tests/bootstrap.php

@@ -3,7 +3,7 @@
 /**
  * This file is part of the bitrix24-php-sdk package.
  *
- * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ * © Vadim Soluyanov <vadimsallee@gmail.com>
  *
  * For the full copyright and license information, please view the MIT-LICENSE.txt
  * file that was distributed with this source code.
@@ -11,47 +11,53 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Lead\Service;
+namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Quote\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Services\CRM\Lead\Service\Lead;
+use Bitrix24\SDK\Services\CRM\Quote\Service\Quote;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class BatchTest
  *
- * @package Bitrix24\SDK\Tests\Integration\Services\CRM\Lead\Service
+ * @package Bitrix24\SDK\Tests\Integration\Services\CRM\Quote\Service
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Lead\Service\Batch::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Quote\Service\Batch::class)]
 class BatchTest extends TestCase
 {
-    protected Lead $leadService;
+    protected Quote $quoteService;
+    
+    
+    protected function setUp(): void
+    {
+        $this->quoteService = Fabric::getServiceBuilder()->getCRMScope()->quote();
+    }
 
     /**
      * @throws BaseException
      * @throws TransportException
      */
-    #[\PHPUnit\Framework\Attributes\TestDox('Batch list leads')]
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch list quotes')]
     public function testBatchList(): void
     {
-        $itemId = $this->leadService->add(['TITLE' => 'test lead'])->getId();
+        $itemId = $this->quoteService->add(['TITLE' => 'test quote'])->getId();
         $cnt = 0;
 
-        foreach ($this->leadService->batch->list([], ['ID' => $itemId], ['ID', 'NAME'], 1) as $item) {
+        foreach ($this->quoteService->batch->list([], ['ID' => $itemId], ['ID', 'NAME'], 1) as $item) {
             $cnt++;
         }
 
         self::assertGreaterThanOrEqual(1, $cnt);
 
-        $this->leadService->delete($itemId);
+        $this->quoteService->delete($itemId);
     }
 
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    #[\PHPUnit\Framework\Attributes\TestDox('Batch add lead')]
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch add quote')]
     public function testBatchAdd(): void
     {
         $items = [];
@@ -61,7 +67,7 @@ class BatchTest extends TestCase
 
         $cnt = 0;
         $itemId = [];
-        foreach ($this->leadService->batch->add($items) as $item) {
+        foreach ($this->quoteService->batch->add($items) as $item) {
             $cnt++;
             $itemId[] = $item->getId();
         }
@@ -69,7 +75,7 @@ class BatchTest extends TestCase
         self::assertEquals(count($items), $cnt);
 
         $cnt = 0;
-        foreach ($this->leadService->batch->delete($itemId) as $cnt => $deleteResult) {
+        foreach ($this->quoteService->batch->delete($itemId) as $cnt => $deleteResult) {
             $cnt++;
         }
 
@@ -79,33 +85,29 @@ class BatchTest extends TestCase
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    #[\PHPUnit\Framework\Attributes\TestDox('Batch delete leads')]
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch delete quotes')]
     public function testBatchDelete(): void
     {
-        $leads = [];
+        $quotes = [];
         for ($i = 1; $i < 60; $i++) {
-            $leads[] = ['TITLE' => 'TITLE-' . $i];
+            $quotes[] = ['TITLE' => 'TITLE-' . $i];
         }
 
         $cnt = 0;
-        $dealId = [];
-        foreach ($this->leadService->batch->add($leads) as $item) {
+        $itemId = [];
+        foreach ($this->quoteService->batch->add($quotes) as $item) {
             $cnt++;
-            $dealId[] = $item->getId();
+            $itemId[] = $item->getId();
         }
 
-        self::assertEquals(count($leads), $cnt);
+        self::assertEquals(count($quotes), $cnt);
 
         $cnt = 0;
-        foreach ($this->leadService->batch->delete($dealId) as $cnt => $deleteResult) {
+        foreach ($this->quoteService->batch->delete($itemId) as $cnt => $deleteResult) {
             $cnt++;
         }
 
-        self::assertEquals(count($leads), $cnt);
+        self::assertEquals(count($quotes), $cnt);
     }
 
-    protected function setUp(): void
-    {
-        $this->leadService = Fabric::getServiceBuilder()->getCRMScope()->lead();
-    }
 }

@@ -13,6 +13,50 @@
     - `setPersonal` method set card configuration
     - `setGeneral` method set card configuration for all users
     - `setForceCommonConfigForAll` method set common detail form for All Users
+- Added service `Services\CRM\Lead\Service\LeadProductRows` with support methods,
+  see [add crm.lead.productrows* methods](https://github.com/bitrix24/b24phpsdk/issues/175):
+    - `set` Adds products to a lead
+    - `get` Returns the products of a lead
+- Added service `Services\CRM\Quote\Service\Quote` with support methods,
+  see [crm.quote.* methods](https://github.com/bitrix24/b24phpsdk/issues/179):
+    - `fields` returns a list of fields for the quote
+    - `get` returns the settings of the quote by Id
+    - `list` returns a list of quote
+    - `add` creates a new quote
+    - `delete` deletes a quote
+    - `update` modifies the quote
+    - `countByFilter` count quotes by filter
+- Added support for events:
+    - `OnCrmQuoteAdd`
+    - `OnCrmQuoteDelete`
+    - `OnCrmQuoteUpdate`
+    - `OnCrmQuoteUserFieldAdd`
+    - `OnCrmQuoteUserFieldDelete`
+    - `OnCrmQuoteUserFieldSetEnumValues`
+    - `OnCrmQuoteUserFieldUpdate`
+- Added service `Services\CRM\Quote\Service\QuoteUserfield` with support methods:
+    - `add` add userfield to a quote
+    - `get` get userfield to a quote
+    - `list` list userfields
+    - `delete` delete userfield
+    - `update` update userfield
+- Added service `Services\CRM\Quote\Service\QuoteProductRows` with support methods:
+    - `set` Adds products to a quote
+    - `get` Returns the products of a quote
+- Added service `Services\CRM\Quote\Service\QuoteContact` with support methods,
+    - `fields` get fiels for quote contact connection
+    - `setItems` set contacts related with quote
+    - `get` get contacts related to quote
+    - `deleteItems` delete all relations for quote
+    - `add` add contact relation with quote
+    - `delete` delete contact relation with quote
+- Added service `CRM\Lead\Service\LeadUserfield` with support methods,
+  see [add crm.lead.userfield.* methods](https://github.com/bitrix24/b24phpsdk/issues/177):
+    - `add` add userfield to lead
+    - `get` get userfield to lead
+    - `list` list userfields
+    - `delete` delete userfield
+    - `update` update userfield
 - Added service `Services\CRM\Deal\Service\DealRecurring` with support methods,
   see [crm.deal.recurring.* methods](https://github.com/bitrix24/b24phpsdk/issues/160):
     - `fields` returns a list of fields for the recurring deal template
@@ -71,6 +115,15 @@ work in progress
 
 ### Added
 
+- Added service `CRM\Contact\Service\ContactDetailsConfiguration` with support methods,
+  see [add crm.contact.details.* methods](https://github.com/bitrix24/b24phpsdk/issues/153):
+    - `getPersonal` method retrieves the settings of contact cards for personal user
+    - `getGeneral` method retrieves the settings of contact cards for all users
+    - `resetPersonal` method reset for item user settings
+    - `resetGeneral` method reset all card settings for all users
+    - `setPersonal` method set card configuration
+    - `setGeneral` method set card configuration for all users
+    - `setForceCommonConfigForAll` method set common detail form for All Users
 - Added **PHP 8.4** [support](https://github.com/bitrix24/b24phpsdk/issues/120) 🚀
 - Added method `Bitrix24\SDK\Services\Main\Service::guardValidateCurrentAuthToken` for validate current auth token with
   api-call `app.info` on vendor OAUTH server.

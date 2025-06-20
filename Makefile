@@ -179,6 +179,18 @@ test-integration-scope-entity:
 test-integration-scope-ai-admin:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_ai_admin
 	
+.PHONY: integration_tests_scope_crm_contact_details
+integration_tests_scope_crm_contact_details:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_contact_details
+
+.PHONY: integration_tests_lead_userfield
+integration_tests_lead_userfield:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_userfield
+	
+.PHONY: integration_tests_lead_userfield_use_case
+integration_tests_lead_userfield_use_case:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_userfield_use_case
+  
 .PHONY: integration_tests_scope_crm_currency
 integration_tests_scope_crm_currency:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_currency
@@ -190,6 +202,18 @@ integration_tests_deal_recurring:
 .PHONY: integration_tests_lead_details
 integration_tests_lead_details:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_details
+
+.PHONY: integration_tests_scope_automation
+integration_tests_scope_automation:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_automation
+	
+.PHONY: integration_tests_lead_productrows
+integration_tests_lead_productrows:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_productrows
+
+.PHONY: integration_tests_crm_quote
+integration_tests_crm_quote:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_quote
 
 # work dev environment
 .PHONY: php-dev-server-up

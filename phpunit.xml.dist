@@ -43,6 +43,18 @@
         <testsuite name="integration_tests_scope_ai_admin">
             <directory>./tests/Integration/Services/AI/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_crm_contact_details">
+            <file>./tests/Integration/Services/CRM/Contact/Service/ContactDetailsConfigurationTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_lead_productrows">
+            <file>./tests/Integration/Services/CRM/Lead/Service/LeadProductRowsTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_lead_userfield">
+            <file>./tests/Integration/Services/CRM/Lead/Service/LeadUserfieldTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_lead_userfield_use_case">
+            <file>./tests/Integration/Services/CRM/Lead/Service/LeadUserfieldUseCaseTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_scope_crm_currency">
             <directory>./tests/Integration/Services/CRM/Currency/</directory>
         </testsuite>
@@ -51,6 +63,9 @@
         </testsuite>
         <testsuite name="integration_tests_lead_details">
             <file>./tests/Integration/Services/CRM/Lead/Service/LeadDetailsConfigurationTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_crm_quote">
+            <directory>./tests/Integration/Services/CRM/Quote/</directory>
         </testsuite>
     </testsuites>
     <source>
