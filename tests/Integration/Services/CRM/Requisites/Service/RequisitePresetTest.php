@@ -34,8 +34,8 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(RequisitePreset::class, 'fields')]
-#[CoversClass(RequisitePreset::class, 'countries')]
+#[CoversMethod(RequisitePreset::class, 'fields')]
+#[CoversMethod(RequisitePreset::class, 'countries')]
 #[CoversMethod(RequisitePreset::class, 'add')]
 #[CoversMethod(RequisitePreset::class, 'delete')]
 #[CoversMethod(RequisitePreset::class, 'get')]
@@ -48,22 +48,12 @@ class RequisitePresetTest extends TestCase
     protected ServiceBuilder $sb;
 
     private array $createdCompanies = [];
-
-    private int $requisitePresetId;
-
     private int $entityTypeRequisiteId;
-
     private int $countryId;
 
     protected function setUp(): void
     {
         $this->sb = Fabric::getServiceBuilder();
-        $this->requisitePresetId = current(
-            array_filter(
-                $this->sb->getCRMScope()->requisitePreset()->list()->getRequisitePresets(),
-                fn($item): bool => str_contains($item->XML_ID, 'COMPANY#')
-            )
-        )->ID;
         $this->entityTypeRequisiteId = current(
             array_filter(
                 $this->sb->getCRMScope()->enum()->ownerType()->getItems(),
@@ -150,7 +140,7 @@ class RequisitePresetTest extends TestCase
         $this->assertTrue($this->sb->getCRMScope()->requisitePreset()->delete($tplId)->isSuccess());
 
         $this->expectException(ItemNotFoundException::class);
-        $this->sb->getCRMScope()->requisitePreset()->get($tplId)->requisite();
+        $this->sb->getCRMScope()->requisitePreset()->get($tplId)->requisitePreset();
     }
 
     public function testUpdate(): void

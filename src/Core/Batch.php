@@ -850,7 +850,7 @@ class Batch implements BatchOperationsInterface
      * @throws BaseException
      * @throws Exceptions\TransportException
      */
-    private function getTraversableBatchResults(bool $isHaltOnError): Generator
+    protected function getTraversableBatchResults(bool $isHaltOnError): Generator
     {
         $this->logger->debug(
             'getTraversableBatchResults.start',

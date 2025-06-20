@@ -36,7 +36,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversMethod(Lead::class,'list')]
 #[CoversMethod(Lead::class,'fields')]
 #[CoversMethod(Lead::class,'update')]
-#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Deal\Service\Deal::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Lead\Service\Lead::class)]
 class LeadTest extends TestCase
 {
     use CustomBitrix24Assertions;
