@@ -52,6 +52,7 @@ class QuoteContactTest extends TestCase
         foreach ($this->sb->getCRMScope()->quote()->batch->delete($this->createdQuotes) as $result) {
             // ###
         }
+        
         foreach ($this->sb->getCRMScope()->contact()->batch->delete($this->createdContacts) as $result) {
             // ###
         }
