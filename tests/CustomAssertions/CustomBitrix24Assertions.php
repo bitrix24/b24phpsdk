@@ -141,7 +141,6 @@ trait CustomBitrix24Assertions
                     break;
                 case 'user':
                 case 'crm_enum_ownertype':
-                case 'crm_lead':
                 case 'integer':
                 case 'int':
                     $this->assertTrue(
@@ -227,6 +226,9 @@ trait CustomBitrix24Assertions
                 case 'object':
                 case 'crm_company':
                 case 'crm_contact':
+                case 'crm_deal':
+                case 'crm_lead':
+                case 'location':
                 case 'product_file':
                     if (str_contains($fieldCode, '_IDS') ||
                         str_contains($fieldCode, 'PHOTO') ||
