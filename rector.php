@@ -36,6 +36,8 @@ return RectorConfig::configure()
         __DIR__ . '/tests/Integration/Services/Main',
         __DIR__ . '/src/Services/Placement',
         __DIR__ . '/tests/Integration/Services/Placement',
+        __DIR__ . '/src/Services/CRM/Contact/Service/ContactDetailsConfiguration.php',
+        __DIR__ . '/tests/Integration/Services/CRM/Contact/Service/ContactDetailsConfigurationTest.php',
         __DIR__ . '/src/Services/CRM/Lead',
         __DIR__ . '/tests/Integration/Services/CRM/Lead/Service',
         __DIR__ . '/src/Services/CRM/Quote',

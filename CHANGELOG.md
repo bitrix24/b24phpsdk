@@ -106,6 +106,15 @@ work in progress
 
 ### Added
 
+- Added service `CRM\Contact\Service\ContactDetailsConfiguration` with support methods,
+  see [add crm.contact.details.* methods](https://github.com/bitrix24/b24phpsdk/issues/153):
+    - `getPersonal` method retrieves the settings of contact cards for personal user
+    - `getGeneral` method retrieves the settings of contact cards for all users
+    - `resetPersonal` method reset for item user settings
+    - `resetGeneral` method reset all card settings for all users
+    - `setPersonal` method set card configuration
+    - `setGeneral` method set card configuration for all users
+    - `setForceCommonConfigForAll` method set common detail form for All Users
 - Added **PHP 8.4** [support](https://github.com/bitrix24/b24phpsdk/issues/120) 🚀
 - Added method `Bitrix24\SDK\Services\Main\Service::guardValidateCurrentAuthToken` for validate current auth token with
   api-call `app.info` on vendor OAUTH server.
