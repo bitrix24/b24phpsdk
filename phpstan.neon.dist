@@ -12,6 +12,7 @@ parameters:
     - tests/Integration/Services/Main
     - tests/Integration/Services/Placement
     - tests/Integration/Services/CRM/Lead/Service/LeadProductRowsTest.php
+    - tests/Integration/Services/CRM/Currency
   bootstrapFiles:
     - tests/bootstrap.php
   parallel:
