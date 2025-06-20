@@ -4,6 +4,15 @@
 
 ### Added
 
+- Added service `CRM\Lead\Service\LeadDetailsConfiguration` with support methods,
+  see [add crm.lead.details.* methods](https://github.com/bitrix24/b24phpsdk/issues/172):
+    - `getPersonal` method retrieves the settings of lead cards for personal user
+    - `getGeneral` method retrieves the settings of lead cards for all users
+    - `resetPersonal` method reset for item user settings
+    - `resetGeneral` method reset all card settings for all users
+    - `setPersonal` method set card configuration
+    - `setGeneral` method set card configuration for all users
+    - `setForceCommonConfigForAll` method set common detail form for All Users
 - Added service `Services\CRM\Lead\Service\LeadProductRows` with support methods,
   see [add crm.lead.productrows* methods](https://github.com/bitrix24/b24phpsdk/issues/175):
     - `set` Adds products to a lead
