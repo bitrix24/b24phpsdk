@@ -11,6 +11,7 @@ parameters:
     - tests/Integration/Services/IMOpenLines
     - tests/Integration/Services/Main
     - tests/Integration/Services/Placement
+    - tests/Integration/Services/CRM/Lead/Service/LeadUserfieldTest.php
     - tests/Integration/Services/CRM/Currency
   bootstrapFiles:
     - tests/bootstrap.php
