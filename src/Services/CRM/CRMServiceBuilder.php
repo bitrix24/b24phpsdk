@@ -83,6 +83,40 @@ class CRMServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+    
+    public function currency(): Currency\Service\Currency
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new Currency\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Currency\Service\Currency(
+                new Currency\Service\Batch($batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+    
+    public function localizations(): Currency\Localizations\Service\Localizations
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new Currency\Localizations\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Currency\Localizations\Service\Localizations(
+                new Currency\Localizations\Service\Batch($batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 
     public function companyContact(): Company\Service\CompanyContact
     {
@@ -277,6 +311,19 @@ class CRMServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+  
+    public function leadUserfield(): Lead\Service\LeadUserfield
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Lead\Service\LeadUserfield(
+                new UserfieldConstraints(),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
     
     public function quote(): Quote\Service\Quote
     {
@@ -319,7 +366,7 @@ class CRMServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Quote\Service\QuoteUserfield(
-                new UserfieldConstraints(),
+              new UserfieldConstraints(),
                 $this->core,
                 $this->log
             );
