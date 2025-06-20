@@ -31,19 +31,12 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['crm']))]
 class Lead extends AbstractService
 {
-    public Batch $batch;
-
     /**
      * Lead constructor.
-     *
-     * @param Batch           $batch
-     * @param CoreInterface   $core
-     * @param LoggerInterface $log
      */
-    public function __construct(Batch $batch, CoreInterface $core, LoggerInterface $log)
+    public function __construct(public Batch $batch, CoreInterface $core, LoggerInterface $logger)
     {
-        parent::__construct($core, $log);
-        $this->batch = $batch;
+        parent::__construct($core, $logger);
     }
 
     /**
@@ -113,7 +106,6 @@ class Lead extends AbstractService
      *   REGISTER_SONET_EVENT?: string
      *   } $params
      *
-     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -140,9 +132,7 @@ class Lead extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/leads/crm_lead_delete.php
      *
-     * @param int $id
      *
-     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -168,7 +158,6 @@ class Lead extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/leads/crm_lead_fields.php
      *
-     * @return FieldsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -187,9 +176,7 @@ class Lead extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/leads/crm_lead_get.php
      *
-     * @param int $id
      *
-     * @return LeadResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -215,7 +202,6 @@ class Lead extends AbstractService
      *
      * @throws BaseException
      * @throws TransportException
-     * @return LeadsResult
      */
     #[ApiEndpointMetadata(
         'crm.lead.list',
@@ -242,7 +228,6 @@ class Lead extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/leads/crm_lead_update.php
      *
-     * @param int $id
      * @param array{
      *   ID?: int,
      *   TITLE?: string,
@@ -305,7 +290,6 @@ class Lead extends AbstractService
      *   REGISTER_SONET_EVENT?: string
      *   }        $params
      *
-     * @return UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -389,7 +373,6 @@ class Lead extends AbstractService
      *   LINK?: string
      *   } $filter
      *
-     * @return int
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      */

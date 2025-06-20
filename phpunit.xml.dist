@@ -43,6 +43,9 @@
         <testsuite name="integration_tests_scope_ai_admin">
             <directory>./tests/Integration/Services/AI/</directory>
         </testsuite>
+        <testsuite name="integration_tests_lead_productrows">
+            <file>./tests/Integration/Services/CRM/Lead/Service/LeadProductRowsTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_lead_userfield">
             <file>./tests/Integration/Services/CRM/Lead/Service/LeadUserfieldTest.php</file>
         </testsuite>

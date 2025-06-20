@@ -11,6 +11,7 @@ parameters:
     - tests/Integration/Services/IMOpenLines
     - tests/Integration/Services/Main
     - tests/Integration/Services/Placement
+    - tests/Integration/Services/CRM/Lead/Service/LeadProductRowsTest.php
     - tests/Integration/Services/CRM/Quote/Service/QuoteTest.php
     - tests/Integration/Services/CRM/Quote/Service/BatchTest.php
     - tests/Integration/Services/CRM/Quote/Service/QuoteContactTest.php

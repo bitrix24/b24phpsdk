@@ -4,6 +4,10 @@
 
 ### Added
 
+- Added service `Services\CRM\Lead\Service\LeadProductRows` with support methods,
+  see [add crm.lead.productrows* methods](https://github.com/bitrix24/b24phpsdk/issues/175):
+    - `set` Adds products to a lead
+    - `get` Returns the products of a lead
 - Added service `Services\CRM\Quote\Service\Quote` with support methods,
   see [crm.quote.* methods](https://github.com/bitrix24/b24phpsdk/issues/179):
     - `fields` returns a list of fields for the quote
