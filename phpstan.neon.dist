@@ -12,6 +12,7 @@ parameters:
     - tests/Integration/Services/Main
     - tests/Integration/Services/Placement
     - tests/Integration/Services/CRM/Item/Service/ItemDetailsConfigurationTest.php
+    - tests/Integration/Services/CRM/Currency
   bootstrapFiles:
     - tests/bootstrap.php
   parallel:
