@@ -19,6 +19,20 @@
     - `delete` delete trigger, with batch calls support
     - `list`  get list of triggers, with batch calls support
     - `execute` execute trigger, with batch calls support
+- Added service `Services\CRM\Currency` with support methods,
+  see [Add crm.currency.* methods](https://github.com/bitrix24/b24phpsdk/issues/155):
+    - `get` get currency
+    - `fields` get currency fields
+    - `list` get currency list
+    - `add` add new currency, with batch calls support
+    - `delete` delete currency, with batch calls support
+    - `update`  update currency, with batch calls support
+- Added service `Services\CRM\Currency\Localizations` with support methods,
+  see [Add crm.currency.* methods](https://github.com/bitrix24/b24phpsdk/issues/155):
+    - `set` set localizations, with batch calls support
+    - `get` get localizations
+    - `fields` get localization fields
+    - `delete` delete currency, with batch calls support
 
 ### Fixed
 
