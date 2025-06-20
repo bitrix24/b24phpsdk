@@ -36,7 +36,6 @@ class QuoteContact extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/quote/index.html
      *
-     * @return FieldsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -66,19 +65,20 @@ class QuoteContact extends AbstractService
     public function setItems(int $quoteId, array $contactConnections): UpdatedItemResult
     {
         $items = [];
-        foreach ($contactConnections as $item) {
-            if (!$item instanceof ContactConnection) {
+        foreach ($contactConnections as $contactConnection) {
+            if (!$contactConnection instanceof ContactConnection) {
                 throw new InvalidArgumentException(
-                    sprintf('array item «%s» must be «%s» type', gettype($item), ContactConnection::class)
+                    sprintf('array item «%s» must be «%s» type', gettype($contactConnection), ContactConnection::class)
                 );
             }
 
             $items[] = [
-                'CONTACT_ID' => $item->contactId,
-                'SORT' => $item->sort,
-                'IS_PRIMARY' => $item->isPrimary ? 'Y' : 'N'
+                'CONTACT_ID' => $contactConnection->contactId,
+                'SORT' => $contactConnection->sort,
+                'IS_PRIMARY' => $contactConnection->isPrimary ? 'Y' : 'N'
             ];
         }
+
         if ($items === []) {
             throw new InvalidArgumentException('empty contact connections array');
         }
@@ -138,14 +138,14 @@ class QuoteContact extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/quote/index.html',
         'Add Contact to the Specified Estimate'
     )]
-    public function add(int $quoteId, ContactConnection $connection): UpdatedItemResult
+    public function add(int $quoteId, ContactConnection $contactConnection): UpdatedItemResult
     {
         return new UpdatedItemResult($this->core->call('crm.quote.contact.add', [
             'id' => $quoteId,
             'fields' => [
-                'CONTACT_ID' => $connection->contactId,
-                'SORT' => $connection->sort,
-                'IS_PRIMARY' => $connection->isPrimary ? 'Y' : 'N'
+                'CONTACT_ID' => $contactConnection->contactId,
+                'SORT' => $contactConnection->sort,
+                'IS_PRIMARY' => $contactConnection->isPrimary ? 'Y' : 'N'
             ]
         ]));
     }

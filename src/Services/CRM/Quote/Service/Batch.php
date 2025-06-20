@@ -28,19 +28,11 @@ use Psr\Log\LoggerInterface;
 #[ApiBatchServiceMetadata(new Scope(['crm']))]
 class Batch
 {
-    protected BatchOperationsInterface $batch;
-    protected LoggerInterface $log;
-
     /**
      * Batch constructor.
-     *
-     * @param BatchOperationsInterface $batch
-     * @param LoggerInterface          $log
      */
-    public function __construct(BatchOperationsInterface $batch, LoggerInterface $log)
+    public function __construct(protected BatchOperationsInterface $batch, protected LoggerInterface $log)
     {
-        $this->batch = $batch;
-        $this->log = $log;
     }
 
     /**
@@ -118,7 +110,6 @@ class Batch
      *   UTM_TERM?: string,
      *   } $filter
      * @param array    $select = ['ID','ASSIGNED_BY_ID','BEGINDATA','CLIENT_ADDR','CLOSED','CLOSEDATA','COMMENTS','COMPANY_ID','CONTACT_ID','CONTACT_IDS','CONTENT','CREATED_BY_ID','CURRENCY_ID','DATE_CREATE','DATE_MODIFY','DEAL_ID','LEAD_ID','LOCATION_ID','MODIFY_BY_ID','MYCOMPANY_ID','OPENED','OPPORTUNITY','PERSON_TYPE_ID','QUOTE_NUMBER','STATUS_ID','TAX_VALUE','TERMS','TITLE','UTM_CAMPAIGN','UTM_CONTENT','UTM_MEDIUM','UTM_SOURCE','UTM_TERM']
-     * @param int|null $limit
      *
      * @return Generator<int, QuoteItemResult>
      * @throws BaseException
@@ -199,11 +190,12 @@ class Batch
                 'fields' => $quote,
             ];
         }
+
         foreach ($this->batch->addEntityItems('crm.quote.add', $items) as $key => $item) {
             yield $key => new AddedItemBatchResult($item);
         }
     }
-    
+
     /**
      * Batch update quotes
      *

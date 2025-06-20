@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Deal\Events\OnCrmDealRecurringUpdate;
+namespace Bitrix24\SDK\Services\CRM\Quote\Events\OnCrmQuoteUpdate;
 
 use Bitrix24\SDK\Core\Result\AbstractItem;
 
@@ -21,6 +21,6 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  * 		RECURRING_DEAL_ID: int,
  *	 } $FIELDS
  */
-class OnCrmDealRecurringUpdatePayload extends AbstractItem
+class OnCrmQuoteUpdatePayload extends AbstractItem
 {
 }

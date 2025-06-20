@@ -39,20 +39,16 @@ class QuoteContactTest extends TestCase
     private ServiceBuilder $sb;
 
     private array $createdQuotes = [];
+
     private array $createdContacts = [];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->sb = Fabric::getServiceBuilder();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
-        foreach ($this->sb->getCRMScope()->quote()->batch->delete($this->createdQuotes) as $result) {
-        }
-
-        foreach ($this->sb->getCRMScope()->contact()->batch->delete($this->createdContacts) as $result) {
-        }
     }
 
     public function testSet(): void
@@ -73,8 +69,8 @@ class QuoteContactTest extends TestCase
         $connectedId = [$contactIdOne, $contactIdTwo];
         $connectedContacts = $this->sb->getCRMScope()->quoteContact()->get($quoteId)->getContactConnections();
 
-        foreach ($connectedContacts as $item) {
-            $this->assertContains($item->CONTACT_ID, $connectedId);
+        foreach ($connectedContacts as $connectedContact) {
+            $this->assertContains($connectedContact->CONTACT_ID, $connectedId);
         }
     }
 
@@ -106,8 +102,8 @@ class QuoteContactTest extends TestCase
         $connectedId = [$contactIdOne, $contactIdTwo];
         $connectedContacts = $this->sb->getCRMScope()->quoteContact()->get($quoteId)->getContactConnections();
 
-        foreach ($connectedContacts as $item) {
-            $this->assertContains($item->CONTACT_ID, $connectedId);
+        foreach ($connectedContacts as $connectedContact) {
+            $this->assertContains($connectedContact->CONTACT_ID, $connectedId);
         }
     }
 

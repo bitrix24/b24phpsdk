@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\CRM\Quote\Events\OnCrmQuoteUserFieldAdd;
 
 use Bitrix24\SDK\Application\Requests\Events\AbstractEventRequest;
-use Bitrix24\SDK\Services\CRM\Quote\Events\OnCrmQuoteAdd\OnCrmQuoteUserFieldAddPayload;
 
 class OnCrmQuoteUserFieldAdd extends AbstractEventRequest
 {

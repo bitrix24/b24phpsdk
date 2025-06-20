@@ -121,7 +121,7 @@ class QuoteTest extends TestCase
         $addedItemResult = $this->quoteService->add(['TITLE' => 'test quote']);
         $newTitle = 'test2';
 
-        self::assertTrue($this->quoteService->update($addedItemResult->getId(), ['TITLE' => $newTitle], [])->isSuccess());
+        self::assertTrue($this->quoteService->update($addedItemResult->getId(), ['TITLE' => $newTitle])->isSuccess());
         self::assertEquals($newTitle, $this->quoteService->get($addedItemResult->getId())->quote()->TITLE);
     }
 

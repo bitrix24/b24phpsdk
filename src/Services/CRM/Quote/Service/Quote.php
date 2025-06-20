@@ -31,19 +31,12 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['crm']))]
 class Quote extends AbstractService
 {
-    public Batch $batch;
-
     /**
      * Quote constructor.
-     *
-     * @param Batch           $batch
-     * @param CoreInterface   $core
-     * @param LoggerInterface $log
      */
-    public function __construct(Batch $batch, CoreInterface $core, LoggerInterface $log)
+    public function __construct(public Batch $batch, CoreInterface $core, LoggerInterface $logger)
     {
-        parent::__construct($core, $log);
-        $this->batch = $batch;
+        parent::__construct($core, $logger);
     }
 
     /**
@@ -97,7 +90,6 @@ class Quote extends AbstractService
      *   UTM_TERM?: string,
      * } $fields
      *
-     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -123,9 +115,7 @@ class Quote extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/quote/crm-quote-delete.html
      *
-     * @param int $id
      *
-     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -151,7 +141,6 @@ class Quote extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/quote/crm-quote-fields.html
      *
-     * @return FieldsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -170,9 +159,7 @@ class Quote extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/quote/crm-quote-get.html
      *
-     * @param int $id
      *
-     * @return QuoteResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -198,7 +185,6 @@ class Quote extends AbstractService
      *
      * @throws BaseException
      * @throws TransportException
-     * @return QuotesResult
      */
     #[ApiEndpointMetadata(
         'crm.quote.list',
@@ -225,7 +211,6 @@ class Quote extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/quote/crm-quote-update.html
      *
-     * @param int $id
      * @param array{
      *   ID?: int,
      *   ASSIGNED_BY_ID?: int,
@@ -262,7 +247,6 @@ class Quote extends AbstractService
      *   UTM_TERM?: string,
      *   }        $fields
      *
-     * @return UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -323,7 +307,6 @@ class Quote extends AbstractService
      *   UTM_TERM?: string,
      *   } $filter
      *
-     * @return int
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      */

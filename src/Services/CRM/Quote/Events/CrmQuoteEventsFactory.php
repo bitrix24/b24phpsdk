@@ -11,9 +11,7 @@
 
 declare(strict_types=1);
 
-
 namespace Bitrix24\SDK\Services\CRM\Quote\Events;
-
 
 use Bitrix24\SDK\Core\Contracts\Events\EventInterface;
 use Bitrix24\SDK\Core\Contracts\Events\EventsFabricInterface;

@@ -72,7 +72,6 @@ class QuoteProductRows extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/quote/crm-quote-product-rows-set.html
      *
-     * @param int $quoteId
      * @param array<int, array{
      *   ID?: int,
      *   OWNER_ID?: int,
