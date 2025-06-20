@@ -182,6 +182,10 @@ test-integration-scope-ai-admin:
 .PHONY: integration_tests_scope_crm_deal_details
 integration_tests_scope_crm_deal_details:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_deal_details
+  
+.PHONY: integration_tests_scope_crm_currency
+integration_tests_scope_crm_currency:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_currency
 
 .PHONY: integration_tests_deal_recurring
 integration_tests_deal_recurring:
