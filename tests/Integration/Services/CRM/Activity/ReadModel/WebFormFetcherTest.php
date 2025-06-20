@@ -17,14 +17,13 @@ use Bitrix24\SDK\Services\CRM\Activity\ReadModel\WebFormFetcher;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
 
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Activity\ReadModel\WebFormFetcher::class)]
 class WebFormFetcherTest extends TestCase
 {
     private WebFormFetcher $webFormFetcher;
 
     /**
-     * @return void
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @covers \Bitrix24\SDK\Services\CRM\Activity\ReadModel\WebFormFetcher::getList
      */
     public function testGetListWithAllWebFormResults(): void
     {
@@ -39,10 +38,11 @@ class WebFormFetcherTest extends TestCase
 //                    $item->SUBJECT,
 //                ) . PHP_EOL);
         }
+
         $this->assertTrue(true);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->webFormFetcher = Fabric::getServiceBuilder()->getCRMScope()->activityFetcher()->webFormFetcher();
     }
