@@ -62,7 +62,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -83,7 +84,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -107,7 +109,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -129,7 +132,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -156,7 +160,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -178,7 +183,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -200,7 +206,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -224,7 +231,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -256,7 +264,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -284,7 +293,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -312,7 +322,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -333,7 +344,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -361,7 +373,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -385,7 +398,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -415,7 +429,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -436,7 +451,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -462,7 +478,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -483,7 +500,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -514,7 +532,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -538,7 +557,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -559,7 +579,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -589,7 +610,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
@@ -610,7 +632,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId
+        ?string               $externalId,
+        string                $comment
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
