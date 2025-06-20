@@ -531,6 +531,9 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         int $applicationVersion,
         Scope $applicationScope,
         string $applicationToken,
+        int $newApplicationVersion,
+        Scope $newApplicationScope,
+        ?Throwable $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
