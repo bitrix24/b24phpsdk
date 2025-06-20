@@ -36,7 +36,6 @@ class LeadContact extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/leads/management-communication/crm-lead-contact-fields.html
      *
-     * @return FieldsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -66,19 +65,20 @@ class LeadContact extends AbstractService
     public function setItems(int $leadId, array $contactConnections): UpdatedItemResult
     {
         $items = [];
-        foreach ($contactConnections as $item) {
-            if (!$item instanceof ContactConnection) {
+        foreach ($contactConnections as $contactConnection) {
+            if (!$contactConnection instanceof ContactConnection) {
                 throw new InvalidArgumentException(
-                    sprintf('array item «%s» must be «%s» type', gettype($item), ContactConnection::class)
+                    sprintf('array item «%s» must be «%s» type', gettype($contactConnection), ContactConnection::class)
                 );
             }
 
             $items[] = [
-                'CONTACT_ID' => $item->contactId,
-                'SORT' => $item->sort,
-                'IS_PRIMARY' => $item->isPrimary ? 'Y' : 'N'
+                'CONTACT_ID' => $contactConnection->contactId,
+                'SORT' => $contactConnection->sort,
+                'IS_PRIMARY' => $contactConnection->isPrimary ? 'Y' : 'N'
             ];
         }
+
         if ($items === []) {
             throw new InvalidArgumentException('empty contact connections array');
         }
@@ -138,14 +138,14 @@ class LeadContact extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/leads/management-communication/index.html',
         'Adds a contact link to the specified lead'
     )]
-    public function add(int $leadId, ContactConnection $connection): UpdatedItemResult
+    public function add(int $leadId, ContactConnection $contactConnection): UpdatedItemResult
     {
         return new UpdatedItemResult($this->core->call('crm.lead.contact.add', [
             'id' => $leadId,
             'fields' => [
-                'CONTACT_ID' => $connection->contactId,
-                'SORT' => $connection->sort,
-                'IS_PRIMARY' => $connection->isPrimary ? 'Y' : 'N'
+                'CONTACT_ID' => $contactConnection->contactId,
+                'SORT' => $contactConnection->sort,
+                'IS_PRIMARY' => $contactConnection->isPrimary ? 'Y' : 'N'
             ]
         ]));
     }
