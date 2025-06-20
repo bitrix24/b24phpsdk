@@ -49,6 +49,12 @@
         <testsuite name="integration_tests_lead_userfield_use_case">
             <file>./tests/Integration/Services/CRM/Lead/Service/LeadUserfieldUseCaseTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_scope_crm_currency">
+            <directory>./tests/Integration/Services/CRM/Currency/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_deal_recurring">
+            <file>./tests/Integration/Services/CRM/Deal/Service/DealRecurringTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_scope_automation">
             <directory>./tests/Integration/Services/CRM/Automation/</directory>
         </testsuite>
