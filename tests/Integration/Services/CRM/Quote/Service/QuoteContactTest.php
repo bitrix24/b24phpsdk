@@ -49,6 +49,12 @@ class QuoteContactTest extends TestCase
 
     protected function tearDown(): void
     {
+        foreach ($this->sb->getCRMScope()->quote()->batch->delete($this->createdQuotes) as $result) {
+            // ###
+        }
+        foreach ($this->sb->getCRMScope()->contact()->batch->delete($this->createdContacts) as $result) {
+            // ###
+        }
     }
 
     public function testSet(): void
