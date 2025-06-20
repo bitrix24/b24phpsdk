@@ -28,9 +28,19 @@ use Money\Money;
  * @property-read int $ID
  * @property-read string $TITLE
  * @property-read int|null $ASSIGNED_BY_ID
- * @property-read CarbonImmutable|null $BEGINDATA
- * @property-read CarbonImmutable|null $CLOSEDATA
+ * @property-read int|null $LAST_ACTIVITY_BY
+ * @property-read CarbonImmutable|null $LAST_ACTIVITY_TIME
+ * @property-read string|null $LAST_COMMUNICATION_TIME
+ * @property-read CarbonImmutable|null $BEGINDATE
+ * @property-read CarbonImmutable|null $CLOSEDATE
+ * @property-read CarbonImmutable|null $ACTUAL_DATE
  * @property-read string|null $CLIENT_ADDR
+ * @property-read string|null $CLIENT_CONTACT
+ * @property-read string|null $CLIENT_EMAIL
+ * @property-read string|null $CLIENT_PHONE
+ * @property-read string|null $CLIENT_TITLE
+ * @property-read string|null $CLIENT_TPA_ID
+ * @property-read string|null $CLIENT_TP_ID
  * @property-read bool|null $CLOSED
  * @property-read string|null $COMMENTS
  * @property-read int|null $COMPANY_ID
@@ -44,12 +54,14 @@ use Money\Money;
  * @property-read int|null $DEAL_ID
  * @property-read int|null $LEAD_ID
  * @property-read int|null $LOCATION_ID
+ * @property-read int|null $MODIFY_BY_ID
+ * @property-read int|null $MYCOMPANY_ID
  * @property-read bool|null $OPENED
  * @property-read Money|null $OPPORTUNITY
  * @property-read int|null $PERSON_TYPE_ID
  * @property-read string|null $QUOTE_NUMBER
  * @property-read string|null $STATUS_ID
- * @property-read string|null $TAX_VALUE
+ * @property-read Money|null $TAX_VALUE
  * @property-read string|null $TERMS
  * @property-read string|null $UTM_SOURCE
  * @property-read string|null $UTM_MEDIUM
