@@ -161,7 +161,14 @@ class AbstractCrmItem extends AbstractItem
                     return new Money((string)$var, new Currency($this->currency->getCode()));
                 }
                 return null;
+            case 'AMOUNT':
+                if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
+                    $var = $this->data[$offset] * 100;
+                    return new Money((string)$var, new Currency($this->data['CURRENCY']));
+                }
+                return null;
             case 'RESULT_CURRENCY_ID':
+            case 'CURRENCY':
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                     return new Currency($this->data[$offset]);
                 }

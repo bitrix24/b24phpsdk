@@ -65,7 +65,9 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
@@ -113,7 +115,9 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
@@ -164,7 +168,9 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
@@ -228,7 +234,9 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
@@ -266,7 +274,9 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
@@ -304,7 +314,9 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
@@ -365,7 +377,9 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
@@ -409,7 +423,9 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
@@ -451,7 +467,9 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
@@ -492,7 +510,9 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
@@ -529,12 +549,13 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
         bool $isMasterAccount,
-
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
@@ -571,12 +592,13 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
         bool $isMasterAccount,
-
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
@@ -622,7 +644,9 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
@@ -683,7 +707,9 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
@@ -727,7 +753,9 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
@@ -769,7 +797,9 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
@@ -810,7 +840,9 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
@@ -851,7 +883,9 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
@@ -889,7 +923,9 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
@@ -940,7 +976,9 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
