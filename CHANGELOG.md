@@ -109,15 +109,18 @@
     - added method `isApplicationTokenValid`
     - changed method `public function applicationInstalled(?string $applicationToken): void` application token now is nullable
     - changed method `public function applicationUninstalled(?string $applicationToken): void` application token now is nullable
-    - added method `linkContactPerson(Uuid $uuid)`
-    - added method `linkBitrix24Partner()`
-    - added method `unlinkBitrix24Partner()`
-    - added method `unlinkContactPerson()`
-    - added method `linkBitrix24PartnerContactPerson()`
-    - added method `unlinkBitrix24PartnerContactPerson()`
-    - remove method `changeContactPerson(?Uuid $uuid)`
-    - remove method `changeBitrix24Partner(?Uuid $uuid)`
-    - remove method `changeBitrix24PartnerContactPerson(?Uuid $uuid)`
+    - added method `linkContactPerson(Uuid $uuid)`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - added method `linkBitrix24Partner()`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - added method `unlinkBitrix24Partner()`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - added method `unlinkContactPerson()`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - added method `linkBitrix24PartnerContactPerson()`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - added method `unlinkBitrix24PartnerContactPerson()`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - remove method `changeContactPerson(?Uuid $uuid)`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - remove method `changeBitrix24Partner(?Uuid $uuid)`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - remove method `changeBitrix24PartnerContactPerson(?Uuid $uuid)`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+- ❗**️️BC** Changed contract `Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Repository\ApplicationInstallationRepositoryInterface`,
+  see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/167):
+    - change return type `findByBitrix24AccountId` from an array to `?ApplicationInstallationInterface`
 
 ### Statistics
 
