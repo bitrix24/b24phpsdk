@@ -17,7 +17,8 @@ Optional can store links to:
 | `linkContactPerson()`                  | `void`                          | Link client contact person                                                             |                            |
 | `unlinkContactPerson()`                | `void`                          | Unlink client contact person                                                           |                            |
 | `getBitrix24PartnerContactPersonId()`  | `?Uuid`                         | Returns Bitrix24 partner contact person id (optional)                                  |                            |
-| `changeBitrix24PartnerContactPerson()` | `void`                          | Changes Bitrix24 partner contact person                                                |                            |
+| `linkBitrix24PartnerContactPerson()`   | `void`                          | Link Bitrix24 partner contact person                                                   |                            |
+| `unlinkBitrix24PartnerContactPerson()` | `void`                          | Unlink Bitrix24 partner contact person                                                 |                            |
 | `getBitrix24PartnerId()`               | `?Uuid`                         | Returns Bitrix24 Partner id related to this installation (optional)                    |                            |
 | `changeBitrix24Partner()`              | `void`                          | Changes Bitrix24 partner                                                               |                            |
 | `getExternalId()`                      | `?string`                       | Returns external id for application installation                                       |                            |
