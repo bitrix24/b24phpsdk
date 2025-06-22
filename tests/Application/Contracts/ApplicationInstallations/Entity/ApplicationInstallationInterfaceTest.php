@@ -410,8 +410,8 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
 
     #[Test]
     #[DataProvider('applicationInstallationDataProvider')]
-    #[TestDox('test changeBitrix24Partner method')]
-    final public function testChangeBitrix24Partner(
+    #[TestDox('test linkBitrix24Partner method')]
+    final public function linkBitrix24Partner(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
         CarbonImmutable $createdAt,
@@ -441,8 +441,48 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         );
 
         $newBitrix24PartnerUuid = Uuid::v7();
-        $installation->changeBitrix24Partner($newBitrix24PartnerUuid);
+        $installation->linkBitrix24Partner($newBitrix24PartnerUuid);
         $this->assertEquals($newBitrix24PartnerUuid, $installation->getBitrix24PartnerId());
+        $this->assertFalse($installation->getCreatedAt()->equalTo($installation->getUpdatedAt()));
+    }
+
+    #[Test]
+    #[DataProvider('applicationInstallationDataProvider')]
+    #[TestDox('test unlinkBitrix24Partner method')]
+    final public function unlinkBitrix24Partner(
+        Uuid $uuid,
+        ApplicationInstallationStatus $applicationInstallationStatus,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        Uuid $bitrix24AccountUuid,
+        ApplicationStatus $applicationStatus,
+        PortalLicenseFamily $portalLicenseFamily,
+        ?int $portalUsersCount,
+        ?Uuid $clientContactPersonUuid,
+        ?Uuid $partnerContactPersonUuid,
+        ?Uuid $partnerUuid,
+        ?string $externalId
+    ): void {
+        $installation = $this->createApplicationInstallationImplementation(
+            $uuid,
+            $applicationInstallationStatus,
+            $createdAt,
+            $updatedAt,
+            $bitrix24AccountUuid,
+            $applicationStatus,
+            $portalLicenseFamily,
+            $portalUsersCount,
+            $clientContactPersonUuid,
+            $partnerContactPersonUuid,
+            $partnerUuid,
+            $externalId
+        );
+
+        $newBitrix24PartnerUuid = Uuid::v7();
+        $installation->linkBitrix24Partner($newBitrix24PartnerUuid);
+        $this->assertEquals($newBitrix24PartnerUuid, $installation->getBitrix24PartnerId());
+        $installation->unlinkBitrix24Partner();
+        $this->assertNull($installation->getBitrix24PartnerId());
         $this->assertFalse($installation->getCreatedAt()->equalTo($installation->getUpdatedAt()));
     }
 

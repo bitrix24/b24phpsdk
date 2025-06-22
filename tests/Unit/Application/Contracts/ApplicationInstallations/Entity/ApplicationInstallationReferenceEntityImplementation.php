@@ -129,9 +129,15 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
         return $this->bitrix24PartnerUuid;
     }
 
-    public function changeBitrix24Partner(?Uuid $uuid): void
+    public function linkBitrix24Partner(Uuid $uuid): void
     {
         $this->bitrix24PartnerUuid = $uuid;
+        $this->updatedAt = new CarbonImmutable();
+    }
+
+    public function unlinkBitrix24Partner(): void
+    {
+        $this->bitrix24PartnerUuid = null;
         $this->updatedAt = new CarbonImmutable();
     }
 

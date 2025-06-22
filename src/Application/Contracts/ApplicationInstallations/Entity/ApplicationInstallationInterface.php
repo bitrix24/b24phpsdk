@@ -97,11 +97,18 @@ interface ApplicationInstallationInterface
     public function getBitrix24PartnerId(): ?Uuid;
 
     /**
-     * Change bitrix24 partner
+     * Link Bitrix24 partner
      *
-     * Change bitrix24 partner if other partner starts support client portal
+     * Link Bitrix24 partner who supports this portal
      */
-    public function changeBitrix24Partner(?Uuid $uuid): void;
+    public function linkBitrix24Partner(Uuid $uuid): void;
+
+    /**
+     * Unlink Bitrix24 partner
+     *
+     * Unlink Bitrix24 partner who stops supporting this portal
+     */
+    public function unlinkBitrix24Partner(): void;
 
     /**
      * Get external id for application installation

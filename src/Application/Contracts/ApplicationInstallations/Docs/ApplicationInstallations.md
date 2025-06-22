@@ -20,7 +20,8 @@ Optional can store links to:
 | `linkBitrix24PartnerContactPerson()`   | `void`                          | Link Bitrix24 partner contact person                                                   |                            |
 | `unlinkBitrix24PartnerContactPerson()` | `void`                          | Unlink Bitrix24 partner contact person                                                 |                            |
 | `getBitrix24PartnerId()`               | `?Uuid`                         | Returns Bitrix24 Partner id related to this installation (optional)                    |                            |
-| `changeBitrix24Partner()`              | `void`                          | Changes Bitrix24 partner                                                               |                            |
+| `linkBitrix24Partner()`                | `void`                          | Link Bitrix24 partner                                                                  |                            |
+| `unlinkBitrix24Partner()`              | `void`                          | Unlink Bitrix24 partner                                                                |                            |
 | `getExternalId()`                      | `?string`                       | Returns external id for application installation                                       |                            |
 | `setExternalId()`                      | `void`                          | Sets external id for application installation                                          | `InvalidArgumentException` |
 | `getStatus()`                          | `ApplicationInstallationStatus` | Returns application installation status                                                |                            |

@@ -110,10 +110,13 @@
     - changed method `public function applicationInstalled(?string $applicationToken): void` application token now is nullable
     - changed method `public function applicationUninstalled(?string $applicationToken): void` application token now is nullable
     - added method `linkContactPerson(Uuid $uuid)`
+    - added method `linkBitrix24Partner()`
+    - added method `unlinkBitrix24Partner()`
     - added method `unlinkContactPerson()`
     - added method `linkBitrix24PartnerContactPerson()`
     - added method `unlinkBitrix24PartnerContactPerson()`
     - remove method `changeContactPerson(?Uuid $uuid)`
+    - remove method `changeBitrix24Partner(?Uuid $uuid)`
     - remove method `changeBitrix24PartnerContactPerson(?Uuid $uuid)`
 
 ### Statistics
