@@ -36,22 +36,24 @@ use Symfony\Component\Uid\Uuid;
 abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
 {
     abstract protected function createApplicationInstallationImplementation(
-        Uuid                          $uuid,
+        Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable               $createdAt,
-        CarbonImmutable               $updatedAt,
-        Uuid                          $bitrix24AccountUuid,
-        ApplicationStatus             $applicationStatus,
-        PortalLicenseFamily           $portalLicenseFamily,
-        ?int                          $portalUsersCount,
-        ?Uuid                         $clientContactPersonUuid,
-        ?Uuid                         $partnerContactPersonUuid,
-        ?Uuid                         $partnerUuid,
-        ?string                       $externalId,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        Uuid $bitrix24AccountUuid,
+        ApplicationStatus $applicationStatus,
+        PortalLicenseFamily $portalLicenseFamily,
+        ?int $portalUsersCount,
+        ?Uuid $clientContactPersonUuid,
+        ?Uuid $partnerContactPersonUuid,
+        ?Uuid $partnerUuid,
+        ?string $externalId,
     ): ApplicationInstallationInterface;
 
     abstract protected function createApplicationInstallationRepositoryImplementation(): ApplicationInstallationRepositoryInterface;
+
     abstract protected function createRepositoryFlusherImplementation(): TestRepositoryFlusherInterface;
+
     /**
      * @throws ApplicationInstallationNotFoundException
      */
@@ -59,24 +61,36 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
     #[DataProvider('applicationInstallationDataProvider')]
     #[TestDox('test save method for install start use case')]
     final public function testSave(
-        Uuid                          $uuid,
+        Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable               $createdAt,
-        CarbonImmutable               $updatedAt,
-        Uuid                          $bitrix24AccountUuid,
-        ApplicationStatus             $applicationStatus,
-        PortalLicenseFamily           $portalLicenseFamily,
-        ?int                          $portalUsersCount,
-        ?Uuid                         $clientContactPersonUuid,
-        ?Uuid                         $partnerContactPersonUuid,
-        ?Uuid                         $partnerUuid,
-        ?string                       $externalId,
-    ): void
-    {
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        Uuid $bitrix24AccountUuid,
+        ApplicationStatus $applicationStatus,
+        PortalLicenseFamily $portalLicenseFamily,
+        ?int $portalUsersCount,
+        ?Uuid $clientContactPersonUuid,
+        ?Uuid $partnerContactPersonUuid,
+        ?Uuid $partnerUuid,
+        ?string $externalId,
+    ): void {
         $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
-        $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
+        $installation = $this->createApplicationInstallationImplementation(
+            $uuid,
+            $applicationInstallationStatus,
+            $createdAt,
+            $updatedAt,
+            $bitrix24AccountUuid,
+            $applicationStatus,
+            $portalLicenseFamily,
+            $portalUsersCount,
+            $clientContactPersonUuid,
+            $partnerContactPersonUuid,
+            $partnerUuid,
+            $externalId
+        );
         $appInstallationRepo->save($installation);
         $flusher->flush();
 
@@ -87,24 +101,36 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
     #[DataProvider('applicationInstallationDataProvider')]
     #[TestDox('test getById method for install start use case')]
     final public function testGetByIdHappyPath(
-        Uuid                          $uuid,
+        Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable               $createdAt,
-        CarbonImmutable               $updatedAt,
-        Uuid                          $bitrix24AccountUuid,
-        ApplicationStatus             $applicationStatus,
-        PortalLicenseFamily           $portalLicenseFamily,
-        ?int                          $portalUsersCount,
-        ?Uuid                         $clientContactPersonUuid,
-        ?Uuid                         $partnerContactPersonUuid,
-        ?Uuid                         $partnerUuid,
-        ?string                       $externalId,
-    ): void
-    {
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        Uuid $bitrix24AccountUuid,
+        ApplicationStatus $applicationStatus,
+        PortalLicenseFamily $portalLicenseFamily,
+        ?int $portalUsersCount,
+        ?Uuid $clientContactPersonUuid,
+        ?Uuid $partnerContactPersonUuid,
+        ?Uuid $partnerUuid,
+        ?string $externalId,
+    ): void {
         $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
-        $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
+        $installation = $this->createApplicationInstallationImplementation(
+            $uuid,
+            $applicationInstallationStatus,
+            $createdAt,
+            $updatedAt,
+            $bitrix24AccountUuid,
+            $applicationStatus,
+            $portalLicenseFamily,
+            $portalUsersCount,
+            $clientContactPersonUuid,
+            $partnerContactPersonUuid,
+            $partnerUuid,
+            $externalId
+        );
         $appInstallationRepo->save($installation);
         $flusher->flush();
 
@@ -115,20 +141,19 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
     #[DataProvider('applicationInstallationDataProvider')]
     #[TestDox('test getById method for install start use case')]
     final public function testGetByIdWithNonExistsEntity(
-        Uuid                          $uuid,
+        Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable               $createdAt,
-        CarbonImmutable               $updatedAt,
-        Uuid                          $bitrix24AccountUuid,
-        ApplicationStatus             $applicationStatus,
-        PortalLicenseFamily           $portalLicenseFamily,
-        ?int                          $portalUsersCount,
-        ?Uuid                         $clientContactPersonUuid,
-        ?Uuid                         $partnerContactPersonUuid,
-        ?Uuid                         $partnerUuid,
-        ?string                       $externalId,
-    ): void
-    {
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        Uuid $bitrix24AccountUuid,
+        ApplicationStatus $applicationStatus,
+        PortalLicenseFamily $portalLicenseFamily,
+        ?int $portalUsersCount,
+        ?Uuid $clientContactPersonUuid,
+        ?Uuid $partnerContactPersonUuid,
+        ?Uuid $partnerUuid,
+        ?string $externalId,
+    ): void {
         $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
 
         $this->expectException(ApplicationInstallationNotFoundException::class);
@@ -143,24 +168,36 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
     #[DataProvider('applicationInstallationDataProvider')]
     #[TestDox('test delete method')]
     final public function testDeleteWithHappyPath(
-        Uuid                          $uuid,
+        Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable               $createdAt,
-        CarbonImmutable               $updatedAt,
-        Uuid                          $bitrix24AccountUuid,
-        ApplicationStatus             $applicationStatus,
-        PortalLicenseFamily           $portalLicenseFamily,
-        ?int                          $portalUsersCount,
-        ?Uuid                         $clientContactPersonUuid,
-        ?Uuid                         $partnerContactPersonUuid,
-        ?Uuid                         $partnerUuid,
-        ?string                       $externalId,
-    ): void
-    {
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        Uuid $bitrix24AccountUuid,
+        ApplicationStatus $applicationStatus,
+        PortalLicenseFamily $portalLicenseFamily,
+        ?int $portalUsersCount,
+        ?Uuid $clientContactPersonUuid,
+        ?Uuid $partnerContactPersonUuid,
+        ?Uuid $partnerUuid,
+        ?string $externalId,
+    ): void {
         $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
-        $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
+        $installation = $this->createApplicationInstallationImplementation(
+            $uuid,
+            $applicationInstallationStatus,
+            $createdAt,
+            $updatedAt,
+            $bitrix24AccountUuid,
+            $applicationStatus,
+            $portalLicenseFamily,
+            $portalUsersCount,
+            $clientContactPersonUuid,
+            $partnerContactPersonUuid,
+            $partnerUuid,
+            $externalId
+        );
         // successfully finish installation flow
         $installation->applicationInstalled();
 
@@ -185,20 +222,19 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
     #[DataProvider('applicationInstallationDataProvider')]
     #[TestDox('test delete method with unknown id')]
     final public function testDeleteWithUnknownId(
-        Uuid                          $uuid,
+        Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable               $createdAt,
-        CarbonImmutable               $updatedAt,
-        Uuid                          $bitrix24AccountUuid,
-        ApplicationStatus             $applicationStatus,
-        PortalLicenseFamily           $portalLicenseFamily,
-        ?int                          $portalUsersCount,
-        ?Uuid                         $clientContactPersonUuid,
-        ?Uuid                         $partnerContactPersonUuid,
-        ?Uuid                         $partnerUuid,
-        ?string                       $externalId,
-    ): void
-    {
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        Uuid $bitrix24AccountUuid,
+        ApplicationStatus $applicationStatus,
+        PortalLicenseFamily $portalLicenseFamily,
+        ?int $portalUsersCount,
+        ?Uuid $clientContactPersonUuid,
+        ?Uuid $partnerContactPersonUuid,
+        ?Uuid $partnerUuid,
+        ?string $externalId,
+    ): void {
         $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
 
         // try to delete unknown installation
@@ -210,24 +246,36 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
     #[DataProvider('applicationInstallationDataProvider')]
     #[TestDox('test delete method with wrong state')]
     final public function testDeleteWithWrongState(
-        Uuid                          $uuid,
+        Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable               $createdAt,
-        CarbonImmutable               $updatedAt,
-        Uuid                          $bitrix24AccountUuid,
-        ApplicationStatus             $applicationStatus,
-        PortalLicenseFamily           $portalLicenseFamily,
-        ?int                          $portalUsersCount,
-        ?Uuid                         $clientContactPersonUuid,
-        ?Uuid                         $partnerContactPersonUuid,
-        ?Uuid                         $partnerUuid,
-        ?string                       $externalId,
-    ): void
-    {
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        Uuid $bitrix24AccountUuid,
+        ApplicationStatus $applicationStatus,
+        PortalLicenseFamily $portalLicenseFamily,
+        ?int $portalUsersCount,
+        ?Uuid $clientContactPersonUuid,
+        ?Uuid $partnerContactPersonUuid,
+        ?Uuid $partnerUuid,
+        ?string $externalId,
+    ): void {
         $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
-        $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
+        $installation = $this->createApplicationInstallationImplementation(
+            $uuid,
+            $applicationInstallationStatus,
+            $createdAt,
+            $updatedAt,
+            $bitrix24AccountUuid,
+            $applicationStatus,
+            $portalLicenseFamily,
+            $portalUsersCount,
+            $clientContactPersonUuid,
+            $partnerContactPersonUuid,
+            $partnerUuid,
+            $externalId
+        );
         $appInstallationRepo->save($installation);
         $flusher->flush();
 
@@ -239,51 +287,61 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
     #[DataProvider('applicationInstallationDataProvider')]
     #[TestDox('test findByBitrix24AccountId method')]
     final public function testFindByBitrix24AccountId(
-        Uuid                          $uuid,
+        Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable               $createdAt,
-        CarbonImmutable               $updatedAt,
-        Uuid                          $bitrix24AccountUuid,
-        ApplicationStatus             $applicationStatus,
-        PortalLicenseFamily           $portalLicenseFamily,
-        ?int                          $portalUsersCount,
-        ?Uuid                         $clientContactPersonUuid,
-        ?Uuid                         $partnerContactPersonUuid,
-        ?Uuid                         $partnerUuid,
-        ?string                       $externalId,
-    ): void
-    {
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        Uuid $bitrix24AccountUuid,
+        ApplicationStatus $applicationStatus,
+        PortalLicenseFamily $portalLicenseFamily,
+        ?int $portalUsersCount,
+        ?Uuid $clientContactPersonUuid,
+        ?Uuid $partnerContactPersonUuid,
+        ?Uuid $partnerUuid,
+        ?string $externalId,
+    ): void {
         $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
-        $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
+        $installation = $this->createApplicationInstallationImplementation(
+            $uuid,
+            $applicationInstallationStatus,
+            $createdAt,
+            $updatedAt,
+            $bitrix24AccountUuid,
+            $applicationStatus,
+            $portalLicenseFamily,
+            $portalUsersCount,
+            $clientContactPersonUuid,
+            $partnerContactPersonUuid,
+            $partnerUuid,
+            $externalId
+        );
         $appInstallationRepo->save($installation);
         $flusher->flush();
 
-        $this->assertEquals([$installation], $appInstallationRepo->findByBitrix24AccountId($bitrix24AccountUuid));
+        $this->assertEquals($installation, $appInstallationRepo->findByBitrix24AccountId($bitrix24AccountUuid));
     }
 
     #[Test]
     #[DataProvider('applicationInstallationDataProvider')]
     #[TestDox('test findByBitrix24AccountId method with unknown id')]
     final public function testFindByBitrix24AccountIdWithUnknownId(
-        Uuid                          $uuid,
+        Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable               $createdAt,
-        CarbonImmutable               $updatedAt,
-        Uuid                          $bitrix24AccountUuid,
-        ApplicationStatus             $applicationStatus,
-        PortalLicenseFamily           $portalLicenseFamily,
-        ?int                          $portalUsersCount,
-        ?Uuid                         $clientContactPersonUuid,
-        ?Uuid                         $partnerContactPersonUuid,
-        ?Uuid                         $partnerUuid,
-        ?string                       $externalId,
-    ): void
-    {
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        Uuid $bitrix24AccountUuid,
+        ApplicationStatus $applicationStatus,
+        PortalLicenseFamily $portalLicenseFamily,
+        ?int $portalUsersCount,
+        ?Uuid $clientContactPersonUuid,
+        ?Uuid $partnerContactPersonUuid,
+        ?Uuid $partnerUuid,
+        ?string $externalId,
+    ): void {
         $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
-
-        $this->assertEquals([], $appInstallationRepo->findByBitrix24AccountId(Uuid::v7()));
+        $this->assertNull($appInstallationRepo->findByBitrix24AccountId(Uuid::v7()));
     }
 
     /**
@@ -293,24 +351,36 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
     #[DataProvider('applicationInstallationDataProvider')]
     #[TestDox('test findByExternalId method')]
     final public function testFindByExternalId(
-        Uuid                          $uuid,
+        Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable               $createdAt,
-        CarbonImmutable               $updatedAt,
-        Uuid                          $bitrix24AccountUuid,
-        ApplicationStatus             $applicationStatus,
-        PortalLicenseFamily           $portalLicenseFamily,
-        ?int                          $portalUsersCount,
-        ?Uuid                         $clientContactPersonUuid,
-        ?Uuid                         $partnerContactPersonUuid,
-        ?Uuid                         $partnerUuid,
-        ?string                       $externalId,
-    ): void
-    {
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        Uuid $bitrix24AccountUuid,
+        ApplicationStatus $applicationStatus,
+        PortalLicenseFamily $portalLicenseFamily,
+        ?int $portalUsersCount,
+        ?Uuid $clientContactPersonUuid,
+        ?Uuid $partnerContactPersonUuid,
+        ?Uuid $partnerUuid,
+        ?string $externalId,
+    ): void {
         $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
-        $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
+        $installation = $this->createApplicationInstallationImplementation(
+            $uuid,
+            $applicationInstallationStatus,
+            $createdAt,
+            $updatedAt,
+            $bitrix24AccountUuid,
+            $applicationStatus,
+            $portalLicenseFamily,
+            $portalUsersCount,
+            $clientContactPersonUuid,
+            $partnerContactPersonUuid,
+            $partnerUuid,
+            $externalId
+        );
         $externalId = Uuid::v7()->toRfc4122();
         $installation->setExternalId($externalId);
         $appInstallationRepo->save($installation);
@@ -323,20 +393,19 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
     #[DataProvider('applicationInstallationDataProvider')]
     #[TestDox('test findByExternalId method with unknown id')]
     final public function testFindByExternalIdWithUnknownId(
-        Uuid                          $uuid,
+        Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable               $createdAt,
-        CarbonImmutable               $updatedAt,
-        Uuid                          $bitrix24AccountUuid,
-        ApplicationStatus             $applicationStatus,
-        PortalLicenseFamily           $portalLicenseFamily,
-        ?int                          $portalUsersCount,
-        ?Uuid                         $clientContactPersonUuid,
-        ?Uuid                         $partnerContactPersonUuid,
-        ?Uuid                         $partnerUuid,
-        ?string                       $externalId,
-    ): void
-    {
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        Uuid $bitrix24AccountUuid,
+        ApplicationStatus $applicationStatus,
+        PortalLicenseFamily $portalLicenseFamily,
+        ?int $portalUsersCount,
+        ?Uuid $clientContactPersonUuid,
+        ?Uuid $partnerContactPersonUuid,
+        ?Uuid $partnerUuid,
+        ?string $externalId,
+    ): void {
         $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
 
         $externalId = Uuid::v7()->toRfc4122();
