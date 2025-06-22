@@ -14,7 +14,8 @@ Optional can store links to:
 | `getUpdatedAt()`                       | `CarbonImmutable`               | Returns date and time of last application installation change                          |                            |
 | `getBitrix24AccountId()`               | `Uuid`                          | Returns Bitrix24 Account id related to this installation                               |                            |
 | `getContactPersonId()`                 | `?Uuid`                         | Returns contact person id who installed the application on portal (optional)           |                            |
-| `changeContactPerson()`                | `void`                          | Changes client contact person                                                          |                            |
+| `linkContactPerson()`                  | `void`                          | Link client contact person                                                             |                            |
+| `unlinkContactPerson()`                | `void`                          | Unlink client contact person                                                           |                            |
 | `getBitrix24PartnerContactPersonId()`  | `?Uuid`                         | Returns Bitrix24 partner contact person id (optional)                                  |                            |
 | `changeBitrix24PartnerContactPerson()` | `void`                          | Changes Bitrix24 partner contact person                                                |                            |
 | `getBitrix24PartnerId()`               | `?Uuid`                         | Returns Bitrix24 Partner id related to this installation (optional)                    |                            |

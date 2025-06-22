@@ -57,11 +57,18 @@ interface ApplicationInstallationInterface
     public function getContactPersonId(): ?Uuid;
 
     /**
-     * Change contact person
+     * Link contact person
      *
-     * Change client contact person if client say he has new responsible for the application
+     * Link client contact person if a client says they have new responsible for the application
      */
-    public function changeContactPerson(?Uuid $uuid): void;
+    public function linkContactPerson(Uuid $uuid): void;
+
+    /**
+     * Unlink contact person
+     *
+     * Unlink a client contact person if the client says the contact person has changed
+     */
+    public function unlinkContactPerson(): void;
 
     /**
      * Get Bitrix24 Partner contact person id, optional

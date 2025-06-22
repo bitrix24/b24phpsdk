@@ -109,6 +109,9 @@
     - added method `isApplicationTokenValid`
     - changed method `public function applicationInstalled(?string $applicationToken): void` application token now is nullable
     - changed method `public function applicationUninstalled(?string $applicationToken): void` application token now is nullable
+    - added method `linkContactPerson(Uuid $uuid)`
+    - added method `unlinkContactPerson()`
+    - remove method `changeContactPerson(?Uuid $uuid)`
 
 ### Statistics
 
