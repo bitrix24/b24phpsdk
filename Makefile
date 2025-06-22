@@ -41,6 +41,7 @@ help:
 	@echo "ngrok-up                  - start ngrok"
 	@echo "ngrok-down                - stop ngrok"
 	@echo ""
+	@echo "lint-all                  - lint codebase with all linters step by step"
 	@echo "lint-allowed-licenses     - lint dependencies for valid licenses"
 	@echo "lint-cs-fixer             - lint source code with php-cs-fixer"
 	@echo "lint-cs-fixer-fix         - fix source code with php-cs-fixer"
@@ -132,6 +133,9 @@ lint-rector:
 .PHONY: lint-rector-fix
 lint-rector-fix:
 	docker-compose run --rm php-cli vendor/bin/rector process
+
+.PHONY: lint-all
+lint-all: lint-allowed-licenses lint-cs-fixer lint-phpstan lint-rector
 
 # unit tests
 .PHONY: test-unit

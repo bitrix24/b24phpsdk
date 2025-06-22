@@ -86,13 +86,16 @@
     - `get` get localizations
     - `fields` get localization fields
     - `delete` delete currency, with batch calls support
+- Developer experience: added make command `lint-all` for run all code linters step by step, [see details](https://github.com/bitrix24/b24phpsdk/issues/183)
 
 ### Fixed
 
 - Fixed error in arguments in service for method `placement.bind`, [see details](https://github.com/bitrix24/b24phpsdk/issues/151)
-- Fixed errors in `task.elapseditem.*` call in ApiClient [see details](https://github.com/bitrix24/b24phpsdk/issues/180) 
+- Fixed errors in `task.elapseditem.*` call in ApiClient [see details](https://github.com/bitrix24/b24phpsdk/issues/180)
+
 ### Changed
 
+- Changed B24-PHP-SDK useragent: added prefix `vendor`, [see details](https://github.com/bitrix24/b24phpsdk/issues/183)
 - ❗**️️BC** Changed contract `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface`, this change needs to process corner cases
   when [installed application with UI or without UI](https://github.com/bitrix24/b24phpsdk/issues/150):
     - changed method `public function applicationInstalled(?string $applicationToken): void` application token now is nullable
