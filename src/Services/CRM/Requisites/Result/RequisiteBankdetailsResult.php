@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Requisite\Result;
+namespace Bitrix24\SDK\Services\CRM\Requisites\Result;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
@@ -20,7 +20,7 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 /**
  * Class QuotesResult
  *
- * @package Bitrix24\SDK\Services\CRM\Requisite\Result
+ * @package Bitrix24\SDK\Services\CRM\Requisites\Result
  */
 class RequisiteBankdetailsResult extends AbstractResult
 {

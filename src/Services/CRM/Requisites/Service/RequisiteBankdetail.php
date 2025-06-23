@@ -38,7 +38,6 @@ class RequisiteBankdetail extends AbstractService
      *
      * @param array{
      *   ID?: int,
-     *   ENTITY_TYPE_ID?: int,
      *   ENTITY_ID?: int,
      *   COUNTRY_ID?: int,
      *   DATE_CREATE?: string,
@@ -162,7 +161,7 @@ class RequisiteBankdetail extends AbstractService
      *
      * @param array   $order     - order of bank detail items
      * @param array   $filter    - filter array
-     * @param array   $select    = ['ID','ENTITY_TYPE_ID','ENTITY_ID','COUNTRY_ID','DATE_CREATE','DATE_MODIFY','CREATED_BY_ID','MODIFY_BY_ID','NAME','CODE','XML_ID','ACTIVE','SORT','RQ_BANK_NAME','RQ_BANK_ADDR','RQ_BANK_CODE','RQ_BANK_ROUTE_NUM','RQ_BIK','RQ_CODEB','RQ_CODEG','RQ_RIB','RQ_MFO','RQ_ACC_NAME','RQ_ACC_TYPE','RQ_AGENCY_NAME','RQ_IIK','RQ_ACC_CURRENCY','RQ_COR_ACC_NUM','RQ_IBAN','RQ_SWIFT','RQ_BIC','COMMENTS','ORIGINATOR_ID']
+     * @param array   $select    = ['ID','ENTITY_ID','COUNTRY_ID','DATE_CREATE','DATE_MODIFY','CREATED_BY_ID','MODIFY_BY_ID','NAME','CODE','XML_ID','ACTIVE','SORT','RQ_BANK_NAME','RQ_BANK_ADDR','RQ_BANK_CODE','RQ_BANK_ROUTE_NUM','RQ_BIK','RQ_CODEB','RQ_CODEG','RQ_RIB','RQ_MFO','RQ_ACC_NAME','RQ_ACC_TYPE','RQ_AGENCY_NAME','RQ_IIK','RQ_ACC_CURRENCY','RQ_COR_ACC_NUM','RQ_IBAN','RQ_SWIFT','RQ_BIC','COMMENTS','ORIGINATOR_ID']
      * @param integer $startItem - entity number to start from (usually returned in 'next' field of previous 'crm.requisite.bankdetail.list' API call)
      *
      * @throws BaseException
@@ -195,7 +194,6 @@ class RequisiteBankdetail extends AbstractService
      *
      * @param array{
      *   ID?: int,
-     *   ENTITY_TYPE_ID?: int,
      *   ENTITY_ID?: int,
      *   COUNTRY_ID?: int,
      *   DATE_CREATE?: string,

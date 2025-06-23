@@ -12,14 +12,14 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Requisite\Result;
+namespace Bitrix24\SDK\Services\CRM\Requisites\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
 /**
  * Class RequisiteBankdetailResult
  *
- * @package Bitrix24\SDK\Services\CRM\Requisite\Result
+ * @package Bitrix24\SDK\Services\CRM\Requisites\Result
  */
 class RequisiteBankdetailResult extends AbstractResult
 {

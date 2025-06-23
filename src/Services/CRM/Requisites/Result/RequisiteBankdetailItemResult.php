@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Requisite\Result;
+namespace Bitrix24\SDK\Services\CRM\Requisites\Result;
 
 use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
 use Carbon\CarbonImmutable;
@@ -20,7 +20,6 @@ use Carbon\CarbonImmutable;
  * Class QuoteItemResult
  *
  * @property-read int $ID
- * @property-read int $ENTITY_TYPE_ID
  * @property-read int $ENTITY_ID
  * @property-read int $COUNTRY_ID
  * @property-read CarbonImmutable|null $DATE_CREATE
@@ -46,6 +45,7 @@ use Carbon\CarbonImmutable;
  * @property-read string|null $RQ_AGENCY_NAME
  * @property-read string|null $RQ_IIK
  * @property-read string|null $RQ_ACC_CURRENCY
+ * @property-read string|null $RQ_ACC_NUM
  * @property-read string|null $RQ_COR_ACC_NUM
  * @property-read string|null $RQ_IBAN
  * @property-read string|null $RQ_SWIFT

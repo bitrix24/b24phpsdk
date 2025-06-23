@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Requisite\Service;
+namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Requisites\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core;
-use Bitrix24\SDK\Services\CRM\Requisite\Result\RequisiteBankdetailItemResult;
-use Bitrix24\SDK\Services\CRM\Requisite\Service\RequisiteBankdetail;
+use Bitrix24\SDK\Services\CRM\Requisites\Result\RequisiteBankdetailItemResult;
+use Bitrix24\SDK\Services\CRM\Requisites\Service\RequisiteBankdetail;
 use Bitrix24\SDK\Services\CRM\Company\Service\Company;
 use Bitrix24\SDK\Services\CRM\Requisites\Service\Requisite;
-use Bitrix24\SDK\Services\CRM\Enum\OwnerType;
+use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\CompanyBuilder;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\RequisiteBuilder;
 
@@ -46,6 +46,8 @@ use PHPUnit\Framework\TestCase;
 class RequisiteBankdetailTest extends TestCase
 {
     use CustomBitrix24Assertions;
+    
+    const COMPANY_OWNER_TYPE_ID = 4;
     
     protected ServiceBuilder $sb;
     protected RequisiteBankdetail $bankService;
@@ -88,7 +90,11 @@ class RequisiteBankdetailTest extends TestCase
 
     public function testAllSystemFieldsAnnotated(): void
     {
-        $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($this->bankService->fields()->getFieldsDescription()));
+        $fieldDescriptions = $this->bankService->fields()->getFieldsDescription();
+        echo "Fields \n";
+        print_r($fieldDescriptions);
+        
+        $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($fieldDescriptions));
         $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, RequisiteBankdetailItemResult::class);
     }
 
@@ -195,7 +201,7 @@ class RequisiteBankdetailTest extends TestCase
         $newName = 'Test2 bank requisite';
 
         self::assertTrue($this->bankService->update($bankRequisite->getId(), ['NAME' => $newName])->isSuccess());
-        self::assertEquals($newName, $this->bankService->get($bankRequisite->getId())->getBankdetails()->NAME);
+        self::assertEquals($newName, $this->bankService->get($bankRequisite->getId())->bankdetail()->NAME);
     }
 
     /**
@@ -224,10 +230,10 @@ class RequisiteBankdetailTest extends TestCase
         $companyId = $this->companyService->add((new CompanyBuilder())->build())->getId();
         $requisiteId = $this->requisiteService->add(
             $companyId,
-            4,
+            self::COMPANY_OWNER_TYPE_ID,
             $presetId,
             'Test requisite '.$presetId,
-            (new RequisiteBuilder(OwnerType::company->value, $companyId, $presetId))->build()
+            (new RequisiteBuilder(self::COMPANY_OWNER_TYPE_ID, $companyId, $presetId))->build()
         )->getId();
 
         return [$companyId, $requisiteId];
