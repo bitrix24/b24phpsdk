@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Requisite\Service;
+namespace Bitrix24\SDK\Services\CRM\Requisites\Service;
 
 use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
@@ -24,8 +24,8 @@ use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Core\Result\FieldsResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
-use Bitrix24\SDK\Services\CRM\Requisite\Result\RequisiteBankdetailResult;
-use Bitrix24\SDK\Services\CRM\Requisite\Result\RequisiteBankdetailsResult;
+use Bitrix24\SDK\Services\CRM\Requisites\Result\RequisiteBankdetailResult;
+use Bitrix24\SDK\Services\CRM\Requisites\Result\RequisiteBankdetailsResult;
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['crm']))]
