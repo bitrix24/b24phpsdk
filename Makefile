@@ -41,6 +41,7 @@ help:
 	@echo "ngrok-up                  - start ngrok"
 	@echo "ngrok-down                - stop ngrok"
 	@echo ""
+	@echo "lint-all                  - lint codebase with all linters step by step"
 	@echo "lint-allowed-licenses     - lint dependencies for valid licenses"
 	@echo "lint-cs-fixer             - lint source code with php-cs-fixer"
 	@echo "lint-cs-fixer-fix         - fix source code with php-cs-fixer"
@@ -133,6 +134,9 @@ lint-rector:
 lint-rector-fix:
 	docker-compose run --rm php-cli vendor/bin/rector process
 
+.PHONY: lint-all
+lint-all: lint-allowed-licenses lint-cs-fixer lint-phpstan lint-rector
+
 # unit tests
 .PHONY: test-unit
 test-unit:
@@ -182,6 +186,18 @@ test-integration-scope-ai-admin:
 .PHONY: integration_tests_scope_crm_deal_details
 integration_tests_scope_crm_deal_details:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_deal_details
+
+.PHONY: integration_tests_scope_crm_contact_details
+integration_tests_scope_crm_contact_details:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_contact_details
+
+.PHONY: integration_tests_lead_userfield
+integration_tests_lead_userfield:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_userfield
+	
+.PHONY: integration_tests_lead_userfield_use_case
+integration_tests_lead_userfield_use_case:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_userfield_use_case
   
 .PHONY: integration_tests_scope_crm_currency
 integration_tests_scope_crm_currency:
@@ -191,9 +207,21 @@ integration_tests_scope_crm_currency:
 integration_tests_deal_recurring:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_deal_recurring
 
+.PHONY: integration_tests_lead_details
+integration_tests_lead_details:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_details
+
 .PHONY: integration_tests_scope_automation
 integration_tests_scope_automation:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_automation
+	
+.PHONY: integration_tests_lead_productrows
+integration_tests_lead_productrows:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_productrows
+
+.PHONY: integration_tests_crm_quote
+integration_tests_crm_quote:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_quote
 
 # work dev environment
 .PHONY: php-dev-server-up

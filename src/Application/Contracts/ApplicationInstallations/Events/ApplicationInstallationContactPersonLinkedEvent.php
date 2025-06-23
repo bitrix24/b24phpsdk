@@ -17,13 +17,12 @@ use Carbon\CarbonImmutable;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class ApplicationInstallationContactPersonChangedEvent extends Event
+class ApplicationInstallationContactPersonLinkedEvent extends Event
 {
     public function __construct(
-        public readonly Uuid            $applicationInstallationId,
+        public readonly Uuid $applicationInstallationId,
         public readonly CarbonImmutable $timestamp,
-        public readonly ?Uuid           $previousContactPersonId,
-        public readonly ?Uuid           $currentContactPersonId)
-    {
+        public readonly Uuid $contactPersonId
+    ) {
     }
 }

@@ -17,13 +17,12 @@ use Carbon\CarbonImmutable;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class ApplicationInstallationBitrix24PartnerContactPersonChangedEvent extends Event
+class ApplicationInstallationBitrix24PartnerContactPersonUnlinkedEvent extends Event
 {
     public function __construct(
-        public readonly Uuid            $applicationInstallationId,
+        public readonly Uuid $applicationInstallationId,
         public readonly CarbonImmutable $timestamp,
-        public readonly ?Uuid           $previousBitrix24PartnerContactPersonId,
-        public readonly ?Uuid           $currentBitrix24PartnerContactPersonId)
-    {
+        public readonly Uuid $unlinkedBitrix24PartnerContactPersonId
+    ) {
     }
 }

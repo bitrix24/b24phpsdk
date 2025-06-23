@@ -36,6 +36,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversMethod(Lead::class,'list')]
 #[CoversMethod(Lead::class,'fields')]
 #[CoversMethod(Lead::class,'update')]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Lead\Service\Lead::class)]
 class LeadTest extends TestCase
 {
     use CustomBitrix24Assertions;
@@ -51,9 +52,7 @@ class LeadTest extends TestCase
     {
         $allFields = $this->leadService->fields()->getFieldsDescription();
         $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
-        $systemFields = array_filter($allFields, static function ($code) use ($systemFieldsCodes) {
-            return in_array($code, $systemFieldsCodes, true);
-        }, ARRAY_FILTER_USE_KEY);
+        $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
 
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
             $systemFields,
@@ -72,7 +71,6 @@ class LeadTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Lead::delete
      */
     public function testDelete(): void
     {
@@ -80,7 +78,6 @@ class LeadTest extends TestCase
     }
 
     /**
-     * @covers Lead::fields
      * @throws BaseException
      * @throws TransportException
      */
@@ -92,7 +89,6 @@ class LeadTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Lead::get
      */
     public function testGet(): void
     {
@@ -105,7 +101,6 @@ class LeadTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Lead::list
      */
     public function testList(): void
     {
@@ -116,21 +111,19 @@ class LeadTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers Lead::update
      */
     public function testUpdate(): void
     {
-        $deal = $this->leadService->add(['TITLE' => 'test lead']);
+        $addedItemResult = $this->leadService->add(['TITLE' => 'test lead']);
         $newTitle = 'test2';
 
-        self::assertTrue($this->leadService->update($deal->getId(), ['TITLE' => $newTitle], [])->isSuccess());
-        self::assertEquals($newTitle, $this->leadService->get($deal->getId())->lead()->TITLE);
+        self::assertTrue($this->leadService->update($addedItemResult->getId(), ['TITLE' => $newTitle], [])->isSuccess());
+        self::assertEquals($newTitle, $this->leadService->get($addedItemResult->getId())->lead()->TITLE);
     }
 
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\Deal::countByFilter
      */
     public function testCountByFilter(): void
     {
@@ -141,10 +134,12 @@ class LeadTest extends TestCase
         for ($i = 1; $i <= $newItemsCount; $i++) {
             $items[] = ['TITLE' => 'TITLE-' . $i];
         }
+
         $cnt = 0;
         foreach ($this->leadService->batch->add($items) as $item) {
             $cnt++;
         }
+
         self::assertEquals(count($items), $cnt);
 
         $after = $this->leadService->countByFilter();
@@ -152,7 +147,7 @@ class LeadTest extends TestCase
         $this->assertEquals($before + $newItemsCount, $after);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->leadService = Fabric::getServiceBuilder()->getCRMScope()->lead();
     }
