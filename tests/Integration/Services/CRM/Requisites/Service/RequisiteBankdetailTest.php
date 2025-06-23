@@ -42,7 +42,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversMethod(RequisiteBankdetail::class,'fields')]
 #[CoversMethod(RequisiteBankdetail::class,'update')]
 #[CoversMethod(RequisiteBankdetail::class,'countByFilter')]
-#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Requisite\Service\RequisiteBankdetail::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Requisites\Service\RequisiteBankdetail::class)]
 class RequisiteBankdetailTest extends TestCase
 {
     use CustomBitrix24Assertions;
@@ -54,7 +54,6 @@ class RequisiteBankdetailTest extends TestCase
     protected Company $companyService;
     protected Requisite $requisiteService;
     protected array   $presets = [];
-    private int $countryId;
     private array $createdCompanies = [];
     
     protected function setUp(): void
@@ -67,18 +66,6 @@ class RequisiteBankdetailTest extends TestCase
         foreach ($requisitePreset->list()->getRequisitePresets() as $presetItemResult) {
             $this->presets[] = $presetItemResult->ID;
         }
-        // probably not needed
-        $this->countryId = current(
-            array_column(
-                array_filter(
-                    $this->sb->getCRMScope()->requisitePreset()->countries()->getCountries(),
-                    function ($item) {
-                        return $item->CODE === 'US';
-                    }
-                ),
-                'ID'
-            )
-        );
     }
     
     protected function tearDown(): void
