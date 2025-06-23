@@ -11,65 +11,49 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Quote\Result;
+namespace Bitrix24\SDK\Services\CRM\Requisite\Result;
 
 use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
-use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Email;
-use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\InstantMessenger;
-use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Phone;
-use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Website;
 use Carbon\CarbonImmutable;
-use Money\Currency;
-use Money\Money;
 
 /**
  * Class QuoteItemResult
  *
  * @property-read int $ID
- * @property-read string $TITLE
- * @property-read int|null $ASSIGNED_BY_ID
- * @property-read int|null $LAST_ACTIVITY_BY
- * @property-read CarbonImmutable|null $LAST_ACTIVITY_TIME
- * @property-read string|null $LAST_COMMUNICATION_TIME
- * @property-read CarbonImmutable|null $BEGINDATE
- * @property-read CarbonImmutable|null $CLOSEDATE
- * @property-read CarbonImmutable|null $ACTUAL_DATE
- * @property-read string|null $CLIENT_ADDR
- * @property-read string|null $CLIENT_CONTACT
- * @property-read string|null $CLIENT_EMAIL
- * @property-read string|null $CLIENT_PHONE
- * @property-read string|null $CLIENT_TITLE
- * @property-read string|null $CLIENT_TPA_ID
- * @property-read string|null $CLIENT_TP_ID
- * @property-read bool|null $CLOSED
- * @property-read string|null $COMMENTS
- * @property-read int|null $COMPANY_ID
- * @property-read int|null $CONTACT_ID
- * @property-read array|null $CONTACT_IDS
- * @property-read string|null $CONTENT
- * @property-read int|null $CREATED_BY_ID
- * @property-read Currency|null $CURRENCY_ID
+ * @property-read int $ENTITY_TYPE_ID
+ * @property-read int $ENTITY_ID
+ * @property-read int $COUNTRY_ID
  * @property-read CarbonImmutable|null $DATE_CREATE
  * @property-read CarbonImmutable|null $DATE_MODIFY
- * @property-read int|null $DEAL_ID
- * @property-read int|null $LEAD_ID
- * @property-read int|null $LOCATION_ID
+ * @property-read int|null $CREATED_BY_ID
  * @property-read int|null $MODIFY_BY_ID
- * @property-read int|null $MYCOMPANY_ID
- * @property-read bool|null $OPENED
- * @property-read Money|null $OPPORTUNITY
- * @property-read int|null $PERSON_TYPE_ID
- * @property-read string|null $QUOTE_NUMBER
- * @property-read string|null $STATUS_ID
- * @property-read Money|null $TAX_VALUE
- * @property-read string|null $TERMS
- * @property-read string|null $UTM_SOURCE
- * @property-read string|null $UTM_MEDIUM
- * @property-read string|null $UTM_CAMPAIGN
- * @property-read string|null $UTM_CONTENT
- * @property-read string|null $UTM_TERM
+ * @property-read string $NAME
+ * @property-read string $CODE
+ * @property-read string $XML_ID
+ * @property-read bool|null $ACTIVE
+ * @property-read int|null $SORT
+ * @property-read string|null $RQ_BANK_NAME
+ * @property-read string|null $RQ_BANK_ADDR
+ * @property-read string|null $RQ_BANK_CODE
+ * @property-read string|null $RQ_BANK_ROUTE_NUM
+ * @property-read string|null $RQ_BIK
+ * @property-read string|null $RQ_CODEB
+ * @property-read string|null $RQ_CODEG
+ * @property-read string|null $RQ_RIB
+ * @property-read string|null $RQ_MFO
+ * @property-read string|null $RQ_ACC_NAME
+ * @property-read string|null $RQ_ACC_TYPE
+ * @property-read string|null $RQ_AGENCY_NAME
+ * @property-read string|null $RQ_IIK
+ * @property-read string|null $RQ_ACC_CURRENCY
+ * @property-read string|null $RQ_COR_ACC_NUM
+ * @property-read string|null $RQ_IBAN
+ * @property-read string|null $RQ_SWIFT
+ * @property-read string|null $RQ_BIC
+ * @property-read string|null $COMMENTS
+ * @property-read string|null $ORIGINATOR_ID
  */
-class QuoteItemResult extends AbstractCrmItem
+class RequisiteBankdetailItemResult extends AbstractCrmItem
 {
     /**
      *

@@ -12,22 +12,22 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Quote\Result;
+namespace Bitrix24\SDK\Services\CRM\Requisite\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
 /**
- * Class QuoteResult
+ * Class RequisiteBankdetailResult
  *
- * @package Bitrix24\SDK\Services\CRM\Quote\Result
+ * @package Bitrix24\SDK\Services\CRM\Requisite\Result
  */
-class QuoteResult extends AbstractResult
+class RequisiteBankdetailResult extends AbstractResult
 {
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    public function quote(): QuoteItemResult
+    public function bankdetail(): RequisiteBankdetailItemResult
     {
-        return new QuoteItemResult($this->getCoreResponse()->getResponseData()->getResult());
+        return new RequisiteBankdetailItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }

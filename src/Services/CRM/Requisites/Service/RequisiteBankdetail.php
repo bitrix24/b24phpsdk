@@ -32,14 +32,6 @@ use Psr\Log\LoggerInterface;
 class RequisiteBankdetail extends AbstractService
 {
     /**
-     * RequisiteBankdetail constructor.
-     */
-    public function __construct(public Batch $batch, CoreInterface $core, LoggerInterface $logger)
-    {
-        parent::__construct($core, $logger);
-    }
-
-    /**
      * Add a new Bank Detail
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/bank-detail/crm-requisite-bank-detail-add.html
@@ -101,9 +93,9 @@ class RequisiteBankdetail extends AbstractService
     }
 
     /**
-     * Deletes the specified quote and all the associated objects.
+     * Deletes the specified bank detail.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/crm/quote/crm-quote-delete.html
+     * @link hhttps://apidocs.bitrix24.com/api-reference/crm/requisites/bank-detail/crm-requisite-bank-detail-delete.html
      *
      *
      * @throws BaseException
@@ -111,8 +103,8 @@ class RequisiteBankdetail extends AbstractService
      */
     #[ApiEndpointMetadata(
         'crm.requisite.bankdetail.delete',
-        'https://apidocs.bitrix24.com/api-reference/crm/quote/crm-quote-delete.html',
-        'Deletes the specified quote and all the associated objects.'
+        'https://apidocs.bitrix24.com/api-reference/crm/requisites/bank-detail/crm-requisite-bank-detail-delete.html',
+        'Deletes the specified bank detail'
     )]
     public function delete(int $id): DeletedItemResult
     {
@@ -127,17 +119,17 @@ class RequisiteBankdetail extends AbstractService
     }
 
     /**
-     * Returns the description of the quote fields, including user fields.
+     * Returns the description of the bank detail fields, including user fields.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/crm/quote/crm-quote-fields.html
+     * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/bank-detail/crm-requisite-bank-detail-fields.html
      *
      * @throws BaseException
      * @throws TransportException
      */
     #[ApiEndpointMetadata(
         'crm.requisite.bankdetail.fields',
-        'https://apidocs.bitrix24.com/api-reference/crm/quote/crm-quote-fields.html',
-        'Returns the description of the quote fields, including user fields.'
+        'https://apidocs.bitrix24.com/api-reference/crm/requisites/bank-detail/crm-requisite-bank-detail-fields.html',
+        'Returns the description of the bank detail fields, including user fields.'
     )]
     public function fields(): FieldsResult
     {
@@ -145,9 +137,9 @@ class RequisiteBankdetail extends AbstractService
     }
 
     /**
-     * Returns a quote by the quote ID.
+     * Returns a bank detail by identifier.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/crm/quote/crm-quote-get.html
+     * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/bank-detail/crm-requisite-bank-detail-get.html
      *
      *
      * @throws BaseException
@@ -155,22 +147,22 @@ class RequisiteBankdetail extends AbstractService
      */
     #[ApiEndpointMetadata(
         'crm.requisite.bankdetail.get',
-        'https://apidocs.bitrix24.com/api-reference/crm/quote/crm-quote-get.html',
-        'Returns a quote by the quote ID.'
+        'https://apidocs.bitrix24.com/api-reference/crm/requisites/bank-detail/crm-requisite-bank-detail-get.html',
+        'Returns a bank detail by identifier.'
     )]
-    public function get(int $id): RequisiteResult
+    public function get(int $id): RequisiteBankdetailResult
     {
-        return new RequisiteResult($this->core->call('crm.requisite.bankdetail.get', ['id' => $id]));
+        return new RequisiteBankdetailResult($this->core->call('crm.requisite.bankdetail.get', ['id' => $id]));
     }
 
     /**
-     * Get list of quote items.
+     * Get list of bank detail items.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/crm/quote/crm-quote-list.html
+     * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/bank-detail/crm-requisite-bank-detail-list.html
      *
-     * @param array   $order     - order of quote items
+     * @param array   $order     - order of bank detail items
      * @param array   $filter    - filter array
-     * @param array   $select    = ['ID','ASSIGNED_BY_ID','BEGINDATA','CLIENT_ADDR','CLOSED','CLOSEDATA','COMMENTS','COMPANY_ID','CONTACT_ID','CONTACT_IDS','CONTENT','CREATED_BY_ID','CURRENCY_ID','DATE_CREATE','DATE_MODIFY','DEAL_ID','LEAD_ID','LOCATION_ID','MODIFY_BY_ID','MYCOMPANY_ID','OPENED','OPPORTUNITY','PERSON_TYPE_ID','QUOTE_NUMBER','STATUS_ID','TAX_VALUE','TERMS','TITLE','UTM_CAMPAIGN','UTM_CONTENT','UTM_MEDIUM','UTM_SOURCE','UTM_TERM']
+     * @param array   $select    = ['ID','ENTITY_TYPE_ID','ENTITY_ID','COUNTRY_ID','DATE_CREATE','DATE_MODIFY','CREATED_BY_ID','MODIFY_BY_ID','NAME','CODE','XML_ID','ACTIVE','SORT','RQ_BANK_NAME','RQ_BANK_ADDR','RQ_BANK_CODE','RQ_BANK_ROUTE_NUM','RQ_BIK','RQ_CODEB','RQ_CODEG','RQ_RIB','RQ_MFO','RQ_ACC_NAME','RQ_ACC_TYPE','RQ_AGENCY_NAME','RQ_IIK','RQ_ACC_CURRENCY','RQ_COR_ACC_NUM','RQ_IBAN','RQ_SWIFT','RQ_BIC','COMMENTS','ORIGINATOR_ID']
      * @param integer $startItem - entity number to start from (usually returned in 'next' field of previous 'crm.requisite.bankdetail.list' API call)
      *
      * @throws BaseException
@@ -178,12 +170,12 @@ class RequisiteBankdetail extends AbstractService
      */
     #[ApiEndpointMetadata(
         'crm.requisite.bankdetail.list',
-        'https://apidocs.bitrix24.com/api-reference/crm/quote/crm-quote-list.html',
-        'Get list of quote items.'
+        'https://apidocs.bitrix24.com/api-reference/crm/requisites/bank-detail/crm-requisite-bank-detail-list.html',
+        'Get list of bank detail items.'
     )]
-    public function list(array $order, array $filter, array $select, int $startItem = 0): RequisitesResult
+    public function list(array $order, array $filter, array $select, int $startItem = 0): RequisiteBankdetailsResult
     {
-        return new RequisitesResult(
+        return new RequisiteBankdetailsResult(
             $this->core->call(
                 'crm.requisite.bankdetail.list',
                 [
@@ -199,42 +191,42 @@ class RequisiteBankdetail extends AbstractService
     /**
      * Updates the specified (existing) requisite.bankdetail.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/crm/quote/crm-quote-update.html
+     * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/bank-detail/crm-requisite-bank-detail-update.html
      *
      * @param array{
      *   ID?: int,
-     *   ASSIGNED_BY_ID?: int,
-     *   BEGINDATA?: string,
-     *   CLIENT_ADDR?: string,
-     *   CLOSED?: bool,
-     *   CLOSEDATA?: string,
-     *   COMMENTS?: string,
-     *   COMPANY_ID?: int,
-     *   CONTACT_ID?: int,
-     *   CONTACT_IDS?: int[],
-     *   CONTENT?: string,
-     *   CREATED_BY_ID?: int,
-     *   CURRENCY_ID?: string,
+     *   ENTITY_TYPE_ID?: int,
+     *   ENTITY_ID?: int,
+     *   COUNTRY_ID?: int,
      *   DATE_CREATE?: string,
      *   DATE_MODIFY?: string,
-     *   DEAL_ID?: int,
-     *   LEAD_ID?: int,
-     *   LOCATION_ID?: int,
-     *   MODIFY_BY_ID?: int,
-     *   MYCOMPANY_ID?: int,
-     *   OPENED?: bool,
-     *   OPPORTUNITY?: string,
-     *   PERSON_TYPE_ID?: int,
-     *   QUOTE_NUMBER?: string,
-     *   STATUS_ID?: string,
-     *   TAX_VALUE?: string,
-     *   TERMS?: string,
-     *   TITLE?: string,
-     *   UTM_CAMPAIGN?: string,
-     *   UTM_CONTENT?: string,
-     *   UTM_MEDIUM?: string,
-     *   UTM_SOURCE?: string,
-     *   UTM_TERM?: string,
+     *   CREATED_BY_ID?: int,
+     *   MODIFY_BY_ID?: int, 
+     *   NAME?: string,
+     *   CODE?: string,
+     *   XML_ID?: string,
+     *   ACTIVE?: bool,
+     *   SORT?: int,
+     *   RQ_BANK_NAME?: string,
+     *   RQ_BANK_ADDR?: string,
+     *   RQ_BANK_CODE?: string,
+     *   RQ_BANK_ROUTE_NUM?: string,
+     *   RQ_BIK?: string,
+     *   RQ_CODEB?: string,
+     *   RQ_CODEG?: string,
+     *   RQ_RIB?: string,
+     *   RQ_MFO?: string,
+     *   RQ_ACC_NAME?: string,
+     *   RQ_ACC_TYPE?: string,
+     *   RQ_AGENCY_NAME?: string,
+     *   RQ_IIK?: string,
+     *   RQ_ACC_CURRENCY?: string,
+     *   RQ_COR_ACC_NUM?: string,
+     *   RQ_IBAN?: string,
+     *   RQ_SWIFT?: string,
+     *   RQ_BIC?: string,
+     *   COMMENTS?: string,
+     *   ORIGINATOR_ID?: string,
      *   }        $fields
      *
      * @throws BaseException
@@ -242,7 +234,7 @@ class RequisiteBankdetail extends AbstractService
      */
     #[ApiEndpointMetadata(
         'crm.requisite.bankdetail.update',
-        'https://apidocs.bitrix24.com/api-reference/crm/quote/crm-quote-update.html',
+        'https://apidocs.bitrix24.com/api-reference/crm/requisites/bank-detail/crm-requisite-bank-detail-update.html',
         'Updates the specified (existing) requisite.bankdetail.'
     )]
     public function update(int $id, array $fields): UpdatedItemResult
@@ -263,38 +255,38 @@ class RequisiteBankdetail extends AbstractService
      *
      * @param array{
      *   ID?: int,
-     *   ASSIGNED_BY_ID?: int,
-     *   BEGINDATA?: string,
-     *   CLIENT_ADDR?: string,
-     *   CLOSED?: bool,
-     *   CLOSEDATA?: string,
-     *   COMMENTS?: string,
-     *   COMPANY_ID?: int,
-     *   CONTACT_ID?: int,
-     *   CONTACT_IDS?: int[],
-     *   CONTENT?: string,
-     *   CREATED_BY_ID?: int,
-     *   CURRENCY_ID?: string,
+     *   ENTITY_TYPE_ID?: int,
+     *   ENTITY_ID?: int,
+     *   COUNTRY_ID?: int,
      *   DATE_CREATE?: string,
      *   DATE_MODIFY?: string,
-     *   DEAL_ID?: int,
-     *   LEAD_ID?: int,
-     *   LOCATION_ID?: int,
-     *   MODIFY_BY_ID?: int,
-     *   MYCOMPANY_ID?: int,
-     *   OPENED?: bool,
-     *   OPPORTUNITY?: string,
-     *   PERSON_TYPE_ID?: int,
-     *   QUOTE_NUMBER?: string,
-     *   STATUS_ID?: string,
-     *   TAX_VALUE?: string,
-     *   TERMS?: string,
-     *   TITLE?: string,
-     *   UTM_CAMPAIGN?: string,
-     *   UTM_CONTENT?: string,
-     *   UTM_MEDIUM?: string,
-     *   UTM_SOURCE?: string,
-     *   UTM_TERM?: string,
+     *   CREATED_BY_ID?: int,
+     *   MODIFY_BY_ID?: int, 
+     *   NAME?: string,
+     *   CODE?: string,
+     *   XML_ID?: string,
+     *   ACTIVE?: bool,
+     *   SORT?: int,
+     *   RQ_BANK_NAME?: string,
+     *   RQ_BANK_ADDR?: string,
+     *   RQ_BANK_CODE?: string,
+     *   RQ_BANK_ROUTE_NUM?: string,
+     *   RQ_BIK?: string,
+     *   RQ_CODEB?: string,
+     *   RQ_CODEG?: string,
+     *   RQ_RIB?: string,
+     *   RQ_MFO?: string,
+     *   RQ_ACC_NAME?: string,
+     *   RQ_ACC_TYPE?: string,
+     *   RQ_AGENCY_NAME?: string,
+     *   RQ_IIK?: string,
+     *   RQ_ACC_CURRENCY?: string,
+     *   RQ_COR_ACC_NUM?: string,
+     *   RQ_IBAN?: string,
+     *   RQ_SWIFT?: string,
+     *   RQ_BIC?: string,
+     *   COMMENTS?: string,
+     *   ORIGINATOR_ID?: string,
      *   } $filter
      *
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException

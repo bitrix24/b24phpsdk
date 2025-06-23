@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Quote\Result;
+namespace Bitrix24\SDK\Services\CRM\Requisite\Result;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
@@ -20,19 +20,19 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 /**
  * Class QuotesResult
  *
- * @package Bitrix24\SDK\Services\CRM\Quote\Result
+ * @package Bitrix24\SDK\Services\CRM\Requisite\Result
  */
-class QuotesResult extends AbstractResult
+class RequisiteBankdetailsResult extends AbstractResult
 {
     /**
-     * @return QuoteItemResult[]
+     * @return RequisiteBankdetailItemResult[]
      * @throws BaseException
      */
-    public function getQuotes(): array
+    public function getBankdetails(): array
     {
         $items = [];
         foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
-            $items[] = new QuoteItemResult($item);
+            $items[] = new RequisiteBankdetailItemResult($item);
         }
 
         return $items;
