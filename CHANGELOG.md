@@ -4,6 +4,14 @@
 
 ### Added
 
+- Added service `Services\CRM\Lead\Service\LeadContact` with support methods,
+  see [crm.lead.contact.* methods](https://github.com/bitrix24/b24phpsdk/issues/170):
+    - `fields` get fiels for lead contact connection
+    - `setItems` set contacts related with lead
+    - `get` get contacts related to lead
+    - `deleteItems` delete all relations for lead
+    - `add` add contact relation with lead
+    - `delete` delete contact relation with lead
 - Added service `CRM\Item\Service\ItemDetailsConfiguration` with support methods,
   see [add crm.item.details.* methods](https://github.com/bitrix24/b24phpsdk/issues/168):
     - `getPersonal` method retrieves the settings of item cards for personal user

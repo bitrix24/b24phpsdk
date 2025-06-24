@@ -206,6 +206,10 @@ integration_tests_scope_crm_currency:
 .PHONY: integration_tests_deal_recurring
 integration_tests_deal_recurring:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_deal_recurring
+	
+.PHONY: integration_tests_lead_contacts
+integration_tests_lead_contacts:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_contacts
 
 .PHONY: integration_tests_lead_details
 integration_tests_lead_details:
