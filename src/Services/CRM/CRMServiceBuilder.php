@@ -72,6 +72,18 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
     
+    public function itemDetailsConfiguration(): Item\Service\ItemDetailsConfiguration
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Item\Service\ItemDetailsConfiguration(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function dealDetailsConfiguration(): Deal\Service\DealDetailsConfiguration
     {
         if (!isset($this->serviceCache[__METHOD__])) {

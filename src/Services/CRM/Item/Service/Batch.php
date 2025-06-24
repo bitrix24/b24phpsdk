@@ -26,13 +26,8 @@ use Psr\Log\LoggerInterface;
 #[ApiBatchServiceMetadata(new Scope(['crm']))]
 class Batch
 {
-    protected BatchOperationsInterface $batch;
-    protected LoggerInterface $log;
-
-    public function __construct(BatchOperationsInterface $batch, LoggerInterface $log)
+    public function __construct(protected BatchOperationsInterface $batch, protected LoggerInterface $log)
     {
-        $this->batch = $batch;
-        $this->log = $log;
     }
 
     /**
@@ -83,6 +78,7 @@ class Batch
                 'fields' => $item,
             ];
         }
+
         foreach ($this->batch->addEntityItems('crm.item.add', $rawItems) as $key => $item) {
             yield $key => new ItemItemResult($item->getResult()['item']);
         }

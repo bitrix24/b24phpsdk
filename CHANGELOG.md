@@ -4,6 +4,15 @@
 
 ### Added
 
+- Added service `CRM\Item\Service\ItemDetailsConfiguration` with support methods,
+  see [add crm.item.details.* methods](https://github.com/bitrix24/b24phpsdk/issues/168):
+    - `getPersonal` method retrieves the settings of item cards for personal user
+    - `getGeneral` method retrieves the settings of item cards for all users
+    - `resetPersonal` method reset for item user settings
+    - `resetGeneral` method reset all card settings for all users
+    - `setPersonal` method set card configuration
+    - `setGeneral` method set card configuration for all users
+    - `setForceCommonConfigForAll` method set common detail form for All Users
 - Added service `CRM\Deal\Service\DealDetailsConfiguration` with support methods,
   see [add crm.deal.details.* methods](https://github.com/bitrix24/b24phpsdk/issues/158):
     - `getPersonal` method retrieves the settings of deal cards for personal user
