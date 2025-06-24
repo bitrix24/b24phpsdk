@@ -23,6 +23,8 @@ use Bitrix24\SDK\Services\CRM\Requisites\Service\Requisite;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\CompanyBuilder;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\RequisiteBuilder;
+use Bitrix24\SDK\Services\CRM\Deal\Service\Deal;
+use Bitrix24\SDK\Services\CRM\Requisites\Service\RequisiteBankdetail;
 
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 use Bitrix24\SDK\Tests\Integration\Fabric;
@@ -48,31 +50,56 @@ class RequisiteLinkTest extends TestCase
     use CustomBitrix24Assertions;
     
     const COMPANY_OWNER_TYPE_ID = 4;
+    const DEAL_OWNER_TYPE_ID = 2;
     
     protected ServiceBuilder $sb;
     protected RequisiteLink $linkService;
     protected Company $companyService;
     protected Requisite $requisiteService;
-    protected array   $presets = [];
-    private array $createdCompanies = [];
+    protected RequisiteBankdetail $bankService;
+    protected Deal $dealService;
+    private int $companyId = 0;
+    private int $myCompanyId = 0;
+    private int $myRequisiteId = 0;
+    private int $myRequisiteBankId = 0;
+    private int $requisiteId = 0;
+    private int $requisiteBankId = 0;
+    private int $dealId = 0;
     
     protected function setUp(): void
     {
         $this->sb = Fabric::getServiceBuilder();
         $this->companyService = $this->sb->getCRMScope()->company();
         $this->requisiteService = $this->sb->getCRMScope()->requisite();
-        $this->linkService = $this->sb->getCRMScope()->requisiteBankdetail();
+        $this->linkService = $this->sb->getCRMScope()->requisiteLink();
+        $presetId = 0;
         $requisitePreset = $this->sb->getCRMScope()->requisitePreset();
         foreach ($requisitePreset->list()->getRequisitePresets() as $presetItemResult) {
-            $this->presets[] = $presetItemResult->ID;
+            $presetId = $presetItemResult->ID;
+            break;
         }
+        list($this->companyId, $this->requisiteId) = $this->addCompanyAndRequisite($presetId);
+        $this->bankService = $this->sb->getCRMScope()->requisiteBankdetail();
+        $this->requisiteBankId = $this->bankService->add([
+            'ENTITY_ID' => $this->requisiteId,
+            'NAME' => 'Test requisite link'
+        ])->getId();
+        $this->dealService = $this->sb->getCRMScope()->deal();
+        $this->dealId = $this->dealService->add(['TITLE' => 'test requisite link'])->getId();
+        // my company
+        list($this->myCompanyId, $this->myRequisiteId) = $this->addCompanyAndRequisite($presetId);
+        $this->companyService->update($this->myCompanyId, ['IS_MY_COMPANY'=>'Y']);
+        $this->myRequisiteBankId = $this->bankService->add([
+            'ENTITY_ID' => $this->myRequisiteId,
+            'NAME' => 'Test my requisite link'
+        ])->getId();
     }
     
     protected function tearDown(): void
     {
-        foreach ($this->companyService->batch->delete($this->createdCompanies) as $result) {
-            // ###
-        }
+        $this->companyService->delete($this->companyId);
+        $this->companyService->delete($this->myCompanyId);
+        $this->dealService->delete($this->dealId);
     }
 
     public function testAllSystemFieldsAnnotated(): void
@@ -100,16 +127,15 @@ class RequisiteLinkTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
-    public function testAdd(): void
+    public function testRegister(): void
     {
-        $presetId = $this->presets[0];
-        list($companyId, $requisiteId) = $this->addCompanyAndRequisite($presetId);
-        $this->createdCompanies[] = $companyId;
-        $bankRequisite = $this->linkService->add([
-            'ENTITY_ID' => $requisiteId,
-            'NAME' => 'Test bank requisite'
+        $requisiteLink = $this->linkService->register([
+            'ENTITY_TYPE_ID' => self::DEAL_OWNER_TYPE_ID,
+            'ENTITY_ID' => $this->dealId,
+            'REQUISITE_ID' => $this->requisiteId,
+            
         ]);
-        self::assertGreaterThan(1, $bankRequisite->getId());
+        self::assertTrue($requisiteLink->isSuccess());
     }
 
     /**
