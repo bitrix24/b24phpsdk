@@ -18,21 +18,21 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
 /**
- * Class RequisiteBankdetailsResult
+ * Class RequisiteLinksResult
  *
  * @package Bitrix24\SDK\Services\CRM\Requisites\Result
  */
-class RequisiteBankdetailsResult extends AbstractResult
+class RequisiteLinksResult extends AbstractResult
 {
     /**
-     * @return RequisiteBankdetailItemResult[]
+     * @return RequisiteLinkItemResult[]
      * @throws BaseException
      */
-    public function getBankdetails(): array
+    public function getLinks(): array
     {
         $items = [];
         foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
-            $items[] = new RequisiteBankdetailItemResult($item);
+            $items[] = new RequisiteLinkItemResult($item);
         }
 
         return $items;

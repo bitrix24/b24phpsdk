@@ -17,7 +17,7 @@ use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
 use Carbon\CarbonImmutable;
 
 /**
- * Class QuoteItemResult
+ * Class RequisiteBankdetailItemResult
  *
  * @property-read int $ID
  * @property-read int $ENTITY_ID
