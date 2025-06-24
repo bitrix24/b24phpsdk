@@ -25,7 +25,6 @@ use PHPUnit\Framework\TestCase;
  * @package Bitrix24\SDK\Tests\Integration\Services\CRM\Lead\Service
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Lead\Service\Batch::class)]
-#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Deal\Service\Batch::class)]
 class BatchTest extends TestCase
 {
     protected Lead $leadService;
@@ -80,29 +79,29 @@ class BatchTest extends TestCase
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    #[\PHPUnit\Framework\Attributes\TestDox('Batch delete deals')]
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch delete leads')]
     public function testBatchDelete(): void
     {
-        $deals = [];
+        $leads = [];
         for ($i = 1; $i < 60; $i++) {
-            $deals[] = ['TITLE' => 'TITLE-' . $i];
+            $leads[] = ['TITLE' => 'TITLE-' . $i];
         }
 
         $cnt = 0;
         $dealId = [];
-        foreach ($this->leadService->batch->add($deals) as $item) {
+        foreach ($this->leadService->batch->add($leads) as $item) {
             $cnt++;
             $dealId[] = $item->getId();
         }
 
-        self::assertEquals(count($deals), $cnt);
+        self::assertEquals(count($leads), $cnt);
 
         $cnt = 0;
         foreach ($this->leadService->batch->delete($dealId) as $cnt => $deleteResult) {
             $cnt++;
         }
 
-        self::assertEquals(count($deals), $cnt);
+        self::assertEquals(count($leads), $cnt);
     }
 
     protected function setUp(): void

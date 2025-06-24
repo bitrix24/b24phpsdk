@@ -40,7 +40,7 @@ class ApiClient implements ApiClientInterface
      */
     protected const SDK_VERSION = '1.3.0';
 
-    protected const SDK_USER_AGENT = 'b24-php-sdk';
+    protected const SDK_USER_AGENT = 'b24-php-sdk-vendor';
 
     /**
      * ApiClient constructor.
