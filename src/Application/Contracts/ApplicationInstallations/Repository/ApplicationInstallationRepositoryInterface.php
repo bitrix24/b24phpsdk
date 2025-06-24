@@ -44,10 +44,8 @@ interface ApplicationInstallationRepositoryInterface
 
     /**
      * Find application installation by bitrix24 account id
-     *
-     * @return ApplicationInstallationInterface[]
-     */
-    public function findByBitrix24AccountId(Uuid $uuid): array;
+     **/
+    public function findByBitrix24AccountId(Uuid $uuid): ?ApplicationInstallationInterface;
 
     /**
      * Find application installation by external id

@@ -13,6 +13,68 @@
     - `setPersonal` method set card configuration
     - `setGeneral` method set card configuration for all users
     - `setForceCommonConfigForAll` method set common detail form for All Users
+- Added service `CRM\Deal\Service\DealDetailsConfiguration` with support methods,
+  see [add crm.deal.details.* methods](https://github.com/bitrix24/b24phpsdk/issues/158):
+    - `getPersonal` method retrieves the settings of deal cards for personal user
+    - `getGeneral` method retrieves the settings of deal cards for all users
+    - `resetPersonal` method reset for item user settings
+    - `resetGeneral` method reset all card settings for all users
+    - `setPersonal` method set card configuration
+    - `setGeneral` method set card configuration for all users
+    - `setForceCommonConfigForAll` method set common detail form for All Users
+- Added service `CRM\Lead\Service\LeadDetailsConfiguration` with support methods,
+  see [add crm.lead.details.* methods](https://github.com/bitrix24/b24phpsdk/issues/172):
+    - `getPersonal` method retrieves the settings of lead cards for personal user
+    - `getGeneral` method retrieves the settings of lead cards for all users
+    - `resetPersonal` method reset for item user settings
+    - `resetGeneral` method reset all card settings for all users
+    - `setPersonal` method set card configuration
+    - `setGeneral` method set card configuration for all users
+    - `setForceCommonConfigForAll` method set common detail form for All Users
+- Added service `Services\CRM\Lead\Service\LeadProductRows` with support methods,
+  see [add crm.lead.productrows* methods](https://github.com/bitrix24/b24phpsdk/issues/175):
+    - `set` Adds products to a lead
+    - `get` Returns the products of a lead
+- Added service `Services\CRM\Quote\Service\Quote` with support methods,
+  see [crm.quote.* methods](https://github.com/bitrix24/b24phpsdk/issues/179):
+    - `fields` returns a list of fields for the quote
+    - `get` returns the settings of the quote by Id
+    - `list` returns a list of quote
+    - `add` creates a new quote
+    - `delete` deletes a quote
+    - `update` modifies the quote
+    - `countByFilter` count quotes by filter
+- Added support for events:
+    - `OnCrmQuoteAdd`
+    - `OnCrmQuoteDelete`
+    - `OnCrmQuoteUpdate`
+    - `OnCrmQuoteUserFieldAdd`
+    - `OnCrmQuoteUserFieldDelete`
+    - `OnCrmQuoteUserFieldSetEnumValues`
+    - `OnCrmQuoteUserFieldUpdate`
+- Added service `Services\CRM\Quote\Service\QuoteUserfield` with support methods:
+    - `add` add userfield to a quote
+    - `get` get userfield to a quote
+    - `list` list userfields
+    - `delete` delete userfield
+    - `update` update userfield
+- Added service `Services\CRM\Quote\Service\QuoteProductRows` with support methods:
+    - `set` Adds products to a quote
+    - `get` Returns the products of a quote
+- Added service `Services\CRM\Quote\Service\QuoteContact` with support methods,
+    - `fields` get fiels for quote contact connection
+    - `setItems` set contacts related with quote
+    - `get` get contacts related to quote
+    - `deleteItems` delete all relations for quote
+    - `add` add contact relation with quote
+    - `delete` delete contact relation with quote
+- Added service `CRM\Lead\Service\LeadUserfield` with support methods,
+  see [add crm.lead.userfield.* methods](https://github.com/bitrix24/b24phpsdk/issues/177):
+    - `add` add userfield to lead
+    - `get` get userfield to lead
+    - `list` list userfields
+    - `delete` delete userfield
+    - `update` update userfield
 - Added service `Services\CRM\Deal\Service\DealRecurring` with support methods,
   see [crm.deal.recurring.* methods](https://github.com/bitrix24/b24phpsdk/issues/160):
     - `fields` returns a list of fields for the recurring deal template
@@ -42,13 +104,16 @@
     - `get` get localizations
     - `fields` get localization fields
     - `delete` delete currency, with batch calls support
+- Developer experience: added make command `lint-all` for run all code linters step by step, [see details](https://github.com/bitrix24/b24phpsdk/issues/183)
 
 ### Fixed
 
 - Fixed error in arguments in service for method `placement.bind`, [see details](https://github.com/bitrix24/b24phpsdk/issues/151)
-- Fixed errors in `task.elapseditem.*` call in ApiClient [see details](https://github.com/bitrix24/b24phpsdk/issues/180) 
+- Fixed errors in `task.elapseditem.*` call in ApiClient [see details](https://github.com/bitrix24/b24phpsdk/issues/180)
+
 ### Changed
 
+- Changed B24-PHP-SDK useragent: added prefix `vendor`, [see details](https://github.com/bitrix24/b24phpsdk/issues/183)
 - ❗**️️BC** Changed contract `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface`, this change needs to process corner cases
   when [installed application with UI or without UI](https://github.com/bitrix24/b24phpsdk/issues/150):
     - changed method `public function applicationInstalled(?string $applicationToken): void` application token now is nullable
@@ -62,6 +127,18 @@
     - added method `isApplicationTokenValid`
     - changed method `public function applicationInstalled(?string $applicationToken): void` application token now is nullable
     - changed method `public function applicationUninstalled(?string $applicationToken): void` application token now is nullable
+    - added method `linkContactPerson(Uuid $uuid)`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - added method `linkBitrix24Partner()`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - added method `unlinkBitrix24Partner()`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - added method `unlinkContactPerson()`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - added method `linkBitrix24PartnerContactPerson()`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - added method `unlinkBitrix24PartnerContactPerson()`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - remove method `changeContactPerson(?Uuid $uuid)`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - remove method `changeBitrix24Partner(?Uuid $uuid)`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - remove method `changeBitrix24PartnerContactPerson(?Uuid $uuid)`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+- ❗**️️BC** Changed contract `Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Repository\ApplicationInstallationRepositoryInterface`,
+  see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/167):
+    - change return type `findByBitrix24AccountId` from an array to `?ApplicationInstallationInterface`
 
 ### Statistics
 
@@ -71,6 +148,15 @@ work in progress
 
 ### Added
 
+- Added service `CRM\Contact\Service\ContactDetailsConfiguration` with support methods,
+  see [add crm.contact.details.* methods](https://github.com/bitrix24/b24phpsdk/issues/153):
+    - `getPersonal` method retrieves the settings of contact cards for personal user
+    - `getGeneral` method retrieves the settings of contact cards for all users
+    - `resetPersonal` method reset for item user settings
+    - `resetGeneral` method reset all card settings for all users
+    - `setPersonal` method set card configuration
+    - `setGeneral` method set card configuration for all users
+    - `setForceCommonConfigForAll` method set common detail form for All Users
 - Added **PHP 8.4** [support](https://github.com/bitrix24/b24phpsdk/issues/120) 🚀
 - Added method `Bitrix24\SDK\Services\Main\Service::guardValidateCurrentAuthToken` for validate current auth token with
   api-call `app.info` on vendor OAUTH server.
