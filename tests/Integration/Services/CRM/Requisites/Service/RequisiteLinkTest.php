@@ -133,7 +133,9 @@ class RequisiteLinkTest extends TestCase
             'ENTITY_TYPE_ID' => self::DEAL_OWNER_TYPE_ID,
             'ENTITY_ID' => $this->dealId,
             'REQUISITE_ID' => $this->requisiteId,
-            
+            'BANK_DETAIL_ID' => $this->requisiteBankId,
+            'MC_REQUISITE_ID' => $this->myRequisiteId,
+            'MC_BANK_DETAIL_ID' => $this->myRequisiteBankId,
         ]);
         self::assertTrue($requisiteLink->isSuccess());
     }
@@ -142,16 +144,17 @@ class RequisiteLinkTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
-    public function testDelete(): void
+    public function testUnregister(): void
     {
-        $presetId = $this->presets[0];
-        list($companyId, $requisiteId) = $this->addCompanyAndRequisite($presetId);
-        $this->createdCompanies[] = $companyId;
-        $bankRequisite = $this->linkService->add([
-            'ENTITY_ID' => $requisiteId,
-            'NAME' => 'Test bank requisite'
+        $this->linkService->register([
+            'ENTITY_TYPE_ID' => self::DEAL_OWNER_TYPE_ID,
+            'ENTITY_ID' => $this->dealId,
+            'REQUISITE_ID' => $this->requisiteId,
+            'BANK_DETAIL_ID' => $this->requisiteBankId,
+            'MC_REQUISITE_ID' => $this->myRequisiteId,
+            'MC_BANK_DETAIL_ID' => $this->myRequisiteBankId,
         ]);
-        self::assertTrue($this->linkService->delete($bankRequisite->getId())->isSuccess());
+        self::assertTrue($this->linkService->unregister(self::DEAL_OWNER_TYPE_ID, $this->dealId)->isSuccess());
     }
 
     /**
@@ -169,16 +172,17 @@ class RequisiteLinkTest extends TestCase
      */
     public function testGet(): void
     {
-        $presetId = $this->presets[0];
-        list($companyId, $requisiteId) = $this->addCompanyAndRequisite($presetId);
-        $this->createdCompanies[] = $companyId;
-        $bankRequisite = $this->linkService->add([
-            'ENTITY_ID' => $requisiteId,
-            'NAME' => 'Test bank requisite'
+        $this->linkService->register([
+            'ENTITY_TYPE_ID' => self::DEAL_OWNER_TYPE_ID,
+            'ENTITY_ID' => $this->dealId,
+            'REQUISITE_ID' => $this->requisiteId,
+            'BANK_DETAIL_ID' => $this->requisiteBankId,
+            'MC_REQUISITE_ID' => $this->myRequisiteId,
+            'MC_BANK_DETAIL_ID' => $this->myRequisiteBankId,
         ]);
         self::assertGreaterThan(
             1,
-            $this->linkService->get($bankRequisite->getId())->bankdetail()->ID
+            $this->linkService->get(self::DEAL_OWNER_TYPE_ID, $this->dealId)->bankdetail()->ENTITY_ID
         );
     }
 
@@ -188,33 +192,15 @@ class RequisiteLinkTest extends TestCase
      */
     public function testList(): void
     {
-        $presetId = $this->presets[0];
-        list($companyId, $requisiteId) = $this->addCompanyAndRequisite($presetId);
-        $this->createdCompanies[] = $companyId;
-        $this->linkService->add([
-            'ENTITY_ID' => $requisiteId,
-            'NAME' => 'Test bank requisite'
+        $this->linkService->register([
+            'ENTITY_TYPE_ID' => self::DEAL_OWNER_TYPE_ID,
+            'ENTITY_ID' => $this->dealId,
+            'REQUISITE_ID' => $this->requisiteId,
+            'BANK_DETAIL_ID' => $this->requisiteBankId,
+            'MC_REQUISITE_ID' => $this->myRequisiteId,
+            'MC_BANK_DETAIL_ID' => $this->myRequisiteBankId,
         ]);
-        self::assertGreaterThanOrEqual(1, $this->linkService->list([], [], ['ID', 'NAME'])->getBankdetails());
-    }
-
-    /**
-     * @throws BaseException
-     * @throws TransportException
-     */
-    public function testUpdate(): void
-    {
-        $presetId = $this->presets[0];
-        list($companyId, $requisiteId) = $this->addCompanyAndRequisite($presetId);
-        $this->createdCompanies[] = $companyId;
-        $bankRequisite = $this->linkService->add([
-            'ENTITY_ID' => $requisiteId,
-            'NAME' => 'Test bank requisite'
-        ]);
-        $newName = 'Test2 bank requisite';
-
-        self::assertTrue($this->linkService->update($bankRequisite->getId(), ['NAME' => $newName])->isSuccess());
-        self::assertEquals($newName, $this->linkService->get($bankRequisite->getId())->bankdetail()->NAME);
+        self::assertGreaterThanOrEqual(1, $this->linkService->list([], [], ['REQUISITE_ID', 'BANK_DETAIL_ID'])->getLinks());
     }
 
     /**
@@ -225,18 +211,18 @@ class RequisiteLinkTest extends TestCase
     {
         $before = $this->linkService->countByFilter();
 
-        foreach ($this->presets as $presetId) {
-            list($companyId, $requisiteId) = $this->addCompanyAndRequisite($presetId);
-            $this->createdCompanies[] = $companyId;
-            $bankRequisite = $this->linkService->add([
-                'ENTITY_ID' => $requisiteId,
-                'NAME' => 'Test bank requisite '.$presetId
-            ]);
-        }
+        $this->linkService->register([
+            'ENTITY_TYPE_ID' => self::DEAL_OWNER_TYPE_ID,
+            'ENTITY_ID' => $this->dealId,
+            'REQUISITE_ID' => $this->requisiteId,
+            'BANK_DETAIL_ID' => $this->requisiteBankId,
+            'MC_REQUISITE_ID' => $this->myRequisiteId,
+            'MC_BANK_DETAIL_ID' => $this->myRequisiteBankId,
+        ]);
         
         $after = $this->linkService->countByFilter();
 
-        $this->assertEquals($before + count($this->presets), $after);
+        $this->assertEquals($before + 1, $after);
     }
     
     protected function addCompanyAndRequisite(int $presetId = 0): array {
