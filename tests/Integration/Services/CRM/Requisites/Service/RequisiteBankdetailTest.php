@@ -46,16 +46,21 @@ use PHPUnit\Framework\TestCase;
 class RequisiteBankdetailTest extends TestCase
 {
     use CustomBitrix24Assertions;
-    
-    const COMPANY_OWNER_TYPE_ID = 4;
-    
+
+    public const COMPANY_OWNER_TYPE_ID = 4;
+
     protected ServiceBuilder $sb;
+
     protected RequisiteBankdetail $bankService;
+
     protected Company $companyService;
+
     protected Requisite $requisiteService;
+
     protected array   $presets = [];
+
     private array $createdCompanies = [];
-    
+
     protected function setUp(): void
     {
         $this->sb = Fabric::getServiceBuilder();
@@ -63,11 +68,11 @@ class RequisiteBankdetailTest extends TestCase
         $this->requisiteService = $this->sb->getCRMScope()->requisite();
         $this->bankService = $this->sb->getCRMScope()->requisiteBankdetail();
         $requisitePreset = $this->sb->getCRMScope()->requisitePreset();
-        foreach ($requisitePreset->list()->getRequisitePresets() as $presetItemResult) {
-            $this->presets[] = $presetItemResult->ID;
+        foreach ($requisitePreset->list()->getRequisitePresets() as $requisitePresetItemResult) {
+            $this->presets[] = $requisitePresetItemResult->ID;
         }
     }
-    
+
     protected function tearDown(): void
     {
         foreach ($this->companyService->batch->delete($this->createdCompanies) as $result) {
@@ -80,7 +85,7 @@ class RequisiteBankdetailTest extends TestCase
         $fieldDescriptions = $this->bankService->fields()->getFieldsDescription();
         echo "Fields \n";
         print_r($fieldDescriptions);
-        
+
         $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($fieldDescriptions));
         $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, RequisiteBankdetailItemResult::class);
     }
@@ -103,13 +108,13 @@ class RequisiteBankdetailTest extends TestCase
     public function testAdd(): void
     {
         $presetId = $this->presets[0];
-        list($companyId, $requisiteId) = $this->addCompanyAndRequisite($presetId);
+        [$companyId, $requisiteId] = $this->addCompanyAndRequisite($presetId);
         $this->createdCompanies[] = $companyId;
-        $bankRequisite = $this->bankService->add([
+        $addedItemResult = $this->bankService->add([
             'ENTITY_ID' => $requisiteId,
             'NAME' => 'Test bank requisite'
         ]);
-        self::assertGreaterThan(1, $bankRequisite->getId());
+        self::assertGreaterThan(1, $addedItemResult->getId());
     }
 
     /**
@@ -119,13 +124,13 @@ class RequisiteBankdetailTest extends TestCase
     public function testDelete(): void
     {
         $presetId = $this->presets[0];
-        list($companyId, $requisiteId) = $this->addCompanyAndRequisite($presetId);
+        [$companyId, $requisiteId] = $this->addCompanyAndRequisite($presetId);
         $this->createdCompanies[] = $companyId;
-        $bankRequisite = $this->bankService->add([
+        $addedItemResult = $this->bankService->add([
             'ENTITY_ID' => $requisiteId,
             'NAME' => 'Test bank requisite'
         ]);
-        self::assertTrue($this->bankService->delete($bankRequisite->getId())->isSuccess());
+        self::assertTrue($this->bankService->delete($addedItemResult->getId())->isSuccess());
     }
 
     /**
@@ -144,15 +149,15 @@ class RequisiteBankdetailTest extends TestCase
     public function testGet(): void
     {
         $presetId = $this->presets[0];
-        list($companyId, $requisiteId) = $this->addCompanyAndRequisite($presetId);
+        [$companyId, $requisiteId] = $this->addCompanyAndRequisite($presetId);
         $this->createdCompanies[] = $companyId;
-        $bankRequisite = $this->bankService->add([
+        $addedItemResult = $this->bankService->add([
             'ENTITY_ID' => $requisiteId,
             'NAME' => 'Test bank requisite'
         ]);
         self::assertGreaterThan(
             1,
-            $this->bankService->get($bankRequisite->getId())->bankdetail()->ID
+            $this->bankService->get($addedItemResult->getId())->bankdetail()->ID
         );
     }
 
@@ -163,7 +168,7 @@ class RequisiteBankdetailTest extends TestCase
     public function testList(): void
     {
         $presetId = $this->presets[0];
-        list($companyId, $requisiteId) = $this->addCompanyAndRequisite($presetId);
+        [$companyId, $requisiteId] = $this->addCompanyAndRequisite($presetId);
         $this->createdCompanies[] = $companyId;
         $this->bankService->add([
             'ENTITY_ID' => $requisiteId,
@@ -179,16 +184,16 @@ class RequisiteBankdetailTest extends TestCase
     public function testUpdate(): void
     {
         $presetId = $this->presets[0];
-        list($companyId, $requisiteId) = $this->addCompanyAndRequisite($presetId);
+        [$companyId, $requisiteId] = $this->addCompanyAndRequisite($presetId);
         $this->createdCompanies[] = $companyId;
-        $bankRequisite = $this->bankService->add([
+        $addedItemResult = $this->bankService->add([
             'ENTITY_ID' => $requisiteId,
             'NAME' => 'Test bank requisite'
         ]);
         $newName = 'Test2 bank requisite';
 
-        self::assertTrue($this->bankService->update($bankRequisite->getId(), ['NAME' => $newName])->isSuccess());
-        self::assertEquals($newName, $this->bankService->get($bankRequisite->getId())->bankdetail()->NAME);
+        self::assertTrue($this->bankService->update($addedItemResult->getId(), ['NAME' => $newName])->isSuccess());
+        self::assertEquals($newName, $this->bankService->get($addedItemResult->getId())->bankdetail()->NAME);
     }
 
     /**
@@ -199,20 +204,20 @@ class RequisiteBankdetailTest extends TestCase
     {
         $before = $this->bankService->countByFilter();
 
-        foreach ($this->presets as $presetId) {
-            list($companyId, $requisiteId) = $this->addCompanyAndRequisite($presetId);
+        foreach ($this->presets as $preset) {
+            [$companyId, $requisiteId] = $this->addCompanyAndRequisite($preset);
             $this->createdCompanies[] = $companyId;
             $bankRequisite = $this->bankService->add([
                 'ENTITY_ID' => $requisiteId,
-                'NAME' => 'Test bank requisite '.$presetId
+                'NAME' => 'Test bank requisite '.$preset
             ]);
         }
-        
+
         $after = $this->bankService->countByFilter();
 
         $this->assertEquals($before + count($this->presets), $after);
     }
-    
+
     protected function addCompanyAndRequisite(int $presetId = 0): array {
         $companyId = $this->companyService->add((new CompanyBuilder())->build())->getId();
         $requisiteId = $this->requisiteService->add(

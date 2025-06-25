@@ -53,9 +53,9 @@ class RequisiteLink extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/requisites/links/crm-requisite-link-register.html',
         'Registers the link between requisites and an object'
     )]
-    public function register(array $fields): AddedItemResult
+    public function register(array $fields): UpdatedItemResult
     {
-        return new AddedItemResult(
+        return new UpdatedItemResult(
             $this->core->call(
                 'crm.requisite.link.register',
                 [
@@ -187,6 +187,6 @@ class RequisiteLink extends AbstractService
      */
     public function countByFilter(array $filter = []): int
     {
-        return $this->list([], $filter, ['ID'], 1)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
+        return $this->list([], $filter, ['ENTITY_ID'], 1)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
     }
 }

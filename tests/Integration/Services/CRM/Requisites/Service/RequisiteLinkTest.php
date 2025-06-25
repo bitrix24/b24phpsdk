@@ -48,24 +48,27 @@ use PHPUnit\Framework\TestCase;
 class RequisiteLinkTest extends TestCase
 {
     use CustomBitrix24Assertions;
-    
-    const COMPANY_OWNER_TYPE_ID = 4;
-    const DEAL_OWNER_TYPE_ID = 2;
-    
+
+    public const COMPANY_OWNER_TYPE_ID = 4;
+
+    public const DEAL_OWNER_TYPE_ID = 2;
+
     protected ServiceBuilder $sb;
+
     protected RequisiteLink $linkService;
+
     protected Company $companyService;
+
     protected Requisite $requisiteService;
-    protected RequisiteBankdetail $bankService;
+
     protected Deal $dealService;
+
     private int $companyId = 0;
-    private int $myCompanyId = 0;
-    private int $myRequisiteId = 0;
-    private int $myRequisiteBankId = 0;
+
     private int $requisiteId = 0;
-    private int $requisiteBankId = 0;
+
     private int $dealId = 0;
-    
+
     protected function setUp(): void
     {
         $this->sb = Fabric::getServiceBuilder();
@@ -74,40 +77,30 @@ class RequisiteLinkTest extends TestCase
         $this->linkService = $this->sb->getCRMScope()->requisiteLink();
         $presetId = 0;
         $requisitePreset = $this->sb->getCRMScope()->requisitePreset();
-        foreach ($requisitePreset->list()->getRequisitePresets() as $presetItemResult) {
-            $presetId = $presetItemResult->ID;
+        foreach ($requisitePreset->list()->getRequisitePresets() as $requisitePresetItemResult) {
+            $presetId = $requisitePresetItemResult->ID;
             break;
         }
-        list($this->companyId, $this->requisiteId) = $this->addCompanyAndRequisite($presetId);
-        $this->bankService = $this->sb->getCRMScope()->requisiteBankdetail();
-        $this->requisiteBankId = $this->bankService->add([
-            'ENTITY_ID' => $this->requisiteId,
-            'NAME' => 'Test requisite link'
-        ])->getId();
+
+        [$this->companyId, $this->requisiteId] = $this->addCompanyAndRequisite($presetId);
         $this->dealService = $this->sb->getCRMScope()->deal();
-        $this->dealId = $this->dealService->add(['TITLE' => 'test requisite link'])->getId();
-        // my company
-        list($this->myCompanyId, $this->myRequisiteId) = $this->addCompanyAndRequisite($presetId);
-        $this->companyService->update($this->myCompanyId, ['IS_MY_COMPANY'=>'Y']);
-        $this->myRequisiteBankId = $this->bankService->add([
-            'ENTITY_ID' => $this->myRequisiteId,
-            'NAME' => 'Test my requisite link'
-        ])->getId();
+        $this->dealId = $this->dealService->add(
+            [
+                'TITLE' => 'test requisite link 2',
+                'COMPANY_ID' => strval($this->companyId),
+            ]
+        )->getId();
     }
-    
+
     protected function tearDown(): void
     {
         $this->companyService->delete($this->companyId);
-        $this->companyService->delete($this->myCompanyId);
         $this->dealService->delete($this->dealId);
     }
 
     public function testAllSystemFieldsAnnotated(): void
     {
         $fieldDescriptions = $this->linkService->fields()->getFieldsDescription();
-        echo "Fields \n";
-        print_r($fieldDescriptions);
-        
         $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($fieldDescriptions));
         $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, RequisiteLinkItemResult::class);
     }
@@ -129,15 +122,15 @@ class RequisiteLinkTest extends TestCase
      */
     public function testRegister(): void
     {
-        $requisiteLink = $this->linkService->register([
+        $updatedItemResult = $this->linkService->register([
             'ENTITY_TYPE_ID' => self::DEAL_OWNER_TYPE_ID,
             'ENTITY_ID' => $this->dealId,
             'REQUISITE_ID' => $this->requisiteId,
-            'BANK_DETAIL_ID' => $this->requisiteBankId,
-            'MC_REQUISITE_ID' => $this->myRequisiteId,
-            'MC_BANK_DETAIL_ID' => $this->myRequisiteBankId,
+            'BANK_DETAIL_ID' => 0,
+            'MC_REQUISITE_ID' => 0,
+            'MC_BANK_DETAIL_ID' => 0,
         ]);
-        self::assertTrue($requisiteLink->isSuccess());
+        self::assertTrue($updatedItemResult->isSuccess());
     }
 
     /**
@@ -150,9 +143,9 @@ class RequisiteLinkTest extends TestCase
             'ENTITY_TYPE_ID' => self::DEAL_OWNER_TYPE_ID,
             'ENTITY_ID' => $this->dealId,
             'REQUISITE_ID' => $this->requisiteId,
-            'BANK_DETAIL_ID' => $this->requisiteBankId,
-            'MC_REQUISITE_ID' => $this->myRequisiteId,
-            'MC_BANK_DETAIL_ID' => $this->myRequisiteBankId,
+            'BANK_DETAIL_ID' => 0,
+            'MC_REQUISITE_ID' => 0,
+            'MC_BANK_DETAIL_ID' => 0,
         ]);
         self::assertTrue($this->linkService->unregister(self::DEAL_OWNER_TYPE_ID, $this->dealId)->isSuccess());
     }
@@ -176,13 +169,13 @@ class RequisiteLinkTest extends TestCase
             'ENTITY_TYPE_ID' => self::DEAL_OWNER_TYPE_ID,
             'ENTITY_ID' => $this->dealId,
             'REQUISITE_ID' => $this->requisiteId,
-            'BANK_DETAIL_ID' => $this->requisiteBankId,
-            'MC_REQUISITE_ID' => $this->myRequisiteId,
-            'MC_BANK_DETAIL_ID' => $this->myRequisiteBankId,
+            'BANK_DETAIL_ID' => 0,
+            'MC_REQUISITE_ID' => 0,
+            'MC_BANK_DETAIL_ID' => 0,
         ]);
         self::assertGreaterThan(
             1,
-            $this->linkService->get(self::DEAL_OWNER_TYPE_ID, $this->dealId)->bankdetail()->ENTITY_ID
+            $this->linkService->get(self::DEAL_OWNER_TYPE_ID, $this->dealId)->link()->ENTITY_ID
         );
     }
 
@@ -196,9 +189,9 @@ class RequisiteLinkTest extends TestCase
             'ENTITY_TYPE_ID' => self::DEAL_OWNER_TYPE_ID,
             'ENTITY_ID' => $this->dealId,
             'REQUISITE_ID' => $this->requisiteId,
-            'BANK_DETAIL_ID' => $this->requisiteBankId,
-            'MC_REQUISITE_ID' => $this->myRequisiteId,
-            'MC_BANK_DETAIL_ID' => $this->myRequisiteBankId,
+            'BANK_DETAIL_ID' => 0,
+            'MC_REQUISITE_ID' => 0,
+            'MC_BANK_DETAIL_ID' => 0,
         ]);
         self::assertGreaterThanOrEqual(1, $this->linkService->list([], [], ['REQUISITE_ID', 'BANK_DETAIL_ID'])->getLinks());
     }
@@ -211,20 +204,30 @@ class RequisiteLinkTest extends TestCase
     {
         $before = $this->linkService->countByFilter();
 
-        $this->linkService->register([
+        $dealId = $this->dealService->add(
+            [
+                'TITLE' => 'test requisite link deal',
+                'COMPANY_ID' => strval($this->companyId),
+            ]
+        )->getId();
+        $updatedItemResult = $this->linkService->register([
             'ENTITY_TYPE_ID' => self::DEAL_OWNER_TYPE_ID,
-            'ENTITY_ID' => $this->dealId,
+            'ENTITY_ID' => $dealId,
             'REQUISITE_ID' => $this->requisiteId,
-            'BANK_DETAIL_ID' => $this->requisiteBankId,
-            'MC_REQUISITE_ID' => $this->myRequisiteId,
-            'MC_BANK_DETAIL_ID' => $this->myRequisiteBankId,
+            'BANK_DETAIL_ID' => 0,
+            'MC_REQUISITE_ID' => 0,
+            'MC_BANK_DETAIL_ID' => 0,
         ]);
+        
+        self::assertTrue($updatedItemResult->isSuccess());
         
         $after = $this->linkService->countByFilter();
 
         $this->assertEquals($before + 1, $after);
+        
+        $this->dealService->delete($dealId);
     }
-    
+
     protected function addCompanyAndRequisite(int $presetId = 0): array {
         $companyId = $this->companyService->add((new CompanyBuilder())->build())->getId();
         $requisiteId = $this->requisiteService->add(
