@@ -64,32 +64,6 @@ class BatchTest extends TestCase
     }
 
     /**
-     * @throws BaseException
-     * @throws TransportException
-     */
-    #[\PHPUnit\Framework\Attributes\TestDox('Batch list addresses')]
-    public function testBatchList(): void
-    {
-        [$companyId, $requisiteId] = $this->addCompanyAndRequisite();
-        $fields = [
-            'TYPE_ID' => $this->addressTypes[1],
-            'ENTITY_TYPE_ID' => OwnerType::requisite->value,
-            'ENTITY_ID' => $requisiteId,
-            'ADDRESS_1' => '123, Test str.'
-        ];
-        $this->addressService->add($fields);
-        $cnt = 0;
-        $list = $this->addressService->batch->list([], ['TYPE_ID' => $this->addressTypes[1]], ['TYPE_ID'], 1);
-        foreach ($list as $item) {
-            $cnt++;
-        }
-
-        self::assertGreaterThanOrEqual(1, $cnt);
-
-        $this->companyService->delete($companyId);
-    }
-
-    /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
     #[\PHPUnit\Framework\Attributes\TestDox('Batch add address')]

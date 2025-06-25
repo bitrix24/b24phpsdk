@@ -183,8 +183,8 @@ test-integration-scope-ai-admin:
 test-integration-scope-crm:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm
   
-.PHONY: test-integration-scope-crm-address
-test-integration-scope-crm-address:
+.PHONY: integration_tests_scope_crm_address
+integration_tests_scope_crm_address:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_address
 	
 .PHONY: integration_tests_lead_userfield

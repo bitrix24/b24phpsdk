@@ -93,6 +93,7 @@ class BatchTest extends TestCase
             $cnt++;
             $dealId[] = $item->getId();
         }
+
         self::assertEquals(count($leads), $cnt);
 
         $cnt = 0;

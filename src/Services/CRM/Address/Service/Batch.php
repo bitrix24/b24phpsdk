@@ -36,68 +36,6 @@ class Batch
     }
 
     /**
-     * Batch list method for Addresses
-     *
-     * @param array{
-     *                          TYPE_ID?: int,
-     *                          ENTITY_TYPE_ID?: int,
-     *                          ENTITY_ID?: int,
-     *                          ADDRESS_1?: string,
-     *                          ADDRESS_2?: string,
-     *                          CITY?: string,
-     *                          POSTAL_CODE?: string,
-     *                          REGION?: string,
-     *                          PROVINCE?: string,
-     *                          COUNTRY?: string,
-     *                          COUNTRY_CODE?: string,
-     *                          LOC_ADDR_ID?: int,
-     *                          ANCHOR_TYPE_ID?: int,
-     *                          ANCHOR_ID?: int,
-     *                         } $order
-     *
-     * @param array{
-     *                          TYPE_ID?: int,
-     *                          ENTITY_TYPE_ID?: int,
-     *                          ENTITY_ID?: int,
-     *                          ADDRESS_1?: string,
-     *                          ADDRESS_2?: string,
-     *                          CITY?: string,
-     *                          POSTAL_CODE?: string,
-     *                          REGION?: string,
-     *                          PROVINCE?: string,
-     *                          COUNTRY?: string,
-     *                          COUNTRY_CODE?: string,
-     *                          LOC_ADDR_ID?: int,
-     *                          ANCHOR_TYPE_ID?: int,
-     *                          ANCHOR_ID?: int,
-     *                         } $filter
-     * @param array    $select = ['TYPE_ID','ENTITY_TYPE_ID','ENTITY_ID','ADDRESS_1','ADDRESS_2','CITY','POSTAL_CODE','REGION','PROVINCE','COUNTRY','COUNTRY_CODE','LOC_ADDR_ID','ANCHOR_TYPE_ID','ANCHOR_ID']
-     *
-     * @return Generator<int, AddressItemResult>
-     * @throws BaseException
-     */
-    #[ApiBatchMethodMetadata(
-        'crm.address.list',
-        'https://apidocs.bitrix24.com/api-reference/crm/requisites/addresses/crm-address-list.html',
-        'Batch list method for addresses'
-    )]
-    public function list(array $order, array $filter, array $select, ?int $limit = null): Generator
-    {
-        $this->log->debug(
-            'batchList',
-            [
-                'order'  => $order,
-                'filter' => $filter,
-                'select' => $select,
-                'limit'  => $limit,
-            ]
-        );
-        foreach ($this->batch->getTraversableList('crm.address.list', $order, $filter, $select, $limit) as $key => $value) {
-            yield $key => new AddressItemResult($value);
-        }
-    }
-
-    /**
      * Batch adding addresses
      *
      * @param array <int, array{
