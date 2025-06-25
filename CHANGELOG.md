@@ -4,6 +4,41 @@
 
 ### Added
 
+- Added service `Services\CRM\Lead\Service\LeadContact` with support methods,
+  see [crm.lead.contact.* methods](https://github.com/bitrix24/b24phpsdk/issues/170):
+    - `fields` get fiels for lead contact connection
+    - `setItems` set contacts related with lead
+    - `get` get contacts related to lead
+    - `deleteItems` delete all relations for lead
+    - `add` add contact relation with lead
+    - `delete` delete contact relation with lead
+- Added service `CRM\Item\Service\ItemDetailsConfiguration` with support methods,
+  see [add crm.item.details.* methods](https://github.com/bitrix24/b24phpsdk/issues/168):
+    - `getPersonal` method retrieves the settings of item cards for personal user
+    - `getGeneral` method retrieves the settings of item cards for all users
+    - `resetPersonal` method reset for item user settings
+    - `resetGeneral` method reset all card settings for all users
+    - `setPersonal` method set card configuration
+    - `setGeneral` method set card configuration for all users
+    - `setForceCommonConfigForAll` method set common detail form for All Users
+- Added service `CRM\Deal\Service\DealDetailsConfiguration` with support methods,
+  see [add crm.deal.details.* methods](https://github.com/bitrix24/b24phpsdk/issues/158):
+    - `getPersonal` method retrieves the settings of deal cards for personal user
+    - `getGeneral` method retrieves the settings of deal cards for all users
+    - `resetPersonal` method reset for item user settings
+    - `resetGeneral` method reset all card settings for all users
+    - `setPersonal` method set card configuration
+    - `setGeneral` method set card configuration for all users
+    - `setForceCommonConfigForAll` method set common detail form for All Users
+- Added service `CRM\Lead\Service\LeadDetailsConfiguration` with support methods,
+  see [add crm.lead.details.* methods](https://github.com/bitrix24/b24phpsdk/issues/172):
+    - `getPersonal` method retrieves the settings of lead cards for personal user
+    - `getGeneral` method retrieves the settings of lead cards for all users
+    - `resetPersonal` method reset for item user settings
+    - `resetGeneral` method reset all card settings for all users
+    - `setPersonal` method set card configuration
+    - `setGeneral` method set card configuration for all users
+    - `setForceCommonConfigForAll` method set common detail form for All Users
 - Added service `Services\CRM\Lead\Service\LeadProductRows` with support methods,
   see [add crm.lead.productrows* methods](https://github.com/bitrix24/b24phpsdk/issues/175):
     - `set` Adds products to a lead
@@ -84,13 +119,16 @@
     - `delete` delete item, with batch calls support
     - `update` update item, with batch calls support
 - Added enum `Services\CRM\Enum\OwnerType`
+- Developer experience: added make command `lint-all` for run all code linters step by step, [see details](https://github.com/bitrix24/b24phpsdk/issues/183)
 
 ### Fixed
 
 - Fixed error in arguments in service for method `placement.bind`, [see details](https://github.com/bitrix24/b24phpsdk/issues/151)
-- Fixed errors in `task.elapseditem.*` call in ApiClient [see details](https://github.com/bitrix24/b24phpsdk/issues/180) 
+- Fixed errors in `task.elapseditem.*` call in ApiClient [see details](https://github.com/bitrix24/b24phpsdk/issues/180)
+
 ### Changed
 
+- Changed B24-PHP-SDK useragent: added prefix `vendor`, [see details](https://github.com/bitrix24/b24phpsdk/issues/183)
 - ❗**️️BC** Changed contract `Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface`, this change needs to process corner cases
   when [installed application with UI or without UI](https://github.com/bitrix24/b24phpsdk/issues/150):
     - changed method `public function applicationInstalled(?string $applicationToken): void` application token now is nullable
@@ -104,6 +142,18 @@
     - added method `isApplicationTokenValid`
     - changed method `public function applicationInstalled(?string $applicationToken): void` application token now is nullable
     - changed method `public function applicationUninstalled(?string $applicationToken): void` application token now is nullable
+    - added method `linkContactPerson(Uuid $uuid)`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - added method `linkBitrix24Partner()`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - added method `unlinkBitrix24Partner()`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - added method `unlinkContactPerson()`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - added method `linkBitrix24PartnerContactPerson()`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - added method `unlinkBitrix24PartnerContactPerson()`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - remove method `changeContactPerson(?Uuid $uuid)`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - remove method `changeBitrix24Partner(?Uuid $uuid)`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+    - remove method `changeBitrix24PartnerContactPerson(?Uuid $uuid)`, see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/166).
+- ❗**️️BC** Changed contract `Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Repository\ApplicationInstallationRepositoryInterface`,
+  see [change signatures](https://github.com/bitrix24/b24phpsdk/issues/167):
+    - change return type `findByBitrix24AccountId` from an array to `?ApplicationInstallationInterface`
 
 ### Statistics
 
@@ -113,6 +163,15 @@ work in progress
 
 ### Added
 
+- Added service `CRM\Contact\Service\ContactDetailsConfiguration` with support methods,
+  see [add crm.contact.details.* methods](https://github.com/bitrix24/b24phpsdk/issues/153):
+    - `getPersonal` method retrieves the settings of contact cards for personal user
+    - `getGeneral` method retrieves the settings of contact cards for all users
+    - `resetPersonal` method reset for item user settings
+    - `resetGeneral` method reset all card settings for all users
+    - `setPersonal` method set card configuration
+    - `setGeneral` method set card configuration for all users
+    - `setForceCommonConfigForAll` method set common detail form for All Users
 - Added **PHP 8.4** [support](https://github.com/bitrix24/b24phpsdk/issues/120) 🚀
 - Added method `Bitrix24\SDK\Services\Main\Service::guardValidateCurrentAuthToken` for validate current auth token with
   api-call `app.info` on vendor OAUTH server.

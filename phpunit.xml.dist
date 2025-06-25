@@ -49,6 +49,12 @@
         <testsuite name="integration_tests_scope_crm_address">
             <directory>./tests/Integration/Services/CRM/Address/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_crm_deal_details">
+            <file>./tests/Integration/Services/CRM/Deal/Service/DealDetailsConfigurationTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_scope_crm_contact_details">
+            <file>./tests/Integration/Services/CRM/Contact/Service/ContactDetailsConfigurationTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_lead_productrows">
             <file>./tests/Integration/Services/CRM/Lead/Service/LeadProductRowsTest.php</file>
         </testsuite>
@@ -64,8 +70,17 @@
         <testsuite name="integration_tests_deal_recurring">
             <file>./tests/Integration/Services/CRM/Deal/Service/DealRecurringTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_lead_contacts">
+            <file>./tests/Integration/Services/CRM/Lead/Service/LeadContactTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_item_details">
+            <file>./tests/Integration/Services/CRM/Item/Service/ItemDetailsConfigurationTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_scope_automation">
             <directory>./tests/Integration/Services/CRM/Automation/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_lead_details">
+            <file>./tests/Integration/Services/CRM/Lead/Service/LeadDetailsConfigurationTest.php</file>
         </testsuite>
         <testsuite name="integration_tests_crm_quote">
             <directory>./tests/Integration/Services/CRM/Quote/</directory>

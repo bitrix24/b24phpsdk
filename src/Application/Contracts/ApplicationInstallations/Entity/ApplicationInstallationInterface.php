@@ -57,11 +57,18 @@ interface ApplicationInstallationInterface
     public function getContactPersonId(): ?Uuid;
 
     /**
-     * Change contact person
+     * Link contact person
      *
-     * Change client contact person if client say he has new responsible for the application
+     * Link client contact person if a client says they have new responsible for the application
      */
-    public function changeContactPerson(?Uuid $uuid): void;
+    public function linkContactPerson(Uuid $uuid): void;
+
+    /**
+     * Unlink contact person
+     *
+     * Unlink a client contact person if the client says the contact person has changed
+     */
+    public function unlinkContactPerson(): void;
 
     /**
      * Get Bitrix24 Partner contact person id, optional
@@ -71,11 +78,18 @@ interface ApplicationInstallationInterface
     public function getBitrix24PartnerContactPersonId(): ?Uuid;
 
     /**
-     * Change bitrix24 partner contact person
+     * Link Bitrix24 partner contact person
      *
-     * Change bitrix24 partner contact person if partner say he has new responsible for the application
+     * Link Bitrix24 partner contact person if partner say he has new responsible for the application
      */
-    public function changeBitrix24PartnerContactPerson(?Uuid $uuid): void;
+    public function linkBitrix24PartnerContactPerson(Uuid $uuid): void;
+
+    /**
+     * Unlink Bitrix24 partner contact person
+     *
+     * Unlink Bitrix24 partner contacts the person if the partner says they remove this employee
+     */
+    public function unlinkBitrix24PartnerContactPerson(): void;
 
     /**
      * @return Uuid|null get Bitrix24 Partner id related with this installation, optional
@@ -83,11 +97,18 @@ interface ApplicationInstallationInterface
     public function getBitrix24PartnerId(): ?Uuid;
 
     /**
-     * Change bitrix24 partner
+     * Link Bitrix24 partner
      *
-     * Change bitrix24 partner if other partner starts support client portal
+     * Link Bitrix24 partner who supports this portal
      */
-    public function changeBitrix24Partner(?Uuid $uuid): void;
+    public function linkBitrix24Partner(Uuid $uuid): void;
+
+    /**
+     * Unlink Bitrix24 partner
+     *
+     * Unlink Bitrix24 partner who stops supporting this portal
+     */
+    public function unlinkBitrix24Partner(): void;
 
     /**
      * Get external id for application installation

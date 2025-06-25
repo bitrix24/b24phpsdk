@@ -30,8 +30,7 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
 
     public function __construct(
         private readonly LoggerInterface $logger
-    )
-    {
+    ) {
     }
 
     public function save(ApplicationInstallationInterface $applicationInstallation): void
@@ -47,10 +46,13 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
 
         $applicationInstallation = $this->getById($uuid);
         if (ApplicationInstallationStatus::deleted !== $applicationInstallation->getStatus()) {
-            throw new InvalidArgumentException(sprintf('you cannot delete application installation «%s», in status «%s», mark applicatoin installation as «deleted» before',
-                $applicationInstallation->getId()->toRfc4122(),
-                $applicationInstallation->getStatus()->name,
-            ));
+            throw new InvalidArgumentException(
+                sprintf(
+                    'you cannot delete application installation «%s», in status «%s», mark applicatoin installation as «deleted» before',
+                    $applicationInstallation->getId()->toRfc4122(),
+                    $applicationInstallation->getStatus()->name,
+                )
+            );
         }
 
         unset($this->items[$uuid->toRfc4122()]);
@@ -67,18 +69,17 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
         return $this->items[$uuid->toRfc4122()];
     }
 
-    public function findByBitrix24AccountId(Uuid $uuid): array
+    public function findByBitrix24AccountId(Uuid $uuid): ?ApplicationInstallationInterface
     {
         $this->logger->debug('InMemoryApplicationInstallationRepositoryImplementation.findByBitrix24AccountId', ['id' => $uuid->toRfc4122()]);
 
-        $result = [];
         foreach ($this->items as $item) {
             if ($item->getBitrix24AccountId() === $uuid) {
-                $result[] = $item;
+                return $item;
             }
         }
 
-        return $result;
+        return null;
     }
 
     public function findByExternalId(string $externalId): array
