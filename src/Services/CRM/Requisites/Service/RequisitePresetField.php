@@ -162,7 +162,7 @@ class RequisitePresetField extends AbstractService
             )
         );
     }
-    
+
     /**
      * Modifies a custom field in the requisites template.
      *
@@ -195,7 +195,7 @@ class RequisitePresetField extends AbstractService
             )
         );
     }
-    
+
     /**
      * Returns fields available for addition to the specified requisites template.
      *
