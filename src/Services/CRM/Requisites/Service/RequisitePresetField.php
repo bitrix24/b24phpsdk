@@ -37,7 +37,6 @@ class RequisitePresetField extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/presets/fields/crm-requisite-preset-field-add.html
      *
-     * @param int $presetId
      * @param array{
      *   FIELD_NAME?: string,
      *   FIELD_TITLE?: string,
@@ -59,7 +58,7 @@ class RequisitePresetField extends AbstractService
             $this->core->call(
                 'crm.requisite.preset.field.add',
                 [
-                    'preset'  => ['ID' => $presetId]
+                    'preset'  => ['ID' => $presetId],
                     'fields' => $fields
                 ]
             )
@@ -87,7 +86,7 @@ class RequisitePresetField extends AbstractService
                 'crm.requisite.preset.field.delete',
                 [
                     'id' => $id,
-                    'preset'  => ['ID' => $presetId]
+                    'preset'  => ['ID' => $presetId],
                 ]
             )
         );  // ###
@@ -132,7 +131,7 @@ class RequisitePresetField extends AbstractService
                 'crm.requisite.preset.field.get',
                 [
                     'id' => $id,
-                    'preset'  => ['ID' => $presetId]
+                    'preset'  => ['ID' => $presetId],
                 ]
             )
         );
@@ -143,7 +142,6 @@ class RequisitePresetField extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/presets/fields/crm-requisite-preset-field-list.html
      *
-     * @param int  $presetId
      *
      * @throws BaseException
      * @throws TransportException
@@ -159,7 +157,7 @@ class RequisitePresetField extends AbstractService
             $this->core->call(
                 'crm.requisite.preset.field.list',
                 [
-                    'preset'  => ['ID' => $presetId]
+                    'preset'  => ['ID' => $presetId],
                 ]
             )
         );
@@ -170,17 +168,12 @@ class RequisitePresetField extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/presets/fields/crm-requisite-preset-field-update.html
      *
-     * @param int $id
-     * @param array{
-     *   ID?: int,
-     * } $presetId
      * @param array{
      *   FIELD_NAME?: string,
      *   FIELD_TITLE?: string,
      *   SORT?: int,
      *   IN_SHORT_LIST?: string,
      * } $fields
-     *
      * @throws BaseException
      * @throws TransportException
      */
@@ -189,7 +182,7 @@ class RequisitePresetField extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/requisites/presets/fields/crm-requisite-preset-field-update.html',
         'Modifies a custom field in the requisites template'
     )]
-    public function update(int $id, int $presetId, array $fields): RequisitePresetFieldResult
+    public function update(int $id, int $presetId, array $fields): UpdatedItemResult
     {
         return new UpdatedItemResult(
             $this->core->call(
@@ -197,7 +190,7 @@ class RequisitePresetField extends AbstractService
                 [
                     'id' => $id,
                     'preset'  => ['ID' => $presetId],
-                    'fields' => $fields
+                    'fields' => $fields,
                 ]
             )
         );
@@ -208,7 +201,6 @@ class RequisitePresetField extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/presets/fields/crm-requisite-preset-field-available-to-add.html
      *
-     * @param int  $presetId
      *
      * @throws BaseException
      * @throws TransportException
@@ -224,7 +216,7 @@ class RequisitePresetField extends AbstractService
             $this->core->call(
                 'crm.requisite.preset.field.availabletoadd',
                 [
-                    'preset'  => ['ID' => $presetId]
+                    'preset'  => ['ID' => $presetId],
                 ]
             )
         );

@@ -26,5 +26,4 @@ use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
  */
 class RequisitePresetFieldItemResult extends AbstractCrmItem
 {
-    
 }

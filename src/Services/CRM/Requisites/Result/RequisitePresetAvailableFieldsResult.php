@@ -30,11 +30,6 @@ class RequisitePresetAvailableFieldsResult extends AbstractResult
      */
     public function getAvailableFields(): array
     {
-        $items = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
-            $items[] = $item;
-        }
-
-        return $items;
+        return $this->getCoreResponse()->getResponseData()->getResult();
     }
 }
