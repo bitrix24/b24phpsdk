@@ -83,9 +83,7 @@ class RequisiteBankdetailTest extends TestCase
     public function testAllSystemFieldsAnnotated(): void
     {
         $fieldDescriptions = $this->bankService->fields()->getFieldsDescription();
-        echo "Fields \n";
-        print_r($fieldDescriptions);
-
+        
         $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($fieldDescriptions));
         $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, RequisiteBankdetailItemResult::class);
     }

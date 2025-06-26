@@ -26,7 +26,7 @@ class RequisitePresetFieldResult extends AbstractResult
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    public function presetfield(): RequisitePresetFieldItemResult
+    public function presetField(): RequisitePresetFieldItemResult
     {
         return new RequisitePresetFieldItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
