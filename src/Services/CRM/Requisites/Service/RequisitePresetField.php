@@ -26,6 +26,7 @@ use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\CRM\Requisites\Result\RequisitePresetFieldResult;
 use Bitrix24\SDK\Services\CRM\Requisites\Result\RequisitePresetFieldsResult;
+use Bitrix24\SDK\Services\CRM\Requisites\Result\RequisitePresetAvailableFieldsResult;
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['crm']))]
@@ -38,12 +39,10 @@ class RequisitePresetField extends AbstractService
      *
      * @param int $presetId
      * @param array{
-     *   ENTITY_TYPE_ID?: int,
-     *   ENTITY_ID?: int,
-     *   REQUISITE_ID?: int,
-     *   BANK_DETAIL_ID?: int,
-     *   MC_REQUISITE_ID?: int,
-     *   MC_BANK_DETAIL_ID?: int,
+     *   FIELD_NAME?: string,
+     *   FIELD_TITLE?: string,
+     *   SORT?: int,
+     *   IN_SHORT_LIST?: string,
      * } $fields
      *
      * @throws BaseException
@@ -60,7 +59,7 @@ class RequisitePresetField extends AbstractService
             $this->core->call(
                 'crm.requisite.preset.field.add',
                 [
-                    'preset' => $presetId,
+                    'preset'  => ['ID' => $presetId]
                     'fields' => $fields
                 ]
             )
@@ -88,24 +87,24 @@ class RequisitePresetField extends AbstractService
                 'crm.requisite.preset.field.delete',
                 [
                     'id' => $id,
-                    'preset' => $presetId,
+                    'preset'  => ['ID' => $presetId]
                 ]
             )
         );  // ###
     }
 
     /**
-     * Returns a formal description of the fields of the requisites preset.field.
+     * Returns a formal description of the fields describing the custom field in the requisites template.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/links/crm-requisite-link-fields.html
+     * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/presets/fields/crm-requisite-preset-field-fields.html
      *
      * @throws BaseException
      * @throws TransportException
      */
     #[ApiEndpointMetadata(
         'crm.requisite.preset.field.fields',
-        'https://apidocs.bitrix24.com/api-reference/crm/requisites/links/crm-requisite-link-fields.html',
-        'Returns a formal description of the fields of the requisites link'
+        'https://apidocs.bitrix24.com/api-reference/crm/requisites/presets/fields/crm-requisite-preset-field-fields.html',
+        'Returns a formal description of the fields describing the custom field in the requisites template'
     )]
     public function fields(): FieldsResult
     {
@@ -113,9 +112,9 @@ class RequisitePresetField extends AbstractService
     }
 
     /**
-     * Returns the link between requisites and an object.
+     * Returns the description of the custom field in the requisites template by identifier.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/links/crm-requisite-link-get.html
+     * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/presets/fields/crm-requisite-preset-field-get.html
      *
      *
      * @throws BaseException
@@ -123,72 +122,112 @@ class RequisitePresetField extends AbstractService
      */
     #[ApiEndpointMetadata(
         'crm.requisite.preset.field.get',
-        'https://apidocs.bitrix24.com/api-reference/crm/requisites/links/crm-requisite-link-get.html',
-        'Returns the link between requisites and an object'
+        'https://apidocs.bitrix24.com/api-reference/crm/requisites/presets/fields/crm-requisite-preset-field-get.html',
+        'Returns the description of the custom field in the requisites template by identifier'
     )]
-    public function get(int $entityTypeId, int $entityId): RequisitePresetFieldResult
+    public function get(int $id, int $presetId): RequisitePresetFieldResult
     {
         return new RequisitePresetFieldResult(
             $this->core->call(
                 'crm.requisite.preset.field.get',
                 [
-                    'entityTypeId' => $entityTypeId,
-                    'entityId' => $entityId,
+                    'id' => $id,
+                    'preset'  => ['ID' => $presetId]
                 ]
             )
         );
     }
 
     /**
-     * Returns a list of links between requisites based on a filter.
+     * Returns a list of all custom fields for a specific requisites template.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/links/crm-requisite-link-list.html
+     * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/presets/fields/crm-requisite-preset-field-list.html
      *
-     * @param array   $order     - order of link items
-     * @param array   $filter    - filter array
-     * @param array   $select    = ['ENTITY_TYPE_ID','ENTITY_ID','REQUISITE_ID','BANK_DETAIL_ID','MC_REQUISITE_ID','MC_BANK_DETAIL_ID']
-     * @param integer $startItem - entity number to start from (usually returned in 'next' field of previous 'crm.requisite.preset.field.list' API call)
+     * @param int  $presetId
      *
      * @throws BaseException
      * @throws TransportException
      */
     #[ApiEndpointMetadata(
         'crm.requisite.preset.field.list',
-        'https://apidocs.bitrix24.com/api-reference/crm/requisites/links/crm-requisite-link-list.html',
-        'Returns a list of links between requisites based on a filter'
+        'https://apidocs.bitrix24.com/api-reference/crm/requisites/presets/fields/crm-requisite-preset-field-list.html',
+        'Returns a list of all custom fields for a specific requisites template'
     )]
-    public function list(array $order, array $filter, array $select, int $startItem = 0): RequisitePresetFieldsResult
+    public function list(int $presetId): RequisitePresetFieldsResult
     {
         return new RequisitePresetFieldsResult(
             $this->core->call(
                 'crm.requisite.preset.field.list',
                 [
-                    'order'  => $order,
-                    'filter' => $filter,
-                    'select' => $select,
-                    'start'  => $startItem,
+                    'preset'  => ['ID' => $presetId]
+                ]
+            )
+        );
+    }
+    
+    /**
+     * Modifies a custom field in the requisites template.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/presets/fields/crm-requisite-preset-field-update.html
+     *
+     * @param int $id
+     * @param array{
+     *   ID?: int,
+     * } $presetId
+     * @param array{
+     *   FIELD_NAME?: string,
+     *   FIELD_TITLE?: string,
+     *   SORT?: int,
+     *   IN_SHORT_LIST?: string,
+     * } $fields
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'crm.requisite.preset.field.update',
+        'https://apidocs.bitrix24.com/api-reference/crm/requisites/presets/fields/crm-requisite-preset-field-update.html',
+        'Modifies a custom field in the requisites template'
+    )]
+    public function update(int $id, int $presetId, array $fields): RequisitePresetFieldResult
+    {
+        return new UpdatedItemResult(
+            $this->core->call(
+                'crm.requisite.preset.field.update',
+                [
+                    'id' => $id,
+                    'preset'  => ['ID' => $presetId],
+                    'fields' => $fields
+                ]
+            )
+        );
+    }
+    
+    /**
+     * Returns fields available for addition to the specified requisites template.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/crm/requisites/presets/fields/crm-requisite-preset-field-available-to-add.html
+     *
+     * @param int  $presetId
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'crm.requisite.preset.field.availabletoadd',
+        'https://apidocs.bitrix24.com/api-reference/crm/requisites/presets/fields/crm-requisite-preset-field-available-to-add.html',
+        'Returns fields available for addition to the specified requisites template'
+    )]
+    public function availabletoadd(int $presetId): RequisitePresetAvailableFieldsResult
+    {
+        return new RequisitePresetAvailableFieldsResult(
+            $this->core->call(
+                'crm.requisite.preset.field.availabletoadd',
+                [
+                    'preset'  => ['ID' => $presetId]
                 ]
             )
         );
     }
 
-    /**
-     * Count links by filter
-     *
-     * @param array{
-     *   ENTITY_TYPE_ID?: int,
-     *   ENTITY_ID?: int,
-     *   REQUISITE_ID?: int,
-     *   BANK_DETAIL_ID?: int,
-     *   MC_REQUISITE_ID?: int,
-     *   MC_BANK_DETAIL_ID?: int,
-     *   } $filter
-     *
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
-     */
-    public function countByFilter(array $filter = []): int
-    {
-        return $this->list([], $filter, ['ENTITY_ID'], 1)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
-    }
 }
