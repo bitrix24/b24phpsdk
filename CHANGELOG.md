@@ -112,6 +112,13 @@
     - `get` get localizations
     - `fields` get localization fields
     - `delete` delete currency, with batch calls support
+- Added service `Services\CRM\Address\Service\Address` with support methods,
+  see [add crm.address REST methods](https://github.com/bitrix24/b24phpsdk/issues/138):
+    - `list` get item list
+    - `add` add new item, with batch calls support
+    - `delete` delete item, with batch calls support
+    - `update` update item, with batch calls support
+- Added enum `Services\CRM\Enum\OwnerType`
 - Developer experience: added make command `lint-all` for run all code linters step by step, [see details](https://github.com/bitrix24/b24phpsdk/issues/183)
 
 ### Fixed
@@ -173,8 +180,8 @@ work in progress
   see [fix entity.item.* methods](https://github.com/bitrix24/b24phpsdk/issues/53):
     - `get` get item, with batch calls support
     - `add` add new item, with batch calls support
-    - `delete` delete item, with batch calls support
-    - `update`  update item, with batch calls support
+    - `delete` delete item
+    - `update`  update item
 - Added service `Services\Entity\Service\Entity` with support methods,
   see [fix entity.* methods](https://github.com/bitrix24/b24phpsdk/issues/53):
     - `get` get entity

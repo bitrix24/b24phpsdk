@@ -11,6 +11,7 @@ parameters:
     - tests/Integration/Services/IMOpenLines
     - tests/Integration/Services/Main
     - tests/Integration/Services/Placement
+    - tests/Integration/Services/CRM/Address
     - tests/Integration/Services/CRM/Deal/Service/DealRecurringTest.php
     - tests/Integration/Services/CRM/Lead/Service/LeadContactTest.php
     - tests/Integration/Services/CRM/Item/Service/ItemDetailsConfigurationTest.php
