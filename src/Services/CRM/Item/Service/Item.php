@@ -30,12 +30,9 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['crm']))]
 class Item extends AbstractService
 {
-    public Batch $batch;
-
-    public function __construct(Batch $batch, CoreInterface $core, LoggerInterface $log)
+    public function __construct(public Batch $batch, CoreInterface $core, LoggerInterface $logger)
     {
-        parent::__construct($core, $log);
-        $this->batch = $batch;
+        parent::__construct($core, $logger);
     }
 
     /**
@@ -44,9 +41,6 @@ class Item extends AbstractService
      * @link https://training.bitrix24.com/rest_help/crm/dynamic/methodscrmitem/crm_item_add.php
      *
      *
-     * @param int $entityTypeId
-     * @param array $fields
-     * @return ItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -73,10 +67,7 @@ class Item extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/dynamic/methodscrmitem/crm_item_delete.php
      *
-     * @param int $entityTypeId
-     * @param int $id
      *
-     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -89,7 +80,8 @@ class Item extends AbstractService
     {
         return new DeletedItemResult(
             $this->core->call(
-                'crm.item.delete', ['entityTypeId' => $entityTypeId, 'id' => $id]
+                'crm.item.delete',
+                ['entityTypeId' => $entityTypeId, 'id' => $id]
             )
         );
     }
@@ -99,8 +91,6 @@ class Item extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/dynamic/methodscrmitem/crm_item_fields.php
      *
-     * @param int $entityTypeId
-     * @return FieldsResult
      * @throws BaseException
      * @throws TransportException
      */

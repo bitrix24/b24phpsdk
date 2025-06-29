@@ -33,10 +33,6 @@ class DealContact extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_contact_add.php
      *
-     * @param int $dealId
-     * @param int $contactId
-     * @param bool $isPrimary
-     * @param int $sort
      *
      * @throws BaseException
      * @throws TransportException
@@ -85,9 +81,7 @@ class DealContact extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_contact_items_get.php
      *
-     * @param int $dealId
      *
-     * @return DealContactItemsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -113,9 +107,7 @@ class DealContact extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_contact_items_delete.php
      *
-     * @param int $dealId
      *
-     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -141,14 +133,12 @@ class DealContact extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_contact_items_set.php
      *
-     * @param int $dealId
      * @param array<int, array{
      *   CONTACT_ID: int,
      *   SORT: int,
      *   IS_PRIMARY: string,
      *   }> $contactItems
      *
-     * @return UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -175,10 +165,7 @@ class DealContact extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_contact_delete.php
      *
-     * @param int $dealId
-     * @param int $contactId
      *
-     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      */

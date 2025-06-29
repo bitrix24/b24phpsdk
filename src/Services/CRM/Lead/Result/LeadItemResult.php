@@ -86,7 +86,6 @@ use Money\Money;
 class LeadItemResult extends AbstractCrmItem
 {
     /**
-     * @param string $userfieldName
      *
      * @return mixed|null
      * @throws \Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException

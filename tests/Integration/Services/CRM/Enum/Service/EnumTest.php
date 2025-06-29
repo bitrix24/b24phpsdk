@@ -42,56 +42,57 @@ class EnumTest extends TestCase
 
     public function testActivityStatus(): void
     {
-        foreach ($this->enumService->activityStatus()->getItems() as $item) {
-            $this->assertEquals($item->ID, $item->ENUM->value);
+        foreach ($this->enumService->activityStatus()->getItems() as $activityStatusItemResult) {
+            $this->assertEquals($activityStatusItemResult->ID, $activityStatusItemResult->ENUM->value);
         }
     }
 
     public function testAddressType(): void
     {
-        foreach ($this->enumService->addressType()->getItems() as $item) {
-            $this->assertEquals($item->ID, $item->ENUM->value);
+        foreach ($this->enumService->addressType()->getItems() as $addressTypeFieldItemResult) {
+            $this->assertEquals($addressTypeFieldItemResult->ID, $addressTypeFieldItemResult->ENUM->value);
         }
     }
+
     public function testActivityNotifyType(): void
     {
-        foreach ($this->enumService->activityNotifyType()->getItems() as $item) {
-            $this->assertEquals($item->ID, $item->ENUM->value);
+        foreach ($this->enumService->activityNotifyType()->getItems() as $activityNotifyTypeItemResult) {
+            $this->assertEquals($activityNotifyTypeItemResult->ID, $activityNotifyTypeItemResult->ENUM->value);
         }
     }
 
     public function testActivityPriority(): void
     {
-        foreach ($this->enumService->activityPriority()->getItems() as $item) {
-            $this->assertEquals($item->ID, $item->ENUM->value);
+        foreach ($this->enumService->activityPriority()->getItems() as $activityPriorityTypeItemResult) {
+            $this->assertEquals($activityPriorityTypeItemResult->ID, $activityPriorityTypeItemResult->ENUM->value);
         }
     }
 
     public function testActivityDirection(): void
     {
-        foreach ($this->enumService->activityDirection()->getItems() as $item) {
-            $this->assertEquals($item->ID, $item->ENUM->value);
+        foreach ($this->enumService->activityDirection()->getItems() as $activityDirectionItemResult) {
+            $this->assertEquals($activityDirectionItemResult->ID, $activityDirectionItemResult->ENUM->value);
         }
     }
 
     public function testActivityType(): void
     {
-        foreach ($this->enumService->activityType()->getItems() as $item) {
-            $this->assertEquals($item->ID, $item->ENUM->value);
+        foreach ($this->enumService->activityType()->getItems() as $activityTypeItemResult) {
+            $this->assertEquals($activityTypeItemResult->ID, $activityTypeItemResult->ENUM->value);
         }
     }
 
     public function testSettingsMode(): void
     {
-        foreach ($this->enumService->settingsMode()->getItems() as $item) {
-            $this->assertEquals($item->ID, $item->ENUM->value);
+        foreach ($this->enumService->settingsMode()->getItems() as $contentTypeItemResult) {
+            $this->assertEquals($contentTypeItemResult->ID, $contentTypeItemResult->ENUM->value);
         }
     }
 
     public function testContentType(): void
     {
-        foreach ($this->enumService->contentType()->getItems() as $item) {
-            $this->assertEquals($item->ID, $item->ENUM->value);
+        foreach ($this->enumService->contentType()->getItems() as $contentTypeItemResult) {
+            $this->assertEquals($contentTypeItemResult->ID, $contentTypeItemResult->ENUM->value);
         }
     }
 
@@ -105,7 +106,7 @@ class EnumTest extends TestCase
         $this->assertGreaterThan(1, count($this->enumService->fields()->getFieldsDescription()));
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->enumService = Fabric::getServiceBuilder()->getCRMScope()->enum();
     }

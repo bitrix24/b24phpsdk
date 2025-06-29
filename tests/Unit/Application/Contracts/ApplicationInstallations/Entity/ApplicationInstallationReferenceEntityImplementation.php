@@ -32,21 +32,22 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
 {
     private ?string $comment = null;
 
+    private ?string $applicationToken = null;
+
     public function __construct(
-        private readonly Uuid                 $id,
+        private readonly Uuid $id,
         private ApplicationInstallationStatus $applicationInstallationStatus,
-        private readonly CarbonImmutable      $createdAt,
-        private CarbonImmutable               $updatedAt,
-        private readonly Uuid                 $bitrix24AccountUuid,
-        private ApplicationStatus             $applicationStatus,
-        private PortalLicenseFamily           $portalLicenseFamily,
-        private ?int                          $portalUsersCount,
-        private ?Uuid                         $clientContactPersonUuid,
-        private ?Uuid                         $partnerContactPersonUuid,
-        private ?Uuid                         $bitrix24PartnerUuid,
-        private ?string                       $externalId,
-    )
-    {
+        private readonly CarbonImmutable $createdAt,
+        private CarbonImmutable $updatedAt,
+        private readonly Uuid $bitrix24AccountUuid,
+        private ApplicationStatus $applicationStatus,
+        private PortalLicenseFamily $portalLicenseFamily,
+        private ?int $portalUsersCount,
+        private ?Uuid $clientContactPersonUuid,
+        private ?Uuid $partnerContactPersonUuid,
+        private ?Uuid $bitrix24PartnerUuid,
+        private ?string $externalId,
+    ) {
     }
 
     public function getId(): Uuid
@@ -106,20 +107,20 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
         return $this->clientContactPersonUuid;
     }
 
-    public function changeContactPerson(?Uuid $uuid): void
-    {
-        $this->clientContactPersonUuid = $uuid;
-        $this->updatedAt = new CarbonImmutable();
-    }
-
     public function getBitrix24PartnerContactPersonId(): ?Uuid
     {
         return $this->partnerContactPersonUuid;
     }
 
-    public function changeBitrix24PartnerContactPerson(?Uuid $uuid): void
+    public function linkBitrix24PartnerContactPerson(?Uuid $uuid): void
     {
         $this->partnerContactPersonUuid = $uuid;
+        $this->updatedAt = new CarbonImmutable();
+    }
+
+    public function unlinkBitrix24PartnerContactPerson(): void
+    {
+        $this->partnerContactPersonUuid = null;
         $this->updatedAt = new CarbonImmutable();
     }
 
@@ -128,9 +129,15 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
         return $this->bitrix24PartnerUuid;
     }
 
-    public function changeBitrix24Partner(?Uuid $uuid): void
+    public function linkBitrix24Partner(Uuid $uuid): void
     {
         $this->bitrix24PartnerUuid = $uuid;
+        $this->updatedAt = new CarbonImmutable();
+    }
+
+    public function unlinkBitrix24Partner(): void
+    {
+        $this->bitrix24PartnerUuid = null;
         $this->updatedAt = new CarbonImmutable();
     }
 
@@ -152,13 +159,20 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     /**
      * @throws InvalidArgumentException
      */
-    public function applicationInstalled(): void
+    public function applicationInstalled(?string $applicationToken = null): void
     {
         if ($this->applicationInstallationStatus !== ApplicationInstallationStatus::new) {
-            throw new LogicException(sprintf('application installation must be in status «%s», current state «%s»',
-                ApplicationInstallationStatus::new->name,
-                $this->applicationInstallationStatus->name
-            ));
+            throw new LogicException(
+                sprintf(
+                    'application installation must be in status «%s», current state «%s»',
+                    ApplicationInstallationStatus::new->name,
+                    $this->applicationInstallationStatus->name
+                )
+            );
+        }
+
+        if ($applicationToken !== null) {
+            $this->setApplicationToken($applicationToken);
         }
 
         $this->applicationInstallationStatus = ApplicationInstallationStatus::active;
@@ -168,14 +182,21 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     /**
      * @throws InvalidArgumentException
      */
-    public function applicationUninstalled(): void
+    public function applicationUninstalled(?string $applicationToken = null): void
     {
         if ($this->applicationInstallationStatus === ApplicationInstallationStatus::new || $this->applicationInstallationStatus === ApplicationInstallationStatus::deleted) {
-            throw new LogicException(sprintf('application installation must be in status «%s» or «%s», current state «%s»',
-                ApplicationInstallationStatus::active->name,
-                ApplicationInstallationStatus::blocked->name,
-                $this->applicationInstallationStatus->name
-            ));
+            throw new LogicException(
+                sprintf(
+                    'application installation must be in status «%s» or «%s», current state «%s»',
+                    ApplicationInstallationStatus::active->name,
+                    ApplicationInstallationStatus::blocked->name,
+                    $this->applicationInstallationStatus->name
+                )
+            );
+        }
+
+        if ($applicationToken !== null) {
+            $this->setApplicationToken($applicationToken);
         }
 
         $this->applicationInstallationStatus = ApplicationInstallationStatus::deleted;
@@ -185,10 +206,13 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     public function markAsActive(?string $comment): void
     {
         if ($this->applicationInstallationStatus !== ApplicationInstallationStatus::blocked) {
-            throw new LogicException(sprintf('you can activate application install only in state «%s», current state «%s»',
-                ApplicationInstallationStatus::blocked->name,
-                $this->applicationInstallationStatus->name
-            ));
+            throw new LogicException(
+                sprintf(
+                    'you can activate application install only in state «%s», current state «%s»',
+                    ApplicationInstallationStatus::blocked->name,
+                    $this->applicationInstallationStatus->name
+                )
+            );
         }
 
         $this->applicationInstallationStatus = ApplicationInstallationStatus::active;
@@ -199,11 +223,14 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     public function markAsBlocked(?string $comment): void
     {
         if ($this->applicationInstallationStatus === ApplicationInstallationStatus::blocked || $this->applicationInstallationStatus === ApplicationInstallationStatus::deleted) {
-            throw new LogicException(sprintf('you can block application install only in state «%s» or «%s», current state «%s»',
-                ApplicationInstallationStatus::new->name,
-                ApplicationInstallationStatus::active->name,
-                $this->applicationInstallationStatus->name
-            ));
+            throw new LogicException(
+                sprintf(
+                    'you can block application install only in state «%s» or «%s», current state «%s»',
+                    ApplicationInstallationStatus::new->name,
+                    ApplicationInstallationStatus::active->name,
+                    $this->applicationInstallationStatus->name
+                )
+            );
         }
 
         $this->applicationInstallationStatus = ApplicationInstallationStatus::blocked;
@@ -220,5 +247,43 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     public function getComment(): ?string
     {
         return $this->comment;
+    }
+
+    /**
+     * @param non-empty-string $applicationToken
+     * @throws InvalidArgumentException
+     */
+    public function setApplicationToken(string $applicationToken): void
+    {
+        if (trim($applicationToken) === '') {
+            throw new InvalidArgumentException('applicationToken cannot be empty string');
+        }
+
+        $this->applicationToken = $applicationToken;
+        $this->updatedAt = new CarbonImmutable();
+    }
+
+    /**
+     * @param non-empty-string $applicationToken
+     */
+    public function isApplicationTokenValid(string $applicationToken): bool
+    {
+        if ($this->applicationToken === null) {
+            return false;
+        }
+
+        return $this->applicationToken === $applicationToken;
+    }
+
+    public function linkContactPerson(Uuid $uuid): void
+    {
+        $this->clientContactPersonUuid = $uuid;
+        $this->updatedAt = new CarbonImmutable();
+    }
+
+    public function unlinkContactPerson(): void
+    {
+        $this->clientContactPersonUuid = null;
+        $this->updatedAt = new CarbonImmutable();
     }
 }

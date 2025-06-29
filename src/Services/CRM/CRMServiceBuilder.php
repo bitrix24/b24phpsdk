@@ -71,11 +71,93 @@ class CRMServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+    
+    public function itemDetailsConfiguration(): Item\Service\ItemDetailsConfiguration
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Item\Service\ItemDetailsConfiguration(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function dealDetailsConfiguration(): Deal\Service\DealDetailsConfiguration
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Deal\Service\DealDetailsConfiguration(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function leadDetailsConfiguration(): Lead\Service\LeadDetailsConfiguration
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Lead\Service\LeadDetailsConfiguration(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function contactDetailsConfiguration(): Contact\Service\ContactDetailsConfiguration
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Contact\Service\ContactDetailsConfiguration(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 
     public function vat(): VatRates\Service\Vat
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new VatRates\Service\Vat(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+    
+    public function currency(): Currency\Service\Currency
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new Currency\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Currency\Service\Currency(
+                new Currency\Service\Batch($batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+    
+    public function localizations(): Currency\Localizations\Service\Localizations
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new Currency\Localizations\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Currency\Localizations\Service\Localizations(
+                new Currency\Localizations\Service\Batch($batch, $this->log),
                 $this->core,
                 $this->log
             );
@@ -153,6 +235,15 @@ class CRMServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Deal\Service\DealCategory($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+    
+    public function dealRecurring(): Deal\Service\DealRecurring
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Deal\Service\DealRecurring($this->core, $this->log);
         }
 
         return $this->serviceCache[__METHOD__];
@@ -268,12 +359,116 @@ class CRMServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+    
+    public function leadContact(): Lead\Service\LeadContact
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Lead\Service\LeadContact(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * @return Lead\Service\LeadProductRows
+     */
+    public function leadProductRows(): Lead\Service\LeadProductRows
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Lead\Service\LeadProductRows($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+  
+    public function leadUserfield(): Lead\Service\LeadUserfield
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Lead\Service\LeadUserfield(
+                new UserfieldConstraints(),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+    
+    public function quote(): Quote\Service\Quote
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Quote\Service\Quote(
+                new Quote\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+    
+    public function quoteContact(): Quote\Service\QuoteContact
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Quote\Service\QuoteContact(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+    
+    /**
+     * @return Quote\Service\QuoteProductRows
+     */
+    public function quoteProductRows(): Quote\Service\QuoteProductRows
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Quote\Service\QuoteProductRows($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+    
+    public function quoteUserfield(): Quote\Service\QuoteUserfield
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Quote\Service\QuoteUserfield(
+              new UserfieldConstraints(),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 
     public function activity(): Activity\Service\Activity
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Activity\Service\Activity(
                 new Activity\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+    
+    public function trigger(): Automation\Service\Trigger
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new Automation\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Automation\Service\Trigger(
+                new Automation\Service\Batch($batch, $this->log),
                 $this->core,
                 $this->log
             );
@@ -289,6 +484,19 @@ class CRMServiceBuilder extends AbstractServiceBuilder
                 $this->core,
                 $this->batch,
                 $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+    
+    public function address(): Address\Service\Address
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Address\Service\Address(
+                new Address\Service\Batch($this->batch, $this->log),
+                $this->core,
                 $this->log
             );
         }

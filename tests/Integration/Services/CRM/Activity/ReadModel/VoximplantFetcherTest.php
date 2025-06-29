@@ -18,14 +18,13 @@ use Bitrix24\SDK\Services\CRM\Activity\ReadModel\WebFormFetcher;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
 
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Activity\ReadModel\WebFormFetcher::class)]
 class VoximplantFetcherTest extends TestCase
 {
     private VoximplantFetcher $voximplantFetcher;
 
     /**
-     * @return void
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @covers \Bitrix24\SDK\Services\CRM\Activity\ReadModel\WebFormFetcher::getList
      */
     public function testGetListWithAllResults(): void
     {
@@ -40,10 +39,11 @@ class VoximplantFetcherTest extends TestCase
 //                    $item->SUBJECT,
 //                ) . PHP_EOL);
         }
+
         $this->assertTrue(true);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->voximplantFetcher = Fabric::getServiceBuilder()->getCRMScope()->activityFetcher()->voximplantFetcher();
     }

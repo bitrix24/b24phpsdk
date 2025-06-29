@@ -14,11 +14,14 @@ Optional can store links to:
 | `getUpdatedAt()`                       | `CarbonImmutable`               | Returns date and time of last application installation change                          |                            |
 | `getBitrix24AccountId()`               | `Uuid`                          | Returns Bitrix24 Account id related to this installation                               |                            |
 | `getContactPersonId()`                 | `?Uuid`                         | Returns contact person id who installed the application on portal (optional)           |                            |
-| `changeContactPerson()`                | `void`                          | Changes client contact person                                                          |                            |
+| `linkContactPerson()`                  | `void`                          | Link client contact person                                                             |                            |
+| `unlinkContactPerson()`                | `void`                          | Unlink client contact person                                                           |                            |
 | `getBitrix24PartnerContactPersonId()`  | `?Uuid`                         | Returns Bitrix24 partner contact person id (optional)                                  |                            |
-| `changeBitrix24PartnerContactPerson()` | `void`                          | Changes Bitrix24 partner contact person                                                |                            |
+| `linkBitrix24PartnerContactPerson()`   | `void`                          | Link Bitrix24 partner contact person                                                   |                            |
+| `unlinkBitrix24PartnerContactPerson()` | `void`                          | Unlink Bitrix24 partner contact person                                                 |                            |
 | `getBitrix24PartnerId()`               | `?Uuid`                         | Returns Bitrix24 Partner id related to this installation (optional)                    |                            |
-| `changeBitrix24Partner()`              | `void`                          | Changes Bitrix24 partner                                                               |                            |
+| `linkBitrix24Partner()`                | `void`                          | Link Bitrix24 partner                                                                  |                            |
+| `unlinkBitrix24Partner()`              | `void`                          | Unlink Bitrix24 partner                                                                |                            |
 | `getExternalId()`                      | `?string`                       | Returns external id for application installation                                       |                            |
 | `setExternalId()`                      | `void`                          | Sets external id for application installation                                          | `InvalidArgumentException` |
 | `getStatus()`                          | `ApplicationInstallationStatus` | Returns application installation status                                                |                            |
@@ -33,6 +36,8 @@ Optional can store links to:
 | `getPortalUsersCount()`                | `?int`                          | Returns Bitrix24 portal users count stored in persistence storage                      |                            |
 | `changePortalUsersCount()`             | `void`                          | Changes Bitrix24 portal users count                                                    |                            |
 | `getComment()`                         | `?string`                       | Returns comment                                                                        |                            |
+| `setApplicationToken()`                | `void`                          | Sets application token.                                                                | InvalidArgumentException   |
+| `isApplicationTokenValid()`            | `bool`                          | Checks if the provided application token is valid.                                     | -                          |
 
 ## Application installation state diagram
 
@@ -128,7 +133,9 @@ timeline
     section Application uninstall period
         Administrator Uninstalled Application : «Application Installation Uninstalled Event»
 ```
+
 ## Background periodical tasks
+
 - check portal license type
 - check application status
 - check users count

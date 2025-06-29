@@ -43,7 +43,7 @@ class Batch implements BatchOperationsInterface
     /**
      * Batch constructor.
      */
-    public function __construct(private readonly CoreInterface $core, private readonly LoggerInterface $logger)
+    public function __construct(protected readonly CoreInterface $core, protected readonly LoggerInterface $logger)
     {
         $this->commands = new CommandCollection();
     }
@@ -125,11 +125,13 @@ class Batch implements BatchOperationsInterface
                 'additionalParameters' => $additionalParameters,
             ]
         );
+        
+        $useFieldsInsteadOfId = $apiMethod === 'crm.address.delete';
 
         try {
             $this->clearCommands();
             foreach ($entityItemId as $cnt => $itemId) {
-                if (!is_int($itemId)) {
+                if (!$useFieldsInsteadOfId && !is_int($itemId)) {
                     throw new InvalidArgumentException(
                         sprintf(
                             'invalid type «%s» of entity id «%s» at position %s, entity id must be integer type',
@@ -140,7 +142,8 @@ class Batch implements BatchOperationsInterface
                     );
                 }
 
-                $parameters = ['ID' => $itemId];
+                $parameters = $useFieldsInsteadOfId ? ['fields' => $itemId] : ['ID' => $itemId];
+                // TODO: delete after migration to RestAPI v2
                 if ($apiMethod === 'entity.item.delete') {
                     $parameters = array_merge($parameters, $additionalParameters);
                 }
@@ -201,8 +204,11 @@ class Batch implements BatchOperationsInterface
 
         try {
             $this->clearCommands();
+            
+            $useFieldsInsteadOfId = $apiMethod === 'crm.address.update';
+            
             foreach ($entityItems as $entityItemId => $entityItem) {
-                if (!is_int($entityItemId)) {
+                if (!$useFieldsInsteadOfId && !is_int($entityItemId)) {
                     throw new InvalidArgumentException(
                         sprintf(
                             'invalid type «%s» of entity id «%s», entity id must be integer type',
@@ -219,10 +225,17 @@ class Batch implements BatchOperationsInterface
                         );
                     }
 
-                    $cmdArguments = [
-                        'id' => $entityItemId,
-                        'fields' => $entityItem['fields']
-                    ];
+                    if ($useFieldsInsteadOfId) {
+                        $cmdArguments = [
+                            'fields' => $entityItem['fields']
+                        ];
+                    } else {
+                        $cmdArguments = [
+                            'id' => $entityItemId,
+                            'fields' => $entityItem['fields']
+                        ];
+                    }
+
                     if (array_key_exists('params', $entityItem)) {
                         $cmdArguments['params'] = $entityItem['params'];
                     }
@@ -345,9 +358,9 @@ class Batch implements BatchOperationsInterface
      */
     public function getTraversableList(
         string $apiMethod,
-        array $order,
-        array $filter,
-        array $select,
+        ?array $order = [],
+        ?array $filter = [],
+        ?array $select = [],
         ?int $limit = null,
         ?array $additionalParameters = null
     ): Generator {
@@ -837,7 +850,7 @@ class Batch implements BatchOperationsInterface
      * @throws BaseException
      * @throws Exceptions\TransportException
      */
-    private function getTraversableBatchResults(bool $isHaltOnError): Generator
+    protected function getTraversableBatchResults(bool $isHaltOnError): Generator
     {
         $this->logger->debug(
             'getTraversableBatchResults.start',

@@ -33,17 +33,16 @@ use Symfony\Component\Uid\Uuid;
 class BatchTest extends TestCase
 {
     private ServiceBuilder $sb;
+
     private array $createdCompanies = [];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->sb = Fabric::getServiceBuilder();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
-        foreach ($this->sb->getCRMScope()->company()->batch->delete($this->createdCompanies) as $result) {
-        }
     }
 
     public function testBatchList(): void
@@ -54,6 +53,7 @@ class BatchTest extends TestCase
         for ($i = 1; $i <= $newCompaniesCount; $i++) {
             $companies[] = ['TITLE' => 'TITLE-' . sprintf('Acme Inc - %s', time()), 'UTM_SOURCE' => $utmSource];
         }
+
         $cnt = 0;
         foreach ($this->sb->getCRMScope()->company()->batch->add($companies) as $item) {
             $this->createdCompanies[] = $item->getId();
@@ -66,6 +66,7 @@ class BatchTest extends TestCase
         ) {
             $addedCompanies[] = $item->ID;
         }
+
         $this->assertEquals($newCompaniesCount, count($addedCompanies));
     }
 
@@ -77,11 +78,13 @@ class BatchTest extends TestCase
         for ($i = 1; $i <= $newCompaniesCount; $i++) {
             $companies[] = ['TITLE' => 'TITLE-' . sprintf('Acme Inc - %s', time()), 'UTM_SOURCE' => $utmSource];
         }
+
         $newCompanies = [];
         foreach ($this->sb->getCRMScope()->company()->batch->add($companies) as $item) {
             $this->createdCompanies[] = $item->getId();
             $newCompanies[] = $item->getId();
         }
+
         foreach (
             $this->sb->getCRMScope()->company()->batch->list([], ['UTM_SOURCE' => $utmSource], ['ID', 'TITLE']) as $item
         ) {
@@ -99,15 +102,18 @@ class BatchTest extends TestCase
         for ($i = 1; $i <= $newCompaniesCount; $i++) {
             $companies[] = ['TITLE' => 'TITLE-' . sprintf('Acme Inc - %s', time()), 'UTM_SOURCE' => $utmSource];
         }
+
         $newCompanies = [];
         foreach ($this->sb->getCRMScope()->company()->batch->add($companies) as $item) {
             $newCompanies[] = $item->getId();
         }
+
         $deletedCnt = 0;
         foreach ($this->sb->getCRMScope()->company()->batch->delete($newCompanies) as $result) {
             $this->assertTrue($result->isSuccess());
             $deletedCnt++;
         }
+
         $this->assertEquals($newCompaniesCount, $deletedCnt);
         $this->assertEquals(0, $this->sb->getCRMScope()->company()->countByFilter(['UTM_SOURCE' => $utmSource]));
     }
@@ -120,6 +126,7 @@ class BatchTest extends TestCase
         for ($i = 1; $i <= $newCompaniesCount; $i++) {
             $companies[] = ['TITLE' => 'TITLE-' . sprintf('Acme Inc - %s', time()), 'UTM_SOURCE' => $utmSource];
         }
+
         $newCompanies = [];
         foreach ($this->sb->getCRMScope()->company()->batch->add($companies) as $item) {
             $this->createdCompanies[] = $item->getId();

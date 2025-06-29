@@ -57,11 +57,18 @@ interface ApplicationInstallationInterface
     public function getContactPersonId(): ?Uuid;
 
     /**
-     * Change contact person
+     * Link contact person
      *
-     * Change client contact person if client say he has new responsible for the application
+     * Link client contact person if a client says they have new responsible for the application
      */
-    public function changeContactPerson(?Uuid $uuid): void;
+    public function linkContactPerson(Uuid $uuid): void;
+
+    /**
+     * Unlink contact person
+     *
+     * Unlink a client contact person if the client says the contact person has changed
+     */
+    public function unlinkContactPerson(): void;
 
     /**
      * Get Bitrix24 Partner contact person id, optional
@@ -71,11 +78,18 @@ interface ApplicationInstallationInterface
     public function getBitrix24PartnerContactPersonId(): ?Uuid;
 
     /**
-     * Change bitrix24 partner contact person
+     * Link Bitrix24 partner contact person
      *
-     * Change bitrix24 partner contact person if partner say he has new responsible for the application
+     * Link Bitrix24 partner contact person if partner say he has new responsible for the application
      */
-    public function changeBitrix24PartnerContactPerson(?Uuid $uuid): void;
+    public function linkBitrix24PartnerContactPerson(Uuid $uuid): void;
+
+    /**
+     * Unlink Bitrix24 partner contact person
+     *
+     * Unlink Bitrix24 partner contacts the person if the partner says they remove this employee
+     */
+    public function unlinkBitrix24PartnerContactPerson(): void;
 
     /**
      * @return Uuid|null get Bitrix24 Partner id related with this installation, optional
@@ -83,11 +97,18 @@ interface ApplicationInstallationInterface
     public function getBitrix24PartnerId(): ?Uuid;
 
     /**
-     * Change bitrix24 partner
+     * Link Bitrix24 partner
      *
-     * Change bitrix24 partner if other partner starts support client portal
+     * Link Bitrix24 partner who supports this portal
      */
-    public function changeBitrix24Partner(?Uuid $uuid): void;
+    public function linkBitrix24Partner(Uuid $uuid): void;
+
+    /**
+     * Unlink Bitrix24 partner
+     *
+     * Unlink Bitrix24 partner who stops supporting this portal
+     */
+    public function unlinkBitrix24Partner(): void;
 
     /**
      * Get external id for application installation
@@ -118,10 +139,14 @@ interface ApplicationInstallationInterface
     /**
      * Finish application installation
      *
-     * Installation can be finished only for state «new»
-     * @throws LogicException
+     * Application installed on portal and finish installation flow. Method must set the status from «new» to «active»
+     * If You installed application without UI, You already have an application token in OnApplicationInstall event
+     * If You installed application with UI, You can finish the installation flow without a token and receive it in a separate request with OnApplicationInstall event
+     *
+     * @param non-empty-string|null $applicationToken
+     * @throws InvalidArgumentException
      */
-    public function applicationInstalled(): void;
+    public function applicationInstalled(?string $applicationToken = null): void;
 
     /**
      * Application uninstalled
@@ -129,9 +154,29 @@ interface ApplicationInstallationInterface
      * Application can be uninstalled by:
      * - admin on portal active → deleted statuses
      * - if installation will not complete new → blocked → deleted by background task
-     * @throws LogicException
+     * @param string|null $applicationToken Application uninstalled from portal, set status «deleted»
+     * @throws InvalidArgumentException
      */
-    public function applicationUninstalled(): void;
+    public function applicationUninstalled(?string $applicationToken = null): void;
+
+    /**
+     * Check is application token valid
+     *
+     * @param non-empty-string $applicationToken
+     * @link https://training.bitrix24.com/rest_help/general/events/event_safe.php
+     */
+    public function isApplicationTokenValid(string $applicationToken): bool;
+
+    /**
+     * Set application token from OnApplicationInstall event
+     *
+     * If the application is installed without UI, You already have an application token in OnApplicationInstall event
+     * If the application is installed with UI, You can finish the installation flow without a token and receive it in a separate request with OnApplicationInstall event
+     *
+     * @param non-empty-string $applicationToken
+     * @throws InvalidArgumentException
+     */
+    public function setApplicationToken(string $applicationToken): void;
 
     /**
      * Change status to active for blocked application installation accounts

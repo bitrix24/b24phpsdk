@@ -38,6 +38,7 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
@@ -59,16 +60,20 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
             $authToken,
@@ -105,16 +110,20 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
             $authToken,
@@ -154,16 +163,20 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
             $authToken,
@@ -216,16 +229,20 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
             $authToken,
@@ -252,16 +269,20 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
             $bitrix24UserId,
             false,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
             $authToken,
@@ -288,16 +309,20 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
             $authToken,
@@ -347,16 +372,20 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
             $authToken,
@@ -389,16 +418,20 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
             $authToken,
@@ -429,16 +462,20 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
             $authToken,
@@ -468,16 +505,20 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
             $bitrix24UserId,
             false,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
             $authToken,
@@ -507,16 +548,20 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
             $authToken,
@@ -546,16 +591,20 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
             $authToken,
@@ -590,16 +639,20 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
             $authToken,
@@ -649,16 +702,20 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
             $authToken,
@@ -691,16 +748,20 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
             $authToken,
@@ -731,16 +792,20 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
             $authToken,
@@ -770,16 +835,20 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
             $bitrix24UserId,
             false,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
             $authToken,
@@ -809,16 +878,20 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
             $bitrix24UserId,
             false,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
             $authToken,
@@ -845,16 +918,20 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
             $bitrix24UserId,
             false,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
             $authToken,
@@ -894,16 +971,20 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         int $bitrix24UserId,
         bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
         string $memberId,
         string $domainUrl,
         AuthToken $authToken,
         int $applicationVersion,
-        Scope $applicationScope
+        Scope $applicationScope,
+        string $applicationToken,
+        ?object $throwable
     ): void {
         $bitrix24Account = $this->createBitrix24AccountImplementation(
             $uuid,
             $bitrix24UserId,
             false,
+            $isMasterAccount,
             $memberId,
             $domainUrl,
             $authToken,
@@ -931,6 +1012,7 @@ abstract class Bitrix24AccountRepositoryInterfaceTest extends TestCase
         yield 'account-status-new' => [
             Uuid::v7(),
             12345,
+            true,
             true,
             Uuid::v7()->toRfc4122(),
             sprintf('https://example-%s.com', Uuid::v7()->toRfc4122()),

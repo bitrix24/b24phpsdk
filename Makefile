@@ -29,15 +29,19 @@ help:
 	@echo "docker-down-clear         - stop docker and remove orphaned containers"
 	@echo "docker-pull               - download images and ignore pull failures"
 	@echo "docker-restart            - restart containers"
+	@echo ""
 	@echo "composer-install          - install dependencies from composer"
 	@echo "composer-update           - update dependencies from composer"
 	@echo "composer-dumpautoload     - regenerate composer autoload file"
 	@echo "composer                  - run composer and pass arguments"
+	@echo ""
 	@echo "php-dev-server-up         - start php dev-server"
 	@echo "php-dev-server-down       - stop php dev-server"
 	@echo "php-cli-bash              - run container php-cli and open shell with arguments"
 	@echo "ngrok-up                  - start ngrok"
 	@echo "ngrok-down                - stop ngrok"
+	@echo ""
+	@echo "lint-all                  - lint codebase with all linters step by step"
 	@echo "lint-allowed-licenses     - lint dependencies for valid licenses"
 	@echo "lint-cs-fixer             - lint source code with php-cs-fixer"
 	@echo "lint-cs-fixer-fix         - fix source code with php-cs-fixer"
@@ -45,6 +49,7 @@ help:
 	@echo "lint-rector               - lint source code with rector"
 	@echo "lint-rector-fix           - fix source code with rector"
 	@echo ""
+	@echo "test-unit                 - run unit tests"
 
 
 .PHONY: docker-init
@@ -129,6 +134,9 @@ lint-rector:
 lint-rector-fix:
 	docker-compose run --rm php-cli vendor/bin/rector process
 
+.PHONY: lint-all
+lint-all: lint-allowed-licenses lint-cs-fixer lint-phpstan lint-rector
+
 # unit tests
 .PHONY: test-unit
 test-unit:
@@ -174,6 +182,62 @@ test-integration-scope-entity:
 .PHONY: test-integration-scope-ai-admin
 test-integration-scope-ai-admin:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_ai_admin
+ 
+.PHONY: test-integration-scope-crm
+test-integration-scope-crm:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm
+  
+.PHONY: integration_tests_scope_crm_address
+integration_tests_scope_crm_address:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_address
+	
+.PHONY: integration_tests_scope_crm_deal_details
+integration_tests_scope_crm_deal_details:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_deal_details
+
+.PHONY: integration_tests_scope_crm_contact_details
+integration_tests_scope_crm_contact_details:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_contact_details
+
+.PHONY: integration_tests_lead_userfield
+integration_tests_lead_userfield:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_userfield
+	
+.PHONY: integration_tests_lead_userfield_use_case
+integration_tests_lead_userfield_use_case:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_userfield_use_case
+  
+.PHONY: integration_tests_scope_crm_currency
+integration_tests_scope_crm_currency:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_currency
+
+.PHONY: integration_tests_deal_recurring
+integration_tests_deal_recurring:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_deal_recurring
+	
+.PHONY: integration_tests_lead_contacts
+integration_tests_lead_contacts:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_contacts
+
+.PHONY: integration_tests_lead_details
+integration_tests_lead_details:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_details
+
+.PHONY: integration_tests_scope_automation
+integration_tests_scope_automation:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_automation
+	
+.PHONY: integration_tests_item_details
+integration_tests_item_details:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_item_details
+
+.PHONY: integration_tests_lead_productrows
+integration_tests_lead_productrows:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_productrows
+
+.PHONY: integration_tests_crm_quote
+integration_tests_crm_quote:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_quote
 
 # work dev environment
 .PHONY: php-dev-server-up
@@ -216,7 +280,7 @@ build-documentation:
 	--file=docs/EN/Services/bitrix24-php-sdk-methods.md
 
 show-sdk-coverage-statistics:
-	php bin/console b24-dev:show-sdk-coverage-statistics \
+	docker-compose run --rm php-cli php bin/console b24-dev:show-sdk-coverage-statistics \
 	--webhook=$(BITRIX24_WEBHOOK)
 
 dev-show-fields-description:

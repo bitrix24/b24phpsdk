@@ -53,6 +53,7 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
         private readonly Uuid $id,
         private int $bitrix24UserId,
         private readonly bool $isBitrix24UserAdmin,
+        private readonly bool $isMasterAccount,
         private readonly string $memberId,
         private string $domainUrl,
         AuthToken $authToken,
@@ -82,6 +83,11 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
         return $this->isBitrix24UserAdmin;
     }
 
+    public function isMasterAccount(): bool
+    {
+        return $this->isMasterAccount;
+    }
+
     public function getMemberId(): string
     {
         return $this->memberId;
@@ -95,6 +101,18 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
     public function getStatus(): Bitrix24AccountStatus
     {
         return $this->accountStatus;
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function setApplicationToken(string $applicationToken): void
+    {
+        if ($applicationToken === '') {
+            throw new InvalidArgumentException('application token cannot be empty');
+        }
+
+        $this->applicationToken = $applicationToken;
     }
 
     public function getAuthToken(): AuthToken
@@ -165,7 +183,7 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
     /**
      * @throws InvalidArgumentException
      */
-    public function applicationInstalled(string $applicationToken): void
+    public function applicationInstalled(?string $applicationToken): void
     {
         if (Bitrix24AccountStatus::new !== $this->accountStatus) {
             throw new InvalidArgumentException(
@@ -181,14 +199,16 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
         }
 
         $this->accountStatus = Bitrix24AccountStatus::active;
-        $this->applicationToken = $applicationToken;
         $this->updatedAt = new CarbonImmutable();
+        if ($applicationToken !== null) {
+            $this->applicationToken = $applicationToken;
+        }
     }
 
     /**
      * @throws InvalidArgumentException
      */
-    public function applicationUninstalled(string $applicationToken): void
+    public function applicationUninstalled(?string $applicationToken): void
     {
         if ($applicationToken === '') {
             throw new InvalidArgumentException('application token cannot be empty');

@@ -38,9 +38,9 @@ class ApiClient implements ApiClientInterface
     /**
      * @const string
      */
-    protected const SDK_VERSION = '1.3.0';
+    protected const SDK_VERSION = '1.4.0';
 
-    protected const SDK_USER_AGENT = 'b24-php-sdk';
+    protected const SDK_USER_AGENT = 'b24-php-sdk-vendor';
 
     /**
      * ApiClient constructor.
@@ -210,7 +210,15 @@ class ApiClient implements ApiClientInterface
             'task.commentitem.update',
             'task.commentitem.getlist',
             'task.commentitem.delete',
-            'task.commentitem.isactionallowed'
+            'task.commentitem.isactionallowed',
+            'task.elapseditem.add',
+            'task.elapseditem.update',
+            'task.elapseditem.get',
+            'task.elapseditem.getlist',
+            'task.elapseditem.delete',
+            'task.elapseditem.isactionallowed',
+            'task.elapseditem.getmanifest',
+            'tasks.task.add',
         ];
         if (!in_array($apiMethod, $strictApiMethods, true)) {
             $url .= '?' . $this->requestIdGenerator->getQueryStringParameterName() . '=' . $requestId;
