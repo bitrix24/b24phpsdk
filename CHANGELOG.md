@@ -1,6 +1,6 @@
 # b24-php-sdk change log
 
-## ⏳ UPCOMING 1.4.0 – 2025.07.01
+## 1.4.0 – 2025.07.01
 
 ### Added
 
@@ -156,8 +156,12 @@
     - change return type `findByBitrix24AccountId` from an array to `?ApplicationInstallationInterface`
 
 ### Statistics
-
-work in progress
+```
+Bitrix24 API-methods count: 1166
+Supported in bitrix24-php-sdk methods count: 300
+Coverage percentage: 25.73% 🚀
+Supported in bitrix24-php-sdk methods with batch wrapper count: 45
+```
 
 ## 1.3.0 – 2025.04.23
 

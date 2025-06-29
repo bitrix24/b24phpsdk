@@ -280,7 +280,7 @@ build-documentation:
 	--file=docs/EN/Services/bitrix24-php-sdk-methods.md
 
 show-sdk-coverage-statistics:
-	php bin/console b24-dev:show-sdk-coverage-statistics \
+	docker-compose run --rm php-cli php bin/console b24-dev:show-sdk-coverage-statistics \
 	--webhook=$(BITRIX24_WEBHOOK)
 
 dev-show-fields-description:
