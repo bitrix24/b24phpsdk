@@ -4,9 +4,39 @@
 
 ### Added
 
+- Added service `CRM\Requisites\Service\RequisiteUserfield` with support methods,
+  see [add crm.requisite.userfield.* methods](https://github.com/bitrix24/b24phpsdk/issues/188):
+    - `add` add userfield to requisite
+    - `get` get userfield to requisite
+    - `list` list userfields
+    - `delete` delete userfield
+    - `update` update userfield
+- Added service `CRM\Requisites\Service\RequisiteBankdetail` with support methods:
+    - `add` add bank detail to requisite
+    - `get` get bank detail to requisite
+    - `fields` get fields for bank details
+    - `list` list bank details
+    - `delete` delete bank detail
+    - `update` update bank detail
+    - `countByFilter` count bank details by filter
+- Added service `CRM\Requisites\Service\RequisiteLink` with support methods:
+    - `register` registers the link between requisites and an object
+    - `unregister` removes the link between requisites and an object
+    - `fields` get a formal description of the fields of the requisites link
+    - `get` returns the link between requisites and an object
+    - `list` returns a list of links between requisites based on a filter
+    - `countByFilter` count links by filter
+- Added service `CRM\Requisites\Service\RequisitePresetField` with support methods:
+    - `add` adds a customizable field to the requisites template
+    - `get` returns the description of the custom field in the requisites template by identifier
+    - `fields` returns the description of the custom field in the requisites template by identifier
+    - `list` returns a list of all custom fields for a specific requisites template
+    - `delete` deletes a customizable field from the requisites template
+    - `update` modifies a custom field in the requisites template
+    - `availabletoadd` returns fields available for addition to the specified requisites template
 - Added service `Services\CRM\Lead\Service\LeadContact` with support methods,
   see [crm.lead.contact.* methods](https://github.com/bitrix24/b24phpsdk/issues/170):
-    - `fields` get fiels for lead contact connection
+    - `fields` get fields for lead contact connection
     - `setItems` set contacts related with lead
     - `get` get contacts related to lead
     - `deleteItems` delete all relations for lead
