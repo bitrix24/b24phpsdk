@@ -45,8 +45,6 @@ class RequisiteTest extends TestCase
 
     private array $createdCompanies = [];
 
-    private array $createdRequisites = [];
-
     private int $requisitePresetId;
 
     private int $entityTypeIdCompany;
@@ -70,6 +68,9 @@ class RequisiteTest extends TestCase
 
     protected function tearDown(): void
     {
+        foreach ($this->sb->getCRMScope()->company()->batch->delete($this->createdCompanies) as $result) {
+            // ###
+        }
     }
 
     public function testFields(): void
@@ -108,7 +109,6 @@ class RequisiteTest extends TestCase
             $reqName,
             (new RequisiteBuilder($this->entityTypeIdCompany, $companyId, $this->requisitePresetId))->build()
         )->getId();
-        $this->createdRequisites[] = $reqId;
 
         $requisiteItemResult = $this->sb->getCRMScope()->requisite()->get($reqId)->requisite();
 
@@ -152,7 +152,6 @@ class RequisiteTest extends TestCase
             $reqName,
             (new RequisiteBuilder($this->entityTypeIdCompany, $companyId, $this->requisitePresetId))->build()
         )->getId();
-        $this->createdRequisites[] = $reqId;
 
         $this->assertContains(
             $reqId,
@@ -177,7 +176,6 @@ class RequisiteTest extends TestCase
             $reqName,
             (new RequisiteBuilder($this->entityTypeIdCompany, $companyId, $this->requisitePresetId))->build()
         )->getId();
-        $this->createdRequisites[] = $reqId;
 
         $requisiteItemResult = $this->sb->getCRMScope()->requisite()->get($reqId)->requisite();
 

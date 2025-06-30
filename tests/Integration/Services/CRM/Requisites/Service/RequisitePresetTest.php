@@ -47,8 +47,8 @@ class RequisitePresetTest extends TestCase
 
     protected ServiceBuilder $sb;
 
-    private array $createdCompanies = [];
     private int $entityTypeRequisiteId;
+
     private int $countryId;
 
     protected function setUp(): void
@@ -69,10 +69,6 @@ class RequisitePresetTest extends TestCase
                 'ID'
             )
         );
-    }
-
-    protected function tearDown(): void
-    {
     }
 
     public function testFields(): void
