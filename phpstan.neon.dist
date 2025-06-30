@@ -27,6 +27,8 @@ parameters:
     - tests/Integration/Services/CRM/Lead/Service/LeadUserfieldTest.php
     - tests/Integration/Services/CRM/Currency
     - tests/Integration/Services/CRM/Requisites
+  excludePaths:
+    - tests/Integration/Services/CRM/Requisites/Service/RequisiteUserfieldUseCaseTest.php
   bootstrapFiles:
     - tests/bootstrap.php
   parallel:

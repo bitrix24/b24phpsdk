@@ -92,7 +92,7 @@ class RequisiteUserfield extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/requisites/user-fields/crm-requisite-userfield-list.html',
         'Returns a list of custom fields for requisites by filter'
     )]
-    public function list(array $order, array $filter): RequisiteUserfieldsResult
+    public function list(array $order = [], array $filter = []): RequisiteUserfieldsResult
     {
         return new RequisiteUserfieldsResult(
             $this->core->call(

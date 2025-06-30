@@ -91,6 +91,9 @@
         <testsuite name="integration_tests_crm_preset_field">
             <file>./tests/Integration/Services/CRM/Requisites/Service/RequisitePresetFieldTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_crm_requisite_userfield">
+            <file>./tests/Integration/Services/CRM/Requisites/Service/RequisiteUserfieldTest.php</file>
+        </testsuite>
     </testsuites>
     <source>
         <include>
