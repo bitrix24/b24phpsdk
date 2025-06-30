@@ -1,9 +1,35 @@
 # b24-php-sdk change log
 
-## ⏳ UPCOMING 1.4.0 – 2025.07.01
+## 1.4.0 – 2025.07.01
 
 ### Added
 
+- Added service `Services\CRM\Lead\Service\LeadContact` with support methods,
+  see [crm.lead.contact.* methods](https://github.com/bitrix24/b24phpsdk/issues/170):
+    - `fields` get fiels for lead contact connection
+    - `setItems` set contacts related with lead
+    - `get` get contacts related to lead
+    - `deleteItems` delete all relations for lead
+    - `add` add contact relation with lead
+    - `delete` delete contact relation with lead
+- Added service `CRM\Item\Service\ItemDetailsConfiguration` with support methods,
+  see [add crm.item.details.* methods](https://github.com/bitrix24/b24phpsdk/issues/168):
+    - `getPersonal` method retrieves the settings of item cards for personal user
+    - `getGeneral` method retrieves the settings of item cards for all users
+    - `resetPersonal` method reset for item user settings
+    - `resetGeneral` method reset all card settings for all users
+    - `setPersonal` method set card configuration
+    - `setGeneral` method set card configuration for all users
+    - `setForceCommonConfigForAll` method set common detail form for All Users
+- Added service `CRM\Deal\Service\DealDetailsConfiguration` with support methods,
+  see [add crm.deal.details.* methods](https://github.com/bitrix24/b24phpsdk/issues/158):
+    - `getPersonal` method retrieves the settings of deal cards for personal user
+    - `getGeneral` method retrieves the settings of deal cards for all users
+    - `resetPersonal` method reset for item user settings
+    - `resetGeneral` method reset all card settings for all users
+    - `setPersonal` method set card configuration
+    - `setGeneral` method set card configuration for all users
+    - `setForceCommonConfigForAll` method set common detail form for All Users
 - Added service `CRM\Lead\Service\LeadDetailsConfiguration` with support methods,
   see [add crm.lead.details.* methods](https://github.com/bitrix24/b24phpsdk/issues/172):
     - `getPersonal` method retrieves the settings of lead cards for personal user
@@ -86,6 +112,13 @@
     - `get` get localizations
     - `fields` get localization fields
     - `delete` delete currency, with batch calls support
+- Added service `Services\CRM\Address\Service\Address` with support methods,
+  see [add crm.address REST methods](https://github.com/bitrix24/b24phpsdk/issues/138):
+    - `list` get item list
+    - `add` add new item, with batch calls support
+    - `delete` delete item, with batch calls support
+    - `update` update item, with batch calls support
+- Added enum `Services\CRM\Enum\OwnerType`
 - Developer experience: added make command `lint-all` for run all code linters step by step, [see details](https://github.com/bitrix24/b24phpsdk/issues/183)
 
 ### Fixed
@@ -123,8 +156,12 @@
     - change return type `findByBitrix24AccountId` from an array to `?ApplicationInstallationInterface`
 
 ### Statistics
-
-work in progress
+```
+Bitrix24 API-methods count: 1166
+Supported in bitrix24-php-sdk methods count: 300
+Coverage percentage: 25.73% 🚀
+Supported in bitrix24-php-sdk methods with batch wrapper count: 45
+```
 
 ## 1.3.0 – 2025.04.23
 
@@ -147,8 +184,8 @@ work in progress
   see [fix entity.item.* methods](https://github.com/bitrix24/b24phpsdk/issues/53):
     - `get` get item, with batch calls support
     - `add` add new item, with batch calls support
-    - `delete` delete item, with batch calls support
-    - `update`  update item, with batch calls support
+    - `delete` delete item
+    - `update`  update item
 - Added service `Services\Entity\Service\Entity` with support methods,
   see [fix entity.* methods](https://github.com/bitrix24/b24phpsdk/issues/53):
     - `get` get entity

@@ -182,7 +182,19 @@ test-integration-scope-entity:
 .PHONY: test-integration-scope-ai-admin
 test-integration-scope-ai-admin:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_ai_admin
+ 
+.PHONY: test-integration-scope-crm
+test-integration-scope-crm:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm
+  
+.PHONY: integration_tests_scope_crm_address
+integration_tests_scope_crm_address:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_address
 	
+.PHONY: integration_tests_scope_crm_deal_details
+integration_tests_scope_crm_deal_details:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_deal_details
+
 .PHONY: integration_tests_scope_crm_contact_details
 integration_tests_scope_crm_contact_details:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_contact_details
@@ -202,6 +214,10 @@ integration_tests_scope_crm_currency:
 .PHONY: integration_tests_deal_recurring
 integration_tests_deal_recurring:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_deal_recurring
+	
+.PHONY: integration_tests_lead_contacts
+integration_tests_lead_contacts:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_contacts
 
 .PHONY: integration_tests_lead_details
 integration_tests_lead_details:
@@ -211,6 +227,10 @@ integration_tests_lead_details:
 integration_tests_scope_automation:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_automation
 	
+.PHONY: integration_tests_item_details
+integration_tests_item_details:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_item_details
+
 .PHONY: integration_tests_lead_productrows
 integration_tests_lead_productrows:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_productrows
@@ -268,7 +288,7 @@ build-documentation:
 	--file=docs/EN/Services/bitrix24-php-sdk-methods.md
 
 show-sdk-coverage-statistics:
-	php bin/console b24-dev:show-sdk-coverage-statistics \
+	docker-compose run --rm php-cli php bin/console b24-dev:show-sdk-coverage-statistics \
 	--webhook=$(BITRIX24_WEBHOOK)
 
 dev-show-fields-description:

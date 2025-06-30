@@ -6,7 +6,8 @@ use PhpCsFixer\Finder;
 
 $finder = Finder::create()
     ->in(__DIR__ . '/src/Infrastructure/Console/Commands/')
-    ->in(__DIR__ . '/src/Services/CRM/Lead/Service')
+    ->in(__DIR__ . '/src/Services/CRM/Address/')
+    ->in(__DIR__ . '/src/Services/CRM/Item/Service/')
     ->in(__DIR__ . '/src/Services/CRM/Contact/')
     ->in(__DIR__ . '/src/Services/CRM/Quote/')
     ->in(__DIR__ . '/src/Services/CRM/Lead/')

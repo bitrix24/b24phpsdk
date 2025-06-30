@@ -41,14 +41,15 @@ class CompanyDetailsConfigurationTest extends TestCase
     private ServiceBuilder $sb;
 
     private array $createdCompanies = [];
+
     private array $createdContacts = [];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->sb = Fabric::getServiceBuilder();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
           $this->sb->getCRMScope()->companyDetailsConfiguration()->resetGeneral();
     }
@@ -142,7 +143,7 @@ class CompanyDetailsConfigurationTest extends TestCase
 
 
         $currentUserId = $this->sb->getMainScope()->main()->getCurrentUserProfile()->getUserProfile()->ID;
-        $cardConfig = $this->sb->getCRMScope()->companyDetailsConfiguration()->getGeneral($currentUserId);
+        $this->sb->getCRMScope()->companyDetailsConfiguration()->getGeneral();
 
         // todo fix after we get valid cardConfig
         $this->assertTrue(true);
