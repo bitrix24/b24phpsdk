@@ -25,7 +25,7 @@ use Bitrix24\SDK\Core\Result\FieldsResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\CRM\Status\Result\StatusResult;
-use Bitrix24\SDK\Services\CRM\Status\Result\StatussResult;
+use Bitrix24\SDK\Services\CRM\Status\Result\StatusesResult;
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['crm']))]
@@ -50,7 +50,6 @@ class Status extends AbstractService
      *   STATUS_ID?: string,
      *   SORT?: int,
      *   NAME?: string,
-     *   NAME_INIT?: string,
      *   SYSTEM?: bool,
      *   CATEGORY_ID?: int,
      *   COLOR?: string,
@@ -79,7 +78,7 @@ class Status extends AbstractService
     }
 
     /**
-     * Deletes the specified status and all the associated objects.
+     * Deletes an element from the reference book.
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/status/crm-status-delete.html
      *
@@ -90,22 +89,24 @@ class Status extends AbstractService
     #[ApiEndpointMetadata(
         'crm.status.delete',
         'https://apidocs.bitrix24.com/api-reference/crm/status/crm-status-delete.html',
-        'Deletes the specified status and all the associated objects.'
+        'Deletes an element from the reference book'
     )]
-    public function delete(int $id): DeletedItemResult
+    public function delete(int $id, bool $forced=false): DeletedItemResult
     {
+        $param = $forced ? 'Y' : 'N';
         return new DeletedItemResult(
             $this->core->call(
                 'crm.status.delete',
                 [
                     'id' => $id,
+                    'params' => ['FORCED' => $param]
                 ]
             )
         );
     }
 
     /**
-     * Returns the description of the status fields, including user fields.
+     * Returns descriptions of reference book fields.
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/status/crm-status-fields.html
      *
@@ -115,7 +116,7 @@ class Status extends AbstractService
     #[ApiEndpointMetadata(
         'crm.status.fields',
         'https://apidocs.bitrix24.com/api-reference/crm/status/crm-status-fields.html',
-        'Returns the description of the status fields, including user fields.'
+        'Returns descriptions of reference book fields'
     )]
     public function fields(): FieldsResult
     {
@@ -123,7 +124,7 @@ class Status extends AbstractService
     }
 
     /**
-     * Returns a status by the status ID.
+     * Returns an element of the reference book by its identifier.
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/status/crm-status-get.html
      *
@@ -134,7 +135,7 @@ class Status extends AbstractService
     #[ApiEndpointMetadata(
         'crm.status.get',
         'https://apidocs.bitrix24.com/api-reference/crm/status/crm-status-get.html',
-        'Returns a status by the status ID.'
+        'Returns an element of the reference book by its identifier'
     )]
     public function get(int $id): StatusResult
     {
@@ -142,13 +143,13 @@ class Status extends AbstractService
     }
 
     /**
-     * Get list of status items.
+     * Returns a list of elements of the reference book by filter.
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/status/crm-status-list.html
      *
      * @param array   $order     - order of status items
      * @param array   $filter    - filter array
-     * @param array   $select    = ['ID','ASSIGNED_BY_ID','BEGINDATA','CLIENT_ADDR','CLOSED','CLOSEDATA','COMMENTS','COMPANY_ID','CONTACT_ID','CONTACT_IDS','CONTENT','CREATED_BY_ID','CURRENCY_ID','DATE_CREATE','DATE_MODIFY','DEAL_ID','LEAD_ID','LOCATION_ID','MODIFY_BY_ID','MYCOMPANY_ID','OPENED','OPPORTUNITY','PERSON_TYPE_ID','QUOTE_NUMBER','STATUS_ID','TAX_VALUE','TERMS','TITLE','UTM_CAMPAIGN','UTM_CONTENT','UTM_MEDIUM','UTM_SOURCE','UTM_TERM']
+     * @param array   $select    = ['ID','ENTITY_ID','STATUS_ID','SORT','NAME','NAME_INIT','SYSTEM','CATEGORY_ID','COLOR','SEMANTICS','EXTRA']
      * @param integer $startItem - entity number to start from (usually returned in 'next' field of previous 'crm.status.list' API call)
      *
      * @throws BaseException
@@ -157,11 +158,11 @@ class Status extends AbstractService
     #[ApiEndpointMetadata(
         'crm.status.list',
         'https://apidocs.bitrix24.com/api-reference/crm/status/crm-status-list.html',
-        'Get list of status items.'
+        'Returns a list of elements of the reference book by filter'
     )]
-    public function list(array $order, array $filter, array $select, int $startItem = 0): StatussResult
+    public function list(array $order = [], array $filter = [], array $select = [], int $startItem = 0): StatusesResult
     {
-        return new StatussResult(
+        return new StatusesResult(
             $this->core->call(
                 'crm.status.list',
                 [
@@ -175,44 +176,22 @@ class Status extends AbstractService
     }
 
     /**
-     * Updates the specified (existing) status.
+     * Updates an existing element of the reference book.
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/status/crm-status-update.html
      *
      * @param array{
      *   ID?: int,
-     *   ASSIGNED_BY_ID?: int,
-     *   BEGINDATA?: string,
-     *   CLIENT_ADDR?: string,
-     *   CLOSED?: bool,
-     *   CLOSEDATA?: string,
-     *   COMMENTS?: string,
-     *   COMPANY_ID?: int,
-     *   CONTACT_ID?: int,
-     *   CONTACT_IDS?: int[],
-     *   CONTENT?: string,
-     *   CREATED_BY_ID?: int,
-     *   CURRENCY_ID?: string,
-     *   DATE_CREATE?: string,
-     *   DATE_MODIFY?: string,
-     *   DEAL_ID?: int,
-     *   LEAD_ID?: int,
-     *   LOCATION_ID?: int,
-     *   MODIFY_BY_ID?: int,
-     *   MYCOMPANY_ID?: int,
-     *   OPENED?: bool,
-     *   OPPORTUNITY?: string,
-     *   PERSON_TYPE_ID?: int,
-     *   QUOTE_NUMBER?: string,
+     *   ENTITY_ID?: string,
      *   STATUS_ID?: string,
-     *   TAX_VALUE?: string,
-     *   TERMS?: string,
-     *   TITLE?: string,
-     *   UTM_CAMPAIGN?: string,
-     *   UTM_CONTENT?: string,
-     *   UTM_MEDIUM?: string,
-     *   UTM_SOURCE?: string,
-     *   UTM_TERM?: string,
+     *   SORT?: int,
+     *   NAME?: string,
+     *   NAME_INIT?: string,
+     *   SYSTEM?: bool,
+     *   CATEGORY_ID?: int,
+     *   COLOR?: string,
+     *   SEMANTICS?: string,
+     *   EXTRA?: string,
      *   }        $fields
      *
      * @throws BaseException
@@ -221,7 +200,7 @@ class Status extends AbstractService
     #[ApiEndpointMetadata(
         'crm.status.update',
         'https://apidocs.bitrix24.com/api-reference/crm/status/crm-status-update.html',
-        'Updates the specified (existing) status.'
+        'Updates an existing element of the reference book'
     )]
     public function update(int $id, array $fields): UpdatedItemResult
     {
@@ -237,42 +216,20 @@ class Status extends AbstractService
     }
 
     /**
-     * Count statuss by filter
+     * Count statuses by filter
      *
      * @param array{
      *   ID?: int,
-     *   ASSIGNED_BY_ID?: int,
-     *   BEGINDATA?: string,
-     *   CLIENT_ADDR?: string,
-     *   CLOSED?: bool,
-     *   CLOSEDATA?: string,
-     *   COMMENTS?: string,
-     *   COMPANY_ID?: int,
-     *   CONTACT_ID?: int,
-     *   CONTACT_IDS?: int[],
-     *   CONTENT?: string,
-     *   CREATED_BY_ID?: int,
-     *   CURRENCY_ID?: string,
-     *   DATE_CREATE?: string,
-     *   DATE_MODIFY?: string,
-     *   DEAL_ID?: int,
-     *   LEAD_ID?: int,
-     *   LOCATION_ID?: int,
-     *   MODIFY_BY_ID?: int,
-     *   MYCOMPANY_ID?: int,
-     *   OPENED?: bool,
-     *   OPPORTUNITY?: string,
-     *   PERSON_TYPE_ID?: int,
-     *   QUOTE_NUMBER?: string,
+     *   ENTITY_ID?: string,
      *   STATUS_ID?: string,
-     *   TAX_VALUE?: string,
-     *   TERMS?: string,
-     *   TITLE?: string,
-     *   UTM_CAMPAIGN?: string,
-     *   UTM_CONTENT?: string,
-     *   UTM_MEDIUM?: string,
-     *   UTM_SOURCE?: string,
-     *   UTM_TERM?: string,
+     *   SORT?: int,
+     *   NAME?: string,
+     *   NAME_INIT?: string,
+     *   SYSTEM?: bool,
+     *   CATEGORY_ID?: int,
+     *   COLOR?: string,
+     *   SEMANTICS?: string,
+     *   EXTRA?: string,
      *   } $filter
      *
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
