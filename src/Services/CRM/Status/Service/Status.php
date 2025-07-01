@@ -54,7 +54,7 @@ class Status extends AbstractService
      *   CATEGORY_ID?: int,
      *   COLOR?: string,
      *   SEMANTICS?: string,
-     *   EXTRA?: string,
+     *   EXTRA?: array,
      * } $fields
      *
      * @throws BaseException
@@ -91,7 +91,7 @@ class Status extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/status/crm-status-delete.html',
         'Deletes an element from the reference book'
     )]
-    public function delete(int $id, bool $forced=false): DeletedItemResult
+    public function delete(int $id, bool $forced = false): DeletedItemResult
     {
         $param = $forced ? 'Y' : 'N';
         return new DeletedItemResult(
@@ -191,7 +191,7 @@ class Status extends AbstractService
      *   CATEGORY_ID?: int,
      *   COLOR?: string,
      *   SEMANTICS?: string,
-     *   EXTRA?: string,
+     *   EXTRA?: array,
      *   }        $fields
      *
      * @throws BaseException
@@ -229,7 +229,7 @@ class Status extends AbstractService
      *   CATEGORY_ID?: int,
      *   COLOR?: string,
      *   SEMANTICS?: string,
-     *   EXTRA?: string,
+     *   EXTRA?: array,
      *   } $filter
      *
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException

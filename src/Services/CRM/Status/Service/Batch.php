@@ -49,7 +49,7 @@ class Batch
      *   CATEGORY_ID?: int,
      *   COLOR?: string,
      *   SEMANTICS?: string,
-     *   EXTRA?: string,
+     *   EXTRA?: array,
      *   } $order
      *
      * @param array{
@@ -63,7 +63,7 @@ class Batch
      *   CATEGORY_ID?: int,
      *   COLOR?: string,
      *   SEMANTICS?: string,
-     *   EXTRA?: string,
+     *   EXTRA?: array,
      *   } $filter
      * @param array    $select = ['ID','ENTITY_ID','STATUS_ID','SORT','NAME','NAME_INIT','SYSTEM','CATEGORY_ID','COLOR','SEMANTICS','EXTRA']
      *
@@ -103,7 +103,7 @@ class Batch
      *   CATEGORY_ID?: int,
      *   COLOR?: string,
      *   SEMANTICS?: string,
-     *   EXTRA?: string,
+     *   EXTRA?: array,
      *   }> $statuses
      *
      * @return Generator<int, AddedItemBatchResult>

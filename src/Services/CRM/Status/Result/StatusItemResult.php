@@ -27,10 +27,9 @@ use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
  * @property-read bool|null $SYSTEM
  * @property-read int|null $CATEGORY_ID
  * @property-read string|null $COLOR
- * @property-read string|null $SEMANTICS
- * @property-read string|null $EXTRA
+ * @property-read bool|null $SEMANTICS
+ * @property-read array|null $EXTRA
  */
 class StatusItemResult extends AbstractCrmItem
 {
-    
 }

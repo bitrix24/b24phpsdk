@@ -348,6 +348,7 @@ trait CustomBitrix24Assertions
                 case 'crm_multifield':
                 case 'uf_enum_element':
                 case 'currency_localization':
+                case 'crm_status_extra':
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'array'),
                         sprintf(
