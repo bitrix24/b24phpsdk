@@ -92,13 +92,14 @@ class Comment extends AbstractService
         $params = [
             'id' => $id,
         ];
-        if (!empty($ownerTypeId)) {
+        if ($ownerTypeId !== 0) {
             $params = [
                 'id' => $id,
                 'ownerTypeId' => $ownerTypeId,
                 'ownerId' => $ownerId,
             ];
         }
+
         return new DeletedItemResult(
             $this->core->call(
                 'crm.timeline.comment.delete',
@@ -205,7 +206,7 @@ class Comment extends AbstractService
             'id' => $id,
             'fields' => $fields
         ];
-        if (!empty($ownerTypeId)) {
+        if ($ownerTypeId !== 0) {
             $params = [
                 'id' => $id,
                 'fields' => $fields,
@@ -213,6 +214,7 @@ class Comment extends AbstractService
                 'ownerId' => $ownerId,
             ];
         }
+
         return new UpdatedItemResult(
             $this->core->call(
                 'crm.timeline.comment.update',

@@ -238,6 +238,10 @@ integration_tests_lead_productrows:
 .PHONY: integration_tests_crm_quote
 integration_tests_crm_quote:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_quote
+	
+.PHONY: integration_tests_crm_timeline
+integration_tests_crm_timeline:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_timeline
 
 # work dev environment
 .PHONY: php-dev-server-up
