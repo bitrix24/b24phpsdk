@@ -31,7 +31,7 @@ class StatusEntityTypesResult extends AbstractResult
     public function getEntityTypes(): array
     {
         $res = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult()['result'] as $item) {
+        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
             $res[] = new StatusEntityTypeItemResult($item);
         }
 
