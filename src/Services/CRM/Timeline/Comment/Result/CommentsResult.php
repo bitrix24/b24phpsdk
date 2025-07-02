@@ -12,27 +12,27 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Status\Result;
+namespace Bitrix24\SDK\Services\CRM\Timeline\Comment\Result;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
 /**
- * Class StatusesResult
+ * Class CommentsResult
  *
- * @package Bitrix24\SDK\Services\CRM\Status\Result
+ * @package Bitrix24\SDK\Services\CRM\Timeline\Comment\Result
  */
-class StatusesResult extends AbstractResult
+class CommentsResult extends AbstractResult
 {
     /**
-     * @return StatusItemResult[]
+     * @return CommentItemResult[]
      * @throws BaseException
      */
-    public function getStatuses(): array
+    public function getComments(): array
     {
         $items = [];
         foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
-            $items[] = new StatusItemResult($item);
+            $items[] = new CommentItemResult($item);
         }
 
         return $items;

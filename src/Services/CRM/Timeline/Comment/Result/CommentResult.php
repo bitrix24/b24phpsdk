@@ -12,22 +12,22 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Status\Result;
+namespace Bitrix24\SDK\Services\CRM\Timeline\Comment\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
 /**
- * Class StatusResult
+ * Class CommentResult
  *
- * @package Bitrix24\SDK\Services\CRM\Status\Result
+ * @package Bitrix24\SDK\Services\CRM\Timeline\Comment\Result
  */
-class StatusResult extends AbstractResult
+class CommentResult extends AbstractResult
 {
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    public function status(): StatusItemResult
+    public function comment(): CommentItemResult
     {
-        return new StatusItemResult($this->getCoreResponse()->getResponseData()->getResult());
+        return new CommentItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }
