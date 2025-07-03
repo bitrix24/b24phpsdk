@@ -14,11 +14,13 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\CRM\Timeline\Comment\Result;
 
 use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
+use Carbon\CarbonImmutable;
 
 /**
  * Class CommentItemResult
  *
  * @property-read int $ID
+ * @property-read CarbonImmutable $CREATED
  * @property-read int|null $ENTITY_ID
  * @property-read string|null $ENTITY_TYPE
  * @property-read int|null $AUTHOR_ID

@@ -148,6 +148,8 @@ class Comment extends AbstractService
     /**
      * Retrieves a list of all comments for the CRM entity.
      *
+     * Can be used only with required filtration by ENTITY_ID and ENTITY_TYPE
+     *
      * @link https://apidocs.bitrix24.com/api-reference/crm/timeline/comments/crm-timeline-comment-list.html
      *
      * @param array   $order     - order of comment items
@@ -225,6 +227,8 @@ class Comment extends AbstractService
 
     /**
      * Count comments by filter
+     *
+     * Can be used only with required filtration by ENTITY_ID and ENTITY_TYPE
      *
      * @param array{
      *   ID?: int,

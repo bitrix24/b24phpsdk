@@ -532,8 +532,12 @@ class CRMServiceBuilder extends AbstractServiceBuilder
     public function timelineComment(): Timeline\Comment\Service\Comment
     {
         if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new Timeline\Comment\Batch(
+                $this->core,
+                $this->log
+            );
             $this->serviceCache[__METHOD__] = new Timeline\Comment\Service\Comment(
-                new Timeline\Comment\Service\Batch($this->batch, $this->log),
+                new Timeline\Comment\Service\Batch($batch, $this->log),
                 $this->core,
                 $this->log
             );

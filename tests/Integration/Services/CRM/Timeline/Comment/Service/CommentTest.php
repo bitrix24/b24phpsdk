@@ -105,7 +105,9 @@ class CommentTest extends TestCase
             'COMMENT' => 'Test timeline comments',
         ];
         $newId = $this->commentService->add($newComment)->getId();
-        self::assertTrue($this->commentService->delete($newId)->isSuccess());
+        $res = $this->commentService->delete($newId)->getCoreResponse()->getResponseData()->getResult()[0];
+        // always returns result => null
+        self::assertNull($res);
     }
 
     /**
@@ -148,7 +150,12 @@ class CommentTest extends TestCase
             'COMMENT' => 'Test timeline comments',
         ];
         $newId = $this->commentService->add($newComment)->getId();
-        self::assertGreaterThanOrEqual(1, $this->commentService->list([], [], ['ID', 'COMMENT'])->getComments());
+        $filter = [
+            'ENTITY_ID' => $this->companyId,
+            'ENTITY_TYPE' => 'company',
+        ];
+        $comments = $this->commentService->list([], $filter, ['ID', 'COMMENT'])->getComments();
+        self::assertGreaterThanOrEqual(1, $comments);
         $this->commentService->delete($newId);
     }
 
@@ -177,7 +184,12 @@ class CommentTest extends TestCase
      */
     public function testCountByFilter(): void
     {
-        $before = $this->commentService->countByFilter();
+        $filter = [
+            'ENTITY_ID' => $this->companyId,
+            'ENTITY_TYPE' => 'company',
+        ];
+        // Can be used only with required filtration by ENTITY_ID and ENTITY_TYPE
+        $before = $this->commentService->countByFilter($filter);
 
         $newComment = [
             'ENTITY_ID' => $this->companyId,
@@ -186,7 +198,7 @@ class CommentTest extends TestCase
         ];
         $newId = $this->commentService->add($newComment)->getId();
 
-        $after = $this->commentService->countByFilter();
+        $after = $this->commentService->countByFilter($filter);
 
         $this->assertEquals($before + 1, $after);
         $this->commentService->delete($newId);

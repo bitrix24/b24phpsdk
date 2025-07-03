@@ -62,7 +62,12 @@ class BatchTest extends TestCase
         $newId = $this->commentService->add($newComment)->getId();
         
         $cnt = 0;
-        foreach ($this->commentService->batch->list([], ['ID' => $newId], ['ID', 'COMMENT'], 1) as $item) {
+        $filter = [
+            'ID' => $newId,
+            'ENTITY_ID' => $this->companyId,
+            'ENTITY_TYPE' => 'company',
+        ];
+        foreach ($this->commentService->batch->list([], $filter, ['ID', 'COMMENT'], 1) as $item) {
             $cnt++;
         }
 
