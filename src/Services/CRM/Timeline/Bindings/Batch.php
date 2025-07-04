@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\CRM\Timeline\Comment;
+namespace Bitrix24\SDK\Services\CRM\Timeline\Bindings;
 
 use Bitrix24\SDK\Core\Commands\Command;
 use Bitrix24\SDK\Core\Commands\CommandCollection;
@@ -29,7 +29,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class Batch
  *
- * @package Bitrix24\SDK\Services\CRM\Timeline\Comment
+ * @package Bitrix24\SDK\Services\CRM\Timeline\Bindings
  */
 class Batch extends \Bitrix24\SDK\Core\Batch
 {
@@ -57,10 +57,10 @@ class Batch extends \Bitrix24\SDK\Core\Batch
         try {
             $this->clearCommands();
             foreach ($entityItemId as $cnt => $code) {
-                if (!is_int($code)) {
+                if (!is_array($code)) {
                     throw new InvalidArgumentException(
                         sprintf(
-                            'invalid type «%s» of comment id «%s» at position %s, id must be integer type',
+                            'invalid type «%s» of binding fields «%s» at position %s, fields must be array type',
                             gettype($code),
                             $code,
                             $cnt
@@ -68,7 +68,7 @@ class Batch extends \Bitrix24\SDK\Core\Batch
                     );
                 }
 
-                $parameters = ['id' => $code];
+                $parameters = ['fields' => $code];
                 $this->registerCommand($apiMethod, $parameters);
             }
 
