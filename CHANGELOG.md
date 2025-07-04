@@ -13,6 +13,10 @@
     - `delete` deletes a comment, with batch calls support
     - `update` updates a comment, with batch calls support
     - `countByFilter` count comments by filter
+- Added support for events:
+    - `OnCrmTimelineCommentAdd`
+    - `OnCrmTimelineCommentDelete`
+    - `OnCrmTimelineCommentUpdate`
 - Added service `Services\CRM\Timeline\Service\Bindings` with support methods:
     - `fields` retrieves the fields of the link between CRM entities and the timeline record
     - `list` retrieves a list of links for a timeline record, with batch calls support
