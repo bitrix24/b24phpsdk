@@ -4,6 +4,21 @@
 
 ### Added
 
+- Added service `Services\CRM\Timeline\Service\Comment` with support methods,
+  see [crm.timeline.comment.* methods](https://github.com/bitrix24/b24phpsdk/issues/196):
+    - `fields` retrieves a list of timeline comment fields
+    - `get` retrieves information about a comment
+    - `list` retrieves a list of all comments for a CRM entity, with batch calls support
+    - `add` adds a new comment to the timeline, with batch calls support
+    - `delete` deletes a comment, with batch calls support
+    - `update` updates a comment, with batch calls support
+    - `countByFilter` count comments by filter
+- Added service `Services\CRM\Timeline\Service\Bindings` with support methods:
+    - `fields` retrieves the fields of the link between CRM entities and the timeline record
+    - `list` retrieves a list of links for a timeline record, with batch calls support
+    - `bind` adds a link between a timeline record and a CRM entity, with batch calls support
+    - `unbind` removes a link between a timeline record and a CRM entity, with batch calls support
+    - `countByFilter` count links between a timeline record and CRM entities by filter
 - Added service `Services\CRM\Lead\Service\LeadContact` with support methods,
   see [crm.lead.contact.* methods](https://github.com/bitrix24/b24phpsdk/issues/170):
     - `fields` get fiels for lead contact connection
