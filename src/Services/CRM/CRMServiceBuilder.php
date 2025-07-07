@@ -516,6 +516,19 @@ class CRMServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+    
+    public function itemProductRow(): Item\ProductRow\Service\ProductRow
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Item\ProductRow\Service\ProductRow(
+                new Item\ProductRow\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 
     public function duplicate(): Duplicates\Service\Duplicate
     {
