@@ -20,6 +20,11 @@ class ProductrowResult extends AbstractResult
 {
     public function productrow(): ProductrowItemResult
     {
-        return new ProductrowItemResult($this->getCoreResponse()->getResponseData()->getResult()['productRow'][0]);
+        return new ProductrowItemResult($this->getCoreResponse()->getResponseData()->getResult()['productRow']);
+    }
+
+    public function getId(): int
+    {
+        return intval($this->getCoreResponse()->getResponseData()->getResult()['productRow']['id']);
     }
 }

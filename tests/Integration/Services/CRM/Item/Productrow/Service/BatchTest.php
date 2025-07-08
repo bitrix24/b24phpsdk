@@ -36,7 +36,7 @@ class BatchTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productrowService = Fabric::getServiceBuilder()->getCRMScope()->itemProductRow();
+        $this->productrowService = Fabric::getServiceBuilder()->getCRMScope()->itemProductrow();
         $this->leadService = Fabric::getServiceBuilder()->getCRMScope()->lead();
         
         $this->leadId = $this->leadService->add(['TITLE' => 'test lead for productRows'])->getId();
@@ -57,8 +57,13 @@ class BatchTest extends TestCase
         $fields = $this->getProductrowFields();
         $rowId = $this->productrowService->add($fields)->getId();
         
+        $filter = [
+            'id' => $rowId,
+            '=ownerId' => $this->leadId,
+            '=ownerType' => 'L',
+        ];
         $cnt = 0;
-        foreach ($this->productrowService->batch->list([], ['id' => $rowId], 1) as $item) {
+        foreach ($this->productrowService->batch->list([], $filter, 1) as $item) {
             $cnt++;
         }
 
@@ -75,7 +80,7 @@ class BatchTest extends TestCase
         $items = [];
         for ($i = 1; $i < 11; $i++) {
             $copy = $fields;
-            $copy['productName'] .= " $i";
+            $copy['productName'] .= ' ' . $i;
             $copy['price'] += $i;
             $items[] = $copy;
         }
@@ -98,7 +103,7 @@ class BatchTest extends TestCase
         $items = [];
         for ($i = 1; $i < 11; $i++) {
             $copy = $fields;
-            $copy['productName'] .= " $i";
+            $copy['productName'] .= ' ' . $i;
             $copy['price'] += $i;
             $items[] = $copy;
         }
@@ -107,7 +112,7 @@ class BatchTest extends TestCase
         $prodId = [];
         foreach ($this->productrowService->batch->add($items) as $item) {
             $cnt++;
-            $prodId[] = $item->getId();
+            $prodId[] = $item->id;
         }
 
         $cnt = 0;
@@ -118,7 +123,7 @@ class BatchTest extends TestCase
         self::assertEquals(count($items), $cnt);
     }
     
-    private getProductrowFields() {
+    private function getProductrowFields(): array {
         return [
             'ownerId' => $this->leadId,
             'ownerType' => 'L',

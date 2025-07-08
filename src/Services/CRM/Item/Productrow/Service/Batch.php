@@ -77,10 +77,10 @@ class Batch
         }
 
         foreach ($this->batch->addEntityItems('crm.item.productrow.add', $rawItems) as $key => $item) {
-            yield $key => new ProductrowItemResult($item->getResult()['productRow'][0]);
+            yield $key => new ProductrowItemResult($item->getResult()['productRow']);
         }
     }
-    
+
     /**
      * Batch delete product items
      *

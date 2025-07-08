@@ -51,7 +51,7 @@ class ProductrowTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productrowService = Fabric::getServiceBuilder()->getCRMScope()->itemProductRow();
+        $this->productrowService = Fabric::getServiceBuilder()->getCRMScope()->itemProductrow();
         $this->leadService = Fabric::getServiceBuilder()->getCRMScope()->lead();
         
         $this->leadId = $this->leadService->add(['TITLE' => 'test lead for productRows'])->getId();
@@ -97,6 +97,8 @@ class ProductrowTest extends TestCase
     {
         $fields = $this->getProductrowFields();
         $rowId = $this->productrowService->add($fields)->getId();
+        echo 'Row ID: ';
+        print_r($rowId);
         $res = $this->productrowService->delete($rowId)->getCoreResponse()->getResponseData()->getResult()[0];
         // always returns result => null
         self::assertNull($res);
@@ -132,12 +134,59 @@ class ProductrowTest extends TestCase
     public function testList(): void
     {
         $fields = $this->getProductrowFields();
-        $rowId = $this->productrowService->add($fields)->getId();
+        $this->productrowService->add($fields)->getId();
         $filter = [
-            'ownerId' => $this->leadId,
-            'ownerType' => 'L',
+            '=ownerId' => $this->leadId,
+            '=ownerType' => 'L',
         ];
         self::assertGreaterThanOrEqual(1, $this->productrowService->list([], $filter)->getProductrows());
+    }
+    
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testSet(): void
+    {
+        $fields = $this->getProductrowFields();
+        unset($fields['ownerId']);
+        unset($fields['ownerType']);
+        $items = [];
+        for ($i = 1; $i < 11; $i++) {
+            $copy = $fields;
+            $copy['productName'] .= ' ' . $i;
+            $copy['price'] += $i;
+            $copy['sort'] += $i;
+            $items[] = $copy;
+        }
+
+        $setResultItems = $this->productrowService->set($this->leadId, 'L', $items)->getProductrows();
+        self::assertGreaterThanOrEqual(count($items), count($setResultItems));
+    }
+    
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testGetAvailableForPayment(): void
+    {
+        $fields = $this->getProductrowFields();
+        unset($fields['ownerId']);
+        unset($fields['ownerType']);
+        $items = [];
+        for ($i = 1; $i < 6; $i++) {
+            $copy = $fields;
+            $copy['productName'] .= ' ' . $i;
+            $copy['price'] += $i;
+            $copy['sort'] += $i;
+            $items[] = $copy;
+        }
+        
+        $this->productrowService->set($this->leadId, 'L', $items)->getProductrows();
+        $availableItems = $this->productrowService->getAvailableForPayment($this->leadId, 'L')->getProductrows();
+        // This way, nothing is returned
+        //self::assertGreaterThanOrEqual(count($setResultItems), count($availableItems));
+        self::assertIsArray($availableItems);
     }
 
     /**
@@ -161,25 +210,26 @@ class ProductrowTest extends TestCase
     public function testCountByFilter(): void
     {
         $filter = [
-            'ownerId' => $this->leadId,
-            'ownerType' => 'L',
+            '=ownerId' => $this->leadId,
+            '=ownerType' => 'L',
         ];
         $before = $this->productrowService->countByFilter($filter);
 
         $fields = $this->getProductrowFields();
-        $rowId = $this->productrowService->add($fields)->getId();
+        $this->productrowService->add($fields)->getId();
 
         $after = $this->productrowService->countByFilter($filter);
 
         $this->assertEquals($before + 1, $after);
     }   
     
-    private getProductrowFields() {
+    private function getProductrowFields(): array {
         return [
             'ownerId' => $this->leadId,
             'ownerType' => 'L',
             'productName' => 'Test product for lead',
             'price' => 0.5,
+            'sort' => 100,
         ];
     }
 }

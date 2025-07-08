@@ -20,10 +20,11 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
-use Bitrix24\SDK\Core\Result\FieldsResult;
+//use Bitrix24\SDK\Core\Result\FieldsResult;
 //use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\CRM\Item\Productrow\Result\ProductrowResult;
+use Bitrix24\SDK\Services\CRM\Item\Productrow\Result\ProductrowFieldsResult;
 use Bitrix24\SDK\Services\CRM\Item\Productrow\Result\ProductrowsResult;
 use Psr\Log\LoggerInterface;
 
@@ -116,9 +117,9 @@ class Productrow extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/universal/product-rows/crm-item-productrow-fields.html',
         'Retrieves a list of product item fields.'
     )]
-    public function fields(): FieldsResult
+    public function fields(): ProductrowFieldsResult
     {
-        return new FieldsResult($this->core->call('crm.item.productrow.fields', []));
+        return new ProductrowFieldsResult($this->core->call('crm.item.productrow.fields', []));
     }
 
     /**
@@ -141,7 +142,7 @@ class Productrow extends AbstractService
 
     /**
      * Retrieves a list of product items
-     * 
+     *
      * The following keys must be present in the filter: ownerType, ownerId
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/universal/product-rows/crm-item-productrow-list.html
@@ -172,7 +173,7 @@ class Productrow extends AbstractService
      * Updates a product item.
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/universal/product-rows/crm-item-productrow-update.html
-     * 
+     *
      * @param array{
      *   id?: int,
      *   ownerId?: int,
@@ -212,7 +213,7 @@ class Productrow extends AbstractService
             )
         );
     }
-    
+
     /**
      * Associates a product item with a CRM object.
      *
@@ -239,7 +240,7 @@ class Productrow extends AbstractService
             )
         );
     }
-    
+
     /**
      * Retrieves a list of unpaid products.
      *
@@ -268,9 +269,9 @@ class Productrow extends AbstractService
 
     /**
      * Count by filter
-     * 
+     *
      * The following keys must be present in the filter: ownerType, ownerId
-     * 
+     *
      * @param array{
      *   id?: int,
      *   ownerId?: int,

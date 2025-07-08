@@ -9,26 +9,21 @@
  * file that was distributed with this source code.
  */
 
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Item\Productrow\Result;
 
+use Bitrix24\SDK\Core\Result\FieldsResult;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Result\AbstractResult;
 
-class ProductrowsResult extends AbstractResult
+class ProductrowFieldsResult extends FieldsResult
 {
     /**
-     * @return ProductrowItemResult[]
      * @throws BaseException
      */
-    public function getProductrows(): array
+    public function getFieldsDescription(): array
     {
-        $items = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult()['productRows'] as $item) {
-            $items[] = new ProductrowItemResult($item);
-        }
-
-        return $items;
+        return $this->getCoreResponse()->getResponseData()->getResult()['fields'];
     }
 }

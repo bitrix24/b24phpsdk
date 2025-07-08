@@ -18,7 +18,6 @@ use Carbon\CarbonImmutable;
 use Money\Currency;
 use Money\Money;
 use MoneyPHP\Percentage\Percentage;
-use Bitrix24\SDK\Services\CRM\Common\Result\DiscountType;
 
 /**
  * @property-read int $id
@@ -31,14 +30,15 @@ use Bitrix24\SDK\Services\CRM\Common\Result\DiscountType;
  * @property-read Money $priceNetto  without taxes and discounts
  * @property-read Money $priceBrutto without discounts but with taxes
  * @property-read string $quantity
- * @property-read DiscountType $discountTypeId
+ * @property-read int $discountTypeId
  * @property-read Percentage $discountRate
  * @property-read Money $discountSum
- * @property-read string $taxRate
+ * @property-read Percentage $taxRate
  * @property-read bool $taxIncluded
- * @property-read string $customized
+ * @property-read bool $customized
  * @property-read int $measureCode
  * @property-read string $measureName
+ * @property-read int $sort
  * @property-read int $type
  * @property-read int|null $storeId
  */
