@@ -3,7 +3,7 @@
 /**
  * This file is part of the bitrix24-php-sdk package.
  *
- * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ * © Vadim Soluyanov <vadimsallee@gmail.com>
  *
  * For the full copyright and license information, please view the MIT-LICENSE.txt
  * file that was distributed with this source code.
@@ -11,10 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Lead\Service;
+namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Item\Productrow\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Services\CRM\Item\Productrow\Service\Productrow;
 use Bitrix24\SDK\Services\CRM\Lead\Service\Lead;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
@@ -22,30 +23,46 @@ use PHPUnit\Framework\TestCase;
 /**
  * Class BatchTest
  *
- * @package Bitrix24\SDK\Tests\Integration\Services\CRM\Lead\Service
+ * @package Bitrix24\SDK\Tests\Integration\Services\CRM\Item\Productrow\Service
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Lead\Service\Batch::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Item\Productrow\Service\Batch::class)]
 class BatchTest extends TestCase
 {
+    protected Productrow $productrowService;
+    
     protected Lead $leadService;
+    
+    protected int $leadId = 0;
 
+    protected function setUp(): void
+    {
+        $this->productrowService = Fabric::getServiceBuilder()->getCRMScope()->itemProductRow();
+        $this->leadService = Fabric::getServiceBuilder()->getCRMScope()->lead();
+        
+        $this->leadId = $this->leadService->add(['TITLE' => 'test lead for productRows'])->getId();
+    }
+    
+    protected function tearDown(): void
+    {
+        $this->leadService->delete($this->leadId);
+    }
+    
     /**
      * @throws BaseException
      * @throws TransportException
      */
-    #[\PHPUnit\Framework\Attributes\TestDox('Batch list leads')]
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch list productrows')]
     public function testBatchList(): void
     {
-        $itemId = $this->leadService->add(['TITLE' => 'test lead'])->getId();
+        $fields = $this->getProductrowFields();
+        $rowId = $this->productrowService->add($fields)->getId();
+        
         $cnt = 0;
-
-        foreach ($this->leadService->batch->list([], ['ID' => $itemId], ['ID', 'NAME'], 1) as $item) {
+        foreach ($this->productrowService->batch->list([], ['id' => $rowId], 1) as $item) {
             $cnt++;
         }
 
         self::assertGreaterThanOrEqual(1, $cnt);
-
-        $this->leadService->delete($itemId);
     }
 
     /**
@@ -54,22 +71,17 @@ class BatchTest extends TestCase
     #[\PHPUnit\Framework\Attributes\TestDox('Batch add lead')]
     public function testBatchAdd(): void
     {
+        $fields = $this->getProductrowFields();
         $items = [];
-        for ($i = 1; $i < 60; $i++) {
-            $items[] = ['TITLE' => 'TITLE-' . $i];
+        for ($i = 1; $i < 11; $i++) {
+            $copy = $fields;
+            $copy['productName'] .= " $i";
+            $copy['price'] += $i;
+            $items[] = $copy;
         }
 
         $cnt = 0;
-        $itemId = [];
-        foreach ($this->leadService->batch->add($items) as $item) {
-            $cnt++;
-            $itemId[] = $item->getId();
-        }
-
-        self::assertEquals(count($items), $cnt);
-
-        $cnt = 0;
-        foreach ($this->leadService->batch->delete($itemId) as $cnt => $deleteResult) {
+        foreach ($this->productrowService->batch->add($items) as $item) {
             $cnt++;
         }
 
@@ -79,33 +91,39 @@ class BatchTest extends TestCase
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    #[\PHPUnit\Framework\Attributes\TestDox('Batch delete leads')]
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch delete productrows')]
     public function testBatchDelete(): void
     {
-        $leads = [];
-        for ($i = 1; $i < 60; $i++) {
-            $leads[] = ['TITLE' => 'TITLE-' . $i];
+        $fields = $this->getProductrowFields();
+        $items = [];
+        for ($i = 1; $i < 11; $i++) {
+            $copy = $fields;
+            $copy['productName'] .= " $i";
+            $copy['price'] += $i;
+            $items[] = $copy;
         }
 
         $cnt = 0;
-        $dealId = [];
-        foreach ($this->leadService->batch->add($leads) as $item) {
+        $prodId = [];
+        foreach ($this->productrowService->batch->add($items) as $item) {
             $cnt++;
-            $dealId[] = $item->getId();
+            $prodId[] = $item->getId();
         }
-
-        self::assertEquals(count($leads), $cnt);
 
         $cnt = 0;
-        foreach ($this->leadService->batch->delete($dealId) as $cnt => $deleteResult) {
+        foreach ($this->productrowService->batch->delete($prodId) as $cnt => $deleteResult) {
             $cnt++;
         }
 
-        self::assertEquals(count($leads), $cnt);
+        self::assertEquals(count($items), $cnt);
     }
-
-    protected function setUp(): void
-    {
-        $this->leadService = Fabric::getServiceBuilder()->getCRMScope()->lead();
+    
+    private getProductrowFields() {
+        return [
+            'ownerId' => $this->leadId,
+            'ownerType' => 'L',
+            'productName' => 'Test product for lead',
+            'price' => 0.5,
+        ];
     }
 }

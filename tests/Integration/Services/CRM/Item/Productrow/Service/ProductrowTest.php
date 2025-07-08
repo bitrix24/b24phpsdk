@@ -3,7 +3,7 @@
 /**
  * This file is part of the bitrix24-php-sdk package.
  *
- * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ * © Vadim Soluyanov <vadimsallee@gmail.com>
  *
  * For the full copyright and license information, please view the MIT-LICENSE.txt
  * file that was distributed with this source code.
@@ -131,9 +131,13 @@ class ProductrowTest extends TestCase
      */
     public function testList(): void
     {
-        // ###
-        $this->productrowService->add(['TITLE' => 'test']);
-        self::assertGreaterThanOrEqual(1, $this->productrowService->list([], [], ['ID', 'TITLE'])->getProductrows());
+        $fields = $this->getProductrowFields();
+        $rowId = $this->productrowService->add($fields)->getId();
+        $filter = [
+            'ownerId' => $this->leadId,
+            'ownerType' => 'L',
+        ];
+        self::assertGreaterThanOrEqual(1, $this->productrowService->list([], $filter)->getProductrows());
     }
 
     /**
@@ -142,11 +146,12 @@ class ProductrowTest extends TestCase
      */
     public function testUpdate(): void
     {
-        $addedItemResult = $this->productrowService->add(['TITLE' => 'test lead']);
-        $newTitle = 'test2';
+        $fields = $this->getProductrowFields();
+        $rowId = $this->productrowService->add($fields)->getId();
+        $newName = 'Test product 222';
 
-        self::assertTrue($this->productrowService->update($addedItemResult->getId(), ['TITLE' => $newTitle], [])->isSuccess());
-        self::assertEquals($newTitle, $this->productrowService->get($addedItemResult->getId())->lead()->TITLE);
+        $this->productrowService->update($rowId, ['productName' => $newName]);
+        self::assertEquals($newName, $this->productrowService->get($rowId)->productrow()->productName);
     }
 
     /**
@@ -155,24 +160,18 @@ class ProductrowTest extends TestCase
      */
     public function testCountByFilter(): void
     {
-        $before = $this->productrowService->countByFilter();
+        $filter = [
+            'ownerId' => $this->leadId,
+            'ownerType' => 'L',
+        ];
+        $before = $this->productrowService->countByFilter($filter);
 
-        $newItemsCount = 60;
-        $items = [];
-        for ($i = 1; $i <= $newItemsCount; $i++) {
-            $items[] = ['TITLE' => 'TITLE-' . $i];
-        }
+        $fields = $this->getProductrowFields();
+        $rowId = $this->productrowService->add($fields)->getId();
 
-        $cnt = 0;
-        foreach ($this->productrowService->batch->add($items) as $item) {
-            $cnt++;
-        }
+        $after = $this->productrowService->countByFilter($filter);
 
-        self::assertEquals(count($items), $cnt);
-
-        $after = $this->productrowService->countByFilter();
-
-        $this->assertEquals($before + $newItemsCount, $after);
+        $this->assertEquals($before + 1, $after);
     }   
     
     private getProductrowFields() {
