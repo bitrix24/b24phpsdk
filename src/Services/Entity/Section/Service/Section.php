@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\Entity\Item\Section\Service;
+namespace Bitrix24\SDK\Services\Entity\Section\Service;
 
 use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
@@ -23,7 +23,7 @@ use Bitrix24\SDK\Core\Result\AddedItemResult;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
-use Bitrix24\SDK\Services\Entity\Item\Section\Result\SectionsResult;
+use Bitrix24\SDK\Services\Entity\Section\Result\SectionsResult;
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['entity']))]
@@ -45,7 +45,7 @@ class Section extends AbstractService
      * @throws BaseException
      */
     #[ApiEndpointMetadata(
-        'entity.item.section.add',
+        'entity.section.add',
         'https://apidocs.bitrix24.com/api-reference/entity/sections/entity-section-add.html',
         'Adds a storage section'
     )]
@@ -56,7 +56,7 @@ class Section extends AbstractService
 
         return new AddedItemResult(
             $this->core->call(
-                'entity.item.section.add',
+                'entity.section.add',
                 array_merge(
                     [
                         'ENTITY' => $entity,
@@ -76,7 +76,7 @@ class Section extends AbstractService
      * @throws BaseException
      */
     #[ApiEndpointMetadata(
-        'entity.item.section.get',
+        'entity.section.get',
         'https://apidocs.bitrix24.com/api-reference/entity/sections/entity-section-get.html',
         'Retrieves a list of storage sections'
     )]
@@ -86,7 +86,7 @@ class Section extends AbstractService
 
         return new SectionsResult(
             $this->core->call(
-                'entity.item.section.get',
+                'entity.section.get',
                 [
                     'ENTITY' => $entity,
                     'SORT' => $sort,
@@ -105,7 +105,7 @@ class Section extends AbstractService
      * @throws BaseException
      */
     #[ApiEndpointMetadata(
-        'entity.item.section.delete',
+        'entity.section.delete',
         'https://apidocs.bitrix24.com/api-reference/entity/sections/entity-section-delete.html',
         'Deletes a storage section'
     )]
@@ -115,7 +115,7 @@ class Section extends AbstractService
 
         return new DeletedItemResult(
             $this->core->call(
-                'entity.item.section.delete',
+                'entity.section.delete',
                 [
                     'ENTITY' => $entity,
                     'ID' => $sectionId,
@@ -132,7 +132,7 @@ class Section extends AbstractService
      * @throws BaseException
      */
     #[ApiEndpointMetadata(
-        'entity.item.section.update',
+        'entity.section.update',
         'https://apidocs.bitrix24.com/api-reference/entity/sections/entity-section-update.html',
         'Modifies a storage section'
     )]
@@ -141,7 +141,7 @@ class Section extends AbstractService
         $this->guardNonEmptyString($entity, 'entity must be an non empty string');
         return new UpdatedItemResult(
             $this->core->call(
-                'entity.item.section.update',
+                'entity.section.update',
                 array_merge(
                     [
                         'ENTITY' => $entity,

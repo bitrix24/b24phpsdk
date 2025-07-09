@@ -38,7 +38,7 @@
             <directory>./tests/Integration/Services/Workflows/</directory>
         </testsuite>
         <testsuite name="integration_tests_scope_entity">
-            <directory>./tests/Integration/Services/Entity/</directory>
+            <directory>./tests/Integration/Services/Entity/Section/</directory>
         </testsuite>
         <testsuite name="integration_tests_scope_ai_admin">
             <directory>./tests/Integration/Services/AI/</directory>
