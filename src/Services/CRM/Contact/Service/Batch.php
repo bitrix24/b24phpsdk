@@ -203,10 +203,10 @@ class Batch extends AbstractBatchService
      *                         UTM_CAMPAIGN?: string,
      *                         UTM_CONTENT?: string,
      *                         UTM_TERM?: string,
-     *                         PHONE?: string,
-     *                         EMAIL?: string,
-     *                         WEB?: string,
-     *                         IM?: string,
+     *                         PHONE?: array,
+     *                         EMAIL?: array,
+     *                         WEB?: array,
+     *                         IM?: array,
      *                         }> $contacts
      *
      * @return Generator<int, AddedItemBatchResult>
