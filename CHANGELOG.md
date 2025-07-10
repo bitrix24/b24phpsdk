@@ -1,5 +1,15 @@
 # b24-php-sdk change log
 
+## UPCOMING 1.5.0 – 2025.08.01
+
+### Added
+
+### Fixed
+- Fixed typehints in Contact batch for method `add`, [see details](https://github.com/bitrix24/b24phpsdk/issues/202)
+
+### Changed
+### Statistics
+
 ## 1.4.0 – 2025.07.01
 
 ### Added
