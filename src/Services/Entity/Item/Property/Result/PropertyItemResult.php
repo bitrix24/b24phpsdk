@@ -11,22 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\Entity\Section\Result;
+namespace Bitrix24\SDK\Services\Entity\Item\Property\Result;
 
 use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
-use Carbon\CarbonImmutable;
 
 /**
- * @property-read int $ID
  * @property-read string $ENTITY
+ * @property-read string $PROPERTY
  * @property-read string $NAME
- * @property-read string|null $DESCRIPTION
- * @property-read bool $ACTIVE
- * @property-read int $SORT
- * @property-read array|null $PICTURE
- * @property-read array|null $DETAIL_PICTURE
- * @property-read int|null $SECTION
+ * @property-read string $TYPE
  */
-class SectionItemResult extends AbstractCrmItem
+class PropertyItemResult extends AbstractCrmItem
 {
 }

@@ -41,6 +41,7 @@ class Batch implements BatchOperationsInterface
         'entity.section.get',
         'entity.item.update',
         'entity.section.update',
+        'entity.item.property.update',
     ];
     
     protected const MAX_BATCH_PACKET_SIZE = 50;

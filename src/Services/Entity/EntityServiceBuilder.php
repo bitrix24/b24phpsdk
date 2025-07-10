@@ -59,4 +59,21 @@ class EntityServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+    
+    public function itemProperty(): Entity\Item\Property\Service\Property
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new Entity\Item\Property\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Entity\Item\Property\Service\Property(
+                new Entity\Item\Property\Service\Batch($batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 }
