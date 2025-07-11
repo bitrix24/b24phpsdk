@@ -34,6 +34,16 @@ use Psr\Log\LoggerInterface;
  */
 class Batch implements BatchOperationsInterface
 {
+    protected const ENTITY_METHODS = [
+        'entity.item.delete',
+        'entity.section.delete',
+        'entity.item.get',
+        'entity.section.get',
+        'entity.item.update',
+        'entity.section.update',
+        'entity.item.property.update',
+    ];
+    
     protected const MAX_BATCH_PACKET_SIZE = 50;
 
     protected const MAX_ELEMENTS_IN_PAGE = 50;
@@ -144,7 +154,7 @@ class Batch implements BatchOperationsInterface
 
                 $parameters = $useFieldsInsteadOfId ? ['fields' => $itemId] : ['ID' => $itemId];
                 // TODO: delete after migration to RestAPI v2
-                if ($apiMethod === 'entity.item.delete') {
+                if (in_array($apiMethod, self::ENTITY_METHODS)) {
                     $parameters = array_merge($parameters, $additionalParameters);
                 }
 
@@ -218,7 +228,7 @@ class Batch implements BatchOperationsInterface
                     );
                 }
 
-                if ($apiMethod !== 'entity.item.update') {
+                if (!in_array($apiMethod, self::ENTITY_METHODS)) {
                     if (!array_key_exists('fields', $entityItem)) {
                         throw new InvalidArgumentException(
                             sprintf('array key «fields» not found in entity item with id %s', $entityItemId)
@@ -482,7 +492,7 @@ class Batch implements BatchOperationsInterface
         // todo wait new api version
         if ($apiMethod !== 'user.get') {
             $defaultOrderKey = 'order';
-            $orderKey = $apiMethod === 'entity.item.get' ? 'SORT' : $defaultOrderKey;
+            $orderKey = in_array($apiMethod, self::ENTITY_METHODS) ? 'SORT' : $defaultOrderKey;
 
             $params = [
                 $orderKey => $this->getReverseOrder($order),

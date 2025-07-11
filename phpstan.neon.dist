@@ -26,6 +26,7 @@ parameters:
     - tests/Integration/Services/CRM/Quote/Service/QuoteProductRowsTest.php
     - tests/Integration/Services/CRM/Lead/Service/LeadUserfieldTest.php
     - tests/Integration/Services/CRM/Currency
+    - tests/Integration/Services/Entity/Section
   bootstrapFiles:
     - tests/bootstrap.php
   parallel:
