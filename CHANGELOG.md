@@ -1,6 +1,7 @@
 # b24-php-sdk change log
 
-## 1.5.0 – 2025.08.01
+
+## UPCOMING 1.5.0 – 2025.08.01
 
 ### Added
 
@@ -15,7 +16,13 @@
     - `add` add an additional property to storage elements, with batch calls support
     - `update` update an additional property of storage elements, with batch calls support
     - `delete` delete an additional property of storage elements, with batch calls support
-    
+
+### Fixed
+- Fixed typehints in Contact batch for method `add`, [see details](https://github.com/bitrix24/b24phpsdk/issues/202)
+
+### Changed
+### Statistics
+
 ## 1.4.0 – 2025.07.01
 
 ### Added
