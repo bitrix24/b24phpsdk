@@ -34,8 +34,10 @@ class BatchTest extends TestCase
     
     protected function setUp(): void
     {
-        $this->departmentService = Fabric::getServiceBuilder()->getCRMScope()->department();
-        $this->rootDepartmentId = $this->departmentService->get('ID', 'ASC', ['PARENT' => 0])->getDepartments()[0]->ID;
+        $this->departmentService = Fabric::getServiceBuilder()->getDepartmentScope()->department();
+        $dep = $this->departmentService->get(['PARENT' => 0])->getDepartments()[0];
+        
+        $this->rootDepartmentId = intval($dep->ID);
     }
 
     /**
@@ -47,7 +49,6 @@ class BatchTest extends TestCase
     {
         $depId = $this->departmentService->add('Test depart', $this->rootDepartmentId)->getId();
         $cnt = 0;
-
         foreach ($this->departmentService->batch->get(['ID' => $depId]) as $item) {
             $cnt++;
         }
@@ -109,6 +110,50 @@ class BatchTest extends TestCase
 
         $cnt = 0;
         foreach ($this->departmentService->batch->delete($depId) as $cnt => $deleteResult) {
+            $cnt++;
+        }
+
+        self::assertEquals(count($items), $cnt);
+    }
+    
+    /**
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     */
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch update departments')]
+    public function testBatchUpdate(): void
+    {
+        $items = [];
+        for ($i = 1; $i < 60; $i++) {
+            $items[] = [
+                'NAME' => 'Dep-' . $i,
+                'PARENT' => $this->rootDepartmentId
+            ];
+        }
+
+        $cnt = 0;
+        $depIds = [];
+        foreach ($this->departmentService->batch->add($items) as $item) {
+            $cnt++;
+            $depIds[] = $item->getId();
+        }
+        
+        $updates = [];
+        foreach ($depIds as $depId) {
+            $updates[$depId] = [
+                'NAME' => 'Updated '.$depId,
+            ];
+        }
+
+        $cnt = 0;
+        foreach ($this->departmentService->batch->update($updates) as $cnt => $updateResult) {
+            $cnt++;
+            self::assertTrue($updateResult->isSuccess());
+        }
+
+        self::assertEquals(count($updates), $cnt);
+        
+        $cnt = 0;
+        foreach ($this->departmentService->batch->delete($depIds) as $cnt => $deleteResult) {
             $cnt++;
         }
 

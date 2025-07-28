@@ -50,22 +50,24 @@ class Batch
      * @throws BaseException
      */
     #[ApiBatchMethodMetadata(
-        'crm.department.get',
+        'department.get',
         'https://apidocs.bitrix24.com/api-reference/departments/department-get.html',
         'Batch get method for departments'
     )]
-    public function get(array $filter=[], string $sort='ID', string $order='ASC', ?int $limit = null): Generator
+    public function get(array $filter = [], string $sort = 'ID', string $order = 'ASC', ?int $limit = null): Generator
     {
+        $arOrder = [$sort => $order];
+        $select = [];
         $this->log->debug(
             'batchList',
             [
-                'order'  => $order,
+                'order'  => $arOrder,
                 'filter' => $filter,
                 'select' => $select,
                 'limit'  => $limit,
             ]
         );
-        foreach ($this->batch->getTraversableList('crm.department.get', $order, $filter, $select, $limit) as $key => $value) {
+        foreach ($this->batch->getTraversableList('department.get', $arOrder, $filter, $select, $limit) as $key => $value) {
             yield $key => new DepartmentItemResult($value);
         }
     }
@@ -84,13 +86,13 @@ class Batch
      * @throws BaseException
      */
     #[ApiBatchMethodMetadata(
-        'crm.department.add',
+        'department.add',
         'https://apidocs.bitrix24.com/api-reference/departments/department-add.html',
         'Batch adding departments'
     )]
     public function add(array $departments): Generator
     {
-        foreach ($this->batch->addEntityItems('crm.department.add', $departments) as $key => $item) {
+        foreach ($this->batch->addEntityItems('department.add', $departments) as $key => $item) {
             yield $key => new AddedItemBatchResult($item);
         }
     }
@@ -108,13 +110,13 @@ class Batch
      * @throws BaseException
      */
     #[ApiBatchMethodMetadata(
-        'crm.department.update',
+        'department.update',
         'https://apidocs.bitrix24.com/api-reference/departments/department-update.html',
         'Update in batch mode a list of departments'
     )]
     public function update(array $departmentItems): Generator
     {
-        foreach ($this->batch->updateEntityItems('crm.department.update', $departmentItems) as $key => $item) {
+        foreach ($this->batch->updateEntityItems('department.update', $departmentItems) as $key => $item) {
             yield $key => new UpdatedItemBatchResult($item);
         }
     }
@@ -128,13 +130,13 @@ class Batch
      * @throws BaseException
      */
     #[ApiBatchMethodMetadata(
-        'crm.department.delete',
+        'department.delete',
         'https://apidocs.bitrix24.com/api-reference/departments/department-delete.html',
         'Batch delete departments'
     )]
     public function delete(array $departmentIds): Generator
     {
-        foreach ($this->batch->deleteEntityItems('crm.department.delete', $departmentIds) as $key => $item) {
+        foreach ($this->batch->deleteEntityItems('department.delete', $departmentIds) as $key => $item) {
             yield $key => new DeletedItemBatchResult($item);
         }
     }

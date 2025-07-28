@@ -51,7 +51,7 @@ class Department extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/departments/department-add.html',
         'Method adds new department'
     )]
-    public function add(string $name, int $parent, int $sort=100, int $head=0): AddedItemResult
+    public function add(string $name, int $parent, int $sort = 100, int $head = 0): AddedItemResult
     {
         return new AddedItemResult(
             $this->core->call(
@@ -122,7 +122,7 @@ class Department extends AbstractService
      *   PARENT?: int,
      *   UF_HEAD?: int,
      * } $filter
-     * 
+     *
      * @throws BaseException
      * @throws TransportException
      */
@@ -131,7 +131,7 @@ class Department extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/departments/department-get.html',
         'Retrieve a list of departments.'
     )]
-    public function get(array $filter=[], string $sort='ID', string $order='ASC', $start=0): DepartmentsResult
+    public function get(array $filter = [], string $sort = 'ID', string $order = 'ASC', $start = 0): DepartmentsResult
     {
         $params = $filter;
         $params['SORT'] = $sort;
@@ -188,6 +188,6 @@ class Department extends AbstractService
      */
     public function countByFilter(array $filter = []): int
     {
-        return $this->get('ID', 'ASC', $filter, 1)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
+        return $this->get($filter, 'ID', 'ASC', 1)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
     }
 }

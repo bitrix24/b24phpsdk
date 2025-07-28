@@ -24,8 +24,12 @@ class DepartmentServiceBuilder extends AbstractServiceBuilder
     public function department(): Department\Service\Department
     {
         if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new Department\Batch(
+                $this->core,
+                $this->log
+            );
             $this->serviceCache[__METHOD__] = new Department\Service\Department(
-                new Department\Service\Batch($this->batch, $this->log),
+                new Department\Service\Batch($batch, $this->log),
                 $this->core,
                 $this->log
             );

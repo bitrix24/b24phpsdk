@@ -49,7 +49,7 @@ class DepartmentTest extends TestCase
     {
         $this->departmentService = Fabric::getServiceBuilder()->getDepartmentScope()->department();
         
-        $this->rootDepartmentId = $this->departmentService->get('ID', 'ASC', ['PARENT' => 0])->getDepartments()[0]->ID;
+        $this->rootDepartmentId = intval($this->departmentService->get(['PARENT' => 0])->getDepartments()[0]->ID);
     }
 
     public function testAllSystemFieldsAnnotated(): void
@@ -58,6 +58,8 @@ class DepartmentTest extends TestCase
         $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, DepartmentItemResult::class);
     }
 
+    /*
+    ignore because the result has code => name pairs only
     public function testAllSystemFieldsHasValidTypeAnnotation():void
     {
         $allFields = $this->departmentService->fields()->getFieldsDescription();
@@ -68,6 +70,7 @@ class DepartmentTest extends TestCase
             $systemFields,
             DepartmentItemResult::class);
     }
+    */
 
     /**
      * @throws BaseException
@@ -124,7 +127,7 @@ class DepartmentTest extends TestCase
         $newName = 'Test2 dep';
 
         self::assertTrue($this->departmentService->update($depId, ['NAME' => $newName])->isSuccess());
-        self::assertEquals($newName, $this->departmentService->get($depId)->getDepartments()[0]->NAME);
+        self::assertEquals($newName, $this->departmentService->get(['ID' => $depId])->getDepartments()[0]->NAME);
         
         $this->departmentService->delete($depId);
     }
