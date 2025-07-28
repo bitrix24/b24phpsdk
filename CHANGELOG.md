@@ -4,6 +4,15 @@
 
 ### Added
 
+- Added service `Services\Department\Service\Department` with support methods,
+  see [department.* methods](https://github.com/bitrix24/b24phpsdk/issues/204):
+    - `fields` gets the department fields reference
+    - `get` retrieves a list of departments, with batch calls support
+    - `add` creates a department, with batch calls support
+    - `delete` deletes a department, with batch calls support
+    - `update` modifies a department, with batch calls support
+    - `countByFilter` count departments by filter
+
 ### Fixed
 - Fixed typehints in Contact batch for method `add`, [see details](https://github.com/bitrix24/b24phpsdk/issues/202)
 
