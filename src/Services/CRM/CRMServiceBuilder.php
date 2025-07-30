@@ -565,11 +565,87 @@ class CRMServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+    
+    public function itemProductrow(): Item\Productrow\Service\Productrow
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new Item\Productrow\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Item\Productrow\Service\Productrow(
+                new Item\Productrow\Service\Batch($batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 
     public function duplicate(): Duplicates\Service\Duplicate
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Duplicates\Service\Duplicate(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+    
+    public function status(): Status\Service\Status
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Status\Service\Status(
+                new Status\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function timelineComment(): Timeline\Comment\Service\Comment
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new Timeline\Comment\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Timeline\Comment\Service\Comment(
+                new Timeline\Comment\Service\Batch($batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+    
+    public function statusEntity(): Status\Service\StatusEntity
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Status\Service\StatusEntity(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function timelineBindings(): Timeline\Bindings\Service\Bindings
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new Timeline\Bindings\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Timeline\Bindings\Service\Bindings(
+                new Timeline\Bindings\Service\Batch($batch, $this->log),
                 $this->core,
                 $this->log
             );

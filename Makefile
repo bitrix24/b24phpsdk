@@ -227,9 +227,9 @@ integration_tests_lead_details:
 integration_tests_scope_automation:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_automation
 	
-.PHONY: integration_tests_item_details
-integration_tests_item_details:
-	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_item_details
+.PHONY: integration_tests_crm_item
+integration_tests_crm_item:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_item
 
 .PHONY: integration_tests_lead_productrows
 integration_tests_lead_productrows:
@@ -250,6 +250,18 @@ integration_tests_crm_preset_field:
 .PHONY: integration_tests_crm_requisite_userfield
 integration_tests_crm_requisite_userfield:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_requisite_userfield
+
+.PHONY: integration_tests_crm_status
+integration_tests_crm_status:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_status
+
+.PHONY: integration_tests_crm_timeline
+integration_tests_crm_timeline:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_timeline
+
+.PHONY: integration_tests_department
+integration_tests_department:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_department
 
 # work dev environment
 .PHONY: php-dev-server-up
