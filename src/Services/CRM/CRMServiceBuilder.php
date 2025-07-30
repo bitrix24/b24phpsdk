@@ -545,4 +545,38 @@ class CRMServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+    
+    public function timelineComment(): Timeline\Comment\Service\Comment
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new Timeline\Comment\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Timeline\Comment\Service\Comment(
+                new Timeline\Comment\Service\Batch($batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+    
+    public function timelineBindings(): Timeline\Bindings\Service\Bindings
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new Timeline\Bindings\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Timeline\Bindings\Service\Bindings(
+                new Timeline\Bindings\Service\Batch($batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 }
