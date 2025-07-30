@@ -73,8 +73,8 @@
         <testsuite name="integration_tests_lead_contacts">
             <file>./tests/Integration/Services/CRM/Lead/Service/LeadContactTest.php</file>
         </testsuite>
-        <testsuite name="integration_tests_item_details">
-            <file>./tests/Integration/Services/CRM/Item/Service/ItemDetailsConfigurationTest.php</file>
+        <testsuite name="integration_tests_crm_item">
+            <directory>./tests/Integration/Services/CRM/Item/Productrow/</directory>
         </testsuite>
         <testsuite name="integration_tests_scope_automation">
             <directory>./tests/Integration/Services/CRM/Automation/</directory>
@@ -84,6 +84,24 @@
         </testsuite>
         <testsuite name="integration_tests_crm_quote">
             <directory>./tests/Integration/Services/CRM/Quote/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_crm_requisite">
+            <file>./tests/Integration/Services/CRM/Requisites/Service/RequisiteLinkTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_crm_preset_field">
+            <file>./tests/Integration/Services/CRM/Requisites/Service/RequisitePresetFieldTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_crm_requisite_userfield">
+            <file>./tests/Integration/Services/CRM/Requisites/Service/RequisiteUserfieldTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_crm_status">
+            <directory>./tests/Integration/Services/CRM/Status/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_crm_timeline">
+            <directory>./tests/Integration/Services/CRM/Timeline/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_department">
+            <directory>./tests/Integration/Services/Department/</directory>
         </testsuite>
     </testsuites>
     <source>

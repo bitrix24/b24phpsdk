@@ -34,11 +34,13 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
 
     private ?string $applicationToken = null;
 
+    private readonly CarbonImmutable $createdAt;
+
+    private CarbonImmutable $updatedAt;
+
     public function __construct(
         private readonly Uuid $id,
         private ApplicationInstallationStatus $applicationInstallationStatus,
-        private readonly CarbonImmutable $createdAt,
-        private CarbonImmutable $updatedAt,
         private readonly Uuid $bitrix24AccountUuid,
         private ApplicationStatus $applicationStatus,
         private PortalLicenseFamily $portalLicenseFamily,
@@ -48,6 +50,8 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
         private ?Uuid $bitrix24PartnerUuid,
         private ?string $externalId,
     ) {
+        $this->createdAt = new CarbonImmutable();
+        $this->updatedAt = new CarbonImmutable();
     }
 
     public function getId(): Uuid

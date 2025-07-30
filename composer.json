@@ -31,7 +31,7 @@
     "ext-intl": "*",
     "psr/log": "^2 || ^3",
     "fig/http-message-util": "^1",
-    "giggsey/libphonenumber-for-php": "^8",
+    "giggsey/libphonenumber-for-php": "^8 || ^9",
     "darsyn/ip": "^4 || ^5",
     "nesbot/carbon": "^3",
     "moneyphp/money": "^3 || ^4",

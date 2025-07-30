@@ -14,7 +14,7 @@ parameters:
     - tests/Integration/Services/CRM/Address
     - tests/Integration/Services/CRM/Deal/Service/DealRecurringTest.php
     - tests/Integration/Services/CRM/Lead/Service/LeadContactTest.php
-    - tests/Integration/Services/CRM/Item/Service/ItemDetailsConfigurationTest.php
+    - tests/Integration/Services/CRM/Item
     - tests/Integration/Services/CRM/Deal/Service/DealDetailsConfigurationTest.php
     - tests/Integration/Services/CRM/Lead/Service/LeadDetailsConfigurationTest.php
     - tests/Integration/Services/CRM/Contact/Service/ContactDetailsConfigurationTest.php
@@ -26,6 +26,13 @@ parameters:
     - tests/Integration/Services/CRM/Quote/Service/QuoteProductRowsTest.php
     - tests/Integration/Services/CRM/Lead/Service/LeadUserfieldTest.php
     - tests/Integration/Services/CRM/Currency
+    - tests/Integration/Services/CRM/Requisites
+  excludePaths:
+    - tests/Integration/Services/CRM/Requisites/Service/RequisiteUserfieldUseCaseTest.php
+    - tests/Integration/Services/CRM/Status
+    - tests/Integration/Services/CRM/Timeline
+    - tests/Integration/Services/Entity/Section
+    - tests/Integration/Services/Department
   bootstrapFiles:
     - tests/bootstrap.php
   parallel:
