@@ -11,51 +11,52 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Tests\Integration\Services\Department\Service;
+namespace Bitrix24\SDK\Tests\Integration\Services\CRM\CallList\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Services\Department\Service\Department;
+use Bitrix24\SDK\Services\CRM\CallList\Service\CallList;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class BatchTest
  *
- * @package Bitrix24\SDK\Tests\Integration\Services\Department\Service
+ * @package Bitrix24\SDK\Tests\Integration\Services\CRM\CallList\Service
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\Department\Service\Batch::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\CallList\Service\Batch::class)]
 class BatchTest extends TestCase
 {
-    protected Department $departmentService;
-    
-    protected int $rootDepartmentId = 0;
+    protected CallList $callListService;
     
     
     protected function setUp(): void
     {
-        $this->departmentService = Fabric::getServiceBuilder()->getDepartmentScope()->department();
-        $dep = $this->departmentService->get(['PARENT' => 0])->getDepartments()[0];
-        
-        $this->rootDepartmentId = intval($dep->ID);
+        $this->callListService = Fabric::getServiceBuilder()->getCRMScope()->callList();
     }
 
     /**
      * @throws BaseException
      * @throws TransportException
      */
-    #[\PHPUnit\Framework\Attributes\TestDox('Batch get departments')]
-    public function testBatchGet(): void
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch get call lists')]
+    public function testBatchList(): void
     {
-        $depId = $this->departmentService->add('Test depart', $this->rootDepartmentId)->getId();
+        $callListNum = 60;
+        $allContactIds = [];
+        for ($i=0;$i<$callListNum;$i++) {
+            $contactIds = $this->addContacts(2);
+            $allContactIds = array_merge($allContactIds, $contactIds);
+            $this->callListService->add('CONTACT', $contactIds);
+        }
         $cnt = 0;
-        foreach ($this->departmentService->batch->get(['ID' => $depId]) as $item) {
+        foreach ($this->callListService->batch->list() as $item) {
             $cnt++;
         }
 
-        self::assertGreaterThanOrEqual(1, $cnt);
-
-        $this->departmentService->delete($depId);
+        self::assertGreaterThanOrEqual($callListNum, $cnt);
+        
+        $this->deleteContacts($allContactIds);
     }
 
     /**
@@ -64,56 +65,25 @@ class BatchTest extends TestCase
     #[\PHPUnit\Framework\Attributes\TestDox('Batch add department')]
     public function testBatchAdd(): void
     {
-        $items = [];
-        for ($i = 1; $i < 60; $i++) {
-            $items[] = [
-                'NAME' => 'Dep-' . $i,
-                'PARENT' => $this->rootDepartmentId
+        $callListNum = 60;
+        $allContactIds = [];
+        $callLists = [];
+        for ($i=0;$i<$callListNum;$i++) {
+            $contactIds = $this->addContacts(2);
+            $allContactIds = array_merge($allContactIds, $contactIds);
+            $callLists[] = [
+                'ENTITY_TYPE' => 'CONTACT',
+                'ENTITIES' => $contactIds
             ];
         }
-
         $cnt = 0;
-        $depId = [];
-        foreach ($this->departmentService->batch->add($items) as $item) {
-            $cnt++;
-            $depId[] = $item->getId();
-        }
-
-        self::assertEquals(count($items), $cnt);
-
-        $cnt = 0;
-        foreach ($this->departmentService->batch->delete($depId) as $cnt => $deleteResult) {
-            $cnt++;
-        }
-    }
-
-    /**
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     */
-    #[\PHPUnit\Framework\Attributes\TestDox('Batch delete departments')]
-    public function testBatchDelete(): void
-    {
-        $items = [];
-        for ($i = 1; $i < 60; $i++) {
-            $items[] = [
-                'NAME' => 'Dep-' . $i,
-                'PARENT' => $this->rootDepartmentId
-            ];
-        }
-
-        $cnt = 0;
-        $depId = [];
-        foreach ($this->departmentService->batch->add($items) as $item) {
-            $cnt++;
-            $depId[] = $item->getId();
-        }
-
-        $cnt = 0;
-        foreach ($this->departmentService->batch->delete($depId) as $cnt => $deleteResult) {
+        foreach ($this->callListService->batch->add($callLists) as $item) {
             $cnt++;
         }
 
-        self::assertEquals(count($items), $cnt);
+        self::assertGreaterThanOrEqual($callListNum, $cnt);
+        
+        $this->deleteContacts($allContactIds);
     }
     
     /**
@@ -122,42 +92,57 @@ class BatchTest extends TestCase
     #[\PHPUnit\Framework\Attributes\TestDox('Batch update departments')]
     public function testBatchUpdate(): void
     {
-        $items = [];
-        for ($i = 1; $i < 60; $i++) {
-            $items[] = [
-                'NAME' => 'Dep-' . $i,
-                'PARENT' => $this->rootDepartmentId
-            ];
-        }
-
-        $cnt = 0;
-        $depIds = [];
-        foreach ($this->departmentService->batch->add($items) as $item) {
-            $cnt++;
-            $depIds[] = $item->getId();
+        $callListNum = 60;
+        $allContactIds = [];
+        $callListUpdates = [];
+        $callListIds = [];
+        for ($i=0;$i<$callListNum;$i++) {
+            $contactIds = $this->addContacts(2);
+            $allContactIds = array_merge($allContactIds, $contactIds);
+            $callListIds[] = $this->callListService->add('CONTACT', $contactIds)->getId();
         }
         
-        $updates = [];
-        foreach ($depIds as $depId) {
-            $updates[$depId] = [
-                'NAME' => 'Updated '.$depId,
+        foreach ($callListIds as $callListId) {
+            $contactIds = $this->addContacts(1);
+            $allContactIds = array_merge($allContactIds, $contactIds);
+            $callListUpdates[] = [
+                'ENTITY_TYPE' => 'CONTACT',
+                'ENTITIES' => $contactIds
             ];
         }
-
+        
         $cnt = 0;
-        foreach ($this->departmentService->batch->update($updates) as $cnt => $updateResult) {
+        foreach ($this->callListService->batch->update($callListUpdates) as $updateResult) {
             $cnt++;
             self::assertTrue($updateResult->isSuccess());
         }
 
-        self::assertEquals(count($updates), $cnt);
+        self::assertGreaterThanOrEqual($callListNum, $cnt);
         
-        $cnt = 0;
-        foreach ($this->departmentService->batch->delete($depIds) as $cnt => $deleteResult) {
-            $cnt++;
+        $this->deleteContacts($allContactIds);
+    }
+    
+    protected function addContacts(int $num): array
+    {
+        $contactIds = [];
+        $contacts = [];
+        for ($i=1;$i<=$num;$i++) {
+            $contacts[] = [
+                'NAME' => 'Test contact #'.$i
+            ];
         }
-
-        self::assertEquals(count($items), $cnt);
+        foreach (Fabric::getServiceBuilder()->getCRMScope()->contact()->batch->add($contacts) as $item) {
+            $contactIds[] = $item->getId();
+        }
+        
+        return $contactIds;
+    }
+    
+    protected function deleteContacts(array $contactIds): void
+    {
+        foreach (Fabric::getServiceBuilder()->getCRMScope()->contact()->batch->delete($contactIds) as $item) {
+            //
+        }
     }
 
 }

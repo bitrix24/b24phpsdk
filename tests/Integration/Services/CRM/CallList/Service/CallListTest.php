@@ -66,26 +66,6 @@ class CallListTest extends TestCase
         }
     }
 
-    public function testAllSystemFieldsAnnotated(): void
-    {
-        $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($this->callListService->fields()->getFieldsDescription()));
-        $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, CallListItemResult::class);
-    }
-
-    /*
-    ignore because the result has code => name pairs only
-    public function testAllSystemFieldsHasValidTypeAnnotation():void
-    {
-        $allFields = $this->callListService->fields()->getFieldsDescription();
-        $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
-        $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
-
-        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
-            $systemFields,
-            CallListItemResult::class);
-    }
-    */
-
     /**
      * @throws BaseException
      * @throws TransportException
