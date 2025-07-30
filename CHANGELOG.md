@@ -111,6 +111,7 @@ Bitrix24 API-methods count: 1166
 Supported in bitrix24-php-sdk methods count: 362
 Coverage percentage: 31.05%
 ```
+
 ## 1.4.0 – 2025.07.01
 
 ### Added
