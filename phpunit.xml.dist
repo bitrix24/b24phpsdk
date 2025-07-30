@@ -73,8 +73,8 @@
         <testsuite name="integration_tests_lead_contacts">
             <file>./tests/Integration/Services/CRM/Lead/Service/LeadContactTest.php</file>
         </testsuite>
-        <testsuite name="integration_tests_item_details">
-            <file>./tests/Integration/Services/CRM/Item/Service/ItemDetailsConfigurationTest.php</file>
+        <testsuite name="integration_tests_crm_item">
+            <directory>./tests/Integration/Services/CRM/Item/Productrow/</directory>
         </testsuite>
         <testsuite name="integration_tests_scope_automation">
             <directory>./tests/Integration/Services/CRM/Automation/</directory>

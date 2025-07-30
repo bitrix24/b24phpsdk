@@ -23,6 +23,17 @@
 
 ### Added
 
+- Added service `Services\CRM\Item\Productrow\Service\Productrow` with support methods,
+  see [crm.item.productrow.* methods](https://github.com/bitrix24/b24phpsdk/issues/198):
+    - `fields` retrieves a list of product item fields
+    - `set` associates a product item with a CRM object
+    - `get` retrieves information about a product item by id
+    - `list` retrieves a list of product items, with batch calls support
+    - `add` adds a product item, with batch calls support
+    - `delete` deletes a product item, with batch calls support
+    - `update` updates a product item
+    - `getAvailableForPayment` retrieves a list of unpaid products
+    - `countByFilter` counts product items by filter
 - Added service `Services\CRM\Lead\Service\LeadContact` with support methods,
   see [crm.lead.contact.* methods](https://github.com/bitrix24/b24phpsdk/issues/170):
     - `fields` get fiels for lead contact connection
