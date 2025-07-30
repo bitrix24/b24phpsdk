@@ -100,8 +100,11 @@
   
 ### Fixed
 - Fixed typehints in Contact batch for method `add`, [see details](https://github.com/bitrix24/b24phpsdk/issues/202)
+
 ### Changed
+- Fixed constructor arguments in tests ApplicationInstallations [see details](https://github.com/bitrix24/b24phpsdk/issues/191)
 - Bump giggsey/libphonenumber-for-php version to ^8|^9
+
 ### Statistics
 ```
 Bitrix24 API-methods count: 1166

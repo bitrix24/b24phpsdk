@@ -31,13 +31,21 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(ApplicationInstallationRepositoryInterface::class)]
 class InMemoryApplicationInstallationRepositoryImplementationTest extends ApplicationInstallationRepositoryInterfaceTest
 {
-    protected function createApplicationInstallationImplementation(Uuid $uuid, ApplicationInstallationStatus $applicationInstallationStatus, CarbonImmutable $createdAt, CarbonImmutable $updatedAt, Uuid $bitrix24AccountUuid, ApplicationStatus $applicationStatus, PortalLicenseFamily $portalLicenseFamily, ?int $portalUsersCount, ?Uuid $clientContactPersonUuid, ?Uuid $partnerContactPersonUuid, ?Uuid $partnerUuid, ?string $externalId,): ApplicationInstallationInterface
-    {
+    protected function createApplicationInstallationImplementation(
+        Uuid $uuid,
+        ApplicationInstallationStatus $applicationInstallationStatus,
+        Uuid $bitrix24AccountUuid,
+        ApplicationStatus $applicationStatus,
+        PortalLicenseFamily $portalLicenseFamily,
+        ?int $portalUsersCount,
+        ?Uuid $clientContactPersonUuid,
+        ?Uuid $partnerContactPersonUuid,
+        ?Uuid $partnerUuid,
+        ?string $externalId,
+    ): ApplicationInstallationInterface {
         return new ApplicationInstallationReferenceEntityImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
