@@ -11,11 +11,19 @@
     - `add` add a storage section, with batch calls support
     - `update` update a storage section, with batch calls support
     - `delete` delete a storage section, with batch calls support
-- Added service `Services\Entity\Item\Property\Service\Section` with support methods:
+- Added service `Services\Entity\Item\Property\Service\Property` with support methods:
     - `get` retrieve a list of additional properties of storage elements, with batch calls support
     - `add` add an additional property to storage elements, with batch calls support
     - `update` update an additional property of storage elements, with batch calls support
     - `delete` delete an additional property of storage elements, with batch calls support
+- Added service `Services\Department\Service\Department` with support methods,
+  see [department.* methods](https://github.com/bitrix24/b24phpsdk/issues/204):
+    - `fields` gets the department fields reference
+    - `get` retrieves a list of departments, with batch calls support
+    - `add` creates a department, with batch calls support
+    - `delete` deletes a department, with batch calls support
+    - `update` modifies a department, with batch calls support
+    - `countByFilter` count departments by filter
 
 ### Fixed
 - Fixed typehints in Contact batch for method `add`, [see details](https://github.com/bitrix24/b24phpsdk/issues/202)
