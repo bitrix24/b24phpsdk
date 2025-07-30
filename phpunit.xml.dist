@@ -85,6 +85,9 @@
         <testsuite name="integration_tests_crm_quote">
             <directory>./tests/Integration/Services/CRM/Quote/</directory>
         </testsuite>
+        <testsuite name="integration_tests_crm_status">
+            <directory>./tests/Integration/Services/CRM/Status/</directory>
+        </testsuite>
         <testsuite name="integration_tests_crm_timeline">
             <directory>./tests/Integration/Services/CRM/Timeline/</directory>
         </testsuite>

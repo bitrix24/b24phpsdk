@@ -546,6 +546,19 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
     
+    public function status(): Status\Service\Status
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Status\Service\Status(
+                new Status\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function timelineComment(): Timeline\Comment\Service\Comment
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -563,6 +576,18 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
     
+    public function statusEntity(): Status\Service\StatusEntity
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Status\Service\StatusEntity(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function timelineBindings(): Timeline\Bindings\Service\Bindings
     {
         if (!isset($this->serviceCache[__METHOD__])) {

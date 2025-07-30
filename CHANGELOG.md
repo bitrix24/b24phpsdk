@@ -35,6 +35,18 @@
 
 ### Added
 
+- Added service `Services\CRM\Status\Service\Status` with support methods,
+  see [crm.status.* methods](https://github.com/bitrix24/b24phpsdk/issues/194):
+    - `fields` returns descriptions of reference book fields
+    - `get` returns an element of the reference book by its identifier
+    - `list` returns a list of elements of the reference book by filter, with batch calls support
+    - `add` creates a new element in the specified reference book, with batch calls support
+    - `delete` deletes an element from the reference book, with batch calls support
+    - `update` updates an existing element of the reference book, with batch calls support
+    - `countByFilter` counts elements of the reference book by filter
+- Added service `Services\CRM\Status\Service\StatusEntity` with support methods,
+    - `items` returns elements of the reference book by its symbolic identifier
+    - `types` returns descriptions of reference book types
 - Added service `Services\CRM\Timeline\Service\Comment` with support methods,
   see [crm.timeline.comment.* methods](https://github.com/bitrix24/b24phpsdk/issues/196):
     - `fields` retrieves a list of timeline comment fields
