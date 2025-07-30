@@ -1,9 +1,21 @@
 # b24-php-sdk change log
 
+
 ## UPCOMING 1.5.0 – 2025.08.01
 
 ### Added
 
+- Added service `Services\Entity\Section\Service\Section` with support methods,
+  see [crm.entity.section.* methods](https://github.com/bitrix24/b24phpsdk/issues/200):
+    - `get` retrieve a list of storage sections, with batch calls support
+    - `add` add a storage section, with batch calls support
+    - `update` update a storage section, with batch calls support
+    - `delete` delete a storage section, with batch calls support
+- Added service `Services\Entity\Item\Property\Service\Property` with support methods:
+    - `get` retrieve a list of additional properties of storage elements, with batch calls support
+    - `add` add an additional property to storage elements, with batch calls support
+    - `update` update an additional property of storage elements, with batch calls support
+    - `delete` delete an additional property of storage elements, with batch calls support
 - Added service `Services\Department\Service\Department` with support methods,
   see [department.* methods](https://github.com/bitrix24/b24phpsdk/issues/204):
     - `fields` gets the department fields reference
