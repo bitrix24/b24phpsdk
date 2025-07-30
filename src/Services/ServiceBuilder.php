@@ -20,6 +20,7 @@ use Bitrix24\SDK\Services\AI\AIServiceBuilder;
 use Bitrix24\SDK\Services\Catalog\CatalogServiceBuilder;
 use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
 use Bitrix24\SDK\Services\Entity\EntityServiceBuilder;
+use Bitrix24\SDK\Services\Department\DepartmentServiceBuilder;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
 use Bitrix24\SDK\Services\IMOpenLines\IMOpenLinesServiceBuilder;
 use Bitrix24\SDK\Services\Main\MainServiceBuilder;
@@ -41,6 +42,20 @@ class ServiceBuilder extends AbstractServiceBuilder
         parent::__construct($core, $batch, $bulkItemsReader, $log);
     }
 
+    public function getDepartmentScope(): DepartmentServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new DepartmentServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+    
     public function getEntityScope(): EntityServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {

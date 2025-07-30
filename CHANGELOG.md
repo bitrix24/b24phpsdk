@@ -1,5 +1,36 @@
 # b24-php-sdk change log
 
+
+## UPCOMING 1.5.0 – 2025.08.01
+
+### Added
+
+- Added service `Services\Entity\Section\Service\Section` with support methods,
+  see [crm.entity.section.* methods](https://github.com/bitrix24/b24phpsdk/issues/200):
+    - `get` retrieve a list of storage sections, with batch calls support
+    - `add` add a storage section, with batch calls support
+    - `update` update a storage section, with batch calls support
+    - `delete` delete a storage section, with batch calls support
+- Added service `Services\Entity\Item\Property\Service\Property` with support methods:
+    - `get` retrieve a list of additional properties of storage elements, with batch calls support
+    - `add` add an additional property to storage elements, with batch calls support
+    - `update` update an additional property of storage elements, with batch calls support
+    - `delete` delete an additional property of storage elements, with batch calls support
+- Added service `Services\Department\Service\Department` with support methods,
+  see [department.* methods](https://github.com/bitrix24/b24phpsdk/issues/204):
+    - `fields` gets the department fields reference
+    - `get` retrieves a list of departments, with batch calls support
+    - `add` creates a department, with batch calls support
+    - `delete` deletes a department, with batch calls support
+    - `update` modifies a department, with batch calls support
+    - `countByFilter` count departments by filter
+
+### Fixed
+- Fixed typehints in Contact batch for method `add`, [see details](https://github.com/bitrix24/b24phpsdk/issues/202)
+
+### Changed
+### Statistics
+
 ## 1.4.0 – 2025.07.01
 
 ### Added
@@ -23,6 +54,17 @@
     - `bind` adds a link between a timeline record and a CRM entity, with batch calls support
     - `unbind` removes a link between a timeline record and a CRM entity, with batch calls support
     - `countByFilter` count links between a timeline record and CRM entities by filter
+- Added service `Services\CRM\Item\Productrow\Service\Productrow` with support methods,
+  see [crm.item.productrow.* methods](https://github.com/bitrix24/b24phpsdk/issues/198):
+    - `fields` retrieves a list of product item fields
+    - `set` associates a product item with a CRM object
+    - `get` retrieves information about a product item by id
+    - `list` retrieves a list of product items, with batch calls support
+    - `add` adds a product item, with batch calls support
+    - `delete` deletes a product item, with batch calls support
+    - `update` updates a product item
+    - `getAvailableForPayment` retrieves a list of unpaid products
+    - `countByFilter` counts product items by filter
 - Added service `Services\CRM\Lead\Service\LeadContact` with support methods,
   see [crm.lead.contact.* methods](https://github.com/bitrix24/b24phpsdk/issues/170):
     - `fields` get fiels for lead contact connection
