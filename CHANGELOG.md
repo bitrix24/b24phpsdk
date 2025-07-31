@@ -2,6 +2,18 @@
 
 ## UPCOMING 1.6.0 – 2025.09.01
 
+### Added
+
+- Added service `Services\CRM\CallList\Service\CallList` with support methods,
+  see [crm.entity.section.* methods](https://github.com/bitrix24/b24phpsdk/issues/208):
+    - `get` get information about the call list
+    - `list` get all call lists, with batch calls support
+    - `add` add a new call list, with batch calls support
+    - `update` update the call list, with batch calls support
+    - `statusList` get a list of the calllist statuses
+    - `getItems` get call list members
+
+
 ## 1.5.0 – 2025.08.01
 
 ### Added
