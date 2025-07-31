@@ -50,6 +50,7 @@ class CallListTest extends TestCase
     protected function setUp(): void
     {
         $this->callListService = Fabric::getServiceBuilder()->getCRMScope()->callList();
+        $this->contactIds = [];
         $contacts = [
             ['NAME' => 'name-1'],
             ['NAME' => 'name-2'],
@@ -88,6 +89,46 @@ class CallListTest extends TestCase
             $this->callListService->get($listId)->calllist()->ID
         );
     }
+    
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testList(): void
+    {
+        $listId = $this->callListService->add('CONTACT', $this->contactIds)->getId();
+        self::assertGreaterThan(
+            1,
+            $this->callListService->list([], ['ID' => $listId])->getCallLists()[0]->ID
+        );
+    }
+    
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testStatusList(): void
+    {
+        $statuses = $this->callListService->statusList()->getStatuses();
+        self::assertGreaterThan(
+            1,
+            count($statuses)
+        );
+    }
+    
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testGetItems(): void
+    {
+        $listId = $this->callListService->add('CONTACT', $this->contactIds)->getId();
+        $items = $this->callListService->getItems($listId)->getItems();
+        self::assertGreaterThan(
+            1,
+            count($items)
+        );
+    }
 
     /**
      * @throws BaseException
@@ -100,15 +141,4 @@ class CallListTest extends TestCase
         self::assertTrue($this->callListService->update($listId, 'CONTACT', $this->contactIds)->isSuccess());
     }
 
-    /**
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
-     */
-    public function testCountByFilter(): void
-    {
-        $before = $this->callListService->countByFilter();
-        $listId = $this->callListService->add('CONTACT', [ $this->contactIds[0] ])->getId();
-        $after = $this->callListService->countByFilter();
-        $this->assertEquals($before + 1, $after);
-    }
 }

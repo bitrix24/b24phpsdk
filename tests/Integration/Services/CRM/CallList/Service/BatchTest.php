@@ -106,6 +106,7 @@ class BatchTest extends TestCase
             $contactIds = $this->addContacts(1);
             $allContactIds = array_merge($allContactIds, $contactIds);
             $callListUpdates[] = [
+                'LIST_ID' => $callListId,
                 'ENTITY_TYPE' => 'CONTACT',
                 'ENTITIES' => $contactIds
             ];
@@ -140,8 +141,11 @@ class BatchTest extends TestCase
     
     protected function deleteContacts(array $contactIds): void
     {
+        echo "Contacts: \n";
+        print_r($contactIds);
+        
         foreach (Fabric::getServiceBuilder()->getCRMScope()->contact()->batch->delete($contactIds) as $item) {
-            //
+            self::assertTrue($item->isSuccess());
         }
     }
 

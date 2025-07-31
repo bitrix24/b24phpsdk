@@ -18,6 +18,7 @@ use Bitrix24\SDK\Attributes\ApiBatchServiceMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
+use Bitrix24\SDK\Core\Result\UpdatedItemBatchResult;
 use Bitrix24\SDK\Services\AbstractBatchService;
 use Bitrix24\SDK\Services\CRM\CallList\Result\CallListItemResult;
 use Generator;
@@ -43,6 +44,9 @@ class Batch extends AbstractBatchService
     )]
     public function list(array $order = [], array $filter = [], array $select = [], ?int $limit = null): Generator
     {
+        if ($select === []) {
+            $select = ['ID','ENTITY_TYPE_ID','WEBFORM_ID','DATE_CREATE','CREATED_BY_ID'];
+        }
         $this->log->debug(
             'list',
             [

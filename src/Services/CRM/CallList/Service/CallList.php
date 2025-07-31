@@ -61,14 +61,17 @@ class CallList extends AbstractService
     )]
     public function add(string $entityType, array $entities, int $webformId = 0): AddedItemResult
     {
+        $params = [
+            'ENTITY_TYPE' => $entityType,
+            'ENTITIES' => $entities,
+        ];
+        if ($webformId !== 0) {
+            $params['WEBFORM_ID'] = $webformId;
+        }
         return new AddedItemResult(
             $this->core->call(
                 'crm.calllist.add',
-                [
-                    'ENTITY_TYPE' => $entityType,
-                    'ENTITIES' => $entities,
-                    'WEBFORM_ID' => $webformId,
-                ]
+                $params
             )
         );
     }
@@ -115,6 +118,9 @@ class CallList extends AbstractService
     )]
     public function list(array $order = [], array $filter = [], array $select = [], int $startItem = 0): CallListsResult
     {
+        if ($select === []) {
+            $select = ['ID','ENTITY_TYPE_ID','WEBFORM_ID','DATE_CREATE','CREATED_BY_ID'];
+        }
         return new CallListsResult(
             $this->core->call(
                 'crm.calllist.list',
@@ -144,36 +150,20 @@ class CallList extends AbstractService
     )]
     public function update(int $listId, string $entityType, array $entities, int $webformId = 0): UpdatedItemResult
     {
+        $params = [
+            'LIST_ID' => $listId,
+            'ENTITY_TYPE' => $entityType,
+            'ENTITIES' => $entities,
+        ];
+        if ($webformId !== 0) {
+            $params['WEBFORM_ID'] = $webformId;
+        }
         return new UpdatedItemResult(
             $this->core->call(
                 'crm.calllist.update',
-                [
-                    'LIST_ID' => $listId,
-                    'ENTITY_TYPE' => $entityType,
-                    'ENTITIES' => $entities,
-                    'WEBFORM_ID' => $webformId,
-                ]
+                $params
             )
         );
-    }
-
-    /**
-     * Count calllists by filter
-     *
-     * @param array{
-     *   ID?: int,
-     *   ENTITY_TYPE_ID?: int,
-     *   WEBFORM_ID?: int
-     *   CREATED_BY_ID?: int
-     *   } $filter
-     *
-     * @return int
-     * @throws BaseException
-     * @throws TransportException
-     */
-    public function countByFilter(array $filter = []): int
-    {
-        return $this->list([], $filter, ['ID'], 1)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
     }
     
     /**
@@ -190,9 +180,9 @@ class CallList extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/call-list/crm-call-list-statuslist.html',
         'Get list of calllist statuses.'
     )]
-    public function statuslist(): CallListStatusesResult
+    public function statusList(): CallListStatusesResult
     {
-        return new CallListsResult(
+        return new CallListStatusesResult(
             $this->core->call(
                 'crm.calllist.statuslist', []
             )
