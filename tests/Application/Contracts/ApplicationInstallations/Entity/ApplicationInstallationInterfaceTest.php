@@ -36,8 +36,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     abstract protected function createApplicationInstallationImplementation(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -54,8 +52,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testGetId(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -68,8 +64,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -84,80 +78,10 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
 
     #[Test]
     #[DataProvider('applicationInstallationDataProvider')]
-    #[TestDox('test getCreatedAt method')]
-    final public function testGetCreatedAt(
-        Uuid $uuid,
-        ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
-        Uuid $bitrix24AccountUuid,
-        ApplicationStatus $applicationStatus,
-        PortalLicenseFamily $portalLicenseFamily,
-        ?int $portalUsersCount,
-        ?Uuid $clientContactPersonUuid,
-        ?Uuid $partnerContactPersonUuid,
-        ?Uuid $partnerUuid,
-        ?string $externalId
-    ): void {
-        $installation = $this->createApplicationInstallationImplementation(
-            $uuid,
-            $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
-            $bitrix24AccountUuid,
-            $applicationStatus,
-            $portalLicenseFamily,
-            $portalUsersCount,
-            $clientContactPersonUuid,
-            $partnerContactPersonUuid,
-            $partnerUuid,
-            $externalId
-        );
-        $this->assertEquals($createdAt, $installation->getCreatedAt());
-    }
-
-    #[Test]
-    #[DataProvider('applicationInstallationDataProvider')]
-    #[TestDox('test getCreatedAt method')]
-    final public function testGetUpdatedAt(
-        Uuid $uuid,
-        ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
-        Uuid $bitrix24AccountUuid,
-        ApplicationStatus $applicationStatus,
-        PortalLicenseFamily $portalLicenseFamily,
-        ?int $portalUsersCount,
-        ?Uuid $clientContactPersonUuid,
-        ?Uuid $partnerContactPersonUuid,
-        ?Uuid $partnerUuid,
-        ?string $externalId
-    ): void {
-        $installation = $this->createApplicationInstallationImplementation(
-            $uuid,
-            $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
-            $bitrix24AccountUuid,
-            $applicationStatus,
-            $portalLicenseFamily,
-            $portalUsersCount,
-            $clientContactPersonUuid,
-            $partnerContactPersonUuid,
-            $partnerUuid,
-            $externalId
-        );
-        $this->assertEquals($updatedAt, $installation->getUpdatedAt());
-    }
-
-    #[Test]
-    #[DataProvider('applicationInstallationDataProvider')]
     #[TestDox('test testGetBitrix24AccountId method')]
     final public function testGetBitrix24AccountId(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -170,8 +94,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -190,8 +112,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testGetContactPersonId(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -204,8 +124,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -224,8 +142,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testBindContactPerson(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -238,8 +154,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -262,8 +176,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testUnbindContactPerson(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -276,8 +188,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -302,8 +212,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testGetBitrix24PartnerContactPersonId(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -316,8 +224,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -336,8 +242,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testLinkBitrix24PartnerContactPerson(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -350,8 +254,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -374,8 +276,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testUnlinkBitrix24PartnerContactPerson(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -388,8 +288,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -414,8 +312,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function linkBitrix24Partner(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -428,8 +324,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -452,8 +346,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function unlinkBitrix24Partner(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -466,8 +358,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -492,8 +382,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testGetExternalId(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -506,8 +394,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -529,8 +415,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testSetExternalId(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -543,8 +427,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -572,8 +454,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testGetStatus(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -586,8 +466,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -606,8 +484,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testApplicationInstalled(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -620,8 +496,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -646,8 +520,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testApplicationUninstalled(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -660,8 +532,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -688,8 +558,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testMarkAsActive(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -702,8 +570,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -735,8 +601,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testMarkAsBlocked(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -749,8 +613,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -777,8 +639,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testGetApplicationStatus(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -791,8 +651,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -811,8 +669,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testChangeApplicationStatus(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -825,8 +681,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -849,8 +703,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testGetPortalLicenseFamily(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -863,8 +715,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -883,8 +733,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testChangePortalLicenseFamily(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -897,8 +745,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -921,8 +767,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testGetPortalUsersCount(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -935,8 +779,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -955,8 +797,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testChangePortalUsersCount(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -969,8 +809,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -993,8 +831,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testGetComment(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -1007,8 +843,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -1030,8 +864,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testGetBitrix24PartnerId(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -1044,8 +876,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -1064,8 +894,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testIsApplicationTokenValid(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -1078,8 +906,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -1107,8 +933,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     final public function testSetApplicationToken(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
-        CarbonImmutable $createdAt,
-        CarbonImmutable $updatedAt,
         Uuid $bitrix24AccountUuid,
         ApplicationStatus $applicationStatus,
         PortalLicenseFamily $portalLicenseFamily,
@@ -1121,8 +945,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation = $this->createApplicationInstallationImplementation(
             $uuid,
             $applicationInstallationStatus,
-            $createdAt,
-            $updatedAt,
             $bitrix24AccountUuid,
             $applicationStatus,
             $portalLicenseFamily,
@@ -1149,8 +971,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         yield 'status-new-all-fields' => [
             Uuid::v7(), // uuid
             ApplicationInstallationStatus::new, // application installation status
-            CarbonImmutable::now(), // created at
-            CarbonImmutable::createFromMutable((new DateTime())->add(new DateInterval('PT1H'))), // updated at
             Uuid::v7(), // bitrix24 account id
             ApplicationStatus::subscription(), // application status from bitrix24 api call response
             PortalLicenseFamily::nfr, // portal license family value
@@ -1163,8 +983,6 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         yield 'status-new-without-all-optional-fields' => [
             Uuid::v7(), // uuid
             ApplicationInstallationStatus::new, // application installation status
-            CarbonImmutable::now(), // created at
-            CarbonImmutable::createFromMutable((new DateTime())->add(new DateInterval('PT1H'))), // updated at
             Uuid::v7(), // bitrix24 account id
             ApplicationStatus::subscription(), // application status from bitrix24 api call response
             PortalLicenseFamily::nfr, // portal license family value

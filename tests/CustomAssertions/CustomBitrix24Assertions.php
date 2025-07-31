@@ -156,7 +156,21 @@ trait CustomBitrix24Assertions
                     );
                     break;
                 case 'double':
-                    if (str_contains($fieldCode, 'RATE')) {
+                    if (str_contains(mb_strtoupper($fieldCode), 'QUANTITY')) {
+                        $this->assertTrue(
+                            str_contains($propsFromAnnotations[$fieldCode], 'string'),
+                            sprintf(
+                                'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                                $resultItemClassName,
+                                $fieldCode,
+                                $propsFromAnnotations[$fieldCode],
+                                $fieldData['type'],
+                                'string'
+                            )
+                        );
+                        break;
+                    }
+                    if (str_contains(mb_strtoupper($fieldCode), 'RATE')) {
                         $this->assertTrue(
                             str_contains($propsFromAnnotations[$fieldCode], Percentage::class),
                             sprintf(
@@ -348,6 +362,8 @@ trait CustomBitrix24Assertions
                 case 'crm_multifield':
                 case 'uf_enum_element':
                 case 'currency_localization':
+                case 'crm_status_extra':
+                case 'attached_diskfile':
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'array'),
                         sprintf(
