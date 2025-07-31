@@ -49,13 +49,14 @@ class BatchTest extends TestCase
             $allContactIds = array_merge($allContactIds, $contactIds);
             $this->callListService->add('CONTACT', $contactIds);
         }
+
         $cnt = 0;
         foreach ($this->callListService->batch->list() as $item) {
             $cnt++;
         }
 
         self::assertGreaterThanOrEqual($callListNum, $cnt);
-        
+
         $this->deleteContacts($allContactIds);
     }
 
@@ -76,13 +77,14 @@ class BatchTest extends TestCase
                 'ENTITIES' => $contactIds
             ];
         }
+
         $cnt = 0;
         foreach ($this->callListService->batch->add($callLists) as $item) {
             $cnt++;
         }
 
         self::assertGreaterThanOrEqual($callListNum, $cnt);
-        
+
         $this->deleteContacts($allContactIds);
     }
     
@@ -132,10 +134,11 @@ class BatchTest extends TestCase
                 'NAME' => 'Test contact #'.$i
             ];
         }
+
         foreach (Fabric::getServiceBuilder()->getCRMScope()->contact()->batch->add($contacts) as $item) {
             $contactIds[] = $item->getId();
         }
-        
+
         return $contactIds;
     }
     

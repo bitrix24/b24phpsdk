@@ -25,24 +25,19 @@ use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\CRM\CallList\Result\CallListResult;
 use Bitrix24\SDK\Services\CRM\CallList\Result\CallListsResult;
+use Bitrix24\SDK\Services\CRM\CallList\Result\CallListStatusesResult;
+use Bitrix24\SDK\Services\CRM\CallList\Result\CallListItemsResult;
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['crm']))]
 class CallList extends AbstractService
 {
-    public Batch $batch;
-
     /**
      * CallList constructor.
-     *
-     * @param Batch           $batch
-     * @param CoreInterface   $core
-     * @param LoggerInterface $log
      */
-    public function __construct(Batch $batch, CoreInterface $core, LoggerInterface $log)
+    public function __construct(public Batch $batch, CoreInterface $core, LoggerInterface $logger)
     {
-        parent::__construct($core, $log);
-        $this->batch = $batch;
+        parent::__construct($core, $logger);
     }
 
     /**
@@ -50,7 +45,6 @@ class CallList extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/call-list/crm-call-list-add.html
      *
-     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -68,6 +62,7 @@ class CallList extends AbstractService
         if ($webformId !== 0) {
             $params['WEBFORM_ID'] = $webformId;
         }
+
         return new AddedItemResult(
             $this->core->call(
                 'crm.calllist.add',
@@ -81,9 +76,7 @@ class CallList extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/call-list/crm-call-list-get.html
      *
-     * @param int $id
      *
-     * @return CallListResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -107,7 +100,6 @@ class CallList extends AbstractService
      * @param array $select    = ['ID','ENTITY_TYPE_ID','WEBFORM_ID','DATE_CREATE','CREATED_BY_ID']
      * @param int   $startItem - entity number to start from (usually returned in 'next' field of previous 'crm.calllist.list' API call)
      *
-     * @return CallListsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -121,6 +113,7 @@ class CallList extends AbstractService
         if ($select === []) {
             $select = ['ID','ENTITY_TYPE_ID','WEBFORM_ID','DATE_CREATE','CREATED_BY_ID'];
         }
+
         return new CallListsResult(
             $this->core->call(
                 'crm.calllist.list',
@@ -139,7 +132,6 @@ class CallList extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/call-list/crm-call-list-update.html
      *
-     * @return UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -158,6 +150,7 @@ class CallList extends AbstractService
         if ($webformId !== 0) {
             $params['WEBFORM_ID'] = $webformId;
         }
+
         return new UpdatedItemResult(
             $this->core->call(
                 'crm.calllist.update',
@@ -165,13 +158,12 @@ class CallList extends AbstractService
             )
         );
     }
-    
+
     /**
      * Get list of calllist statuses.
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/call-list/crm-call-list-statuslist.html
      *
-     * @return CallListStatusesResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -184,17 +176,17 @@ class CallList extends AbstractService
     {
         return new CallListStatusesResult(
             $this->core->call(
-                'crm.calllist.statuslist', []
+                'crm.calllist.statuslist',
+                []
             )
         );
     }
-    
+
     /**
      * Get list of calllist items.
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/call-list/crm-call-list-items-get.html
      *
-     * @return CallListItemsResult
      * @throws BaseException
      * @throws TransportException
      */

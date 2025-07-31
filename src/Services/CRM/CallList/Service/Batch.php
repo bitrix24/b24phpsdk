@@ -32,7 +32,6 @@ class Batch extends AbstractBatchService
      * @param array    $order     - order of calllist items
      * @param array    $filter    = ['ID','ENTITY_TYPE_ID','WEBFORM_ID','CREATED_BY_ID']
      * @param array    $select = ['ID','ENTITY_TYPE_ID','WEBFORM_ID','DATE_CREATE','CREATED_BY_ID']
-     * @param int|null $limit
      *
      * @return Generator<int, CallListItemResult>
      * @throws BaseException
@@ -47,6 +46,7 @@ class Batch extends AbstractBatchService
         if ($select === []) {
             $select = ['ID','ENTITY_TYPE_ID','WEBFORM_ID','DATE_CREATE','CREATED_BY_ID'];
         }
+
         $this->log->debug(
             'list',
             [
@@ -83,7 +83,7 @@ class Batch extends AbstractBatchService
             yield $key => new AddedItemBatchResult($item);
         }
     }
-    
+
     /**
      * Batch update calllists
      *
