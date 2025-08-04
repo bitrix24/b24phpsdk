@@ -31,7 +31,7 @@ class CountersResult extends AbstractResult
     public function getCounters(): array
     {
         $items = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $key $item) {
+        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $key => $item) {
             $item['key'] = $key;
             $items[] = new CounterItemResult($item);
         }

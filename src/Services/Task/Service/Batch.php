@@ -11,132 +11,147 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\Department\Service;
+namespace Bitrix24\SDK\Services\Task\Service;
 
 use Bitrix24\SDK\Attributes\ApiBatchMethodMetadata;
 use Bitrix24\SDK\Attributes\ApiBatchServiceMetadata;
-use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
+//use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
+use Bitrix24\SDK\Services\Task;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
 use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemBatchResult;
-use Bitrix24\SDK\Services\Department\Result\DepartmentItemResult;
+use Bitrix24\SDK\Services\Task\Result\TaskItemResult;
 use Generator;
 use Psr\Log\LoggerInterface;
 
-#[ApiBatchServiceMetadata(new Scope(['department']))]
+#[ApiBatchServiceMetadata(new Scope(['task']))]
 class Batch
 {
     /**
      * Batch constructor.
      */
-    public function __construct(protected BatchOperationsInterface $batch, protected LoggerInterface $log)
+    public function __construct(protected Task\Batch $batch, protected LoggerInterface $log)
     {
     }
 
     /**
-     * Batch get method for departments
+     * Batch list method for tasks
      *
      * @param array{
      *   ID?: int,
-     *   NAME?: string,
-     *   SORT?: int,
-     *   PARENT?: int,
-     *   UF_HEAD?: int,
+     *   PARENT_ID?: int,
+     *   GROUP_ID?: int,
+     *   CREATED_BY?: int,
+     *   STATUS_CHANGED_BY?: int,
+     *   PRIORITY?: int,
+     *   FORUM_TOPIC_ID?: int,
+     *   RESPONSIBLE_ID?: int,
+     *   TITLE?: string,
+     *   TAG?: string,
+     *   REAL_STATUS?: int,
+     *   STATUS?: int,
+     *   MARK?: int,
+     *   SITE_ID?: string,
+     *   ADD_IN_REPORT?: string,
+     *   DATE_START?: string,
+     *   DEADLINE?: string,
+     *   CREATED_DATE?: string,
+     *   CLOSED_DATE?: string,
+     *   CHANGED_DATE?: string,
+     *   ACCOMPLICE?: int,
+     *   AUDITOR?: int,
+     *   DEPENDS_ON?: int,
+     *   ONLY_ROOT_TASKS?: string,
+     *   STAGE_ID?: string,
+     *   UF_CRM_TASK?: array,
      *   } $filter
      *
-     * @return Generator<int, DepartmentItemResult>
+     * @return Generator<int, TaskItemResult>
      * @throws BaseException
      */
     #[ApiBatchMethodMetadata(
-        'department.get',
-        'https://apidocs.bitrix24.com/api-reference/departments/department-get.html',
-        'Batch get method for departments'
+        'tasks.task.list',
+        'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-list.html',
+        'Batch list method for tasks'
     )]
-    public function get(array $filter = [], string $sort = 'ID', string $order = 'ASC', ?int $limit = null): Generator
+    public function list(array $order = [], array $filter = [], array $select = [], ?int $limit = null): Generator
     {
-        $arOrder = [$sort => $order];
-        $select = [];
         $this->log->debug(
             'batchList',
             [
-                'order'  => $arOrder,
+                'order'  => $order,
                 'filter' => $filter,
                 'select' => $select,
                 'limit'  => $limit,
             ]
         );
-        foreach ($this->batch->getTraversableList('department.get', $arOrder, $filter, $select, $limit) as $key => $value) {
-            yield $key => new DepartmentItemResult($value);
+        foreach ($this->batch->getTraversableList('tasks.task.list', $order, $filter, $select, $limit) as $key => $value) {
+            yield $key => new TaskItemResult($value);
         }
     }
 
     /**
-     * Batch adding departments
+     * Batch adding tasks
      *
-     * @param array <int, array{
-     *   NAME?: string,
-     *   SORT?: int,
-     *   PARENT?: int,
-     *   UF_HEAD?: int,
-     *   }> $departments
+     * @param array <int, array> $tasks
      *
      * @return Generator<int, AddedItemBatchResult>
      * @throws BaseException
      */
     #[ApiBatchMethodMetadata(
-        'department.add',
-        'https://apidocs.bitrix24.com/api-reference/departments/department-add.html',
-        'Batch adding departments'
+        'tasks.task.add',
+        'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-add.html',
+        'Batch adding tasks'
     )]
-    public function add(array $departments): Generator
+    public function add(array $tasks): Generator
     {
-        foreach ($this->batch->addEntityItems('department.add', $departments) as $key => $item) {
+        foreach ($this->batch->addEntityItems('tasks.task.add', $tasks) as $key => $item) {
             yield $key => new AddedItemBatchResult($item);
         }
     }
 
     /**
-     * Batch update departments
+     * Batch update tasks
      *
      * Update elements in array with structure
-     * element_id => [  // department id
-     *  'fields' => [] // department fields to update
+     * element_id => [  // task id
+     *  'fields' => [] // task fields to update
      * ]
      *
-     * @param array<int, array> $departmentItems
+     * @param array<int, array> $taskItems
      * @return Generator<int, UpdatedItemBatchResult>
      * @throws BaseException
      */
     #[ApiBatchMethodMetadata(
-        'department.update',
-        'https://apidocs.bitrix24.com/api-reference/departments/department-update.html',
-        'Update in batch mode a list of departments'
+        'tasks.task.update',
+        'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-update.html',
+        'Update in batch mode a list of tasks'
     )]
-    public function update(array $departmentItems): Generator
+    public function update(array $taskItems): Generator
     {
-        foreach ($this->batch->updateEntityItems('department.update', $departmentItems) as $key => $item) {
+        foreach ($this->batch->updateEntityItems('tasks.task.update', $taskItems) as $key => $item) {
             yield $key => new UpdatedItemBatchResult($item);
         }
     }
 
     /**
-     * Batch delete departments
+     * Batch delete tasks
      *
-     * @param int[] $departmentIds
+     * @param int[] $taskIds
      *
      * @return Generator<int, DeletedItemBatchResult>
      * @throws BaseException
      */
     #[ApiBatchMethodMetadata(
-        'department.delete',
-        'https://apidocs.bitrix24.com/api-reference/departments/department-delete.html',
-        'Batch delete departments'
+        'tasks.task.delete',
+        'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-delete.html',
+        'Batch delete tasks'
     )]
-    public function delete(array $departmentIds): Generator
+    public function delete(array $taskIds): Generator
     {
-        foreach ($this->batch->deleteEntityItems('department.delete', $departmentIds) as $key => $item) {
+        foreach ($this->batch->deleteEntityItems('tasks.task.delete', $taskIds) as $key => $item) {
             yield $key => new DeletedItemBatchResult($item);
         }
     }
