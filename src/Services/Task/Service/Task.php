@@ -19,13 +19,17 @@ use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Core\Result\AddedItemResult;
-use Bitrix24\SDK\Core\Result\DeletedItemResult;
-use Bitrix24\SDK\Core\Result\FieldsResult;
-use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
+use Bitrix24\SDK\Services\Task\Result\AddedTaskResult;
+use Bitrix24\SDK\Services\Task\Result\DeletedTaskResult;
+use Bitrix24\SDK\Services\Task\Result\UpdatedTaskResult;
+use Bitrix24\SDK\Services\Task\Result\TaskFieldsResult;
 use Bitrix24\SDK\Services\Task\Result\TasksResult;
 use Bitrix24\SDK\Services\Task\Result\TaskResult;
+use Bitrix24\SDK\Services\Task\Result\CountersResult;
+use Bitrix24\SDK\Services\Task\Result\AccessesResult;
+use Bitrix24\SDK\Services\Task\Result\DependenceResult;
+use Bitrix24\SDK\Services\Task\Result\HistoriesResult;
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['task']))]
@@ -52,9 +56,9 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-add.html',
         'Method adds new task'
     )]
-    public function add(array $fields): AddedItemResult
+    public function add(array $fields): AddedTaskResult
     {
-        return new AddedItemResult(
+        return new AddedTaskResult(
             $this->core->call(
                 'tasks.task.add',
                 [
@@ -78,9 +82,9 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-delete.html',
         'Deletes a task.'
     )]
-    public function delete(int $id): DeletedItemResult
+    public function delete(int $id): DeletedTaskResult
     {
-        return new DeletedItemResult(
+        return new DeletedTaskResult(
             $this->core->call(
                 'tasks.task.delete',
                 [
@@ -103,9 +107,9 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-get-fields.html',
         'Get the task fields reference.'
     )]
-    public function fields(): FieldsResult
+    public function fields(): TaskFieldsResult
     {
-        return new FieldsResult($this->core->call('tasks.task.getFields'));
+        return new TaskFieldsResult($this->core->call('tasks.task.getFields'));
     }
     
     /**
@@ -221,9 +225,9 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-update.html',
         'Updates the specified (existing) task.'
     )]
-    public function update(int $id, array $fields): UpdatedItemResult
+    public function update(int $id, array $fields): UpdatedTaskResult
     {
-        return new UpdatedItemResult(
+        return new UpdatedTaskResult(
             $this->core->call(
                 'tasks.task.update',
                 [
@@ -287,9 +291,9 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-delegate.html',
         'Delegates the specified (existing) task.'
     )]
-    public function delegate(int $id, int $userId): UpdatedItemResult
+    public function delegate(int $id, int $userId): UpdatedTaskResult
     {
-        return new UpdatedItemResult(
+        return new UpdatedTaskResult(
             $this->core->call(
                 'tasks.task.delegate',
                 [
@@ -313,9 +317,9 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-start.html',
         'Starts the specified (existing) task.'
     )]
-    public function start(int $id): UpdatedItemResult
+    public function start(int $id): UpdatedTaskResult
     {
-        return new UpdatedItemResult(
+        return new UpdatedTaskResult(
             $this->core->call(
                 'tasks.task.start',
                 [
@@ -338,9 +342,9 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-pause.html',
         'Pauses the specified (existing) task.'
     )]
-    public function pause(int $id): UpdatedItemResult
+    public function pause(int $id): UpdatedTaskResult
     {
-        return new UpdatedItemResult(
+        return new UpdatedTaskResult(
             $this->core->call(
                 'tasks.task.pause',
                 [
@@ -363,9 +367,9 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-defer.html',
         'Changes the task status to "deferred".'
     )]
-    public function defer(int $id): UpdatedItemResult
+    public function defer(int $id): UpdatedTaskResult
     {
-        return new UpdatedItemResult(
+        return new UpdatedTaskResult(
             $this->core->call(
                 'tasks.task.defer',
                 [
@@ -388,9 +392,9 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-complete.html',
         'Changes the task status to "completed".'
     )]
-    public function complete(int $id): UpdatedItemResult
+    public function complete(int $id): UpdatedTaskResult
     {
-        return new UpdatedItemResult(
+        return new UpdatedTaskResult(
             $this->core->call(
                 'tasks.task.complete',
                 [
@@ -413,9 +417,9 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-renew.html',
         'Renews a task after it has been completed.'
     )]
-    public function renew(int $id): UpdatedItemResult
+    public function renew(int $id): UpdatedTaskResult
     {
-        return new UpdatedItemResult(
+        return new UpdatedTaskResult(
             $this->core->call(
                 'tasks.task.renew',
                 [
@@ -438,9 +442,9 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-approve.html',
         'Approves a task.'
     )]
-    public function approve(int $id): UpdatedItemResult
+    public function approve(int $id): UpdatedTaskResult
     {
-        return new UpdatedItemResult(
+        return new UpdatedTaskResult(
             $this->core->call(
                 'tasks.task.approve',
                 [
@@ -463,9 +467,9 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-disapprove.html',
         'Rejects a task.'
     )]
-    public function disapprove(int $id): UpdatedItemResult
+    public function disapprove(int $id): UpdatedTaskResult
     {
-        return new UpdatedItemResult(
+        return new UpdatedTaskResult(
             $this->core->call(
                 'tasks.task.disapprove',
                 [
@@ -488,9 +492,9 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-start-watch.html',
         'Allows watching a task.'
     )]
-    public function startwatch(int $id): UpdatedItemResult
+    public function startwatch(int $id): UpdatedTaskResult
     {
-        return new UpdatedItemResult(
+        return new UpdatedTaskResult(
             $this->core->call(
                 'tasks.task.startwatch',
                 [
@@ -513,9 +517,9 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-stop-watch.html',
         'Stops watching a task.'
     )]
-    public function stopwatch(int $id): UpdatedItemResult
+    public function stopwatch(int $id): UpdatedTaskResult
     {
-        return new UpdatedItemResult(
+        return new UpdatedTaskResult(
             $this->core->call(
                 'tasks.task.stopwatch',
                 [
@@ -538,9 +542,9 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-mute.html',
         'Enables "Silent" mode.'
     )]
-    public function mute(int $id): UpdatedItemResult
+    public function mute(int $id): UpdatedTaskResult
     {
-        return new UpdatedItemResult(
+        return new UpdatedTaskResult(
             $this->core->call(
                 'tasks.task.mute',
                 [
@@ -563,9 +567,9 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-unmute.html',
         'Disables "Silent" mode.'
     )]
-    public function unmute(int $id): UpdatedItemResult
+    public function unmute(int $id): UpdatedTaskResult
     {
-        return new UpdatedItemResult(
+        return new UpdatedTaskResult(
             $this->core->call(
                 'tasks.task.unmute',
                 [
@@ -588,9 +592,9 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-favorite-add.html',
         'Adds tasks to favorites.'
     )]
-    public function addFavorite(int $id): UpdatedItemResult
+    public function addFavorite(int $id): UpdatedTaskResult
     {
-        return new UpdatedItemResult(
+        return new UpdatedTaskResult(
             $this->core->call(
                 'tasks.task.favorite.add',
                 [
@@ -613,9 +617,9 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-favorite-remove.html',
         'Removes tasks from favorites.'
     )]
-    public function removeFavorite(int $id): UpdatedItemResult
+    public function removeFavorite(int $id): UpdatedTaskResult
     {
-        return new UpdatedItemResult(
+        return new UpdatedTaskResult(
             $this->core->call(
                 'tasks.task.favorite.remove',
                 [

@@ -143,6 +143,7 @@ trait CustomBitrix24Assertions
                 case 'crm_enum_ownertype':
                 case 'integer':
                 case 'int':
+                case 'mail_message':
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'int'),
                         sprintf(
@@ -156,6 +157,20 @@ trait CustomBitrix24Assertions
                     );
                     break;
                 case 'double':
+                    if (str_contains(mb_strtoupper($fieldCode), 'SORTING')) {
+                        $this->assertTrue(
+                            str_contains($propsFromAnnotations[$fieldCode], 'string'),
+                            sprintf(
+                                'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                                $resultItemClassName,
+                                $fieldCode,
+                                $propsFromAnnotations[$fieldCode],
+                                $fieldData['type'],
+                                'string'
+                            )
+                        );
+                        break;
+                    }
                     if (str_contains(mb_strtoupper($fieldCode), 'QUANTITY')) {
                         $this->assertTrue(
                             str_contains($propsFromAnnotations[$fieldCode], 'string'),
@@ -211,6 +226,53 @@ trait CustomBitrix24Assertions
                     );
                     break;
                 case 'char':
+                    $this->assertTrue(
+                        str_contains($propsFromAnnotations[$fieldCode], 'bool'),
+                        sprintf(
+                            'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                            $resultItemClassName,
+                            $fieldCode,
+                            $propsFromAnnotations[$fieldCode],
+                            $fieldData['type'],
+                            'bool'
+                        )
+                    );
+                    break;
+                case 'enum':
+                    if (str_contains($fieldCode, 'durationType')
+                        || str_contains($fieldCode, 'mark')
+                    ) {
+                        $this->assertTrue(
+                            str_contains($propsFromAnnotations[$fieldCode], 'string'),
+                            sprintf(
+                                'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                                $resultItemClassName,
+                                $fieldCode,
+                                $propsFromAnnotations[$fieldCode],
+                                $fieldData['type'],
+                                'string|null'
+                            )
+                        );
+                        
+                        break;
+                    }
+                    if (str_contains($fieldCode, 'priority')
+                        || str_contains($fieldCode, 'status')
+                    ) {
+                        $this->assertTrue(
+                            str_contains($propsFromAnnotations[$fieldCode], 'int'),
+                            sprintf(
+                                'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                                $resultItemClassName,
+                                $fieldCode,
+                                $propsFromAnnotations[$fieldCode],
+                                $fieldData['type'],
+                                'int|null'
+                            )
+                        );
+                        
+                        break;
+                    }
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'bool'),
                         sprintf(
@@ -357,6 +419,8 @@ trait CustomBitrix24Assertions
                         )
                     );
                     break;
+                case 'array':
+                case 'crm':
                 case 'crm_activity_binding':
                 case 'crm_activity_communication':
                 case 'crm_multifield':
@@ -364,6 +428,7 @@ trait CustomBitrix24Assertions
                 case 'currency_localization':
                 case 'crm_status_extra':
                 case 'attached_diskfile':
+                case 'disk_file':
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'array'),
                         sprintf(

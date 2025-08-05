@@ -14,20 +14,20 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Task\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractResult;
+use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 
 /**
- * Class TaskResult
+ * Class UpdatedTaskResult
  *
  * @package Bitrix24\SDK\Services\Task\Result
  */
-class TaskResult extends AbstractResult
+class UpdatedTaskResult extends UpdatedItemResult
 {
     /**
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws BaseException
      */
-    public function task(): TaskItemResult
+    public function isSuccess(): bool
     {
-        return new TaskItemResult($this->getCoreResponse()->getResponseData()->getResult()['task']);
+        return (bool)$this->getCoreResponse()->getResponseData()->getResult()['task'];
     }
 }
