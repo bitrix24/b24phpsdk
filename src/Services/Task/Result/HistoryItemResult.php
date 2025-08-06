@@ -22,17 +22,8 @@ use Carbon\CarbonImmutable;
  * @property-read int $id
  * @property-read CarbonImmutable|null $createdDate
  * @property-read string|null $field
- * @property-read array {
- *		from,
- *		to, 
- * } $value
- * @property-read array {
- *		id,
- *		name, 
- *		lastName, 
- *		secontName, 
- *		login, 
- * } $user
+ * @property-read array $value
+ * @property-read array $user
  */
 class HistoryItemResult extends AbstractItem
 {

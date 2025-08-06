@@ -53,7 +53,7 @@ class Batch extends \Bitrix24\SDK\Core\Batch
                 'additionalParameters' => $additionalParameters,
             ]
         );
-        
+
         $useFieldsInsteadOfId = $apiMethod === 'crm.address.delete';
 
         try {
@@ -99,7 +99,7 @@ class Batch extends \Bitrix24\SDK\Core\Batch
 
         $this->logger->debug('deleteEntityItems.finish');
     }
-    
+
     /**
      * Update entity items with batch call
      *

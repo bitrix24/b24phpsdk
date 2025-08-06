@@ -23,6 +23,7 @@ use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Task\Result\AddedTaskResult;
 use Bitrix24\SDK\Services\Task\Result\DeletedTaskResult;
 use Bitrix24\SDK\Services\Task\Result\UpdatedTaskResult;
+use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\Task\Result\TaskFieldsResult;
 use Bitrix24\SDK\Services\Task\Result\TasksResult;
 use Bitrix24\SDK\Services\Task\Result\TaskResult;
@@ -111,7 +112,7 @@ class Task extends AbstractService
     {
         return new TaskFieldsResult($this->core->call('tasks.task.getFields'));
     }
-    
+
     /**
      * Returns a task by the task ID.
      *
@@ -135,7 +136,7 @@ class Task extends AbstractService
      * Retrieve a list of tasks.
      *
      * @link https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-list.html
-     * 
+     *
      * $param array {
      *  ID,
      *  TITLE,
@@ -160,36 +161,8 @@ class Task extends AbstractService
      *  MATCH_WORK_TIME,
      *  FAVORITE,
      *  SORTING,
-     *  MESSAGE_ID, 
+     *  MESSAGE_ID,
      *  } $order
-     * @param array{
-     *   ID,
-     *   PARENT_ID,
-     *   GROUP_ID,
-     *   CREATED_BY,
-     *   STATUS_CHANGED_BY,
-     *   PRIORITY,
-     *   FORUM_TOPIC_ID,
-     *   RESPONSIBLE_ID,
-     *   TITLE,
-     *   TAG,
-     *   REAL_STATUS,
-     *   STATUS,
-     *   MARK,
-     *   SITE_ID,
-     *   ADD_IN_REPORT,
-     *   DATE_START,
-     *   DEADLINE,
-     *   CREATED_DATE,
-     *   CLOSED_DATE,
-     *   CHANGED_DATE,
-     *   ACCOMPLICE,
-     *   AUDITOR,
-     *   DEPENDS_ON,
-     *   ONLY_ROOT_TASKS,
-     *   STAGE_ID,
-     *   UF_CRM_TASK,
-     *   } $filter
      * @param array $select = ['ID','PARENT_ID','TITLE','DESCRIPTION','MARK','PRIORITY','STATUS','MULTITASK','NOT_VIEWED','REPLICATE','GROUP_ID','STAGE_ID','CREATED_BY','CREATED_DATE','RESPONSIBLE_ID','ACCOMPLICES','AUDITORS','CHANGED_BY','CHANGED_DATE','STATUS_CHANGED_BY','STATUS_CHANGED_DATE','CLOSED_BY','CLOSED_DATE','DATE_START','DEADLINE','START_DATE_PLAN','END_DATE_PLAN','GUID','XML_ID','COMMENTS_COUNT','NEW_COMMENTS_COUNT','TASK_CONTROL','ADD_IN_REPORT','FORKED_BY_TEMPLATE_ID','TIME_ESTIMATE','TIME_SPENT_IN_LOGS','MATCH_WORK_TIME','FORUM_TOPIC_ID','FORUM_ID','SITE_ID','SUBORDINATE','FAVORITE','VIEWED_DATE','SORTING','DURATION_PLAN','DURATION_FACT','DURATION_TYPE']
      *
      * @throws BaseException
@@ -208,7 +181,7 @@ class Task extends AbstractService
         $params['select'] = $select;
         $params['limit'] = $limit;
         $params['start'] = $start;
-        
+
         return new TasksResult($this->core->call('tasks.task.list', $params));
     }
 
@@ -241,34 +214,6 @@ class Task extends AbstractService
     /**
      * Count tasks by filter
      *
-     * @param array{
-     *   ID,
-     *   PARENT_ID,
-     *   GROUP_ID,
-     *   CREATED_BY,
-     *   STATUS_CHANGED_BY,
-     *   PRIORITY,
-     *   FORUM_TOPIC_ID,
-     *   RESPONSIBLE_ID,
-     *   TITLE,
-     *   TAG,
-     *   REAL_STATUS,
-     *   STATUS,
-     *   MARK,
-     *   SITE_ID,
-     *   ADD_IN_REPORT,
-     *   DATE_START,
-     *   DEADLINE,
-     *   CREATED_DATE,
-     *   CLOSED_DATE,
-     *   CHANGED_DATE,
-     *   ACCOMPLICE,
-     *   AUDITOR,
-     *   DEPENDS_ON,
-     *   ONLY_ROOT_TASKS,
-     *   STAGE_ID,
-     *   UF_CRM_TASK ,
-     *   } $filter
      *
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
@@ -277,7 +222,7 @@ class Task extends AbstractService
     {
         return $this->list([], $filter, ['ID'], 1)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
     }
-    
+
     /**
      * Delegates the specified (existing) task.
      *
@@ -303,7 +248,7 @@ class Task extends AbstractService
             )
         );
     }
-    
+
     /**
      * Starts the specified (existing) task.
      *
@@ -328,7 +273,7 @@ class Task extends AbstractService
             )
         );
     }
-    
+
     /**
      * Pauses the specified (existing) task.
      *
@@ -353,7 +298,7 @@ class Task extends AbstractService
             )
         );
     }
-    
+
     /**
      * Changes the task status to "deferred".
      *
@@ -378,7 +323,7 @@ class Task extends AbstractService
             )
         );
     }
-    
+
     /**
      * Changes the task status to "completed".
      *
@@ -403,7 +348,7 @@ class Task extends AbstractService
             )
         );
     }
-    
+
     /**
      * Renews a task after it has been completed.
      *
@@ -428,7 +373,7 @@ class Task extends AbstractService
             )
         );
     }
-    
+
     /**
      * Approves a task.
      *
@@ -453,7 +398,7 @@ class Task extends AbstractService
             )
         );
     }
-    
+
     /**
      * Rejects a task.
      *
@@ -478,7 +423,7 @@ class Task extends AbstractService
             )
         );
     }
-    
+
     /**
      * Allows watching a task.
      *
@@ -503,7 +448,7 @@ class Task extends AbstractService
             )
         );
     }
-    
+
     /**
      * Stops watching a task.
      *
@@ -528,7 +473,7 @@ class Task extends AbstractService
             )
         );
     }
-    
+
     /**
      * Enables "Silent" mode.
      *
@@ -553,7 +498,7 @@ class Task extends AbstractService
             )
         );
     }
-    
+
     /**
      * Disables "Silent" mode.
      *
@@ -578,7 +523,7 @@ class Task extends AbstractService
             )
         );
     }
-    
+
     /**
      * Adds tasks to favorites.
      *
@@ -592,9 +537,9 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-favorite-add.html',
         'Adds tasks to favorites.'
     )]
-    public function addFavorite(int $id): UpdatedTaskResult
+    public function addFavorite(int $id): UpdatedItemResult
     {
-        return new UpdatedTaskResult(
+        return new UpdatedItemResult(
             $this->core->call(
                 'tasks.task.favorite.add',
                 [
@@ -603,7 +548,7 @@ class Task extends AbstractService
             )
         );
     }
-    
+
     /**
      * Removes tasks from favorites.
      *
@@ -617,9 +562,9 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-favorite-remove.html',
         'Removes tasks from favorites.'
     )]
-    public function removeFavorite(int $id): UpdatedTaskResult
+    public function removeFavorite(int $id): UpdatedItemResult
     {
-        return new UpdatedTaskResult(
+        return new UpdatedItemResult(
             $this->core->call(
                 'tasks.task.favorite.remove',
                 [
@@ -628,7 +573,7 @@ class Task extends AbstractService
             )
         );
     }
-    
+
     /**
      * Retrieves user counters.
      *
@@ -655,7 +600,7 @@ class Task extends AbstractService
             )
         );
     }
-    
+
     /**
      * Checks access to a task.
      *
@@ -681,7 +626,7 @@ class Task extends AbstractService
             )
         );
     }
-    
+
     /**
      * Creates a dependency of one task on another.
      *
@@ -708,7 +653,7 @@ class Task extends AbstractService
             )
         );
     }
-    
+
     /**
      * Deletes a dependency of one task from another.
      *
@@ -734,7 +679,7 @@ class Task extends AbstractService
             )
         );
     }
-    
+
     /**
      * Retrieves task history.
      *

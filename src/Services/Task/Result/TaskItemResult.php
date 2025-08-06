@@ -15,12 +15,12 @@ namespace Bitrix24\SDK\Services\Task\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractItem;
 use Carbon\CarbonImmutable;
-    
+
 /**
  * Class TaskItemResult
  *
  * @property-read int $id
- * @property-read int $parentId
+ * @property-read int|null $parentId
  * @property-read string $title
  * @property-read string|null $description
  * @property-read string|null $mark

@@ -31,7 +31,7 @@ class TasksResult extends AbstractResult
     public function getTasks(): array
     {
         $items = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
+        foreach ($this->getCoreResponse()->getResponseData()->getResult()['tasks'] as $item) {
             $items[] = new TaskItemResult($item);
         }
 

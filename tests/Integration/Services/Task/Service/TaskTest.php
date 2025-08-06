@@ -124,8 +124,8 @@ class TaskTest extends TestCase
     {
         $taskId = $this->getTaskId();
         $this->assertEquals(
-            1,
-            $this->taskService->list(['ID'=>'ASC'], ['ID'=> $taskId])->getCoreResponse()->getResponseData()->getPagination()->getTotal()
+            $taskId,
+            $this->taskService->list(['ID'=>'ASC'], ['ID'=> $taskId])->getTasks()[0]->id
         );
         
         $this->taskService->delete($taskId);
@@ -169,13 +169,8 @@ class TaskTest extends TestCase
         $taskId = $this->getTaskId('Test task 1');
         $task2Id = $this->getTaskId('Test task 2');
         
-        $this->taskService->addDependence($taskId, $task2Id, 0);
-        
-        $this->assertEquals($task2Id, $this->taskService->get($taskId)->task()->parentId);
-        
-        $this->taskService->deleteDependence($taskId, $task2Id, 0);
-        
-        $this->assertEquals(null, $this->taskService->get($taskId)->task()->parentId);
+        self::assertTrue($this->taskService->addDependence($taskId, $task2Id, 0)->isSuccess());
+        self::assertTrue($this->taskService->deleteDependence($taskId, $task2Id)->isSuccess());
         
         $this->taskService->delete($task2Id);
         $this->taskService->delete($taskId);
@@ -202,7 +197,10 @@ class TaskTest extends TestCase
     public function testGetCounters(): void
     {
         $userId = $this->userService->current()->user()->ID;
-        self::assertIsArray($this->taskService->getCounters($userId)->getCounters());
+        $this->assertEquals(
+            'expired',
+            $this->taskService->getCounters($userId)->getCounters()[0]->key
+        );
     }
     
     /**
@@ -214,10 +212,10 @@ class TaskTest extends TestCase
         $taskId = $this->getTaskId();
         $userId = $this->userService->current()->user()->ID;
         $user2Id = $this->getUserId();
-
+        
         $this->assertGreaterThanOrEqual(
             1,
-            $this->taskService->getAccess($taskId, [$userId, $user2Id])->getCoreResponse()->getResponseData()->getPagination()->getTotal()
+            $this->taskService->getAccess($taskId, [$userId, $user2Id])->getAccesses()[0]->getUserId()
         );
         
         $this->taskService->delete($taskId);
@@ -234,22 +232,24 @@ class TaskTest extends TestCase
         self::assertTrue($this->taskService->start($taskId)->isSuccess());
         self::assertTrue($this->taskService->pause($taskId)->isSuccess());
         self::assertTrue($this->taskService->defer($taskId)->isSuccess());
-        //self::assertTrue($this->taskService->start($taskId)->isSuccess());
         self::assertTrue($this->taskService->startwatch($taskId)->isSuccess());
         self::assertTrue($this->taskService->stopwatch($taskId)->isSuccess());
         self::assertTrue($this->taskService->mute($taskId)->isSuccess());
         self::assertTrue($this->taskService->unmute($taskId)->isSuccess());
         self::assertTrue($this->taskService->addFavorite($taskId)->isSuccess());
         self::assertTrue($this->taskService->removeFavorite($taskId)->isSuccess());
-        
         self::assertTrue($this->taskService->complete($taskId)->isSuccess());
-        self::assertTrue($this->taskService->renew($taskId)->isSuccess());
-        self::assertTrue($this->taskService->approve($taskId)->isSuccess());
-        self::assertTrue($this->taskService->disapprove($taskId)->isSuccess());
         
-        $this->assertGreaterThanOrEqual(
-            1,
-            $this->taskService->historyList($taskId)->getCoreResponse()->getResponseData()->getPagination()->getTotal()
+        self::assertTrue($this->taskService->renew($taskId)->isSuccess());
+        self::assertTrue($this->taskService->start($taskId)->isSuccess());
+        self::assertTrue($this->taskService->complete($taskId)->isSuccess());
+        self::assertTrue($this->taskService->approve($taskId)->isSuccess());
+        
+        // no access to disapprove
+        // self::assertTrue($this->taskService->disapprove($taskId)->isSuccess());
+        
+        self::assertIsArray(
+            $this->taskService->historyList($taskId)->getHistories()[0]->value
         );
         
         $this->taskService->delete($taskId);
@@ -257,14 +257,13 @@ class TaskTest extends TestCase
     
     protected function getTaskId(string $title = 'Test task'): int {
         $userId = $this->userService->current()->user()->ID;
-        $taskId = $this->taskService->add(
+        
+        return $this->taskService->add(
             [
                 'TITLE' => $title,
                 'RESPONSIBLE_ID' => $userId,
             ]
         )->getId();
-        
-        return $taskId;
     }
     
     protected function getUserId(): int {

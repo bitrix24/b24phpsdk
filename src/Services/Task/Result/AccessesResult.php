@@ -25,13 +25,16 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 class AccessesResult extends AbstractResult
 {
     /**
-     * @return CounterItemResult[]
+     * @return AccessItemResult[]
      * @throws BaseException
      */
     public function getAccesses(): array
     {
         $items = [];
-        
+        foreach ($this->getCoreResponse()->getResponseData()->getResult()['allowedActions'] as $userId => $item) {
+            $items[] = new AccessItemResult($item, $userId);
+        }
+
         return $items;
     }
 }
