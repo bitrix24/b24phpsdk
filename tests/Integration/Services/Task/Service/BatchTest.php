@@ -16,6 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\Task\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Task\Service\Task;
+use Bitrix24\SDK\Services\User\Service\User;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
 
@@ -29,54 +30,69 @@ class BatchTest extends TestCase
 {
     protected Task $taskService;
     
+    protected int $userId;
+    
     protected function setUp(): void
     {
         $this->taskService = Fabric::getServiceBuilder()->getTaskScope()->task();
+        $this->userId = Fabric::getServiceBuilder()->getUserScope()->user()->current()->user()->ID;
     }
 
     /**
      * @throws BaseException
      * @throws TransportException
      */
-    #[\PHPUnit\Framework\Attributes\TestDox('Batch get departments')]
-    public function testBatchGet(): void
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch get tasks list')]
+    public function testBatchList(): void
     {
-        $depId = $this->taskService->add('Test depart', $this->rootTaskId)->getId();
+        $taskNum = 60;
+        $taskIds = [];
+        
+        for ($i=0;$i<$taskNum;$i++) {
+            $taskIds[] = $this->taskService->add([
+                'TITLE' => 'Test #'.$i,
+                'RESPONSIBLE_ID' => $this->userId,
+            ])->getId();
+        }
         $cnt = 0;
-        foreach ($this->taskService->batch->get(['ID' => $depId]) as $item) {
+        foreach ($this->taskService->batch->list([], ['RESPONSIBLE_ID' => $this->userId]) as $item) {
             $cnt++;
         }
 
-        self::assertGreaterThanOrEqual(1, $cnt);
+        self::assertGreaterThanOrEqual($taskNum, $cnt);
 
-        $this->taskService->delete($depId);
+        $cnt = 0;
+        foreach ($this->taskService->batch->delete($taskIds) as $cnt => $deleteResult) {
+            $cnt++;
+        }
     }
 
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    #[\PHPUnit\Framework\Attributes\TestDox('Batch add department')]
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch add tasks')]
     public function testBatchAdd(): void
     {
+        $taskNum = 60;
         $items = [];
-        for ($i = 1; $i < 60; $i++) {
+        for ($i = 1; $i < $taskNum; $i++) {
             $items[] = [
-                'NAME' => 'Dep-' . $i,
-                'PARENT' => $this->rootTaskId
+                'TITLE' => 'Test #'.$i,
+                'RESPONSIBLE_ID' => $this->userId,
             ];
         }
 
         $cnt = 0;
-        $depId = [];
+        $taskIds = [];
         foreach ($this->taskService->batch->add($items) as $item) {
             $cnt++;
-            $depId[] = $item->getId();
+            $taskIds[] = $item->getId();
         }
 
         self::assertEquals(count($items), $cnt);
 
         $cnt = 0;
-        foreach ($this->taskService->batch->delete($depId) as $cnt => $deleteResult) {
+        foreach ($this->taskService->batch->delete($taskIds) as $cnt => $deleteResult) {
             $cnt++;
         }
     }
@@ -84,57 +100,55 @@ class BatchTest extends TestCase
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    #[\PHPUnit\Framework\Attributes\TestDox('Batch delete departments')]
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch delete tasks')]
     public function testBatchDelete(): void
     {
+        $taskNum = 60;
         $items = [];
-        for ($i = 1; $i < 60; $i++) {
+        for ($i = 1; $i < $taskNum; $i++) {
             $items[] = [
-                'NAME' => 'Dep-' . $i,
-                'PARENT' => $this->rootTaskId
+                'TITLE' => 'Test #'.$i,
+                'RESPONSIBLE_ID' => $this->userId,
             ];
         }
 
-        $cnt = 0;
-        $depId = [];
+        $taskIds = [];
         foreach ($this->taskService->batch->add($items) as $item) {
-            $cnt++;
-            $depId[] = $item->getId();
+            $taskIds[] = $item->getId();
         }
 
         $cnt = 0;
-        foreach ($this->taskService->batch->delete($depId) as $cnt => $deleteResult) {
+        foreach ($this->taskService->batch->delete($taskIds) as $cnt => $deleteResult) {
             $cnt++;
         }
-
+        
         self::assertEquals(count($items), $cnt);
     }
     
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    #[\PHPUnit\Framework\Attributes\TestDox('Batch update departments')]
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch update tasks')]
     public function testBatchUpdate(): void
     {
+        $taskNum = 60;
         $items = [];
-        for ($i = 1; $i < 60; $i++) {
+        for ($i = 1; $i < $taskNum; $i++) {
             $items[] = [
-                'NAME' => 'Dep-' . $i,
-                'PARENT' => $this->rootTaskId
+                'TITLE' => 'Test #'.$i,
+                'RESPONSIBLE_ID' => $this->userId,
             ];
         }
 
-        $cnt = 0;
-        $depIds = [];
+        $taskIds = [];
         foreach ($this->taskService->batch->add($items) as $item) {
-            $cnt++;
-            $depIds[] = $item->getId();
+            $taskIds[] = $item->getId();
         }
         
         $updates = [];
-        foreach ($depIds as $depId) {
-            $updates[$depId] = [
-                'NAME' => 'Updated '.$depId,
+        foreach ($taskIds as $taskId) {
+            $updates[$taskId] = [
+                'TITLE' => 'Test #'.$taskId,
             ];
         }
 
@@ -147,11 +161,10 @@ class BatchTest extends TestCase
         self::assertEquals(count($updates), $cnt);
         
         $cnt = 0;
-        foreach ($this->taskService->batch->delete($depIds) as $cnt => $deleteResult) {
+        foreach ($this->taskService->batch->delete($taskIds) as $cnt => $deleteResult) {
             $cnt++;
         }
 
         self::assertEquals(count($items), $cnt);
     }
-
 }

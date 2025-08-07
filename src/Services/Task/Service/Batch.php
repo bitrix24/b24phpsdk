@@ -19,10 +19,10 @@ use Bitrix24\SDK\Attributes\ApiBatchServiceMetadata;
 use Bitrix24\SDK\Services\Task;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
 use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemBatchResult;
 use Bitrix24\SDK\Services\Task\Result\TaskItemResult;
+use Bitrix24\SDK\Services\Task\Result\AddedTaskBatchResult;
 use Generator;
 use Psr\Log\LoggerInterface;
 
@@ -97,7 +97,7 @@ class Batch
      *
      * @param array <int, array> $tasks
      *
-     * @return Generator<int, AddedItemBatchResult>
+     * @return Generator<int, AddedTaskBatchResult>
      * @throws BaseException
      */
     #[ApiBatchMethodMetadata(
@@ -108,7 +108,7 @@ class Batch
     public function add(array $tasks): Generator
     {
         foreach ($this->batch->addEntityItems('tasks.task.add', $tasks) as $key => $item) {
-            yield $key => new AddedItemBatchResult($item);
+            yield $key => new AddedTaskBatchResult($item);
         }
     }
 
