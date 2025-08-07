@@ -30,12 +30,14 @@ class BatchTest extends TestCase
 {
     protected Task $taskService;
     
-    protected int $userId;
+    protected int $userId = 0;
     
     protected function setUp(): void
     {
         $this->taskService = Fabric::getServiceBuilder()->getTaskScope()->task();
-        $this->userId = Fabric::getServiceBuilder()->getUserScope()->user()->current()->user()->ID;
+        if (intval($this->userId) == 0) {
+            $this->userId = Fabric::getServiceBuilder()->getUserScope()->user()->current()->user()->ID;
+        }
     }
 
     /**
@@ -47,13 +49,14 @@ class BatchTest extends TestCase
     {
         $taskNum = 60;
         $taskIds = [];
-        
+
         for ($i=0;$i<$taskNum;$i++) {
             $taskIds[] = $this->taskService->add([
-                'TITLE' => 'Test #'.$i,
+                'TITLE' => 'Test #-'.$i,
                 'RESPONSIBLE_ID' => $this->userId,
             ])->getId();
         }
+
         $cnt = 0;
         foreach ($this->taskService->batch->list([], ['RESPONSIBLE_ID' => $this->userId]) as $item) {
             $cnt++;
@@ -77,7 +80,7 @@ class BatchTest extends TestCase
         $items = [];
         for ($i = 1; $i < $taskNum; $i++) {
             $items[] = [
-                'TITLE' => 'Test #'.$i,
+                'TITLE' => 'Test #--'.$i,
                 'RESPONSIBLE_ID' => $this->userId,
             ];
         }
@@ -107,7 +110,7 @@ class BatchTest extends TestCase
         $items = [];
         for ($i = 1; $i < $taskNum; $i++) {
             $items[] = [
-                'TITLE' => 'Test #'.$i,
+                'TITLE' => 'Test #-#'.$i,
                 'RESPONSIBLE_ID' => $this->userId,
             ];
         }
@@ -148,7 +151,7 @@ class BatchTest extends TestCase
         $updates = [];
         foreach ($taskIds as $taskId) {
             $updates[$taskId] = [
-                'TITLE' => 'Test #'.$taskId,
+                'TITLE' => 'Test ##'.$taskId,
             ];
         }
 

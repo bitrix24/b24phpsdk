@@ -276,7 +276,11 @@ class TaskTest extends TestCase
     }
     
     protected function getTaskId(string $title = 'Test task'): int {
-        $userId = $this->userService->current()->user()->ID;
+        static $userId;
+        
+        if (intval($userId) == 0) {
+            $userId = $this->userService->current()->user()->ID;
+        }
         
         return $this->taskService->add(
             [
