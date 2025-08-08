@@ -23,6 +23,7 @@ use Bitrix24\SDK\Services\Entity\EntityServiceBuilder;
 use Bitrix24\SDK\Services\Department\DepartmentServiceBuilder;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
 use Bitrix24\SDK\Services\IMOpenLines\IMOpenLinesServiceBuilder;
+use Bitrix24\SDK\Services\Log\LogServiceBuilder;
 use Bitrix24\SDK\Services\Main\MainServiceBuilder;
 use Bitrix24\SDK\Services\Telephony\TelephonyServiceBuilder;
 use Bitrix24\SDK\Services\User\UserServiceBuilder;
@@ -215,6 +216,21 @@ class ServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    public function getLogScope(): LogServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new LogServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function getAiAdminScope(): AIServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
