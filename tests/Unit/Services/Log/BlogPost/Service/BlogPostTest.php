@@ -27,19 +27,19 @@ class BlogPostTest extends TestCase
     public function testCanBeInstantiated(): void
     {
         $core = $this->createMock(CoreInterface::class);
-        $logger = new NullLogger();
+        $nullLogger = new NullLogger();
         
-        $blogPostService = new BlogPost($core, $logger);
+        $blogPost = new BlogPost($core, $nullLogger);
         
-        $this->assertInstanceOf(BlogPost::class, $blogPostService);
+        $this->assertInstanceOf(BlogPost::class, $blogPost);
     }
 
     #[TestDox('Test BlogPost::add method builds correct parameters')]
-    public function testAddMethodBuildsCorrectParameters(): void
+    public function testAddBuildsCorrectParameters(): void
     {
         $core = $this->createMock(CoreInterface::class);
         $response = $this->createMock(Response::class);
-        $logger = new NullLogger();
+        $nullLogger = new NullLogger();
         
         $core->expects($this->once())
             ->method('call')
@@ -49,19 +49,21 @@ class BlogPostTest extends TestCase
                     'POST_MESSAGE' => 'Test message',
                     'POST_TITLE' => 'Test title',
                     'IMPORTANT' => 'Y',
+                    'IMPORTANT_DATE_END' => '2025-08-15T00:00:00+00:00',
                     'DEST' => ['UA']
                 ]
             )
             ->willReturn($response);
         
-        $blogPostService = new BlogPost($core, $logger);
-        $result = $blogPostService->add(
+        $blogPost = new BlogPost($core, $nullLogger);
+        $blogPostAddResult = $blogPost->add(
             postMessage: 'Test message',
             postTitle: 'Test title',
             important: true,
+            importantDateEnd: '2025-08-15T00:00:00+00:00',
             dest: ['UA']
         );
         
-        $this->assertInstanceOf(BlogPostAddResult::class, $result);
+        $this->assertInstanceOf(BlogPostAddResult::class, $blogPostAddResult);
     }
 }
