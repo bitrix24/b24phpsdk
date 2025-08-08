@@ -38,20 +38,19 @@ use PHPUnit\Framework\TestCase;
 #[CoversMethod(Checklistitem::class,'renew')]
 #[CoversMethod(Checklistitem::class,'isActionAllowed')]
 #[CoversMethod(Checklistitem::class,'getManifest')]
-#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\Task\Service\Checklistitem::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\Task\Checklistitem\Service\Checklistitem::class)]
 class ChecklistitemTest extends TestCase
 {
     use CustomBitrix24Assertions;
     
     protected Checklistitem $checklistitemService;
     
-    protected int $itemId = 0;
+    protected int $taskId = 0;
     
     
     protected function setUp(): void
     {
         $this->checklistitemService = Fabric::getServiceBuilder()->getTaskScope()->checklistitem();
-        $this->userService = Fabric::getServiceBuilder()->getUserScope()->user();
         $this->taskId = $this->getTaskId();
     }
 
@@ -64,7 +63,7 @@ class ChecklistitemTest extends TestCase
         $itemId = $this->checklistitemService->add($this->taskId, 'Test checkbox')->getId();
         self::assertGreaterThan(1, $itemId);
         
-        $this->checklistitemService->delete($itemId);
+        $this->checklistitemService->delete($this->taskId, $itemId);
     }
 
     /**
@@ -74,7 +73,7 @@ class ChecklistitemTest extends TestCase
     public function testDelete(): void
     {
         $itemId = $this->checklistitemService->add($this->taskId, 'Test checkbox')->getId();
-        self::assertTrue($this->checklistitemService->delete($itemId)->isSuccess());
+        self::assertTrue($this->checklistitemService->delete($this->taskId, $itemId)->isSuccess());
     }
 
     /**
@@ -89,7 +88,7 @@ class ChecklistitemTest extends TestCase
             $this->checklistitemService->get($this->taskId, $itemId)->checklistitem()->ID
         );
         
-        $this->checklistitemService->delete($itemId);
+        $this->checklistitemService->delete($this->taskId, $itemId);
     }
     
     /**
@@ -100,13 +99,14 @@ class ChecklistitemTest extends TestCase
     {
         $itemId = $this->checklistitemService->add($this->taskId, 'Test checkbox', 10)->getId();
         $item2Id = $this->checklistitemService->add($this->taskId, 'Test 2 checkbox', 20)->getId();
+        $checkIndex = 2; // because bx24 inserts one parent item with sort index = 0
         $this->assertEquals(
             $item2Id,
-            $this->checklistitemService->list($this->taskId, ['SORT_INDEX'=> 'asc'])->getChecklistitems()[1]->ID
+            $this->checklistitemService->getList($this->taskId, ['SORT_INDEX'=> 'asc'])->getChecklistitems()[$checkIndex]->ID
         );
         
-        $this->checklistitemService->delete($item2Id);
-        $this->checklistitemService->delete($itemId);
+        $this->checklistitemService->delete($this->taskId, $item2Id);
+        $this->checklistitemService->delete($this->taskId, $itemId);
     }
 
     /**
@@ -119,9 +119,9 @@ class ChecklistitemTest extends TestCase
         $newTitle = 'Test second checkbox';
 
         self::assertTrue($this->checklistitemService->update($this->taskId, $itemId, ['TITLE' => $newTitle])->isSuccess());
-        self::assertEquals($newTitle, $this->checklistitemService->get($itemId)->checklistitem()->TITLE);
+        self::assertEquals($newTitle, $this->checklistitemService->get($this->taskId, $itemId)->checklistitem()->TITLE);
         
-        $this->checklistitemService->delete($itemId);
+        $this->checklistitemService->delete($this->taskId, $itemId);
     }
 
     
@@ -135,14 +135,15 @@ class ChecklistitemTest extends TestCase
         $itemId = $this->checklistitemService->add($this->taskId, 'Test checkbox', 10)->getId();
         $item2Id = $this->checklistitemService->add($this->taskId, 'Test 2 checkbox', 20)->getId();
         
-        self::assertTrue($this->checklistitemService->addDependence($this->taskId, $itemId, $item2Id)->isSuccess());
+        self::assertTrue($this->checklistitemService->moveAfterItem($this->taskId, $itemId, $item2Id)->isSuccess());
+        $checkIndex = 2; // because bx24 inserts one parent item with sort index = 0
         $this->assertEquals(
             $itemId,
-            $this->checklistitemService->list($this->taskId, ['SORT_INDEX'=> 'asc'])->getChecklistitems()[1]->ID
+            $this->checklistitemService->getList($this->taskId, ['SORT_INDEX'=> 'asc'])->getChecklistitems()[$checkIndex]->ID
         );
         
-        $this->checklistitemService->delete($item2Id);
-        $this->checklistitemService->delete($itemId);
+        $this->checklistitemService->delete($this->taskId, $item2Id);
+        $this->checklistitemService->delete($this->taskId, $itemId);
     }
     
     /**
@@ -154,9 +155,9 @@ class ChecklistitemTest extends TestCase
         $itemId = $this->checklistitemService->add($this->taskId, 'Test checkbox', 10)->getId();
 
         self::assertTrue($this->checklistitemService->complete($this->taskId, $itemId)->isSuccess());
-        self::assertEquals('Y', $this->checklistitemService->get($itemId)->checklistitem()->IS_COMPLETE);
+        self::assertEquals('Y', $this->checklistitemService->get($this->taskId, $itemId)->checklistitem()->IS_COMPLETE);
         
-        $this->checklistitemService->delete($itemId);
+        $this->checklistitemService->delete($this->taskId, $itemId);
     }
     
     /**
@@ -169,9 +170,9 @@ class ChecklistitemTest extends TestCase
         
         self::assertTrue($this->checklistitemService->complete($this->taskId, $itemId)->isSuccess());
         self::assertTrue($this->checklistitemService->renew($this->taskId, $itemId)->isSuccess());
-        self::assertEquals('N', $this->checklistitemService->get($itemId)->checklistitem()->IS_COMPLETE);
+        self::assertEquals('N', $this->checklistitemService->get($this->taskId, $itemId)->checklistitem()->IS_COMPLETE);
         
-        $this->checklistitemService->delete($itemId);
+        $this->checklistitemService->delete($this->taskId, $itemId);
     }
     
     /**
@@ -192,7 +193,7 @@ class ChecklistitemTest extends TestCase
             self::assertTrue($this->checklistitemService->isActionAllowed($this->taskId, $itemId, $i)->isSuccess());
         }
         
-        $this->checklistitemService->delete($itemId);
+        $this->checklistitemService->delete($this->taskId, $itemId);
     }
     
     /**

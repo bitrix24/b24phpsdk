@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\Task\Events\OnCrmQuoteAdd;
+namespace Bitrix24\SDK\Services\Task\Events\OnTaskAdd;
 
 use Bitrix24\SDK\Core\Result\AbstractItem;
 

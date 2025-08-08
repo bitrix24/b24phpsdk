@@ -37,7 +37,7 @@ class TaskServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-    
+
     public function checklistitem(): Task\Checklistitem\Service\Checklistitem
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -49,5 +49,5 @@ class TaskServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-    
+
 }

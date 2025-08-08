@@ -20,13 +20,12 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\AbstractService;
-
 use Bitrix24\SDK\Core\Result\AddedItemResult;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
-
 use Bitrix24\SDK\Services\Task\Checklistitem\Result\ChecklistitemsResult;
 use Bitrix24\SDK\Services\Task\Checklistitem\Result\ChecklistitemResult;
+use Bitrix24\SDK\Services\Task\Checklistitem\Result\UpdatedChecklistitemResult;
 use Bitrix24\SDK\Services\Task\Checklistitem\Result\ManifestItemResult;
 use Psr\Log\LoggerInterface;
 
@@ -48,6 +47,7 @@ class Checklistitem extends AbstractService
     )]
     public function add(int $taskId, string $title, int $sort = 10, bool $completed = false): AddedItemResult
     {
+        $isComplete = $completed ? 'Y' : 'N';
         return new AddedItemResult(
             $this->core->call(
                 'task.checklistitem.add',
@@ -56,7 +56,7 @@ class Checklistitem extends AbstractService
                     'FIELDS' => [
                         'TITLE' => $title,
                         'SORT_INDEX' => $sort,
-                        'IS_COMPLETE' => $completed
+                        'IS_COMPLETE' => $isComplete
                     ]
                 ]
             )
@@ -111,7 +111,7 @@ class Checklistitem extends AbstractService
                 'task.checklistitem.get',
                 [
                     'TASKID' => $taskId,
-                    'ITEMID' => $itemId,                        
+                    'ITEMID' => $itemId,
                 ]
             )
         );
@@ -147,8 +147,8 @@ class Checklistitem extends AbstractService
                 'task.checklistitem.getlist',
                 [
                     'TASKID' => $taskId,
-                    'ORDER' => $order,       
-                ]              
+                    'ORDER' => $order,
+                ]
             )
         );
     }
@@ -166,20 +166,20 @@ class Checklistitem extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/checklist-item/task-checklist-item-update.html',
         'Updates the data of a checklist item.'
     )]
-    public function update(int $taskId, int $itemId, array $fields): UpdatedItemResult
+    public function update(int $taskId, int $itemId, array $fields): UpdatedChecklistitemResult
     {
-        return new UpdatedItemResult(
+        return new UpdatedChecklistitemResult(
             $this->core->call(
                 'task.checklistitem.update',
                 [
                     'TASKID' => $taskId,
-                    'ITEMID' => $itemId,  
-                    'FIELDS' => $fields,  
+                    'ITEMID' => $itemId,
+                    'FIELDS' => $fields,
                 ]
             )
         );
     }
-    
+
     /**
      * Moves a checklist item in the list after the specified one.
      *
@@ -193,20 +193,20 @@ class Checklistitem extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/checklist-item/task-checklist-item-move-after-item.html',
         'Moves a checklist item in the list after the specified one.'
     )]
-    public function moveAfterItem(int $taskId, int $itemId, int $afterItemId): UpdatedItemResult
+    public function moveAfterItem(int $taskId, int $itemId, int $afterItemId): UpdatedChecklistitemResult
     {
-        return new UpdatedItemResult(
+        return new UpdatedChecklistitemResult(
             $this->core->call(
                 'task.checklistitem.moveafteritem',
                 [
                     'TASKID' => $taskId,
-                    'ITEMID' => $itemId,  
-                    'AFTERITEMID' => $afterItemId,  
+                    'ITEMID' => $itemId,
+                    'AFTERITEMID' => $afterItemId,
                 ]
             )
         );
     }
-    
+
     /**
      * Marks a checklist item as completed.
      *
@@ -227,12 +227,12 @@ class Checklistitem extends AbstractService
                 'task.checklistitem.complete',
                 [
                     'TASKID' => $taskId,
-                    'ITEMID' => $itemId,  
+                    'ITEMID' => $itemId,
                 ]
             )
         );
     }
-    
+
     /**
      * Marks a completed checklist item as active again.
      *
@@ -253,15 +253,15 @@ class Checklistitem extends AbstractService
                 'task.checklistitem.renew',
                 [
                     'TASKID' => $taskId,
-                    'ITEMID' => $itemId,  
+                    'ITEMID' => $itemId,
                 ]
             )
         );
     }
-    
+
     /**
      * Checks if the action is allowed for the checklist item.
-     * 
+     *
      * ActionId can be taken
      * 1 - ACTION_TIME_ADD
      * 2 - ACTION_MODIFY
@@ -285,13 +285,13 @@ class Checklistitem extends AbstractService
                 'task.checklistitem.isactionallowed',
                 [
                     'TASKID' => $taskId,
-                    'ITEMID' => $itemId,  
-                    'ACTIONID' => $actionId,  
+                    'ITEMID' => $itemId,
+                    'ACTIONID' => $actionId,
                 ]
             )
         );
     }
-    
+
     /**
      * Retrieves a list of methods and their descriptions.
      *
@@ -307,7 +307,7 @@ class Checklistitem extends AbstractService
     )]
     public function getManifest(): array
     {
-        return $this->core->call('task.checklistitem.getmanifest',[])->getResponseData()->getResult();
+        return $this->core->call('task.checklistitem.getmanifest', [])->getResponseData()->getResult();
     }
 
 }

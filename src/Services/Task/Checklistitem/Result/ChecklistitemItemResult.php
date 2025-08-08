@@ -20,12 +20,15 @@ use Carbon\CarbonImmutable;
  * Class ChecklistitemItemResult
  *
  * @property-read int $ID
+ * @property-read int $TASK_ID
+ * @property-read int $PARENT_ID
  * @property-read string $TITLE
  * @property-read int|null $CREATED_BY
  * @property-read int|null $TOGGLED_BY
  * @property-read CarbonImmutable|null $TOGGLED_DATE
  * @property-read int|null $SORT_INDEX
  * @property-read bool|null $IS_COMPLETE
+ * @property-read bool|null $IS_IMPORTANT
  */
 class ChecklistitemItemResult extends AbstractItem
 {
