@@ -87,7 +87,7 @@ class ResultTest extends TestCase
                 'AUTHOR_ID' => $this->userId,
             ]
         )->getId();
-        $itemId = $this->resultService->addFromComment(
+        $this->resultService->addFromComment(
             $commentId
         )->getId();
         self::assertTrue($this->resultService->deleteFromComment($commentId)->isSuccess());
@@ -113,7 +113,7 @@ class ResultTest extends TestCase
                 'AUTHOR_ID' => $this->userId,
             ]
         )->getId();
-        $itemId = $this->resultService->addFromComment(
+        $this->resultService->addFromComment(
             $commentId
         )->getId();
         $item2Id = $this->resultService->addFromComment(
@@ -136,7 +136,6 @@ class ResultTest extends TestCase
             return $taskId;
         }
         
-        $userId = Fabric::getServiceBuilder()->getUserScope()->user()->current()->user()->ID;
         $taskId = Fabric::getServiceBuilder()->getTaskScope()->task()->add(
             [
                 'TITLE' => $title,

@@ -110,5 +110,5 @@ class Result extends AbstractService
             )
         );
     }
-    
+
 }
