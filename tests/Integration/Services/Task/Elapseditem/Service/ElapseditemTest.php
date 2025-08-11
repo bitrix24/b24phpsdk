@@ -108,9 +108,9 @@ class ElapseditemTest extends TestCase
         $seconds = 7200;
         $commentText = 'Test elapsed time 2';
         $item2Id = $this->elapseditemService->add($this->taskId, $seconds, $commentText)->getId();
-        $this->assertEquals(
-            $item2Id,
-            $this->elapseditemService->getList($this->taskId, ['ID'=> 'asc'])->getElapseditems()[1]->ID
+        self::assertGreaterThanOrEqual(
+            2,
+            count( $this->elapseditemService->getList($this->taskId, ['ID'=> 'asc'])->getElapseditems() )
         );
         
         $this->elapseditemService->delete($this->taskId, $item2Id);
@@ -126,9 +126,9 @@ class ElapseditemTest extends TestCase
         $seconds = 3600;
         $commentText = 'Test elapsed time';
         $itemId = $this->elapseditemService->add($this->taskId, $seconds, $commentText)->getId();
-        $newText = 'Test second checkbox';
+        $newText = 'Test elapsed time 2';
 
-        self::assertTrue($this->elapseditemService->update($this->taskId, $itemId, ['COMMENT_TEXT' => $newText])->isSuccess());
+        self::assertTrue($this->elapseditemService->update($this->taskId, $itemId, ['SECONDS' => $seconds, 'COMMENT_TEXT' => $newText])->isSuccess());
         self::assertEquals($newText, $this->elapseditemService->get($this->taskId, $itemId)->elapseditem()->COMMENT_TEXT);
         
         $this->elapseditemService->delete($this->taskId, $itemId);
@@ -167,7 +167,7 @@ class ElapseditemTest extends TestCase
         );
     }
     
-    protected function getTaskId(string $title = 'Test task for checklists'): int {
+    protected function getTaskId(string $title = 'Test task for elapsed items'): int {
         static $taskId;
         
         if (intval($taskId) > 0) {

@@ -59,6 +59,7 @@ class Elapseditem extends AbstractService
             $this->core->call(
                 'task.elapseditem.add',
                 [
+                    'TASKID' => $taskId,
                     'ARFIELDS' => $params
                 ]
             )
