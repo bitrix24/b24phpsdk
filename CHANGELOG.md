@@ -2,6 +2,11 @@
 
 ## UPCOMING 1.6.0 – 2025.09.01
 
+### Added
+
+- Added service `Services\Log\BlogPost\Service\BlogPost` with support method:
+  - `add` - Add new blog post to Live Feed with support for all parameters (title, destination, files, importance, etc.)
+
 ## 1.5.0 – 2025.08.01
 
 ### Added
