@@ -12,17 +12,17 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\Task\Checklistitem\Result;
+namespace Bitrix24\SDK\Services\Task\Elapseditem\Result;
 
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 
 /**
- * Class UpdatedChecklistitemResult
+ * Class DeletedElapseditemResult
  *
- * @package Bitrix24\SDK\Services\Task\Checklistitem\Result
+ * @package Bitrix24\SDK\Services\Task\Elapseditem\Result
  */
-class UpdatedChecklistitemResult extends UpdatedItemResult
+class DeletedElapseditemResult extends UpdatedItemResult
 {
     /**
      * @throws BaseException

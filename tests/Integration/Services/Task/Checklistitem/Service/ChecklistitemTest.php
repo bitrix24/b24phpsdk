@@ -31,7 +31,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversMethod(Checklistitem::class,'add')]
 #[CoversMethod(Checklistitem::class,'delete')]
 #[CoversMethod(Checklistitem::class,'get')]
-#[CoversMethod(Checklistitem::class,'list')]
+#[CoversMethod(Checklistitem::class,'getList')]
 #[CoversMethod(Checklistitem::class,'update')]
 #[CoversMethod(Checklistitem::class,'moveAfterItem')]
 #[CoversMethod(Checklistitem::class,'complete')]

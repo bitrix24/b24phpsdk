@@ -16,32 +16,19 @@ namespace Bitrix24\SDK\Services\Task;
 use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
-use Bitrix24\SDK\Services\Task;
 
 #[ApiServiceBuilderMetadata(new Scope(['task']))]
 class TaskServiceBuilder extends AbstractServiceBuilder
 {
-    public function task(): Task\Service\Task
+    public function task(): Service\Task
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $batch = new Task\Batch(
+            $batch = new Batch(
                 $this->core,
                 $this->log
             );
-            $this->serviceCache[__METHOD__] = new Task\Service\Task(
-                new Task\Service\Batch($batch, $this->log),
-                $this->core,
-                $this->log
-            );
-        }
-
-        return $this->serviceCache[__METHOD__];
-    }
-
-    public function checklistitem(): Task\Checklistitem\Service\Checklistitem
-    {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Task\Checklistitem\Service\Checklistitem(
+            $this->serviceCache[__METHOD__] = new Service\Task(
+                new Service\Batch($batch, $this->log),
                 $this->core,
                 $this->log
             );
@@ -50,10 +37,10 @@ class TaskServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    public function commentitem(): Task\Commentitem\Service\Commentitem
+    public function checklistitem(): Checklistitem\Service\Checklistitem
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Task\Commentitem\Service\Commentitem(
+            $this->serviceCache[__METHOD__] = new Checklistitem\Service\Checklistitem(
                 $this->core,
                 $this->log
             );
@@ -62,10 +49,34 @@ class TaskServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    public function result(): Task\TaskResult\Service\Result
+    public function commentitem(): Commentitem\Service\Commentitem
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Task\TaskResult\Service\Result(
+            $this->serviceCache[__METHOD__] = new Commentitem\Service\Commentitem(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function result(): TaskResult\Service\Result
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new TaskResult\Service\Result(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function elapseditem(): Elapseditem\Service\Elapseditem
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Elapseditem\Service\Elapseditem(
                 $this->core,
                 $this->log
             );
