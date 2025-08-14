@@ -16,6 +16,7 @@ namespace Bitrix24\SDK\Services\Task;
 use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
+use Bitrix24\SDK\Services\Task\Userfield\Service\UserfieldConstraints;
 
 #[ApiServiceBuilderMetadata(new Scope(['task']))]
 class TaskServiceBuilder extends AbstractServiceBuilder
@@ -29,6 +30,19 @@ class TaskServiceBuilder extends AbstractServiceBuilder
             );
             $this->serviceCache[__METHOD__] = new Service\Task(
                 new Service\Batch($batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function userfield(): Userfield\Service\Userfield
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Userfield\Service\Userfield(
+                new UserfieldConstraints(),
                 $this->core,
                 $this->log
             );

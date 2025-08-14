@@ -227,6 +227,11 @@ class ApiClient implements ApiClientInterface
             'task.elapseditem.delete',
             'task.elapseditem.isactionallowed',
             'task.elapseditem.getmanifest',
+            'task.item.userfield.add',
+            'task.item.userfield.delete',
+            'task.item.userfield.list',
+            'task.item.userfield.get',
+            'task.item.userfield.update',
             'tasks.task.add',
         ];
         if (!in_array($apiMethod, $strictApiMethods, true)) {

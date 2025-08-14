@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\Task\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractItem;
+use Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException;
 use Carbon\CarbonImmutable;
 
 /**
@@ -86,4 +87,46 @@ use Carbon\CarbonImmutable;
  */
 class TaskItemResult extends AbstractItem
 {
+    private const TASK_USERFIELD_PREFIX = 'UF_';
+
+    /**
+     *
+     * @return mixed|null
+     * @throws \Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException
+     */
+    public function getUserfieldByFieldName(string $userfieldName)
+    {
+        return $this->getKeyWithUserfieldByFieldName($userfieldName);
+    }
+
+    /**
+     * get userfield by field name
+     *
+     * @param string $fieldName field name with uppercase letters
+     *
+     * @return mixed|null
+     * @throws \Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException
+     */
+    protected function getKeyWithUserfieldByFieldName(string $fieldName): mixed
+    {
+        if (!str_starts_with($fieldName, self::TASK_USERFIELD_PREFIX)) {
+            $fieldName = self::TASK_USERFIELD_PREFIX . $fieldName;
+        }
+
+        $fieldName = $this->normalizeFieldKey($fieldName);
+        if (!$this->isKeyExists($fieldName)) {
+            throw new UserfieldNotFoundException(sprintf('Task userfield not found by field name %s', $fieldName));
+        }
+
+        return $this->$fieldName;
+    }
+
+    protected function normalizeFieldKey(string $field): string
+    {
+        $testStr = strtolower($field);
+        $testArr = explode('_', $testStr);
+
+        return  array_shift($testArr) . implode('', array_map('ucfirst', $testArr));
+        ;
+    }
 }
