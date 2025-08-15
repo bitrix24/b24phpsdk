@@ -28,12 +28,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @package Bitrix24\SDK\Tests\Integration\Services\Task\Planner\Service
  */
-#[CoversMethod(Planner::class,'add')]
-#[CoversMethod(Planner::class,'delete')]
-#[CoversMethod(Planner::class,'get')]
-#[CoversMethod(Planner::class,'update')]
-#[CoversMethod(Planner::class,'canMoveTask')]
-#[CoversMethod(Planner::class,'moveTask')]
+#[CoversMethod(Planner::class,'getList')]
 #[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\Task\Planner\Service\Planner::class)]
 class PlannerTest extends TestCase
 {
@@ -50,7 +45,7 @@ class PlannerTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
-    public function testGet(): void
+    public function testGetList(): void
     {
         self::assertIsArray($this->plannerService->getList());
     }

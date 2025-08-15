@@ -36,10 +36,10 @@ class Stage extends AbstractService
      * @link https://apidocs.bitrix24.com/api-reference/tasks/stages/task-stages-add.html
      *
      * $param array {
-     *  POST_MESSAGE,
-     *  AUTHOR_ID,
-     *  POST_DATE,
-     *  UF_FORUM_MESSAGE_DOC,
+     *  TITLE,
+     *  COLOR,
+     *  AFTER_ID,
+     *  ENTITY_ID,
      *  } $fields
      *
      * @throws BaseException
