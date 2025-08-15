@@ -104,7 +104,7 @@
             <directory>./tests/Integration/Services/Department/</directory>
         </testsuite>
         <testsuite name="integration_tests_task">
-            <directory>./tests/Integration/Services/Task/Stage/Service/</directory>
+            <directory>./tests/Integration/Services/Task/Planner/Service/</directory>
         </testsuite>
     </testsuites>
     <source>
