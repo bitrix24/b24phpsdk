@@ -7,6 +7,9 @@
 - Added service `Services\Log\BlogPost\Service\BlogPost` with support method:
   - `add` - Add new blog post to Live Feed with support for all parameters (title, destination, files, importance, etc.)
 
+### Fixed
+- Fixed typehints in the ApplicationInfo method [see details](https://github.com/bitrix24/b24phpsdk/issues/219)
+
 ## 1.5.0 – 2025.08.01
 
 ### Added
