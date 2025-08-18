@@ -77,11 +77,13 @@ class ApplicationInfoItemResult extends AbstractItem
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                     return new Scope($this->data[$offset]);
                 }
+
                 return null;
             case 'STATUS':
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                     return new ApplicationStatus($this->data[$offset]);
                 }
+
                 return null;
             default:
                 return $this->data[$offset] ?? null;
