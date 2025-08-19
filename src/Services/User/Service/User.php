@@ -87,15 +87,17 @@ class User extends AbstractService
             throw new InvalidArgumentException('field EXTRANET is required');
         }
 
-        return new AddedItemResult($this->core->call(
-            'user.add',
-            array_merge(
-                $fields,
-                [
-                    'MESSAGE_TEXT' => $messageText
-                ]
+        return new AddedItemResult(
+            $this->core->call(
+                'user.add',
+                array_merge(
+                    $fields,
+                    [
+                        'MESSAGE_TEXT' => $messageText
+                    ]
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -135,12 +137,17 @@ class User extends AbstractService
     )]
     public function update(int $userId, array $fields): UpdatedItemResult
     {
-        return new UpdatedItemResult($this->core->call('user.update', array_merge(
-            $fields,
-            [
-                'ID' => $userId
-            ]
-        )));
+        return new UpdatedItemResult(
+            $this->core->call(
+                'user.update',
+                array_merge(
+                    $fields,
+                    [
+                        'ID' => $userId
+                    ]
+                )
+            )
+        );
     }
 
     /**
@@ -158,5 +165,10 @@ class User extends AbstractService
     public function search(array $filterFields): UsersResult
     {
         return new UsersResult($this->core->call('user.search', $filterFields));
+    }
+
+    public function countByFilter(array $filterFields): int
+    {
+        return $this->core->call('user.search', $filterFields)->getResponseData()->getPagination()->getTotal();
     }
 }
