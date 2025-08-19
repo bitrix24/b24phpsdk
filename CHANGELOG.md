@@ -2,6 +2,8 @@
 
 ## UPCOMING 1.6.0 – 2025.09.01
 
+### Added
+
 - Added service `Services\Task\Service\Task` with support methods,
   see [tasks.task.* methods](https://github.com/bitrix24/b24phpsdk/issues/214):
     - `add` creates a task, with batch calls support
@@ -87,8 +89,12 @@
     - `isExists` checks if a flow with that name exists
     - `activate` turns a flow on or off
     - `pin` pins or unpins a flow in the list
+- Added service `Services\Log\BlogPost\Service\BlogPost` with support method:
+  - `add` - Add new blog post to Live Feed with support for all parameters (title, destination, files, importance, etc.)
 
-    
+### Fixed
+- Fixed typehints in the ApplicationInfo method [see details](https://github.com/bitrix24/b24phpsdk/issues/219)
+
 ## 1.5.0 – 2025.08.01
 
 ### Added
