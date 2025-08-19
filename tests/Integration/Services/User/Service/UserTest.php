@@ -42,6 +42,14 @@ class UserTest extends TestCase
         $this->assertGreaterThanOrEqual(1, $usersResult->getCoreResponse()->getResponseData()->getPagination()->getTotal());
     }
 
+    #[TestDox('count users by filter')]
+    public function testCountByFilter(): void
+    {
+        $this->assertGreaterThanOrEqual(1, $this->userService->countByFilter([
+            'NAME' => 'test',
+        ]));
+    }
+
     /**
      * @throws BaseException
      * @throws TransportException
