@@ -170,7 +170,7 @@ class ApiClient implements ApiClientInterface
                 'requestId' => $requestId
             ]
         );
-        $apiMethod = strtolower($apiMethod);
+        //$apiMethod = strtolower($apiMethod);
         $method = 'POST';
         if ($this->getCredentials()->getWebhookUrl() instanceof WebhookUrl) {
             $url = sprintf('%s/%s/', $this->getCredentials()->getWebhookUrl()->getUrl(), $apiMethod);

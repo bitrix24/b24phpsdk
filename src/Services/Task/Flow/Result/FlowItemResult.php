@@ -14,21 +14,33 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\Task\Flow\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractItem;
-use Carbon\CarbonImmutable;
 
 /**
  * Class FlowItemResult
  *
- * @property-read int $ID
- * @property-read string $TITLE
- * @property-read int $SORT
- * @property-read string|null $COLOR
- * @property-read string|null $SYSTEM_TYPE
- * @property-read int $ENTITY_ID
- * @property-read string $ENTITY_TYPE
- * @property-read array|null $ADDITIONAL_FILTER
- * @property-read array|null $TO_UPDATE
- * @property-read null $TO_UPDATE_ACCESS
+ * @property-read int $id
+ * @property-read int $creatorId
+ * @property-read int $ownerId
+ * @property-read int $groupId
+ * @property-read int $templateId
+ * @property-read int $efficiency
+ * @property-read int $plannedCompletionTime
+ * @property-read string $activity
+ * @property-read string $name
+ * @property-read string $description
+ * @property-read string $distributionType
+ * @property-read array|null $responsibleList
+ * @property-read bool|null $demo
+ * @property-read bool|null $responsibleCanChangeDeadline
+ * @property-read bool|null $matchWorkTime
+ * @property-read bool|null $taskControl
+ * @property-read bool|null $notifyAtHalfTime
+ * @property-read int|null $notifyOnQueueOverflow
+ * @property-read int|null $notifyOnTasksInProgressOverflow
+ * @property-read int|null $notifyWhenEfficiencyDecreases
+ * @property-read array|null $taskCreators
+ * @property-read array|null $team
+ * @property-read bool|null $trialFeatureEnabled
  */
 class FlowItemResult extends AbstractItem
 {

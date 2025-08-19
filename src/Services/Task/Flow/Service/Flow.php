@@ -20,9 +20,11 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\AbstractService;
-use Bitrix24\SDK\Core\Result\AddedItemResult;
-use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
+use Bitrix24\SDK\Services\Task\Flow\Result\AddedFlowResult;
+use Bitrix24\SDK\Services\Task\Flow\Result\UpdatedFlowResult;
+use Bitrix24\SDK\Services\Task\Flow\Result\DeletedFlowResult;
+use Bitrix24\SDK\Services\Task\Flow\Result\IsExistsFlowResult;
 use Bitrix24\SDK\Services\Task\Flow\Result\FlowsResult;
 use Bitrix24\SDK\Services\Task\Flow\Result\FlowResult;
 use Psr\Log\LoggerInterface;
@@ -62,9 +64,9 @@ class Flow extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/flow/tasks-flow-flow-create.html',
         'Creates a flow'
     )]
-    public function create(array $flowData): AddedItemResult
+    public function create(array $flowData): AddedFlowResult
     {
-        return new AddedItemResult(
+        return new AddedFlowResult(
             $this->core->call(
                 'tasks.flow.Flow.create',
                 [
@@ -87,9 +89,9 @@ class Flow extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/flow/tasks-flow-flow-update.html',
         'Updates a flow.'
     )]
-    public function update(array $flowData): UpdatedItemResult
+    public function update(array $flowData): UpdatedFlowResult
     {
-        return new UpdatedItemResult(
+        return new UpdatedFlowResult(
             $this->core->call(
                 'tasks.flow.Flow.update',
                 [
@@ -113,9 +115,9 @@ class Flow extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/flow/tasks-flow-flow-delete.html',
         'Deletes a flow.'
     )]
-    public function delete(array $flowData): DeletedItemResult
+    public function delete(array $flowData): DeletedFlowResult
     {
-        return new DeletedItemResult(
+        return new DeletedFlowResult(
             $this->core->call(
                 'tasks.flow.Flow.delete',
                 [
@@ -165,19 +167,14 @@ class Flow extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/comment-item/task-comment-item-get.html',
         'Checks if a flow with that name exists.'
     )]
-    public function isExists(array $flowData, string $name, ?int $id = null): UpdatedItemResult
+    public function isExists(array $flowData): IsExistsFlowResult
     {
-        $params = [
-            'flowData' => $flowData,
-            'name' => $name,
-        ];
-        if ($id !== null && $id !== 0) {
-            $params['id'] = $id;
-        }
-        return new UpdatedItemResult(
+        return new IsExistsFlowResult(
             $this->core->call(
                 'tasks.flow.Flow.isExists',
-                $params
+                [
+                    'flowData' => $flowData,
+                ]
             )
         );
     }
@@ -207,7 +204,7 @@ class Flow extends AbstractService
             )
         );
     }
-    
+
     /**
      * Pins or unpins a flow in the list.
      *
