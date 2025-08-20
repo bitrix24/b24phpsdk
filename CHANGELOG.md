@@ -4,6 +4,91 @@
 
 ### Added
 
+- Added service `Services\Task\Service\Task` with support methods,
+  see [tasks.task.* methods](https://github.com/bitrix24/b24phpsdk/issues/214):
+    - `add` creates a task, with batch calls support
+    - `update` updates a task, with batch calls support
+    - `list` retrieves a list of tasks, with batch calls support
+    - `delete` deletes a task, with batch calls support
+    - `fields` retrieves available fields
+    - `get` retrieves information about a task by id
+    - `delegate` delegates tasks
+    - `start` changes the task status to "in progress"
+    - `pause` stops task execution and changes status to "waiting for execution"
+    - `defer` changes the task status to "deferred"
+    - `complete` changes the task status to "completed"
+    - `renew` renews a task after it has been completed
+    - `approve` approves a task
+    - `disapprove` rejects a task
+    - `startwatch` allows watching a task
+    - `stopwatch` stops watching a task
+    - `mute` enables "Mute" mode
+    - `unmute` disables "Mute" mode
+    - `addFavorite` adds tasks to favorites
+    - `removeFavorite` removes tasks from favorites
+    - `getCounters` retrieves user counters
+    - `getAccess` checks access to a task
+    - `addDependence` creates a dependency of one task on another
+    - `deleteDependence` deletes a dependency of one task on another
+    - `historyList` retrieves task history
+- Added support for events:
+  - `OnTaskAdd`
+  - `OnTaskUpdate`
+  - `OnTaskDelete`
+- Added service `Services\Task\TaskResult\Service\Result` with support methods:
+    - `addFromComment` adds a comment to the result
+    - `deleteFromComment` deletes a comment from the task result
+    - `list` retrieves a list of task results
+- Added service `Services\Task\Checklistitem\Service\Checklistitem` with support methods:
+    - `add` adds a new checklist item to a task
+    - `update` updates the data of a checklist item
+    - `delete` deletes a checklist item
+    - `get` retrieves a checklist item by its id
+    - `getList` retrieves a list of checklist items in a task
+    - `moveAfterItem` retrieves a list of checklist items in a task
+    - `complete` marks a checklist item as completed
+    - `renew` marks a completed checklist item as active again
+    - `isActionAllowed` checks if the action is allowed for the checklist item
+    - `getManifest` retrieves the list of methods and their descriptions
+- Added service `Services\Task\Commentitem\Service\Commentitem` with support methods:
+    - `add` creates a new comment for a task
+    - `update` updates the comment data
+    - `delete` deletes a comment
+    - `get` retrieves a comment for a task
+    - `getList` retrieves a list of comments for a task
+- Added service `Services\Task\Elapseditem\Service\Elapseditem` with support methods:
+    - `add` adds time spent to a task
+    - `update` updates the parameters of the time tracking record
+    - `delete` deletes a time tracking record
+    - `get` retrieves a time tracking record by its identifier
+    - `getList` retrieves a list of time tracking records for a task
+    - `isActionAllowed` checks if the action is allowed
+    - `getManifest` retrieves the list of methods and their descriptions
+- Added service `Services\Task\Userfield\Service\Userfield` with support methods:
+    - `add` creates a new field
+    - `get` retrieves a field by its identifier
+    - `getList` retrieves a list of fields
+    - `delete` deletes a field
+    - `update` updates the parameters of the field
+    - `getTypes` retrieves all available data types
+    - `getFields` retrieves all available fields of the custom field
+- Added service `Services\Task\Stage\Service\Stage` with support methods:
+    - `add` adds stages to kanban or "My Planner"
+    - `get` retrieves stages of kanban or "My Planner"
+    - `delete` deletes stages of kanban or "My Planner"
+    - `update` updates stages of kanban or "My Planner"
+    - `canMoveTask` determines if the current user can move tasks in the specified object
+    - `moveTask` moves tasks from one stage to another
+- Added service `Services\Task\Planner\Service\Planner` with support methods:
+    - `getList` retrieves a list of tasks from "The Daily Planner"
+- Added service `Services\Task\Flow\Service\Flow` with support methods:
+    - `add` creates a flow
+    - `get` retrieves a flow
+    - `delete` deletes a flow
+    - `update` modifies a flow
+    - `isExists` checks if a flow with that name exists
+    - `activate` turns a flow on or off
+    - `pin` pins or unpins a flow in the list
 - Added service `Services\Log\BlogPost\Service\BlogPost` with support method:
   - `add` - Add new blog post to Live Feed with support for all parameters (title, destination, files, importance, etc.)
 - Added method `User::countByFilter` [see details](https://github.com/bitrix24/b24phpsdk/issues/221)   

@@ -266,6 +266,10 @@ integration_tests_crm_timeline:
 .PHONY: integration_tests_department
 integration_tests_department:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_department
+	
+.PHONY: integration_tests_task
+integration_tests_task:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_task
 
 # work dev environment
 .PHONY: php-dev-server-up
