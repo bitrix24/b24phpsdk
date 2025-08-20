@@ -47,16 +47,20 @@ interface Bitrix24AccountRepositoryInterface
     public function findOneAdminByMemberId(string $memberId): ?Bitrix24AccountInterface;
 
     /**
-     * Find bitrix24 accounts by member_id and filter by status and isAdmin flag
+     * Find bitrix24 accounts by member_id and filter by status, isAdmin and isMasterAccount flags
      * @param non-empty-string $memberId
-     * @param positive-int $bitrix24UserId
+     * @param Bitrix24AccountStatus|null $bitrix24AccountStatus
+     * @param positive-int|null $bitrix24UserId
+     * @param bool|null $isAdmin
+     * @param bool|null $isMasterAccount
      * @return Bitrix24AccountInterface[]
      */
     public function findByMemberId(
-        string                 $memberId,
+        string $memberId,
         ?Bitrix24AccountStatus $bitrix24AccountStatus = null,
-        ?int                   $bitrix24UserId = null,
-        ?bool                  $isAdmin = null
+        ?int $bitrix24UserId = null,
+        ?bool $isAdmin = null,
+        ?bool $isMasterAccount = null
     ): array;
 
     /**
