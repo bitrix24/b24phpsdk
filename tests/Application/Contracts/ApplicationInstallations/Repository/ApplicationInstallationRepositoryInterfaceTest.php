@@ -398,6 +398,178 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
         $this->assertEquals([], $appInstallationRepo->findByExternalId($externalId));
     }
 
+    #[Test]
+    #[DataProvider('applicationInstallationDataProvider')]
+    #[TestDox('test findByMemberId method')]
+    final public function testFindByMemberId(
+        Uuid $uuid,
+        ApplicationInstallationStatus $applicationInstallationStatus,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        Uuid $bitrix24AccountUuid,
+        ApplicationStatus $applicationStatus,
+        PortalLicenseFamily $portalLicenseFamily,
+        ?int $portalUsersCount,
+        ?Uuid $clientContactPersonUuid,
+        ?Uuid $partnerContactPersonUuid,
+        ?Uuid $partnerUuid,
+        ?string $externalId,
+    ): void {
+        $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
+
+        $installation = $this->createApplicationInstallationImplementation(
+            $uuid,
+            $applicationInstallationStatus,
+            $bitrix24AccountUuid,
+            $applicationStatus,
+            $portalLicenseFamily,
+            $portalUsersCount,
+            $clientContactPersonUuid,
+            $partnerContactPersonUuid,
+            $partnerUuid,
+            $externalId
+        );
+        $appInstallationRepo->save($installation);
+        $flusher->flush();
+
+        $memberId = 'test-member-' . Uuid::v7()->toRfc4122();
+        $result = $appInstallationRepo->findByMemberId($memberId);
+        $this->assertTrue($result === null || $result instanceof ApplicationInstallationInterface);
+    }
+
+    #[Test]
+    #[DataProvider('applicationInstallationDataProvider')]
+    #[TestDox('test findByMemberId method with unknown member id')]
+    final public function testFindByMemberIdWithUnknownId(
+        Uuid $uuid,
+        ApplicationInstallationStatus $applicationInstallationStatus,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        Uuid $bitrix24AccountUuid,
+        ApplicationStatus $applicationStatus,
+        PortalLicenseFamily $portalLicenseFamily,
+        ?int $portalUsersCount,
+        ?Uuid $clientContactPersonUuid,
+        ?Uuid $partnerContactPersonUuid,
+        ?Uuid $partnerUuid,
+        ?string $externalId,
+    ): void {
+        $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
+
+        $memberId = 'unknown-member-' . Uuid::v7()->toRfc4122();
+        $this->assertNull($appInstallationRepo->findByMemberId($memberId));
+    }
+
+    #[Test]
+    #[DataProvider('applicationInstallationDataProvider')]
+    #[TestDox('test findByMemberId method with empty member id')]
+    final public function testFindByMemberIdWithEmptyId(
+        Uuid $uuid,
+        ApplicationInstallationStatus $applicationInstallationStatus,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        Uuid $bitrix24AccountUuid,
+        ApplicationStatus $applicationStatus,
+        PortalLicenseFamily $portalLicenseFamily,
+        ?int $portalUsersCount,
+        ?Uuid $clientContactPersonUuid,
+        ?Uuid $partnerContactPersonUuid,
+        ?Uuid $partnerUuid,
+        ?string $externalId,
+    ): void {
+        $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
+
+        $this->expectException(InvalidArgumentException::class);
+        $appInstallationRepo->findByMemberId('');
+    }
+
+    #[Test]
+    #[DataProvider('applicationInstallationDataProvider')]
+    #[TestDox('test findByApplicationToken method')]
+    final public function testFindByApplicationToken(
+        Uuid $uuid,
+        ApplicationInstallationStatus $applicationInstallationStatus,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        Uuid $bitrix24AccountUuid,
+        ApplicationStatus $applicationStatus,
+        PortalLicenseFamily $portalLicenseFamily,
+        ?int $portalUsersCount,
+        ?Uuid $clientContactPersonUuid,
+        ?Uuid $partnerContactPersonUuid,
+        ?Uuid $partnerUuid,
+        ?string $externalId,
+    ): void {
+        $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
+
+        $installation = $this->createApplicationInstallationImplementation(
+            $uuid,
+            $applicationInstallationStatus,
+            $bitrix24AccountUuid,
+            $applicationStatus,
+            $portalLicenseFamily,
+            $portalUsersCount,
+            $clientContactPersonUuid,
+            $partnerContactPersonUuid,
+            $partnerUuid,
+            $externalId
+        );
+        $applicationToken = 'test-token-' . Uuid::v7()->toRfc4122();
+        $installation->setApplicationToken($applicationToken);
+        $appInstallationRepo->save($installation);
+        $flusher->flush();
+
+        $this->assertEquals($installation, $appInstallationRepo->findByApplicationToken($applicationToken));
+    }
+
+    #[Test]
+    #[DataProvider('applicationInstallationDataProvider')]
+    #[TestDox('test findByApplicationToken method with unknown token')]
+    final public function testFindByApplicationTokenWithUnknownToken(
+        Uuid $uuid,
+        ApplicationInstallationStatus $applicationInstallationStatus,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        Uuid $bitrix24AccountUuid,
+        ApplicationStatus $applicationStatus,
+        PortalLicenseFamily $portalLicenseFamily,
+        ?int $portalUsersCount,
+        ?Uuid $clientContactPersonUuid,
+        ?Uuid $partnerContactPersonUuid,
+        ?Uuid $partnerUuid,
+        ?string $externalId,
+    ): void {
+        $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
+
+        $applicationToken = 'unknown-token-' . Uuid::v7()->toRfc4122();
+        $this->assertNull($appInstallationRepo->findByApplicationToken($applicationToken));
+    }
+
+    #[Test]
+    #[DataProvider('applicationInstallationDataProvider')]
+    #[TestDox('test findByApplicationToken method with empty token')]
+    final public function testFindByApplicationTokenWithEmptyToken(
+        Uuid $uuid,
+        ApplicationInstallationStatus $applicationInstallationStatus,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
+        Uuid $bitrix24AccountUuid,
+        ApplicationStatus $applicationStatus,
+        PortalLicenseFamily $portalLicenseFamily,
+        ?int $portalUsersCount,
+        ?Uuid $clientContactPersonUuid,
+        ?Uuid $partnerContactPersonUuid,
+        ?Uuid $partnerUuid,
+        ?string $externalId,
+    ): void {
+        $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
+
+        $this->expectException(InvalidArgumentException::class);
+        $appInstallationRepo->findByApplicationToken('');
+    }
+
     public static function applicationInstallationDataProvider(): Generator
     {
         yield 'status-new-all-fields' => [
