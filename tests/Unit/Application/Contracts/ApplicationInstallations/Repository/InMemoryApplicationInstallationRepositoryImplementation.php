@@ -17,6 +17,8 @@ use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\Applicati
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationStatus;
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Exceptions\ApplicationInstallationNotFoundException;
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Repository\ApplicationInstallationRepositoryInterface;
+use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountStatus;
+use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Repository\Bitrix24AccountRepositoryInterface;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
@@ -29,6 +31,7 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
     private array $items = [];
 
     public function __construct(
+        private readonly Bitrix24AccountRepositoryInterface $bitrix24AccountRepository,
         private readonly LoggerInterface $logger
     ) {
     }
@@ -97,5 +100,61 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
         }
 
         return $result;
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function findByMemberId(string $memberId): ?ApplicationInstallationInterface
+    {
+        $this->logger->debug('InMemoryApplicationInstallationRepositoryImplementation.findByMemberId', ['memberId' => $memberId]);
+
+        if (trim($memberId) === '') {
+            throw new InvalidArgumentException('memberId id cannot be empty string');
+        }
+
+        $b24Accounts = $this->bitrix24AccountRepository->findByMemberId(
+            $memberId,
+            Bitrix24AccountStatus::active,
+            null,
+            null,
+            true
+        );
+        $b24Account = null;
+        if ($b24Accounts !== []) {
+            $b24Account = $b24Accounts[0];
+        }
+
+        if ($b24Account === null) {
+            return null;
+        }
+
+        foreach ($this->items as $item) {
+            if ($item->getBitrix24AccountId()->equals($b24Account->getId())) {
+                return $item;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function findByApplicationToken(string $applicationToken): ?ApplicationInstallationInterface
+    {
+        $this->logger->debug('InMemoryApplicationInstallationRepositoryImplementation.findByApplicationToken', ['applicationToken' => $applicationToken]);
+
+        if (trim($applicationToken) === '') {
+            throw new InvalidArgumentException('applicationToken id cannot be empty string');
+        }
+
+        foreach ($this->items as $item) {
+            if ($item->isApplicationTokenValid($applicationToken)) {
+                return $item;
+            }
+        }
+
+        return null;
     }
 }

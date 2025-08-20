@@ -196,6 +196,9 @@
     - `update` updates a product item
     - `getAvailableForPayment` retrieves a list of unpaid products
     - `countByFilter` counts product items by filter
+- Added methods to `ApplicationInstallationRepositoryInterface`, see [223](https://github.com/bitrix24/b24phpsdk/issues/223)
+    - `findByMemberId`
+    - `findByApplicationToken`
 
 ### Fixed
 

@@ -55,4 +55,18 @@ interface ApplicationInstallationRepositoryInterface
      * @throws InvalidArgumentException
      */
     public function findByExternalId(string $externalId): array;
+
+    /**
+     * Find application installation by memberId
+     *
+     * @param non-empty-string $memberId
+     */
+    public function findByMemberId(string $memberId): ?ApplicationInstallationInterface;
+
+    /**
+     * Find application installation by application token
+     *
+     * @param non-empty-string $applicationToken
+     */
+    public function findByApplicationToken(string $applicationToken): ?ApplicationInstallationInterface;
 }

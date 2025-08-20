@@ -49,10 +49,7 @@ interface Bitrix24AccountRepositoryInterface
     /**
      * Find bitrix24 accounts by member_id and filter by status, isAdmin and isMasterAccount flags
      * @param non-empty-string $memberId
-     * @param Bitrix24AccountStatus|null $bitrix24AccountStatus
      * @param positive-int|null $bitrix24UserId
-     * @param bool|null $isAdmin
-     * @param bool|null $isMasterAccount
      * @return Bitrix24AccountInterface[]
      */
     public function findByMemberId(
