@@ -170,7 +170,19 @@ class ApiClient implements ApiClientInterface
                 'requestId' => $requestId
             ]
         );
-        //$apiMethod = strtolower($apiMethod);
+        $caseSensitiveMethods = [
+            'tasks.flow.Flow.create',
+            'tasks.flow.Flow.update',
+            'tasks.flow.Flow.delete',
+            'tasks.flow.Flow.get',
+            'tasks.flow.Flow.isExists',
+            'tasks.flow.Flow.activate',
+            'tasks.flow.Flow.pin',
+        ];
+        if (!in_array($apiMethod, $caseSensitiveMethods, true)) {
+            $apiMethod = strtolower($apiMethod);
+        }
+        
         $method = 'POST';
         if ($this->getCredentials()->getWebhookUrl() instanceof WebhookUrl) {
             $url = sprintf('%s/%s/', $this->getCredentials()->getWebhookUrl()->getUrl(), $apiMethod);
