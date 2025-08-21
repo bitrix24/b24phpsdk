@@ -100,6 +100,8 @@
 ### Changed
 
 - Added optional argument in method `Bitrix24AccountRepositoryInterface::findByMemberId` [see details](https://github.com/bitrix24/b24phpsdk/issues/223)
+- Changed method name `ApplicationInstallationRepositoryInterface::findByMemberId` to
+  `ApplicationInstallationRepositoryInterface::findByBitrix24AccountMemberId` [see details](https://github.com/bitrix24/b24phpsdk/issues/226)
 
 ## 1.5.0 – 2025.08.01
 

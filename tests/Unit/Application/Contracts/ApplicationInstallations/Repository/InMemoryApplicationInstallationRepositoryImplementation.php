@@ -105,7 +105,7 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
     /**
      * @throws InvalidArgumentException
      */
-    public function findByMemberId(string $memberId): ?ApplicationInstallationInterface
+    public function findByBitrix24AccountMemberId(string $memberId): ?ApplicationInstallationInterface
     {
         $this->logger->debug('InMemoryApplicationInstallationRepositoryImplementation.findByMemberId', ['memberId' => $memberId]);
 
