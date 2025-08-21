@@ -43,11 +43,6 @@ interface ApplicationInstallationRepositoryInterface
     public function delete(Uuid $uuid): void;
 
     /**
-     * Find application installation by bitrix24 account id
-     **/
-    public function findByBitrix24AccountId(Uuid $uuid): ?ApplicationInstallationInterface;
-
-    /**
      * Find application installation by external id
      *
      * @param non-empty-string $externalId
@@ -57,16 +52,21 @@ interface ApplicationInstallationRepositoryInterface
     public function findByExternalId(string $externalId): array;
 
     /**
-     * Find application installation by memberId
-     *
-     * @param non-empty-string $memberId
-     */
-    public function findByMemberId(string $memberId): ?ApplicationInstallationInterface;
-
-    /**
      * Find application installation by application token
      *
      * @param non-empty-string $applicationToken
      */
     public function findByApplicationToken(string $applicationToken): ?ApplicationInstallationInterface;
+
+    /**
+     * Find application installation by related Bitrix24 account member_id
+     *
+     * @param non-empty-string $memberId
+     */
+    public function findByBitrix24AccountMemberId(string $memberId): ?ApplicationInstallationInterface;
+
+    /**
+     * Find application installation by bitrix24 account id
+     **/
+    public function findByBitrix24AccountId(Uuid $uuid): ?ApplicationInstallationInterface;
 }

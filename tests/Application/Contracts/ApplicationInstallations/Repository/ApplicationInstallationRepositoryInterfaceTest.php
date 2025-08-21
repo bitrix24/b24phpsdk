@@ -434,7 +434,7 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
         $flusher->flush();
 
         $memberId = 'test-member-' . Uuid::v7()->toRfc4122();
-        $result = $appInstallationRepo->findByMemberId($memberId);
+        $result = $appInstallationRepo->findByBitrix24AccountMemberId($memberId);
         $this->assertTrue($result === null || $result instanceof ApplicationInstallationInterface);
     }
 
@@ -458,7 +458,7 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
         $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
 
         $memberId = 'unknown-member-' . Uuid::v7()->toRfc4122();
-        $this->assertNull($appInstallationRepo->findByMemberId($memberId));
+        $this->assertNull($appInstallationRepo->findByBitrix24AccountMemberId($memberId));
     }
 
     #[Test]
@@ -481,7 +481,7 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
         $appInstallationRepo = $this->createApplicationInstallationRepositoryImplementation();
 
         $this->expectException(InvalidArgumentException::class);
-        $appInstallationRepo->findByMemberId('');
+        $appInstallationRepo->findByBitrix24AccountMemberId('');
     }
 
     #[Test]
