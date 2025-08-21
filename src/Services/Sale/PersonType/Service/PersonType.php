@@ -15,174 +15,214 @@ namespace Bitrix24\SDK\Services\Sale\PersonType\Service;
 
 use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
-use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\AbstractService;
-use Bitrix24\SDK\Core\Result\AddedItemResult;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
-use Bitrix24\SDK\Core\Result\UpdatedItemResult;
-use Bitrix24\SDK\Services\Sale\PersonType\Result\CommentitemsResult;
-use Bitrix24\SDK\Services\Sale\PersonType\Result\CommentitemResult;
-use Psr\Log\LoggerInterface;
+use Bitrix24\SDK\Services\Sale\PersonType\Result\PersonTypeFieldsResult;
+use Bitrix24\SDK\Services\Sale\PersonType\Result\PersonTypeResult;
+use Bitrix24\SDK\Services\Sale\PersonType\Result\PersonTypesResult;
+use Bitrix24\SDK\Services\Sale\PersonType\Result\AddedPersonTypeResult;
+use Bitrix24\SDK\Services\Sale\PersonType\Result\UpdatedPersonTypeResult;
 
 #[ApiServiceMetadata(new Scope(['sale']))]
 class PersonType extends AbstractService
 {
     /**
-     * Adds a comment to a task
+     * Adds a payer type
      *
-     * @link https://apidocs.bitrix24.com/api-reference/tasks/comment-item/task-comment-item-add.html
+     * @link https://apidocs.bitrix24.com/api-reference/sale/person-type/sale-person-type-add.html
      *
      * $param array {
-     *  POST_MESSAGE,
-     *  AUTHOR_ID,
-     *  POST_DATE,
-     *  UF_FORUM_MESSAGE_DOC,
+     *  name,
+     *  code,
+     *  sort,
+     *  active,
+     *  xmlId,
      *  } $fields
      *
      * @throws BaseException
      * @throws TransportException
      */
     #[ApiEndpointMetadata(
-        'task.commentitem.add',
-        'https://apidocs.bitrix24.com/api-reference/tasks/comment-item/task-comment-item-add.html',
-        'Adds a comment to a task'
+        'sale.persontype.add',
+        'https://apidocs.bitrix24.com/api-reference/sale/person-type/sale-person-type-add.html',
+        'Adds a payer type'
     )]
-    public function add(int $taskId, array $fields): AddedItemResult
+    public function add(array $fields): AddedPersonTypeResult
     {
-        return new AddedItemResult(
+        return new AddedPersonTypeResult(
             $this->core->call(
-                'task.commentitem.add',
+                'sale.persontype.add',
                 [
-                    'TASKID' => $taskId,
-                    'FIELDS' => $fields
+                    'fields' => $fields
                 ]
             )
         );
     }
 
     /**
-     * Deletes a comment item.
+     * Deletes a payer type.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/tasks/comment-item/task-comment-item-delete.html
+     * @link https://apidocs.bitrix24.com/api-reference/sale/person-type/sale-person-type-delete.html
      *
      *
      * @throws BaseException
      * @throws TransportException
      */
     #[ApiEndpointMetadata(
-        'task.commentitem.delete',
-        'https://apidocs.bitrix24.com/api-reference/tasks/comment-item/task-comment-item-delete.html',
-        'Deletes a comment item.'
+        'sale.persontype.delete',
+        'https://apidocs.bitrix24.com/api-reference/sale/person-type/sale-person-type-delete.html',
+        'Deletes a payer type.'
     )]
-    public function delete(int $taskId, int $itemId): DeletedItemResult
+    public function delete(int $itemId): DeletedItemResult
     {
         return new DeletedItemResult(
             $this->core->call(
-                'task.commentitem.delete',
+                'sale.persontype.delete',
                 [
-                    'TASKID' => $taskId,
-                    'ITEMID' => $itemId,
+                    'id' => $itemId,
                 ]
             )
         );
     }
 
     /**
-     * Retrieves a comment item by its id.
+     * Returns the fields of the payer type.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/tasks/comment-item/task-comment-item-get.html
+     * @link https://apidocs.bitrix24.com/api-reference/sale/person-type/sale-person-type-get.html
      *
      *
      * @throws BaseException
      * @throws TransportException
      */
     #[ApiEndpointMetadata(
-        'task.commentitem.get',
-        'https://apidocs.bitrix24.com/api-reference/tasks/comment-item/task-comment-item-get.html',
-        'Retrieves a comment item by its id'
+        'sale.persontype.get',
+        'https://apidocs.bitrix24.com/api-reference/sale/person-type/sale-person-type-get.html',
+        'Returns the fields of the payer type'
     )]
-    public function get(int $taskId, int $itemId): CommentitemResult
+    public function get(int $itemId): PersonTypeResult
     {
-        return new CommentitemResult(
+        return new PersonTypeResult(
             $this->core->call(
-                'task.commentitem.get',
+                'sale.persontype.get',
                 [
-                    'TASKID' => $taskId,
-                    'ITEMID' => $itemId,
+                    'id' => $itemId,
                 ]
             )
         );
     }
 
     /**
-     * Retrieves a list of comment items in the task.
+     * Returns a list of payer types.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/tasks/comment-item/task-comment-item-get-list.html
+     * @link https://apidocs.bitrix24.com/api-reference/sale/person-type/sale-person-type-list.html
      *
      * $param ?array {
-     *  ID,
-     *  AUTHOR_ID,
-     *  AUTHOR_NAME,
-     *  AUTHOR_EMAIL,
-     *  POST_DATE,
-     *  } $order
+     *  id,
+     *  name,
+     *  code,
+     *  sort,
+     *  active,
+     *  xmlId,
+     *  } $select
      * $param ?array {
-     *  ID,
-     *  AUTHOR_ID,
-     *  AUTHOR_NAME,
-     *  POST_DATE,
+     *  id,
+     *  name,
+     *  code,
+     *  sort,
+     *  active,
+     *  xmlId,
      *  } $filter
+     * $param ?array {
+     *  id,
+     *  name,
+     *  code,
+     *  sort,
+     *  active,
+     *  xmlId,
+     *  } $order
      *
      * @throws BaseException
      * @throws TransportException
      */
     #[ApiEndpointMetadata(
-        'task.commentitem.getlist',
-        'https://apidocs.bitrix24.com/api-reference/tasks/comment-item/task-comment-item-get-list.html',
-        'Retrieves a list of comment items in the task.'
+        'sale.persontype.list',
+        'https://apidocs.bitrix24.com/api-reference/sale/person-type/sale-person-type-list.html',
+        'Returns a list of payer types.'
     )]
-    public function getList(int $taskId, ?array $order = [], ?array $filter = []): CommentitemsResult
+    public function list(?array $select = [], ?array $filter = [], ?array $order = [], int $start = 0): PersonTypesResult
     {
-        return new CommentitemsResult(
+        return new PersonTypesResult(
             $this->core->call(
-                'task.commentitem.getlist',
+                'sale.persontype.list',
                 [
-                    'TASKID' => $taskId,
-                    'ORDER' => $order,
-                    'FILTER' => $filter,
+                    'select' => $select,
+                    'filter' => $filter,
+                    'order' => $order,
+                    'start' => $start,
                 ]
             )
         );
     }
 
     /**
-     * Updates the data of a comment item.
+     * Modifies a payer type.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/tasks/comment-item/task-comment-item-update.html
+     * @link https://apidocs.bitrix24.com/api-reference/sale/person-type/sale-person-type-update.html
+     *
+     * $param array {
+     *  name,
+     *  code,
+     *  sort,
+     *  active,
+     *  xmlId,
+     *  } $fields
      *
      * @throws BaseException
      * @throws TransportException
      */
     #[ApiEndpointMetadata(
-        'task.commentitem.update',
-        'https://apidocs.bitrix24.com/api-reference/tasks/comment-item/task-comment-item-update.html',
-        'Updates the data of a comment item.'
+        'sale.persontype.update',
+        'https://apidocs.bitrix24.com/api-reference/sale/person-type/sale-person-type-update.html',
+        'Modifies a payer type.'
     )]
-    public function update(int $taskId, int $itemId, array $fields): UpdatedItemResult
+    public function update(int $itemId, array $fields): UpdatedPersonTypeResult
     {
-        return new UpdatedItemResult(
+        return new UpdatedPersonTypeResult(
             $this->core->call(
-                'task.commentitem.update',
+                'sale.persontype.update',
                 [
-                    'TASKID' => $taskId,
-                    'ITEMID' => $itemId,
-                    'FIELDS' => $fields,
+                    'id' => $itemId,
+                    'fields' => $fields,
                 ]
             )
         );
     }
 
+    /**
+     * Returns the fields of the payer type.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/sale/person-type/sale-person-type-get-fields.html
+     *
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'sale.persontype.getFields',
+        'https://apidocs.bitrix24.com/api-reference/sale/person-type/sale-person-type-get-fields.html',
+        'Returns the fields of the payer type'
+    )]
+    public function getFields(): PersonTypeFieldsResult
+    {
+        return new PersonTypeFieldsResult(
+            $this->core->call(
+                'sale.persontype.getFields',
+                [
+                ]
+            )
+        );
+    }
 }

@@ -12,22 +12,22 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\Task\Commentitem\Result;
+namespace Bitrix24\SDK\Services\Sale\PersonType\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
 /**
- * Class CommentitemResult
+ * Class PersonTypeResult
  *
- * @package Bitrix24\SDK\Services\Task\Commentitem\Result
+ * @package Bitrix24\SDK\Services\Sale\PersonType\Result
  */
-class CommentitemResult extends AbstractResult
+class PersonTypeResult extends AbstractResult
 {
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    public function commentitem(): CommentitemItemResult
+    public function persontype(): PersonTypeItemResult
     {
-        return new CommentitemItemResult($this->getCoreResponse()->getResponseData()->getResult());
+        return new PersonTypeItemResult($this->getCoreResponse()->getResponseData()->getResult()['personType']);
     }
 }

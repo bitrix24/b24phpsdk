@@ -12,27 +12,27 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\Task\Commentitem\Result;
+namespace Bitrix24\SDK\Services\Sale\PersonType\Result;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
 /**
- * Class CommentitemsResult
+ * Class PersonTypesResult
  *
- * @package Bitrix24\SDK\Services\Task\Commentitem\Result
+ * @package Bitrix24\SDK\Services\Sale\PersonType\Result
  */
-class CommentitemsResult extends AbstractResult
+class PersonTypesResult extends AbstractResult
 {
     /**
-     * @return CommentitemItemResult[]
+     * @return PersonTypeItemResult[]
      * @throws BaseException
      */
-    public function getCommentitems(): array
+    public function getPersonTypes(): array
     {
         $items = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
-            $items[] = new CommentitemItemResult($item);
+        foreach ($this->getCoreResponse()->getResponseData()->getResult()['personTypes'] as $item) {
+            $items[] = new PersonTypeItemResult($item);
         }
 
         return $items;
