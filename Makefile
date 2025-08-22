@@ -267,6 +267,10 @@ integration_tests_crm_timeline:
 integration_tests_department:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_department
 	
+.PHONY: test-integration-scope-sale
+test-integration-scope-sale:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sale
+
 .PHONY: integration_tests_task
 integration_tests_task:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_task

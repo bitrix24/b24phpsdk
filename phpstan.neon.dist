@@ -28,6 +28,7 @@ parameters:
     - tests/Integration/Services/CRM/Currency
     - tests/Integration/Services/CRM/Requisites
     - tests/Integration/Services/Task
+    - tests/Integration/Services/Sale
   excludePaths:
     - tests/Integration/Services/CRM/Requisites/Service/RequisiteUserfieldUseCaseTest.php
     - tests/Integration/Services/CRM/Status
