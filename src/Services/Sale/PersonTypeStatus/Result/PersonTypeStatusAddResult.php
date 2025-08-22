@@ -24,11 +24,6 @@ class PersonTypeStatusAddResult extends AddedItemResult
     public function isSuccess(): bool
     {
         $result = $this->getCoreResponse()->getResponseData()->getResult();
-        if (isset($result['businessValuePersonDomain'])) {
-            
-            return true;
-        }
-        
-        return false;
+        return isset($result['businessValuePersonDomain']);
     }
 }
