@@ -190,6 +190,10 @@ test-integration-scope-log:
 .PHONY: test-integration-scope-crm
 test-integration-scope-crm:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm
+ 
+.PHONY: test-integration-scope-sale
+test-integration-scope-sale:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sale
   
 .PHONY: integration_tests_scope_crm_address
 integration_tests_scope_crm_address:
