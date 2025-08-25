@@ -17,6 +17,7 @@ use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
 use Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Services\AI\AIServiceBuilder;
+use Bitrix24\SDK\Services\Sale\SaleServiceBuilder;
 use Bitrix24\SDK\Services\Catalog\CatalogServiceBuilder;
 use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
 use Bitrix24\SDK\Services\Entity\EntityServiceBuilder;
@@ -250,6 +251,20 @@ class ServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new AIServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function getSaleScope(): SaleServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new SaleServiceBuilder(
                 $this->core,
                 $this->batch,
                 $this->bulkItemsReader,
