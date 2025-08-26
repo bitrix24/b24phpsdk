@@ -271,6 +271,10 @@ integration_tests_department:
 integration_tests_task:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_task
 
+.PHONY: test-integration-scope-sale
+test-integration-scope-sale:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sale
+
 # work dev environment
 .PHONY: php-dev-server-up
 php-dev-server-up:

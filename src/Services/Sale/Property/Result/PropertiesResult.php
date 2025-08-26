@@ -26,6 +26,7 @@ class PropertiesResult extends AbstractResult
         foreach ($this->getCoreResponse()->getResponseData()->getResult()['properties'] as $item) {
             $items[] = new PropertyItemResult($item);
         }
+
         return $items;
     }
 

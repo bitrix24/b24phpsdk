@@ -21,18 +21,18 @@ use Bitrix24\SDK\Services\Sale\Property\Service\Property;
 #[ApiServiceBuilderMetadata(new Scope(['sale']))]
 class SaleServiceBuilder extends AbstractServiceBuilder
 {
-	/**
-	 * Order properties service (sale.property.*)
-	 */
-	public function property(): Property
-	{
-		if (!isset($this->serviceCache[__METHOD__])) {
-			$this->serviceCache[__METHOD__] = new Property(
-				$this->core,
-				$this->log
-			);
-		}
+    /**
+     * Order properties service (sale.property.*)
+     */
+    public function property(): Property
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Property(
+                $this->core,
+                $this->log
+            );
+        }
 
-		return $this->serviceCache[__METHOD__];
-	}
+        return $this->serviceCache[__METHOD__];
+    }
 }
