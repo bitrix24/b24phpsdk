@@ -13,6 +13,14 @@
     - `delete` deletes a status
     - `getFields` returns available fields for statuses
 
+- Added service `Services\Sale\StatusLang\Service\StatusLang` with support methods,
+  see [sale.statusLang.* methods](https://apidocs.bitrix24.com/api-reference/sale/status-lang/index.html):
+    - `getListLangs` returns list of available languages
+    - `add` adds a new status language
+    - `list` returns a list of status languages with filtering and sorting options
+    - `deleteByFilter` deletes status languages by filter
+    - `getFields` returns available fields for status languages
+
 - Added service `Services\Task\Service\Task` with support methods,
   see [tasks.task.* methods](https://github.com/bitrix24/b24phpsdk/issues/214):
     - `add` creates a task, with batch calls support

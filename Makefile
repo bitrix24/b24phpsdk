@@ -194,6 +194,10 @@ test-integration-scope-sale:
 .PHONY: test-integration-sale-status
 test-integration-sale-status:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_status
+
+.PHONY: test-integration-sale-status-lang
+test-integration-sale-status-lang:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_status_lang
  
 .PHONY: test-integration-scope-crm
 test-integration-scope-crm:
