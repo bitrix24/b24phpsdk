@@ -46,6 +46,12 @@
         <testsuite name="integration_tests_scope_log">
             <directory>./tests/Integration/Services/Log/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_sale">
+            <directory>./tests/Integration/Services/Sale/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_status">
+            <directory>./tests/Integration/Services/Sale/Status/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_crm">
             <directory>./tests/Integration/Services/CRM/</directory>
         </testsuite>

@@ -4,6 +4,15 @@
 
 ### Added
 
+- Added service `Services\Sale\Status\Service\Status` with support methods,
+  see [sale.status.* methods](https://github.com/bitrix24/b24phpsdk/issues/234):
+    - `add` adds a new status
+    - `update` updates an existing status
+    - `get` returns information about a status by ID
+    - `list` returns a list of statuses with filtering and sorting options
+    - `delete` deletes a status
+    - `getFields` returns available fields for statuses
+
 - Added service `Services\Task\Service\Task` with support methods,
   see [tasks.task.* methods](https://github.com/bitrix24/b24phpsdk/issues/214):
     - `add` creates a task, with batch calls support

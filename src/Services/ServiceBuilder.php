@@ -26,6 +26,7 @@ use Bitrix24\SDK\Services\IM\IMServiceBuilder;
 use Bitrix24\SDK\Services\IMOpenLines\IMOpenLinesServiceBuilder;
 use Bitrix24\SDK\Services\Log\LogServiceBuilder;
 use Bitrix24\SDK\Services\Main\MainServiceBuilder;
+use Bitrix24\SDK\Services\Sale\SaleServiceBuilder;
 use Bitrix24\SDK\Services\Telephony\TelephonyServiceBuilder;
 use Bitrix24\SDK\Services\User\UserServiceBuilder;
 use Bitrix24\SDK\Services\UserConsent\UserConsentServiceBuilder;
@@ -250,6 +251,25 @@ class ServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new AIServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+    
+    /**
+     * Returns the Sale service builder
+     * 
+     * @return SaleServiceBuilder
+     */
+    public function getSaleScope(): SaleServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new SaleServiceBuilder(
                 $this->core,
                 $this->batch,
                 $this->bulkItemsReader,

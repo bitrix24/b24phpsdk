@@ -186,6 +186,14 @@ test-integration-scope-ai-admin:
 .PHONY: test-integration-scope-log
 test-integration-scope-log:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_log
+
+.PHONY: test-integration-scope-sale
+test-integration-scope-sale:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sale
+
+.PHONY: test-integration-sale-status
+test-integration-sale-status:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_status
  
 .PHONY: test-integration-scope-crm
 test-integration-scope-crm:
