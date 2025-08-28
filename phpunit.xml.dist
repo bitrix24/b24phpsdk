@@ -112,6 +112,9 @@
         <testsuite name="integration_tests_task">
             <directory>./tests/Integration/Services/Task/</directory>
         </testsuite>
+        <testsuite name="integration_tests_sale">
+            <directory>./tests/Integration/Services/Sale/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>

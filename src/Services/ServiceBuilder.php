@@ -23,6 +23,7 @@ use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
 use Bitrix24\SDK\Services\Entity\EntityServiceBuilder;
 use Bitrix24\SDK\Services\Department\DepartmentServiceBuilder;
 use Bitrix24\SDK\Services\Task\TaskServiceBuilder;
+use Bitrix24\SDK\Services\Sale\SaleServiceBuilder;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
 use Bitrix24\SDK\Services\IMOpenLines\IMOpenLinesServiceBuilder;
 use Bitrix24\SDK\Services\Log\LogServiceBuilder;
@@ -43,6 +44,20 @@ class ServiceBuilder extends AbstractServiceBuilder
         protected LoggerInterface $log
     ) {
         parent::__construct($core, $batch, $bulkItemsReader, $log);
+    }
+
+    public function getSaleScope(): SaleServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new SaleServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
     }
 
     public function getTaskScope(): TaskServiceBuilder
