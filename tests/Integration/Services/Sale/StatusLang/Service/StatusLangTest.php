@@ -36,7 +36,9 @@ use PHPUnit\Framework\TestCase;
 class StatusLangTest extends TestCase
 {
     protected StatusLang $statusLangService;
+
     protected array $createdStatusIds = [];
+
     protected array $createdStatusLangs = [];
 
     /**
@@ -55,12 +57,12 @@ class StatusLangTest extends TestCase
     protected function tearDown(): void
     {
         // Clean up any test status langs created during tests
-        foreach ($this->createdStatusLangs as $statusLang) {
+        foreach ($this->createdStatusLangs as $createdRectorPrefix202407StatusLang) {
             try {
                 $this->statusLangService->deleteByFilter([
-                    'statusId' => $statusLang['STATUS_ID'],
-                    'lid' => $statusLang['LID'],
-                    'name' => $statusLang['NAME'],
+                    'statusId' => $createdRectorPrefix202407StatusLang['STATUS_ID'],
+                    'lid' => $createdRectorPrefix202407StatusLang['LID'],
+                    'name' => $createdRectorPrefix202407StatusLang['NAME'],
                 ]);
             } catch (\Exception) {
                 // Ignore errors during cleanup
@@ -69,9 +71,9 @@ class StatusLangTest extends TestCase
 
         // Clean up any test statuses created during tests
         $statusService = Fabric::getServiceBuilder()->getSaleScope()->status();
-        foreach ($this->createdStatusIds as $statusId) {
+        foreach ($this->createdStatusIds as $createdRectorPrefix202407StatusId) {
             try {
-                $statusService->delete($statusId);
+                $statusService->delete($createdRectorPrefix202407StatusId);
             } catch (\Exception) {
                 // Ignore errors during cleanup
             }
@@ -143,12 +145,12 @@ class StatusLangTest extends TestCase
      */
     public function testGetListLangs(): void
     {
-        $result = $this->statusLangService->getListLangs();
-        $languages = $result->getLanguages();
+        $languagesResult = $this->statusLangService->getListLangs();
+        $languages = $languagesResult->getLanguages();
 
         $this->assertIsArray($languages);
         $this->assertNotEmpty($languages);
-        
+
         // Just check there are languages, don't check for a specific one
         $languageExists = false;
         foreach ($languages as $language) {
@@ -157,6 +159,7 @@ class StatusLangTest extends TestCase
                 break;
             }
         }
+
         $this->assertTrue($languageExists, 'No languages found');
     }
 
@@ -172,9 +175,9 @@ class StatusLangTest extends TestCase
         $statusId = $this->createTestStatus();
         $langId = 'en';
         $name = 'Test Status Language ' . time();
-        
+
         // Add status language
-        $result = $this->statusLangService->add([
+        $statusLangAddResult = $this->statusLangService->add([
             'statusId' => $statusId,
             'lid' => $langId,
             'name' => $name,
@@ -189,29 +192,30 @@ class StatusLangTest extends TestCase
         ];
 
         // Verify result was successful
-        $this->assertTrue($result->isSuccess());
-        
+        $this->assertTrue($statusLangAddResult->isSuccess());
+
         // Verify we can retrieve the added status language
-        $listResult = $this->statusLangService->list(
+        $statusLangsResult = $this->statusLangService->list(
             [],
             [
                 'STATUS_ID' => $statusId,
                 'LID' => $langId
             ]
         );
-        
-        $statusLangs = $listResult->getStatusLangs();
+
+        $statusLangs = $statusLangsResult->getStatusLangs();
         $this->assertNotEmpty($statusLangs);
-        
+
         // Find our status language
         $found = false;
-        foreach ($statusLangs as $statusLang) {
-            if ($statusLang->statusId === $statusId && $statusLang->lid === $langId) {
-                $this->assertEquals($name, $statusLang->name);
+        foreach ($statusLangs as $RectorPrefix202407statusLang) {
+            if ($RectorPrefix202407statusLang->statusId === $statusId && $RectorPrefix202407statusLang->lid === $langId) {
+                $this->assertEquals($name, $RectorPrefix202407statusLang->name);
                 $found = true;
                 break;
             }
         }
+
         $this->assertTrue($found, 'Status language not found in the list');
     }
 
@@ -225,15 +229,15 @@ class StatusLangTest extends TestCase
     {
         // Create a status first
         $statusId = $this->createTestStatus();
-        
+
         // Add a couple of languages to test listing
         $this->createStatusLang($statusId, 'en', 'English Test Status');
         $this->createStatusLang($statusId, 'de', 'German Test Status');
-        
+
         // Get list 
-        $listResult = $this->statusLangService->list();
-        
-        $statusLangs = $listResult->getStatusLangs();
+        $statusLangsResult = $this->statusLangService->list();
+
+        $statusLangs = $statusLangsResult->getStatusLangs();
         // Just check it returns something that looks like a collection
         $this->assertIsArray($statusLangs);
     }
@@ -248,19 +252,19 @@ class StatusLangTest extends TestCase
     {
         // Create a status first
         $statusId = $this->createTestStatus();
-        
+
         // Add status languages
         $this->createStatusLang($statusId, 'en', 'English Test Status');
-        
+
         // Delete by filter
-        $deleteResult = $this->statusLangService->deleteByFilter([
+        $deletedItemResult = $this->statusLangService->deleteByFilter([
             'statusId' => $statusId,
             'lid' => 'en',
             'name' => 'English Test Status',
         ]);
-        
+
         // Check that deletion was successful
-        $this->assertTrue($deleteResult->isSuccess());
+        $this->assertTrue($deletedItemResult->isSuccess());
     }
 
     /**
@@ -271,16 +275,16 @@ class StatusLangTest extends TestCase
      */
     public function testGetFields(): void
     {
-        $fieldsResult = $this->statusLangService->getFields();
-        $fields = $fieldsResult->getFieldsDescription();
-        
+        $statusLangFieldsResult = $this->statusLangService->getFields();
+        $fields = $statusLangFieldsResult->getFieldsDescription();
+
         $this->assertIsArray($fields);
         $this->assertNotEmpty($fields);
-        
+
         // Check for required fields
         $requiredFields = ['statusId', 'lid', 'name'];
-        foreach ($requiredFields as $field) {
-            $this->assertArrayHasKey($field, $fields);
+        foreach ($requiredFields as $requiredField) {
+            $this->assertArrayHasKey($requiredField, $fields);
         }
     }
 }

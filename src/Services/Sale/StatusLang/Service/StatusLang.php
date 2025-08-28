@@ -46,14 +46,14 @@ class StatusLang extends AbstractService
     /**
      * Get list of available languages
      *
-     * @link https://apidocs.bitrix24.com/api-reference/sale/status-lang/sale-statuslang-getlistlangs.html
+    * @link https://apidocs.bitrix24.com/api-reference/sale/status-lang/sale-status-lang-get-list-langs.html
      *
      * @throws BaseException
      * @throws TransportException
      */
     #[ApiEndpointMetadata(
         'sale.statusLang.getListLangs',
-        'https://apidocs.bitrix24.com/api-reference/sale/status-lang/sale-statuslang-getlistlangs.html',
+        'https://apidocs.bitrix24.com/api-reference/sale/status-lang/sale-status-lang-get-list-langs.html',
         'Returns list of available languages'
     )]
     public function getListLangs(): LanguagesResult
@@ -66,7 +66,7 @@ class StatusLang extends AbstractService
     /**
      * Add a new status language
      *
-     * @link https://apidocs.bitrix24.com/api-reference/sale/status-lang/sale-statuslang-add.html
+    * @link https://apidocs.bitrix24.com/api-reference/sale/status-lang/sale-status-lang-add.html
      *
      * @param array $fields Fields for the new status language
      *
@@ -75,7 +75,7 @@ class StatusLang extends AbstractService
      */
     #[ApiEndpointMetadata(
         'sale.statusLang.add',
-        'https://apidocs.bitrix24.com/api-reference/sale/status-lang/sale-statuslang-add.html',
+        'https://apidocs.bitrix24.com/api-reference/sale/status-lang/sale-status-lang-add.html',
         'Adds a new status language'
     )]
     public function add(array $fields): StatusLangAddResult
@@ -84,7 +84,7 @@ class StatusLang extends AbstractService
             $this->core->call(
                 'sale.statusLang.add',
                 [
-                    'fields' => $fields,
+                    'fields' => $fields
                 ]
             )
         );
@@ -93,7 +93,7 @@ class StatusLang extends AbstractService
     /**
      * Get list of status languages
      *
-     * @link https://apidocs.bitrix24.com/api-reference/sale/status-lang/sale-statuslang-list.html
+    * @link https://apidocs.bitrix24.com/api-reference/sale/status-lang/sale-status-lang-list.html
      *
      * @param array $select Fields to select
      * @param array $filter Filter parameters
@@ -104,7 +104,7 @@ class StatusLang extends AbstractService
      */
     #[ApiEndpointMetadata(
         'sale.statusLang.list',
-        'https://apidocs.bitrix24.com/api-reference/sale/status-lang/sale-statuslang-list.html',
+        'https://apidocs.bitrix24.com/api-reference/sale/status-lang/sale-status-lang-list.html',
         'Returns a list of status languages'
     )]
     public function list(array $select = [], array $filter = [], array $order = []): StatusLangsResult
@@ -121,7 +121,7 @@ class StatusLang extends AbstractService
     /**
      * Delete status languages by filter
      *
-     * @link https://apidocs.bitrix24.com/api-reference/sale/status-lang/sale-statuslang-deletebyfilter.html
+    * @link https://apidocs.bitrix24.com/api-reference/sale/status-lang/sale-status-lang-delete-by-filter.html
      *
      * @param array $filter Filter parameters
      *
@@ -130,7 +130,7 @@ class StatusLang extends AbstractService
      */
     #[ApiEndpointMetadata(
         'sale.statusLang.deleteByFilter',
-        'https://apidocs.bitrix24.com/api-reference/sale/status-lang/sale-statuslang-deletebyfilter.html',
+        'https://apidocs.bitrix24.com/api-reference/sale/status-lang/sale-status-lang-delete-by-filter.html',
         'Deletes status languages by filter'
     )]
     public function deleteByFilter(array $filter): DeletedItemResult
@@ -145,14 +145,14 @@ class StatusLang extends AbstractService
     /**
      * Get available status language fields
      *
-     * @link https://apidocs.bitrix24.com/api-reference/sale/status-lang/sale-statuslang-getfields.html
+    * @link https://apidocs.bitrix24.com/api-reference/sale/status-lang/sale-status-lang-get-fields.html
      *
      * @throws BaseException
      * @throws TransportException
      */
     #[ApiEndpointMetadata(
         'sale.statusLang.getFields',
-        'https://apidocs.bitrix24.com/api-reference/sale/status-lang/sale-statuslang-getfields.html',
+        'https://apidocs.bitrix24.com/api-reference/sale/status-lang/sale-status-lang-get-fields.html',
         'Returns available fields and their settings'
     )]
     public function getFields(): StatusLangFieldsResult
