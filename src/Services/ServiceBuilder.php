@@ -22,7 +22,6 @@ use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
 use Bitrix24\SDK\Services\Entity\EntityServiceBuilder;
 use Bitrix24\SDK\Services\Department\DepartmentServiceBuilder;
 use Bitrix24\SDK\Services\Task\TaskServiceBuilder;
-use Bitrix24\SDK\Services\Sale\SaleServiceBuilder;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
 use Bitrix24\SDK\Services\IMOpenLines\IMOpenLinesServiceBuilder;
 use Bitrix24\SDK\Services\Log\LogServiceBuilder;
@@ -276,22 +275,4 @@ class ServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
     
-    /**
-     * Returns the Sale service builder
-     * 
-     * @return SaleServiceBuilder
-     */
-    public function getSaleScope(): SaleServiceBuilder
-    {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new SaleServiceBuilder(
-                $this->core,
-                $this->batch,
-                $this->bulkItemsReader,
-                $this->log
-            );
-        }
-
-        return $this->serviceCache[__METHOD__];
-    }
 }

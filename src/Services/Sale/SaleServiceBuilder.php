@@ -32,8 +32,8 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Status(
-              $this->core,
-              $this->log
+                $this->core,
+                $this->log
             );
         }
 
@@ -75,5 +75,5 @@ class SaleServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-  
+
 }
