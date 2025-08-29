@@ -101,20 +101,6 @@ class ServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    public function getSaleScope(): SaleServiceBuilder
-    {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new SaleServiceBuilder(
-                $this->core,
-                $this->batch,
-                $this->bulkItemsReader,
-                $this->log
-            );
-        }
-
-        return $this->serviceCache[__METHOD__];
-    }
-
     public function getCRMScope(): CRMServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
