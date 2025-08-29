@@ -548,108 +548,108 @@ Example:
 
 This document serves as a guide for understanding SDK architecture and creating new wrapper services for Bitrix24 REST API.
 
-## Анализ архитектуры системы событий Битрикс24
+## Analysis of the Bitrix24 Event System Architecture
 
-### Основные компоненты
+### Main components
 
-1. **Структура классов событий**
-   - Каждое событие представлено двумя основными классами:
-     - **Класс события** (например, `OnCrmCompanyAdd`) - Наследуется от `AbstractEventRequest`, отвечает за обработку запроса события и предоставление полезной нагрузки
-     - **Класс полезной нагрузки** (например, `OnCrmCompanyAddPayload`) - Наследуется от `AbstractItem`, представляет данные события в структурированном формате
+1. **Event class structure**
+    - Each event is represented by two main classes:
+      - **Event class** (for example, `OnCrmCompanyAdd`) — extends `AbstractEventRequest`, is responsible for handling the event request and providing the payload
+      - **Payload class** (for example, `OnCrmCompanyAddPayload`) — extends `AbstractItem`, represents the event data in a structured format
 
-2. **Иерархия наследования**
-   - **Классы событий**: `[Конкретный класс события]` → `AbstractEventRequest` → `AbstractRequest` → реализует `EventInterface`
-   - **Классы полезной нагрузки**: `[Конкретный класс полезной нагрузки]` → `AbstractItem` → реализует `IteratorAggregate`
+2. **Inheritance hierarchy**
+    - **Event classes**: `[SpecificEventClass]` → `AbstractEventRequest` → `AbstractRequest` → implements `EventInterface`
+    - **Payload classes**: `[SpecificPayloadClass]` → `AbstractItem` → implements `IteratorAggregate`
 
-3. **Реализация паттерна Фабрика**
-   - Каждый модуль имеет свою фабрику событий (например, `CrmCompanyEventsFactory`, `TelephonyEventsFactory`)
-   - Все фабрики реализуют интерфейс `EventsFabricInterface` с двумя ключевыми методами:
-     - `isSupport(string $eventCode): bool` - Проверяет, может ли фабрика обработать конкретный код события
-     - `create(Request $eventRequest): EventInterface` - Создает соответствующий объект события из запроса
+3. **Factory pattern implementation**
+    - Each module provides its own events factory (for example, `CrmCompanyEventsFactory`, `TelephonyEventsFactory`)
+    - All factories implement the `EventsFabricInterface` with two key methods:
+      - `isSupport(string $eventCode): bool` — checks whether the factory can handle a given event code
+      - `create(Request $eventRequest): EventInterface` — creates the corresponding event object from the request
 
-4. **Центральный координатор фабрик**
-   - `RemoteEventsFactory` управляет всеми фабриками событий и направляет входящие запросы событий в соответствующую фабрику
-   - Он использует код события из полезной нагрузки для определения, какая фабрика должна обрабатывать событие
+4. **Central coordinator of factories**
+    - `RemoteEventsFactory` manages all event factories and routes incoming event requests to the appropriate factory
+    - It uses the event code from the payload to determine which factory should handle the event
 
-5. **Регистрация и управление событиями**
-   - Класс `EventManager` позволяет регистрировать обработчики событий через API Битрикс24
-   - Сервисный класс `Event` предоставляет прямой доступ к API для операций, связанных с событиями:
-     - `bind` - Регистрация нового обработчика события
-     - `unbind` - Отмена регистрации обработчика события
-     - `get` - Получение списка зарегистрированных обработчиков событий
-     - `test` - Тестирование обработки событий
+5. **Event registration and management**
+    - The `EventManager` class allows registering event handlers via the Bitrix24 API
+    - The service class `Event` provides direct API operations related to events:
+      - `bind` — register a new event handler
+      - `unbind` — unregister a handler
+      - `get` — retrieve the list of registered handlers
+      - `test` — test event handling
 
-### Поток обработки событий
+### Event processing flow
 
-1. Приложение получает HTTP-запрос, содержащий данные события
-2. Запрос передается в `RemoteEventsFactory->createEvent()`
-3. На основе кода события определяется соответствующая фабрика, которая используется для создания конкретного объекта события
-4. Объект события обрабатывает запрос и предоставляет структурированный доступ к данным события через свой класс полезной нагрузки
-5. Код приложения затем может соответствующим образом обработать событие
+1. The application receives an HTTP request containing event data
+2. The request is passed to `RemoteEventsFactory->createEvent()`
+3. Based on the event code, the appropriate factory is selected to create the concrete event object
+4. The event object processes the request and exposes structured access to event data via its payload class
+5. Application code can then handle the event accordingly
 
-### Существующие типы событий
+### Implemented event types
 
-В SDK в настоящее время реализованы события для нескольких модулей:
+The SDK currently implements events for several modules:
 
-1. **Модуль CRM**:
-   - События компаний (добавление, обновление, удаление, операции с пользовательскими полями)
-   - События сделок (операции с повторяющимися сделками)
-   - События коммерческих предложений (аналогичные шаблоны с событиями компаний)
+1. **CRM module**:
+    - Company events (add, update, delete, custom fields operations)
+    - Deal events (including recurring deal operations)
+    - Quote events (similar patterns to company events)
 
-2. **Модуль Задачи**:
-   - События задач (добавление, обновление, удаление)
+2. **Tasks module**:
+    - Task events (add, update, delete)
 
-3. **Жизненный цикл приложения**:
-   - События установки/удаления приложения
+3. **Application lifecycle**:
+    - Application install/uninstall events
 
-4. **Телефония**:
-   - События, связанные с вызовами
+4. **Telephony**:
+    - Call-related events
 
-### Используемые паттерны проектирования
+### Design patterns used
 
-1. **Паттерн Фабрика** - Для создания объектов событий
-2. **Паттерн Стратегия** - Разные фабрики обрабатывают разные типы событий
-3. **Паттерн Наблюдатель** - Для системы уведомления о событиях
-4. **Неизменяемые объекты** - Объекты полезной нагрузки спроектированы как неизменяемые для обеспечения целостности данных
+1. **Factory pattern** — to create event objects
+2. **Strategy pattern** — different factories handle different event types
+3. **Observer pattern** — for the event notification system
+4. **Immutable objects** — payload objects are designed as immutable to ensure data integrity
 
-### Примеры использования
+### Usage examples
 
-1. **Регистрация обработчиков событий**:
-   ```php
-   $eventManager->bindEventHandlers([
-       new EventHandlerMetadata(
-           OnCrmCompanyAdd::CODE,
-           'https://your-handler-url.com',
-           $userId
-       ),
-   ]);
-   ```
+1. **Registering event handlers**:
+    ```php
+    $eventManager->bindEventHandlers([
+         new EventHandlerMetadata(
+              OnCrmCompanyAdd::CODE,
+              'https://your-handler-url.com',
+              $userId
+         ),
+    ]);
+    ```
 
-2. **Обработка входящих событий**:
-   ```php
-   $event = $remoteEventsFactory->createEvent($request, $applicationToken);
-   if ($event instanceof OnCrmCompanyAdd) {
-       $payload = $event->getPayload();
-       // Обработка события добавления компании
-   }
-   ```
+2. **Handling incoming events**:
+    ```php
+    $event = $remoteEventsFactory->createEvent($request, $applicationToken);
+    if ($event instanceof OnCrmCompanyAdd) {
+         $payload = $event->getPayload();
+         // Handle company added event
+    }
+    ```
 
-### Итоговое резюме анализа
+### Final summary
 
-PHP SDK для Битрикс24 реализует надежную, расширяемую систему событий, следуя принципам чистого ООП и хорошо зарекомендовавшим себя паттернам проектирования. Ключевые характеристики включают:
+The Bitrix24 PHP SDK implements a robust and extensible event system following clean OOP principles and proven design patterns. Key characteristics include:
 
-1. **Модульная конструкция** - Обработка событий организована по модулям (CRM, Задачи и т.д.), что облегчает расширение
-2. **Типобезопасность** - Строгая типизация с конкретными классами событий и полезной нагрузки обеспечивает лучшее автодополнение кода и обнаружение ошибок
-3. **Паттерн Фабрика** - Фабрики предоставляют чистый способ создания объектов событий из HTTP-запросов
-4. **Функции безопасности** - Встроенная поддержка валидации токена приложения
-5. **Неизменяемость** - Объекты полезной нагрузки события неизменяемы, что предотвращает случайное изменение данных события
-6. **Стандартизированный интерфейс** - Все события следуют единому шаблону интерфейса, что упрощает реализацию новых типов событий
+1. **Modular design** — events are organized by module (CRM, Tasks, etc.), which makes it easy to extend
+2. **Type safety** — strong typing with concrete event and payload classes improves IDE support and error detection
+3. **Factory pattern** — factories provide a clean way to create event objects from HTTP requests
+4. **Security features** — built-in support for validating application tokens
+5. **Immutability** — event payload objects are immutable, preventing accidental modification of event data
+6. **Standardized interface** — all events follow a common interface, simplifying the implementation of new event types
 
-Для создания новых классов событий для системы Битрикс24 необходимо:
+To add new event classes for the Bitrix24 event system you need to:
 
-1. Создать класс события, наследующий от `AbstractEventRequest`
-2. Создать класс полезной нагрузки, наследующий от `AbstractItem`
-3. Создать или обновить фабрику событий, реализующую `EventsFabricInterface`
-4. Зарегистрировать фабрику в методе `RemoteEventsFactory::init()`
+1. Create an event class that extends `AbstractEventRequest`
+2. Create a payload class that extends `AbstractItem`
+3. Create or update an events factory implementing `EventsFabricInterface`
+4. Register the factory in `RemoteEventsFactory::init()`
 
-Эта архитектура позволяет бесшовно интегрироваться с системой уведомлений о событиях Битрикс24 на основе вебхуков, сохраняя при этом чистый, тестируемый код.
+This architecture allows seamless integration with Bitrix24 webhook-based event notifications while keeping the code clean and testable.

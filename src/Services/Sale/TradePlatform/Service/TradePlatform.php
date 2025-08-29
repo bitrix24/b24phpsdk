@@ -34,8 +34,7 @@ class TradePlatform extends AbstractService
      * @param array|null $filter List of fields for filtering
      * @param array|null $order Sorting parameters
      * @param int|null $start Pagination parameter
-     * 
-     * @return TradePlatformsResult
+     *
      * @throws BaseException
      * @throws TransportException
      */
@@ -51,30 +50,29 @@ class TradePlatform extends AbstractService
         ?int $start = null
     ): TradePlatformsResult {
         $params = [];
-        
+
         if ($select !== null) {
             $params['select'] = $select;
         }
-        
+
         if ($filter !== null) {
             $params['filter'] = $filter;
         }
-        
+
         if ($order !== null) {
             $params['order'] = $order;
         }
-        
+
         if ($start !== null) {
             $params['start'] = $start;
         }
-        
+
         return new TradePlatformsResult($this->core->call('sale.tradePlatform.list', $params));
     }
 
     /**
      * Get available fields for order sources
      *
-     * @return FieldsResult
      * @throws BaseException
      * @throws TransportException
      */

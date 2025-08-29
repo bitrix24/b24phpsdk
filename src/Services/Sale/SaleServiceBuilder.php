@@ -46,6 +46,7 @@ class SaleServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    /**
      * Order properties service (sale.property.*)
      */
     public function property(): Property

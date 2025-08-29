@@ -25,36 +25,36 @@ class TradePlatformTest extends TestCase
 
     public function testList(): void
     {
-        $result = $this->tradePlatformService->list();
-        self::assertGreaterThanOrEqual(0, $result->getTotal());
+        $tradePlatformsResult = $this->tradePlatformService->list();
+        self::assertGreaterThanOrEqual(0, $tradePlatformsResult->getTotal());
         
         // If we have trade platforms, test the structure
-        if ($result->getTotal() > 0) {
-            foreach ($result->getTradePlatforms() as $tradePlatform) {
-                self::assertArrayHasKey('id', $tradePlatform->data);
-                self::assertArrayHasKey('code', $tradePlatform->data);
+        if ($tradePlatformsResult->getTotal() > 0) {
+            foreach ($tradePlatformsResult->getTradePlatforms() as $tradePlatformItemResult) {
+                self::assertNotNull($tradePlatformItemResult->id);
+                self::assertNotNull($tradePlatformItemResult->code);
             }
         }
     }
 
     public function testGetFields(): void
     {
-        $result = $this->tradePlatformService->getFields();
-        self::assertNotEmpty($result->getFieldsDescription());
+        $fieldsResult = $this->tradePlatformService->getFields();
+        self::assertNotEmpty($fieldsResult->getFieldsDescription());
         
         // Check that at least some expected fields are present
-        $fields = $result->getFieldsDescription();
+        $fields = $fieldsResult->getFieldsDescription();
         self::assertArrayHasKey('tradePlatform', $fields);
         
         $tradePlatformFields = $fields['tradePlatform'];
         self::assertIsArray($tradePlatformFields);
         
         // Check presence of typical field properties
-        foreach ($tradePlatformFields as $fieldInfo) {
-            self::assertArrayHasKey('isImmutable', $fieldInfo);
-            self::assertArrayHasKey('isReadOnly', $fieldInfo);
-            self::assertArrayHasKey('isRequired', $fieldInfo);
-            self::assertArrayHasKey('type', $fieldInfo);
+        foreach ($tradePlatformFields as $tradePlatformField) {
+            self::assertArrayHasKey('isImmutable', $tradePlatformField);
+            self::assertArrayHasKey('isReadOnly', $tradePlatformField);
+            self::assertArrayHasKey('isRequired', $tradePlatformField);
+            self::assertArrayHasKey('type', $tradePlatformField);
         }
     }
 

@@ -31,8 +31,8 @@ class TradePlatformsResult extends AbstractResult
         $items = [];
         $tradePlatforms = $this->getCoreResponse()->getResponseData()->getResult()['tradePlatforms'] ?? [];
 
-        foreach ($tradePlatforms as $item) {
-            $items[] = new TradePlatformItemResult($item);
+        foreach ($tradePlatforms as $tradePlatform) {
+            $items[] = new TradePlatformItemResult($tradePlatform);
         }
 
         return $items;
@@ -40,8 +40,6 @@ class TradePlatformsResult extends AbstractResult
 
     /**
      * Get total count of trade platforms
-     *
-     * @return int
      */
     public function getTotal(): int
     {

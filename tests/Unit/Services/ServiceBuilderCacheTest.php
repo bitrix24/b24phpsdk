@@ -25,6 +25,16 @@ use Psr\Log\NullLogger;
 class ServiceBuilderCacheTest extends TestCase
 {
     private ServiceBuilder $serviceBuilder;
+    
+    protected function setUp(): void
+    {
+        $this->serviceBuilder = new ServiceBuilder(
+            new NullCore(),
+            new NullBatch(),
+            new NullBulkItemsReader(),
+            new NullLogger()
+        );
+    }
 
     public function testGetMainScopeBuilder(): void
     {
