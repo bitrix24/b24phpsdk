@@ -18,6 +18,7 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\Sale\Status\Service\Status;
 use Bitrix24\SDK\Services\Sale\StatusLang\Service\StatusLang;
+use Bitrix24\SDK\Services\Sale\PersonTypeStatus\Service\PersonTypeStatus;
 
 /**
  * Class SaleServiceBuilder
@@ -27,14 +28,23 @@ use Bitrix24\SDK\Services\Sale\StatusLang\Service\StatusLang;
 #[ApiServiceBuilderMetadata(new Scope(['sale']))]
 class SaleServiceBuilder extends AbstractServiceBuilder
 {
-    /**
-     * Status service (sale.status.*)
-     */
     public function status(): Status
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Status(
               $this->core,
+              $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function personTypeStatus(): PersonTypeStatus
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new PersonTypeStatus(
+                $this->core,
                 $this->log
             );
         }
@@ -54,9 +64,6 @@ class SaleServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * StatusLang service (sale.statusLang.*)
-     */
     public function statusLang(): StatusLang
     {
         if (!isset($this->serviceCache[__METHOD__])) {
