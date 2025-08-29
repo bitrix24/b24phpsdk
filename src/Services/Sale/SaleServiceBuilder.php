@@ -28,6 +28,18 @@ use Bitrix24\SDK\Services\Sale\PersonTypeStatus\Service\PersonTypeStatus;
 #[ApiServiceBuilderMetadata(new Scope(['sale']))]
 class SaleServiceBuilder extends AbstractServiceBuilder
 {
+    public function propertyGroup(): PropertyGroup\Service\PropertyGroup
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new PropertyGroup\Service\PropertyGroup(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function status(): Status
     {
         if (!isset($this->serviceCache[__METHOD__])) {

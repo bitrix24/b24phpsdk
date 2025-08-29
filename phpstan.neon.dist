@@ -35,7 +35,6 @@ parameters:
     - tests/Integration/Services/CRM/Status
     - tests/Integration/Services/CRM/Timeline
     - tests/Integration/Services/Entity/Section
-    - tests/Integration/Services/Department
   bootstrapFiles:
     - tests/bootstrap.php
   parallel:

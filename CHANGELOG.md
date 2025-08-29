@@ -12,6 +12,14 @@
     - `update` update the call list, with batch calls support
     - `statusList` get a list of the calllist statuses
     - `getItems` get call list members
+- Added service `Services\Sale\PropertyGroup\Service\PropertyGroup` with support methods,
+  see [sale.propertygroup.* methods](https://github.com/bitrix24/b24phpsdk/issues/232):
+    - `add` adds a new property group
+    - `update` updates a property group
+    - `get` returns a property group by id
+    - `list` returns a list of property groups
+    - `delete` deletes a property group
+    - `getFields` returns available fields for property groups
 - Added service `Services\Sale\Status\Service\Status` with support methods,
   see [sale.status.* methods](https://github.com/bitrix24/b24phpsdk/issues/234):
     - `add` adds a new status
