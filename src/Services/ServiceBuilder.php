@@ -26,12 +26,12 @@ use Bitrix24\SDK\Services\IM\IMServiceBuilder;
 use Bitrix24\SDK\Services\IMOpenLines\IMOpenLinesServiceBuilder;
 use Bitrix24\SDK\Services\Log\LogServiceBuilder;
 use Bitrix24\SDK\Services\Main\MainServiceBuilder;
-use Bitrix24\SDK\Services\Sale\SaleServiceBuilder;
 use Bitrix24\SDK\Services\Telephony\TelephonyServiceBuilder;
 use Bitrix24\SDK\Services\User\UserServiceBuilder;
 use Bitrix24\SDK\Services\UserConsent\UserConsentServiceBuilder;
 use Bitrix24\SDK\Services\Placement\PlacementServiceBuilder;
 use Bitrix24\SDK\Services\Workflows\WorkflowsServiceBuilder;
+use Bitrix24\SDK\Services\Sale\SaleServiceBuilder;
 use Psr\Log\LoggerInterface;
 
 class ServiceBuilder extends AbstractServiceBuilder

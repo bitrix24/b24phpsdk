@@ -12,6 +12,22 @@
     - `update` update the call list, with batch calls support
     - `statusList` get a list of the calllist statuses
     - `getItems` get call list members
+- Added service `Services\Sale\PropertyVariant\Service\PropertyVariant` with support methods,
+  see [sale.propertyvariant.* methods](https://github.com/bitrix24/b24phpsdk/issues/234):
+    - `add` adds a variant of an order property
+    - `update` updates the fields of a property variant
+    - `get` returns the value of a property variant by its identifier
+    - `list` returns a list of property variants
+    - `delete` deletes a property variant
+    - `getFields` returns the fields and settings of property variants
+- Added service `Services\Sale\Property\Service\Property` with support methods,
+  see [sale.property.* methods](https://github.com/bitrix24/b24phpsdk/issues/234):
+    - `add` adds a new order property
+    - `update` updates the fields of an order property
+    - `get` returns an order property by ID
+    - `list` returns a list of order properties
+    - `delete` deletes an order property
+    - `getFieldsByType` returns the fields and settings of order properties by type
 - Added service `Services\Sale\PropertyGroup\Service\PropertyGroup` with support methods,
   see [sale.propertygroup.* methods](https://github.com/bitrix24/b24phpsdk/issues/232):
     - `add` adds a new property group
