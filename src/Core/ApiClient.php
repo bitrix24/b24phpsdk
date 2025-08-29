@@ -170,7 +170,19 @@ class ApiClient implements ApiClientInterface
                 'requestId' => $requestId
             ]
         );
-        $apiMethod = strtolower($apiMethod);
+        $caseSensitiveMethods = [
+            'tasks.flow.Flow.create',
+            'tasks.flow.Flow.update',
+            'tasks.flow.Flow.delete',
+            'tasks.flow.Flow.get',
+            'tasks.flow.Flow.isExists',
+            'tasks.flow.Flow.activate',
+            'tasks.flow.Flow.pin',
+        ];
+        if (!in_array($apiMethod, $caseSensitiveMethods, true)) {
+            $apiMethod = strtolower($apiMethod);
+        }
+        
         $method = 'POST';
         if ($this->getCredentials()->getWebhookUrl() instanceof WebhookUrl) {
             $url = sprintf('%s/%s/', $this->getCredentials()->getWebhookUrl()->getUrl(), $apiMethod);
@@ -205,10 +217,19 @@ class ApiClient implements ApiClientInterface
         // todo must be fixed by vendor in API v2
         // part of endpoints required strict order of arguments
         $strictApiMethods = [
+            'task.checklistitem.add',
+            'task.checklistitem.update',
+            'task.checklistitem.getlist',
+            'task.checklistitem.get',
+            'task.checklistitem.delete',
+            'task.checklistitem.moveafteritem',
+            'task.checklistitem.complete',
+            'task.checklistitem.renew',
+            'task.checklistitem.isactionallowed',
             'task.commentitem.add',
+            'task.commentitem.get',
             'task.commentitem.getlist',
             'task.commentitem.update',
-            'task.commentitem.getlist',
             'task.commentitem.delete',
             'task.commentitem.isactionallowed',
             'task.elapseditem.add',
@@ -218,6 +239,11 @@ class ApiClient implements ApiClientInterface
             'task.elapseditem.delete',
             'task.elapseditem.isactionallowed',
             'task.elapseditem.getmanifest',
+            'task.item.userfield.add',
+            'task.item.userfield.delete',
+            'task.item.userfield.list',
+            'task.item.userfield.get',
+            'task.item.userfield.update',
             'tasks.task.add',
         ];
         if (!in_array($apiMethod, $strictApiMethods, true)) {

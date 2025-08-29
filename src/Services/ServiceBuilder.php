@@ -21,9 +21,12 @@ use Bitrix24\SDK\Services\Catalog\CatalogServiceBuilder;
 use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
 use Bitrix24\SDK\Services\Entity\EntityServiceBuilder;
 use Bitrix24\SDK\Services\Department\DepartmentServiceBuilder;
+use Bitrix24\SDK\Services\Task\TaskServiceBuilder;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
 use Bitrix24\SDK\Services\IMOpenLines\IMOpenLinesServiceBuilder;
+use Bitrix24\SDK\Services\Log\LogServiceBuilder;
 use Bitrix24\SDK\Services\Main\MainServiceBuilder;
+use Bitrix24\SDK\Services\Sale\SaleServiceBuilder;
 use Bitrix24\SDK\Services\Telephony\TelephonyServiceBuilder;
 use Bitrix24\SDK\Services\User\UserServiceBuilder;
 use Bitrix24\SDK\Services\UserConsent\UserConsentServiceBuilder;
@@ -42,6 +45,34 @@ class ServiceBuilder extends AbstractServiceBuilder
         parent::__construct($core, $batch, $bulkItemsReader, $log);
     }
 
+    public function getSaleScope(): SaleServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new SaleServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function getTaskScope(): TaskServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new TaskServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+    
     public function getDepartmentScope(): DepartmentServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -215,6 +246,21 @@ class ServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    public function getLogScope(): LogServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new LogServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function getAiAdminScope(): AIServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -228,4 +274,5 @@ class ServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+    
 }
