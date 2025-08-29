@@ -37,6 +37,18 @@ class SaleServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    public function personType(): PersonType\Service\PersonType
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new PersonType\Service\PersonType(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     /**
      * Order property variants service (sale.propertyvariant.*)
      */
@@ -51,4 +63,5 @@ class SaleServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
 }

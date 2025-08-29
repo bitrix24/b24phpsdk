@@ -270,6 +270,10 @@ integration_tests_department:
 .PHONY: integration_tests_task
 integration_tests_task:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_task
+	
+.PHONY: integration_tests_sale
+integration_tests_sale:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale
 
 .PHONY: test-integration-scope-sale
 test-integration-scope-sale:
