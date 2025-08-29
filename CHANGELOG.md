@@ -20,6 +20,27 @@
     - `list` returns a list of order properties
     - `delete` deletes an order property
     - `getFieldsByType` returns the fields and settings of order properties by type
+- Added service `Services\Sale\Status\Service\Status` with support methods,
+  see [sale.status.* methods](https://github.com/bitrix24/b24phpsdk/issues/234):
+    - `add` adds a new status
+    - `update` updates an existing status
+    - `get` returns information about a status by ID
+    - `list` returns a list of statuses with filtering and sorting options
+    - `delete` deletes a status
+    - `getFields` returns available fields for statuses
+- Added service `Services\Sale\StatusLang\Service\StatusLang` with support methods,
+  see [sale.statusLang.* methods](https://apidocs.bitrix24.com/api-reference/sale/status-lang/index.html):
+    - `getListLangs` returns list of available languages
+    - `add` adds a new status language
+    - `list` returns a list of status languages with filtering and sorting options
+    - `deleteByFilter` deletes status languages by filter
+    - `getFields` returns available fields for status languages
+- Added service `Services\Sale\PersonTypeStatus\Service\PersonTypeStatus` with support methods,
+  see [sale.businessValuePersonDomain.* methods](https://github.com/bitrix24/b24phpsdk/issues/228):
+    - `add` adds business value for person domain
+    - `list` retrieves list of business values for person domain
+    - `delete` deletes business values by filter
+    - `getFields` gets fields description for business value person domain
 - Added service `Services\Task\Service\Task` with support methods,
   see [tasks.task.* methods](https://github.com/bitrix24/b24phpsdk/issues/214):
     - `add` creates a task, with batch calls support
