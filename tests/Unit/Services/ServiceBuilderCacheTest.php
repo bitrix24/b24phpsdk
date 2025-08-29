@@ -76,6 +76,11 @@ class ServiceBuilderCacheTest extends TestCase
         $this::assertSame($this->serviceBuilder->getTelephonyScope(), $this->serviceBuilder->getTelephonyScope());
     }
 
+    public function testGetSaleBuilder(): void
+    {
+        $this::assertSame($this->serviceBuilder->getSaleScope(), $this->serviceBuilder->getSaleScope());
+    }
+
     protected function setUp(): void
     {
         $this->serviceBuilder = new ServiceBuilder(
