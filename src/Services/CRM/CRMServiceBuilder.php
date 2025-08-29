@@ -595,6 +595,23 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
     
+    public function callList(): CallList\Service\CallList
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new CallList\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new CallList\Service\CallList(
+                new CallList\Service\Batch($batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function status(): Status\Service\Status
     {
         if (!isset($this->serviceCache[__METHOD__])) {

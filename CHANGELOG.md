@@ -4,6 +4,14 @@
 
 ### Added
 
+- Added service `Services\CRM\CallList\Service\CallList` with support methods,
+  see [crm.entity.section.* methods](https://github.com/bitrix24/b24phpsdk/issues/208):
+    - `get` get information about the call list
+    - `list` get all call lists, with batch calls support
+    - `add` add a new call list, with batch calls support
+    - `update` update the call list, with batch calls support
+    - `statusList` get a list of the calllist statuses
+    - `getItems` get call list members
 - Added service `Services\Sale\PropertyVariant\Service\PropertyVariant` with support methods,
   see [sale.propertyvariant.* methods](https://github.com/bitrix24/b24phpsdk/issues/234):
     - `add` adds a variant of an order property

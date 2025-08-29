@@ -50,6 +50,8 @@ return RectorConfig::configure()
         __DIR__ . '/tests/Integration/Services/CRM/Quote/Service',
         __DIR__ . '/src/Services/CRM/Currency',
         __DIR__ . '/tests/Integration/Services/CRM/Currency',
+        __DIR__ . '/src/Services/CRM/CallList',
+        __DIR__ . '/tests/Integration/Services/CRM/CallList',
         __DIR__ . '/src/Services/CRM/Requisites',
         __DIR__ . '/tests/Integration/Services/CRM/Requisites',
         __DIR__ . '/src/Services/CRM/Timeline',

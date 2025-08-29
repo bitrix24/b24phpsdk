@@ -259,6 +259,10 @@ integration_tests_lead_productrows:
 integration_tests_crm_quote:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_quote
 	
+.PHONY: integration_tests_crm_calllist
+integration_tests_crm_calllist:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_calllist
+
 .PHONY: integration_tests_crm_requisite
 integration_tests_crm_requisite:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_requisite
