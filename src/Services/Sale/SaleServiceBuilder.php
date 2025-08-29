@@ -16,6 +16,8 @@ namespace Bitrix24\SDK\Services\Sale;
 use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
+use Bitrix24\SDK\Services\Sale\Property\Service\Property;
+use Bitrix24\SDK\Services\Sale\PropertyVariant\Service\PropertyVariant;
 use Bitrix24\SDK\Services\Sale\Status\Service\Status;
 use Bitrix24\SDK\Services\Sale\StatusLang\Service\StatusLang;
 use Bitrix24\SDK\Services\Sale\PersonTypeStatus\Service\PersonTypeStatus;
@@ -28,6 +30,21 @@ use Bitrix24\SDK\Services\Sale\PersonTypeStatus\Service\PersonTypeStatus;
 #[ApiServiceBuilderMetadata(new Scope(['sale']))]
 class SaleServiceBuilder extends AbstractServiceBuilder
 {
+    /**
+     * Order properties service (sale.property.*)
+     */
+    public function property(): Property
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Property(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function propertyGroup(): PropertyGroup\Service\PropertyGroup
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -68,6 +85,18 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new PersonType\Service\PersonType(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function propertyVariant(): PropertyVariant
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new PropertyVariant(
                 $this->core,
                 $this->log
             );
