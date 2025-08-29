@@ -45,6 +45,20 @@ class ServiceBuilder extends AbstractServiceBuilder
         parent::__construct($core, $batch, $bulkItemsReader, $log);
     }
 
+    public function getSaleScope(): SaleServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new SaleServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function getTaskScope(): TaskServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -274,4 +288,5 @@ class ServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+    
 }
