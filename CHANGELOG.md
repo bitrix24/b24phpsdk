@@ -20,6 +20,14 @@
     - `list` returns a list of order properties
     - `delete` deletes an order property
     - `getFieldsByType` returns the fields and settings of order properties by type
+- Added service `Services\Sale\PropertyGroup\Service\PropertyGroup` with support methods,
+  see [sale.propertygroup.* methods](https://github.com/bitrix24/b24phpsdk/issues/232):
+    - `add` adds a new property group
+    - `update` updates a property group
+    - `get` returns a property group by id
+    - `list` returns a list of property groups
+    - `delete` deletes a property group
+    - `getFields` returns available fields for property groups
 - Added service `Services\Sale\Status\Service\Status` with support methods,
   see [sale.status.* methods](https://github.com/bitrix24/b24phpsdk/issues/234):
     - `add` adds a new status

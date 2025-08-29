@@ -45,6 +45,18 @@ class SaleServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    public function propertyGroup(): PropertyGroup\Service\PropertyGroup
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new PropertyGroup\Service\PropertyGroup(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function status(): Status
     {
         if (!isset($this->serviceCache[__METHOD__])) {
