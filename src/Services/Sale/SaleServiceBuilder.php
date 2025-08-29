@@ -16,6 +16,7 @@ namespace Bitrix24\SDK\Services\Sale;
 use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
+use Bitrix24\SDK\Services\Sale\TradePlatform\Service\TradePlatform;
 use Bitrix24\SDK\Services\Sale\Property\Service\Property;
 use Bitrix24\SDK\Services\Sale\PropertyVariant\Service\PropertyVariant;
 use Bitrix24\SDK\Services\Sale\Status\Service\Status;
@@ -30,6 +31,21 @@ use Bitrix24\SDK\Services\Sale\PersonTypeStatus\Service\PersonTypeStatus;
 #[ApiServiceBuilderMetadata(new Scope(['sale']))]
 class SaleServiceBuilder extends AbstractServiceBuilder
 {
+    /**
+     * Get TradePlatform service
+     */
+    public function tradePlatform(): TradePlatform
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new TradePlatform(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     /**
      * Order properties service (sale.property.*)
      */

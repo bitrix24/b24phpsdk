@@ -547,3 +547,109 @@ Example:
 - Clearly explain **what bug** you're fixing and **how**
 
 This document serves as a guide for understanding SDK architecture and creating new wrapper services for Bitrix24 REST API.
+
+## Analysis of the Bitrix24 Event System Architecture
+
+### Main components
+
+1. **Event class structure**
+    - Each event is represented by two main classes:
+      - **Event class** (for example, `OnCrmCompanyAdd`) — extends `AbstractEventRequest`, is responsible for handling the event request and providing the payload
+      - **Payload class** (for example, `OnCrmCompanyAddPayload`) — extends `AbstractItem`, represents the event data in a structured format
+
+2. **Inheritance hierarchy**
+    - **Event classes**: `[SpecificEventClass]` → `AbstractEventRequest` → `AbstractRequest` → implements `EventInterface`
+    - **Payload classes**: `[SpecificPayloadClass]` → `AbstractItem` → implements `IteratorAggregate`
+
+3. **Factory pattern implementation**
+    - Each module provides its own events factory (for example, `CrmCompanyEventsFactory`, `TelephonyEventsFactory`)
+    - All factories implement the `EventsFabricInterface` with two key methods:
+      - `isSupport(string $eventCode): bool` — checks whether the factory can handle a given event code
+      - `create(Request $eventRequest): EventInterface` — creates the corresponding event object from the request
+
+4. **Central coordinator of factories**
+    - `RemoteEventsFactory` manages all event factories and routes incoming event requests to the appropriate factory
+    - It uses the event code from the payload to determine which factory should handle the event
+
+5. **Event registration and management**
+    - The `EventManager` class allows registering event handlers via the Bitrix24 API
+    - The service class `Event` provides direct API operations related to events:
+      - `bind` — register a new event handler
+      - `unbind` — unregister a handler
+      - `get` — retrieve the list of registered handlers
+      - `test` — test event handling
+
+### Event processing flow
+
+1. The application receives an HTTP request containing event data
+2. The request is passed to `RemoteEventsFactory->createEvent()`
+3. Based on the event code, the appropriate factory is selected to create the concrete event object
+4. The event object processes the request and exposes structured access to event data via its payload class
+5. Application code can then handle the event accordingly
+
+### Implemented event types
+
+The SDK currently implements events for several modules:
+
+1. **CRM module**:
+    - Company events (add, update, delete, custom fields operations)
+    - Deal events (including recurring deal operations)
+    - Quote events (similar patterns to company events)
+
+2. **Tasks module**:
+    - Task events (add, update, delete)
+
+3. **Application lifecycle**:
+    - Application install/uninstall events
+
+4. **Telephony**:
+    - Call-related events
+
+### Design patterns used
+
+1. **Factory pattern** — to create event objects
+2. **Strategy pattern** — different factories handle different event types
+3. **Observer pattern** — for the event notification system
+4. **Immutable objects** — payload objects are designed as immutable to ensure data integrity
+
+### Usage examples
+
+1. **Registering event handlers**:
+    ```php
+    $eventManager->bindEventHandlers([
+         new EventHandlerMetadata(
+              OnCrmCompanyAdd::CODE,
+              'https://your-handler-url.com',
+              $userId
+         ),
+    ]);
+    ```
+
+2. **Handling incoming events**:
+    ```php
+    $event = $remoteEventsFactory->createEvent($request, $applicationToken);
+    if ($event instanceof OnCrmCompanyAdd) {
+         $payload = $event->getPayload();
+         // Handle company added event
+    }
+    ```
+
+### Final summary
+
+The Bitrix24 PHP SDK implements a robust and extensible event system following clean OOP principles and proven design patterns. Key characteristics include:
+
+1. **Modular design** — events are organized by module (CRM, Tasks, etc.), which makes it easy to extend
+2. **Type safety** — strong typing with concrete event and payload classes improves IDE support and error detection
+3. **Factory pattern** — factories provide a clean way to create event objects from HTTP requests
+4. **Security features** — built-in support for validating application tokens
+5. **Immutability** — event payload objects are immutable, preventing accidental modification of event data
+6. **Standardized interface** — all events follow a common interface, simplifying the implementation of new event types
+
+To add new event classes for the Bitrix24 event system you need to:
+
+1. Create an event class that extends `AbstractEventRequest`
+2. Create a payload class that extends `AbstractItem`
+3. Create or update an events factory implementing `EventsFabricInterface`
+4. Register the factory in `RemoteEventsFactory::init()`
+
+This architecture allows seamless integration with Bitrix24 webhook-based event notifications while keeping the code clean and testable.

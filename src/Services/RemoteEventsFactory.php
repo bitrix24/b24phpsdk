@@ -22,6 +22,7 @@ use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\WrongSecuritySignatureException;
 use Bitrix24\SDK\Core\Requests\Events\UnsupportedRemoteEvent;
 use Bitrix24\SDK\Services\CRM\Company\Events\CrmCompanyEventsFactory;
+use Bitrix24\SDK\Services\Sale;
 use Bitrix24\SDK\Services\Telephony\Events\TelephonyEventsFabric;
 use Bitrix24\SDK\Services\Telephony\Events\TelephonyEventsFactory;
 use Psr\Log\LoggerInterface;
@@ -147,6 +148,7 @@ readonly class RemoteEventsFactory
                 new ApplicationLifeCycleEventsFactory(),
                 new TelephonyEventsFactory(),
                 new CrmCompanyEventsFactory(),
+                new Sale\Events\SaleEventsFactory(),
             ],
             $logger
         );
