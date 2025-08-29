@@ -4,6 +4,12 @@
 
 ### Added
 
+- Added service `Services\Sale\PersonTypeStatus\Service\PersonTypeStatus` with support methods,
+  see [sale.businessValuePersonDomain.* methods](https://github.com/bitrix24/b24phpsdk/issues/228):
+    - `add` adds business value for person domain
+    - `list` retrieves list of business values for person domain
+    - `delete` deletes business values by filter
+    - `getFields` gets fields description for business value person domain
 - Added service `Services\Task\Service\Task` with support methods,
   see [tasks.task.* methods](https://github.com/bitrix24/b24phpsdk/issues/214):
     - `add` creates a task, with batch calls support
