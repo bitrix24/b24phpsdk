@@ -73,6 +73,26 @@ class SaleServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    /**
+     * Order service (sale.order.*)
+     */
+    public function order(): Order\Service\Order
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new Order\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Order\Service\Order(
+                new Order\Service\Batch($batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function status(): Status
     {
         if (!isset($this->serviceCache[__METHOD__])) {

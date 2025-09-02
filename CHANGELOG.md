@@ -4,6 +4,14 @@
 
 ### Added
 
+- Added service `Services\Sale\Order\Service\Order` with support methods,
+  see [sale.order.* methods](https://github.com/bitrix24/b24phpsdk/issues/241):
+    - `add` adds an order, with batch calls support
+    - `update` modifies an order, with batch calls support
+    - `get` returns order fields and fields of related objects
+    - `list` returns a list of orders, with batch calls support
+    - `delete` deletes an order and related objects, with batch calls support
+    - `getFields` returns order fields
 - Added service `Services\Sale\PropertyVariant\Service\PropertyVariant` with support methods,
   see [sale.propertyvariant.* methods](https://github.com/bitrix24/b24phpsdk/issues/234):
     - `add` adds a variant of an order property
