@@ -51,6 +51,17 @@ class OrderTest extends TestCase
         $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($this->orderService->getFields()->getFieldsDescription()));
         $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, OrderItemResult::class);
     }
+    
+    public function testAllSystemFieldsHasValidTypeAnnotation():void
+    {
+        $allFields = $this->orderService->getFields()->getFieldsDescription();
+        $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
+        $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
+
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
+            $systemFields,
+            OrderItemResult::class);
+    }
 
     /**
      * @throws BaseException

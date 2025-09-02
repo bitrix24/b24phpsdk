@@ -24,6 +24,6 @@ class OrderFieldsResult extends AbstractResult
     public function getFieldsDescription(): array
     {
         $result = $this->getCoreResponse()->getResponseData()->getResult();
-        return $result['fields'] ?? [];
+        return $result['order'] ?? [];
     }
 }
