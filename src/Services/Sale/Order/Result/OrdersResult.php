@@ -29,7 +29,7 @@ class OrdersResult extends AbstractResult
     {
         $result = $this->getCoreResponse()->getResponseData()->getResult();
         $orders = $result['orders'] ?? [];
-        return array_map(fn($order) => new OrderItemResult($order), $orders);
+        return array_map(fn ($order): \Bitrix24\SDK\Services\Sale\Order\Result\OrderItemResult => new OrderItemResult($order), $orders);
     }
 
 }

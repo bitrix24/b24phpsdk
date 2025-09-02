@@ -166,9 +166,9 @@ class OrderTest extends TestCase
         self::assertTrue($this->orderService->update($orderId, $updateFields)->isSuccess());
         
         // Проверяем, что изменения применились
-        $updatedOrder = $this->orderService->get($orderId)->order();
+        $orderItemResult = $this->orderService->get($orderId)->order();
         
-        self::assertEquals($newComments, $updatedOrder->comments);
+        self::assertEquals($newComments, $orderItemResult->comments);
         
         // Удаляем тестовый заказ
         $this->orderService->delete($orderId);
@@ -191,27 +191,26 @@ class OrderTest extends TestCase
                 'currency' => 'USD', 
                 'price' => 100 * ($i + 1)
             ];
-            
+
             $orderIds[] = $this->orderService->add($orderFields)->getId();
         }
-        
+
         // Получаем список заказов и проверяем, что созданные заказы в нем присутствуют
         $orders = $this->orderService->list([], ['id' => 'desc'])->getOrders();
-        
+
         // Создаем массив ID из полученных заказов
-        $returnedIds = array_map(function($order) {
-            return $order->id;
-        }, $orders);
-        
+        $returnedIds = array_map(fn($order) => $order->id, $orders);
+
         // Проверяем, что все наши тестовые заказы присутствуют в списке
         foreach ($orderIds as $orderId) {
             self::assertContains($orderId, $returnedIds);
         }
-        
+
         // Удаляем тестовые заказы
         foreach ($orderIds as $orderId) {
             $this->orderService->delete($orderId);
         }
+
         $this->deletePersonType($personTypeId);
     }
     

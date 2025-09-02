@@ -60,11 +60,12 @@ class BatchTest extends TestCase
         }
 
         self::assertEquals(count($items), $cnt);
-        
+
         // Удаляем созданные заказы
         foreach ($orderIds as $orderId) {
             $this->orderService->delete($orderId);
         }
+
         $this->deletePersonType($personTypeId);
     }
 
@@ -90,7 +91,7 @@ class BatchTest extends TestCase
         foreach ($this->orderService->batch->add($items) as $item) {
             $orderIds[] = $item->getId();
         }
-        
+
         // Подготавливаем данные для обновления
         $updates = [];
         foreach ($orderIds as $i => $orderId) {
@@ -108,11 +109,12 @@ class BatchTest extends TestCase
         }
 
         self::assertEquals(count($updates), $cnt);
-        
+
         // Удаляем тестовые заказы
         foreach ($orderIds as $orderId) {
             $this->orderService->delete($orderId);
         }
+
         $this->deletePersonType($personTypeId);
     }
 
@@ -139,27 +141,28 @@ class BatchTest extends TestCase
         foreach ($this->orderService->batch->add($items) as $item) {
             $orderIds[] = $item->getId();
         }
-        
+
         // Получаем заказы с фильтром по комментарию
         $filter = ['%comments' => 'Test order'];
         $cnt = 0;
         $foundIds = [];
-        
+
         foreach ($this->orderService->batch->list($filter, ['id' => 'desc'], ['id', 'price', 'comments']) as $order) {
             $cnt++;
             $foundIds[] = $order->id;
         }
-        
+
         // Проверяем, что все созданные заказы найдены
         self::assertGreaterThanOrEqual(count($orderIds), $cnt);
         foreach ($orderIds as $orderId) {
             self::assertContains($orderId, $foundIds);
         }
-        
+
         // Удаляем тестовые заказы
         foreach ($orderIds as $orderId) {
             $this->orderService->delete($orderId);
         }
+
         $this->deletePersonType($personTypeId);
     }
     

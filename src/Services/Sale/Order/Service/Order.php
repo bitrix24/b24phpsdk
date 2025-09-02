@@ -35,7 +35,7 @@ class Order extends \Bitrix24\SDK\Services\AbstractService
     #[ApiEndpointMetadata(
         'sale.order.add',
         'https://apidocs.bitrix24.com/api-reference/sale/order/sale-order-add.html',
-    'Creates a new order.'
+        'Creates a new order.'
     )]
     public function add(array $fields): OrderAddedResult
     {
@@ -48,7 +48,7 @@ class Order extends \Bitrix24\SDK\Services\AbstractService
     #[ApiEndpointMetadata(
         'sale.order.update',
         'https://apidocs.bitrix24.com/api-reference/sale/order/sale-order-update.html',
-    'Updates an existing order.'
+        'Updates an existing order.'
     )]
     public function update(int $id, array $fields): OrderUpdatedResult
     {
@@ -62,7 +62,7 @@ class Order extends \Bitrix24\SDK\Services\AbstractService
     #[ApiEndpointMetadata(
         'sale.order.get',
         'https://apidocs.bitrix24.com/api-reference/sale/order/sale-order-get.html',
-    'Retrieves information about an order.'
+        'Retrieves information about an order.'
     )]
     public function get(int $id): OrderResult
     {
@@ -75,7 +75,7 @@ class Order extends \Bitrix24\SDK\Services\AbstractService
     #[ApiEndpointMetadata(
         'sale.order.list',
         'https://apidocs.bitrix24.com/api-reference/sale/order/sale-order-list.html',
-    'Retrieves a list of orders.'
+        'Retrieves a list of orders.'
     )]
     public function list(array $filter = [], array $order = [], array $select = [], int $start = 0): OrdersResult
     {
@@ -91,7 +91,7 @@ class Order extends \Bitrix24\SDK\Services\AbstractService
     #[ApiEndpointMetadata(
         'sale.order.delete',
         'https://apidocs.bitrix24.com/api-reference/sale/order/sale-order-delete.html',
-    'Deletes an order.'
+        'Deletes an order.'
     )]
     public function delete(int $id): DeletedItemResult
     {
@@ -104,7 +104,7 @@ class Order extends \Bitrix24\SDK\Services\AbstractService
     #[ApiEndpointMetadata(
         'sale.order.getFields',
         'https://apidocs.bitrix24.com/api-reference/sale/order/sale-order-getfields.html',
-    'Retrieves the description of order fields.'
+        'Retrieves the description of order fields.'
     )]
     public function getFields(): OrderFieldsResult
     {

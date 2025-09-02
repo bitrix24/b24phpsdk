@@ -23,7 +23,6 @@ class OrderResult extends AbstractResult
 {
     /**
      * Returns the order as OrderItemResult
-     * @return OrderItemResult
      */
     public function order(): OrderItemResult
     {

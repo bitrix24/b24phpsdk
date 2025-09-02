@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Sale\Order\Service;
 
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiBatchMethodMetadata;
 use Bitrix24\SDK\Attributes\ApiBatchServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
@@ -51,12 +52,12 @@ class Batch
     public function add(array $orders): Generator
     {
         $fields = [];
-        foreach ($orders as $orderFields) {
+        foreach ($orders as $order) {
             $fields[] = [
-                'fields' => $orderFields
+                'fields' => $order
             ];
         }
-        
+
         foreach ($this->batch->addEntityItems('sale.order.add', $fields) as $key => $item) {
             yield $key => new AddedOrderBatchResult($item);
         }
@@ -114,7 +115,7 @@ class Batch
             yield $key => new OrderItemResult($item);
         }
     }
-    
+
     /**
      * Batch delete orders
      *
