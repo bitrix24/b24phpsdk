@@ -1,6 +1,6 @@
 # b24-php-sdk change log
 
-## UPCOMING 1.6.0 – 2025.09.01
+## 1.6.0 – 2025.09.01
 
 ### Added
 
@@ -155,6 +155,15 @@
 - Added optional argument in method `Bitrix24AccountRepositoryInterface::findByMemberId` [see details](https://github.com/bitrix24/b24phpsdk/issues/223)
 - Changed method name `ApplicationInstallationRepositoryInterface::findByMemberId` to
   `ApplicationInstallationRepositoryInterface::findByBitrix24AccountMemberId` [see details](https://github.com/bitrix24/b24phpsdk/issues/226)
+
+### Statistics
+
+```
+Bitrix24 API-methods count: 1160
+Supported in bitrix24-php-sdk methods count: 476
+Coverage percentage: 41.03% 🚀
+```
+
 
 ## 1.5.0 – 2025.08.01
 
