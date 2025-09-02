@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Sale\Order\Service;
 
-use Bitrix24\SDK\Core\CoreInterface;
+use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Services\Sale\Order\Result\OrderResult;
 use Bitrix24\SDK\Services\Sale\Order\Result\OrdersResult;
 use Bitrix24\SDK\Services\Sale\Order\Result\OrderFieldsResult;
@@ -92,12 +93,12 @@ class Order extends \Bitrix24\SDK\Services\AbstractService
         'https://apidocs.bitrix24.com/api-reference/sale/order/sale-order-delete.html',
     'Deletes an order.'
     )]
-    public function delete(int $id): OrderResult
+    public function delete(int $id): DeletedItemResult
     {
         $response = $this->core->call('sale.order.delete', [
             'id' => $id
         ]);
-        return new OrderResult($response);
+        return new DeletedItemResult($response);
     }
 
     #[ApiEndpointMetadata(

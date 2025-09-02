@@ -18,9 +18,9 @@ use Bitrix24\SDK\Attributes\ApiBatchServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
 use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
-use Bitrix24\SDK\Core\Result\UpdatedItemBatchResult;
+use Bitrix24\SDK\Services\Sale\Order\Result\UpdatedOrderBatchResult;
+use Bitrix24\SDK\Services\Sale\Order\Result\AddedOrderBatchResult;
 use Bitrix24\SDK\Services\Sale\Order\Result\OrderItemResult;
 use Generator;
 use Psr\Log\LoggerInterface;
@@ -36,47 +36,85 @@ class Batch
     }
 
     /**
-     * Batch adding orders
+     * Batch add method for creating multiple orders
      *
-     * @return Generator<int, AddedItemBatchResult>
+     * @param array $orders Array of order fields
+     *
+     * @return Generator<int, AddedOrderBatchResult>
      * @throws BaseException
      */
     #[ApiBatchMethodMetadata(
         'sale.order.add',
         'https://apidocs.bitrix24.com/api-reference/sale/order/sale-order-add.html',
-        'Batch adding orders'
+        'Creates a new order'
     )]
     public function add(array $orders): Generator
     {
-        foreach ($this->batch->addEntityItems('sale.order.add', $orders) as $key => $item) {
-            yield $key => new AddedItemBatchResult($item);
+        $fields = [];
+        foreach ($orders as $orderFields) {
+            $fields[] = [
+                'fields' => $orderFields
+            ];
+        }
+        
+        foreach ($this->batch->addEntityItems('sale.order.add', $fields) as $key => $item) {
+            yield $key => new AddedOrderBatchResult($item);
         }
     }
 
     /**
-     * Batch update orders
+     * Batch update method for updating multiple orders
      *
      * Update elements in array with structure
-     * element_id => [  // id
-     *  'fields' => [] // fields to update
+     * element_id => [  // order id
+     *  'fields' => [] // order fields to update
      * ]
      *
-     * @param array<int, array> $orderItems
-     * @return Generator<int, UpdatedItemBatchResult>
+     * @param array<int, array> $ordersData
+     * @return Generator<int, UpdatedOrderBatchResult>
      * @throws BaseException
      */
     #[ApiBatchMethodMetadata(
         'sale.order.update',
         'https://apidocs.bitrix24.com/api-reference/sale/order/sale-order-update.html',
-        'Update in batch mode a list of orders'
+        'Updates an existing order'
     )]
-    public function update(array $orderItems): Generator
+    public function update(array $ordersData): Generator
     {
-        foreach ($this->batch->updateEntityItems('sale.order.update', $orderItems) as $key => $item) {
-            yield $key => new UpdatedItemBatchResult($item);
+        foreach ($this->batch->updateEntityItems('sale.order.update', $ordersData) as $key => $item) {
+            yield $key => new UpdatedOrderBatchResult($item);
         }
     }
 
+    /**
+     * Batch list method for retrieving multiple orders
+     *
+     * @param array $filter Filter criteria
+     * @param array $order Sort order
+     * @param array $select Fields to select
+     * @param int|null $limit Maximum number of items to return
+     *
+     * @return Generator|OrderItemResult[]
+     * @throws BaseException
+     */
+    #[ApiBatchMethodMetadata(
+        'sale.order.list',
+        'https://apidocs.bitrix24.com/api-reference/sale/order/sale-order-list.html',
+        'Retrieves a list of orders'
+    )]
+    public function list(array $filter = [], array $order = [], array $select = [], ?int $limit = null): Generator
+    {
+        foreach ($this->batch->getTraversableList(
+            'sale.order.list',
+            $order,
+            $filter,
+            $select,
+            $limit
+        ) as $key => $item) {
+            yield $key => new OrderItemResult($item);
+        }
+    }
+    
     /**
      * Batch delete orders
      *
@@ -85,42 +123,15 @@ class Batch
      * @return Generator<int, DeletedItemBatchResult>
      * @throws BaseException
      */
-    #[ApiBatchMethodMetadata(
+    #[ApiEndpointMetadata(
         'sale.order.delete',
         'https://apidocs.bitrix24.com/api-reference/sale/order/sale-order-delete.html',
-        'Batch delete orders'
+        'Batch delete orders.'
     )]
     public function delete(array $orderIds): Generator
     {
         foreach ($this->batch->deleteEntityItems('sale.order.delete', $orderIds) as $key => $item) {
             yield $key => new DeletedItemBatchResult($item);
-        }
-    }
-    
-    /**
-     * Batch list method for orders
-     *
-     * @return Generator<int, DepartmentItemResult>
-     * @throws BaseException
-     */
-    #[ApiBatchMethodMetadata(
-        'sale.order.list',
-        'https://apidocs.bitrix24.com/api-reference/sale/order/sale-order-list.html',
-        'Batch list method for orders'
-    )]
-    public function list(array $filter = [], array $order = [], array $select = [], ?int $limit = null): Generator
-    {
-        $this->log->debug(
-            'batchList',
-            [
-                'order'  => $order,
-                'filter' => $filter,
-                'select' => $select,
-                'limit'  => $limit,
-            ]
-        );
-        foreach ($this->batch->getTraversableList('sale.order.list', $order, $filter, $select, $limit) as $key => $value) {
-            yield $key => new OrderItemResult($value);
         }
     }
 }

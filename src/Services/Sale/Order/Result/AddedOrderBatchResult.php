@@ -9,21 +9,26 @@
  * file that was distributed with this source code.
  */
 
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Sale\Order\Result;
 
+use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Result\AbstractResult;
 
-class OrderFieldsResult extends AbstractResult
+/**
+ * Class AddedOrderBatchResult
+ *
+ * @package Bitrix24\SDK\Services\Sale\Order\Result
+ */
+class AddedOrderBatchResult extends AddedItemBatchResult
 {
     /**
      * @throws BaseException
      */
-    public function getFieldsDescription(): array
+    public function getId(): int
     {
-        $result = $this->getCoreResponse()->getResponseData()->getResult();
-        return $result['fields'] ?? [];
+        return (int)$this->getResponseData()->getResult()['order']['id'];
     }
 }
