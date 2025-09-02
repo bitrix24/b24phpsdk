@@ -182,6 +182,26 @@ test-integration-scope-entity:
 .PHONY: test-integration-scope-ai-admin
 test-integration-scope-ai-admin:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_ai_admin
+
+.PHONY: test-integration-scope-log
+test-integration-scope-log:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_log
+
+.PHONY: test-integration-scope-sale
+test-integration-scope-sale:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sale
+
+.PHONY: test-integration-sale-status
+test-integration-sale-status:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_status
+
+.PHONY: test-integration-sale-status-lang
+test-integration-sale-status-lang:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_status_lang
+	
+.PHONY: test-integration-sale-order
+test-integration-sale-order:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_order
  
 .PHONY: test-integration-scope-crm
 test-integration-scope-crm:
@@ -262,6 +282,14 @@ integration_tests_crm_timeline:
 .PHONY: integration_tests_department
 integration_tests_department:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_department
+	
+.PHONY: integration_tests_task
+integration_tests_task:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_task
+	
+.PHONY: integration_tests_sale
+integration_tests_sale:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale
 
 # work dev environment
 .PHONY: php-dev-server-up

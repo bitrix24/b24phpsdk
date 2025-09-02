@@ -27,12 +27,13 @@ parameters:
     - tests/Integration/Services/CRM/Lead/Service/LeadUserfieldTest.php
     - tests/Integration/Services/CRM/Currency
     - tests/Integration/Services/CRM/Requisites
+    - tests/Integration/Services/Task
+    - tests/Integration/Services/Sale
   excludePaths:
     - tests/Integration/Services/CRM/Requisites/Service/RequisiteUserfieldUseCaseTest.php
     - tests/Integration/Services/CRM/Status
     - tests/Integration/Services/CRM/Timeline
     - tests/Integration/Services/Entity/Section
-    - tests/Integration/Services/Department
   bootstrapFiles:
     - tests/bootstrap.php
   parallel:
