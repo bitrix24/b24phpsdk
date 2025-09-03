@@ -153,4 +153,23 @@ class SaleServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    /**
+     * Basket Item service (sale.basketitem.*)
+     */
+    public function basketItem(): BasketItem\Service\BasketItem
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new BasketItem\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new BasketItem\Service\BasketItem(
+                new BasketItem\Service\Batch($batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 }
