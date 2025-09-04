@@ -30,6 +30,6 @@ class FieldsCatalogProductResult extends FieldsResult
      */
     public function getFieldsDescription(): array
     {
-        return $this->result['basketItem'];
+        return $this->getCoreResponse()->getResponseData()->getResult()['basketItem'];
     }
 }

@@ -50,6 +50,8 @@ class BasketItemTest extends TestCase
     protected int $personTypeId;
     protected int $productId;
     protected int $iblockId;
+    protected int $productIblockId;
+    protected int $skuId;
     
     /**
      * @throws BaseException
@@ -60,14 +62,19 @@ class BasketItemTest extends TestCase
         $serviceBuilder = Fabric::getServiceBuilder();
         $this->basketItemService = $serviceBuilder->getSaleScope()->basketItem();
         
-        // Получаем список каталогов
+        // Get list of catalogs
         $catalogs = $serviceBuilder->getCatalogScope()->catalog()->list([], [], ['id', 'iblockId'], 0)->getCatalogs();
         if (empty($catalogs)) {
-            throw new \RuntimeException('Не найдено ни одного каталога товаров');
+            throw new \RuntimeException('No product catalogs found');
         }
-        $this->iblockId = (int)$catalogs[0]->iblockId;
+        foreach ($catalogs as $catalogItem) {
+            if (!empty($catalogItem->productIblockId)) {
+                $this->iblockId = (int)$catalogItem->productIblockId;
+                $this->productIblockId = (int)$catalogItem->iblockId;
+            }
+        }
         
-        // Создаем тестовый товар
+        // Create test product
         $productFields = [
             'name' => 'Test Product ' . uniqid(),
             'iblockId' => $this->iblockId,
@@ -84,7 +91,7 @@ class BasketItemTest extends TestCase
         $result = $serviceBuilder->getCatalogScope()->product()->add($productFields);
         $this->productId = (int)$result->product()->id;
         
-        // Создаем тип плательщика
+        // Create person type
         $personTypeFields = [
             'name' => 'Test Person Type',
             'active' => 'Y',
@@ -95,7 +102,7 @@ class BasketItemTest extends TestCase
         ];
         $this->personTypeId = $serviceBuilder->getSaleScope()->personType()->add($personTypeFields)->getId();
         
-        // Создаем тестовый заказ
+        // Create test order
         $orderFields = [
             'lid' => 's1',
             'personTypeId' => $this->personTypeId,
@@ -113,13 +120,13 @@ class BasketItemTest extends TestCase
     {
         $serviceBuilder = Fabric::getServiceBuilder();
         
-        // Удаляем тестовый заказ
+        // Delete test order
         $serviceBuilder->getSaleScope()->order()->delete($this->orderId);
         
-        // Удаляем тип плательщика
+        // Delete person type
         $serviceBuilder->getSaleScope()->personType()->delete($this->personTypeId);
         
-        // Удаляем тестовый товар
+        // Delete test product
         $serviceBuilder->getCatalogScope()->product()->delete($this->productId);
     }
 
@@ -146,7 +153,7 @@ class BasketItemTest extends TestCase
      */
     public function testAdd(): void
     {
-        // Создаем элемент корзины с минимально необходимыми полями
+        // Create basket item with minimum required fields
         $basketItemFields = [
             'orderId' => $this->orderId,
             'productId' => 0,
@@ -158,7 +165,7 @@ class BasketItemTest extends TestCase
         $basketItemId = $this->basketItemService->add($basketItemFields)->getId();
         self::assertGreaterThan(0, $basketItemId);
 
-        // Удаляем тестовый элемент корзины
+        // Delete test basket item
         $this->basketItemService->delete($basketItemId);
     }
 
@@ -168,7 +175,7 @@ class BasketItemTest extends TestCase
      */
     public function testUpdate(): void
     {
-        // Создаем тестовый элемент корзины
+        // Create test basket item
         $basketItemFields = [
             'orderId' => $this->orderId,
             'productId' => 0,
@@ -179,7 +186,7 @@ class BasketItemTest extends TestCase
 
         $basketItemId = $this->basketItemService->add($basketItemFields)->getId();
 
-        // Обновляем элемент корзины
+        // Update basket item
         $updateFields = [
             'quantity' => 2.0,
             'name' => 'Updated Test Product'
@@ -188,13 +195,51 @@ class BasketItemTest extends TestCase
         $result = $this->basketItemService->update($basketItemId, $updateFields);
         self::assertTrue($result->isSuccess());
 
-        // Проверяем, что изменения применились
+        // Verify changes were applied
         $basketItem = $this->basketItemService->get($basketItemId)->basketItem();
         self::assertEquals(2.0, $basketItem->quantity);
         self::assertEquals('Updated Test Product', $basketItem->name);
 
-        // Удаляем тестовый элемент корзины
+        // Delete test basket item
         $this->basketItemService->delete($basketItemId);
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testList(): void
+    {
+        // Create two test basket items
+        $basketItemIds = [];
+        for ($i = 0; $i < 2; $i++) {
+            $basketItemFields = [
+                'orderId' => $this->orderId,
+                'productId' => 0,
+                'currency' => 'USD',
+                'quantity' => 1.0,
+                'name' => sprintf('Test Product %d', $i + 1)
+            ];
+
+            $basketItemIds[] = $this->basketItemService->add($basketItemFields)->getId();
+        }
+
+        // Get list of basket items and verify that created items are present
+        $basketItems = $this->basketItemService->list(['id'], ['orderId' => $this->orderId])->getBasketItems();
+        
+        self::assertGreaterThanOrEqual(2, count($basketItems));
+        $foundIds = [];
+        foreach ($basketItems as $basketItem) {
+            if (in_array($basketItem->id, $basketItemIds, true)) {
+                $foundIds[] = $basketItem->id;
+            }
+        }
+        self::assertEquals(2, count($foundIds));
+
+        // Delete test basket items
+        foreach ($basketItemIds as $basketItemId) {
+            $this->basketItemService->delete($basketItemId);
+        }
     }
 
     /**
@@ -203,7 +248,7 @@ class BasketItemTest extends TestCase
      */
     public function testDelete(): void
     {
-        // Создаем тестовый элемент корзины
+        // Create test basket item
         $basketItemFields = [
             'orderId' => $this->orderId,
             'productId' => 0,
@@ -214,7 +259,72 @@ class BasketItemTest extends TestCase
 
         $basketItemId = $this->basketItemService->add($basketItemFields)->getId();
 
-        // Проверяем успешность удаления
+        // Verify deletion was successful
         self::assertTrue($this->basketItemService->delete($basketItemId)->isSuccess());
     }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testGet(): void
+    {
+        // Create test basket item
+        $basketItemFields = [
+            'orderId' => $this->orderId,
+            'productId' => 0,
+            'currency' => 'USD',
+            'quantity' => 1.0,
+            'name' => 'Test Product'
+        ];
+
+        $basketItemId = $this->basketItemService->add($basketItemFields)->getId();
+
+        // Get basket item and verify its fields
+        $basketItem = $this->basketItemService->get($basketItemId)->basketItem();
+        self::assertEquals($basketItemId, $basketItem->id);
+        self::assertEquals($this->orderId, $basketItem->orderId);
+        self::assertEquals('Test Product', $basketItem->name);
+        self::assertEquals(1.0, $basketItem->quantity);
+        self::assertEquals('USD', $basketItem->currency);
+
+        // Delete test basket item
+        $this->basketItemService->delete($basketItemId);
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testGetFields(): void
+    {
+        // Get fields description
+        $fields = $this->basketItemService->getFields()->getFieldsDescription();
+        
+        // Verify presence of essential fields
+        self::assertArrayHasKey('id', $fields);
+        self::assertArrayHasKey('orderId', $fields);
+        self::assertArrayHasKey('productId', $fields);
+        self::assertArrayHasKey('name', $fields);
+        self::assertArrayHasKey('price', $fields);
+        self::assertArrayHasKey('currency', $fields);
+        self::assertArrayHasKey('quantity', $fields);
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testGetFieldsCatalogProduct(): void
+    {
+        // Get fields description for catalog products
+        $fields = $this->basketItemService->getFieldsCatalogProduct()->getFieldsDescription();
+        
+        // Verify presence of essential fields for catalog products
+        self::assertArrayHasKey('id', $fields);
+        self::assertArrayHasKey('quantity', $fields);
+        self::assertArrayHasKey('xmlId', $fields);
+        self::assertArrayHasKey('sort', $fields);
+    }
+
 }
