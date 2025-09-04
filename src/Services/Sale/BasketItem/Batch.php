@@ -316,11 +316,15 @@ class Batch extends \Bitrix24\SDK\Core\Batch
             $tmp = $lastElementIdInFirstPage;
             $lastElementIdInFirstPage = $lastElementId;
             $lastElementId = $tmp;
+            --$lastElementIdInFirstPage;
+        }
+        else {
+            ++$lastElementIdInFirstPage;
         }
 
         // register commands with updated filter
         //more than one page in results -  register list commands
-        ++$lastElementIdInFirstPage;
+        
         for ($startId = $lastElementIdInFirstPage; $startId <= $lastElementId; $startId += self::MAX_ELEMENTS_IN_PAGE) {
             $this->logger->debug('registerCommand.item', [
                 'startId' => $startId,
@@ -349,6 +353,13 @@ class Batch extends \Bitrix24\SDK\Core\Batch
             if ($additionalParameters !== null) {
                 $params = array_merge($params, $additionalParameters);
             }
+            
+            $this->logger->debug(
+                'getTraversableList.newParams',
+                [
+                    'newParams' => $params,
+                ]
+            );
 
             $this->registerCommand($apiMethod, $params);
         }
@@ -387,5 +398,40 @@ class Batch extends \Bitrix24\SDK\Core\Batch
         }
 
         $this->logger->debug('getTraversableList.finish');
+    }
+    
+    /**
+     * @param array<string,string> $order
+     *
+     * @return array|string[]
+     */
+    protected function getReverseOrder(array $order): array
+    {
+        $this->logger->debug(
+            'getReverseOrder.start',
+            [
+                'order' => $order,
+            ]
+        );
+        $reverseOrder = null;
+
+        if ($order === []) {
+            $reverseOrder = ['id' => 'desc'];
+        } else {
+            $order = array_change_key_case($order, CASE_LOWER);
+            $oldDirection = array_values($order)[0];
+            $newOrderDirection = $oldDirection === 'asc' ? 'desc' : 'asc';
+
+            $reverseOrder[array_key_first($order)] = $newOrderDirection;
+        }
+
+        $this->logger->debug(
+            'getReverseOrder.finish',
+            [
+                'order' => $reverseOrder,
+            ]
+        );
+
+        return $reverseOrder;
     }
 }
