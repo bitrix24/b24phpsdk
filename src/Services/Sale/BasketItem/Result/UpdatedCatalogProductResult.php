@@ -27,6 +27,6 @@ class UpdatedCatalogProductResult extends UpdatedItemResult
      */
     public function isSuccess(): bool
     {
-        return isset($this->result['basketItem']) && $this->result['basketItem'] !== null;
+        return $this->getCoreResponse()->getResponseData()->getResult()['basketItem'] !== null;
     }
 }

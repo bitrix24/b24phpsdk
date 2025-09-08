@@ -48,10 +48,6 @@ class BasketItemTest extends TestCase
     protected BasketItem $basketItemService;
     protected int $orderId;
     protected int $personTypeId;
-    protected int $productId;
-    protected int $iblockId;
-    protected int $productIblockId;
-    protected int $skuId;
     
     /**
      * @throws BaseException
@@ -61,36 +57,6 @@ class BasketItemTest extends TestCase
     {
         $serviceBuilder = Fabric::getServiceBuilder();
         $this->basketItemService = $serviceBuilder->getSaleScope()->basketItem();
-        
-        // Get list of catalogs
-        $catalogs = $serviceBuilder->getCatalogScope()->catalog()->list([], [], ['id', 'iblockId'], 0)->getCatalogs();
-        if (empty($catalogs)) {
-            throw new \RuntimeException('No product catalogs found');
-        }
-        foreach ($catalogs as $catalogItem) {
-            if (!empty($catalogItem->productIblockId)) {
-                $this->iblockId = (int)$catalogItem->productIblockId;
-                $this->productIblockId = (int)$catalogItem->iblockId;
-            }
-        }
-        
-        // Create test product
-        $productFields = [
-            'name' => 'Test Product ' . uniqid(),
-            'iblockId' => $this->iblockId,
-            'iblockSectionId' => 0,
-            'price' => 100.00,
-            'currency' => 'USD',
-            'vat' => 0,
-            'vatIncluded' => 'Y',
-            'active' => 'Y',
-            'available' => 'Y',
-            'canBuyZero' => 'Y',
-            'type' => 1,
-            'quantity' => 1000,
-        ];
-        $result = $serviceBuilder->getCatalogScope()->product()->add($productFields);
-        $this->productId = (int)$result->product()->id;
         
         // Create person type
         $personTypeFields = [
@@ -126,9 +92,6 @@ class BasketItemTest extends TestCase
         
         // Delete person type
         $serviceBuilder->getSaleScope()->personType()->delete($this->personTypeId);
-        
-        // Delete test product
-        $serviceBuilder->getCatalogScope()->product()->delete($this->productId);
     }
 
     public function testAllSystemFieldsAnnotated(): void
@@ -334,10 +297,11 @@ class BasketItemTest extends TestCase
      */
     public function testAddCatalogProduct(): void
     {
+        $productId = $this->getProductId();
         // Create basket item from catalog product with required fields
         $basketItemFields = [
             'orderId' => $this->orderId,
-            'productId' => $this->productId,
+            'productId' => $productId,
             'currency' => 'USD',
             'quantity' => 1.0,
             'name' => 'Test Product',
@@ -351,13 +315,103 @@ class BasketItemTest extends TestCase
 
         // Verify that added item contains correct product reference
         $basketItem = $this->basketItemService->get($basketItemId)->basketItem();
-        self::assertEquals($this->skuId, $basketItem->productId);
+        self::assertEquals($productId, $basketItem->productId);
         self::assertEquals($this->orderId, $basketItem->orderId);
         self::assertEquals(1.0, $basketItem->quantity);
         self::assertEquals('USD', $basketItem->currency);
 
-        // Delete test basket item
+        // Delete test basket item and product
         $this->basketItemService->delete($basketItemId);
+        $this->deleteProduct($productId);
+    }
+    
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testUpdateCatalogProduct(): void
+    {
+        $productId = $this->getProductId();
+        // Create basket item from catalog product with required fields
+        $basketItemFields = [
+            'orderId' => $this->orderId,
+            'productId' => $productId,
+            'currency' => 'USD',
+            'quantity' => 1.0,
+            'name' => 'Test Product',
+        ];
+
+        $result = $this->basketItemService->addCatalogProduct($basketItemFields);
+        $basketItemId = $result->getId();
+
+        // Verify that item was added successfully
+        self::assertGreaterThan(0, $basketItemId);
+
+        $newQuantity = 2.0;
+        // Verify update was successful
+        self::assertTrue($this->basketItemService->updateCatalogProduct($basketItemId, ['quantity' => $newQuantity])->isSuccess());
+        
+        // Verify that added item contains correct product reference
+        $basketItem = $this->basketItemService->get($basketItemId)->basketItem();
+        self::assertEquals($newQuantity, $basketItem->quantity);
+
+        // Delete test basket item and product
+        $this->basketItemService->delete($basketItemId);
+        $this->deleteProduct($productId);
+    }
+    
+    protected function getProductId(): int
+    {
+        $iblockId = 0;
+        $productId = 0;
+        // Get list of catalogs
+        $catalogs = Fabric::getServiceBuilder()->getCatalogScope()->catalog()->list([], [], ['id', 'iblockId','productIblockId'], 0)->getCatalogs();
+        if (empty($catalogs)) {
+            throw new \RuntimeException('No product catalogs found');
+        }
+        foreach ($catalogs as $catalogItem) {
+            if (!empty($catalogItem->productIblockId)) {
+                $iblockId = (int)$catalogItem->productIblockId;
+            }
+        }
+        
+        // Create test product
+        $productFields = [
+            'name' => 'Test Product ' . uniqid(),
+            'iblockId' => $iblockId,
+            'iblockSectionId' => 0,
+            'price' => 100.00,
+            'currency' => 'USD',
+            'vat' => 0,
+            'vatIncluded' => 'Y',
+            'active' => 'Y',
+            'available' => 'Y',
+            'canBuyZero' => 'Y',
+            'type' => 1,
+            'quantity' => 1000,
+        ];
+        $result = Fabric::getServiceBuilder()->getCatalogScope()->product()->add($productFields);
+        $productId = (int)$result->product()->id;
+        
+        $core = Fabric::getCore();
+        // Get price types
+        $priceTypeId = (int)$core->call('catalog.priceType.list', [])->getResponseData()->getResult()['priceTypes'][0]['id'];
+        // Create product price
+        $res = (bool)$core->call('catalog.price.add', [
+            'fields' => [
+                'productId' => $productId,
+                'catalogGroupId' => $priceTypeId,
+                'price' => 100.00,
+                'currency' => 'USD',
+            ]
+        ])->getResponseData()->getResult()['price']['id'];
+        
+        return ($res) ? $productId : 0;
+    }
+    
+    protected function deleteProduct($id) {
+        // Delete test product
+        Fabric::getServiceBuilder()->getCatalogScope()->product()->delete($id);
     }
 
 }
