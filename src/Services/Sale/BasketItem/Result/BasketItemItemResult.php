@@ -21,8 +21,8 @@ use MoneyPHP\Percentage\Percentage;
 /**
  * Class BasketItemItemResult
  * Represents a single basket item returned by Bitrix24 REST API.
+ * bool|null $barcodeMulti - there isn't on com bitrix24 accounts
  *
- * @property-read bool|null $barcodeMulti
  * @property-read Money|null $basePrice Original price excluding markups and discounts
  * @property-read bool|null $canBuy Availability flag (Y/N)
  * @property-read string|null $catalogXmlId External code of the product catalog

@@ -87,6 +87,7 @@ class BasketItemTest extends TestCase
             'available' => 'Y',
             'canBuyZero' => 'Y',
             'type' => 1,
+            'quantity' => 1000,
         ];
         $result = $serviceBuilder->getCatalogScope()->product()->add($productFields);
         $this->productId = (int)$result->product()->id;
@@ -325,6 +326,38 @@ class BasketItemTest extends TestCase
         self::assertArrayHasKey('quantity', $fields);
         self::assertArrayHasKey('xmlId', $fields);
         self::assertArrayHasKey('sort', $fields);
+    }
+    
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testAddCatalogProduct(): void
+    {
+        // Create basket item from catalog product with required fields
+        $basketItemFields = [
+            'orderId' => $this->orderId,
+            'productId' => $this->productId,
+            'currency' => 'USD',
+            'quantity' => 1.0,
+            'name' => 'Test Product',
+        ];
+
+        $result = $this->basketItemService->addCatalogProduct($basketItemFields);
+        $basketItemId = $result->getId();
+
+        // Verify that item was added successfully
+        self::assertGreaterThan(0, $basketItemId);
+
+        // Verify that added item contains correct product reference
+        $basketItem = $this->basketItemService->get($basketItemId)->basketItem();
+        self::assertEquals($this->skuId, $basketItem->productId);
+        self::assertEquals($this->orderId, $basketItem->orderId);
+        self::assertEquals(1.0, $basketItem->quantity);
+        self::assertEquals('USD', $basketItem->currency);
+
+        // Delete test basket item
+        $this->basketItemService->delete($basketItemId);
     }
 
 }
