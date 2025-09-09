@@ -102,7 +102,7 @@ class PaymentTest extends TestCase
         $result = $response->getResponseData()->getResult();
         $paySystems = (is_array($result)) ? $result : [];
 
-        if (empty($paySystems)) {
+        if ($paySystems === []) {
             $this->markTestSkipped('No payment systems available for testing');
         }
 
