@@ -128,7 +128,7 @@ class SaleServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-    
+
     /**
      * Payment service (sale.payment.*)
      */

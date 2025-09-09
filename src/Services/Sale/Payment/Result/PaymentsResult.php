@@ -23,7 +23,7 @@ class PaymentsResult extends AbstractResult
 {
     /**
      * Returns an array of payment items
-     * 
+     *
      * @return PaymentItemResult[] array of payment item results
      */
     public function getPayments(): array

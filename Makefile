@@ -290,6 +290,10 @@ integration_tests_task:
 .PHONY: integration_tests_sale
 integration_tests_sale:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale
+	
+.PHONY: integration_tests_sale_payment
+integration_tests_sale_payment:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_payment
 
 # work dev environment
 .PHONY: php-dev-server-up

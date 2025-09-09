@@ -146,7 +146,7 @@ class Payment extends AbstractService
      * @link https://apidocs.bitrix24.com/api-reference/sale/payment/sale-payment-delete.html
      *
      * @param int $id Payment identifier
-     * 
+     *
      * @throws BaseException
      * @throws TransportException
      */
