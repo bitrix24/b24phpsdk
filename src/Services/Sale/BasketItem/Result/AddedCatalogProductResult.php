@@ -25,8 +25,6 @@ class AddedCatalogProductResult extends AddedItemResult
 {
     /**
      * Get ID of the added basket item
-     *
-     * @return int
      */
     public function getId(): int
     {

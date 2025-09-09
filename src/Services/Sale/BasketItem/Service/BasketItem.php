@@ -57,7 +57,6 @@ class BasketItem extends AbstractService
      *
      * @param array $fields Array of basket item fields
      *
-     * @return AddedBasketItemResult
      *
      * @link https://apidocs.bitrix24.com/api-reference/sale/basket-item/sale-basket-item-add.html
      */
@@ -103,7 +102,6 @@ class BasketItem extends AbstractService
      * @param int   $id     Basket item identifier
      * @param array $fields Array of fields to update
      *
-     * @return UpdatedBasketItemResult
      *
      * @link https://apidocs.bitrix24.com/api-reference/sale/basket-item/sale-basket-item-update.html
      */
@@ -127,7 +125,6 @@ class BasketItem extends AbstractService
      *
      * @param int $id Identifier of the basket item
      *
-     * @return BasketItemResult
      *
      * @link https://apidocs.bitrix24.com/api-reference/sale/basket-item/sale-basket-item-get.html
      */
@@ -153,7 +150,6 @@ class BasketItem extends AbstractService
      * @param array|null  $order  Sort order
      * @param int|null    $start  Offset for pagination
      *
-     * @return BasketItemsResult
      *
      * @link https://apidocs.bitrix24.com/api-reference/sale/basket-item/sale-basket-item-list.html
      */
@@ -192,7 +188,6 @@ class BasketItem extends AbstractService
      *
      * @param int $id Identifier of the basket item
      *
-     * @return DeletedItemResult
      *
      * @link https://apidocs.bitrix24.com/api-reference/sale/basket-item/sale-basket-item-delete.html
      */
@@ -213,7 +208,6 @@ class BasketItem extends AbstractService
     /**
      * Get available fields for basket item with their descriptions
      *
-     * @return FieldsBasketItemResult
      *
      * @link https://apidocs.bitrix24.com/api-reference/sale/basket-item/sale-basket-item-get-fields.html
      */
@@ -249,7 +243,6 @@ class BasketItem extends AbstractService
      *
      * @param array $fields Array of basket item fields
      *
-     * @return AddedCatalogProductResult
      *
      * @link https://apidocs.bitrix24.com/api-reference/sale/basket-item/sale-basket-item-add-catalog-product.html
      */
@@ -281,14 +274,13 @@ class BasketItem extends AbstractService
      * @param int   $id     Basket item identifier
      * @param array $fields Array of fields to update
      *
-     * @return UpdatedCatalogProductResult
      *
      * @link https://apidocs.bitrix24.com/api-reference/sale/basket-item/sale-basket-item-update-catalog-product.html
      */
     #[ApiEndpointMetadata(
         'sale.basketitem.updateCatalogProduct',
         'https://apidocs.bitrix24.com/api-reference/sale/basket-item/sale-basket-item-update-catalog-product.html',
-        'Update a catalog product in an order\'s basket'
+        "Update a catalog product in an order's basket"
     )]
     public function updateCatalogProduct(int $id, array $fields): UpdatedCatalogProductResult
     {
@@ -306,7 +298,6 @@ class BasketItem extends AbstractService
      * Unlike getFields(), this method returns the minimum necessary list of fields
      * specifically for working with products from the catalog module
      *
-     * @return FieldsCatalogProductResult
      *
      * @link https://apidocs.bitrix24.com/api-reference/sale/basket-item/sale-basket-item-get-catalog-product-fields.html
      */

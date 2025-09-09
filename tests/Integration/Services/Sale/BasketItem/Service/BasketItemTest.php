@@ -44,11 +44,13 @@ use PHPUnit\Framework\TestCase;
 class BasketItemTest extends TestCase
 {
     use CustomBitrix24Assertions;
-    
+
     protected BasketItem $basketItemService;
+
     protected int $orderId;
+
     protected int $personTypeId;
-    
+
     /**
      * @throws BaseException
      * @throws TransportException
@@ -57,7 +59,7 @@ class BasketItemTest extends TestCase
     {
         $serviceBuilder = Fabric::getServiceBuilder();
         $this->basketItemService = $serviceBuilder->getSaleScope()->basketItem();
-        
+
         // Create person type
         $personTypeFields = [
             'name' => 'Test Person Type',
@@ -68,7 +70,7 @@ class BasketItemTest extends TestCase
             ]
         ];
         $this->personTypeId = $serviceBuilder->getSaleScope()->personType()->add($personTypeFields)->getId();
-        
+
         // Create test order
         $orderFields = [
             'lid' => 's1',
@@ -78,7 +80,7 @@ class BasketItemTest extends TestCase
         ];
         $this->orderId = $serviceBuilder->getSaleScope()->order()->add($orderFields)->getId();
     }
-    
+
     /**
      * @throws BaseException
      * @throws TransportException
@@ -86,10 +88,10 @@ class BasketItemTest extends TestCase
     protected function tearDown(): void
     {
         $serviceBuilder = Fabric::getServiceBuilder();
-        
+
         // Delete test order
         $serviceBuilder->getSaleScope()->order()->delete($this->orderId);
-        
+
         // Delete person type
         $serviceBuilder->getSaleScope()->personType()->delete($this->personTypeId);
     }
@@ -99,13 +101,13 @@ class BasketItemTest extends TestCase
         $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($this->basketItemService->getFields()->getFieldsDescription()));
         $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, BasketItemItemResult::class);
     }
-    
+
     public function testAllSystemFieldsHasValidTypeAnnotation(): void
     {
         $allFields = $this->basketItemService->getFields()->getFieldsDescription();
         $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
         $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
-        
+
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
             $systemFields,
             BasketItemItemResult::class);
@@ -156,8 +158,8 @@ class BasketItemTest extends TestCase
             'name' => 'Updated Test Product'
         ];
 
-        $result = $this->basketItemService->update($basketItemId, $updateFields);
-        self::assertTrue($result->isSuccess());
+        $updatedBasketItemResult = $this->basketItemService->update($basketItemId, $updateFields);
+        self::assertTrue($updatedBasketItemResult->isSuccess());
 
         // Verify changes were applied
         $basketItem = $this->basketItemService->get($basketItemId)->basketItem();
@@ -190,7 +192,7 @@ class BasketItemTest extends TestCase
 
         // Get list of basket items and verify that created items are present
         $basketItems = $this->basketItemService->list(['id'], ['orderId' => $this->orderId])->getBasketItems();
-        
+
         self::assertGreaterThanOrEqual(2, count($basketItems));
         $foundIds = [];
         foreach ($basketItems as $basketItem) {
@@ -198,6 +200,7 @@ class BasketItemTest extends TestCase
                 $foundIds[] = $basketItem->id;
             }
         }
+
         self::assertEquals(2, count($foundIds));
 
         // Delete test basket items
@@ -264,7 +267,7 @@ class BasketItemTest extends TestCase
     {
         // Get fields description
         $fields = $this->basketItemService->getFields()->getFieldsDescription();
-        
+
         // Verify presence of essential fields
         self::assertArrayHasKey('id', $fields);
         self::assertArrayHasKey('orderId', $fields);
@@ -283,14 +286,14 @@ class BasketItemTest extends TestCase
     {
         // Get fields description for catalog products
         $fields = $this->basketItemService->getFieldsCatalogProduct()->getFieldsDescription();
-        
+
         // Verify presence of essential fields for catalog products
         self::assertArrayHasKey('id', $fields);
         self::assertArrayHasKey('quantity', $fields);
         self::assertArrayHasKey('xmlId', $fields);
         self::assertArrayHasKey('sort', $fields);
     }
-    
+
     /**
      * @throws BaseException
      * @throws TransportException
@@ -307,8 +310,8 @@ class BasketItemTest extends TestCase
             'name' => 'Test Product',
         ];
 
-        $result = $this->basketItemService->addCatalogProduct($basketItemFields);
-        $basketItemId = $result->getId();
+        $addedCatalogProductResult = $this->basketItemService->addCatalogProduct($basketItemFields);
+        $basketItemId = $addedCatalogProductResult->getId();
 
         // Verify that item was added successfully
         self::assertGreaterThan(0, $basketItemId);
@@ -324,7 +327,7 @@ class BasketItemTest extends TestCase
         $this->basketItemService->delete($basketItemId);
         $this->deleteProduct($productId);
     }
-    
+
     /**
      * @throws BaseException
      * @throws TransportException
@@ -341,8 +344,8 @@ class BasketItemTest extends TestCase
             'name' => 'Test Product',
         ];
 
-        $result = $this->basketItemService->addCatalogProduct($basketItemFields);
-        $basketItemId = $result->getId();
+        $addedCatalogProductResult = $this->basketItemService->addCatalogProduct($basketItemFields);
+        $basketItemId = $addedCatalogProductResult->getId();
 
         // Verify that item was added successfully
         self::assertGreaterThan(0, $basketItemId);
@@ -350,7 +353,7 @@ class BasketItemTest extends TestCase
         $newQuantity = 2.0;
         // Verify update was successful
         self::assertTrue($this->basketItemService->updateCatalogProduct($basketItemId, ['quantity' => $newQuantity])->isSuccess());
-        
+
         // Verify that added item contains correct product reference
         $basketItem = $this->basketItemService->get($basketItemId)->basketItem();
         self::assertEquals($newQuantity, $basketItem->quantity);
@@ -359,22 +362,23 @@ class BasketItemTest extends TestCase
         $this->basketItemService->delete($basketItemId);
         $this->deleteProduct($productId);
     }
-    
+
     protected function getProductId(): int
     {
         $iblockId = 0;
         $productId = 0;
         // Get list of catalogs
         $catalogs = Fabric::getServiceBuilder()->getCatalogScope()->catalog()->list([], [], ['id', 'iblockId','productIblockId'], 0)->getCatalogs();
-        if (empty($catalogs)) {
+        if ($catalogs === []) {
             throw new \RuntimeException('No product catalogs found');
         }
-        foreach ($catalogs as $catalogItem) {
-            if (!empty($catalogItem->productIblockId)) {
-                $iblockId = (int)$catalogItem->productIblockId;
+
+        foreach ($catalogs as $catalog) {
+            if (!empty($catalog->productIblockId)) {
+                $iblockId = (int)$catalog->productIblockId;
             }
         }
-        
+
         // Create test product
         $productFields = [
             'name' => 'Test Product ' . uniqid(),
@@ -390,9 +394,9 @@ class BasketItemTest extends TestCase
             'type' => 1,
             'quantity' => 1000,
         ];
-        $result = Fabric::getServiceBuilder()->getCatalogScope()->product()->add($productFields);
-        $productId = (int)$result->product()->id;
-        
+        $productResult = Fabric::getServiceBuilder()->getCatalogScope()->product()->add($productFields);
+        $productId = (int)$productResult->product()->id;
+
         $core = Fabric::getCore();
         // Get price types
         $priceTypeId = (int)$core->call('catalog.priceType.list', [])->getResponseData()->getResult()['priceTypes'][0]['id'];
@@ -405,11 +409,11 @@ class BasketItemTest extends TestCase
                 'currency' => 'USD',
             ]
         ])->getResponseData()->getResult()['price']['id'];
-        
+
         return ($res) ? $productId : 0;
     }
-    
-    protected function deleteProduct($id) {
+
+    protected function deleteProduct(int $id) {
         // Delete test product
         Fabric::getServiceBuilder()->getCatalogScope()->product()->delete($id);
     }

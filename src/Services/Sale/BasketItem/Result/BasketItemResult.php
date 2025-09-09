@@ -25,8 +25,6 @@ class BasketItemResult extends AbstractResult
 {
     /**
      * Get basket item information
-     *
-     * @return BasketItemItemResult
      */
     public function basketItem(): BasketItemItemResult
     {

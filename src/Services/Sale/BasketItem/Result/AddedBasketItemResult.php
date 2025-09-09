@@ -22,7 +22,6 @@ use Bitrix24\SDK\Core\Result\AddedItemResult;
 class AddedBasketItemResult extends AddedItemResult
 {
     /**
-     * @return int
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
     public function getId(): int

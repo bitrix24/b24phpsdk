@@ -205,233 +205,235 @@ class Batch extends \Bitrix24\SDK\Core\Batch
             ]
         );
 
-        // strategy.3 — ID filter, batch, no count, order
-        // — ✅ counting of the number of elements in the selection is disabled
-        // — ⚠️ The ID of elements in the selection is increasing, i.e. the results were sorted by ID
-        // — using batch
-        // — sequential execution of queries
-        //
-        // Optimization groundwork
-        // — limited use of parallel queries
-        //
-        // Queries are sent to the server sequentially with the "order" parameter: {"ID": "ASC"} (sorting in ascending ID).
-        // Since the results are sorted in ascending ID, they can be combined into batch queries with counting of the number of elements in each disabled.
-        //
-        // Filter formation order:
-        //
-        // took a filter with "direct" sorting and got the first ID
-        // took a filter with "reverse" sorting and got the last ID
-        // Since ID increases monotonically, then we assume that all pages are filled with elements uniformly, in fact there will be "holes" due to master-master replication and deleted elements. i.e. the resulting selections will not always contain exactly 50 elements.
-        // we form selections from ready-made filters and pack them into batch commands.
-        // if possible, batch queries are executed in parallel
+        // Determine sort direction and ID key
+        $keyId = 'id';
+        $order = array_key_exists($keyId, $order) ? [$keyId => $order[$keyId]] : [$keyId => 'asc'];
 
-        // we got the first id of the element in the selection by filter
-        // todo checked that this is a *.list command
-        // todo checked that there is an ID in the select, i.e. the developer understands that ID is used
-        // todo checked that sorting is set as "order": {"ID": "ASC"} i.e. the developer understands that the data will arrive in this order
-        // todo checked that if there is a limit, then it is >1
-        // todo checked that there is no ID field in the filter, since we will work with it
+        $isAscendingSort = $order[$keyId] == 'asc';
 
+        // Get first page
         $params = [
             'order' => $order,
             'filter' => $filter,
             'select' => $select,
             'start' => 0,
         ];
-        $keyId = 'id';
-        $this->logger->debug('getTraversableList.getFirstPage', [
-            'apiMethod' => $apiMethod,
-            'params' => $params,
-        ]);
-        $response = $this->core->call($apiMethod, $params);
-        $totalElementsCount = $response->getResponseData()->getPagination()->getTotal();
-        $this->logger->debug('getTraversableList.totalElementsCount', [
-            'totalElementsCount' => $totalElementsCount,
-        ]);
-        // filtered elements count less than or equal one result page(50 elements)
-        $elementsCounter = 0;
-        if ($totalElementsCount <= self::MAX_ELEMENTS_IN_PAGE) {
-            // adding 'orders' to result is needed
-            foreach ($response->getResponseData()->getResult()['basketItems'] as $listElement) {
-                ++$elementsCounter;
-                if ($limit !== null && $elementsCounter > $limit) {
-                    return;
-                }
 
-                yield $listElement;
-            }
-
-            $this->logger->debug('getTraversableList.finish');
-
-            return;
+        if ($additionalParameters !== null) {
+            $params = array_merge($params, $additionalParameters);
         }
 
-        // filtered elements count more than one result page(50 elements)
-        // return first page
-        $lastElementIdInFirstPage = null;
-        // adding 'orders' to result is needed
-        foreach ($response->getResponseData()->getResult()['basketItems'] as $listElement) {
-            ++$elementsCounter;
-            $lastElementIdInFirstPage = (int)$listElement[$keyId];
+        $firstPageResponse = $this->core->call($apiMethod, $params);
+        $totalElementsCount = $firstPageResponse->getResponseData()->getPagination()->getTotal();
+        $this->logger->debug('getTraversableListAlter.totalElementsCount', [
+            'totalElementsCount' => $totalElementsCount,
+        ]);
+
+        // Process first page and count returned elements
+        $elementsCounter = 0;
+
+        // Process first page results
+        $firstPageElements = $firstPageResponse->getResponseData()->getResult()['basketItems'];
+
+        foreach ($firstPageElements as $firstPageElement) {
+            $elementsCounter++;
             if ($limit !== null && $elementsCounter > $limit) {
                 return;
             }
 
-            yield $listElement;
+            yield $firstPageElement;
         }
 
-        $this->clearCommands();
-        if (!in_array($keyId, $select, true)) {
-            $select[] = $keyId;
+        // If total elements count is less than or equal to page size, finish
+        if ($totalElementsCount <= self::MAX_ELEMENTS_IN_PAGE) {
+            $this->logger->debug('getTraversableListAlter.finish - single page');
+            return;
         }
 
-        // getLastElementId in filtered result
-        // todo wait new api version
-        $defaultOrderKey = 'order';
-        $orderKey = in_array($apiMethod, self::ENTITY_METHODS) ? 'SORT' : $defaultOrderKey;
-
-        $params = [
-            $orderKey => $this->getReverseOrder($order),
-            'filter' => $filter,
-            'select' => $select,
-            'start' => 0,
-        ];
-
-        $this->logger->debug('getTraversableList.getLastPage', [
-            'apiMethod' => $apiMethod,
-            'params' => $params,
-        ]);
-        $lastResultPage = $this->core->call($apiMethod, $params);
-        // adding 'basket items' to result is needed
-        $lastElementId = (int)$lastResultPage->getResponseData()->getResult()['basketItems'][0][$keyId];
-
-        $this->logger->debug('getTraversableList.lastElementsId', [
-            'lastElementIdInFirstPage' => $lastElementIdInFirstPage,
-            'lastElementIdInLastPage' => $lastElementId,
+        // Get ID of the last element on the page
+        $lastElementId = $this->getLastElementIdAlter($firstPageElements, $keyId, $isAscendingSort);
+        $this->logger->debug('getTraversableListAlter.lastElementId', [
+            'lastElementId' => $lastElementId,
         ]);
 
-
-        // reverse order if elements in batch ordered in DESC direction
-        if ($lastElementIdInFirstPage > $lastElementId) {
-            $tmp = $lastElementIdInFirstPage;
-            $lastElementIdInFirstPage = $lastElementId;
-            $lastElementId = $tmp;
-            --$lastElementIdInFirstPage;
-        }
-        else {
-            ++$lastElementIdInFirstPage;
-        }
-
-        // register commands with updated filter
-        //more than one page in results -  register list commands
-        
-        for ($startId = $lastElementIdInFirstPage; $startId <= $lastElementId; $startId += self::MAX_ELEMENTS_IN_PAGE) {
-            $this->logger->debug('registerCommand.item', [
-                'startId' => $startId,
-                'lastElementId' => $lastElementId,
-                'delta' => $lastElementId - $startId,
+        // Form and execute sequential batch requests
+        $batchNumber = 0;
+        while ($elementsCounter < $totalElementsCount && ($limit === null || $elementsCounter < $limit)) {
+            $this->clearCommands();
+            $this->logger->debug('getTraversableListAlter.preparingBatch', [
+                'batchNumber' => $batchNumber,
+                'elementsCounter' => $elementsCounter,
             ]);
 
-            $delta = $lastElementId - $startId;
-            $isLastPage = false;
-            if ($delta > self::MAX_ELEMENTS_IN_PAGE) {
-                // ignore
-                // - master–master replication with id
-                // - deleted elements
-                $lastElementIdInPage = $startId + self::MAX_ELEMENTS_IN_PAGE;
-            } else {
-                $lastElementIdInPage = $lastElementId;
-                $isLastPage = true;
-            }
+            // Form the first request based on sort order
+            $firstCommandId = "cmd_0";
+            $firstParams = [];
 
-            $params = [
+            $updatedFilter = $this->updateFilterForNextBatchAlter($filter, $keyId, $lastElementId, $isAscendingSort);
+            $firstParams = [
                 'order' => $order,
-                'filter' => $this->updateFilterForBatch($keyId, $startId, $lastElementIdInPage, $isLastPage, $filter),
+                'filter' => $updatedFilter,
                 'select' => $select,
-                'start' => -1,
+                'start' => -1
             ];
+
             if ($additionalParameters !== null) {
-                $params = array_merge($params, $additionalParameters);
+                $firstParams = array_merge($firstParams, $additionalParameters);
             }
-            
-            $this->logger->debug(
-                'getTraversableList.newParams',
-                [
-                    'newParams' => $params,
-                ]
+
+            $this->logger->debug('getTraversableListAlter.batchFirstParams', [
+                'nextParams' => $firstParams,
+            ]);
+
+            // Register the first command
+            $this->registerCommand($apiMethod, $firstParams, $firstCommandId);
+
+            // Calculate how many additional pages we need for remaining elements
+            $remainingElements = $totalElementsCount - $elementsCounter;
+            $neededPages = ceil($remainingElements / self::MAX_ELEMENTS_IN_PAGE);
+            // one page we already registered
+            $neededPages -= 1;
+
+            // Limit by the maximum packet size and the limit parameter if provided
+            $maxBatchSize = min(
+                (int)$neededPages, // Only register as many commands as we need pages
+                self::MAX_BATCH_PACKET_SIZE - 1 // -1 because we've already registered cmd_0
             );
 
-            $this->registerCommand($apiMethod, $params);
-        }
+            if ($limit !== null) {
+                // If we have a limit, we might need even fewer pages
+                $remainingLimit = $limit - $elementsCounter;
+                $pagesForLimit = ceil($remainingLimit / self::MAX_ELEMENTS_IN_PAGE);
+                $maxBatchSize = min($maxBatchSize, (int)$pagesForLimit);
+            }
 
-        $this->logger->debug(
-            'getTraversableList.commandsRegistered',
-            [
-                'commandsCount' => $this->commands->count(),
-            ]
-        );
+            $this->logger->debug('getTraversableListAlter.batchSizeCalculation', [
+                'totalElementsCount' => $totalElementsCount,
+                'elementsCounter' => $elementsCounter,
+                'remainingElements' => $remainingElements,
+                'neededPages' => $neededPages,
+                'maxBatchSize' => $maxBatchSize,
+            ]);
 
-        // iterate batch queries, max:  50 results per 50 elements in each result
-        foreach ($this->getTraversable(true) as $queryCnt => $queryResultData) {
-            /**
-             * @var $queryResultData ResponseData
-             */
-            $this->logger->debug(
-                'getTraversableList.batchResultItem',
-                [
-                    'batchCommandItemNumber' => $queryCnt,
-                    'nextItem' => $queryResultData->getPagination()->getNextItem(),
-                    'durationTime' => $queryResultData->getTime()->duration,
-                ]
-            );
+            // Use a unified approach for both ASC and DESC sorting with dynamic filters
+            for ($i = 1; $i <= $maxBatchSize; $i++) {
+                $prevCommandId = "cmd_" . ($i - 1);
+                $currentCommandId = "cmd_" . $i;
 
-            // iterate items in batch query result
-            // adding 'orders' to result is needed
-            foreach ($queryResultData->getResult()['basketItems'] as $listElement) {
-                ++$elementsCounter;
-                if ($limit !== null && $elementsCounter > $limit) {
-                    return;
+                // Dynamic filter referencing the result of the previous request
+                $referenceFilter = [];
+                $lastIndex = (self::MAX_ELEMENTS_IN_PAGE - 1);
+                $referenceFieldPath = sprintf('$result[%s][basketItems][%d][%s]', $prevCommandId, $lastIndex, $keyId);
+
+                // Create the appropriate filter based on sort direction
+                $filterOperator = $isAscendingSort ? '>' . $keyId : '<' . $keyId;
+                $referenceFilter[$filterOperator] = $referenceFieldPath;
+
+                $nextParams = [
+                    'order' => $order,
+                    'filter' => array_merge($filter, $referenceFilter),
+                    'select' => $select,
+                    'start' => -1
+                ];
+
+                if ($additionalParameters !== null) {
+                    $nextParams = array_merge($nextParams, $additionalParameters);
                 }
 
-                yield $listElement;
+                $this->logger->debug('getTraversableListAlter.batchCommandParams', [
+                    'nextParams' => $nextParams,
+                ]);
+
+                // Register the next command
+                $this->registerCommand($apiMethod, $nextParams, $currentCommandId);
             }
+
+            $this->logger->debug('getTraversableListAlter.batchCommandsRegistered', [
+                'commandsCount' => $this->commands->count(),
+            ]);
+
+            // Use the existing getTraversable method to process commands
+            foreach ($this->getTraversable(true) as $batchResult) {
+                // Extract elements from the result
+                $resultElements = $this->extractElementsFromBatchResultAlter($batchResult, $keyId);
+
+                // For each result element, return it and track the last element ID
+                // The lastElementId will be used for the next batch if using ASC sort
+                foreach ($resultElements as $resultElement) {
+                    // Update lastElementId properly depending on sort order
+                    if (isset($resultElement[$keyId])) {
+                        $lastElementId = (int)$resultElement[$keyId];
+                    }
+
+                    yield $resultElement;
+                    $elementsCounter++;
+                    if ($limit !== null && $elementsCounter >= $limit) {
+                        $this->logger->debug('getTraversableListAlter.finish - limit reached', [
+                            'elementsCounter' => $elementsCounter,
+                            'limit' => $limit,
+                        ]);
+                        return;
+                    }
+                }
+
+                // If there are no elements in the result, stop execution
+                if ($resultElements === []) {
+                    $this->logger->debug('getTraversableListAlter.finish - empty result');
+                    return;
+                }
+            }
+
+            $batchNumber++;
         }
 
-        $this->logger->debug('getTraversableList.finish');
+        $this->logger->debug('getTraversableListAlter.finish - all elements processed', [
+            'elementsCounter' => $elementsCounter,
+            'totalBatches' => $batchNumber,
+        ]);
     }
-    
+
     /**
-     * @param array<string,string> $order
-     *
-     * @return array|string[]
+     * Gets the ID of the last element from an array of elements
+     * For ASC sorting, returns the highest ID (last element)
+     * For DESC sorting, returns the lowest ID (last element)
      */
-    protected function getReverseOrder(array $order): array
+    protected function getLastElementIdAlter(array $elements, string $keyId, bool $isAscendingSort): int
     {
-        $this->logger->debug(
-            'getReverseOrder.start',
-            [
-                'order' => $order,
-            ]
-        );
-        $reverseOrder = null;
-
-        if ($order === []) {
-            $reverseOrder = ['id' => 'desc'];
-        } else {
-            $order = array_change_key_case($order, CASE_LOWER);
-            $oldDirection = array_values($order)[0];
-            $newOrderDirection = $oldDirection === 'asc' ? 'desc' : 'asc';
-
-            $reverseOrder[array_key_first($order)] = $newOrderDirection;
+        if ($elements === []) {
+            return 0;
         }
 
-        $this->logger->debug(
-            'getReverseOrder.finish',
-            [
-                'order' => $reverseOrder,
-            ]
-        );
+        $lastElement = $isAscendingSort ? end($elements) : end($elements);
 
-        return $reverseOrder;
+        return (int)$lastElement[$keyId];
+    }
+
+    /**
+     * Updates the filter for the next batch of requests
+     *
+     * @param array<string,mixed> $filter
+     * @return array<string,mixed>
+     */
+    protected function updateFilterForNextBatchAlter(array $filter, string $keyId, int $lastElementId, bool $isAscendingSort): array
+    {
+        if ($isAscendingSort) {
+            return array_merge($filter, ['>' . $keyId => $lastElementId]);
+        }
+        return array_merge($filter, ['<' . $keyId => $lastElementId]);
+    }
+
+    /**
+     * Extracts elements from batch request result
+     */
+    protected function extractElementsFromBatchResultAlter(ResponseData $responseData, string $keyId): array
+    {
+        $results = [];
+        $resultData = $responseData->getResult();
+
+        foreach ($resultData['basketItems'] as $item) {
+            $results[] = $item;
+        }
+
+        return $results;
     }
 }

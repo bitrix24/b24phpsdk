@@ -28,9 +28,11 @@ use PHPUnit\Framework\TestCase;
 class BatchTest extends TestCase
 {
     protected BasketItem $basketItemService;
+
     protected int $orderId;
+
     protected int $personTypeId;
-    
+
     /**
      * @throws BaseException
      * @throws TransportException
@@ -39,7 +41,7 @@ class BatchTest extends TestCase
     {
         $serviceBuilder = Fabric::getServiceBuilder();
         $this->basketItemService = $serviceBuilder->getSaleScope()->basketItem();
-        
+
         // Create person type
         $personTypeFields = [
             'name' => 'Test Person Type',
@@ -50,7 +52,7 @@ class BatchTest extends TestCase
             ]
         ];
         $this->personTypeId = $serviceBuilder->getSaleScope()->personType()->add($personTypeFields)->getId();
-        
+
         // Create test order
         $orderFields = [
             'lid' => 's1',
@@ -60,7 +62,7 @@ class BatchTest extends TestCase
         ];
         $this->orderId = $serviceBuilder->getSaleScope()->order()->add($orderFields)->getId();
     }
-    
+
     /**
      * @throws BaseException
      * @throws TransportException
@@ -68,10 +70,10 @@ class BatchTest extends TestCase
     protected function tearDown(): void
     {
         $serviceBuilder = Fabric::getServiceBuilder();
-        
+
         // Delete test order
         $serviceBuilder->getSaleScope()->order()->delete($this->orderId);
-        
+
         // Delete person type
         $serviceBuilder->getSaleScope()->personType()->delete($this->personTypeId);
     }
@@ -191,7 +193,7 @@ class BatchTest extends TestCase
             $cnt++;
             $foundIds[] = $basketItem->id;
         }
-        
+
         // Verify that all created items are found
         self::assertGreaterThanOrEqual(count($basketItemIds), $cnt);
         foreach ($basketItemIds as $basketItemId) {
