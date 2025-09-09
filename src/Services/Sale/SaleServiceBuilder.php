@@ -132,15 +132,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     /**
      * Payment service (sale.payment.*)
      */
-    public function payment(): \Bitrix24\SDK\Services\Sale\Payment\Service\Payment
+    public function payment(): Payment\Service\Payment
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $batch = new \Bitrix24\SDK\Services\Sale\Payment\Batch(
-                $this->core,
-                $this->log
-            );
-            $this->serviceCache[__METHOD__] = new \Bitrix24\SDK\Services\Sale\Payment\Service\Payment(
-                new \Bitrix24\SDK\Services\Sale\Payment\Service\Batch($batch, $this->log),
+            $this->serviceCache[__METHOD__] = new Payment\Service\Payment(
                 $this->core,
                 $this->log
             );
