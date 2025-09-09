@@ -39,24 +39,29 @@ use PHPUnit\Framework\TestCase;
 class BasketPropertyTest extends TestCase
 {
     protected BasketProperty $basketPropertyService;
+
     protected BasketItem $basketItemService;
+
     protected Order $orderService;
+
     protected PersonType $personTypeService;
-    
+
     protected int $basketItemId;
+
     protected int $orderId;
+
     protected int $personTypeId;
 
     protected function setUp(): void
     {
         $serviceBuilder = Fabric::getServiceBuilder();
-        $saleScope = $serviceBuilder->getSaleScope();
-        
-        $this->basketPropertyService = $saleScope->basketProperty();
-        $this->basketItemService = $saleScope->basketItem();
-        $this->orderService = $saleScope->order();
-        $this->personTypeService = $saleScope->personType();
-        
+        $saleServiceBuilder = $serviceBuilder->getSaleScope();
+
+        $this->basketPropertyService = $saleServiceBuilder->basketProperty();
+        $this->basketItemService = $saleServiceBuilder->basketItem();
+        $this->orderService = $saleServiceBuilder->order();
+        $this->personTypeService = $saleServiceBuilder->personType();
+
         // Create test data
         $this->personTypeId = $this->createPersonType();
         $this->orderId = $this->createOrder($this->personTypeId);
@@ -69,11 +74,11 @@ class BasketPropertyTest extends TestCase
         if (isset($this->basketItemId)) {
             $this->deleteBasketItem($this->basketItemId);
         }
-        
+
         if (isset($this->orderId)) {
             $this->deleteOrder($this->orderId);
         }
-        
+
         if (isset($this->personTypeId)) {
             $this->deletePersonType($this->personTypeId);
         }
@@ -93,11 +98,11 @@ class BasketPropertyTest extends TestCase
             'active' => 'Y',
             'sort' => 100,
         ];
-        
-        $result = $this->personTypeService->add($personTypeFields);
-        return $result->getId();
+
+        $addedPersonTypeResult = $this->personTypeService->add($personTypeFields);
+        return $addedPersonTypeResult->getId();
     }
-    
+
     /**
      * Helper method to delete a person type
      * 
@@ -107,11 +112,11 @@ class BasketPropertyTest extends TestCase
     {
         try {
             $this->personTypeService->delete($id);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // Ignore errors during cleanup
         }
     }
-    
+
     /**
      * Helper method to create an order for testing
      * 
@@ -129,11 +134,11 @@ class BasketPropertyTest extends TestCase
             'userId' => 1, // Using admin user
             'lid' => 's1',
         ];
-        
-        $result = $this->orderService->add($orderFields);
-        return $result->getId();
+
+        $orderAddedResult = $this->orderService->add($orderFields);
+        return $orderAddedResult->getId();
     }
-    
+
     /**
      * Helper method to delete an order
      * 
@@ -143,7 +148,7 @@ class BasketPropertyTest extends TestCase
     {
         try {
             $this->orderService->delete($id);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // Ignore errors during cleanup
         }
     }
@@ -167,9 +172,9 @@ class BasketPropertyTest extends TestCase
             'productId' => 0,
             'xmlId' => 'TEST_PRODUCT_' . uniqid()
         ];
-        
-        $result = $this->basketItemService->add($basketItemFields);
-        return $result->getId();
+
+        $addedBasketItemResult = $this->basketItemService->add($basketItemFields);
+        return $addedBasketItemResult->getId();
     }
 
     /**
@@ -181,7 +186,7 @@ class BasketPropertyTest extends TestCase
     {
         try {
             $this->basketItemService->delete($id);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // Ignore errors during cleanup
         }
     }
@@ -200,8 +205,8 @@ class BasketPropertyTest extends TestCase
             'code' => 'TEST_CODE',
         ];
 
-        $propertyAddResult = $this->basketPropertyService->add($propertyFields);
-        $propertyId = $propertyAddResult->getId();
+        $basketPropertyAddResult = $this->basketPropertyService->add($propertyFields);
+        $propertyId = $basketPropertyAddResult->getId();
 
         self::assertGreaterThan(0, $propertyId);
 
@@ -223,8 +228,8 @@ class BasketPropertyTest extends TestCase
             'code' => 'TEST_CODE',
         ];
 
-        $propertyAddResult = $this->basketPropertyService->add($propertyFields);
-        $propertyId = $propertyAddResult->getId();
+        $basketPropertyAddResult = $this->basketPropertyService->add($propertyFields);
+        $propertyId = $basketPropertyAddResult->getId();
 
         // Update the property
         $updateFields = [
@@ -236,8 +241,8 @@ class BasketPropertyTest extends TestCase
         $this->basketPropertyService->update($propertyId, $updateFields);
 
         // Verify the update
-        $propertyItemResult = $this->basketPropertyService->get($propertyId)->getBasketProperty();
-        self::assertEquals('Updated Test Value', $propertyItemResult->value);
+        $basketPropertyItemResult = $this->basketPropertyService->get($propertyId)->getBasketProperty();
+        self::assertEquals('Updated Test Value', $basketPropertyItemResult->value);
 
         // Clean up
         $this->basketPropertyService->delete($propertyId);
@@ -257,16 +262,16 @@ class BasketPropertyTest extends TestCase
             'code' => 'TEST_CODE',
         ];
 
-        $propertyAddResult = $this->basketPropertyService->add($propertyFields);
-        $propertyId = $propertyAddResult->getId();
+        $basketPropertyAddResult = $this->basketPropertyService->add($propertyFields);
+        $propertyId = $basketPropertyAddResult->getId();
 
         // Get the property
-        $propertyItemResult = $this->basketPropertyService->get($propertyId)->getBasketProperty();
+        $basketPropertyItemResult = $this->basketPropertyService->get($propertyId)->getBasketProperty();
 
-        self::assertEquals($propertyId, $propertyItemResult->id);
-        self::assertEquals('Test Property', $propertyItemResult->name);
-        self::assertEquals('Test Value', $propertyItemResult->value);
-        self::assertEquals('TEST_CODE', $propertyItemResult->code);
+        self::assertEquals($propertyId, $basketPropertyItemResult->id);
+        self::assertEquals('Test Property', $basketPropertyItemResult->name);
+        self::assertEquals('Test Value', $basketPropertyItemResult->value);
+        self::assertEquals('TEST_CODE', $basketPropertyItemResult->code);
 
         // Clean up
         $this->basketPropertyService->delete($propertyId);
@@ -286,13 +291,13 @@ class BasketPropertyTest extends TestCase
             'code' => 'TEST_LIST_CODE',
         ];
 
-        $propertyAddResult = $this->basketPropertyService->add($propertyFields);
-        $propertyId = $propertyAddResult->getId();
+        $basketPropertyAddResult = $this->basketPropertyService->add($propertyFields);
+        $propertyId = $basketPropertyAddResult->getId();
 
         // List properties
         $filter = ['basketId' => $this->basketItemId];
-        $propertiesResult = $this->basketPropertyService->list([], $filter);
-        $properties = $propertiesResult->getBasketProperties();
+        $basketPropertiesResult = $this->basketPropertyService->list([], $filter);
+        $properties = $basketPropertiesResult->getBasketProperties();
 
         self::assertGreaterThan(0, count($properties));
 
@@ -325,14 +330,14 @@ class BasketPropertyTest extends TestCase
             'code' => 'TEST_DELETE_CODE',
         ];
 
-        $propertyAddResult = $this->basketPropertyService->add($propertyFields);
-        $propertyId = $propertyAddResult->getId();
+        $basketPropertyAddResult = $this->basketPropertyService->add($propertyFields);
+        $propertyId = $basketPropertyAddResult->getId();
 
         // Delete the property
-        $deleteResult = $this->basketPropertyService->delete($propertyId);
-        
+        $deletedItemResult = $this->basketPropertyService->delete($propertyId);
+
         // Verify deletion was successful
-        self::assertTrue($deleteResult->isSuccess());
+        self::assertTrue($deletedItemResult->isSuccess());
 
         // Verify property no longer exists
         try {
@@ -351,13 +356,13 @@ class BasketPropertyTest extends TestCase
     public function testGetFields(): void
     {
         // Get fields
-        $fieldsResult = $this->basketPropertyService->getFields();
-        $fields = $fieldsResult->getFieldsDescription();
+        $basketPropertyFieldsResult = $this->basketPropertyService->getFields();
+        $fields = $basketPropertyFieldsResult->getFieldsDescription();
 
         // Verify fields structure
         self::assertIsArray($fields);
         self::assertNotEmpty($fields);
-        
+
         // Check for expected fields in basket properties
         self::assertArrayHasKey('basketId', $fields);
         self::assertArrayHasKey('name', $fields);

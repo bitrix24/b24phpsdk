@@ -419,6 +419,7 @@ class Batch extends \Bitrix24\SDK\Core\Batch
         if ($isAscendingSort) {
             return array_merge($filter, ['>' . $keyId => $lastElementId]);
         }
+
         return array_merge($filter, ['<' . $keyId => $lastElementId]);
     }
 
