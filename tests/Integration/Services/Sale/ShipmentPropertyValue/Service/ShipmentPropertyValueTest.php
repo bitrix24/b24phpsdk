@@ -31,25 +31,35 @@ use PHPUnit\Framework\TestCase;
 class ShipmentPropertyValueTest extends TestCase
 {
     protected ShipmentPropertyValue $spvService;
+
     protected ShipmentProperty $shipmentPropertyService;
+
     protected Shipment $shipmentService;
 
     protected int $personTypeId;
+
     protected int $orderId;
+
     protected int $deliveryId;
+
     protected int $shipmentId;
+
     protected int $propertyGroupId;
+
     protected int $propertyId1;
+
     protected int $propertyId2;
+
     protected string $propertyName1 = 'SPV Test Property 1';
+
     protected string $propertyName2 = 'SPV Test Property 2';
 
     protected function setUp(): void
     {
-        $sale = Fabric::getServiceBuilder()->getSaleScope();
-        $this->spvService = $sale->shipmentPropertyValue();
-        $this->shipmentPropertyService = $sale->shipmentProperty();
-        $this->shipmentService = $sale->shipment();
+        $saleServiceBuilder = Fabric::getServiceBuilder()->getSaleScope();
+        $this->spvService = $saleServiceBuilder->shipmentPropertyValue();
+        $this->shipmentPropertyService = $saleServiceBuilder->shipmentProperty();
+        $this->shipmentService = $saleServiceBuilder->shipment();
 
         $this->personTypeId = $this->createPersonType();
         $this->orderId = $this->createOrder();
@@ -70,18 +80,23 @@ class ShipmentPropertyValueTest extends TestCase
         if (isset($this->propertyId1)) {
             try { $this->shipmentPropertyService->delete($this->propertyId1); } catch (\Throwable) {}
         }
+
         if (isset($this->propertyId2)) {
             try { $this->shipmentPropertyService->delete($this->propertyId2); } catch (\Throwable) {}
         }
+
         if (isset($this->shipmentId)) {
             try { $this->shipmentService->delete($this->shipmentId); } catch (\Throwable) {}
         }
+
         if (isset($this->orderId)) {
             try { $this->deleteOrder($this->orderId); } catch (\Throwable) {}
         }
+
         if (isset($this->propertyGroupId)) {
             try { $this->deletePropertyGroup($this->propertyGroupId); } catch (\Throwable) {}
         }
+
         if (isset($this->personTypeId)) {
             try { $this->deletePersonType($this->personTypeId); } catch (\Throwable) {}
         }
@@ -90,29 +105,29 @@ class ShipmentPropertyValueTest extends TestCase
     protected function createPersonType(): int
     {
         $personTypeService = Fabric::getServiceBuilder()->getSaleScope()->personType();
-        $added = $personTypeService->add([
+        $addedPersonTypeResult = $personTypeService->add([
             'name' => 'Test Person Type for SPV',
             'sort' => 100,
             'active' => 'Y'
         ]);
-        return $added->getId();
+        return $addedPersonTypeResult->getId();
     }
 
     protected function createPropertyGroup(string $name): int
     {
-        $pgService = Fabric::getServiceBuilder()->getSaleScope()->propertyGroup();
-        $added = $pgService->add([
+        $propertyGroup = Fabric::getServiceBuilder()->getSaleScope()->propertyGroup();
+        $propertyGroupAddResult = $propertyGroup->add([
             'name' => $name,
             'personTypeId' => $this->personTypeId,
             'sort' => 100,
         ]);
-        return $added->propertyGroup()->id;
+        return $propertyGroupAddResult->propertyGroup()->id;
     }
 
     protected function deletePropertyGroup(int $id): void
     {
-        $pgService = Fabric::getServiceBuilder()->getSaleScope()->propertyGroup();
-        $pgService->delete($id);
+        $propertyGroup = Fabric::getServiceBuilder()->getSaleScope()->propertyGroup();
+        $propertyGroup->delete($id);
     }
 
     protected function deletePersonType(int $id): void
@@ -124,13 +139,13 @@ class ShipmentPropertyValueTest extends TestCase
     protected function createOrder(): int
     {
         $orderService = Fabric::getServiceBuilder()->getSaleScope()->order();
-        $added = $orderService->add([
+        $orderAddedResult = $orderService->add([
             'personTypeId' => $this->personTypeId,
             'userEmail' => 'test@example.com',
             'currency' => 'RUB',
             'lid' => 's1',
         ]);
-        return $added->getId();
+        return $orderAddedResult->getId();
     }
 
     protected function deleteOrder(int $id): void
@@ -152,24 +167,24 @@ class ShipmentPropertyValueTest extends TestCase
             'order' => ['SORT' => 'ASC'],
         ]);
         $deliveries = $response->getResponseData()->getResult();
-        
+
         return (int)$deliveries[0]['ID'];
     }
 
     protected function createShipment(): int
     {
-        $added = $this->shipmentService->add([
+        $addedShipmentResult = $this->shipmentService->add([
             'orderId' => $this->orderId,
             'deliveryId' => $this->deliveryId,
             'allowDelivery' => 'Y',
             'deducted' => 'N',
         ]);
-        return $added->getId();
+        return $addedShipmentResult->getId();
     }
 
     protected function createShipmentProperty(string $name): int
     {
-        $added = $this->shipmentPropertyService->add([
+        $addedShipmentPropertyResult = $this->shipmentPropertyService->add([
             'name' => $name,
             'type' => 'STRING',
             'required' => 'N',
@@ -177,7 +192,7 @@ class ShipmentPropertyValueTest extends TestCase
             'personTypeId' => $this->personTypeId,
             'propsGroupId' => $this->propertyGroupId,
         ]);
-        return $added->getId();
+        return $addedShipmentPropertyResult->getId();
     }
 
     /**
@@ -191,20 +206,21 @@ class ShipmentPropertyValueTest extends TestCase
             ['shipmentPropsId' => $this->propertyId2, 'value' => 'Description value'],
         ];
 
-        $updated = $this->spvService->modify([
+        $updatedShipmentPropertyValueResult = $this->spvService->modify([
             'shipment' => [
                 'id' => $this->shipmentId,
                 'propertyValues' => $values,
             ],
         ]);
 
-        self::assertTrue($updated->isSuccess());
+        self::assertTrue($updatedShipmentPropertyValueResult->isSuccess());
 
         // Verify via list for this shipment
         $list = $this->spvService->list(['id','name','value','shipmentId','shipmentPropsId'], ['shipmentId' => $this->shipmentId]);
         $items = $list->getPropertyValues();
         $byName = static function(array $its, string $name): ?object {
-            foreach ($its as $i) { if ((string)$i->name === $name) { return $i; } }
+            foreach ($its as $it) { if ((string)$it->name === $name) { return $it; } }
+
             return null;
         };
         $pv1 = $byName($items, $this->propertyName1);
@@ -222,7 +238,7 @@ class ShipmentPropertyValueTest extends TestCase
     public function testGet(): void
     {
         // Ensure values exist
-        $updated = $this->spvService->modify([
+        $this->spvService->modify([
             'shipment' => [
                 'id' => $this->shipmentId,
                 'propertyValues' => [
@@ -233,12 +249,13 @@ class ShipmentPropertyValueTest extends TestCase
     // find by name via list
     $items = $this->spvService->list(['id','name','value'], ['shipmentId' => $this->shipmentId])->getPropertyValues();
     $pv = null;
-    foreach ($items as $i) { if ((string)$i->name === $this->propertyName1) { $pv = $i; break; } }
+    foreach ($items as $item) { if ((string)$item->name === $this->propertyName1) { $pv = $item; break; } }
+
     self::assertNotNull($pv, 'Property value for property 1 not found in list');
 
-    $got = $this->spvService->get($pv->id)->propertyValue();
-        self::assertEquals($pv->id, $got->id);
-        self::assertEquals('Get value 1', (string)$got->value);
+    $shipmentPropertyValueItemResult = $this->spvService->get($pv->id)->propertyValue();
+        self::assertEquals($pv->id, $shipmentPropertyValueItemResult->id);
+        self::assertEquals('Get value 1', (string)$shipmentPropertyValueItemResult->value);
     }
 
     /**
@@ -279,7 +296,7 @@ class ShipmentPropertyValueTest extends TestCase
         // Create an extra property and value to delete to avoid interfering with other tests
         $deletePropId = $this->createShipmentProperty('SPV Delete Property');
 
-        $updated = $this->spvService->modify([
+        $this->spvService->modify([
             'shipment' => [
                 'id' => $this->shipmentId,
                 'propertyValues' => [
@@ -290,11 +307,12 @@ class ShipmentPropertyValueTest extends TestCase
     // find by name in list
     $items = $this->spvService->list(['id','name'], ['shipmentId' => $this->shipmentId])->getPropertyValues();
     $pv = null;
-    foreach ($items as $i) { if ((string)$i->name === 'SPV Delete Property') { $pv = $i; break; } }
+    foreach ($items as $item) { if ((string)$item->name === 'SPV Delete Property') { $pv = $item; break; } }
+
     self::assertNotNull($pv, 'Property value to delete not found');
 
-    $result = $this->spvService->delete($pv->id);
-        self::assertTrue($result->isSuccess());
+    $deletedItemResult = $this->spvService->delete($pv->id);
+        self::assertTrue($deletedItemResult->isSuccess());
 
         // cleanup the extra property
         $this->shipmentPropertyService->delete($deletePropId);

@@ -4,15 +4,6 @@
 
 ### Added
 
-- Added service `Services\Sale\ShipmentProperty\Service\ShipmentProperty` with support methods,
-  see [sale.shipmentproperty.* methods](https://github.com/bitrix24/b24phpsdk/issues/250):
-    - `add` adds a shipment property
-    - `update` updates the fields of a shipment property
-    - `get` returns a shipment property by its identifier
-    - `list` returns a list of shipment properties
-    - `delete` deletes a shipment property
-    - `getFieldsByType` returns the fields and settings for shipment properties by type
-
 - Added service `Services\Sale\Shipment\Service\Shipment` with support methods,
   see [sale.shipment.* methods](https://github.com/bitrix24/b24phpsdk/issues/250):
     - `add` adds a shipment
@@ -21,7 +12,14 @@
     - `list` returns a list of shipments
     - `delete` deletes a shipment
     - `getFields` returns the fields and settings for shipments
-
+- Added service `Services\Sale\ShipmentProperty\Service\ShipmentProperty` with support methods,
+  see [sale.shipmentproperty.* methods](https://github.com/bitrix24/b24phpsdk/issues/250):
+    - `add` adds a shipment property
+    - `update` updates the fields of a shipment property
+    - `get` returns a shipment property by its identifier
+    - `list` returns a list of shipment properties
+    - `delete` deletes a shipment property
+    - `getFieldsByType` returns the fields and settings for shipment properties by type
 - Added service `Services\Sale\ShipmentPropertyValue\Service\ShipmentPropertyValue` with support methods,
   see [sale.shipmentpropertyvalue.* methods](https://github.com/bitrix24/b24phpsdk/issues/250):
     - `modify` updates shipment property values for a shipment

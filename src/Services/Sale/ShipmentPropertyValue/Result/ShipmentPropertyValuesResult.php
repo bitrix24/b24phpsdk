@@ -2,6 +2,11 @@
 
 /**
  * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Sally Fancen <vadimsallee@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -38,6 +43,6 @@ class ShipmentPropertyValuesResult extends AbstractResult
         $result = $this->getCoreResponse()->getResponseData()->getResult();
         return isset($result['total'])
             ? (int)$result['total']
-            : (int)($this->getCoreResponse()->getResponseData()->getPagination()->getTotal() ?? 0);
+            : $this->getCoreResponse()->getResponseData()->getPagination()->getTotal() ?? 0;
     }
 }
