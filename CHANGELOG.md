@@ -1,5 +1,18 @@
 # b24-php-sdk change log
 
+## Upcoming 1.7.0 - 2025.10.01
+
+### Added
+
+- Added service `Services\Sale\Shipment\Service\Shipment` with support methods,
+  see [sale.shipment.* methods](https://github.com/bitrix24/b24phpsdk/issues/250):
+    - `add` adds a shipment
+    - `update` updates the fields of a shipment
+    - `get` returns a shipment by its identifier
+    - `list` returns a list of shipments
+    - `delete` deletes a shipment
+    - `getFields` returns the fields and settings for shipments
+
 ## 1.6.0 – 2025.09.01
 
 ### Added

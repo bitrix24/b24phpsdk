@@ -127,6 +127,9 @@
         <testsuite name="integration_tests_sale_order">
             <directory>./tests/Integration/Services/Sale/Order/</directory>
         </testsuite>
+        <testsuite name="integration_tests_sale_shipment">
+            <directory>./tests/Integration/Services/Sale/Shipment/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>
