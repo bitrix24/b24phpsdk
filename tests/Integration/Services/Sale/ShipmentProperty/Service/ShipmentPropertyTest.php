@@ -40,9 +40,11 @@ use PHPUnit\Framework\TestCase;
 class ShipmentPropertyTest extends TestCase
 {
     use CustomBitrix24Assertions;
-    
+
     protected ShipmentProperty $shipmentPropertyService;
+
     protected int $propertyId;
+
     protected string $propertyName;
 
     /**
@@ -53,13 +55,13 @@ class ShipmentPropertyTest extends TestCase
         $this->shipmentPropertyService = Fabric::getServiceBuilder()->getSaleScope()->shipmentProperty();
         $this->propertyName = 'Test Shipment Property ' . uniqid();
     }
-    
+
     public function testAllSystemFieldsAnnotated(): void
     {
         $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($this->shipmentPropertyService->getFieldsByType('STRING')->getFieldsDescription()));
         $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, ShipmentPropertyItemResult::class);
     }
-    
+
     public function testAllSystemFieldsHasValidTypeAnnotation(): void
     {
         $allFields = $this->shipmentPropertyService->getFieldsByType('STRING')->getFieldsDescription();
@@ -80,7 +82,7 @@ class ShipmentPropertyTest extends TestCase
         if (isset($this->propertyId)) {
             try {
                 $this->shipmentPropertyService->delete($this->propertyId);
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 // Property might have been deleted in the test
             }
         }
@@ -102,8 +104,8 @@ class ShipmentPropertyTest extends TestCase
             'sort' => 100
         ];
 
-        $result = $this->shipmentPropertyService->add($propertyFields);
-        $this->propertyId = $result->getId();
+        $addedShipmentPropertyResult = $this->shipmentPropertyService->add($propertyFields);
+        $this->propertyId = $addedShipmentPropertyResult->getId();
 
         self::assertGreaterThan(0, $this->propertyId);
     }
@@ -124,8 +126,8 @@ class ShipmentPropertyTest extends TestCase
             'sort' => 100
         ];
 
-        $addResult = $this->shipmentPropertyService->add($propertyFields);
-        $this->propertyId = $addResult->getId();
+        $addedShipmentPropertyResult = $this->shipmentPropertyService->add($propertyFields);
+        $this->propertyId = $addedShipmentPropertyResult->getId();
 
         // Update the property
         $newName = 'Updated ' . $this->propertyName;
@@ -133,13 +135,13 @@ class ShipmentPropertyTest extends TestCase
             'name' => $newName
         ];
 
-        $updateResult = $this->shipmentPropertyService->update($this->propertyId, $updateFields);
-        self::assertTrue($updateResult->isSuccess());
+        $updatedShipmentPropertyResult = $this->shipmentPropertyService->update($this->propertyId, $updateFields);
+        self::assertTrue($updatedShipmentPropertyResult->isSuccess());
 
         // Verify the update
-        $getResult = $this->shipmentPropertyService->get($this->propertyId);
-        $property = $getResult->property();
-        
+        $shipmentPropertyResult = $this->shipmentPropertyService->get($this->propertyId);
+        $property = $shipmentPropertyResult->property();
+
         self::assertEquals($newName, $property->name);
     }
 
@@ -159,13 +161,13 @@ class ShipmentPropertyTest extends TestCase
             'sort' => 100
         ];
 
-        $addResult = $this->shipmentPropertyService->add($propertyFields);
-        $this->propertyId = $addResult->getId();
+        $addedShipmentPropertyResult = $this->shipmentPropertyService->add($propertyFields);
+        $this->propertyId = $addedShipmentPropertyResult->getId();
 
         // Get the property
-        $getResult = $this->shipmentPropertyService->get($this->propertyId);
-        $property = $getResult->property();
-        
+        $shipmentPropertyResult = $this->shipmentPropertyService->get($this->propertyId);
+        $property = $shipmentPropertyResult->property();
+
         self::assertEquals($this->propertyId, $property->id);
         self::assertEquals($this->propertyName, $property->name);
         self::assertEquals('STRING', $property->type);
@@ -187,19 +189,19 @@ class ShipmentPropertyTest extends TestCase
             'sort' => 100
         ];
 
-        $addResult = $this->shipmentPropertyService->add($propertyFields);
-        $this->propertyId = $addResult->getId();
+        $addedShipmentPropertyResult = $this->shipmentPropertyService->add($propertyFields);
+        $this->propertyId = $addedShipmentPropertyResult->getId();
 
         // List properties with filter
         $filter = [
             'name' => $this->propertyName
         ];
 
-        $listResult = $this->shipmentPropertyService->list([], $filter);
-        $properties = $listResult->getProperties();
-        
+        $shipmentPropertiesResult = $this->shipmentPropertyService->list([], $filter);
+        $properties = $shipmentPropertiesResult->getProperties();
+
         self::assertGreaterThanOrEqual(1, count($properties));
-        
+
         // Verify our property is in the list
         $found = false;
         foreach ($properties as $property) {
@@ -208,6 +210,7 @@ class ShipmentPropertyTest extends TestCase
                 break;
             }
         }
+
         self::assertTrue($found);
     }
 
@@ -227,17 +230,17 @@ class ShipmentPropertyTest extends TestCase
             'sort' => 100
         ];
 
-        $addResult = $this->shipmentPropertyService->add($propertyFields);
-        $this->propertyId = $addResult->getId();
+        $addedShipmentPropertyResult = $this->shipmentPropertyService->add($propertyFields);
+        $this->propertyId = $addedShipmentPropertyResult->getId();
 
         // Delete the property
-        $deleteResult = $this->shipmentPropertyService->delete($this->propertyId);
-        self::assertTrue($deleteResult->isSuccess());
+        $deletedItemResult = $this->shipmentPropertyService->delete($this->propertyId);
+        self::assertTrue($deletedItemResult->isSuccess());
 
         // Verify deletion
         $this->expectException(BaseException::class);
         $this->shipmentPropertyService->get($this->propertyId);
-        
+
         // Clear property ID since it's been deleted
         $this->propertyId = 0;
     }
@@ -250,12 +253,12 @@ class ShipmentPropertyTest extends TestCase
      */
     public function testGetFieldsByType(): void
     {
-        $fieldsResult = $this->shipmentPropertyService->getFieldsByType('STRING');
-        $fields = $fieldsResult->getFieldsDescription();
-        
+        $shipmentPropertyFieldsResult = $this->shipmentPropertyService->getFieldsByType('STRING');
+        $fields = $shipmentPropertyFieldsResult->getFieldsDescription();
+
         self::assertIsArray($fields);
         self::assertNotEmpty($fields);
-        
+
         // Verify essential fields are present
         self::assertArrayHasKey('NAME', $fields);
         self::assertArrayHasKey('TYPE', $fields);

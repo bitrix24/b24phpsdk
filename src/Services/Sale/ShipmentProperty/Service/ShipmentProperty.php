@@ -149,7 +149,7 @@ class ShipmentProperty extends AbstractService
      * @link https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipment-property-delete.html
      *
      * @param int $id Shipment property identifier
-     * 
+     *
      * @throws BaseException
      * @throws TransportException
      */
@@ -171,7 +171,7 @@ class ShipmentProperty extends AbstractService
      * Returns the fields and settings for shipment properties of a specific property type.
      *
      * @link https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipment-property-get-fields-by-type.html
-     * 
+     *
      * @param string $type Shipment property type. Possible values: STRING, Y/N, NUMBER, ENUM, FILE, DATE, LOCATION, ADDRESS
      *
      * @throws BaseException
