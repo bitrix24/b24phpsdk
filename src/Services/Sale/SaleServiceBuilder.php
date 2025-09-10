@@ -130,6 +130,21 @@ class SaleServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    /**
+     * Payment service (sale.payment.*)
+     */
+    public function payment(): Payment\Service\Payment
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Payment\Service\Payment(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function propertyVariant(): PropertyVariant
     {
         if (!isset($this->serviceCache[__METHOD__])) {

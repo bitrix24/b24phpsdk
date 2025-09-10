@@ -1,5 +1,18 @@
 # b24-php-sdk change log
 
+## Upcoming 1.7.0 - 2025.10.01
+
+### Added
+
+- Added service `Services\Sale\Payment\Service\Payment` with support methods,
+  see [sale.payment.* methods](https://github.com/bitrix24/b24phpsdk/issues/248):
+    - `add` adds a payment
+    - `update` updates the fields of a payment
+    - `get` returns a payment by its identifier
+    - `list` returns a list of payments
+    - `delete` deletes a payment
+    - `getFields` returns the fields and settings for payments
+
 ## 1.6.0 – 2025.09.01
 
 ### Added
