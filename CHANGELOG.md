@@ -22,6 +22,14 @@
     - `delete` deletes a shipment
     - `getFields` returns the fields and settings for shipments
 
+- Added service `Services\Sale\ShipmentPropertyValue\Service\ShipmentPropertyValue` with support methods,
+  see [sale.shipmentpropertyvalue.* methods](https://github.com/bitrix24/b24phpsdk/issues/250):
+    - `modify` updates shipment property values for a shipment
+    - `get` returns a shipment property value by its identifier
+    - `list` returns a list of shipment property values
+    - `delete` deletes a shipment property value
+    - `getFields` returns the fields and settings for shipment property values
+
 ## 1.6.0 – 2025.09.01
 
 ### Added

@@ -133,6 +133,9 @@
         <testsuite name="integration_tests_sale_shipment_property">
             <directory>./tests/Integration/Services/Sale/ShipmentProperty/</directory>
         </testsuite>
+        <testsuite name="integration_tests_sale_shipment_property_value">
+            <directory>./tests/Integration/Services/Sale/ShipmentPropertyValue/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>
