@@ -50,6 +50,7 @@ help:
 	@echo "lint-rector-fix           - fix source code with rector"
 	@echo ""
 	@echo "test-unit                 - run unit tests"
+	@echo "test-integration-sale-basket-property - run BasketProperty integration tests"
 
 
 .PHONY: docker-init
@@ -198,6 +199,14 @@ test-integration-sale-status:
 .PHONY: test-integration-sale-status-lang
 test-integration-sale-status-lang:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_status_lang
+
+.PHONY: test-integration-sale-basket-property
+test-integration-sale-basket-property:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_basket_property
+
+.PHONY: test-integration-sale-basket
+test-integration-sale-basket:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_basket
 	
 .PHONY: test-integration-sale-order
 test-integration-sale-order:
