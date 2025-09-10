@@ -192,7 +192,6 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new ShipmentProperty\Service\ShipmentProperty(
-              $this->serviceCache[__METHOD__] = new Shipment\Service\Shipment(
                 $this->core,
                 $this->log
             );
@@ -200,7 +199,7 @@ class SaleServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-              
+
     /**
      * Basket Item service (sale.basketitem.*)
      */
