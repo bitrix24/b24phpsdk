@@ -39,7 +39,7 @@ class ShipmentProperty extends AbstractService
     /**
      * Adds a shipment property.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipmentproperty-add.html
+     * @link https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipment-property-add.html
      *
      * @param array $fields Field values for creating a shipment property. Required fields:
      *                      - name (string) - Name of the property
@@ -51,7 +51,7 @@ class ShipmentProperty extends AbstractService
      */
     #[ApiEndpointMetadata(
         'sale.shipmentproperty.add',
-        'https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipmentproperty-add.html',
+        'https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipment-property-add.html',
         'Adds a shipment property.'
     )]
     public function add(array $fields): AddedShipmentPropertyResult
@@ -66,7 +66,7 @@ class ShipmentProperty extends AbstractService
     /**
      * Updates the fields of a shipment property.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipmentproperty-update.html
+     * @link https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipment-property-update.html
      *
      * @param int   $id     Shipment property identifier
      * @param array $fields Field values for update. At least one field must be provided.
@@ -76,7 +76,7 @@ class ShipmentProperty extends AbstractService
      */
     #[ApiEndpointMetadata(
         'sale.shipmentproperty.update',
-        'https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipmentproperty-update.html',
+        'https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipment-property-update.html',
         'Updates the fields of a shipment property.'
     )]
     public function update(int $id, array $fields): UpdatedShipmentPropertyResult
@@ -92,7 +92,7 @@ class ShipmentProperty extends AbstractService
     /**
      * Returns the value of a shipment property by its identifier.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipmentproperty-get.html
+     * @link https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipment-property-get.html
      *
      * @param int $id Shipment property identifier
      *
@@ -101,7 +101,7 @@ class ShipmentProperty extends AbstractService
      */
     #[ApiEndpointMetadata(
         'sale.shipmentproperty.get',
-        'https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipmentproperty-get.html',
+        'https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipment-property-get.html',
         'Returns the shipment property.'
     )]
     public function get(int $id): ShipmentPropertyResult
@@ -116,7 +116,7 @@ class ShipmentProperty extends AbstractService
     /**
      * Returns a list of shipment properties.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipmentproperty-list.html
+     * @link https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipment-property-list.html
      *
      * @param array $select Fields to select
      * @param array $filter Filter criteria
@@ -128,7 +128,7 @@ class ShipmentProperty extends AbstractService
      */
     #[ApiEndpointMetadata(
         'sale.shipmentproperty.list',
-        'https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipmentproperty-list.html',
+        'https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipment-property-list.html',
         'Returns a list of shipment properties.'
     )]
     public function list(array $select = [], array $filter = [], array $order = [], int $start = 0): ShipmentPropertiesResult
@@ -146,7 +146,7 @@ class ShipmentProperty extends AbstractService
     /**
      * Deletes a shipment property.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipmentproperty-delete.html
+     * @link https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipment-property-delete.html
      *
      * @param int $id Shipment property identifier
      * 
@@ -155,7 +155,7 @@ class ShipmentProperty extends AbstractService
      */
     #[ApiEndpointMetadata(
         'sale.shipmentproperty.delete',
-        'https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipmentproperty-delete.html',
+        'https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipment-property-delete.html',
         'Deletes a shipment property.'
     )]
     public function delete(int $id): DeletedItemResult
@@ -168,22 +168,26 @@ class ShipmentProperty extends AbstractService
     }
 
     /**
-     * Returns the fields and settings for shipment properties.
+     * Returns the fields and settings for shipment properties of a specific property type.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipmentproperty-get-fields.html
+     * @link https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipment-property-get-fields-by-type.html
+     * 
+     * @param string $type Shipment property type. Possible values: STRING, Y/N, NUMBER, ENUM, FILE, DATE, LOCATION, ADDRESS
      *
      * @throws BaseException
      * @throws TransportException
      */
     #[ApiEndpointMetadata(
-        'sale.shipmentproperty.getFields',
-        'https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipmentproperty-get-fields.html',
+        'sale.shipmentproperty.getFieldsByType',
+        'https://apidocs.bitrix24.com/api-reference/sale/shipment-property/sale-shipment-property-get-fields-by-type.html',
         'Returns the fields and settings for shipment properties.'
     )]
-    public function getFields(): ShipmentPropertyFieldsResult
+    public function getFieldsByType(string $type): ShipmentPropertyFieldsResult
     {
         return new ShipmentPropertyFieldsResult(
-            $this->core->call('sale.shipmentproperty.getFields', [])
+            $this->core->call('sale.shipmentproperty.getFieldsByType', [
+                'type' => $type
+            ])
         );
     }
 }

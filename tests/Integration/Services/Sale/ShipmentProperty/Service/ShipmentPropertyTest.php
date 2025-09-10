@@ -33,7 +33,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversMethod(ShipmentProperty::class,'get')]
 #[CoversMethod(ShipmentProperty::class,'list')]
 #[CoversMethod(ShipmentProperty::class,'delete')]
-#[CoversMethod(ShipmentProperty::class,'getFields')]
+#[CoversMethod(ShipmentProperty::class,'getFieldsByType')]
 #[CoversMethod(ShipmentPropertyTest::class,'testAllSystemFieldsAnnotated')]
 #[CoversMethod(ShipmentPropertyTest::class,'testAllSystemFieldsHasValidTypeAnnotation')]
 #[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\Sale\ShipmentProperty\Service\ShipmentProperty::class)]
@@ -56,13 +56,13 @@ class ShipmentPropertyTest extends TestCase
     
     public function testAllSystemFieldsAnnotated(): void
     {
-        $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($this->shipmentPropertyService->getFields()->getFieldsDescription()));
+        $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($this->shipmentPropertyService->getFieldsByType('STRING')->getFieldsDescription()));
         $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, ShipmentPropertyItemResult::class);
     }
     
     public function testAllSystemFieldsHasValidTypeAnnotation(): void
     {
-        $allFields = $this->shipmentPropertyService->getFields()->getFieldsDescription();
+        $allFields = $this->shipmentPropertyService->getFieldsByType('STRING')->getFieldsDescription();
         $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
         $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
 
@@ -243,14 +243,14 @@ class ShipmentPropertyTest extends TestCase
     }
 
     /**
-     * Test getting shipment property fields
+     * Test getting shipment property fields for a specific property type
      * 
      * @throws BaseException
      * @throws TransportException
      */
-    public function testGetFields(): void
+    public function testGetFieldsByType(): void
     {
-        $fieldsResult = $this->shipmentPropertyService->getFields();
+        $fieldsResult = $this->shipmentPropertyService->getFieldsByType('STRING');
         $fields = $fieldsResult->getFieldsDescription();
         
         self::assertIsArray($fields);
