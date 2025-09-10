@@ -36,6 +36,8 @@ use PHPUnit\Framework\TestCase;
 #[CoversMethod(Payment::class,'list')]
 #[CoversMethod(Payment::class,'delete')]
 #[CoversMethod(Payment::class,'getFields')]
+#[CoversMethod(PaymentTest::class,'testAllSystemFieldsAnnotated')]
+#[CoversMethod(PaymentTest::class,'testAllSystemFieldsHasValidTypeAnnotation')]
 #[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\Sale\Payment\Service\Payment::class)]
 class PaymentTest extends TestCase
 {
@@ -63,6 +65,23 @@ class PaymentTest extends TestCase
         // Clean up created resources
         $this->deleteTestOrder($this->orderId);
         $this->deletePersonType($this->personTypeId);
+    }
+
+    public function testAllSystemFieldsAnnotated(): void
+    {
+        $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($this->paymentService->getFields()->getFieldsDescription()));
+        $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, PaymentItemResult::class);
+    }
+    
+    public function testAllSystemFieldsHasValidTypeAnnotation(): void
+    {
+        $allFields = $this->paymentService->getFields()->getFieldsDescription();
+        $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
+        $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
+
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
+            $systemFields,
+            PaymentItemResult::class);
     }
 
     /**
@@ -136,23 +155,6 @@ class PaymentTest extends TestCase
         } catch (\Exception) {
             // Ignore if order doesn't exist
         }
-    }
-
-    public function testAllSystemFieldsAnnotated(): void
-    {
-        $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($this->paymentService->getFields()->getFieldsDescription()));
-        $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, PaymentItemResult::class);
-    }
-
-    public function testAllSystemFieldsHasValidTypeAnnotation(): void
-    {
-        $allFields = $this->paymentService->getFields()->getFieldsDescription();
-        $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
-        $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
-
-        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
-            $systemFields,
-            PaymentItemResult::class);
     }
 
     /**
