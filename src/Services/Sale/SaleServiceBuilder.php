@@ -168,4 +168,19 @@ class SaleServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    /**
+     * ShipmentProperty service (sale.shipmentproperty.*)
+     */
+    public function shipmentProperty(): ShipmentProperty\Service\ShipmentProperty
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new ShipmentProperty\Service\ShipmentProperty(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
 }
