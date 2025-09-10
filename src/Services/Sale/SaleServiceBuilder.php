@@ -23,6 +23,7 @@ use Bitrix24\SDK\Services\Sale\Status\Service\Status;
 use Bitrix24\SDK\Services\Sale\StatusLang\Service\StatusLang;
 use Bitrix24\SDK\Services\Sale\PersonTypeStatus\Service\PersonTypeStatus;
 use Bitrix24\SDK\Services\Sale\ShipmentPropertyValue\Service\ShipmentPropertyValue;
+use Bitrix24\SDK\Services\Sale\BasketProperty\Service\BasketProperty;
 
 /**
  * Class SaleServiceBuilder
@@ -130,6 +131,21 @@ class SaleServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    /**
+     * Payment service (sale.payment.*)
+     */
+    public function payment(): Payment\Service\Payment
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Payment\Service\Payment(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function propertyVariant(): PropertyVariant
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -176,6 +192,27 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new ShipmentProperty\Service\ShipmentProperty(
+              $this->serviceCache[__METHOD__] = new Shipment\Service\Shipment(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+              
+    /**
+     * Basket Item service (sale.basketitem.*)
+     */
+    public function basketItem(): BasketItem\Service\BasketItem
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new BasketItem\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new BasketItem\Service\BasketItem(
+                new BasketItem\Service\Batch($batch, $this->log),
                 $this->core,
                 $this->log
             );
@@ -199,4 +236,18 @@ class SaleServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    /**
+     * BasketProperty service (sale.basketproperties.*)
+     */
+    public function basketProperty(): BasketProperty
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new BasketProperty(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 }

@@ -27,11 +27,35 @@
     - `list` returns a list of shipment property values
     - `delete` deletes a shipment property value
     - `getFields` returns the fields and settings for shipment property values
+- Added service `Services\Sale\Payment\Service\Payment` with support methods,
+  see [sale.payment.* methods](https://github.com/bitrix24/b24phpsdk/issues/248):
+    - `add` adds a payment
+    - `update` updates the fields of a payment
+    - `get` returns a payment by its identifier
+    - `list` returns a list of payments
+    - `delete` deletes a payment
+    - `getFields` returns the fields and settings for payments
 
 ## 1.6.0 – 2025.09.01
 
 ### Added
 
+- Added service `Services\Sale\BasketItem\Service\BasketItem` with support methods,
+  see [sale.basketitems.* methods](https://github.com/bitrix24/b24phpsdk/issues/243):
+    - `add` adds a new basket item, with batch calls support
+    - `update` updates a basket item, with batch calls support
+    - `get` returns a basket item by ID
+    - `list` returns a list of basket items, with batch calls support
+    - `delete` deletes a basket item, with batch calls support
+    - `getFields` returns the fields of a basket item
+- Added service `Services\Sale\BasketProperty\Service\BasketProperty` with support methods,
+  see [sale.basketproperties.* methods](https://github.com/bitrix24/b24phpsdk/issues/243):
+    - `add` adds a basket property
+    - `update` updates the fields of a basket property
+    - `get` returns a basket property by ID
+    - `list` returns a list of basket properties
+    - `delete` deletes a basket property
+    - `getFields` returns the fields of basket properties
 - Added service `Services\Sale\Order\Service\Order` with support methods,
   see [sale.order.* methods](https://github.com/bitrix24/b24phpsdk/issues/241):
     - `add` adds an order, with batch calls support

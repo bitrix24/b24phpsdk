@@ -185,6 +185,20 @@ trait CustomBitrix24Assertions
                         );
                         break;
                     }
+                    if (str_contains(mb_strtoupper($fieldCode), 'WEIGHT')) {
+                        $this->assertTrue(
+                            str_contains($propsFromAnnotations[$fieldCode], 'string'),
+                            sprintf(
+                                'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                                $resultItemClassName,
+                                $fieldCode,
+                                $propsFromAnnotations[$fieldCode],
+                                $fieldData['type'],
+                                'string'
+                            )
+                        );
+                        break;
+                    }
                     if (str_contains(mb_strtoupper($fieldCode), 'RATE')) {
                         $this->assertTrue(
                             str_contains($propsFromAnnotations[$fieldCode], Percentage::class),

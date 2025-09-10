@@ -55,6 +55,12 @@
         <testsuite name="integration_tests_sale_status_lang">
             <directory>./tests/Integration/Services/Sale/StatusLang/</directory>
         </testsuite>
+        <testsuite name="integration_tests_sale_basket">
+            <directory>./tests/Integration/Services/Sale/BasketItem/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_basket_property">
+            <directory>./tests/Integration/Services/Sale/BasketProperty/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_crm">
             <directory>./tests/Integration/Services/CRM/</directory>
         </testsuite>
@@ -123,6 +129,9 @@
         </testsuite>
         <testsuite name="integration_tests_sale">
             <directory>./tests/Integration/Services/Sale/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_payment">
+            <directory>./tests/Integration/Services/Sale/Payment/</directory>
         </testsuite>
         <testsuite name="integration_tests_sale_order">
             <directory>./tests/Integration/Services/Sale/Order/</directory>
