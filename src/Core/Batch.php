@@ -961,6 +961,7 @@ class Batch implements BatchOperationsInterface
         if ($isAscendingSort) {
             return array_merge($filter, ['>' . $keyId => $lastElementId]);
         }
+
         return array_merge($filter, ['<' . $keyId => $lastElementId]);
     }
 
