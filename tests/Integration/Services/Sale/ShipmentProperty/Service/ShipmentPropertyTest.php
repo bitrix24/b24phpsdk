@@ -47,6 +47,10 @@ class ShipmentPropertyTest extends TestCase
 
     protected string $propertyName;
 
+    protected int $personTypeId;
+
+    protected int $propertyGroupId;
+
     /**
      * Set up test environment
      */
@@ -54,6 +58,8 @@ class ShipmentPropertyTest extends TestCase
     {
         $this->shipmentPropertyService = Fabric::getServiceBuilder()->getSaleScope()->shipmentProperty();
         $this->propertyName = 'Test Shipment Property ' . uniqid();
+        $this->personTypeId = $this->getPersonTypeId();
+        $this->propertyGroupId = $this->getPropertyGroupId();
     }
 
     public function testAllSystemFieldsAnnotated(): void
@@ -86,6 +92,16 @@ class ShipmentPropertyTest extends TestCase
                 // Property might have been deleted in the test
             }
         }
+        
+        // Clean up property group
+        if (isset($this->propertyGroupId)) {
+            $this->deletePropertyGroup($this->propertyGroupId);
+        }
+        
+        // Clean up person type
+        if (isset($this->personTypeId)) {
+            $this->deletePersonType($this->personTypeId);
+        }
     }
 
     /**
@@ -101,7 +117,9 @@ class ShipmentPropertyTest extends TestCase
             'name' => $this->propertyName,
             'type' => 'STRING',
             'required' => 'N',
-            'sort' => 100
+            'sort' => 100,
+            'personTypeId' => $this->personTypeId,
+            'propsGroupId' => $this->propertyGroupId
         ];
 
         $addedShipmentPropertyResult = $this->shipmentPropertyService->add($propertyFields);
@@ -123,7 +141,9 @@ class ShipmentPropertyTest extends TestCase
             'name' => $this->propertyName,
             'type' => 'STRING',
             'required' => 'N',
-            'sort' => 100
+            'sort' => 100,
+            'personTypeId' => $this->personTypeId,
+            'propsGroupId' => $this->propertyGroupId
         ];
 
         $addedShipmentPropertyResult = $this->shipmentPropertyService->add($propertyFields);
@@ -158,7 +178,9 @@ class ShipmentPropertyTest extends TestCase
             'name' => $this->propertyName,
             'type' => 'STRING',
             'required' => 'N',
-            'sort' => 100
+            'sort' => 100,
+            'personTypeId' => $this->personTypeId,
+            'propsGroupId' => $this->propertyGroupId
         ];
 
         $addedShipmentPropertyResult = $this->shipmentPropertyService->add($propertyFields);
@@ -186,7 +208,9 @@ class ShipmentPropertyTest extends TestCase
             'name' => $this->propertyName,
             'type' => 'STRING',
             'required' => 'N',
-            'sort' => 100
+            'sort' => 100,
+            'personTypeId' => $this->personTypeId,
+            'propsGroupId' => $this->propertyGroupId
         ];
 
         $addedShipmentPropertyResult = $this->shipmentPropertyService->add($propertyFields);
@@ -227,7 +251,9 @@ class ShipmentPropertyTest extends TestCase
             'name' => $this->propertyName,
             'type' => 'STRING',
             'required' => 'N',
-            'sort' => 100
+            'sort' => 100,
+            'personTypeId' => $this->personTypeId,
+            'propsGroupId' => $this->propertyGroupId
         ];
 
         $addedShipmentPropertyResult = $this->shipmentPropertyService->add($propertyFields);
@@ -260,8 +286,67 @@ class ShipmentPropertyTest extends TestCase
         self::assertNotEmpty($fields);
 
         // Verify essential fields are present
-        self::assertArrayHasKey('NAME', $fields);
-        self::assertArrayHasKey('TYPE', $fields);
-        self::assertArrayHasKey('REQUIRED', $fields);
+        self::assertArrayHasKey('name', $fields);
+        self::assertArrayHasKey('type', $fields);
+        self::assertArrayHasKey('required', $fields);
+    }
+
+    /**
+     * Create a person type for testing
+     */
+    protected function getPersonTypeId(): int
+    {
+        $core = Fabric::getCore();
+        return (int)$core->call('sale.persontype.add', [
+            'fields' => [
+                'name' => 'Test Person Type ' . uniqid(),
+                'sort' => 100,
+            ]
+        ])->getResponseData()->getResult()['personType']['id'];
+    }
+
+    /**
+     * Delete a person type
+     */
+    protected function deletePersonType(int $id): void
+    {
+        try {
+            $core = Fabric::getCore();
+            $core->call('sale.persontype.delete', [
+                'id' => $id
+            ]);
+        } catch (\Exception) {
+            // Ignore cleanup errors
+        }
+    }
+
+    /**
+     * Create a property group for testing
+     */
+    protected function getPropertyGroupId(): int
+    {
+        $core = Fabric::getCore();
+        return (int)$core->call('sale.propertygroup.add', [
+            'fields' => [
+                'name' => 'Test Property Group ' . uniqid(),
+                'personTypeId' => $this->personTypeId,
+                'sort' => 100,
+            ]
+        ])->getResponseData()->getResult()['propertyGroup']['id'];
+    }
+
+    /**
+     * Delete a property group
+     */
+    protected function deletePropertyGroup(int $id): void
+    {
+        try {
+            $core = Fabric::getCore();
+            $core->call('sale.propertygroup.delete', [
+                'id' => $id
+            ]);
+        } catch (\Exception) {
+            // Ignore cleanup errors
+        }
     }
 }

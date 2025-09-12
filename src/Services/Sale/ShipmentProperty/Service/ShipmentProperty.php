@@ -45,6 +45,8 @@ class ShipmentProperty extends AbstractService
      *                      - name (string) - Name of the property
      *                      - type (string) - Type of the property
      *                      - required (string) - Whether the property is required ('Y'/'N')
+     *                      - persontypeid (int) - Person type identifier
+     *                      - propsgroupid (int) - Property group identifier
      *
      * @throws BaseException
      * @throws TransportException
