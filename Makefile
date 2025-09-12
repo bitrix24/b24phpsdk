@@ -212,6 +212,10 @@ test-integration-scope-sale-shipment-property:
 test-integration-scope-sale-shipment-property-value:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_shipment_property_value
 
+.PHONY: test-integration-scope-sale-shipment-item
+test-integration-scope-sale-shipment-item:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_shipment_item
+
 .PHONY: test-integration-sale-basket-property
 test-integration-sale-basket-property:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_basket_property

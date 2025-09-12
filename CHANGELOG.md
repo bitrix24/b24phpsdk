@@ -27,6 +27,15 @@
     - `list` returns a list of shipment property values
     - `delete` deletes a shipment property value
     - `getFields` returns the fields and settings for shipment property values
+
+- Added service `Services\Sale\ShipmentItem\Service\ShipmentItem` with support methods,
+  see [sale.shipmentitem.* methods](https://github.com/bitrix24/b24phpsdk/issues/250):
+    - `add` adds a new shipment item
+    - `update` updates the fields of a shipment item
+    - `get` returns a shipment item by its identifier
+    - `list` returns a list of shipment items
+    - `delete` deletes a shipment item
+    - `getFields` returns the fields and settings for shipment items
 - Added service `Services\Sale\Payment\Service\Payment` with support methods,
   see [sale.payment.* methods](https://github.com/bitrix24/b24phpsdk/issues/248):
     - `add` adds a payment

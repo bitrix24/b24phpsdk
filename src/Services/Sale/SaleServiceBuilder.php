@@ -23,6 +23,7 @@ use Bitrix24\SDK\Services\Sale\Status\Service\Status;
 use Bitrix24\SDK\Services\Sale\StatusLang\Service\StatusLang;
 use Bitrix24\SDK\Services\Sale\PersonTypeStatus\Service\PersonTypeStatus;
 use Bitrix24\SDK\Services\Sale\ShipmentPropertyValue\Service\ShipmentPropertyValue;
+use Bitrix24\SDK\Services\Sale\ShipmentItem\Service\ShipmentItem;
 use Bitrix24\SDK\Services\Sale\BasketProperty\Service\BasketProperty;
 
 /**
@@ -227,6 +228,21 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new ShipmentPropertyValue(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * ShipmentItem service (sale.shipmentitem.*)
+     */
+    public function shipmentItem(): ShipmentItem
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new ShipmentItem(
                 $this->core,
                 $this->log
             );
