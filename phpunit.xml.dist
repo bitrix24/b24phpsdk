@@ -136,6 +136,18 @@
         <testsuite name="integration_tests_sale_order">
             <directory>./tests/Integration/Services/Sale/Order/</directory>
         </testsuite>
+        <testsuite name="integration_tests_sale_shipment">
+            <directory>./tests/Integration/Services/Sale/Shipment/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_shipment_property">
+            <directory>./tests/Integration/Services/Sale/ShipmentProperty/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_shipment_property_value">
+            <directory>./tests/Integration/Services/Sale/ShipmentPropertyValue/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_shipment_item">
+            <directory>./tests/Integration/Services/Sale/ShipmentItem/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>

@@ -200,6 +200,22 @@ test-integration-sale-status:
 test-integration-sale-status-lang:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_status_lang
 
+.PHONY: test-integration-scope-sale-shipment
+test-integration-scope-sale-shipment:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_shipment
+
+.PHONY: test-integration-scope-sale-shipment-property
+test-integration-scope-sale-shipment-property:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_shipment_property
+
+.PHONY: test-integration-scope-sale-shipment-property-value
+test-integration-scope-sale-shipment-property-value:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_shipment_property_value
+
+.PHONY: test-integration-scope-sale-shipment-item
+test-integration-scope-sale-shipment-item:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_shipment_item
+
 .PHONY: test-integration-sale-basket-property
 test-integration-sale-basket-property:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_basket_property

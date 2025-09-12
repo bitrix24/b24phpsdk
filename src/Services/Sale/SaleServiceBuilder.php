@@ -22,6 +22,8 @@ use Bitrix24\SDK\Services\Sale\PropertyVariant\Service\PropertyVariant;
 use Bitrix24\SDK\Services\Sale\Status\Service\Status;
 use Bitrix24\SDK\Services\Sale\StatusLang\Service\StatusLang;
 use Bitrix24\SDK\Services\Sale\PersonTypeStatus\Service\PersonTypeStatus;
+use Bitrix24\SDK\Services\Sale\ShipmentPropertyValue\Service\ShipmentPropertyValue;
+use Bitrix24\SDK\Services\Sale\ShipmentItem\Service\ShipmentItem;
 use Bitrix24\SDK\Services\Sale\BasketProperty\Service\BasketProperty;
 
 /**
@@ -170,6 +172,36 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     }
 
     /**
+     * Shipment service (sale.shipment.*)
+     */
+    public function shipment(): Shipment\Service\Shipment
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Shipment\Service\Shipment(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * ShipmentProperty service (sale.shipmentproperty.*)
+     */
+    public function shipmentProperty(): ShipmentProperty\Service\ShipmentProperty
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new ShipmentProperty\Service\ShipmentProperty(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
      * Basket Item service (sale.basketitem.*)
      */
     public function basketItem(): BasketItem\Service\BasketItem
@@ -181,6 +213,36 @@ class SaleServiceBuilder extends AbstractServiceBuilder
             );
             $this->serviceCache[__METHOD__] = new BasketItem\Service\BasketItem(
                 new BasketItem\Service\Batch($batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * ShipmentPropertyValue service (sale.shipmentpropertyvalue.*)
+     */
+    public function shipmentPropertyValue(): ShipmentPropertyValue
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new ShipmentPropertyValue(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * ShipmentItem service (sale.shipmentitem.*)
+     */
+    public function shipmentItem(): ShipmentItem
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new ShipmentItem(
                 $this->core,
                 $this->log
             );
