@@ -315,6 +315,75 @@ class Batch implements BatchOperationsInterface
             ]
         );
     }
+    
+    /**
+     * @param array<string,string> $order
+     *
+     * @return array|string[]
+     */
+    protected function getReverseOrder(array $order): array
+    {
+        $this->logger->debug(
+            'getReverseOrder.start',
+            [
+                'order' => $order,
+            ]
+        );
+        $reverseOrder = null;
+
+        if ($order === []) {
+            $reverseOrder = ['ID' => 'DESC'];
+        } else {
+            $order = array_change_key_case($order, CASE_UPPER);
+            $oldDirection = array_values($order)[0];
+            $newOrderDirection = $oldDirection === 'ASC' ? 'DESC' : 'ASC';
+
+            $reverseOrder[array_key_first($order)] = $newOrderDirection;
+        }
+
+        $this->logger->debug(
+            'getReverseOrder.finish',
+            [
+                'order' => $reverseOrder,
+            ]
+        );
+
+        return $reverseOrder;
+    }
+    
+    /**
+     * @param array<string,mixed> $oldFilter
+     *
+     * @return array<string,mixed>
+     */
+    protected function updateFilterForBatch(
+        string $keyId,
+        int $startElementId,
+        int $lastElementId,
+        bool $isLastPage,
+        array $oldFilter
+    ): array {
+        $this->logger->debug('updateFilterForBatch.start', [
+            'startElementId' => $startElementId,
+            'lastElementId' => $lastElementId,
+            'isLastPage' => $isLastPage,
+            'oldFilter' => $oldFilter,
+            'key' => $keyId,
+        ]);
+
+        $filter = array_merge(
+            $oldFilter,
+            [
+                sprintf('>=%s', $keyId) => $startElementId,
+                $isLastPage ? sprintf('<=%s', $keyId) : sprintf('<%s', $keyId) => $lastElementId,
+            ]
+        );
+        $this->logger->debug('updateFilterForBatch.finish', [
+            'filter' => $filter,
+        ]);
+
+        return $filter;
+    }
 
     /**
      * Get traversable list without count elements (alternative implementation)
@@ -363,7 +432,7 @@ class Batch implements BatchOperationsInterface
                         'order' => $order,
                     ]
                 );
-                
+
                 foreach($this->getTraversableListWithCount(
                         $apiMethod,
                         $order,
@@ -371,20 +440,21 @@ class Batch implements BatchOperationsInterface
                         $select,
                         $limit,
                         $additionalParameters
-                    ) as $key => $item
+                    ) as $item
                 ) {
                     yield $item;
                 }
-                
+
                 return;
             }
         }
-        
+
         if (!array_key_exists($keyId, $order)) {
             $order = [$keyId => 'ASC'];
         }
-        $isAscendingSort = mb_strtoupper($order[$keyId]) == 'ASC';
-        
+
+        $isAscendingSort = mb_strtoupper($order[$keyId]) === 'ASC';
+
         // Get first page
         $params = [
             'order' => $order,
@@ -392,45 +462,45 @@ class Batch implements BatchOperationsInterface
             'select' => $select,
             'start' => 0,
         ];
-        
+
         if ($additionalParameters !== null) {
             $params = array_merge($params, $additionalParameters);
         }
-        
+
         $firstPageResponse = $this->core->call($apiMethod, $params);
         $totalElementsCount = $firstPageResponse->getResponseData()->getPagination()->getTotal();
         $this->logger->debug('getTraversableList.totalElementsCount', [
             'totalElementsCount' => $totalElementsCount,
         ]);
-        
+
         // Process first page and count returned elements
         $elementsCounter = 0;
         $isCrmItemsInBatch = $additionalParameters !== null && array_key_exists('entityTypeId', $additionalParameters);
-        
+
         // Process first page results
         $firstPageElements = $this->extractElementsFromBatchResult($firstPageResponse->getResponseData(), $isCrmItemsInBatch);
-        
-        foreach ($firstPageElements as $element) {
+
+        foreach ($firstPageElements as $firstPageElement) {
             $elementsCounter++;
             if ($limit !== null && $elementsCounter > $limit) {
                 return;
             }
-            
-            yield $element;
+
+            yield $firstPageElement;
         }
-        
+
         // If total elements count is less than or equal to page size, finish
         if ($totalElementsCount <= self::MAX_ELEMENTS_IN_PAGE) {
             $this->logger->debug('getTraversableList.finish - single page');
             return;
         }
-        
+
         // Get ID of the last element on the page
         $lastElementId = $this->getLastElementId($firstPageElements, $keyId, $isAscendingSort);
         $this->logger->debug('getTraversableList.lastElementId', [
             'lastElementId' => $lastElementId,
         ]);
-        
+
         // Form and execute sequential batch requests
         $batchNumber = 0;
         while ($elementsCounter < $totalElementsCount && ($limit === null || $elementsCounter < $limit)) {
@@ -439,11 +509,11 @@ class Batch implements BatchOperationsInterface
                 'batchNumber' => $batchNumber,
                 'elementsCounter' => $elementsCounter,
             ]);
-            
+
             // Form the first request based on sort order
             $firstCommandId = "cmd_0";
             $firstParams = [];
-            
+
             $updatedFilter = $this->updateFilterForNextBatch($filter, $keyId, $lastElementId, $isAscendingSort);
             $firstParams = [
                 'order' => $order,
@@ -451,37 +521,37 @@ class Batch implements BatchOperationsInterface
                 'select' => $select,
                 'start' => -1
             ];
-            
+
             if ($additionalParameters !== null) {
                 $firstParams = array_merge($firstParams, $additionalParameters);
             }
-            
+
             $this->logger->debug('getTraversableList.batchFirstParams', [
                 'nextParams' => $firstParams,
             ]);
-            
+
             // Register the first command
             $this->registerCommand($apiMethod, $firstParams, $firstCommandId);
-            
+
             // Calculate how many additional pages we need for remaining elements
             $remainingElements = $totalElementsCount - $elementsCounter;
             $neededPages = ceil($remainingElements / self::MAX_ELEMENTS_IN_PAGE);
             // one page we already registered
             $neededPages -= 1;
-            
+
             // Limit by the maximum packet size and the limit parameter if provided
             $maxBatchSize = min(
                 (int)$neededPages, // Only register as many commands as we need pages
                 self::MAX_BATCH_PACKET_SIZE - 1 // -1 because we've already registered cmd_0
             );
-            
+
             if ($limit !== null) {
                 // If we have a limit, we might need even fewer pages
                 $remainingLimit = $limit - $elementsCounter;
                 $pagesForLimit = ceil($remainingLimit / self::MAX_ELEMENTS_IN_PAGE);
                 $maxBatchSize = min($maxBatchSize, (int)$pagesForLimit);
             }
-            
+
             $this->logger->debug('getTraversableList.batchSizeCalculation', [
                 'totalElementsCount' => $totalElementsCount,
                 'elementsCounter' => $elementsCounter,
@@ -489,58 +559,58 @@ class Batch implements BatchOperationsInterface
                 'neededPages' => $neededPages,
                 'maxBatchSize' => $maxBatchSize,
             ]);
-            
+
             // Use a unified approach for both ASC and DESC sorting with dynamic filters
             for ($i = 1; $i <= $maxBatchSize; $i++) {
                 $prevCommandId = "cmd_" . ($i - 1);
                 $currentCommandId = "cmd_" . $i;
-                
+
                 // Dynamic filter referencing the result of the previous request
                 $referenceFilter = [];
                 $lastIndex = (self::MAX_ELEMENTS_IN_PAGE - 1);
                 $referenceFieldPath = $this->getReferenceFieldPath($prevCommandId, $lastIndex, $keyId, $isCrmItemsInBatch);
-                
+
                 // Create the appropriate filter based on sort direction
-                $filterOperator = $isAscendingSort ? ">$keyId" : "<$keyId";
+                $filterOperator = $isAscendingSort ? '>' . $keyId : '<' . $keyId;
                 $referenceFilter[$filterOperator] = $referenceFieldPath;
-                
+
                 $nextParams = [
                     'order' => $order,
                     'filter' => array_merge($filter, $referenceFilter),
                     'select' => $select,
                     'start' => -1
                 ];
-                
+
                 if ($additionalParameters !== null) {
                     $nextParams = array_merge($nextParams, $additionalParameters);
                 }
-                
+
                 $this->logger->debug('getTraversableList.batchCommandParams', [
                     'nextParams' => $nextParams,
                 ]);
-                
+
                 // Register the next command
                 $this->registerCommand($apiMethod, $nextParams, $currentCommandId);
             }
-            
+
             $this->logger->debug('getTraversableList.batchCommandsRegistered', [
                 'commandsCount' => $this->commands->count(),
             ]);
-            
+
             // Use the existing getTraversable method to process commands
-            foreach ($this->getTraversable(true) as $batchKey => $batchResult) {
+            foreach ($this->getTraversable(true) as $batchResult) {
                 // Extract elements from the result
                 $resultElements = $this->extractElementsFromBatchResult($batchResult, $isCrmItemsInBatch);
-                
+
                 // For each result element, return it and track the last element ID
                 // The lastElementId will be used for the next batch if using ASC sort
-                foreach ($resultElements as $element) {
+                foreach ($resultElements as $resultElement) {
                     // Update lastElementId properly depending on sort order
-                    if (isset($element[$keyId])) {
-                        $lastElementId = (int)$element[$keyId];
+                    if (isset($resultElement[$keyId])) {
+                        $lastElementId = (int)$resultElement[$keyId];
                     }
-                    
-                    yield $element;
+
+                    yield $resultElement;
                     $elementsCounter++;
                     if ($limit !== null && $elementsCounter >= $limit) {
                         $this->logger->debug('getTraversableList.finish - limit reached', [
@@ -550,14 +620,14 @@ class Batch implements BatchOperationsInterface
                         return;
                     }
                 }
-                
+
                 // If there are no elements in the result, stop execution
-                if (count($resultElements) === 0) {
+                if ($resultElements === []) {
                     $this->logger->debug('getTraversableList.finish - empty result');
                     return;
                 }
             }
-            
+
             $batchNumber++;
         }
 
@@ -613,10 +683,11 @@ class Batch implements BatchOperationsInterface
             'select' => $select,
             'start' => 0,
         ];
-        
+
         if ($additionalParameters !== null) {
             $params = array_merge($params, $additionalParameters);
         }
+
         // get total elements count
         $response = $this->core->call(
             $apiMethod,
@@ -634,24 +705,24 @@ class Batch implements BatchOperationsInterface
                 'totalItems' => $total,
             ]
         );
-        
+
         if ($total <= self::MAX_ELEMENTS_IN_PAGE) {
             $elementsCounter = 0;
             $firstPageElements = $this->extractElementsFromBatchResult($response->getResponseData(), $isCrmItemsInBatch);
-            foreach ($firstPageElements as $element) {
+            foreach ($firstPageElements as $firstPageElement) {
                 $elementsCounter++;
                 if ($limit !== null && $elementsCounter > $limit) {
                     return;
                 }
-                
-                yield $element;
+
+                yield $firstPageElement;
             }
-            
+
             return;
         }
 
-        
-        
+
+
         if ($nextItem !== null) {
             //more than one page in results -  register list commands
             for ($startItem = 0; $startItem <= $total; $startItem += $nextItem) {
@@ -661,10 +732,11 @@ class Batch implements BatchOperationsInterface
                     'select' => $select,
                     'start' => $startItem,
                 ];
-                
+
                 if ($additionalParameters !== null) {
                     $params = array_merge($params, $additionalParameters);
                 }
+
                 $this->registerCommand(
                     $apiMethod,
                     $params
@@ -699,13 +771,13 @@ class Batch implements BatchOperationsInterface
             );
             $resultElements = $this->extractElementsFromBatchResult($queryResultData, $isCrmItemsInBatch);
             // iterate items in batch query result
-            foreach ($resultElements as $listElement) {
+            foreach ($resultElements as $resultElement) {
                 ++$elementsCounter;
                 if ($limit !== null && $elementsCounter > $limit) {
                     return;
                 }
 
-                yield $listElement;
+                yield $resultElement;
             }
         }
 
@@ -847,26 +919,16 @@ class Batch implements BatchOperationsInterface
     
     /**
      * Returns relative path to previous ID value
-     * 
-     * @param string $prevCommandId
-     * @param int $lastIndex
-     * @param string $keyId
-     * @param bool $isCrmItemsInBatch
-     * @return string
      */
     protected function getReferenceFieldPath(string $prevCommandId, int $lastIndex, string $keyId, bool $isCrmItemsInBatch): string
     {
         return $isCrmItemsInBatch ? 
-            "\$result[$prevCommandId][items][$lastIndex][$keyId]" : 
-            "\$result[$prevCommandId][$lastIndex][$keyId]";
+            sprintf('$result[%s][items][%d][%s]', $prevCommandId, $lastIndex, $keyId) : 
+            sprintf('$result[%s][%d][%s]', $prevCommandId, $lastIndex, $keyId);
     }
     
     /**
      * Determines the ID key based on API method and parameters
-     * 
-     * @param string $apiMethod
-     * @param array|null $additionalParameters
-     * @return string
      */
     protected function determineKeyId(string $apiMethod, ?array $additionalParameters): string {
         // For CRM items 'id' is used, for others - 'ID'
@@ -878,56 +940,37 @@ class Batch implements BatchOperationsInterface
      * Gets the ID of the last element from an array of elements
      * For ASC sorting, returns the highest ID (last element)
      * For DESC sorting, returns the lowest ID (last element)
-     * 
-     * @param array $elements
-     * @param string $keyId
-     * @param bool $isAscendingSort
-     * @return int
      */
     protected function getLastElementId(array $elements, string $keyId, bool $isAscendingSort): int {
-        if (empty($elements)) {
+        if ($elements === []) {
             return 0;
         }
         
-        if ($isAscendingSort) {
-            // For ASC sorting, we need the highest ID (last element)
-            $lastElement = end($elements);
-        } else {
-            // For DESC sorting, we need the lowest ID (last element in descending order)
-            $lastElement = end($elements);
-        }
+        $lastElement = $isAscendingSort ? end($elements) : end($elements);
         
         return (int)$lastElement[$keyId];
     }
 
     /**
      * Updates the filter for the next batch of requests
-     * 
+     *
      * @param array<string,mixed> $filter
-     * @param string $keyId
-     * @param int $lastElementId
-     * @param bool $isAscendingSort
      * @return array<string,mixed>
      */
     protected function updateFilterForNextBatch(array $filter, string $keyId, int $lastElementId, bool $isAscendingSort): array {
         if ($isAscendingSort) {
-            return array_merge($filter, [">$keyId" => $lastElementId]);
-        } else {
-            return array_merge($filter, ["<$keyId" => $lastElementId]);
+            return array_merge($filter, ['>' . $keyId => $lastElementId]);
         }
+        return array_merge($filter, ['<' . $keyId => $lastElementId]);
     }
 
     /**
      * Extracts elements from batch request result
-     * 
-     * @param ResponseData $batchResult
-     * @param bool $isCrmItemsInBatch
-     * @return array
      */
-    protected function extractElementsFromBatchResult(ResponseData $batchResult, bool $isCrmItemsInBatch): array {
-        $resultData = $batchResult->getResult();
+    protected function extractElementsFromBatchResult(ResponseData $responseData, bool $isCrmItemsInBatch): array {
+        $resultData = $responseData->getResult();
         if ($isCrmItemsInBatch) {
-            if (is_array($resultData) && array_key_exists('items', $resultData)) {
+            if (array_key_exists('items', $resultData)) {
                 return $resultData['items'];
             }
         } else {
