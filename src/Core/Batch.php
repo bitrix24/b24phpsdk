@@ -386,7 +386,17 @@ class Batch implements BatchOperationsInterface
     }
 
     /**
-     * Get traversable list without count elements (alternative implementation)
+     * Get traversable list without count elements
+     * 
+     * @link https://apidocs.bitrix24.com/api-reference/performance/huge-data.html
+     * 
+     * Depending on the requested sorting option, the method uses two scenarios
+     * 1. Sorting is not specified or starts with sorting by ID (in any direction)
+     * We use fast data loading with start=-1 and a dynamic filter by the ID value from the result of the previous subquery. See
+     * https://apidocs.bitrix24.com/api-reference/how-to-call-rest-api/batch.html
+     * 2. Sorting by a field other than ID is specified
+     * In this case, the method delegates execution to the getTraversableListWithCount() method. It uses the start >= 0 parameter, and data loading is
+     * somewhat slower.
      *
      * @param array<string,string> $order
      * @param array<string,mixed> $filter
@@ -421,7 +431,7 @@ class Batch implements BatchOperationsInterface
             ]
         );
 
-        // Determine sort direction and ID key
+        // Check the sorting and select the appropriate scenario
         $keyId = $this->determineKeyId($apiMethod, $additionalParameters);
         if ($order !== []) {
             $fistKey = key($order);
