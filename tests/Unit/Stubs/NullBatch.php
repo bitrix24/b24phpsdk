@@ -46,7 +46,8 @@ class NullBatch implements BatchOperationsInterface
         array $order,
         array $filter,
         array $select,
-        ?int $limit = null
+        ?int $limit = null,
+        ?array $additionalParameters = null
     ): Generator {
         yield [];
     }
