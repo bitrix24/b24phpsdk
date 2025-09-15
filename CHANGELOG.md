@@ -12,6 +12,22 @@
     - `list` returns a list of payments
     - `delete` deletes a payment
     - `getFields` returns the fields and settings for payments
+- Added service `Services\Sale\PaymentItemBasket\Service\PaymentItemBasket` with support methods,
+  see [sale.paymentitembasket.* methods](https://github.com/bitrix24/b24phpsdk/issues/253):
+    - `add` adds a binding of a basket item to a payment
+    - `update` updates the binding of a basket item to a payment
+    - `get` returns the values of all fields for the basket item binding to payment
+    - `list` returns a list of bindings of basket items to payments
+    - `delete` deletes the binding of a basket item to a payment
+    - `getFields` returns the available fields for payment item basket bindings
+- Added service `Services\Sale\PaymentItemShipment\Service\PaymentItemShipment` with support methods,
+  see [sale.paymentitemshipment.* methods](https://github.com/bitrix24/b24phpsdk/issues/253):
+    - `add` adds a binding of a payment to a shipment
+    - `update` updates the binding of a payment to a shipment
+    - `get` returns the values of all fields for the payment binding to shipment
+    - `list` returns a list of bindings of payments to shipments
+    - `delete` deletes the binding of a payment to a shipment
+    - `getFields` returns the available fields for payment item shipment bindings
 
 ## 1.6.0 – 2025.09.01
 
