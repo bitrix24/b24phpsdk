@@ -136,6 +136,9 @@
         <testsuite name="integration_tests_sale_payment_item_basket">
             <directory>./tests/Integration/Services/Sale/PaymentItemBasket/</directory>
         </testsuite>
+        <testsuite name="integration_tests_sale_payment_item_shipment">
+            <directory>./tests/Integration/Services/Sale/PaymentItemShipment/</directory>
+        </testsuite>
         <testsuite name="integration_tests_sale_order">
             <directory>./tests/Integration/Services/Sale/Order/</directory>
         </testsuite>

@@ -25,6 +25,7 @@ use Bitrix24\SDK\Services\Sale\PersonTypeStatus\Service\PersonTypeStatus;
 use Bitrix24\SDK\Services\Sale\BasketProperty\Service\BasketProperty;
 use Bitrix24\SDK\Services\Sale\Payment;
 use Bitrix24\SDK\Services\Sale\PaymentItemBasket;
+use Bitrix24\SDK\Services\Sale\PaymentItemShipment;
 use Bitrix24\SDK\Services\Sale\PersonType;
 use Bitrix24\SDK\Services\Sale\PropertyGroup;
 use Bitrix24\SDK\Services\Sale\Order;
@@ -158,6 +159,21 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new PaymentItemBasket\Service\PaymentItemBasket(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * Payment Item Shipment service (sale.paymentitemshipment.*)
+     */
+    public function paymentItemShipment(): PaymentItemShipment\Service\PaymentItemShipment
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new PaymentItemShipment\Service\PaymentItemShipment(
                 $this->core,
                 $this->log
             );
