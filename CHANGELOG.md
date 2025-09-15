@@ -28,6 +28,12 @@
     - `list` returns a list of bindings of payments to shipments
     - `delete` deletes the binding of a payment to a shipment
     - `getFields` returns the available fields for payment item shipment bindings
+- Added service `Services\Sale\PropertyRelation\Service\PropertyRelation` with support methods,
+  see [sale.propertyRelation.* methods](https://github.com/bitrix24/b24phpsdk/issues/253):
+    - `add` adds a property binding
+    - `list` retrieves a list of property bindings
+    - `deleteByFilter` removes the property relation
+    - `getFields` returns the available fields for property binding
 
 ## 1.6.0 – 2025.09.01
 

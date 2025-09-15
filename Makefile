@@ -53,6 +53,7 @@ help:
 	@echo "test-integration-sale-basket-property - run BasketProperty integration tests"
 	@echo "test-integration-sale-payment-item-basket - run PaymentItemBasket integration tests"
 	@echo "test-integration-sale-payment-item-shipment - run PaymentItemShipment integration tests"
+	@echo "test-integration-sale-property-relation - run PropertyRelation integration tests"
 
 
 .PHONY: docker-init
@@ -221,6 +222,10 @@ test-integration-sale-payment-item-basket:
 .PHONY: test-integration-sale-payment-item-shipment
 test-integration-sale-payment-item-shipment:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_payment_item_shipment
+
+.PHONY: test-integration-sale-property-relation
+test-integration-sale-property-relation:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_property_relation
  
 .PHONY: test-integration-scope-crm
 test-integration-scope-crm:

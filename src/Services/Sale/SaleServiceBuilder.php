@@ -30,6 +30,7 @@ use Bitrix24\SDK\Services\Sale\PersonType;
 use Bitrix24\SDK\Services\Sale\PropertyGroup;
 use Bitrix24\SDK\Services\Sale\Order;
 use Bitrix24\SDK\Services\Sale\BasketItem;
+use Bitrix24\SDK\Services\Sale\PropertyRelation;
 
 /**
  * Class SaleServiceBuilder
@@ -233,6 +234,21 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new BasketProperty(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * Property Relation service (sale.propertyRelation.*)
+     */
+    public function propertyRelation(): PropertyRelation\Service\PropertyRelation
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new PropertyRelation\Service\PropertyRelation(
                 $this->core,
                 $this->log
             );
