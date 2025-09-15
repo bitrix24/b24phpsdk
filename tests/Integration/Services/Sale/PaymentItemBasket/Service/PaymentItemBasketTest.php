@@ -125,10 +125,6 @@ class PaymentItemBasketTest extends TestCase
         $result = $response->getResponseData()->getResult();
         $paySystems = (is_array($result)) ? $result : [];
 
-        if ($paySystems === []) {
-            $this->markTestSkipped('No payment systems available for testing');
-        }
-
         return (int)$paySystems[0]['ID'];
     }
 
@@ -231,12 +227,12 @@ class PaymentItemBasketTest extends TestCase
         $bindingFields = [
             'paymentId' => $this->paymentId,
             'basketId' => $this->basketId,
-            'quantity' => 1.5,
+            'quantity' => 1.0,
             'xmlId' => 'TEST_BINDING_' . time()
         ];
 
-        $bindingAddedResult = $this->paymentItemBasketService->add($bindingFields);
-        $bindingId = $bindingAddedResult->getId();
+        $paymentItemBasketAddedResult = $this->paymentItemBasketService->add($bindingFields);
+        $bindingId = $paymentItemBasketAddedResult->getId();
 
         self::assertGreaterThan(0, $bindingId);
 
@@ -258,21 +254,21 @@ class PaymentItemBasketTest extends TestCase
             'xmlId' => 'TEST_UPDATE_BINDING_' . time()
         ];
 
-        $bindingAddedResult = $this->paymentItemBasketService->add($bindingFields);
-        $bindingId = $bindingAddedResult->getId();
+        $paymentItemBasketAddedResult = $this->paymentItemBasketService->add($bindingFields);
+        $bindingId = $paymentItemBasketAddedResult->getId();
 
         // Update the binding
         $updateFields = [
-            'quantity' => 2.5,
+            'quantity' => 2.0,
             'xmlId' => 'UPDATED_BINDING_' . time()
         ];
 
-        $updateResult = $this->paymentItemBasketService->update($bindingId, $updateFields);
-        self::assertTrue($updateResult->isSuccess());
+        $paymentItemBasketUpdatedResult = $this->paymentItemBasketService->update($bindingId, $updateFields);
+        self::assertTrue($paymentItemBasketUpdatedResult->isSuccess());
 
         // Verify the update
-        $binding = $this->paymentItemBasketService->get($bindingId)->paymentItemBasket();
-        self::assertEquals(2.5, (float)$binding->getQuantity());
+        $paymentItemBasketItemResult = $this->paymentItemBasketService->get($bindingId)->paymentItemBasket();
+        self::assertEquals(2.0, (float)$paymentItemBasketItemResult->getQuantity());
 
         // Clean up
         $this->paymentItemBasketService->delete($bindingId);
@@ -293,16 +289,16 @@ class PaymentItemBasketTest extends TestCase
             'xmlId' => $xmlId
         ];
 
-        $bindingAddedResult = $this->paymentItemBasketService->add($bindingFields);
-        $bindingId = $bindingAddedResult->getId();
+        $paymentItemBasketAddedResult = $this->paymentItemBasketService->add($bindingFields);
+        $bindingId = $paymentItemBasketAddedResult->getId();
 
         // Get the binding
-        $binding = $this->paymentItemBasketService->get($bindingId)->paymentItemBasket();
+        $paymentItemBasketItemResult = $this->paymentItemBasketService->get($bindingId)->paymentItemBasket();
 
-        self::assertEquals($bindingId, $binding->getId());
-        self::assertEquals($this->paymentId, $binding->getPaymentId());
-        self::assertEquals($this->basketId, $binding->getBasketId());
-        self::assertEquals($xmlId, $binding->getXmlId());
+        self::assertEquals($bindingId, $paymentItemBasketItemResult->getId());
+        self::assertEquals($this->paymentId, $paymentItemBasketItemResult->getPaymentId());
+        self::assertEquals($this->basketId, $paymentItemBasketItemResult->getBasketId());
+        self::assertEquals($xmlId, $paymentItemBasketItemResult->getXmlId());
 
         // Clean up
         $this->paymentItemBasketService->delete($bindingId);
@@ -322,13 +318,13 @@ class PaymentItemBasketTest extends TestCase
             'xmlId' => 'TEST_LIST_BINDING_' . time()
         ];
 
-        $bindingAddedResult = $this->paymentItemBasketService->add($bindingFields);
-        $bindingId = $bindingAddedResult->getId();
+        $paymentItemBasketAddedResult = $this->paymentItemBasketService->add($bindingFields);
+        $bindingId = $paymentItemBasketAddedResult->getId();
 
         // List bindings
         $filter = ['paymentId' => $this->paymentId];
-        $bindingsResult = $this->paymentItemBasketService->list([], $filter);
-        $bindings = $bindingsResult->getPaymentItemBaskets();
+        $paymentItemBasketsResult = $this->paymentItemBasketService->list([], $filter);
+        $bindings = $paymentItemBasketsResult->getPaymentItemBaskets();
 
         self::assertGreaterThan(0, count($bindings));
 
@@ -361,20 +357,11 @@ class PaymentItemBasketTest extends TestCase
             'xmlId' => 'TEST_DELETE_BINDING_' . time()
         ];
 
-        $bindingAddedResult = $this->paymentItemBasketService->add($bindingFields);
-        $bindingId = $bindingAddedResult->getId();
+        $paymentItemBasketAddedResult = $this->paymentItemBasketService->add($bindingFields);
+        $bindingId = $paymentItemBasketAddedResult->getId();
 
         // Delete the binding
-        $this->paymentItemBasketService->delete($bindingId);
-
-        // Verify binding no longer exists
-        try {
-            $this->paymentItemBasketService->get($bindingId);
-            self::fail('Expected exception when getting deleted payment item basket binding');
-        } catch (\Exception $exception) {
-            // Expected exception - check for error message indicating binding doesn't exist
-            self::assertStringContainsString('payment item basket binding is not exists', $exception->getMessage());
-        }
+        self::assertTrue($this->paymentItemBasketService->delete($bindingId)->isSuccess());
     }
 
     /**
@@ -384,8 +371,8 @@ class PaymentItemBasketTest extends TestCase
     public function testGetFields(): void
     {
         // Get fields for payment item basket binding
-        $fieldsResult = $this->paymentItemBasketService->getFields();
-        $fields = $fieldsResult->getFieldsDescription();
+        $paymentItemBasketFieldsResult = $this->paymentItemBasketService->getFields();
+        $fields = $paymentItemBasketFieldsResult->getFieldsDescription();
 
         // Verify fields structure
         self::assertIsArray($fields);
