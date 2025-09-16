@@ -23,6 +23,7 @@ use Bitrix24\SDK\Services\Sale\Status\Service\Status;
 use Bitrix24\SDK\Services\Sale\StatusLang\Service\StatusLang;
 use Bitrix24\SDK\Services\Sale\PersonTypeStatus\Service\PersonTypeStatus;
 use Bitrix24\SDK\Services\Sale\BasketProperty\Service\BasketProperty;
+use Bitrix24\SDK\Services\Sale\DeliveryHandler\Service\DeliveryHandler;
 
 /**
  * Class SaleServiceBuilder
@@ -196,6 +197,21 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new BasketProperty(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * DeliveryHandler service (sale.delivery.handler.*)
+     */
+    public function deliveryHandler(): DeliveryHandler
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new DeliveryHandler(
                 $this->core,
                 $this->log
             );
