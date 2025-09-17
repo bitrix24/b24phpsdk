@@ -654,7 +654,7 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    public function numerator(): Documentgenerator\Numerator\Service\Numerator
+    public function documentgeneratorNumerator(): Documentgenerator\Numerator\Service\Numerator
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Documentgenerator\Numerator\Service\Numerator(
