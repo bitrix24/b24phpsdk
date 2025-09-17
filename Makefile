@@ -52,6 +52,7 @@ help:
 	@echo "test-unit                 - run unit tests"
 	@echo "test-integration-sale-basket-property - run BasketProperty integration tests"
 	@echo "test-integration-sale-delivery - run Delivery integration tests"
+	@echo "test-integration-sale-delivery-extra-service - run DeliveryExtraService integration tests"
 
 
 .PHONY: docker-init
@@ -312,6 +313,10 @@ test-integration-sale-delivery-handler:
 .PHONY: test-integration-sale-delivery
 test-integration-sale-delivery:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_delivery
+
+.PHONY: test-integration-sale-delivery-extra-service
+test-integration-sale-delivery-extra-service:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_delivery_extra_service
 
 # work dev environment
 .PHONY: php-dev-server-up

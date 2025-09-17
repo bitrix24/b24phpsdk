@@ -12,6 +12,12 @@
     - `delete` deletes a delivery service
     - `configUpdate` updates delivery service settings
     - `configGet` returns delivery service settings
+- Added service `Services\Sale\DeliveryExtraService\Service\DeliveryExtraService` with support methods,
+  see [sale.delivery.extra.service.* methods](https://github.com/bitrix24/b24phpsdk/issues/255):
+    - `add` adds a delivery service
+    - `update` updates a delivery service
+    - `get` returns information about all services of a specific delivery service
+    - `delete` deletes a delivery service
 - Added service `Services\Sale\DeliveryHandler\Service\DeliveryHandler` with support methods,
   see [sale.delivery.handler.* methods](https://github.com/bitrix24/b24phpsdk/issues/255):
     - `add` adds a delivery service handler

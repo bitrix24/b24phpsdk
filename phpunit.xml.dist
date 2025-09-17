@@ -142,6 +142,9 @@
         <testsuite name="integration_tests_sale_delivery">
             <directory>./tests/Integration/Services/Sale/Delivery/Service/</directory>
         </testsuite>
+        <testsuite name="integration_tests_sale_delivery_extra_service">
+            <directory>./tests/Integration/Services/Sale/DeliveryExtraService/Service/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>
