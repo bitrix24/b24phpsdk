@@ -52,6 +52,7 @@ help:
 	@echo "test-unit                 - run unit tests"
 	@echo "test-integration-sale-basket-property - run BasketProperty integration tests"
 	@echo "test-integration-sale-cashbox-handler - run CashboxHandler integration tests"
+	@echo "test-integration-sale-cashbox - run Cashbox integration tests"
 
 
 .PHONY: docker-init
@@ -216,6 +217,10 @@ test-integration-sale-order:
 .PHONY: test-integration-sale-cashbox-handler
 test-integration-sale-cashbox-handler:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_cashbox_handler
+
+.PHONY: test-integration-sale-cashbox
+test-integration-sale-cashbox:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_cashbox
  
 .PHONY: test-integration-scope-crm
 test-integration-scope-crm:

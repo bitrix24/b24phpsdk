@@ -139,6 +139,9 @@
         <testsuite name="integration_tests_sale_cashbox_handler">
             <directory>./tests/Integration/Services/Sale/CashboxHandler/</directory>
         </testsuite>
+        <testsuite name="integration_tests_sale_cashbox">
+            <directory>./tests/Integration/Services/Sale/Cashbox/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>

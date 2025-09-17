@@ -18,6 +18,13 @@
     - `update` updates the data of the REST cashbox handler
     - `list` returns a list of available REST cashbox handlers
     - `delete` deletes the REST cashbox handler
+- Added service `Services\Sale\Cashbox\Service\Cashbox` with support methods,
+  see [sale.cashbox.* methods](https://github.com/bitrix24/b24phpsdk/issues/258):
+    - `add` adds a new cash register
+    - `update` updates an existing cash register
+    - `list` returns a list of configured cash registers
+    - `delete` deletes a cash register
+    - `checkApply` saves the result of printing the receipt
 
 ## 1.6.0 – 2025.09.01
 

@@ -24,6 +24,7 @@ use Bitrix24\SDK\Services\Sale\StatusLang\Service\StatusLang;
 use Bitrix24\SDK\Services\Sale\PersonTypeStatus\Service\PersonTypeStatus;
 use Bitrix24\SDK\Services\Sale\BasketProperty\Service\BasketProperty;
 use Bitrix24\SDK\Services\Sale\CashboxHandler\Service\CashboxHandler;
+use Bitrix24\SDK\Services\Sale\Cashbox\Service\Cashbox;
 
 /**
  * Class SaleServiceBuilder
@@ -212,6 +213,21 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new CashboxHandler(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * Cash registers service (sale.cashbox.*)
+     */
+    public function cashbox(): Cashbox
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Cashbox(
                 $this->core,
                 $this->log
             );
