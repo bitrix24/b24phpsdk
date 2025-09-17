@@ -35,9 +35,13 @@ use PHPUnit\Framework\TestCase;
 class DeliveryExtraServiceTest extends TestCase
 {
     protected DeliveryExtraService $deliveryExtraService;
+
     protected Delivery $deliveryService;
+
     protected DeliveryHandler $deliveryHandlerService;
+
     protected ?int $testHandlerId = null;
+
     protected ?int $testDeliveryId = null;
 
     protected function setUp(): void
@@ -45,7 +49,7 @@ class DeliveryExtraServiceTest extends TestCase
         $this->deliveryExtraService = Fabric::getServiceBuilder()->getSaleScope()->deliveryExtraService();
         $this->deliveryService = Fabric::getServiceBuilder()->getSaleScope()->delivery();
         $this->deliveryHandlerService = Fabric::getServiceBuilder()->getSaleScope()->deliveryHandler();
-        
+
         // Create a test delivery handler and delivery service for our tests
         $this->createTestDeliveryHandler();
         $this->createTestDeliveryService();
@@ -61,7 +65,7 @@ class DeliveryExtraServiceTest extends TestCase
                 // Ignore cleanup errors
             }
         }
-        
+
         if ($this->testHandlerId !== null) {
             try {
                 $this->deliveryHandlerService->delete($this->testHandlerId);
@@ -139,8 +143,8 @@ class DeliveryExtraServiceTest extends TestCase
             ]
         ];
 
-        $addedDeliveryResult = $this->deliveryService->add($deliveryFields);
-        $this->testDeliveryId = $addedDeliveryResult->getId();
+        $deliveryAddResult = $this->deliveryService->add($deliveryFields);
+        $this->testDeliveryId = $deliveryAddResult->getId();
     }
 
     /**
@@ -196,9 +200,9 @@ class DeliveryExtraServiceTest extends TestCase
     {
         $extraServiceFields = $this->getSampleCheckboxExtraServiceFields();
 
-        $addResult = $this->deliveryExtraService->add($extraServiceFields);
-        
-        $extraServiceId = $addResult->getId();
+        $addedItemResult = $this->deliveryExtraService->add($extraServiceFields);
+
+        $extraServiceId = $addedItemResult->getId();
         self::assertIsInt($extraServiceId);
         self::assertGreaterThan(0, $extraServiceId);
 
@@ -214,9 +218,9 @@ class DeliveryExtraServiceTest extends TestCase
     {
         $extraServiceFields = $this->getSampleEnumExtraServiceFields();
 
-        $addResult = $this->deliveryExtraService->add($extraServiceFields);
-        
-        $extraServiceId = $addResult->getId();
+        $addedItemResult = $this->deliveryExtraService->add($extraServiceFields);
+
+        $extraServiceId = $addedItemResult->getId();
         self::assertIsInt($extraServiceId);
         self::assertGreaterThan(0, $extraServiceId);
 
@@ -232,8 +236,8 @@ class DeliveryExtraServiceTest extends TestCase
     {
         // Create an extra service first
         $extraServiceFields = $this->getSampleCheckboxExtraServiceFields();
-        $addResult = $this->deliveryExtraService->add($extraServiceFields);
-        $extraServiceId = $addResult->getId();
+        $addedItemResult = $this->deliveryExtraService->add($extraServiceFields);
+        $extraServiceId = $addedItemResult->getId();
 
         // Update the extra service
         $updateFields = [
@@ -243,8 +247,8 @@ class DeliveryExtraServiceTest extends TestCase
             'ACTIVE' => 'N'
         ];
 
-        $updateResult = $this->deliveryExtraService->update($extraServiceId, $updateFields);
-        self::assertTrue($updateResult->isSuccess());
+        $updatedItemResult = $this->deliveryExtraService->update($extraServiceId, $updateFields);
+        self::assertTrue($updatedItemResult->isSuccess());
 
         // Clean up
         $this->deliveryExtraService->delete($extraServiceId);
@@ -258,37 +262,37 @@ class DeliveryExtraServiceTest extends TestCase
     {
         // Create extra services first
         $checkboxFields = $this->getSampleCheckboxExtraServiceFields();
-        $addCheckboxResult = $this->deliveryExtraService->add($checkboxFields);
-        $checkboxServiceId = $addCheckboxResult->getId();
+        $addedItemResult = $this->deliveryExtraService->add($checkboxFields);
+        $checkboxServiceId = $addedItemResult->getId();
 
         $enumFields = $this->getSampleEnumExtraServiceFields();
         $addEnumResult = $this->deliveryExtraService->add($enumFields);
         $enumServiceId = $addEnumResult->getId();
 
         // Get extra services for our delivery
-        $getResult = $this->deliveryExtraService->get($this->testDeliveryId);
+        $deliveryExtraServicesResult = $this->deliveryExtraService->get($this->testDeliveryId);
 
-        $extraServices = $getResult->getDeliveryExtraServices();
+        $extraServices = $deliveryExtraServicesResult->getDeliveryExtraServices();
         self::assertIsArray($extraServices);
         self::assertGreaterThanOrEqual(2, count($extraServices));
 
         // Verify our services are in the list
         $foundCheckbox = false;
         $foundEnum = false;
-        
-        foreach ($extraServices as $service) {
-            if ((int)$service->ID === $checkboxServiceId) {
-                self::assertEquals('checkbox', $service->TYPE);
-                self::assertEquals('Door Delivery', $service->NAME);
-                self::assertEquals(99.99, (float)$service->PRICE);
+
+        foreach ($extraServices as $extraService) {
+            if ((int)$extraService->ID === $checkboxServiceId) {
+                self::assertEquals('checkbox', $extraService->TYPE);
+                self::assertEquals('Door Delivery', $extraService->NAME);
+                self::assertEquals(99.99, (float)$extraService->PRICE);
                 $foundCheckbox = true;
             }
-            
-            if ((int)$service->ID === $enumServiceId) {
-                self::assertEquals('enum', $service->TYPE);
-                self::assertEquals('Cargo Type', $service->NAME);
-                self::assertIsArray($service->ITEMS);
-                self::assertGreaterThanOrEqual(2, count($service->ITEMS));
+
+            if ((int)$extraService->ID === $enumServiceId) {
+                self::assertEquals('enum', $extraService->TYPE);
+                self::assertEquals('Cargo Type', $extraService->NAME);
+                self::assertIsArray($extraService->ITEMS);
+                self::assertGreaterThanOrEqual(2, count($extraService->ITEMS));
                 $foundEnum = true;
             }
         }
@@ -309,19 +313,19 @@ class DeliveryExtraServiceTest extends TestCase
     {
         // Create an extra service first
         $extraServiceFields = $this->getSampleCheckboxExtraServiceFields();
-        $addResult = $this->deliveryExtraService->add($extraServiceFields);
-        $extraServiceId = $addResult->getId();
+        $addedItemResult = $this->deliveryExtraService->add($extraServiceFields);
+        $extraServiceId = $addedItemResult->getId();
 
         // Delete the extra service
-        $deleteResult = $this->deliveryExtraService->delete($extraServiceId);
-        self::assertTrue($deleteResult->isSuccess());
+        $deletedItemResult = $this->deliveryExtraService->delete($extraServiceId);
+        self::assertTrue($deletedItemResult->isSuccess());
 
         // Verify it's deleted by checking the list
-        $getResult = $this->deliveryExtraService->get($this->testDeliveryId);
-        $extraServices = $getResult->getDeliveryExtraServices();
-        
-        foreach ($extraServices as $service) {
-            self::assertNotEquals($extraServiceId, (int)$service->ID, 'Deleted service should not be in the list');
+        $deliveryExtraServicesResult = $this->deliveryExtraService->get($this->testDeliveryId);
+        $extraServices = $deliveryExtraServicesResult->getDeliveryExtraServices();
+
+        foreach ($extraServices as $extraService) {
+            self::assertNotEquals($extraServiceId, (int)$extraService->ID, 'Deleted service should not be in the list');
         }
     }
 
@@ -333,8 +337,8 @@ class DeliveryExtraServiceTest extends TestCase
     {
         // 1. Add an enum type extra service
         $enumFields = $this->getSampleEnumExtraServiceFields();
-        $addResult = $this->deliveryExtraService->add($enumFields);
-        $extraServiceId = $addResult->getId();
+        $addedItemResult = $this->deliveryExtraService->add($enumFields);
+        $extraServiceId = $addedItemResult->getId();
 
         // 2. Update the extra service
         $updateFields = [
@@ -354,17 +358,17 @@ class DeliveryExtraServiceTest extends TestCase
             ]
         ];
 
-        $updateResult = $this->deliveryExtraService->update($extraServiceId, $updateFields);
-        self::assertTrue($updateResult->isSuccess());
+        $updatedItemResult = $this->deliveryExtraService->update($extraServiceId, $updateFields);
+        self::assertTrue($updatedItemResult->isSuccess());
 
         // 3. Get and verify the updated service
-        $getResult = $this->deliveryExtraService->get($this->testDeliveryId);
-        $extraServices = $getResult->getDeliveryExtraServices();
-        
+        $deliveryExtraServicesResult = $this->deliveryExtraService->get($this->testDeliveryId);
+        $extraServices = $deliveryExtraServicesResult->getDeliveryExtraServices();
+
         $foundService = null;
-        foreach ($extraServices as $service) {
-            if ((int)$service->ID === $extraServiceId) {
-                $foundService = $service;
+        foreach ($extraServices as $extraService) {
+            if ((int)$extraService->ID === $extraServiceId) {
+                $foundService = $extraService;
                 break;
             }
         }
@@ -376,7 +380,7 @@ class DeliveryExtraServiceTest extends TestCase
         self::assertCount(2, $foundService->ITEMS);
 
         // 4. Delete the service
-        $deleteResult = $this->deliveryExtraService->delete($extraServiceId);
-        self::assertTrue($deleteResult->isSuccess());
+        $deletedItemResult = $this->deliveryExtraService->delete($extraServiceId);
+        self::assertTrue($deletedItemResult->isSuccess());
     }
 }
