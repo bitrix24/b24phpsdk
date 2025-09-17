@@ -1,6 +1,169 @@
 # b24-php-sdk change log
 
-## UPCOMING 1.6.0 – 2025.09.01
+## 1.6.0 – 2025.09.01
+
+### Added
+
+- Added service `Services\Sale\Order\Service\Order` with support methods,
+  see [sale.order.* methods](https://github.com/bitrix24/b24phpsdk/issues/241):
+    - `add` adds an order, with batch calls support
+    - `update` modifies an order, with batch calls support
+    - `get` returns order fields and fields of related objects
+    - `list` returns a list of orders, with batch calls support
+    - `delete` deletes an order and related objects, with batch calls support
+    - `getFields` returns order fields
+- Added service `Services\Sale\PropertyVariant\Service\PropertyVariant` with support methods,
+  see [sale.propertyvariant.* methods](https://github.com/bitrix24/b24phpsdk/issues/234):
+    - `add` adds a variant of an order property
+    - `update` updates the fields of a property variant
+    - `get` returns the value of a property variant by its identifier
+    - `list` returns a list of property variants
+    - `delete` deletes a property variant
+    - `getFields` returns the fields and settings of property variants
+- Added service `Services\Sale\Property\Service\Property` with support methods,
+  see [sale.property.* methods](https://github.com/bitrix24/b24phpsdk/issues/234):
+    - `add` adds a new order property
+    - `update` updates the fields of an order property
+    - `get` returns an order property by ID
+    - `list` returns a list of order properties
+    - `delete` deletes an order property
+    - `getFieldsByType` returns the fields and settings of order properties by type
+- Added service `Services\Sale\PropertyGroup\Service\PropertyGroup` with support methods,
+  see [sale.propertygroup.* methods](https://github.com/bitrix24/b24phpsdk/issues/232):
+    - `add` adds a new property group
+    - `update` updates a property group
+    - `get` returns a property group by id
+    - `list` returns a list of property groups
+    - `delete` deletes a property group
+    - `getFields` returns available fields for property groups
+- Added service `Services\Sale\Status\Service\Status` with support methods,
+  see [sale.status.* methods](https://github.com/bitrix24/b24phpsdk/issues/234):
+    - `add` adds a new status
+    - `update` updates an existing status
+    - `get` returns information about a status by ID
+    - `list` returns a list of statuses with filtering and sorting options
+    - `delete` deletes a status
+    - `getFields` returns available fields for statuses
+- Added service `Services\Sale\StatusLang\Service\StatusLang` with support methods,
+  see [sale.statusLang.* methods](https://apidocs.bitrix24.com/api-reference/sale/status-lang/index.html):
+    - `getListLangs` returns list of available languages
+    - `add` adds a new status language
+    - `list` returns a list of status languages with filtering and sorting options
+    - `deleteByFilter` deletes status languages by filter
+    - `getFields` returns available fields for status languages
+- Added service `Services\Sale\PersonTypeStatus\Service\PersonTypeStatus` with support methods,
+  see [sale.businessValuePersonDomain.* methods](https://github.com/bitrix24/b24phpsdk/issues/228):
+    - `add` adds business value for person domain
+    - `list` retrieves list of business values for person domain
+    - `delete` deletes business values by filter
+    - `getFields` gets fields description for business value person domain
+- Added service `Services\Task\Service\Task` with support methods,
+  see [tasks.task.* methods](https://github.com/bitrix24/b24phpsdk/issues/214):
+    - `add` creates a task, with batch calls support
+    - `update` updates a task, with batch calls support
+    - `list` retrieves a list of tasks, with batch calls support
+    - `delete` deletes a task, with batch calls support
+    - `fields` retrieves available fields
+    - `get` retrieves information about a task by id
+    - `delegate` delegates tasks
+    - `start` changes the task status to "in progress"
+    - `pause` stops task execution and changes status to "waiting for execution"
+    - `defer` changes the task status to "deferred"
+    - `complete` changes the task status to "completed"
+    - `renew` renews a task after it has been completed
+    - `approve` approves a task
+    - `disapprove` rejects a task
+    - `startwatch` allows watching a task
+    - `stopwatch` stops watching a task
+    - `mute` enables "Mute" mode
+    - `unmute` disables "Mute" mode
+    - `addFavorite` adds tasks to favorites
+    - `removeFavorite` removes tasks from favorites
+    - `getCounters` retrieves user counters
+    - `getAccess` checks access to a task
+    - `addDependence` creates a dependency of one task on another
+    - `deleteDependence` deletes a dependency of one task on another
+    - `historyList` retrieves task history
+- Added support for events:
+    - `OnTaskAdd`
+    - `OnTaskUpdate`
+    - `OnTaskDelete`
+- Added service `Services\Task\TaskResult\Service\Result` with support methods:
+    - `addFromComment` adds a comment to the result
+    - `deleteFromComment` deletes a comment from the task result
+    - `list` retrieves a list of task results
+- Added service `Services\Task\Checklistitem\Service\Checklistitem` with support methods:
+    - `add` adds a new checklist item to a task
+    - `update` updates the data of a checklist item
+    - `delete` deletes a checklist item
+    - `get` retrieves a checklist item by its id
+    - `getList` retrieves a list of checklist items in a task
+    - `moveAfterItem` retrieves a list of checklist items in a task
+    - `complete` marks a checklist item as completed
+    - `renew` marks a completed checklist item as active again
+    - `isActionAllowed` checks if the action is allowed for the checklist item
+    - `getManifest` retrieves the list of methods and their descriptions
+- Added service `Services\Task\Commentitem\Service\Commentitem` with support methods:
+    - `add` creates a new comment for a task
+    - `update` updates the comment data
+    - `delete` deletes a comment
+    - `get` retrieves a comment for a task
+    - `getList` retrieves a list of comments for a task
+- Added service `Services\Task\Elapseditem\Service\Elapseditem` with support methods:
+    - `add` adds time spent to a task
+    - `update` updates the parameters of the time tracking record
+    - `delete` deletes a time tracking record
+    - `get` retrieves a time tracking record by its identifier
+    - `getList` retrieves a list of time tracking records for a task
+    - `isActionAllowed` checks if the action is allowed
+    - `getManifest` retrieves the list of methods and their descriptions
+- Added service `Services\Task\Userfield\Service\Userfield` with support methods:
+    - `add` creates a new field
+    - `get` retrieves a field by its identifier
+    - `getList` retrieves a list of fields
+    - `delete` deletes a field
+    - `update` updates the parameters of the field
+    - `getTypes` retrieves all available data types
+    - `getFields` retrieves all available fields of the custom field
+- Added service `Services\Task\Stage\Service\Stage` with support methods:
+    - `add` adds stages to kanban or "My Planner"
+    - `get` retrieves stages of kanban or "My Planner"
+    - `delete` deletes stages of kanban or "My Planner"
+    - `update` updates stages of kanban or "My Planner"
+    - `canMoveTask` determines if the current user can move tasks in the specified object
+    - `moveTask` moves tasks from one stage to another
+- Added service `Services\Task\Planner\Service\Planner` with support methods:
+    - `getList` retrieves a list of tasks from "The Daily Planner"
+- Added service `Services\Task\Flow\Service\Flow` with support methods:
+    - `add` creates a flow
+    - `get` retrieves a flow
+    - `delete` deletes a flow
+    - `update` modifies a flow
+    - `isExists` checks if a flow with that name exists
+    - `activate` turns a flow on or off
+    - `pin` pins or unpins a flow in the list
+- Added service `Services\Log\BlogPost\Service\BlogPost` with support method:
+    - `add` - Add new blog post to Live Feed with support for all parameters (title, destination, files, importance, etc.)
+- Added method `User::countByFilter` [see details](https://github.com/bitrix24/b24phpsdk/issues/221)
+
+### Fixed
+
+- Fixed typehints in the ApplicationInfo method [see details](https://github.com/bitrix24/b24phpsdk/issues/219)
+
+### Changed
+
+- Added optional argument in method `Bitrix24AccountRepositoryInterface::findByMemberId` [see details](https://github.com/bitrix24/b24phpsdk/issues/223)
+- Changed method name `ApplicationInstallationRepositoryInterface::findByMemberId` to
+  `ApplicationInstallationRepositoryInterface::findByBitrix24AccountMemberId` [see details](https://github.com/bitrix24/b24phpsdk/issues/226)
+
+### Statistics
+
+```
+Bitrix24 API-methods count: 1160
+Supported in bitrix24-php-sdk methods count: 476
+Coverage percentage: 41.03% 🚀
+```
+
 
 ## 1.5.0 – 2025.08.01
 
@@ -27,85 +190,91 @@
     - `countByFilter` count departments by filter
 - Added service `CRM\Requisites\Service\RequisiteUserfield` with support methods,
   see [add crm.requisite.userfield.* methods](https://github.com/bitrix24/b24phpsdk/issues/188):
-  - `add` add userfield to requisite
-  - `get` get userfield to requisite
-  - `list` list userfields
-  - `delete` delete userfield
-  - `update` update userfield
+    - `add` add userfield to requisite
+    - `get` get userfield to requisite
+    - `list` list userfields
+    - `delete` delete userfield
+    - `update` update userfield
 - Added service `CRM\Requisites\Service\RequisiteBankdetail` with support methods:
-  - `add` add bank detail to requisite
-  - `get` get bank detail to requisite
-  - `fields` get fields for bank details
-  - `list` list bank details
-  - `delete` delete bank detail
-  - `update` update bank detail
-  - `countByFilter` count bank details by filter
+    - `add` add bank detail to requisite
+    - `get` get bank detail to requisite
+    - `fields` get fields for bank details
+    - `list` list bank details
+    - `delete` delete bank detail
+    - `update` update bank detail
+    - `countByFilter` count bank details by filter
 - Added service `CRM\Requisites\Service\RequisiteLink` with support methods:
-  - `register` registers the link between requisites and an object
-  - `unregister` removes the link between requisites and an object
-  - `fields` get a formal description of the fields of the requisites link
-  - `get` returns the link between requisites and an object
-  - `list` returns a list of links between requisites based on a filter
-  - `countByFilter` count links by filter
+    - `register` registers the link between requisites and an object
+    - `unregister` removes the link between requisites and an object
+    - `fields` get a formal description of the fields of the requisites link
+    - `get` returns the link between requisites and an object
+    - `list` returns a list of links between requisites based on a filter
+    - `countByFilter` count links by filter
 - Added service `CRM\Requisites\Service\RequisitePresetField` with support methods:
-  - `add` adds a customizable field to the requisites template
-  - `get` returns the description of the custom field in the requisites template by identifier
-  - `fields` returns the description of the custom field in the requisites template by identifier
-  - `list` returns a list of all custom fields for a specific requisites template
-  - `delete` deletes a customizable field from the requisites template
-  - `update` modifies a custom field in the requisites template
-  - `availabletoadd` returns fields available for addition to the specified requisites template
+    - `add` adds a customizable field to the requisites template
+    - `get` returns the description of the custom field in the requisites template by identifier
+    - `fields` returns the description of the custom field in the requisites template by identifier
+    - `list` returns a list of all custom fields for a specific requisites template
+    - `delete` deletes a customizable field from the requisites template
+    - `update` modifies a custom field in the requisites template
+    - `availabletoadd` returns fields available for addition to the specified requisites template
 - Added service `Services\CRM\Status\Service\Status` with support methods,
   see [crm.status.* methods](https://github.com/bitrix24/b24phpsdk/issues/194):
-  - `fields` returns descriptions of reference book fields
-  - `get` returns an element of the reference book by its identifier
-  - `list` returns a list of elements of the reference book by filter, with batch calls support
-  - `add` creates a new element in the specified reference book, with batch calls support
-  - `delete` deletes an element from the reference book, with batch calls support
-  - `update` updates an existing element of the reference book, with batch calls support
-  - `countByFilter` counts elements of the reference book by filter
+    - `fields` returns descriptions of reference book fields
+    - `get` returns an element of the reference book by its identifier
+    - `list` returns a list of elements of the reference book by filter, with batch calls support
+    - `add` creates a new element in the specified reference book, with batch calls support
+    - `delete` deletes an element from the reference book, with batch calls support
+    - `update` updates an existing element of the reference book, with batch calls support
+    - `countByFilter` counts elements of the reference book by filter
 - Added service `Services\CRM\Status\Service\StatusEntity` with support methods,
-  - `items` returns elements of the reference book by its symbolic identifier
-  - `types` returns descriptions of reference book types
+    - `items` returns elements of the reference book by its symbolic identifier
+    - `types` returns descriptions of reference book types
 - Added service `Services\CRM\Timeline\Service\Comment` with support methods,
   see [crm.timeline.comment.* methods](https://github.com/bitrix24/b24phpsdk/issues/196):
-  - `fields` retrieves a list of timeline comment fields
-  - `get` retrieves information about a comment
-  - `list` retrieves a list of all comments for a CRM entity, with batch calls support
-  - `add` adds a new comment to the timeline, with batch calls support
-  - `delete` deletes a comment, with batch calls support
-  - `update` updates a comment, with batch calls support
-  - `countByFilter` count comments by filter
+    - `fields` retrieves a list of timeline comment fields
+    - `get` retrieves information about a comment
+    - `list` retrieves a list of all comments for a CRM entity, with batch calls support
+    - `add` adds a new comment to the timeline, with batch calls support
+    - `delete` deletes a comment, with batch calls support
+    - `update` updates a comment, with batch calls support
+    - `countByFilter` count comments by filter
 - Added support for events:
-  - `OnCrmTimelineCommentAdd`
-  - `OnCrmTimelineCommentDelete`
-  - `OnCrmTimelineCommentUpdate`
+    - `OnCrmTimelineCommentAdd`
+    - `OnCrmTimelineCommentDelete`
+    - `OnCrmTimelineCommentUpdate`
 - Added service `Services\CRM\Timeline\Service\Bindings` with support methods:
-  - `fields` retrieves the fields of the link between CRM entities and the timeline record
-  - `list` retrieves a list of links for a timeline record, with batch calls support
-  - `bind` adds a link between a timeline record and a CRM entity, with batch calls support
-  - `unbind` removes a link between a timeline record and a CRM entity, with batch calls support
-  - `countByFilter` count links between a timeline record and CRM entities by filter
+    - `fields` retrieves the fields of the link between CRM entities and the timeline record
+    - `list` retrieves a list of links for a timeline record, with batch calls support
+    - `bind` adds a link between a timeline record and a CRM entity, with batch calls support
+    - `unbind` removes a link between a timeline record and a CRM entity, with batch calls support
+    - `countByFilter` count links between a timeline record and CRM entities by filter
 - Added service `Services\CRM\Item\Productrow\Service\Productrow` with support methods,
   see [crm.item.productrow.* methods](https://github.com/bitrix24/b24phpsdk/issues/198):
-  - `fields` retrieves a list of product item fields
-  - `set` associates a product item with a CRM object
-  - `get` retrieves information about a product item by id
-  - `list` retrieves a list of product items, with batch calls support
-  - `add` adds a product item, with batch calls support
-  - `delete` deletes a product item, with batch calls support
-  - `update` updates a product item
-  - `getAvailableForPayment` retrieves a list of unpaid products
-  - `countByFilter` counts product items by filter
-  
+    - `fields` retrieves a list of product item fields
+    - `set` associates a product item with a CRM object
+    - `get` retrieves information about a product item by id
+    - `list` retrieves a list of product items, with batch calls support
+    - `add` adds a product item, with batch calls support
+    - `delete` deletes a product item, with batch calls support
+    - `update` updates a product item
+    - `getAvailableForPayment` retrieves a list of unpaid products
+    - `countByFilter` counts product items by filter
+- Added methods to `ApplicationInstallationRepositoryInterface`, see [223](https://github.com/bitrix24/b24phpsdk/issues/223)
+    - `findByMemberId`
+    - `findByApplicationToken`
+
 ### Fixed
+
 - Fixed typehints in Contact batch for method `add`, [see details](https://github.com/bitrix24/b24phpsdk/issues/202)
 
 ### Changed
+
 - Fixed constructor arguments in tests ApplicationInstallations [see details](https://github.com/bitrix24/b24phpsdk/issues/191)
 - Bump giggsey/libphonenumber-for-php version to ^8|^9
 
 ### Statistics
+
 ```
 Bitrix24 API-methods count: 1166
 Supported in bitrix24-php-sdk methods count: 362
@@ -268,6 +437,7 @@ Coverage percentage: 31.05%
     - change return type `findByBitrix24AccountId` from an array to `?ApplicationInstallationInterface`
 
 ### Statistics
+
 ```
 Bitrix24 API-methods count: 1166
 Supported in bitrix24-php-sdk methods count: 300

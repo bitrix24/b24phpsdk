@@ -23,6 +23,7 @@ use Bitrix24\SDK\Tests\Application\Contracts\NullableFlusher;
 use Bitrix24\SDK\Tests\Application\Contracts\TestRepositoryFlusherInterface;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationReferenceEntityImplementation;
+use Bitrix24\SDK\Tests\Unit\Application\Contracts\Bitrix24Accounts\Repository\InMemoryBitrix24AccountRepositoryImplementation;
 use Carbon\CarbonImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Log\NullLogger;
@@ -64,6 +65,9 @@ class InMemoryApplicationInstallationRepositoryImplementationTest extends Applic
 
     protected function createApplicationInstallationRepositoryImplementation(): ApplicationInstallationRepositoryInterface
     {
-        return new InMemoryApplicationInstallationRepositoryImplementation(new NullLogger());
+        return new InMemoryApplicationInstallationRepositoryImplementation(
+            new InMemoryBitrix24AccountRepositoryImplementation(new NullLogger()),
+            new NullLogger()
+        );
     }
 }

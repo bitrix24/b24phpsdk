@@ -43,6 +43,18 @@
         <testsuite name="integration_tests_scope_ai_admin">
             <directory>./tests/Integration/Services/AI/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_log">
+            <directory>./tests/Integration/Services/Log/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_sale">
+            <directory>./tests/Integration/Services/Sale/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_status">
+            <directory>./tests/Integration/Services/Sale/Status/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_status_lang">
+            <directory>./tests/Integration/Services/Sale/StatusLang/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_crm">
             <directory>./tests/Integration/Services/CRM/</directory>
         </testsuite>
@@ -102,6 +114,18 @@
         </testsuite>
         <testsuite name="integration_tests_department">
             <directory>./tests/Integration/Services/Department/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_sale">
+            <directory>./tests/Integration/Services/Sale/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_task">
+            <directory>./tests/Integration/Services/Task/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale">
+            <directory>./tests/Integration/Services/Sale/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_order">
+            <directory>./tests/Integration/Services/Sale/Order/</directory>
         </testsuite>
     </testsuites>
     <source>
