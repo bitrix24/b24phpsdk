@@ -136,6 +136,9 @@
         <testsuite name="integration_tests_sale_order">
             <directory>./tests/Integration/Services/Sale/Order/</directory>
         </testsuite>
+        <testsuite name="integration_tests_sale_cashbox_handler">
+            <directory>./tests/Integration/Services/Sale/CashboxHandler/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>

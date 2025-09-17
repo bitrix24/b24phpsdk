@@ -12,6 +12,12 @@
     - `list` returns a list of payments
     - `delete` deletes a payment
     - `getFields` returns the fields and settings for payments
+- Added service `Services\Sale\CashboxHandler\Service\CashboxHandler` with support methods,
+  see [sale.cashbox.handler.* methods](https://github.com/bitrix24/b24phpsdk/issues/258):
+    - `add` adds a REST cashbox handler
+    - `update` updates the data of the REST cashbox handler
+    - `list` returns a list of available REST cashbox handlers
+    - `delete` deletes the REST cashbox handler
 
 ## 1.6.0 – 2025.09.01
 
