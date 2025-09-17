@@ -4,6 +4,14 @@
 
 ### Added
 
+- Added service `Services\Sale\Delivery\Service\Delivery` with support methods,
+  see [sale.delivery.* methods](https://github.com/bitrix24/b24phpsdk/issues/255):
+    - `add` adds a delivery service
+    - `update` updates a delivery service
+    - `getlist` returns a list of delivery services
+    - `delete` deletes a delivery service
+    - `configUpdate` updates delivery service settings
+    - `configGet` returns delivery service settings
 - Added service `Services\Sale\DeliveryHandler\Service\DeliveryHandler` with support methods,
   see [sale.delivery.handler.* methods](https://github.com/bitrix24/b24phpsdk/issues/255):
     - `add` adds a delivery service handler
