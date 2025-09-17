@@ -41,7 +41,7 @@ class DeliveryAddResult extends AbstractResult implements AddedItemIdResultInter
     {
         $items = [];
         $result = $this->getCoreResponse()->getResponseData()->getResult();
-        
+
         if (isset($result['profiles']) && is_array($result['profiles'])) {
             foreach ($result['profiles'] as $item) {
                 $items[] = new DeliveryItemResult($item);

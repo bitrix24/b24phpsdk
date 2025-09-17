@@ -36,14 +36,16 @@ use PHPUnit\Framework\TestCase;
 class DeliveryTest extends TestCase
 {
     protected Delivery $deliveryService;
+
     protected DeliveryHandler $deliveryHandlerService;
+
     protected ?int $testHandlerId = null;
 
     protected function setUp(): void
     {
         $this->deliveryService = Fabric::getServiceBuilder()->getSaleScope()->delivery();
         $this->deliveryHandlerService = Fabric::getServiceBuilder()->getSaleScope()->deliveryHandler();
-        
+
         // Create a test delivery handler for our tests
         $this->createTestDeliveryHandler();
     }
@@ -54,7 +56,7 @@ class DeliveryTest extends TestCase
         if ($this->testHandlerId !== null) {
             try {
                 $this->deliveryHandlerService->delete($this->testHandlerId);
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 // Ignore cleanup errors
             }
         }
@@ -112,9 +114,9 @@ class DeliveryTest extends TestCase
     protected function getSampleDeliveryFields(): array
     {
         // Get the handler list to find our test handler code
-        $handlersResult = $this->deliveryHandlerService->list();
-        $handlers = $handlersResult->getDeliveryHandlers();
-        
+        $deliveryHandlersResult = $this->deliveryHandlerService->list();
+        $handlers = $deliveryHandlersResult->getDeliveryHandlers();
+
         $testHandlerCode = null;
         foreach ($handlers as $handler) {
             if ((int)$handler->ID === $this->testHandlerId) {
@@ -156,18 +158,18 @@ class DeliveryTest extends TestCase
         // Create a delivery service
         $deliveryFields = $this->getSampleDeliveryFields();
 
-        $addedItemResult = $this->deliveryService->add($deliveryFields);
-        $deliveryId = $addedItemResult->getId();
+        $deliveryAddResult = $this->deliveryService->add($deliveryFields);
+        $deliveryId = $deliveryAddResult->getId();
 
         self::assertGreaterThan(0, $deliveryId);
 
         // Verify parent delivery service was created
-        $parent = $addedItemResult->getParent();
-        self::assertNotNull($parent, 'Parent delivery service should not be null');
-        self::assertNotNull($parent->NAME, 'Parent NAME should not be null');
-        self::assertEquals($deliveryFields['NAME'], $parent->NAME);
-        self::assertEquals($deliveryFields['CURRENCY'], $parent->CURRENCY);
-        self::assertEquals($deliveryFields['DESCRIPTION'], $parent->DESCRIPTION);
+        $deliveryItemResult = $deliveryAddResult->getParent();
+        self::assertNotNull($deliveryItemResult, 'Parent delivery service should not be null');
+        self::assertNotNull($deliveryItemResult->NAME, 'Parent NAME should not be null');
+        self::assertEquals($deliveryFields['NAME'], $deliveryItemResult->NAME);
+        self::assertEquals($deliveryFields['CURRENCY'], $deliveryItemResult->CURRENCY);
+        self::assertEquals($deliveryFields['DESCRIPTION'], $deliveryItemResult->DESCRIPTION);
 
         // Clean up
         $this->deliveryService->delete($deliveryId);
@@ -182,8 +184,8 @@ class DeliveryTest extends TestCase
         // Create a delivery service
         $deliveryFields = $this->getSampleDeliveryFields();
 
-        $addedItemResult = $this->deliveryService->add($deliveryFields);
-        $deliveryId = $addedItemResult->getId();
+        $deliveryAddResult = $this->deliveryService->add($deliveryFields);
+        $deliveryId = $deliveryAddResult->getId();
 
         // Update the delivery service
         $updateFields = [
@@ -229,8 +231,8 @@ class DeliveryTest extends TestCase
         // Create a delivery service
         $deliveryFields = $this->getSampleDeliveryFields();
 
-        $addedItemResult = $this->deliveryService->add($deliveryFields);
-        $deliveryId = $addedItemResult->getId();
+        $deliveryAddResult = $this->deliveryService->add($deliveryFields);
+        $deliveryId = $deliveryAddResult->getId();
 
         // List delivery services with explicit field selection
         $deliveriesResult = $this->deliveryService->getlist(['ID', 'NAME', 'CURRENCY', 'DESCRIPTION', 'ACTIVE']);
@@ -277,8 +279,8 @@ class DeliveryTest extends TestCase
         // Create a delivery service
         $deliveryFields = $this->getSampleDeliveryFields();
 
-        $addedItemResult = $this->deliveryService->add($deliveryFields);
-        $deliveryId = $addedItemResult->getId();
+        $deliveryAddResult = $this->deliveryService->add($deliveryFields);
+        $deliveryId = $deliveryAddResult->getId();
 
         // Delete the delivery service
         $deletedItemResult = $this->deliveryService->delete($deliveryId);
@@ -300,8 +302,8 @@ class DeliveryTest extends TestCase
         // Create a delivery service
         $deliveryFields = $this->getSampleDeliveryFields();
 
-        $addedItemResult = $this->deliveryService->add($deliveryFields);
-        $deliveryId = $addedItemResult->getId();
+        $deliveryAddResult = $this->deliveryService->add($deliveryFields);
+        $deliveryId = $deliveryAddResult->getId();
 
         // Update delivery service configuration
         $newConfig = [
@@ -319,12 +321,12 @@ class DeliveryTest extends TestCase
             ]
         ];
 
-        $updatedConfigResult = $this->deliveryService->configUpdate($deliveryId, $newConfig);
-        self::assertTrue($updatedConfigResult->isSuccess());
+        $updatedItemResult = $this->deliveryService->configUpdate($deliveryId, $newConfig);
+        self::assertTrue($updatedItemResult->isSuccess());
 
         // Verify configuration was updated
-        $configResult = $this->deliveryService->configGet($deliveryId);
-        $config = $configResult->getConfig();
+        $deliveryConfigGetResult = $this->deliveryService->configGet($deliveryId);
+        $config = $deliveryConfigGetResult->getConfig();
 
         self::assertIsArray($config);
         self::assertGreaterThan(0, count($config));
@@ -337,10 +339,10 @@ class DeliveryTest extends TestCase
 
         self::assertArrayHasKey('API_KEY', $configValues);
         self::assertEquals('updated_api_key_456', $configValues['API_KEY']);
-        
+
         self::assertArrayHasKey('TEST_MODE', $configValues);
         self::assertEquals('N', $configValues['TEST_MODE']);
-        
+
         self::assertArrayHasKey('TIMEOUT', $configValues);
         self::assertEquals(60, (int)$configValues['TIMEOUT']);
 
@@ -357,12 +359,12 @@ class DeliveryTest extends TestCase
         // Create a delivery service with configuration
         $deliveryFields = $this->getSampleDeliveryFields();
 
-        $addedItemResult = $this->deliveryService->add($deliveryFields);
-        $deliveryId = $addedItemResult->getId();
+        $deliveryAddResult = $this->deliveryService->add($deliveryFields);
+        $deliveryId = $deliveryAddResult->getId();
 
         // Get delivery service configuration
-        $configResult = $this->deliveryService->configGet($deliveryId);
-        $config = $configResult->getConfig();
+        $deliveryConfigGetResult = $this->deliveryService->configGet($deliveryId);
+        $config = $deliveryConfigGetResult->getConfig();
 
         self::assertIsArray($config);
         self::assertGreaterThan(0, count($config));
@@ -397,16 +399,16 @@ class DeliveryTest extends TestCase
         // Create a delivery service
         $deliveryFields = $this->getSampleDeliveryFields();
 
-        $addedItemResult = $this->deliveryService->add($deliveryFields);
-        $deliveryId = $addedItemResult->getId();
+        $deliveryAddResult = $this->deliveryService->add($deliveryFields);
+        $deliveryId = $deliveryAddResult->getId();
 
         // Verify parent and profiles were created
-        $parent = $addedItemResult->getParent();
-        self::assertNotNull($parent, 'Parent delivery service should not be null');
-        self::assertNotNull($parent->NAME, 'Parent NAME should not be null');
-        self::assertEquals($deliveryFields['NAME'], $parent->NAME);
+        $deliveryItemResult = $deliveryAddResult->getParent();
+        self::assertNotNull($deliveryItemResult, 'Parent delivery service should not be null');
+        self::assertNotNull($deliveryItemResult->NAME, 'Parent NAME should not be null');
+        self::assertEquals($deliveryFields['NAME'], $deliveryItemResult->NAME);
 
-        $profiles = $addedItemResult->getProfiles();
+        $profiles = $deliveryAddResult->getProfiles();
         self::assertIsArray($profiles);
         self::assertGreaterThan(0, count($profiles));
 
