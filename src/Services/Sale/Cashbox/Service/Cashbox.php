@@ -105,9 +105,11 @@ class Cashbox extends AbstractService
         if ($select !== null) {
             $params['SELECT'] = $select;
         }
+
         if ($filter !== null) {
             $params['FILTER'] = $filter;
         }
+
         if ($order !== null) {
             $params['ORDER'] = $order;
         }

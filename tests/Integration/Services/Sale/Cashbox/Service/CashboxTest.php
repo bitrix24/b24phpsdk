@@ -35,6 +35,7 @@ use PHPUnit\Framework\TestCase;
 class CashboxTest extends TestCase
 {
     protected Cashbox $cashboxService;
+
     protected CashboxHandler $cashboxHandlerService;
 
     protected function setUp(): void
@@ -311,7 +312,7 @@ class CashboxTest extends TestCase
         // In a real scenario, the receipt would be created first through the print process
         $this->expectException(\Bitrix24\SDK\Core\Exceptions\BaseException::class);
         $this->expectExceptionMessage('check not found');
-        
+
         $this->cashboxService->checkApply($checkApplyFields);
     }
 }
