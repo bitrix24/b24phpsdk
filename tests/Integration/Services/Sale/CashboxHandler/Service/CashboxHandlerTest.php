@@ -101,7 +101,7 @@ class CashboxHandlerTest extends TestCase
         $name = 'Test Cashbox Handler';
         $settings = $this->getTestSettings();
 
-        $addResult = $this->cashboxHandlerService->add(
+        $addedItemResult = $this->cashboxHandlerService->add(
             $code,
             $name,
             $settings,
@@ -109,7 +109,7 @@ class CashboxHandlerTest extends TestCase
             'N'
         );
 
-        $handlerId = $addResult->getId();
+        $handlerId = $addedItemResult->getId();
         self::assertGreaterThan(0, $handlerId);
 
         // Clean up
@@ -127,7 +127,7 @@ class CashboxHandlerTest extends TestCase
         $name = 'Test Cashbox Handler';
         $settings = $this->getTestSettings();
 
-        $addResult = $this->cashboxHandlerService->add(
+        $addedItemResult = $this->cashboxHandlerService->add(
             $code,
             $name,
             $settings,
@@ -135,7 +135,7 @@ class CashboxHandlerTest extends TestCase
             'N'
         );
 
-        $handlerId = $addResult->getId();
+        $handlerId = $addedItemResult->getId();
 
         // Update the handler
         $updateFields = [
@@ -143,12 +143,12 @@ class CashboxHandlerTest extends TestCase
             'SORT' => 200
         ];
 
-        $updateResult = $this->cashboxHandlerService->update($handlerId, $updateFields);
-        self::assertTrue($updateResult->isSuccess());
+        $updatedItemResult = $this->cashboxHandlerService->update($handlerId, $updateFields);
+        self::assertTrue($updatedItemResult->isSuccess());
 
         // Verify the update by listing handlers
-        $listResult = $this->cashboxHandlerService->list();
-        $handlers = $listResult->getCashboxHandlers();
+        $cashboxHandlersResult = $this->cashboxHandlerService->list();
+        $handlers = $cashboxHandlersResult->getCashboxHandlers();
 
         $found = false;
         foreach ($handlers as $handler) {
@@ -177,7 +177,7 @@ class CashboxHandlerTest extends TestCase
         $name = 'Test List Cashbox Handler';
         $settings = $this->getTestSettings();
 
-        $addResult = $this->cashboxHandlerService->add(
+        $addedItemResult = $this->cashboxHandlerService->add(
             $code,
             $name,
             $settings,
@@ -185,11 +185,11 @@ class CashboxHandlerTest extends TestCase
             'N'
         );
 
-        $handlerId = $addResult->getId();
+        $handlerId = $addedItemResult->getId();
 
         // List handlers
-        $listResult = $this->cashboxHandlerService->list();
-        $handlers = $listResult->getCashboxHandlers();
+        $cashboxHandlersResult = $this->cashboxHandlerService->list();
+        $handlers = $cashboxHandlersResult->getCashboxHandlers();
 
         self::assertIsArray($handlers);
         self::assertGreaterThan(0, count($handlers));
@@ -227,7 +227,7 @@ class CashboxHandlerTest extends TestCase
         $name = 'Test Delete Cashbox Handler';
         $settings = $this->getTestSettings();
 
-        $addResult = $this->cashboxHandlerService->add(
+        $addedItemResult = $this->cashboxHandlerService->add(
             $code,
             $name,
             $settings,
@@ -235,15 +235,15 @@ class CashboxHandlerTest extends TestCase
             'N'
         );
 
-        $handlerId = $addResult->getId();
+        $handlerId = $addedItemResult->getId();
 
         // Delete the handler
-        $deleteResult = $this->cashboxHandlerService->delete($handlerId);
-        self::assertTrue($deleteResult->isSuccess());
+        $deletedItemResult = $this->cashboxHandlerService->delete($handlerId);
+        self::assertTrue($deletedItemResult->isSuccess());
 
         // Verify handler no longer exists in the list
-        $listResult = $this->cashboxHandlerService->list();
-        $handlers = $listResult->getCashboxHandlers();
+        $cashboxHandlersResult = $this->cashboxHandlerService->list();
+        $handlers = $cashboxHandlersResult->getCashboxHandlers();
 
         $found = false;
         foreach ($handlers as $handler) {
