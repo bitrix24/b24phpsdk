@@ -32,7 +32,20 @@ class PaysystemServiceBuilder extends AbstractServiceBuilder
     public function handler(): Handler
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Handler(
+            $this->serviceCache[__METHOD__] = new Handler($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * Payment systems service (sale.paysystem.*)
+     */
+    public function paysystem(): Service\Paysystem
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Service\Paysystem(
+                new Service\Batch($this->batch, $this->log),
                 $this->core,
                 $this->log
             );
@@ -40,4 +53,5 @@ class PaysystemServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
 }

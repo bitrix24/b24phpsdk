@@ -31,6 +31,9 @@
         <testsuite name="integration_tests_scope_paysystem">
             <directory>./tests/Integration/Services/Paysystem/</directory>
         </testsuite>
+        <testsuite name="integration_tests_paysystem_service">
+            <directory>./tests/Integration/Services/Paysystem/Service/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_user">
             <directory>./tests/Integration/Services/User/</directory>
         </testsuite>
