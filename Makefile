@@ -160,6 +160,10 @@ test-integration-scope-im:
 test-integration-scope-placement:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_placement
 
+.PHONY: test-integration-scope-paysystem
+test-integration-scope-paysystem:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_paysystem
+
 .PHONY: test-integration-scope-im-open-lines
 test-integration-scope-im-open-lines:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im_open_lines

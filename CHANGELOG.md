@@ -4,6 +4,12 @@
 
 ### Added
 
+- Added service `Services\Paysystem\Handler\Service\Handler` with support methods,
+  see [pay_system.handler.* methods](https://github.com/bitrix24/b24phpsdk/issues/260):
+    - `add` adds a payment system handler
+    - `update` updates a payment system handler
+    - `list` returns a list of payment system handlers
+    - `delete` deletes a payment system handler
 - Added service `Services\Sale\Payment\Service\Payment` with support methods,
   see [sale.payment.* methods](https://github.com/bitrix24/b24phpsdk/issues/248):
     - `add` adds a payment

@@ -28,6 +28,9 @@
         <testsuite name="integration_tests_scope_placement">
             <directory>./tests/Integration/Services/Placement/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_paysystem">
+            <directory>./tests/Integration/Services/Paysystem/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_user">
             <directory>./tests/Integration/Services/User/</directory>
         </testsuite>
