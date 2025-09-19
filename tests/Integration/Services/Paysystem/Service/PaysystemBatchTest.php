@@ -40,14 +40,14 @@ class PaysystemBatchTest extends TestCase
     private function getPersonTypeId(): int
     {
         $personTypeService = Fabric::getServiceBuilder()->getSaleScope()->personType();
-        $personTypes = $personTypeService->list();
+        $personTypesResult = $personTypeService->list();
         
-        if (count($personTypes->getPersonTypes()) > 0) {
-            return $personTypes->getPersonTypes()[0]->id;
+        if ($personTypesResult->getPersonTypes() !== []) {
+            return $personTypesResult->getPersonTypes()[0]->id;
         }
         
-        $personTypeResult = $personTypeService->add(['name' => 'Test Person Type ' . time()]);
-        return $personTypeResult->getId();
+        $addedPersonTypeResult = $personTypeService->add(['name' => 'Test Person Type ' . time()]);
+        return $addedPersonTypeResult->getId();
     }
 
     /**
@@ -85,7 +85,7 @@ class PaysystemBatchTest extends TestCase
             ]
         ];
 
-        $handlerResult = $handlerService->add($handlerName, $handlerCode, $handlerSettings);
+        $handlerService->add($handlerName, $handlerCode, $handlerSettings);
         return $handlerCode;
     }
 
@@ -97,53 +97,17 @@ class PaysystemBatchTest extends TestCase
         try {
             $handlerService = Fabric::getServiceBuilder()->getPaysystemScope()->handler();
             $handlers = $handlerService->list();
-            foreach ($handlers->getHandlers() as $handler) {
-                if ($handler->CODE === $handlerCode) {
-                    $handlerService->delete(intval($handler->ID));
+            foreach ($handlers->getHandlers() as $handlerItemResult) {
+                if ($handlerItemResult->CODE === $handlerCode) {
+                    $handlerService->delete(intval($handlerItemResult->ID));
                     break;
                 }
             }
-        } catch (BaseException $e) {
+        } catch (BaseException $baseException) {
             // Log the error but don't fail the test if handler deletion fails
             // This is cleanup code, so failures should not break tests
-            error_log("Warning: Failed to delete test handler {$handlerCode}: " . $e->getMessage());
+            error_log(sprintf('Warning: Failed to delete test handler %s: ', $handlerCode) . $baseException->getMessage());
         }
-    }
-
-    /**
-     * Test batch list payment systems
-     *
-     * @throws BaseException
-     * @throws TransportException
-     */
-    public function testBatchList(): void
-    {
-        $personTypeId = $this->getPersonTypeId();
-        $handlerCode = $this->createTestHandler();
-
-        // Add a test payment system first
-        $addResult = $this->paysystemService->add([
-            'NAME' => 'Test Payment System for Batch List ' . time(),
-            'DESCRIPTION' => 'Test payment system for batch list',
-            'PERSON_TYPE_ID' => $personTypeId,
-            'BX_REST_HANDLER' => $handlerCode,
-            'ACTIVE' => 'Y',
-            'ENTITY_REGISTRY_TYPE' => 'ORDER',
-            'NEW_WINDOW' => 'N',
-            'XML_ID' => 'test_batch_list_' . time()
-        ]);
-        self::assertGreaterThanOrEqual(1, $addResult->getId());
-
-        $cnt = 0;
-        foreach ($this->paysystemService->batch->list(['ID', 'NAME'], ['>ID' => 1], ['ID' => 'ASC']) as $item) {
-            $cnt++;
-        }
-
-        self::assertGreaterThanOrEqual(1, $cnt);
-
-        // Clean up
-        $this->paysystemService->delete($addResult->getId());
-        $this->deleteTestHandlerByCode($handlerCode);
     }
 
     /**
@@ -158,7 +122,7 @@ class PaysystemBatchTest extends TestCase
         $personTypeId = $this->getPersonTypeId();
         $paysystems = [];
         $timestamp = time();
-        
+
         for ($i = 1; $i <= 10; $i++) {
             $paysystems[] = [
                 'NAME' => 'Batch Test Payment System ' . $i . ' ' . $timestamp,
@@ -182,11 +146,12 @@ class PaysystemBatchTest extends TestCase
         }
 
         self::assertEquals(count($paysystems), $cnt);
-        
+
         // Clean up created payment systems
-        foreach ($createdIds as $id) {
-            $this->paysystemService->delete($id);
+        foreach ($createdIds as $createdId) {
+            $this->paysystemService->delete($createdId);
         }
+
         $this->deleteTestHandlerByCode($handlerCode);
     }
 
@@ -332,19 +297,19 @@ class PaysystemBatchTest extends TestCase
         try {
             $handlerService = Fabric::getServiceBuilder()->getPaysystemScope()->handler();
             $handlers = $handlerService->list();
-            foreach ($handlers->getHandlers() as $handler) {
-                if (str_contains($handler->CODE, 'test_handler_')) {
+            foreach ($handlers->getHandlers() as $handlerItemResult) {
+                if (str_contains($handlerItemResult->CODE, 'test_handler_')) {
                     try {
-                        $handlerService->delete(intval($handler->ID));
+                        $handlerService->delete(intval($handlerItemResult->ID));
                     } catch (BaseException $e) {
                         // Ignore individual deletion errors
-                        error_log("Warning: Failed to cleanup test handler {$handler->CODE}: " . $e->getMessage());
+                        error_log(sprintf('Warning: Failed to cleanup test handler %s: ', $handlerItemResult->CODE) . $e->getMessage());
                     }
                 }
             }
-        } catch (BaseException $e) {
+        } catch (BaseException $baseException) {
             // Ignore general cleanup errors
-            error_log("Warning: Failed to list handlers during cleanup: " . $e->getMessage());
+            error_log("Warning: Failed to list handlers during cleanup: " . $baseException->getMessage());
         }
     }
 }

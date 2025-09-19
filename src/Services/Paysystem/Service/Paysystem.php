@@ -29,19 +29,12 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['pay_system']))]
 class Paysystem extends AbstractService
 {
-    public Batch $batch;
-
     /**
      * Paysystem constructor.
-     *
-     * @param Batch $batch
-     * @param CoreInterface $core
-     * @param LoggerInterface $log
      */
-    public function __construct(Batch $batch, CoreInterface $core, LoggerInterface $log)
+    public function __construct(public Batch $batch, CoreInterface $core, LoggerInterface $logger)
     {
-        parent::__construct($core, $log);
-        $this->batch = $batch;
+        parent::__construct($core, $logger);
     }
 
     /**

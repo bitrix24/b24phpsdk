@@ -83,8 +83,8 @@ class HandlerTest extends TestCase
         $handlerCode = 'test_handler_' . time();
         $handlerSettings = $this->getDefaultHandlerSettings();
 
-        $handlerAddResult = $this->handlerService->add($handlerName, $handlerCode, $handlerSettings);
-        $handlerId = $handlerAddResult->getId();
+        $addedItemResult = $this->handlerService->add($handlerName, $handlerCode, $handlerSettings);
+        $handlerId = $addedItemResult->getId();
 
         self::assertGreaterThan(0, $handlerId);
 
@@ -103,8 +103,8 @@ class HandlerTest extends TestCase
         $handlerCode = 'test_handler_' . time();
         $handlerSettings = $this->getDefaultHandlerSettings();
 
-        $handlerAddResult = $this->handlerService->add($handlerName, $handlerCode, $handlerSettings);
-        $handlerId = $handlerAddResult->getId();
+        $addedItemResult = $this->handlerService->add($handlerName, $handlerCode, $handlerSettings);
+        $handlerId = $addedItemResult->getId();
 
         // Update the handler
         $updateFields = [
@@ -112,8 +112,8 @@ class HandlerTest extends TestCase
             'SORT' => 200
         ];
 
-        $handlerUpdateResult = $this->handlerService->update($handlerId, $updateFields);
-        self::assertTrue($handlerUpdateResult->isSuccess());
+        $updatedItemResult = $this->handlerService->update($handlerId, $updateFields);
+        self::assertTrue($updatedItemResult->isSuccess());
 
         // Clean up
         $this->handlerService->delete($handlerId);
@@ -130,8 +130,8 @@ class HandlerTest extends TestCase
         $handlerCode = 'test_handler_' . time();
         $handlerSettings = $this->getDefaultHandlerSettings();
 
-        $handlerAddResult = $this->handlerService->add($handlerName, $handlerCode, $handlerSettings);
-        $handlerId = $handlerAddResult->getId();
+        $addedItemResult = $this->handlerService->add($handlerName, $handlerCode, $handlerSettings);
+        $handlerId = $addedItemResult->getId();
 
         // Test list functionality
         $handlersResult = $this->handlerService->list();
@@ -167,11 +167,11 @@ class HandlerTest extends TestCase
         $handlerCode = 'test_handler_' . time();
         $handlerSettings = $this->getDefaultHandlerSettings();
 
-        $handlerAddResult = $this->handlerService->add($handlerName, $handlerCode, $handlerSettings);
-        $handlerId = $handlerAddResult->getId();
+        $addedItemResult = $this->handlerService->add($handlerName, $handlerCode, $handlerSettings);
+        $handlerId = $addedItemResult->getId();
 
         // Delete the handler
-        $handlerDeleteResult = $this->handlerService->delete($handlerId);
-        self::assertTrue($handlerDeleteResult->isSuccess());
+        $deletedItemResult = $this->handlerService->delete($handlerId);
+        self::assertTrue($deletedItemResult->isSuccess());
     }
 }

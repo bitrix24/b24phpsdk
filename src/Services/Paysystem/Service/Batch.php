@@ -28,30 +28,6 @@ use Generator;
 class Batch extends AbstractBatchService
 {
     /**
-     * Batch list method for payment systems
-     *
-     * @param array $select Fields to select
-     * @param array $filter Filter criteria
-     * @param array $order  Sort order
-     * @param int   $limit  Maximum number of items to return
-     *
-     * @return Generator<int, PaysystemItemResult, mixed, mixed>
-     *
-     * @throws BaseException
-     */
-    #[ApiBatchMethodMetadata(
-        'sale.paysystem.list',
-        'https://apidocs.bitrix24.com/api-reference/pay-system/sale-pay-system-list.html',
-        'Returns a list of payment systems.'
-    )]
-    public function list(array $select = [], array $filter = [], array $order = [], int $limit = 50): Generator
-    {
-        foreach ($this->batch->getTraversableList('sale.paysystem.list', $order, $filter, $select, $limit) as $key => $value) {
-            yield $key => new PaysystemItemResult($value);
-        }
-    }
-
-    /**
      * Batch add method for payment systems
      *
      * @param array<array> $paysystems Array of payment system data
@@ -75,7 +51,10 @@ class Batch extends AbstractBatchService
     /**
      * Batch update method for payment systems
      *
-     * @param array<array{id: int, fields: array}> $paysystems Array of payment system data with identifiers
+     * Update elements in array with structure
+     * element_id => [  // PS item id
+     *  'fields' => [] // PS item fields to update
+     * ]
      *
      * @return Generator<int, UpdatedItemBatchResult, mixed, mixed>
      *
