@@ -22,10 +22,10 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 class CalendarSettingsResult extends AbstractResult
 {
     /**
-     * Returns the calendar settings array
+     * Returns the calendar settings as CalendarSettingsItemResult
      */
-    public function getSettings(): array
+    public function getSettings(): CalendarSettingsItemResult
     {
-        return $this->getCoreResponse()->getResponseData()->getResult();
+        return new CalendarSettingsItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }

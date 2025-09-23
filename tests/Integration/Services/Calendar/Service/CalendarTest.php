@@ -225,14 +225,14 @@ class CalendarTest extends TestCase
     public function testGetSettings(): void
     {
         $calendarSettingsResult = $this->calendarService->getSettings();
-        $settings = $calendarSettingsResult->getSettings();
+        $calendarSettingsItemResult = $calendarSettingsResult->getSettings();
 
-        self::assertIsArray($settings);
-        self::assertArrayHasKey('work_time_start', $settings);
-        self::assertArrayHasKey('work_time_end', $settings);
-        self::assertArrayHasKey('week_holidays', $settings);
-        self::assertArrayHasKey('week_start', $settings);
-        self::assertArrayHasKey('user_name_template', $settings);
+        self::assertNotNull($calendarSettingsItemResult);
+        self::assertNotNull($calendarSettingsItemResult->work_time_start);
+        self::assertNotNull($calendarSettingsItemResult->work_time_end);
+        self::assertNotNull($calendarSettingsItemResult->week_holidays);
+        self::assertNotNull($calendarSettingsItemResult->week_start);
+        self::assertNotNull($calendarSettingsItemResult->user_name_template);
     }
 
     /**
@@ -242,13 +242,13 @@ class CalendarTest extends TestCase
     public function testGetUserSettings(): void
     {
         $calendarUserSettingsResult = $this->calendarService->getUserSettings();
-        $settings = $calendarUserSettingsResult->getSettings();
+        $calendarUserSettingsItemResult = $calendarUserSettingsResult->getSettings();
 
-        self::assertIsArray($settings);
-        self::assertArrayHasKey('view', $settings);
-        self::assertArrayHasKey('showDeclined', $settings);
-        self::assertArrayHasKey('showTasks', $settings);
-        self::assertArrayHasKey('timezoneName', $settings);
+        self::assertNotNull($calendarUserSettingsItemResult);
+        self::assertNotNull($calendarUserSettingsItemResult->view);
+        self::assertNotNull($calendarUserSettingsItemResult->showDeclined);
+        self::assertNotNull($calendarUserSettingsItemResult->showTasks);
+        self::assertNotNull($calendarUserSettingsItemResult->timezoneName);
     }
 
     /**
@@ -258,7 +258,7 @@ class CalendarTest extends TestCase
     public function testSetUserSettings(): void
     {
         // Get current settings first
-        $currentSettings = $this->calendarService->getUserSettings()->getSettings();
+        $calendarUserSettingsItemResult = $this->calendarService->getUserSettings()->getSettings();
 
         // Prepare new settings
         $newSettings = [
@@ -275,17 +275,17 @@ class CalendarTest extends TestCase
         // Verify settings were updated
         $updatedSettings = $this->calendarService->getUserSettings()->getSettings();
 
-        self::assertEquals('week', $updatedSettings['view']);
-        self::assertEquals(false, $updatedSettings['showDeclined']);
-        self::assertEquals('Y', $updatedSettings['showTasks']);
-        self::assertEquals('Y', $updatedSettings['collapseOffHours']);
+        self::assertEquals('week', $updatedSettings->view);
+        self::assertEquals(false, $updatedSettings->showDeclined);
+        self::assertEquals('Y', $updatedSettings->showTasks);
+        self::assertEquals('Y', $updatedSettings->collapseOffHours);
 
         // Restore original settings
         $restoreSettings = [
-            'view' => $currentSettings['view'] ?? 'month',
-            'showDeclined' => $currentSettings['showDeclined'] ?? true,
-            'showTasks' => $currentSettings['showTasks'] ?? 'Y',
-            'collapseOffHours' => $currentSettings['collapseOffHours'] ?? 'N'
+            'view' => $calendarUserSettingsItemResult->view ?? 'month',
+            'showDeclined' => $calendarUserSettingsItemResult->showDeclined ?? true,
+            'showTasks' => $calendarUserSettingsItemResult->showTasks ?? 'Y',
+            'collapseOffHours' => $calendarUserSettingsItemResult->collapseOffHours ?? 'N'
         ];
 
         $this->calendarService->setUserSettings($restoreSettings);
