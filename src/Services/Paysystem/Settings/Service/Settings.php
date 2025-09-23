@@ -35,7 +35,6 @@ class Settings extends AbstractService
      * @param int $paySystemId Payment system identifier
      * @param int $personTypeId Payer type identifier (pass 0 to get default settings)
      *
-     * @return SettingsItemResult
      *
      * @throws BaseException
      * @throws TransportException
@@ -68,7 +67,6 @@ class Settings extends AbstractService
      *                        ['PARAMETER_NAME' => ['TYPE' => 'VALUE', 'VALUE' => 'parameter_value']]
      * @param int|null $personTypeId Payer type identifier (optional)
      *
-     * @return UpdatedItemResult
      *
      * @throws BaseException
      * @throws TransportException
@@ -102,7 +100,6 @@ class Settings extends AbstractService
      * @param int $paymentId Payment identifier
      * @param int $paySystemId Payment system identifier
      *
-     * @return SettingsItemResult
      *
      * @throws BaseException
      * @throws TransportException
@@ -134,7 +131,6 @@ class Settings extends AbstractService
      * @param int|null $paySystemId Payment system identifier (optional if bxRestHandler is provided)
      * @param string|null $bxRestHandler Symbolic identifier of the payment system REST handler (optional if paySystemId is provided)
      *
-     * @return SettingsItemResult
      *
      * @throws BaseException
      * @throws TransportException

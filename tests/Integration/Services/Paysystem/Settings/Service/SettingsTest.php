@@ -39,21 +39,21 @@ class SettingsTest extends TestCase
     use CustomBitrix24Assertions;
 
     private Settings $settingsService;
+
     private array $testDataCleanup = [];
 
     /**
      * Get or create a person type ID for tests
      *
-     * @return int
      * @throws BaseException
      * @throws TransportException
      */
     private function getPersonTypeId(): int
     {
         $personTypeService = Fabric::getServiceBuilder()->getSaleScope()->personType();
-        $personTypes = $personTypeService->list();
-        
-        return $personTypes->getPersonTypes()[0]->id;
+        $personTypesResult = $personTypeService->list();
+
+        return $personTypesResult->getPersonTypes()[0]->id;
     }
 
     /**
@@ -66,7 +66,7 @@ class SettingsTest extends TestCase
     private function createTestHandler(): string
     {
         $handlerService = Fabric::getServiceBuilder()->getPaysystemScope()->handler();
-        
+
         $handlerName = 'Test Settings Handler ' . time();
         $handlerCode = 'test_settings_handler_' . time();
         $handlerSettings = [
@@ -118,14 +118,13 @@ class SettingsTest extends TestCase
 
         $handlerService->add($handlerName, $handlerCode, $handlerSettings);
         $this->testDataCleanup['handler_code'] = $handlerCode;
-        
+
         return $handlerCode;
     }
 
     /**
      * Create a test payment system
      *
-     * @param string $handlerCode
      * @return int Payment system ID
      * @throws BaseException
      * @throws TransportException
@@ -134,10 +133,10 @@ class SettingsTest extends TestCase
     {
         $paysystemService = Fabric::getServiceBuilder()->getPaysystemScope()->paysystem();
         $personTypeId = $this->getPersonTypeId();
-        
+
         $name = 'Test Payment System for Settings ' . time();
-        
-        $result = $paysystemService->add([
+
+        $addedItemResult = $paysystemService->add([
             'NAME' => $name,
             'DESCRIPTION' => 'Test payment system for settings testing',
             'PERSON_TYPE_ID' => $personTypeId,
@@ -148,16 +147,15 @@ class SettingsTest extends TestCase
             'XML_ID' => 'test_settings_ps_' . time()
         ]);
 
-        $paySystemId = $result->getId();
+        $paySystemId = $addedItemResult->getId();
         $this->testDataCleanup['paysystem_id'] = $paySystemId;
-        
+
         return $paySystemId;
     }
 
     /**
      * Helper method to create a test order
      *
-     * @param int $personTypeId
      * @return int Order ID
      * @throws BaseException
      * @throws TransportException
@@ -174,15 +172,13 @@ class SettingsTest extends TestCase
 
         $orderId = $orderService->add($orderFields)->getId();
         $this->testDataCleanup['order_id'] = $orderId;
-        
+
         return $orderId;
     }
 
     /**
      * Helper method to create a test payment
      *
-     * @param int $orderId
-     * @param int $paySystemId
      * @return int Payment ID
      * @throws BaseException
      * @throws TransportException
@@ -199,7 +195,7 @@ class SettingsTest extends TestCase
 
         $paymentId = $paymentService->add($paymentFields)->getId();
         $this->testDataCleanup['payment_id'] = $paymentId;
-        
+
         return $paymentId;
     }
 
@@ -215,15 +211,15 @@ class SettingsTest extends TestCase
         $paySystemId = $this->createTestPaymentSystem($handlerCode);
         $personTypeId = $this->getPersonTypeId();
 
-        $result = $this->settingsService->get($paySystemId, $personTypeId);
+        $settingsItemResult = $this->settingsService->get($paySystemId, $personTypeId);
 
-        self::assertInstanceOf(SettingsItemResult::class, $result);
+        self::assertInstanceOf(SettingsItemResult::class, $settingsItemResult);
         // The settings should contain the default values from the handler
-        $settings = iterator_to_array($result->getIterator());
+        $settings = iterator_to_array($settingsItemResult->getIterator());
         self::assertIsArray($settings);
-        
+
         // Check that we can access settings as properties
-        self::assertNotNull($result->TEST_MODE ?? null);
+        self::assertNotNull($settingsItemResult->TEST_MODE ?? null);
     }
 
     /**
@@ -239,8 +235,8 @@ class SettingsTest extends TestCase
         $personTypeId = $this->getPersonTypeId();
 
         // First, get current settings to ensure we have a baseline
-        $currentSettings = $this->settingsService->get($paySystemId, $personTypeId);
-        
+        $this->settingsService->get($paySystemId, $personTypeId);
+
         // Update settings
         $newSettings = [
             'TEST_API_KEY' => [
@@ -253,19 +249,19 @@ class SettingsTest extends TestCase
             ]
         ];
 
-        $updateResult = $this->settingsService->update($paySystemId, $newSettings, $personTypeId);
-        self::assertTrue($updateResult->isSuccess());
+        $updatedItemResult = $this->settingsService->update($paySystemId, $newSettings, $personTypeId);
+        self::assertTrue($updatedItemResult->isSuccess());
 
         // Verify settings were updated
-        $updatedSettings = $this->settingsService->get($paySystemId, $personTypeId);
-        
+        $settingsItemResult = $this->settingsService->get($paySystemId, $personTypeId);
+
         // Debug: check what we actually got
-        $settingsArray = iterator_to_array($updatedSettings->getIterator());
-        
+        $settingsArray = iterator_to_array($settingsItemResult->getIterator());
+
         // Check that settings exist and have correct values
         self::assertArrayHasKey('TEST_API_KEY', $settingsArray);
         self::assertArrayHasKey('TEST_MERCHANT_ID', $settingsArray);
-        
+
         // Compare values directly from array
         self::assertEquals($newSettings['TEST_API_KEY']['VALUE'], $settingsArray['TEST_API_KEY']['VALUE']);
         self::assertEquals($newSettings['TEST_MERCHANT_ID']['VALUE'], $settingsArray['TEST_MERCHANT_ID']['VALUE']);
@@ -282,21 +278,21 @@ class SettingsTest extends TestCase
         $handlerCode = $this->createTestHandler();
         $paySystemId = $this->createTestPaymentSystem($handlerCode);
         $personTypeId = $this->getPersonTypeId();
-        
+
         // Create test order and payment
         $orderId = $this->createTestOrder($personTypeId);
         $paymentId = $this->createTestPayment($orderId, $paySystemId);
 
-        $result = $this->settingsService->getForPayment($paymentId, $paySystemId);
+        $settingsItemResult = $this->settingsService->getForPayment($paymentId, $paySystemId);
 
-        self::assertInstanceOf(SettingsItemResult::class, $result);
-        
+        self::assertInstanceOf(SettingsItemResult::class, $settingsItemResult);
+
         // The settings should contain the values from the payment system
-        $settings = iterator_to_array($result->getIterator());
+        $settings = iterator_to_array($settingsItemResult->getIterator());
         self::assertIsArray($settings);
-        
+
         // Check that we can access settings as properties
-        self::assertNotNull($result->TEST_MODE ?? null);
+        self::assertNotNull($settingsItemResult->TEST_MODE ?? null);
     }
 
     /**
@@ -310,10 +306,10 @@ class SettingsTest extends TestCase
         $handlerCode = $this->createTestHandler();
         $paySystemId = $this->createTestPaymentSystem($handlerCode);
 
-        $result = $this->settingsService->get($paySystemId, 0);
+        $settingsItemResult = $this->settingsService->get($paySystemId, 0);
 
-        self::assertInstanceOf(SettingsItemResult::class, $result);
-        $settings = iterator_to_array($result->getIterator());
+        self::assertInstanceOf(SettingsItemResult::class, $settingsItemResult);
+        $settings = iterator_to_array($settingsItemResult->getIterator());
         self::assertIsArray($settings);
     }
 
@@ -371,9 +367,9 @@ class SettingsTest extends TestCase
                 try {
                     // We need to get the handler ID first to delete it
                     $handlers = $handlerService->list();
-                    foreach ($handlers->getHandlers() as $handler) {
-                        if ($handler->CODE === $this->testDataCleanup['handler_code']) {
-                            $handlerService->delete(intval($handler->ID));
+                    foreach ($handlers->getHandlers() as $handlerItemResult) {
+                        if ($handlerItemResult->CODE === $this->testDataCleanup['handler_code']) {
+                            $handlerService->delete(intval($handlerItemResult->ID));
                             break;
                         }
                     }
@@ -381,8 +377,8 @@ class SettingsTest extends TestCase
                     error_log("Warning: Failed to delete test handler: " . $e->getMessage());
                 }
             }
-        } catch (\Exception $e) {
-            error_log("Warning: General cleanup error: " . $e->getMessage());
+        } catch (\Exception $exception) {
+            error_log("Warning: General cleanup error: " . $exception->getMessage());
         }
     }
 }

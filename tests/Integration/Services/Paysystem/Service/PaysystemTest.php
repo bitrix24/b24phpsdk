@@ -46,22 +46,20 @@ class PaysystemTest extends TestCase
     /**
      * Get or create a person type ID for tests
      *
-     * @return int
      * @throws BaseException
      * @throws TransportException
      */
     private function getPersonTypeId(): int
     {
         $personTypeService = Fabric::getServiceBuilder()->getSaleScope()->personType();
-        $personTypes = $personTypeService->list();
+        $personTypesResult = $personTypeService->list();
         
-        return $personTypes->getPersonTypes()[0]->id;
+        return $personTypesResult->getPersonTypes()[0]->id;
     }
 
     /**
      * Helper method to create a test order
      *
-     * @param int $personTypeId
      * @return int Order ID
      * @throws BaseException
      * @throws TransportException
@@ -82,8 +80,6 @@ class PaysystemTest extends TestCase
     /**
      * Helper method to create a test payment
      *
-     * @param int $orderId
-     * @param int $paySystemId
      * @return int Payment ID
      * @throws BaseException
      * @throws TransportException
@@ -103,8 +99,6 @@ class PaysystemTest extends TestCase
 
     /**
      * Helper method to delete a test order
-     *
-     * @param int $id
      */
     private function deleteTestOrder(int $id): void
     {
@@ -118,8 +112,6 @@ class PaysystemTest extends TestCase
 
     /**
      * Helper method to delete a test payment
-     *
-     * @param int $id
      */
     private function deleteTestPayment(int $id): void
     {
@@ -179,7 +171,6 @@ class PaysystemTest extends TestCase
     /**
      * Delete test handler by code
      *
-     * @param string $handlerCode
      * @throws BaseException
      * @throws TransportException
      */
@@ -189,16 +180,16 @@ class PaysystemTest extends TestCase
             $handlerService = Fabric::getServiceBuilder()->getPaysystemScope()->handler();
             // We need to get the handler ID first to delete it
             $handlers = $handlerService->list();
-            foreach ($handlers->getHandlers() as $handler) {
-                if ($handler->CODE === $handlerCode) {
-                    $handlerService->delete(intval($handler->ID));
+            foreach ($handlers->getHandlers() as $handlerItemResult) {
+                if ($handlerItemResult->CODE === $handlerCode) {
+                    $handlerService->delete(intval($handlerItemResult->ID));
                     break;
                 }
             }
-        } catch (BaseException $e) {
+        } catch (BaseException $baseException) {
             // Log the error but don't fail the test if handler deletion fails
             // This is cleanup code, so failures should not break tests
-            error_log("Warning: Failed to delete test handler {$handlerCode}: " . $e->getMessage());
+            error_log(sprintf('Warning: Failed to delete test handler %s: ', $handlerCode) . $baseException->getMessage());
         }
     }
 
@@ -215,7 +206,7 @@ class PaysystemTest extends TestCase
 
         $name = 'Test Payment System ' . time();
         
-        $result = $this->paysystemService->add([
+        $addedItemResult = $this->paysystemService->add([
             'NAME' => $name,
             'DESCRIPTION' => 'Test payment system description',
             'PERSON_TYPE_ID' => $personTypeId,
@@ -226,10 +217,10 @@ class PaysystemTest extends TestCase
             'XML_ID' => 'test_ps_' . time()
         ]);
 
-        self::assertGreaterThanOrEqual(1, $result->getId());
+        self::assertGreaterThanOrEqual(1, $addedItemResult->getId());
 
         // Clean up: first delete payment system, then handler
-        $this->paysystemService->delete($result->getId());
+        $this->paysystemService->delete($addedItemResult->getId());
         $this->deleteTestHandlerByCode($handlerCode);
     }
 
@@ -246,7 +237,7 @@ class PaysystemTest extends TestCase
 
         $name = 'Test Payment System to Delete ' . time();
         
-        $addResult = $this->paysystemService->add([
+        $addedItemResult = $this->paysystemService->add([
             'NAME' => $name,
             'DESCRIPTION' => 'Test payment system for deletion',
             'PERSON_TYPE_ID' => $personTypeId,
@@ -255,8 +246,8 @@ class PaysystemTest extends TestCase
             'ENTITY_REGISTRY_TYPE' => 'ORDER'
         ]);
 
-        $deleteResult = $this->paysystemService->delete($addResult->getId());
-        self::assertTrue($deleteResult->isSuccess());
+        $deletedItemResult = $this->paysystemService->delete($addedItemResult->getId());
+        self::assertTrue($deletedItemResult->isSuccess());
 
         $this->deleteTestHandlerByCode($handlerCode);
     }
@@ -275,7 +266,7 @@ class PaysystemTest extends TestCase
         // Create a test payment system first
         $name = 'Test Payment System for List ' . time();
         
-        $addResult = $this->paysystemService->add([
+        $addedItemResult = $this->paysystemService->add([
             'NAME' => $name,
             'DESCRIPTION' => 'Test payment system for listing',
             'PERSON_TYPE_ID' => $personTypeId,
@@ -284,22 +275,22 @@ class PaysystemTest extends TestCase
             'ENTITY_REGISTRY_TYPE' => 'ORDER'
         ]);
 
-        $result = $this->paysystemService->list(
+        $paysystemsResult = $this->paysystemService->list(
             ['ID', 'NAME', 'ACTIVE'],
             [],
             ['ID' => 'ASC']
         );
 
-        self::assertGreaterThanOrEqual(1, count($result->getPaysystems()));
+        self::assertGreaterThanOrEqual(1, count($paysystemsResult->getPaysystems()));
         
-        foreach ($result->getPaysystems() as $paysystem) {
-            self::assertInstanceOf(PaysystemItemResult::class, $paysystem);
-            self::assertNotNull($paysystem->ID);
-            self::assertNotNull($paysystem->NAME);
+        foreach ($paysystemsResult->getPaysystems() as $paysystemItemResult) {
+            self::assertInstanceOf(PaysystemItemResult::class, $paysystemItemResult);
+            self::assertNotNull($paysystemItemResult->ID);
+            self::assertNotNull($paysystemItemResult->NAME);
         }
 
         // Clean up
-        $this->paysystemService->delete($addResult->getId());
+        $this->paysystemService->delete($addedItemResult->getId());
         $this->deleteTestHandlerByCode($handlerCode);
     }
 
@@ -315,26 +306,26 @@ class PaysystemTest extends TestCase
         $personTypeId = $this->getPersonTypeId();
 
         // Create a payment system first
-        $addResult = $this->paysystemService->add([
+        $addedItemResult = $this->paysystemService->add([
             'NAME' => 'Payment System for Update Test ' . time(),
             'PERSON_TYPE_ID' => $personTypeId,
             'BX_REST_HANDLER' => $handlerCode,
             'ENTITY_REGISTRY_TYPE' => 'ORDER'
         ]);
 
-        $paysystemId = $addResult->getId();
+        $paysystemId = $addedItemResult->getId();
         $newName = 'Updated Payment System ' . time();
 
         // Update the payment system
-        $updateResult = $this->paysystemService->update($paysystemId, [
+        $updatedItemResult = $this->paysystemService->update($paysystemId, [
             'NAME' => $newName
         ]);
 
-        self::assertTrue($updateResult->isSuccess());
+        self::assertTrue($updatedItemResult->isSuccess());
 
         // Verify the update by listing and finding our payment system
-        $listResult = $this->paysystemService->list(['ID', 'NAME'], ['ID' => $paysystemId]);
-        $paysystems = $listResult->getPaysystems();
+        $paysystemsResult = $this->paysystemService->list(['ID', 'NAME'], ['ID' => $paysystemId]);
+        $paysystems = $paysystemsResult->getPaysystems();
         self::assertCount(1, $paysystems);
         self::assertEquals($newName, $paysystems[0]->NAME);
 
@@ -356,18 +347,18 @@ class PaysystemTest extends TestCase
         $testName = 'Test Payment System for List Filter ' . time();
 
         // Add a test payment system
-        $addResult = $this->paysystemService->add([
+        $addedItemResult = $this->paysystemService->add([
             'NAME' => $testName,
             'PERSON_TYPE_ID' => $personTypeId,
             'BX_REST_HANDLER' => $handlerCode,
             'ENTITY_REGISTRY_TYPE' => 'ORDER'
         ]);
 
-        $paysystemId = $addResult->getId();
+        $paysystemId = $addedItemResult->getId();
 
         // Test list with filter
-        $listResult = $this->paysystemService->list(['ID', 'NAME'], ['NAME' => $testName]);
-        $paysystems = $listResult->getPaysystems();
+        $paysystemsResult = $this->paysystemService->list(['ID', 'NAME'], ['NAME' => $testName]);
+        $paysystems = $paysystemsResult->getPaysystems();
 
         self::assertGreaterThanOrEqual(1, count($paysystems));
         self::assertEquals($testName, $paysystems[0]->NAME);
@@ -389,18 +380,18 @@ class PaysystemTest extends TestCase
         $personTypeId = $this->getPersonTypeId();
 
         // Add a test payment system
-        $addResult = $this->paysystemService->add([
+        $addedItemResult = $this->paysystemService->add([
             'NAME' => 'Test Payment System for Count ' . time(),
             'PERSON_TYPE_ID' => $personTypeId,
             'BX_REST_HANDLER' => $handlerCode,
             'ENTITY_REGISTRY_TYPE' => 'ORDER'
         ]);
 
-        $paysystemId = $addResult->getId();
+        $paysystemId = $addedItemResult->getId();
 
         // Test list returns at least one result
-        $listResult = $this->paysystemService->list();
-        self::assertGreaterThanOrEqual(1, count($listResult->getPaysystems()));
+        $paysystemsResult = $this->paysystemService->list();
+        self::assertGreaterThanOrEqual(1, count($paysystemsResult->getPaysystems()));
 
         // Clean up
         $this->paysystemService->delete($paysystemId);
@@ -419,7 +410,7 @@ class PaysystemTest extends TestCase
         $personTypeId = $this->getPersonTypeId();
 
         // Create a test payment system
-        $paysystemAddResult = $this->paysystemService->add([
+        $addedItemResult = $this->paysystemService->add([
             'NAME' => 'Test Payment System for Payment ' . time(),
             'PERSON_TYPE_ID' => $personTypeId,
             'BX_REST_HANDLER' => $handlerCode,
@@ -427,7 +418,7 @@ class PaysystemTest extends TestCase
             'ACTIVE' => 'Y'
         ]);
         
-        $paysystemId = $paysystemAddResult->getId();
+        $paysystemId = $addedItemResult->getId();
 
         // Create a test order
         $orderId = $this->createTestOrder($personTypeId);
@@ -468,19 +459,19 @@ class PaysystemTest extends TestCase
         try {
             $handlerService = Fabric::getServiceBuilder()->getPaysystemScope()->handler();
             $handlers = $handlerService->list();
-            foreach ($handlers->getHandlers() as $handler) {
-                if (str_contains($handler->CODE, 'test_handler_')) {
+            foreach ($handlers->getHandlers() as $handlerItemResult) {
+                if (str_contains($handlerItemResult->CODE, 'test_handler_')) {
                     try {
-                        $handlerService->delete(intval($handler->ID));
+                        $handlerService->delete(intval($handlerItemResult->ID));
                     } catch (BaseException $e) {
                         // Ignore individual deletion errors
-                        error_log("Warning: Failed to cleanup test handler {$handler->CODE}: " . $e->getMessage());
+                        error_log(sprintf('Warning: Failed to cleanup test handler %s: ', $handlerItemResult->CODE) . $e->getMessage());
                     }
                 }
             }
-        } catch (BaseException $e) {
+        } catch (BaseException $baseException) {
             // Ignore general cleanup errors
-            error_log("Warning: Failed to list handlers during cleanup: " . $e->getMessage());
+            error_log("Warning: Failed to list handlers during cleanup: " . $baseException->getMessage());
         }
     }
 }

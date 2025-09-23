@@ -182,11 +182,11 @@ class Paysystem extends AbstractService
     public function payInvoice(int $invoiceId, ?int $paySystemId = null, ?string $bxRestHandler = null): PaymentResult
     {
         $params = ['INVOICE_ID' => $invoiceId];
-        
+
         if ($paySystemId !== null) {
             $params['PAY_SYSTEM_ID'] = $paySystemId;
         }
-        
+
         if ($bxRestHandler !== null) {
             $params['BX_REST_HANDLER'] = $bxRestHandler;
         }
