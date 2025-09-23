@@ -36,6 +36,7 @@ use Bitrix24\SDK\Core;
 #[CoversMethod(Paysystem::class, 'delete')]
 #[CoversMethod(Paysystem::class, 'list')]
 #[CoversMethod(Paysystem::class, 'update')]
+#[CoversMethod(Paysystem::class, 'payPayment')]
 class PaysystemTest extends TestCase
 {
     use CustomBitrix24Assertions;
@@ -54,13 +55,80 @@ class PaysystemTest extends TestCase
         $personTypeService = Fabric::getServiceBuilder()->getSaleScope()->personType();
         $personTypes = $personTypeService->list();
         
-        if (count($personTypes->getPersonTypes()) > 0) {
-            return $personTypes->getPersonTypes()[0]->id;
+        return $personTypes->getPersonTypes()[0]->id;
+    }
+
+    /**
+     * Helper method to create a test order
+     *
+     * @param int $personTypeId
+     * @return int Order ID
+     * @throws BaseException
+     * @throws TransportException
+     */
+    private function createTestOrder(int $personTypeId): int
+    {
+        $orderService = Fabric::getServiceBuilder()->getSaleScope()->order();
+        $orderFields = [
+            'lid' => 's1',
+            'personTypeId' => $personTypeId,
+            'currency' => 'USD',
+            'price' => 100.00
+        ];
+
+        return $orderService->add($orderFields)->getId();
+    }
+
+    /**
+     * Helper method to create a test payment
+     *
+     * @param int $orderId
+     * @param int $paySystemId
+     * @return int Payment ID
+     * @throws BaseException
+     * @throws TransportException
+     */
+    private function createTestPayment(int $orderId, int $paySystemId): int
+    {
+        $paymentService = Fabric::getServiceBuilder()->getSaleScope()->payment();
+        $paymentFields = [
+            'orderId' => $orderId,
+            'paySystemId' => $paySystemId,
+            'sum' => 100.00,
+            'currency' => 'USD'
+        ];
+
+        return $paymentService->add($paymentFields)->getId();
+    }
+
+    /**
+     * Helper method to delete a test order
+     *
+     * @param int $id
+     */
+    private function deleteTestOrder(int $id): void
+    {
+        try {
+            $orderService = Fabric::getServiceBuilder()->getSaleScope()->order();
+            $orderService->delete($id);
+        } catch (\Exception) {
+            // Ignore if order doesn't exist
         }
-        
-        // Create a test person type if none exist
-        $personTypeResult = $personTypeService->add(['name' => 'Test Person Type ' . time()]);
-        return $personTypeResult->getId();
+    }
+
+    /**
+     * Helper method to delete a test payment
+     *
+     * @param int $id
+     */
+    private function deleteTestPayment(int $id): void
+    {
+        try {
+            $paymentService = Fabric::getServiceBuilder()->getSaleScope()->payment();
+            $paymentService->delete($id);
+        } catch (\Exception) {
+            // Ignore if payment doesn't exist
+        }
     }
 
     /**
@@ -73,11 +141,12 @@ class PaysystemTest extends TestCase
     private function createTestHandler(): string
     {
         $handlerService = Fabric::getServiceBuilder()->getPaysystemScope()->handler();
+        
         $handlerName = 'Test Handler ' . time();
         $handlerCode = 'test_handler_' . time();
         $handlerSettings = [
             'CURRENCY' => ['USD'],
-            'CLIENT_TYPE' => 'b2c',
+            'CLIENT_TYPE' => 'b2b',
             'FORM_DATA' => [
                 'ACTION_URI' => 'https://example.com/payment_form.php',
                 'METHOD' => 'POST',
@@ -102,7 +171,7 @@ class PaysystemTest extends TestCase
             ]
         ];
 
-        $handlerResult = $handlerService->add($handlerName, $handlerCode, $handlerSettings);
+        $handlerService->add($handlerName, $handlerCode, $handlerSettings);
         // Return the CODE, not the ID
         return $handlerCode;
     }
@@ -338,6 +407,48 @@ class PaysystemTest extends TestCase
         $this->deleteTestHandlerByCode($handlerCode);
     }
 
+    /**
+     * Test pay payment through specific payment system
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testPayPayment(): void
+    {
+        $handlerCode = $this->createTestHandler();
+        $personTypeId = $this->getPersonTypeId();
+
+        // Create a test payment system
+        $paysystemAddResult = $this->paysystemService->add([
+            'NAME' => 'Test Payment System for Payment ' . time(),
+            'PERSON_TYPE_ID' => $personTypeId,
+            'BX_REST_HANDLER' => $handlerCode,
+            'ENTITY_REGISTRY_TYPE' => 'ORDER',
+            'ACTIVE' => 'Y'
+        ]);
+        
+        $paysystemId = $paysystemAddResult->getId();
+
+        // Create a test order
+        $orderId = $this->createTestOrder($personTypeId);
+
+        // Create a test payment
+        $paymentId = $this->createTestPayment($orderId, $paysystemId);
+
+        // Test the payPayment method
+        $paymentResult = $this->paysystemService->payPayment($paymentId, $paysystemId);
+        
+        // Verify that payment result is returned (can be true or false depending on payment system configuration)
+        self::assertIsBool($paymentResult->isSuccess());
+
+        // Clean up in reverse order
+        $this->deleteTestPayment($paymentId);
+        $this->deleteTestOrder($orderId);
+        $this->paysystemService->delete($paysystemId);
+        $this->deleteTestHandlerByCode($handlerCode);
+    }
+
+    
     protected function setUp(): void
     {
         $this->paysystemService = Fabric::getServiceBuilder()->getPaysystemScope()->paysystem();

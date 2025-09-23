@@ -10,6 +10,21 @@
     - `update` updates a payment system handler
     - `list` returns a list of payment system handlers
     - `delete` deletes a payment system handler
+- Added service `Services\Paysystem\Service\Paysystem` with support methods,
+  see [sale.paysystem.* methods](https://github.com/bitrix24/b24phpsdk/issues/260):
+    - `add` adds a payment system
+    - `update` updates a payment system
+    - `get` returns a payment system by its identifier
+    - `list` returns a list of payment systems
+    - `delete` deletes a payment system
+    - `payPayment` pays a payment
+    - `payInvoice` pays an invoice (legacy version)
+- Added service `Services\Paysystem\Settings\Service\Settings` with support methods,
+  see [sale.paysystem.settings.* methods](https://github.com/bitrix24/b24phpsdk/issues/260):
+    - `get` returns the settings of the payment system
+    - `update` updates the payment system settings
+    - `getForPayment` returns the payment system settings for a specific payment
+    - `getForInvoice` returns the payment system settings for a specific invoice (legacy version)
 - Added service `Services\Sale\Payment\Service\Payment` with support methods,
   see [sale.payment.* methods](https://github.com/bitrix24/b24phpsdk/issues/248):
     - `add` adds a payment

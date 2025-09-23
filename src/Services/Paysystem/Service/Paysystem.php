@@ -23,6 +23,7 @@ use Bitrix24\SDK\Core\Result\AddedItemResult;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
+use Bitrix24\SDK\Services\Paysystem\Result\PaymentResult;
 use Bitrix24\SDK\Services\Paysystem\Result\PaysystemsResult;
 use Psr\Log\LoggerInterface;
 
@@ -132,6 +133,66 @@ class Paysystem extends AbstractService
             $this->core->call('sale.paysystem.delete', [
                 'ID' => $id,
             ])
+        );
+    }
+
+    /**
+     * Pay for an order through a specific payment system.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/pay-system/sale-pay-system-pay-payment.html
+     *
+     * @param int $paymentId   Payment identifier
+     * @param int $paySystemId Payment system identifier
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'sale.paysystem.pay.payment',
+        'https://apidocs.bitrix24.com/api-reference/pay-system/sale-pay-system-pay-payment.html',
+        'Pay for an order through a specific payment system.'
+    )]
+    public function payPayment(int $paymentId, int $paySystemId): PaymentResult
+    {
+        return new PaymentResult(
+            $this->core->call('sale.paysystem.pay.payment', [
+                'PAYMENT_ID' => $paymentId,
+                'PAY_SYSTEM_ID' => $paySystemId,
+            ])
+        );
+    }
+
+    /**
+     * Pay an invoice through a specific payment system.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/pay-system/sale-pay-system-pay-invoice.html
+     *
+     * @param int         $invoiceId        Identifier of the old version invoice
+     * @param int|null    $paySystemId      Identifier of the payment system
+     * @param string|null $bxRestHandler    Symbolic identifier of the payment system's REST handler
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'sale.paysystem.pay.invoice',
+        'https://apidocs.bitrix24.com/api-reference/pay-system/sale-pay-system-pay-invoice.html',
+        'Pay an invoice through a specific payment system.'
+    )]
+    public function payInvoice(int $invoiceId, ?int $paySystemId = null, ?string $bxRestHandler = null): PaymentResult
+    {
+        $params = ['INVOICE_ID' => $invoiceId];
+        
+        if ($paySystemId !== null) {
+            $params['PAY_SYSTEM_ID'] = $paySystemId;
+        }
+        
+        if ($bxRestHandler !== null) {
+            $params['BX_REST_HANDLER'] = $bxRestHandler;
+        }
+
+        return new PaymentResult(
+            $this->core->call('sale.paysystem.pay.invoice', $params)
         );
     }
 }

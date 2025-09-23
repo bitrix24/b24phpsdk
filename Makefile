@@ -53,6 +53,7 @@ help:
 	@echo "test-integration-sale-basket-property - run BasketProperty integration tests"
 	@echo "test-integration-scope-paysystem - run Payment System integration tests"
 	@echo "test-integration-paysystem-service - run new Paysystem service tests only"
+	@echo "test-integration-paysystem-settings - run Payment System Settings service tests only"
 
 
 .PHONY: docker-init
@@ -169,6 +170,10 @@ test-integration-scope-paysystem:
 .PHONY: test-integration-paysystem-service
 test-integration-paysystem-service:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_paysystem_service
+
+.PHONY: test-integration-paysystem-settings
+test-integration-paysystem-settings:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_paysystem_settings
 
 .PHONY: test-integration-scope-im-open-lines
 test-integration-scope-im-open-lines:

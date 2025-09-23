@@ -54,4 +54,16 @@ class PaysystemServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    /**
+     * Payment system settings service (sale.paysystem.settings.*)
+     */
+    public function settings(): Settings\Service\Settings
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Settings\Service\Settings($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
 }
