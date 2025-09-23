@@ -12,6 +12,15 @@
     - `list` returns a list of payments
     - `delete` deletes a payment
     - `getFields` returns the fields and settings for payments
+- Added service `Services\Calendar\Service\Calendar` with support methods,
+  see [calendar.* methods](https://github.com/bitrix24/b24phpsdk/issues/263):
+    - `add` adds a new calendar section
+    - `update` updates a calendar section
+    - `get` returns a list of calendar sections
+    - `delete` deletes a calendar section
+    - `getSettings` returns main calendar settings
+    - `getUserSettings` returns user calendar settings
+    - `setUserSettings` sets user calendar settings
 
 ## 1.6.0 – 2025.09.01
 

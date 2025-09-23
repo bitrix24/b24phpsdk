@@ -62,6 +62,8 @@ return RectorConfig::configure()
         __DIR__ . '/tests/Integration/Services/Task',
         __DIR__ . '/src/Services/Sale',
         __DIR__ . '/tests/Integration/Services/Sale',
+        __DIR__ . '/src/Services/Calendar',
+        __DIR__ . '/tests/Integration/Services/Calendar',
         __DIR__ . '/tests/Unit/',
     ])
     ->withCache(cacheDirectory: __DIR__ . '.cache/rector')
