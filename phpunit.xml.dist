@@ -136,8 +136,29 @@
         <testsuite name="integration_tests_sale_payment">
             <directory>./tests/Integration/Services/Sale/Payment/</directory>
         </testsuite>
+        <testsuite name="integration_tests_sale_payment_item_basket">
+            <directory>./tests/Integration/Services/Sale/PaymentItemBasket/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_payment_item_shipment">
+            <directory>./tests/Integration/Services/Sale/PaymentItemShipment/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_property_relation">
+            <directory>./tests/Integration/Services/Sale/PropertyRelation/</directory>
+        </testsuite>
         <testsuite name="integration_tests_sale_order">
             <directory>./tests/Integration/Services/Sale/Order/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_shipment">
+            <directory>./tests/Integration/Services/Sale/Shipment/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_shipment_property">
+            <directory>./tests/Integration/Services/Sale/ShipmentProperty/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_shipment_property_value">
+            <directory>./tests/Integration/Services/Sale/ShipmentPropertyValue/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_shipment_item">
+            <directory>./tests/Integration/Services/Sale/ShipmentItem/</directory>
         </testsuite>
     </testsuites>
     <source>
