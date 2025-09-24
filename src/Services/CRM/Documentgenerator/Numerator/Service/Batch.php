@@ -36,6 +36,38 @@ class Batch
     }
 
     /**
+     * Batch list method for numerators
+     *
+     * @return Generator<int, NumeratorItemResult>
+     * @throws BaseException
+     */
+    #[ApiBatchMethodMetadata(
+        'crm.documentgenerator.numerator.list',
+        'https://apidocs.bitrix24.com/api-reference/crm/document-generator/numerator/crm-document-generator-numerator-list.html',
+        'Batch list method for numerators'
+    )]
+    public function list(?int $limit = null): Generator
+    {
+        $this->log->debug(
+            'batchList',
+            [
+                'limit' => $limit,
+            ]
+        );
+
+        $numeratorListGenerator = $this->batch->getTraversableList(
+            'crm.documentgenerator.numerator.list',
+            [],
+            [],
+            [],
+            $limit
+        );
+        foreach ($numeratorListGenerator as $key => $value) {
+            yield $key => new NumeratorItemResult($value);
+        }
+    }
+
+    /**
      * Batch adding numerators
      *
      * @param array <int, array{
@@ -85,7 +117,12 @@ class Batch
     )]
     public function update(array $entityItems): Generator
     {
-        foreach ($this->batch->updateEntityItems('crm.documentgenerator.numerator.update', $entityItems) as $key => $item) {
+        foreach (
+            $this->batch->updateEntityItems(
+                'crm.documentgenerator.numerator.update',
+                $entityItems
+            ) as $key => $item
+        ) {
             yield $key => new UpdatedItemBatchResult($item);
         }
     }
@@ -105,7 +142,12 @@ class Batch
     )]
     public function delete(array $numeratorId): Generator
     {
-        foreach ($this->batch->deleteEntityItems('crm.documentgenerator.numerator.delete', $numeratorId) as $key => $item) {
+        foreach (
+            $this->batch->deleteEntityItems(
+                'crm.documentgenerator.numerator.delete',
+                $numeratorId
+            ) as $key => $item
+        ) {
             yield $key => new DeletedItemBatchResult($item);
         }
     }

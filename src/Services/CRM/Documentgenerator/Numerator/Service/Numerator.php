@@ -178,4 +178,15 @@ class Numerator extends AbstractService
             )
         );
     }
+
+    /**
+     * Count numerators
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function count(): int
+    {
+        return $this->list(1)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
+    }
 }
