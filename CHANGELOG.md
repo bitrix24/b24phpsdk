@@ -53,6 +53,24 @@
     - `getSettings` returns main calendar settings
     - `getUserSettings` returns user calendar settings
     - `setUserSettings` sets user calendar settings
+- Added service `Services\Calendar\Event\Service\Event` with support methods,
+  see [calendar.event.* methods](https://github.com/bitrix24/b24phpsdk/issues/263):
+    - `add` adds a new calendar event, with batch calls support
+    - `update` updates a calendar event, with batch calls support
+    - `getById` returns calendar event by identifier
+    - `get` returns a list of calendar events
+    - `getNearest` returns a list of upcoming events
+    - `delete` deletes a calendar event, with batch calls support
+    - `getMeetingStatus` gets current user's participation status in event
+    - `setMeetingStatus` sets participation status in event for current user
+    - `getAccessibility` gets users' availability from list
+- Added service `Services\Calendar\Resource\Service\Resource` with support methods,
+  see [calendar.resource.* methods](https://github.com/bitrix24/b24phpsdk/issues/263):
+    - `add` adds a new calendar resource
+    - `update` updates a calendar resource
+    - `list` returns a list of all resources
+    - `bookingList` retrieves resource bookings based on a filter
+    - `delete` deletes a calendar resource
 - Added service `Services\Sale\PaymentItemBasket\Service\PaymentItemBasket` with support methods,
   see [sale.paymentitembasket.* methods](https://github.com/bitrix24/b24phpsdk/issues/253):
     - `add` adds a binding of a basket item to a payment
