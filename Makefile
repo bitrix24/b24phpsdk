@@ -51,6 +51,7 @@ help:
 	@echo ""
 	@echo "test-unit                 - run unit tests"
 	@echo "test-integration-calendar-event - run Calendar Event integration tests"
+	@echo "test-integration-calendar-resource - run Calendar Resource integration tests"
 	@echo "test-integration-sale-basket-property - run BasketProperty integration tests"
 	@echo "test-integration-sale-payment-item-basket - run PaymentItemBasket integration tests"
 	@echo "test-integration-sale-payment-item-shipment - run PaymentItemShipment integration tests"
@@ -203,6 +204,10 @@ test-integration-scope-calendar:
 .PHONY: test-integration-calendar-event
 test-integration-calendar-event:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_calendar_event
+
+.PHONY: test-integration-calendar-resource
+test-integration-calendar-resource:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_calendar_resource
 
 .PHONY: test-integration-sale-status
 test-integration-sale-status:
