@@ -52,6 +52,9 @@
         <testsuite name="integration_tests_scope_calendar">
             <directory>./tests/Integration/Services/Calendar/</directory>
         </testsuite>
+        <testsuite name="integration_tests_calendar_event">
+            <directory>./tests/Integration/Services/Calendar/Event/</directory>
+        </testsuite>
         <testsuite name="integration_tests_sale_status">
             <directory>./tests/Integration/Services/Sale/Status/</directory>
         </testsuite>

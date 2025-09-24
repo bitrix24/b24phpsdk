@@ -16,7 +16,6 @@ namespace Bitrix24\SDK\Services\Calendar;
 use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
-use Bitrix24\SDK\Services\Calendar\Service\Calendar;
 
 /**
  * Class CalendarServiceBuilder
@@ -29,10 +28,30 @@ class CalendarServiceBuilder extends AbstractServiceBuilder
     /**
      * Get Calendar service for calendar sections
      */
-    public function calendar(): Calendar
+    public function calendar(): Service\Calendar
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Calendar(
+            $this->serviceCache[__METHOD__] = new Service\Calendar(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * Get Event service for calendar events
+     */
+    public function event(): Event\Service\Event
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new Event\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Event\Service\Event(
+                new Event\Service\Batch($batch, $this->log),
                 $this->core,
                 $this->log
             );
