@@ -53,6 +53,10 @@
     - `getSettings` returns main calendar settings
     - `getUserSettings` returns user calendar settings
     - `setUserSettings` sets user calendar settings
+- Added support for events:
+    - `OnCalendarSectionAdd`
+    - `OnCalendarSectionUpdate`
+    - `OnCalendarSectionDelete`
 - Added service `Services\Calendar\Event\Service\Event` with support methods,
   see [calendar.event.* methods](https://github.com/bitrix24/b24phpsdk/issues/263):
     - `add` adds a new calendar event, with batch calls support
