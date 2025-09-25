@@ -64,10 +64,12 @@ class FolderTest extends TestCase
         foreach ($allFields as $field => $params) {
             $newParams = [];
             foreach ($params as $key => $value) {
-                $newParams[mb_strtolower($key)] = $value;
+                $newParams[mb_strtolower((string) $key)] = $value;
             }
+
             $allFields[$field] = $newParams;
         }
+
         $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
         $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
 
@@ -185,11 +187,11 @@ class FolderTest extends TestCase
         $targetFolderId = $this->folderService->addSubfolder($rootFolderId, $targetFolderData)->getId();
         
         // Copy folder
-        $result = $this->folderService->copyTo($sourceFolderId, $targetFolderId);
-        self::assertTrue($result->isSuccess());
+        $folderOperationResult = $this->folderService->copyTo($sourceFolderId, $targetFolderId);
+        self::assertTrue($folderOperationResult->isSuccess());
         
         // Check that copy was created
-        $copiedFolder = $result->folder();
+        $copiedFolder = $folderOperationResult->folder();
         self::assertNotNull($copiedFolder);
         self::assertEquals($sourceFolderData['NAME'], $copiedFolder->NAME);
         self::assertEquals($targetFolderId, $copiedFolder->PARENT_ID);
@@ -222,12 +224,12 @@ class FolderTest extends TestCase
         $targetFolderId = $this->folderService->addSubfolder($rootFolderId, $targetFolderData)->getId();
         
         // Move folder
-        $result = $this->folderService->moveTo($sourceFolderId, $targetFolderId);
-        self::assertTrue($result->isSuccess());
+        $folderOperationResult = $this->folderService->moveTo($sourceFolderId, $targetFolderId);
+        self::assertTrue($folderOperationResult->isSuccess());
         
         // Check that folder was moved
-        $movedFolder = $this->folderService->get($sourceFolderId)->folder();
-        self::assertEquals($targetFolderId, $movedFolder->PARENT_ID);
+        $folderItemResult = $this->folderService->get($sourceFolderId)->folder();
+        self::assertEquals($targetFolderId, $folderItemResult->PARENT_ID);
         
         // Clean up test folders
         $this->folderService->deleteTree($targetFolderId);
@@ -249,12 +251,12 @@ class FolderTest extends TestCase
         
         // Rename folder
         $newName = 'Renamed Folder ' . time();
-        $result = $this->folderService->rename($folderId, $newName);
-        self::assertTrue($result->isSuccess());
+        $folderOperationResult = $this->folderService->rename($folderId, $newName);
+        self::assertTrue($folderOperationResult->isSuccess());
         
         // Check that name was changed
-        $renamedFolder = $this->folderService->get($folderId)->folder();
-        self::assertEquals($newName, $renamedFolder->NAME);
+        $folderItemResult = $this->folderService->get($folderId)->folder();
+        self::assertEquals($newName, $folderItemResult->NAME);
         
         // Clean up test folder
         $this->folderService->deleteTree($folderId);
@@ -275,12 +277,12 @@ class FolderTest extends TestCase
         $folderId = $this->folderService->addSubfolder($rootFolderId, $folderData)->getId();
         
         // Move to trash
-        $deleteResult = $this->folderService->markDeleted($folderId);
-        self::assertTrue($deleteResult->isSuccess());
+        $folderOperationResult = $this->folderService->markDeleted($folderId);
+        self::assertTrue($folderOperationResult->isSuccess());
         
         // Check that folder is in trash
-        $deletedFolder = $this->folderService->get($folderId)->folder();
-        self::assertNotEquals('0', $deletedFolder->DELETED_TYPE);
+        $folderItemResult = $this->folderService->get($folderId)->folder();
+        self::assertNotEquals('0', $folderItemResult->DELETED_TYPE);
         
         // Restore from trash
         $restoreResult = $this->folderService->restore($folderId);
@@ -354,19 +356,19 @@ class FolderTest extends TestCase
         $testContent = $this->getFileContent();
         
         // Encode content to base64
-        $base64Content = base64_encode($testContent);
+        $base64Content = base64_encode((string) $testContent);
         
         $fileData = [
             'NAME' => 'test_text_file.txt'
         ];
         
         // Upload file
-        $uploadResult = $this->folderService->uploadFile($folderId, $fileData, $base64Content, true);
-        $fileId = $uploadResult->getId();
+        $uploadedFileResult = $this->folderService->uploadFile($folderId, $fileData, $base64Content, true);
+        $fileId = $uploadedFileResult->getId();
         self::assertGreaterThan(0, $fileId);
         
         // Check uploaded file data
-        $fileInfo = $uploadResult->getFile();
+        $fileInfo = $uploadedFileResult->getFile();
         self::assertEquals($fileData['NAME'], $fileInfo['NAME']);
         self::assertEquals($folderId, $fileInfo['PARENT_ID']);
         
@@ -385,15 +387,15 @@ class FolderTest extends TestCase
     {
         // Get user's personal storage root folder
         $core = Fabric::getCore();
-        $storageResult = $core->call('disk.storage.getlist', [
+        $response = $core->call('disk.storage.getlist', [
             'filter' => [
                 'ENTITY_TYPE' => 'user'
             ]
         ]);
         
-        $storages = $storageResult->getResponseData()->getResult();
+        $storages = $response->getResponseData()->getResult();
         
-        if (empty($storages)) {
+        if ($storages === []) {
             self::markTestSkipped('No user storage found');
         }
         
@@ -403,7 +405,7 @@ class FolderTest extends TestCase
     /**
      * Helper method to get file content for testUploadFile
      */
-    protected function getFileContent()
+    protected function getFileContent(): string
     {
         return 'Test file content';
     }

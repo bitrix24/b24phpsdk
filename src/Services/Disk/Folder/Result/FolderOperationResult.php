@@ -27,8 +27,7 @@ class FolderOperationResult extends AbstractResult
      */
     public function isSuccess(): bool
     {
-        $result = $this->getCoreResponse()->getResponseData()->getResult();
-        return isset($result['ID']) || $result === true;
+        return (bool)$this->getCoreResponse()->getResponseData()->getResult()['ID'];
     }
 
     /**

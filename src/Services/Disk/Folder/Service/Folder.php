@@ -78,11 +78,11 @@ class Folder extends \Bitrix24\SDK\Services\AbstractService
     public function getChildren(int $id, array $filter = [], int $start = 0): FolderChildrenResult
     {
         $params = ['id' => $id];
-        
-        if (!empty($filter)) {
+
+        if ($filter !== []) {
             $params['filter'] = $filter;
         }
-        
+
         if ($start > 0) {
             $params['START'] = $start;
         }
@@ -255,7 +255,7 @@ class Folder extends \Bitrix24\SDK\Services\AbstractService
             $params['generateUniqueName'] = $generateUniqueName;
         }
 
-        if (!empty($rights)) {
+        if ($rights !== []) {
             $params['rights'] = $rights;
         }
 

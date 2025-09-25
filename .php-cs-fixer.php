@@ -20,6 +20,7 @@ $finder = Finder::create()
     ->in(__DIR__ . '/src/Services/Sale/')
     ->in(__DIR__ . '/src/Services/Task/')
     ->in(__DIR__ . '/src/Services/Sale/')
+    ->in(__DIR__ . '/src/Services/Disk/')
     ->name('*.php')
     ->exclude(['vendor', 'storage', 'docker', 'docs']) // Exclude directories
     ->ignoreDotFiles(true)
