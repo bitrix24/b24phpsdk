@@ -16,6 +16,7 @@ namespace Bitrix24\SDK\Services\Disk;
 use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
+use Bitrix24\SDK\Services\Disk\File\Service\File;
 use Bitrix24\SDK\Services\Disk\Folder\Service\Folder;
 
 /**
@@ -33,6 +34,21 @@ class DiskServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Folder(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * Get File service
+     */
+    public function file(): File
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new File(
                 $this->core,
                 $this->log
             );

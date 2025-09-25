@@ -127,6 +127,9 @@
         <testsuite name="integration_tests_scope_disk">
             <directory>./tests/Integration/Services/Disk/</directory>
         </testsuite>
+        <testsuite name="integration_tests_disk_file">
+            <directory>./tests/Integration/Services/Disk/File/</directory>
+        </testsuite>
         <testsuite name="integration_tests_task">
             <directory>./tests/Integration/Services/Task/</directory>
         </testsuite>

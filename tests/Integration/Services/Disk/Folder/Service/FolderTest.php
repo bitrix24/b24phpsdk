@@ -356,7 +356,7 @@ class FolderTest extends TestCase
         $testContent = $this->getFileContent();
         
         // Encode content to base64
-        $base64Content = base64_encode((string) $testContent);
+        $base64Content = base64_encode($testContent);
         
         $fileData = [
             'NAME' => 'test_text_file.txt'
