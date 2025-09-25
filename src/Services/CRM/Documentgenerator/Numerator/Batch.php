@@ -13,18 +13,10 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Documentgenerator\Numerator;
 
-use Bitrix24\SDK\Core\Commands\Command;
-use Bitrix24\SDK\Core\Commands\CommandCollection;
-use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
-use Bitrix24\SDK\Core\Response\DTO\Pagination;
 use Bitrix24\SDK\Core\Response\DTO\ResponseData;
-use Bitrix24\SDK\Core\Response\DTO\Result;
-use Bitrix24\SDK\Core\Response\DTO\Time;
-use Bitrix24\SDK\Core\Response\Response;
 use Generator;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class Batch

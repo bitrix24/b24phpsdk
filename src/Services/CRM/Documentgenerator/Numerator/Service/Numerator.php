@@ -20,7 +20,6 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\AddedItemResult;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
-use Bitrix24\SDK\Core\Result\FieldsResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\CRM\Documentgenerator\Numerator\Result\NumeratorResult;
@@ -187,6 +186,6 @@ class Numerator extends AbstractService
      */
     public function count(): int
     {
-        return $this->list(1)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
+        return $this->list()->getCoreResponse()->getResponseData()->getPagination()->getTotal();
     }
 }

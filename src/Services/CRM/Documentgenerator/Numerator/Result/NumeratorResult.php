@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Documentgenerator\Numerator\Result;
@@ -29,6 +28,12 @@ class NumeratorResult extends AbstractResult
      */
     public function numerator(): NumeratorItemResult
     {
-        return new NumeratorItemResult($this->getCoreResponse()->getResponseData()->getResult());
+        $result = $this->getCoreResponse()->getResponseData()->getResult();
+        // Be tolerant to different API payload shapes
+        if (!empty($result['numerator']) && is_array($result['numerator'])) {
+            $result = $result['numerator'];
+        }
+
+        return new NumeratorItemResult($result);
     }
 }

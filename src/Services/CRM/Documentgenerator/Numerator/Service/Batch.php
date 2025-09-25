@@ -55,7 +55,8 @@ class Batch
             ]
         );
 
-        $numeratorListGenerator = $this->batch->getTraversableList(
+        // Use pagination-based traversable to avoid dependency on element ID field name
+        $numeratorListGenerator = $this->batch->getTraversableListWithCount(
             'crm.documentgenerator.numerator.list',
             [],
             [],
