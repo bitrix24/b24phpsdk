@@ -102,7 +102,7 @@ class StorageTest extends TestCase
         // Check that known storage types are present
         $expectedTypes = ['user', 'common', 'group'];
         foreach ($expectedTypes as $expectedType) {
-            self::assertContains($expectedType, $types, sprintf('Storage type \'%s\' should be in the list', $expectedType));
+            self::assertContains($expectedType, $types, sprintf("Storage type '%s' should be in the list", $expectedType));
         }
     }
 

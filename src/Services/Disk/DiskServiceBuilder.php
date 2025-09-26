@@ -69,4 +69,19 @@ class DiskServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    /**
+     * Get Disk service
+     */
+    public function disk(): Service\Disk
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Service\Disk(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 }

@@ -196,6 +196,10 @@ test-integration-scope-sale:
 test-integration-scope-disk:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_disk
 
+.PHONY: test-integration-disk-service
+test-integration-disk-service:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_disk_service
+
 .PHONY: test-integration-disk-file
 test-integration-disk-file:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_disk_file

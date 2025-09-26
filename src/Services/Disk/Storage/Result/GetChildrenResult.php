@@ -35,9 +35,11 @@ class GetChildrenResult extends AbstractResult
             if (!is_array($itemData)) {
                 continue;
             }
+
             if (!isset($itemData['TYPE'])) {
                 continue;
             }
+
             if ($itemData['TYPE'] === 'file') {
                 $items[] = new FileItemResult($itemData);
             } elseif ($itemData['TYPE'] === 'folder') {
