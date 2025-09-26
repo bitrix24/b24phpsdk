@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Documentgenerator\Numerator\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Documentgenerator\Numerator\Service\Numerator;
 use Bitrix24\SDK\Tests\Integration\Fabric;
@@ -32,6 +33,9 @@ class BatchTest extends TestCase
 
     private Faker\Generator $faker;
 
+    /**
+     * @throws InvalidArgumentException
+     */
     protected function setUp(): void
     {
         $this->numeratorService = Fabric::getServiceBuilder()->getCRMScope()->documentgeneratorNumerator();
@@ -57,7 +61,7 @@ class BatchTest extends TestCase
 
         self::assertGreaterThanOrEqual(1, $cnt);
 
-        // cleanup
+        // Cleanup
         $this->numeratorService->delete($id);
     }
 
@@ -148,7 +152,7 @@ class BatchTest extends TestCase
             $this->assertTrue($updated->isSuccess());
         }
 
-        // cleanup
+        // Cleanup
         $ids = array_keys($updatePayload);
         $deletedCount = 0;
         foreach ($this->numeratorService->batch->delete($ids) as $deleted) {

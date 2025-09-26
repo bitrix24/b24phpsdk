@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Documentgenerator\Numerator\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Documentgenerator\Numerator\Result\NumeratorItemResult;
 use Bitrix24\SDK\Services\CRM\Documentgenerator\Numerator\Service\Numerator;
@@ -42,6 +43,9 @@ class NumeratorTest extends TestCase
 
     private Faker\Generator $faker;
 
+    /**
+     * @throws InvalidArgumentException
+     */
     protected function setUp(): void
     {
         $this->numeratorService = Fabric::getServiceBuilder()->getCRMScope()->documentgeneratorNumerator();
@@ -62,7 +66,7 @@ class NumeratorTest extends TestCase
 
         self::assertGreaterThanOrEqual(1, $id);
 
-        // cleanup
+        // Cleanup
         $this->numeratorService->delete($id);
     }
 
@@ -83,7 +87,7 @@ class NumeratorTest extends TestCase
         self::assertEquals($id, $got->id);
         self::assertEquals($name, $got->name);
 
-        // cleanup
+        // Cleanup
         $this->numeratorService->delete($id);
     }
 
@@ -103,7 +107,7 @@ class NumeratorTest extends TestCase
         self::assertIsArray($list);
         self::assertGreaterThanOrEqual(1, count($list));
 
-        // cleanup
+        // Cleanup
         $this->numeratorService->delete($id);
     }
 
@@ -129,7 +133,7 @@ class NumeratorTest extends TestCase
 
         self::assertEquals($newName, $this->numeratorService->get($id)->numerator()->name);
 
-        // cleanup
+        // Cleanup
         $this->numeratorService->delete($id);
     }
 
@@ -163,7 +167,7 @@ class NumeratorTest extends TestCase
         $countAfter = $this->numeratorService->count();
         self::assertEquals($countBefore + 1, $countAfter);
 
-        // cleanup
+        // Cleanup
         $this->numeratorService->delete($id);
     }
 }
