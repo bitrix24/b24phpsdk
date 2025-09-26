@@ -304,6 +304,10 @@ integration_tests_sale:
 integration_tests_sale_payment:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_payment
 
+.PHONY: integration_tests_crm_documentgenerator_numerator
+integration_tests_crm_documentgenerator_numerator:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_documentgenerator_numerator
+
 # work dev environment
 .PHONY: php-dev-server-up
 php-dev-server-up:
@@ -359,4 +363,3 @@ build-examples-for-documentation:
 	--example-template=docs/api/file-templates/examples/master-example.php \
 	--openai-api-key=$(DOCUMENTATION_OPEN_AI_API_KEY) \
 	--docs-repo-folder=$(DOCUMENTATION_REPOSITORY_FOLDER)
-

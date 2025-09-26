@@ -136,6 +136,9 @@
         <testsuite name="integration_tests_sale_order">
             <directory>./tests/Integration/Services/Sale/Order/</directory>
         </testsuite>
+        <testsuite name="integration_tests_crm_documentgenerator_numerator">
+            <directory>./tests/Integration/Services/CRM/Documentgenerator/Numerator/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>
