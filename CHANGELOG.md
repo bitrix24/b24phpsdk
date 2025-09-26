@@ -4,6 +4,50 @@
 
 ### Added
 
+- Added service `Services\Disk\Service\Disk` with support methods,
+  see [disk service methods](https://github.com/bitrix24/b24phpsdk/issues/265):
+    - `getVersion` returns the version by identifier
+    - `getAttachedObject` returns information about the attached file
+    - `getRightsTasks` returns a list of available access levels that can be used for assigning permissions
+- Added service `Services\Disk\Storage\Service\Storage` with support methods,
+  see [disk.storage.* methods](https://github.com/bitrix24/b24phpsdk/issues/265):
+    - `fields` returns the description of the storage fields
+    - `get` returns the storage by identifier
+    - `rename` renames the storage
+    - `list` returns a list of available storages
+    - `getTypes` returns a list of storage types
+    - `addFolder` creates a folder in the root of the storage
+    - `getChildren` returns a list of files and folders in the root of the storage
+    - `uploadFile` uploads a new file to the root of the storage
+    - `getForApp` returns the description of the storage that the application can work with
+- Added service `Services\Disk\Folder\Service\Folder` with support methods,
+  see [disk.folder.* methods](https://github.com/bitrix24/b24phpsdk/issues/265):
+    - `getFields` returns the description of folder fields
+    - `get` returns the folder by identifier
+    - `getChildren` returns a list of files and folders that are directly in the folder
+    - `addSubfolder` creates a subfolder
+    - `copyTo` copies the folder to the specified folder
+    - `moveTo` moves the folder to the specified folder
+    - `rename` renames the folder
+    - `markDeleted` moves the folder to the trash
+    - `restore` restores the folder from the trash
+    - `deleteTree` permanently destroys the folder and all its child elements
+    - `getExternalLink` returns a public link
+    - `uploadFile` uploads a new file to the specified folder
+- Added service `Services\Disk\File\Service\File` with support methods,
+  see [disk.file.* methods](https://github.com/bitrix24/b24phpsdk/issues/265):
+    - `getFields` returns the description of file fields
+    - `get` returns the file by identifier
+    - `rename` renames the file
+    - `copyTo` copies the file to the specified folder
+    - `moveTo` moves the file to the specified folder
+    - `delete` permanently destroys the file
+    - `markDeleted` moves the file to the trash
+    - `restore` restores the file from the trash
+    - `uploadVersion` uploads a new version of the file
+    - `getVersions` returns a list of file versions
+    - `restoreFromVersion` restores the file from a specific version
+    - `getExternalLink` returns a public link to the file
 - Added service `Services\Sale\Payment\Service\Payment` with support methods,
   see [sale.payment.* methods](https://github.com/bitrix24/b24phpsdk/issues/248):
     - `add` adds a payment
