@@ -200,6 +200,10 @@ test-integration-scope-disk:
 test-integration-disk-file:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_disk_file
 
+.PHONY: test-integration-disk-storage
+test-integration-disk-storage:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_disk_storage
+
 .PHONY: test-integration-sale-status
 test-integration-sale-status:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_status
