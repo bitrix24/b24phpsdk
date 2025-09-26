@@ -2,9 +2,7 @@
 
 /**
  * This file is part of the bitrix24-php-sdk package.
- *
  * © Dmitriy Ignatenko <titarx@gmail.com>
- *
  * For the full copyright and license information, please view the MIT-LICENSE.txt
  * file that was distributed with this source code.
  */
@@ -93,6 +91,7 @@ class BatchTest extends TestCase
         foreach ($this->numeratorService->batch->delete($ids) as $deleted) {
             $delCnt++;
         }
+
         self::assertEquals(count($items), $delCnt);
     }
 
@@ -158,6 +157,7 @@ class BatchTest extends TestCase
         foreach ($this->numeratorService->batch->delete($ids) as $deleted) {
             $deletedCount++;
         }
+
         self::assertEquals(count($ids), $deletedCount);
 
         self::assertTrue(true);

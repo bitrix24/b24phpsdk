@@ -82,10 +82,10 @@ class NumeratorTest extends TestCase
             'template' => 'G-{NUMBER}',
         ])->getId();
 
-        $got = $this->numeratorService->get($id)->numerator();
-        self::assertInstanceOf(NumeratorItemResult::class, $got);
-        self::assertEquals($id, $got->id);
-        self::assertEquals($name, $got->name);
+        $numeratorItemResult = $this->numeratorService->get($id)->numerator();
+        self::assertInstanceOf(NumeratorItemResult::class, $numeratorItemResult);
+        self::assertEquals($id, $numeratorItemResult->id);
+        self::assertEquals($name, $numeratorItemResult->name);
 
         // Cleanup
         $this->numeratorService->delete($id);
