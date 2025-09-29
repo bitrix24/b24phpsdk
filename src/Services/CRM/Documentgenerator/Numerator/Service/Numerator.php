@@ -19,12 +19,12 @@ use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Core\Result\AddedItemResult;
-use Bitrix24\SDK\Core\Result\DeletedItemResult;
-use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
+use Bitrix24\SDK\Services\CRM\Documentgenerator\Numerator\Result\AddedNumeratorResult;
+use Bitrix24\SDK\Services\CRM\Documentgenerator\Numerator\Result\DeletedNumeratorResult;
 use Bitrix24\SDK\Services\CRM\Documentgenerator\Numerator\Result\NumeratorResult;
 use Bitrix24\SDK\Services\CRM\Documentgenerator\Numerator\Result\NumeratorsResult;
+use Bitrix24\SDK\Services\CRM\Documentgenerator\Numerator\Result\UpdatedNumeratorResult;
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['crm']))]
@@ -57,9 +57,9 @@ class Numerator extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/document-generator/numerator/crm-document-generator-numerator-add.html',
         'Adds a new numerator'
     )]
-    public function add(array $fields): AddedItemResult
+    public function add(array $fields): AddedNumeratorResult
     {
-        return new AddedItemResult(
+        return new AddedNumeratorResult(
             $this->core->call(
                 'crm.documentgenerator.numerator.add',
                 [
@@ -83,13 +83,13 @@ class Numerator extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/document-generator/numerator/crm-document-generator-numerator-delete.html',
         'Removes a numerator'
     )]
-    public function delete(int $id): DeletedItemResult
+    public function delete(int $id): DeletedNumeratorResult
     {
         $params = [
             'id' => $id,
         ];
 
-        return new DeletedItemResult(
+        return new DeletedNumeratorResult(
             $this->core->call(
                 'crm.documentgenerator.numerator.delete',
                 $params
@@ -164,14 +164,14 @@ class Numerator extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/document-generator/numerator/crm-document-generator-numerator-update.html',
         'Updates an existing numbering with new values'
     )]
-    public function update(int $id, array $fields): UpdatedItemResult
+    public function update(int $id, array $fields): UpdatedNumeratorResult
     {
         $params = [
             'id' => $id,
             'fields' => $fields
         ];
 
-        return new UpdatedItemResult(
+        return new UpdatedNumeratorResult(
             $this->core->call(
                 'crm.documentgenerator.numerator.update',
                 $params

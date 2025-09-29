@@ -18,9 +18,9 @@ use Bitrix24\SDK\Attributes\ApiBatchServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
-use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
-use Bitrix24\SDK\Core\Result\UpdatedItemBatchResult;
+use Bitrix24\SDK\Services\CRM\Documentgenerator\Numerator\Result\AddedNumeratorBatchResult;
+use Bitrix24\SDK\Services\CRM\Documentgenerator\Numerator\Result\UpdatedNumeratorBatchResult;
+use Bitrix24\SDK\Services\CRM\Documentgenerator\Numerator\Result\DeletedNumeratorBatchResult;
 use Bitrix24\SDK\Services\CRM\Documentgenerator\Numerator\Result\NumeratorItemResult;
 use Generator;
 use Psr\Log\LoggerInterface;
@@ -77,7 +77,7 @@ class Batch
      *     settings?: array
      *   }> $numerators
      *
-     * @return Generator<int, AddedItemBatchResult>
+     * @return Generator<int, AddedNumeratorBatchResult>
      * @throws BaseException
      */
     #[ApiBatchMethodMetadata(
@@ -95,7 +95,7 @@ class Batch
         }
 
         foreach ($this->batch->addEntityItems('crm.documentgenerator.numerator.add', $items) as $key => $item) {
-            yield $key => new AddedItemBatchResult($item);
+            yield $key => new AddedNumeratorBatchResult($item);
         }
     }
 
@@ -108,7 +108,8 @@ class Batch
      * ]
      *
      * @param array<int, array> $entityItems
-     * @return Generator<int, UpdatedItemBatchResult>
+     *
+     * @return Generator<int, UpdatedNumeratorBatchResult>
      * @throws BaseException
      */
     #[ApiBatchMethodMetadata(
@@ -124,7 +125,7 @@ class Batch
                 $entityItems
             ) as $key => $item
         ) {
-            yield $key => new UpdatedItemBatchResult($item);
+            yield $key => new UpdatedNumeratorBatchResult($item);
         }
     }
 
@@ -133,7 +134,7 @@ class Batch
      *
      * @param int[] $numeratorId
      *
-     * @return Generator<int, DeletedItemBatchResult>
+     * @return Generator<int, DeletedNumeratorBatchResult>
      * @throws BaseException
      */
     #[ApiBatchMethodMetadata(
@@ -149,7 +150,7 @@ class Batch
                 $numeratorId
             ) as $key => $item
         ) {
-            yield $key => new DeletedItemBatchResult($item);
+            yield $key => new DeletedNumeratorBatchResult($item);
         }
     }
 }
