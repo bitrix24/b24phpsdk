@@ -136,6 +136,12 @@
         <testsuite name="integration_tests_sale_order">
             <directory>./tests/Integration/Services/Sale/Order/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_landing">
+            <directory>./tests/Integration/Services/Landing/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_landing_site">
+            <directory>./tests/Integration/Services/Landing/Site/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>

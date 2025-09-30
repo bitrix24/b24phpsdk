@@ -192,6 +192,14 @@ test-integration-scope-log:
 test-integration-scope-sale:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sale
 
+.PHONY: test-integration-scope-landing
+test-integration-scope-landing:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_landing
+
+.PHONY: test-integration-landing-site
+test-integration-landing-site:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_site
+
 .PHONY: test-integration-sale-status
 test-integration-sale-status:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_status
