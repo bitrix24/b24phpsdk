@@ -16,6 +16,8 @@
     - `unpublic` unpublishes the site and all its pages
     - `markDelete` marks the site as deleted
     - `markUnDelete` restores the site from the trash
+    - `getAdditionalFields` returns additional fields of the site
+    - `fullExport` exports the site to ZIP archive
     - `getFolders` retrieves the site folders
     - `addFolder` adds a folder to the site
     - `updateFolder` updates folder parameters

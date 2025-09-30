@@ -33,6 +33,8 @@ use Bitrix24\SDK\Services\Landing\Site\Result\FoldersResult;
 use Bitrix24\SDK\Services\Landing\Site\Result\FolderUpdatedResult;
 use Bitrix24\SDK\Services\Landing\Site\Result\FolderPublishedResult;
 use Bitrix24\SDK\Services\Landing\Site\Result\FolderUnpublishedResult;
+use Bitrix24\SDK\Services\Landing\Site\Result\SiteAdditionalFieldsResult;
+use Bitrix24\SDK\Services\Landing\Site\Result\SiteExportResult;
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['landing']))]
@@ -279,6 +281,56 @@ class Site extends AbstractService
     {
         return new SiteMarkedUnDeletedResult(
             $this->core->call('landing.site.markUnDelete', ['id' => $id])
+        );
+    }
+
+    /**
+     * Returns additional fields of the site.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/landing/site/landing-site-getadditionalfields.html
+     *
+     * @param int $id Site identifier
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'landing.site.getAdditionalFields',
+        'https://apidocs.bitrix24.com/api-reference/landing/site/landing-site-getadditionalfields.html',
+        'Method returns additional fields of the site.'
+    )]
+    public function getAdditionalFields(int $id): SiteAdditionalFieldsResult
+    {
+        return new SiteAdditionalFieldsResult(
+            $this->core->call('landing.site.getAdditionalFields', ['id' => $id])
+        );
+    }
+
+    /**
+     * Exports the site to ZIP archive.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/landing/site/landing-site-fullexport.html
+     *
+     * @param int $id Site identifier
+     * @param array $params Optional export parameters
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'landing.site.fullExport',
+        'https://apidocs.bitrix24.com/api-reference/landing/site/landing-site-fullexport.html',
+        'Method exports the site to ZIP archive.'
+    )]
+    public function fullExport(int $id, array $params = []): SiteExportResult
+    {
+        $requestParams = ['id' => $id];
+        if ($params !== []) {
+            $requestParams['params'] = $params;
+        }
+
+        return new SiteExportResult(
+            $this->core->call('landing.site.fullExport', $requestParams)
         );
     }
 

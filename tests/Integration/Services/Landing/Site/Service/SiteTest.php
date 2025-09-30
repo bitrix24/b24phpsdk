@@ -44,6 +44,8 @@ use PHPUnit\Framework\TestCase;
 #[CoversMethod(Site::class, 'unPublicFolder')]
 #[CoversMethod(Site::class, 'markFolderDelete')]
 #[CoversMethod(Site::class, 'markFolderUnDelete')]
+#[CoversMethod(Site::class, 'getAdditionalFields')]
+#[CoversMethod(Site::class, 'fullExport')]
 #[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\Landing\Site\Service\Site::class)]
 class SiteTest extends TestCase
 {
@@ -90,7 +92,7 @@ class SiteTest extends TestCase
     {
         $siteFields = [
             'TITLE' => 'Test Site ' . time(),
-            'CODE' => 'test-site-' . time(),
+            'CODE' => 'testsite' . time(),
             'TYPE' => 'PAGE'
         ];
 
@@ -112,7 +114,7 @@ class SiteTest extends TestCase
         $timestamp = time();
         $siteFields = [
             'TITLE' => 'Test Site for List ' . $timestamp,
-            'CODE' => 'test-site-list-' . $timestamp,
+            'CODE' => 'testsitelist' . $timestamp,
             'TYPE' => 'PAGE'
         ];
 
@@ -154,7 +156,7 @@ class SiteTest extends TestCase
         $uniqueTitle = 'Unique Test Site ' . $timestamp;
         $siteFields = [
             'TITLE' => $uniqueTitle,
-            'CODE' => 'unique-test-site-' . $timestamp,
+            'CODE' => 'uniquetestsite' . $timestamp,
             'TYPE' => 'PAGE'
         ];
 
@@ -189,7 +191,7 @@ class SiteTest extends TestCase
         $timestamp = time();
         $siteFields = [
             'TITLE' => 'Test Site for Update ' . $timestamp,
-            'CODE' => 'test-site-update-' . $timestamp,
+            'CODE' => 'testsiteupdate' . $timestamp,
             'TYPE' => 'PAGE'
         ];
 
@@ -227,7 +229,7 @@ class SiteTest extends TestCase
         $timestamp = time();
         $siteFields = [
             'TITLE' => 'Test Site for Delete ' . $timestamp,
-            'CODE' => 'test-site-delete-' . $timestamp,
+            'CODE' => 'testsite' . $timestamp,
             'TYPE' => 'PAGE'
         ];
 
@@ -252,7 +254,7 @@ class SiteTest extends TestCase
         $timestamp = time();
         $siteFields = [
             'TITLE' => 'Test Site for URL ' . $timestamp,
-            'CODE' => 'test-site-url-' . $timestamp,
+            'CODE' => 'testsite' . $timestamp,
             'TYPE' => 'PAGE'
         ];
 
@@ -278,7 +280,7 @@ class SiteTest extends TestCase
         $timestamp = time();
         $siteFields = [
             'TITLE' => 'Test Site for Preview ' . $timestamp,
-            'CODE' => 'test-site-preview-' . $timestamp,
+            'CODE' => 'testsite' . $timestamp,
             'TYPE' => 'PAGE'
         ];
 
@@ -304,7 +306,7 @@ class SiteTest extends TestCase
         $timestamp = time();
         $siteFields = [
             'TITLE' => 'Test Site for Publication ' . $timestamp,
-            'CODE' => 'test-site-publication-' . $timestamp,
+            'CODE' => 'testsite' . $timestamp,
             'TYPE' => 'PAGE'
         ];
 
@@ -331,7 +333,7 @@ class SiteTest extends TestCase
         $timestamp = time();
         $siteFields = [
             'TITLE' => 'Test Site for Mark Delete ' . $timestamp,
-            'CODE' => 'test-site-mark-delete-' . $timestamp,
+            'CODE' => 'testsite' . $timestamp,
             'TYPE' => 'PAGE'
         ];
 
@@ -358,7 +360,7 @@ class SiteTest extends TestCase
         $timestamp = time();
         $siteFields = [
             'TITLE' => 'Test Site for Folders ' . $timestamp,
-            'CODE' => 'test-site-folders-' . $timestamp,
+            'CODE' => 'testsite' . $timestamp,
             'TYPE' => 'PAGE'
         ];
 
@@ -384,7 +386,7 @@ class SiteTest extends TestCase
         $timestamp = time();
         $siteFields = [
             'TITLE' => 'Test Site for Add Folder ' . $timestamp,
-            'CODE' => 'test-site-add-folder-' . $timestamp,
+            'CODE' => 'testsite' . $timestamp,
             'TYPE' => 'PAGE'
         ];
 
@@ -395,7 +397,7 @@ class SiteTest extends TestCase
         // Add a folder
         $folderFields = [
             'TITLE' => 'Test Folder ' . $timestamp,
-            'CODE' => 'test-folder-' . $timestamp,
+            'CODE' => 'testfolder' . $timestamp,
             'ACTIVE' => 'Y'
         ];
 
@@ -417,7 +419,7 @@ class SiteTest extends TestCase
         $timestamp = time();
         $siteFields = [
             'TITLE' => 'Test Site for Update Folder ' . $timestamp,
-            'CODE' => 'test-site-update-folder-' . $timestamp,
+            'CODE' => 'testsite' . $timestamp,
             'TYPE' => 'PAGE'
         ];
 
@@ -428,7 +430,7 @@ class SiteTest extends TestCase
         // Add a folder
         $folderFields = [
             'TITLE' => 'Test Folder for Update ' . $timestamp,
-            'CODE' => 'test-folder-update-' . $timestamp,
+            'CODE' => 'testfolder' . $timestamp,
             'ACTIVE' => 'Y'
         ];
 
@@ -454,7 +456,7 @@ class SiteTest extends TestCase
         $timestamp = time();
         $siteFields = [
             'TITLE' => 'Test Site for Folder Publication ' . $timestamp,
-            'CODE' => 'test-site-folder-pub-' . $timestamp,
+            'CODE' => 'testsite' . $timestamp,
             'TYPE' => 'PAGE'
         ];
 
@@ -465,7 +467,7 @@ class SiteTest extends TestCase
         // Add a folder
         $folderFields = [
             'TITLE' => 'Test Folder for Publication ' . $timestamp,
-            'CODE' => 'test-folder-pub-' . $timestamp,
+            'CODE' => 'testfolder' . $timestamp,
             'ACTIVE' => 'Y'
         ];
 
@@ -492,7 +494,7 @@ class SiteTest extends TestCase
         $timestamp = time();
         $siteFields = [
             'TITLE' => 'Test Site for Folder Delete ' . $timestamp,
-            'CODE' => 'test-site-folder-delete-' . $timestamp,
+            'CODE' => 'testsite' . $timestamp,
             'TYPE' => 'PAGE'
         ];
 
@@ -503,7 +505,7 @@ class SiteTest extends TestCase
         // Add a folder
         $folderFields = [
             'TITLE' => 'Test Folder for Delete ' . $timestamp,
-            'CODE' => 'test-folder-delete-' . $timestamp,
+            'CODE' => 'testfolder' . $timestamp,
             'ACTIVE' => 'Y'
         ];
 
@@ -518,5 +520,136 @@ class SiteTest extends TestCase
         // Test folder mark undelete
         $markUnDeleteResult = $this->siteService->markFolderUnDelete($folderId);
         self::assertTrue($markUnDeleteResult->isSuccess(), 'Folder mark undelete should be successful');
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testGetAdditionalFields(): void
+    {
+        // Create a test site
+        $timestamp = time();
+        $siteFields = [
+            'TITLE' => 'Test Site for Additional Fields ' . $timestamp,
+            'CODE' => 'testsiteadditionalfields' . $timestamp,
+            'TYPE' => 'PAGE'
+        ];
+
+        $addedItemResult = $this->siteService->add($siteFields);
+        $siteId = $addedItemResult->getId();
+        $this->createdSiteIds[] = $siteId;
+
+        // Get additional fields
+        $siteAdditionalFieldsResult = $this->siteService->getAdditionalFields($siteId);
+        
+        // Verify result structure
+        self::assertInstanceOf(
+            \Bitrix24\SDK\Services\Landing\Site\Result\SiteAdditionalFieldsResult::class, 
+            $siteAdditionalFieldsResult,
+            'Result should be instance of SiteAdditionalFieldsResult'
+        );
+        
+        // Verify response data
+        $additionalFields = $siteAdditionalFieldsResult->getAdditionalFields();
+        self::assertIsArray($additionalFields, 'Additional fields should be an array');
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testFullExport(): void
+    {
+        // Create a test site
+        $timestamp = time();
+        $siteFields = [
+            'TITLE' => 'Test Site for Export ' . $timestamp,
+            'CODE' => 'testsiteexport' . $timestamp,
+            'TYPE' => 'PAGE'
+        ];
+
+        $addedItemResult = $this->siteService->add($siteFields);
+        $siteId = $addedItemResult->getId();
+        $this->createdSiteIds[] = $siteId;
+
+        // Test 1: Export site without params
+        $siteExportResult = $this->siteService->fullExport($siteId);
+        
+        // Verify result structure
+        self::assertInstanceOf(
+            \Bitrix24\SDK\Services\Landing\Site\Result\SiteExportResult::class, 
+            $siteExportResult,
+            'Result should be instance of SiteExportResult'
+        );
+        
+        // Verify export data
+        $exportData = $siteExportResult->getExportData();
+        self::assertIsArray($exportData, 'Export data should be an array');
+
+        // Test 2: Export site with comprehensive params
+        $exportParams = [
+            'edit_mode' => 'Y',
+            'code' => 'exportedsite' . $timestamp,
+            'name' => 'Exported Test Site ' . $timestamp,
+            'description' => 'Test site exported via API with comprehensive parameters',
+            'hooks_disable' => ['B24BUTTON_CODE'], // Disable specific hooks
+        ];
+        
+        $exportResultWithParams = $this->siteService->fullExport($siteId, $exportParams);
+        
+        // Verify result with params
+        self::assertInstanceOf(
+            \Bitrix24\SDK\Services\Landing\Site\Result\SiteExportResult::class, 
+            $exportResultWithParams,
+            'Result with params should be instance of SiteExportResult'
+        );
+        
+        $exportDataWithParams = $exportResultWithParams->getExportData();
+        self::assertIsArray($exportDataWithParams, 'Export data with params should be an array');
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testFullExportWithComplexParams(): void
+    {
+        // Create a test site
+        $timestamp = time();
+        $siteFields = [
+            'TITLE' => 'Test Site for Complex Export ' . $timestamp,
+            'CODE' => 'testsitecomplexexport' . $timestamp,
+            'TYPE' => 'PAGE'
+        ];
+
+        $addedItemResult = $this->siteService->add($siteFields);
+        $siteId = $addedItemResult->getId();
+        $this->createdSiteIds[] = $siteId;
+
+        // Test with complex export parameters
+        $complexParams = [
+            'edit_mode' => 'N',
+            'scope' => 'knowledge',
+            'hooks_disable' => ['B24BUTTON_CODE', 'YANDEX_METRICA'],
+            'code' => 'complexexportedsite' . $timestamp,
+            'name' => 'Complex Exported Test Site',
+            'description' => 'This is a complex test site with multiple export parameters',
+            'preview' => 'https://example.com/preview.jpg',
+            'preview2x' => 'https://example.com/preview@2x.jpg',
+            'preview3x' => 'https://example.com/preview@3x.jpg'
+        ];
+        
+        $siteExportResult = $this->siteService->fullExport($siteId, $complexParams);
+        
+        // Verify complex export
+        self::assertInstanceOf(
+            \Bitrix24\SDK\Services\Landing\Site\Result\SiteExportResult::class, 
+            $siteExportResult,
+            'Complex export result should be instance of SiteExportResult'
+        );
+        
+        $exportData = $siteExportResult->getExportData();
+        self::assertIsArray($exportData, 'Complex export data should be an array');
     }
 }
