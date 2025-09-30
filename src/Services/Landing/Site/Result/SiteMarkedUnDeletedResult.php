@@ -19,10 +19,6 @@ class SiteMarkedUnDeletedResult extends AbstractResult
 {
     public function isSuccess(): bool
     {
-        echo "\n SiteMarkedUnDeletedResult \n";
-        print_r($this->getCoreResponse()->getResponseData()->getResult());
-        echo "\n";
-        
-        return $this->getCoreResponse()->getResponseData()->getResult()[0] === true;
+        return (bool)$this->getCoreResponse()->getResponseData()->getResult()[0];
     }
 }

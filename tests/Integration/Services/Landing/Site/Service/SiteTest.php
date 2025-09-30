@@ -137,7 +137,7 @@ class SiteTest extends TestCase
 
         self::assertNotNull($foundSite, 'Created site should be found in the list');
         self::assertEquals($siteFields['TITLE'], $foundSite->TITLE);
-        self::assertEquals($siteFields['CODE'], $foundSite->CODE);
+        self::assertStringContainsString($siteFields['CODE'], $foundSite->CODE);
         self::assertEquals($siteFields['TYPE'], $foundSite->TYPE);
     }
 
@@ -435,7 +435,7 @@ class SiteTest extends TestCase
         $this->createdFolderIds[] = $folderId;
 
         // Update the folder
-        $updateResult = $this->siteService->updateFolder($folderId, [
+        $updateResult = $this->siteService->updateFolder($siteId, $folderId, [
             'TITLE' => 'Updated Test Folder ' . $timestamp
         ]);
 

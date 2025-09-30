@@ -22,10 +22,6 @@ class FoldersResult extends AbstractResult
      */
     public function getFolders(): array
     {
-        echo "\n FoldersResult \n";
-        print_r($this->getCoreResponse()->getResponseData()->getResult());
-        echo "\n";
-        
         return $this->getCoreResponse()->getResponseData()->getResult();
     }
 }

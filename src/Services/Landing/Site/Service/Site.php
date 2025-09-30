@@ -19,23 +19,20 @@ use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Core\Result\AddedItemResult;
+use Bitrix24\SDK\Core\Result\UpdatedItemResult;
+use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
-use Bitrix24\SDK\Services\Landing\Site\Result\SiteAddedResult;
 use Bitrix24\SDK\Services\Landing\Site\Result\SitesResult;
-use Bitrix24\SDK\Services\Landing\Site\Result\SiteUpdatedResult;
-use Bitrix24\SDK\Services\Landing\Site\Result\SiteDeletedResult;
 use Bitrix24\SDK\Services\Landing\Site\Result\SiteUrlResult;
 use Bitrix24\SDK\Services\Landing\Site\Result\SitePublishedResult;
 use Bitrix24\SDK\Services\Landing\Site\Result\SiteUnpublishedResult;
 use Bitrix24\SDK\Services\Landing\Site\Result\SiteMarkedDeletedResult;
 use Bitrix24\SDK\Services\Landing\Site\Result\SiteMarkedUnDeletedResult;
 use Bitrix24\SDK\Services\Landing\Site\Result\FoldersResult;
-use Bitrix24\SDK\Services\Landing\Site\Result\FolderAddedResult;
 use Bitrix24\SDK\Services\Landing\Site\Result\FolderUpdatedResult;
 use Bitrix24\SDK\Services\Landing\Site\Result\FolderPublishedResult;
 use Bitrix24\SDK\Services\Landing\Site\Result\FolderUnpublishedResult;
-use Bitrix24\SDK\Services\Landing\Site\Result\FolderMarkedDeletedResult;
-use Bitrix24\SDK\Services\Landing\Site\Result\FolderMarkedUnDeletedResult;
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['landing']))]
@@ -61,9 +58,9 @@ class Site extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/landing/site/landing-site-add.html',
         'Method creates a new site.'
     )]
-    public function add(array $fields): SiteAddedResult
+    public function add(array $fields): AddedItemResult
     {
-        return new SiteAddedResult(
+        return new AddedItemResult(
             $this->core->call('landing.site.add', ['fields' => $fields])
         );
     }
@@ -119,9 +116,9 @@ class Site extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/landing/site/landing-site-update.html',
         'Method makes changes to the site.'
     )]
-    public function update(int $id, array $fields): SiteUpdatedResult
+    public function update(int $id, array $fields): UpdatedItemResult
     {
-        return new SiteUpdatedResult(
+        return new UpdatedItemResult(
             $this->core->call('landing.site.update', [
                 'id' => $id,
                 'fields' => $fields
@@ -144,9 +141,9 @@ class Site extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/landing/site/landing-site-delete.html',
         'Method deletes a site.'
     )]
-    public function delete(int $id): SiteDeletedResult
+    public function delete(int $id): DeletedItemResult
     {
-        return new SiteDeletedResult(
+        return new DeletedItemResult(
             $this->core->call('landing.site.delete', ['id' => $id])
         );
     }
@@ -325,9 +322,9 @@ class Site extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/landing/site/landing-site-add-folder.html',
         'Method adds a folder to the site.'
     )]
-    public function addFolder(int $siteId, array $fields): FolderAddedResult
+    public function addFolder(int $siteId, array $fields): AddedItemResult
     {
-        return new FolderAddedResult(
+        return new AddedItemResult(
             $this->core->call('landing.site.addFolder', [
                 'siteId' => $siteId,
                 'fields' => $fields
@@ -340,6 +337,7 @@ class Site extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/landing/site/landing-site-update-folder.html
      *
+     * @param int $siteId Site identifier
      * @param int $id Folder identifier
      * @param array $fields Folder fields
      *
@@ -351,11 +349,12 @@ class Site extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/landing/site/landing-site-update-folder.html',
         'Method updates folder parameters.'
     )]
-    public function updateFolder(int $id, array $fields): FolderUpdatedResult
+    public function updateFolder(int $siteId, int $id, array $fields): FolderUpdatedResult
     {
         return new FolderUpdatedResult(
             $this->core->call('landing.site.updateFolder', [
-                'id' => $id,
+                'siteId' => $siteId,
+                'folderId' => $id,
                 'fields' => $fields
             ])
         );
@@ -379,7 +378,7 @@ class Site extends AbstractService
     public function publicationFolder(int $id): FolderPublishedResult
     {
         return new FolderPublishedResult(
-            $this->core->call('landing.site.publicationFolder', ['id' => $id])
+            $this->core->call('landing.site.publicationFolder', ['folderId' => $id])
         );
     }
 
@@ -401,7 +400,7 @@ class Site extends AbstractService
     public function unPublicFolder(int $id): FolderUnpublishedResult
     {
         return new FolderUnpublishedResult(
-            $this->core->call('landing.site.unPublicFolder', ['id' => $id])
+            $this->core->call('landing.site.unPublicFolder', ['folderId' => $id])
         );
     }
 
@@ -420,9 +419,9 @@ class Site extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/landing/site/landing-site-mark-folder-delete.html',
         'Method marks the folder as deleted.'
     )]
-    public function markFolderDelete(int $id): FolderMarkedDeletedResult
+    public function markFolderDelete(int $id): DeletedItemResult
     {
-        return new FolderMarkedDeletedResult(
+        return new DeletedItemResult(
             $this->core->call('landing.site.markFolderDelete', ['id' => $id])
         );
     }
@@ -442,9 +441,9 @@ class Site extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/landing/site/landing-site-mark-folder-undelete.html',
         'Method restores the folder from the trash.'
     )]
-    public function markFolderUnDelete(int $id): FolderMarkedUnDeletedResult
+    public function markFolderUnDelete(int $id): DeletedItemResult
     {
-        return new FolderMarkedUnDeletedResult(
+        return new DeletedItemResult(
             $this->core->call('landing.site.markFolderUnDelete', ['id' => $id])
         );
     }

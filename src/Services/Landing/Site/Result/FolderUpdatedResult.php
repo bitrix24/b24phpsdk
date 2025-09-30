@@ -19,10 +19,6 @@ class FolderUpdatedResult extends AbstractResult
 {
     public function isSuccess(): bool
     {
-        echo "\n FolderUpdatedResult \n";
-        print_r($this->getCoreResponse()->getResponseData()->getResult());
-        echo "\n";
-        
-        return $this->getCoreResponse()->getResponseData()->getResult()[0] === true;
+        return (bool)$this->getCoreResponse()->getResponseData()->getResult()[0];
     }
 }
