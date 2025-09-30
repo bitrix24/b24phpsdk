@@ -23,6 +23,38 @@
     - `unPublicFolder` unpublishes the site's folder
     - `markFolderDelete` marks the folder as deleted
     - `markFolderUnDelete` restores the folder from the trash
+- Added service `Services\Sale\Shipment\Service\Shipment` with support methods,
+  see [sale.shipment.* methods](https://github.com/bitrix24/b24phpsdk/issues/250):
+    - `add` adds a shipment
+    - `update` updates the fields of a shipment
+    - `get` returns a shipment by its identifier
+    - `list` returns a list of shipments
+    - `delete` deletes a shipment
+    - `getFields` returns the fields and settings for shipments
+- Added service `Services\Sale\ShipmentProperty\Service\ShipmentProperty` with support methods,
+  see [sale.shipmentproperty.* methods](https://github.com/bitrix24/b24phpsdk/issues/250):
+    - `add` adds a shipment property
+    - `update` updates the fields of a shipment property
+    - `get` returns a shipment property by its identifier
+    - `list` returns a list of shipment properties
+    - `delete` deletes a shipment property
+    - `getFieldsByType` returns the fields and settings for shipment properties by type
+- Added service `Services\Sale\ShipmentPropertyValue\Service\ShipmentPropertyValue` with support methods,
+  see [sale.shipmentpropertyvalue.* methods](https://github.com/bitrix24/b24phpsdk/issues/250):
+    - `modify` updates shipment property values for a shipment
+    - `get` returns a shipment property value by its identifier
+    - `list` returns a list of shipment property values
+    - `delete` deletes a shipment property value
+    - `getFields` returns the fields and settings for shipment property values
+
+- Added service `Services\Sale\ShipmentItem\Service\ShipmentItem` with support methods,
+  see [sale.shipmentitem.* methods](https://github.com/bitrix24/b24phpsdk/issues/250):
+    - `add` adds a new shipment item
+    - `update` updates the fields of a shipment item
+    - `get` returns a shipment item by its identifier
+    - `list` returns a list of shipment items
+    - `delete` deletes a shipment item
+    - `getFields` returns the fields and settings for shipment items
 - Added service `Services\Sale\Payment\Service\Payment` with support methods,
   see [sale.payment.* methods](https://github.com/bitrix24/b24phpsdk/issues/248):
     - `add` adds a payment
@@ -31,6 +63,28 @@
     - `list` returns a list of payments
     - `delete` deletes a payment
     - `getFields` returns the fields and settings for payments
+- Added service `Services\Sale\PaymentItemBasket\Service\PaymentItemBasket` with support methods,
+  see [sale.paymentitembasket.* methods](https://github.com/bitrix24/b24phpsdk/issues/253):
+    - `add` adds a binding of a basket item to a payment
+    - `update` updates the binding of a basket item to a payment
+    - `get` returns the values of all fields for the basket item binding to payment
+    - `list` returns a list of bindings of basket items to payments
+    - `delete` deletes the binding of a basket item to a payment
+    - `getFields` returns the available fields for payment item basket bindings
+- Added service `Services\Sale\PaymentItemShipment\Service\PaymentItemShipment` with support methods,
+  see [sale.paymentitemshipment.* methods](https://github.com/bitrix24/b24phpsdk/issues/253):
+    - `add` adds a binding of a payment to a shipment
+    - `update` updates the binding of a payment to a shipment
+    - `get` returns the values of all fields for the payment binding to shipment
+    - `list` returns a list of bindings of payments to shipments
+    - `delete` deletes the binding of a payment to a shipment
+    - `getFields` returns the available fields for payment item shipment bindings
+- Added service `Services\Sale\PropertyRelation\Service\PropertyRelation` with support methods,
+  see [sale.propertyRelation.* methods](https://github.com/bitrix24/b24phpsdk/issues/253):
+    - `add` adds a property binding
+    - `list` retrieves a list of property bindings
+    - `deleteByFilter` removes the property relation
+    - `getFields` returns the available fields for property binding
 
 ## 1.6.0 – 2025.09.01
 

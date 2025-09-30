@@ -22,7 +22,17 @@ use Bitrix24\SDK\Services\Sale\PropertyVariant\Service\PropertyVariant;
 use Bitrix24\SDK\Services\Sale\Status\Service\Status;
 use Bitrix24\SDK\Services\Sale\StatusLang\Service\StatusLang;
 use Bitrix24\SDK\Services\Sale\PersonTypeStatus\Service\PersonTypeStatus;
+use Bitrix24\SDK\Services\Sale\ShipmentPropertyValue\Service\ShipmentPropertyValue;
+use Bitrix24\SDK\Services\Sale\ShipmentItem\Service\ShipmentItem;
 use Bitrix24\SDK\Services\Sale\BasketProperty\Service\BasketProperty;
+use Bitrix24\SDK\Services\Sale\Payment;
+use Bitrix24\SDK\Services\Sale\PaymentItemBasket;
+use Bitrix24\SDK\Services\Sale\PaymentItemShipment;
+use Bitrix24\SDK\Services\Sale\PersonType;
+use Bitrix24\SDK\Services\Sale\PropertyGroup;
+use Bitrix24\SDK\Services\Sale\Order;
+use Bitrix24\SDK\Services\Sale\BasketItem;
+use Bitrix24\SDK\Services\Sale\PropertyRelation;
 
 /**
  * Class SaleServiceBuilder
@@ -145,6 +155,36 @@ class SaleServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    /**
+     * Payment Item Basket service (sale.paymentitembasket.*)
+     */
+    public function paymentItemBasket(): PaymentItemBasket\Service\PaymentItemBasket
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new PaymentItemBasket\Service\PaymentItemBasket(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * Payment Item Shipment service (sale.paymentitemshipment.*)
+     */
+    public function paymentItemShipment(): PaymentItemShipment\Service\PaymentItemShipment
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new PaymentItemShipment\Service\PaymentItemShipment(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function propertyVariant(): PropertyVariant
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -161,6 +201,36 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new StatusLang(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * Shipment service (sale.shipment.*)
+     */
+    public function shipment(): Shipment\Service\Shipment
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Shipment\Service\Shipment(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * ShipmentProperty service (sale.shipmentproperty.*)
+     */
+    public function shipmentProperty(): ShipmentProperty\Service\ShipmentProperty
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new ShipmentProperty\Service\ShipmentProperty(
                 $this->core,
                 $this->log
             );
@@ -190,12 +260,57 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     }
 
     /**
+     * ShipmentPropertyValue service (sale.shipmentpropertyvalue.*)
+     */
+    public function shipmentPropertyValue(): ShipmentPropertyValue
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new ShipmentPropertyValue(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * ShipmentItem service (sale.shipmentitem.*)
+     */
+    public function shipmentItem(): ShipmentItem
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new ShipmentItem(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
      * BasketProperty service (sale.basketproperties.*)
      */
     public function basketProperty(): BasketProperty
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new BasketProperty(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * Property Relation service (sale.propertyRelation.*)
+     */
+    public function propertyRelation(): PropertyRelation\Service\PropertyRelation
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new PropertyRelation\Service\PropertyRelation(
                 $this->core,
                 $this->log
             );
