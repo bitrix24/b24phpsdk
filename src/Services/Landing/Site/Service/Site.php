@@ -85,13 +85,15 @@ class Site extends AbstractService
     public function getList(array $select = [], array $filter = [], array $order = []): SitesResult
     {
         $params = [];
-        if (!empty($select)) {
+        if ($select !== []) {
             $params['select'] = $select;
         }
-        if (!empty($filter)) {
+
+        if ($filter !== []) {
             $params['filter'] = $filter;
         }
-        if (!empty($order)) {
+
+        if ($order !== []) {
             $params['order'] = $order;
         }
 
@@ -373,7 +375,7 @@ class Site extends AbstractService
     #[ApiEndpointMetadata(
         'landing.site.publicationFolder',
         'https://apidocs.bitrix24.com/api-reference/landing/site/landing-site-publication-folder.html',
-        'Method publishes the site\'s folder.'
+        "Method publishes the site's folder."
     )]
     public function publicationFolder(int $id): FolderPublishedResult
     {
@@ -395,7 +397,7 @@ class Site extends AbstractService
     #[ApiEndpointMetadata(
         'landing.site.unPublicFolder',
         'https://apidocs.bitrix24.com/api-reference/landing/site/landing-site-unpublic-folder.html',
-        'Method unpublishes the site\'s folder.'
+        "Method unpublishes the site's folder."
     )]
     public function unPublicFolder(int $id): FolderUnpublishedResult
     {

@@ -50,7 +50,9 @@ class SiteTest extends TestCase
     use CustomBitrix24Assertions;
 
     protected Site $siteService;
+
     protected array $createdSiteIds = [];
+
     protected array $createdFolderIds = [];
 
     protected function setUp(): void
@@ -62,18 +64,18 @@ class SiteTest extends TestCase
     protected function tearDown(): void
     {
         // Clean up created folders
-        foreach ($this->createdFolderIds as $folderId) {
+        foreach ($this->createdFolderIds as $createdFolderId) {
             try {
-                $this->siteService->markFolderDelete($folderId);
+                $this->siteService->markFolderDelete($createdFolderId);
             } catch (\Exception) {
                 // Ignore if folder doesn't exist
             }
         }
 
         // Clean up created sites
-        foreach ($this->createdSiteIds as $siteId) {
+        foreach ($this->createdSiteIds as $createdSiteId) {
             try {
-                $this->siteService->delete($siteId);
+                $this->siteService->delete($createdSiteId);
             } catch (\Exception) {
                 // Ignore if site doesn't exist
             }
@@ -92,8 +94,8 @@ class SiteTest extends TestCase
             'TYPE' => 'PAGE'
         ];
 
-        $siteAddedResult = $this->siteService->add($siteFields);
-        $siteId = $siteAddedResult->getId();
+        $addedItemResult = $this->siteService->add($siteFields);
+        $siteId = $addedItemResult->getId();
         $this->createdSiteIds[] = $siteId;
 
         self::assertGreaterThan(0, $siteId);
@@ -114,8 +116,8 @@ class SiteTest extends TestCase
             'TYPE' => 'PAGE'
         ];
 
-        $siteAddedResult = $this->siteService->add($siteFields);
-        $siteId = $siteAddedResult->getId();
+        $addedItemResult = $this->siteService->add($siteFields);
+        $siteId = $addedItemResult->getId();
         $this->createdSiteIds[] = $siteId;
 
         // Test getList with no parameters
@@ -156,8 +158,8 @@ class SiteTest extends TestCase
             'TYPE' => 'PAGE'
         ];
 
-        $siteAddedResult = $this->siteService->add($siteFields);
-        $siteId = $siteAddedResult->getId();
+        $addedItemResult = $this->siteService->add($siteFields);
+        $siteId = $addedItemResult->getId();
         $this->createdSiteIds[] = $siteId;
 
         // Test getList with filters
@@ -191,17 +193,17 @@ class SiteTest extends TestCase
             'TYPE' => 'PAGE'
         ];
 
-        $siteAddedResult = $this->siteService->add($siteFields);
-        $siteId = $siteAddedResult->getId();
+        $addedItemResult = $this->siteService->add($siteFields);
+        $siteId = $addedItemResult->getId();
         $this->createdSiteIds[] = $siteId;
 
         // Update the site
         $newTitle = 'Updated Test Site ' . $timestamp;
-        $updateResult = $this->siteService->update($siteId, [
+        $updatedItemResult = $this->siteService->update($siteId, [
             'TITLE' => $newTitle
         ]);
 
-        self::assertTrue($updateResult->isSuccess(), 'Site update should be successful');
+        self::assertTrue($updatedItemResult->isSuccess(), 'Site update should be successful');
 
         // Verify the update by getting the site list
         $sitesResult = $this->siteService->getList(
@@ -229,15 +231,15 @@ class SiteTest extends TestCase
             'TYPE' => 'PAGE'
         ];
 
-        $siteAddedResult = $this->siteService->add($siteFields);
-        $siteId = $siteAddedResult->getId();
+        $addedItemResult = $this->siteService->add($siteFields);
+        $siteId = $addedItemResult->getId();
 
         // Delete the site
-        $deleteResult = $this->siteService->delete($siteId);
-        self::assertTrue($deleteResult->isSuccess(), 'Site deletion should be successful');
+        $deletedItemResult = $this->siteService->delete($siteId);
+        self::assertTrue($deletedItemResult->isSuccess(), 'Site deletion should be successful');
 
         // Remove from cleanup list since it's already deleted
-        $this->createdSiteIds = array_filter($this->createdSiteIds, fn($id) => $id !== $siteId);
+        $this->createdSiteIds = array_filter($this->createdSiteIds, fn($id): bool => $id !== $siteId);
     }
 
     /**
@@ -254,13 +256,13 @@ class SiteTest extends TestCase
             'TYPE' => 'PAGE'
         ];
 
-        $siteAddedResult = $this->siteService->add($siteFields);
-        $siteId = $siteAddedResult->getId();
+        $addedItemResult = $this->siteService->add($siteFields);
+        $siteId = $addedItemResult->getId();
         $this->createdSiteIds[] = $siteId;
 
         // Get public URL
-        $urlResult = $this->siteService->getPublicUrl($siteId);
-        $url = $urlResult->getUrl();
+        $siteUrlResult = $this->siteService->getPublicUrl($siteId);
+        $url = $siteUrlResult->getUrl();
 
         self::assertIsString($url);
         // URL might be empty if site is not published, but method should work
@@ -280,13 +282,13 @@ class SiteTest extends TestCase
             'TYPE' => 'PAGE'
         ];
 
-        $siteAddedResult = $this->siteService->add($siteFields);
-        $siteId = $siteAddedResult->getId();
+        $addedItemResult = $this->siteService->add($siteFields);
+        $siteId = $addedItemResult->getId();
         $this->createdSiteIds[] = $siteId;
 
         // Get preview URL
-        $previewResult = $this->siteService->getPreview($siteId);
-        $previewUrl = $previewResult->getUrl();
+        $siteUrlResult = $this->siteService->getPreview($siteId);
+        $previewUrl = $siteUrlResult->getUrl();
 
         self::assertIsString($previewUrl);
         // Preview URL might be empty, but method should work
@@ -306,17 +308,17 @@ class SiteTest extends TestCase
             'TYPE' => 'PAGE'
         ];
 
-        $siteAddedResult = $this->siteService->add($siteFields);
-        $siteId = $siteAddedResult->getId();
+        $addedItemResult = $this->siteService->add($siteFields);
+        $siteId = $addedItemResult->getId();
         $this->createdSiteIds[] = $siteId;
 
         // Test publication
-        $publicationResult = $this->siteService->publication($siteId);
-        self::assertTrue($publicationResult->isSuccess(), 'Site publication should be successful');
+        $sitePublishedResult = $this->siteService->publication($siteId);
+        self::assertTrue($sitePublishedResult->isSuccess(), 'Site publication should be successful');
 
         // Test unpublish
-        $unpublicResult = $this->siteService->unpublic($siteId);
-        self::assertTrue($unpublicResult->isSuccess(), 'Site unpublish should be successful');
+        $siteUnpublishedResult = $this->siteService->unpublic($siteId);
+        self::assertTrue($siteUnpublishedResult->isSuccess(), 'Site unpublish should be successful');
     }
 
     /**
@@ -333,17 +335,17 @@ class SiteTest extends TestCase
             'TYPE' => 'PAGE'
         ];
 
-        $siteAddedResult = $this->siteService->add($siteFields);
-        $siteId = $siteAddedResult->getId();
+        $addedItemResult = $this->siteService->add($siteFields);
+        $siteId = $addedItemResult->getId();
         $this->createdSiteIds[] = $siteId;
 
         // Test mark delete
-        $markDeleteResult = $this->siteService->markDelete($siteId);
-        self::assertTrue($markDeleteResult->isSuccess(), 'Site mark delete should be successful');
+        $siteMarkedDeletedResult = $this->siteService->markDelete($siteId);
+        self::assertTrue($siteMarkedDeletedResult->isSuccess(), 'Site mark delete should be successful');
 
         // Test mark undelete
-        $markUnDeleteResult = $this->siteService->markUnDelete($siteId);
-        self::assertTrue($markUnDeleteResult->isSuccess(), 'Site mark undelete should be successful');
+        $siteMarkedUnDeletedResult = $this->siteService->markUnDelete($siteId);
+        self::assertTrue($siteMarkedUnDeletedResult->isSuccess(), 'Site mark undelete should be successful');
     }
 
     /**
@@ -360,8 +362,8 @@ class SiteTest extends TestCase
             'TYPE' => 'PAGE'
         ];
 
-        $siteAddedResult = $this->siteService->add($siteFields);
-        $siteId = $siteAddedResult->getId();
+        $addedItemResult = $this->siteService->add($siteFields);
+        $siteId = $addedItemResult->getId();
         $this->createdSiteIds[] = $siteId;
 
         // Get folders (might be empty initially)
@@ -386,8 +388,8 @@ class SiteTest extends TestCase
             'TYPE' => 'PAGE'
         ];
 
-        $siteAddedResult = $this->siteService->add($siteFields);
-        $siteId = $siteAddedResult->getId();
+        $addedItemResult = $this->siteService->add($siteFields);
+        $siteId = $addedItemResult->getId();
         $this->createdSiteIds[] = $siteId;
 
         // Add a folder
@@ -419,8 +421,8 @@ class SiteTest extends TestCase
             'TYPE' => 'PAGE'
         ];
 
-        $siteAddedResult = $this->siteService->add($siteFields);
-        $siteId = $siteAddedResult->getId();
+        $addedItemResult = $this->siteService->add($siteFields);
+        $siteId = $addedItemResult->getId();
         $this->createdSiteIds[] = $siteId;
 
         // Add a folder
@@ -435,11 +437,11 @@ class SiteTest extends TestCase
         $this->createdFolderIds[] = $folderId;
 
         // Update the folder
-        $updateResult = $this->siteService->updateFolder($siteId, $folderId, [
+        $folderUpdatedResult = $this->siteService->updateFolder($siteId, $folderId, [
             'TITLE' => 'Updated Test Folder ' . $timestamp
         ]);
 
-        self::assertTrue($updateResult->isSuccess(), 'Folder update should be successful');
+        self::assertTrue($folderUpdatedResult->isSuccess(), 'Folder update should be successful');
     }
 
     /**
@@ -456,8 +458,8 @@ class SiteTest extends TestCase
             'TYPE' => 'PAGE'
         ];
 
-        $siteAddedResult = $this->siteService->add($siteFields);
-        $siteId = $siteAddedResult->getId();
+        $addedItemResult = $this->siteService->add($siteFields);
+        $siteId = $addedItemResult->getId();
         $this->createdSiteIds[] = $siteId;
 
         // Add a folder
@@ -472,12 +474,12 @@ class SiteTest extends TestCase
         $this->createdFolderIds[] = $folderId;
 
         // Test folder publication
-        $publicationResult = $this->siteService->publicationFolder($folderId);
-        self::assertTrue($publicationResult->isSuccess(), 'Folder publication should be successful');
+        $folderPublishedResult = $this->siteService->publicationFolder($folderId);
+        self::assertTrue($folderPublishedResult->isSuccess(), 'Folder publication should be successful');
 
         // Test folder unpublish
-        $unpublicResult = $this->siteService->unPublicFolder($folderId);
-        self::assertTrue($unpublicResult->isSuccess(), 'Folder unpublish should be successful');
+        $folderUnpublishedResult = $this->siteService->unPublicFolder($folderId);
+        self::assertTrue($folderUnpublishedResult->isSuccess(), 'Folder unpublish should be successful');
     }
 
     /**
@@ -494,8 +496,8 @@ class SiteTest extends TestCase
             'TYPE' => 'PAGE'
         ];
 
-        $siteAddedResult = $this->siteService->add($siteFields);
-        $siteId = $siteAddedResult->getId();
+        $addedItemResult = $this->siteService->add($siteFields);
+        $siteId = $addedItemResult->getId();
         $this->createdSiteIds[] = $siteId;
 
         // Add a folder
@@ -510,8 +512,8 @@ class SiteTest extends TestCase
         $this->createdFolderIds[] = $folderId;
 
         // Test folder mark delete
-        $markDeleteResult = $this->siteService->markFolderDelete($folderId);
-        self::assertTrue($markDeleteResult->isSuccess(), 'Folder mark delete should be successful');
+        $deletedItemResult = $this->siteService->markFolderDelete($folderId);
+        self::assertTrue($deletedItemResult->isSuccess(), 'Folder mark delete should be successful');
 
         // Test folder mark undelete
         $markUnDeleteResult = $this->siteService->markFolderUnDelete($folderId);

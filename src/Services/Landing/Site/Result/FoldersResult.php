@@ -17,9 +17,6 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 
 class FoldersResult extends AbstractResult
 {
-    /**
-     * @return array
-     */
     public function getFolders(): array
     {
         return $this->getCoreResponse()->getResponseData()->getResult();

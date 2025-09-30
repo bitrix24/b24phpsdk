@@ -4,6 +4,25 @@
 
 ### Added
 
+- Added service `Services\Landing\Site\Service\Site` with support methods,
+  see [landing.site.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
+    - `add` adds a site
+    - `getList` retrieves a list of sites
+    - `update` updates site parameters
+    - `delete` deletes a site
+    - `getPublicUrl` returns the full URL of the site(s)
+    - `getPreview` returns the preview image URL of the site
+    - `publication` publishes the site and all its pages
+    - `unpublic` unpublishes the site and all its pages
+    - `markDelete` marks the site as deleted
+    - `markUnDelete` restores the site from the trash
+    - `getFolders` retrieves the site folders
+    - `addFolder` adds a folder to the site
+    - `updateFolder` updates folder parameters
+    - `publicationFolder` publishes the site's folder
+    - `unPublicFolder` unpublishes the site's folder
+    - `markFolderDelete` marks the folder as deleted
+    - `markFolderUnDelete` restores the folder from the trash
 - Added service `Services\Sale\Payment\Service\Payment` with support methods,
   see [sale.payment.* methods](https://github.com/bitrix24/b24phpsdk/issues/248):
     - `add` adds a payment
