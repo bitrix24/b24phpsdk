@@ -30,6 +30,14 @@ use Bitrix24\SDK\Services\Landing\Page\Result\PagePublicUrlResult;
 use Bitrix24\SDK\Services\Landing\Page\Result\PageIdByUrlResult;
 use Bitrix24\SDK\Services\Landing\Page\Result\MarkPageDeletedResult;
 use Bitrix24\SDK\Services\Landing\Page\Result\MarkPageUnDeletedResult;
+use Bitrix24\SDK\Services\Landing\Page\Result\BlockAddedResult;
+use Bitrix24\SDK\Services\Landing\Page\Result\BlockCopiedResult;
+use Bitrix24\SDK\Services\Landing\Page\Result\BlockDeletedResult;
+use Bitrix24\SDK\Services\Landing\Page\Result\BlockMovedResult;
+use Bitrix24\SDK\Services\Landing\Page\Result\BlockVisibilityResult;
+use Bitrix24\SDK\Services\Landing\Page\Result\BlockMarkDeletedResult;
+use Bitrix24\SDK\Services\Landing\Page\Result\BlockMarkUnDeletedResult;
+use Bitrix24\SDK\Services\Landing\Page\Result\BlockFavoriteResult;
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['landing']))]
@@ -478,6 +486,339 @@ class Page extends AbstractService
             $this->core->call('landing.landing.removeEntities', [
                 'lid' => $lid,
                 'data' => $data
+            ])
+        );
+    }
+
+    /**
+     * Adds a new block to the page.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-add-block.html
+     *
+     * @param int $lid Page identifier
+     * @param array $fields Array of block fields:
+     *                     - CODE: Symbolic code of the block (required)
+     *                     - AFTER_ID: After which block ID the new block should be added (optional)
+     *                     - ACTIVE: Block activity Y/N (optional)
+     *                     - CONTENT: Entirely different content of the block (optional)
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'landing.landing.addblock',
+        'https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-add-block.html',
+        'Method for adding a new block to the page.'
+    )]
+    public function addBlock(int $lid, array $fields): BlockAddedResult
+    {
+        return new BlockAddedResult(
+            $this->core->call('landing.landing.addblock', [
+                'lid' => $lid,
+                'fields' => $fields
+            ])
+        );
+    }
+
+    /**
+     * Copies a block from one page to another.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-copy-block.html
+     *
+     * @param int $lid Identifier of the page where the block should be copied
+     * @param int $block Identifier of the block which may be on another page
+     * @param array $params Array of parameters, currently supporting AFTER_ID - after which block to insert the new one
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'landing.landing.copyblock',
+        'https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-copy-block.html',
+        'Method copies a block from one page to another.'
+    )]
+    public function copyBlock(int $lid, int $block, array $params = []): BlockCopiedResult
+    {
+        $callParams = [
+            'lid' => $lid,
+            'block' => $block,
+        ];
+
+        if ($params !== []) {
+            $callParams['params'] = $params;
+        }
+
+        return new BlockCopiedResult(
+            $this->core->call('landing.landing.copyblock', $callParams)
+        );
+    }
+
+    /**
+     * Completely removes a block from the page.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-delete-block.html
+     *
+     * @param int $lid Page identifier
+     * @param int $block Block identifier
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'landing.landing.deleteblock',
+        'https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-delete-block.html',
+        'Method for deleting a block from the page.'
+    )]
+    public function deleteBlock(int $lid, int $block): BlockDeletedResult
+    {
+        return new BlockDeletedResult(
+            $this->core->call('landing.landing.deleteblock', [
+                'lid' => $lid,
+                'block' => $block
+            ])
+        );
+    }
+
+    /**
+     * Moves a block down one position on the page.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-down-block.html
+     *
+     * @param int $lid Page identifier
+     * @param int $block Block identifier
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'landing.landing.downblock',
+        'https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-down-block.html',
+        'Method moves a block down one position on the page.'
+    )]
+    public function moveBlockDown(int $lid, int $block): BlockMovedResult
+    {
+        return new BlockMovedResult(
+            $this->core->call('landing.landing.downblock', [
+                'lid' => $lid,
+                'block' => $block
+            ])
+        );
+    }
+
+    /**
+     * Moves a block up one position on the page.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-up-block.html
+     *
+     * @param int $lid Page identifier
+     * @param int $block Block identifier
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'landing.landing.upblock',
+        'https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-up-block.html',
+        'Method moves a block up one position on the page.'
+    )]
+    public function moveBlockUp(int $lid, int $block): BlockMovedResult
+    {
+        return new BlockMovedResult(
+            $this->core->call('landing.landing.upblock', [
+                'lid' => $lid,
+                'block' => $block
+            ])
+        );
+    }
+
+    /**
+     * Moves a block from one page to another.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-move-block.html
+     *
+     * @param int $lid Identifier of the page to which the block should be moved
+     * @param int $block Identifier of the block which may be on another page
+     * @param array $params Array of parameters, currently supporting AFTER_ID - after which block to insert the new one
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'landing.landing.moveblock',
+        'https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-move-block.html',
+        'Method moves a block from one page to another.'
+    )]
+    public function moveBlock(int $lid, int $block, array $params = []): BlockMovedResult
+    {
+        $callParams = [
+            'lid' => $lid,
+            'block' => $block,
+        ];
+
+        if ($params !== []) {
+            $callParams['params'] = $params;
+        }
+
+        return new BlockMovedResult(
+            $this->core->call('landing.landing.moveblock', $callParams)
+        );
+    }
+
+    /**
+     * Hides a block from the page.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-hide-block.html
+     *
+     * @param int $lid Page identifier
+     * @param int $block Block identifier
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'landing.landing.hideblock',
+        'https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-hide-block.html',
+        'Method hides a block from the page.'
+    )]
+    public function hideBlock(int $lid, int $block): BlockVisibilityResult
+    {
+        return new BlockVisibilityResult(
+            $this->core->call('landing.landing.hideblock', [
+                'lid' => $lid,
+                'block' => $block
+            ])
+        );
+    }
+
+    /**
+     * Displays a block on the page.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-show-block.html
+     *
+     * @param int $lid Page identifier
+     * @param int $block Block identifier
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'landing.landing.showblock',
+        'https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-show-block.html',
+        'Method displays a block on the page.'
+    )]
+    public function showBlock(int $lid, int $block): BlockVisibilityResult
+    {
+        return new BlockVisibilityResult(
+            $this->core->call('landing.landing.showblock', [
+                'lid' => $lid,
+                'block' => $block
+            ])
+        );
+    }
+
+    /**
+     * Marks a block as deleted but does not physically remove it.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-mark-deleted-block.html
+     *
+     * @param int $lid Page identifier
+     * @param int $block Block identifier
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'landing.landing.markdeletedblock',
+        'https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-mark-deleted-block.html',
+        'Method marks a block as deleted but does not physically remove it.'
+    )]
+    public function markBlockDeleted(int $lid, int $block): BlockMarkDeletedResult
+    {
+        return new BlockMarkDeletedResult(
+            $this->core->call('landing.landing.markdeletedblock', [
+                'lid' => $lid,
+                'block' => $block
+            ])
+        );
+    }
+
+    /**
+     * Restores a block that has been marked as deleted.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-mark-undeleted-block.html
+     *
+     * @param int $lid Page identifier
+     * @param int $block Block identifier
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'landing.landing.markundeletedblock',
+        'https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-mark-undeleted-block.html',
+        'Method restores a block that has been marked as deleted.'
+    )]
+    public function markBlockUnDeleted(int $lid, int $block): BlockMarkUnDeletedResult
+    {
+        return new BlockMarkUnDeletedResult(
+            $this->core->call('landing.landing.markundeletedblock', [
+                'lid' => $lid,
+                'block' => $block
+            ])
+        );
+    }
+
+    /**
+     * Saves an existing block on the page to "My Blocks".
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-favorite-block.html
+     *
+     * @param int $lid Page identifier
+     * @param int $block Block identifier
+     * @param array $meta Object containing information to save the block:
+     *                    - name: Name of the block
+     *                    - section: Array of categories to save the block to
+     *                    - preview: Image of the block
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'landing.landing.favoriteBlock',
+        'https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-favorite-block.html',
+        'Method saves an existing block on the page to My Blocks.'
+    )]
+    public function addBlockToFavorites(int $lid, int $block, array $meta): BlockFavoriteResult
+    {
+        return new BlockFavoriteResult(
+            $this->core->call('landing.landing.favoriteBlock', [
+                'lid' => $lid,
+                'block' => $block,
+                'meta' => $meta
+            ])
+        );
+    }
+
+    /**
+     * Removes a block that was saved in "My Blocks".
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-unfavorite-block.html
+     *
+     * @param int $blockId Block identifier
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'landing.landing.unFavoriteBlock',
+        'https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-unfavorite-block.html',
+        'Method removes a block that was saved in My Blocks.'
+    )]
+    public function removeBlockFromFavorites(int $blockId): BlockFavoriteResult
+    {
+        return new BlockFavoriteResult(
+            $this->core->call('landing.landing.unFavoriteBlock', [
+                'blockId' => $blockId
             ])
         );
     }
