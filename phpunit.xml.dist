@@ -151,6 +151,9 @@
         <testsuite name="integration_tests_landing_site">
             <directory>./tests/Integration/Services/Landing/Site/</directory>
         </testsuite>
+        <testsuite name="integration_tests_landing_page">
+            <directory>./tests/Integration/Services/Landing/Page/</directory>
+        </testsuite>
         <testsuite name="integration_tests_sale_shipment">
             <directory>./tests/Integration/Services/Sale/Shipment/</directory>
         </testsuite>

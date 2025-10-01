@@ -1,0 +1,570 @@
+<?php
+
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Sally Fancen <vadimsallee@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace Bitrix24\SDK\Tests\Integration\Services\Landing\Page\Service;
+
+use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Services\Landing\Page\Result\PageItemResult;
+use Bitrix24\SDK\Services\Landing\Page\Service\Page;
+use Bitrix24\SDK\Services\Landing\Site\Service\Site;
+use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
+use Bitrix24\SDK\Tests\Integration\Fabric;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Class PageTest
+ *
+ * @package Bitrix24\SDK\Tests\Integration\Services\Landing\Page\Service
+ */
+#[CoversMethod(Page::class, 'add')]
+#[CoversMethod(Page::class, 'addByTemplate')]
+#[CoversMethod(Page::class, 'copy')]
+#[CoversMethod(Page::class, 'delete')]
+#[CoversMethod(Page::class, 'update')]
+#[CoversMethod(Page::class, 'getList')]
+#[CoversMethod(Page::class, 'getAdditionalFields')]
+#[CoversMethod(Page::class, 'getPreview')]
+#[CoversMethod(Page::class, 'getPublicUrl')]
+#[CoversMethod(Page::class, 'resolveIdByPublicUrl')]
+#[CoversMethod(Page::class, 'publish')]
+#[CoversMethod(Page::class, 'unpublish')]
+#[CoversMethod(Page::class, 'markDeleted')]
+#[CoversMethod(Page::class, 'markUnDeleted')]
+#[CoversMethod(Page::class, 'move')]
+#[CoversMethod(Page::class, 'removeEntities')]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\Landing\Page\Service\Page::class)]
+class PageTest extends TestCase
+{
+    use CustomBitrix24Assertions;
+
+    protected Page $pageService;
+
+    protected Site $siteService;
+
+    protected array $createdPageIds = [];
+
+    protected array $createdSiteIds = [];
+
+    protected function setUp(): void
+    {
+        $serviceBuilder = Fabric::getServiceBuilder();
+        $this->pageService = $serviceBuilder->getLandingScope()->page();
+        $this->siteService = $serviceBuilder->getLandingScope()->site();
+    }
+
+    protected function tearDown(): void
+    {
+        // Clean up created pages
+        foreach ($this->createdPageIds as $createdPageId) {
+            try {
+                $this->pageService->delete($createdPageId);
+            } catch (\Exception) {
+                // Ignore if page doesn't exist
+            }
+        }
+
+        // Clean up created sites
+        foreach ($this->createdSiteIds as $createdSiteId) {
+            try {
+                $this->siteService->delete($createdSiteId);
+            } catch (\Exception) {
+                // Ignore if site doesn't exist
+            }
+        }
+    }
+
+    /**
+     * Helper method to create a test site
+     */
+    protected function createTestSite(): int
+    {
+        $siteFields = [
+            'TITLE' => 'Test Site for Page ' . time(),
+            'CODE' => 'testsitepage' . time(),
+            'TYPE' => 'PAGE'
+        ];
+
+        $addedItemResult = $this->siteService->add($siteFields);
+        $siteId = $addedItemResult->getId();
+        $this->createdSiteIds[] = $siteId;
+
+        return $siteId;
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testAdd(): void
+    {
+        $siteId = $this->createTestSite();
+
+        $pageFields = [
+            'TITLE' => 'Test Page ' . time(),
+            'CODE' => 'testpage' . time(),
+            'SITE_ID' => $siteId,
+            'ADDITIONAL_FIELDS' => [
+                'THEME_CODE' => 'wedding'
+            ]
+        ];
+
+        $addedItemResult = $this->pageService->add($pageFields);
+        $pageId = $addedItemResult->getId();
+        $this->createdPageIds[] = $pageId;
+
+        self::assertGreaterThan(0, $pageId);
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testAddByTemplate(): void
+    {
+        $siteId = $this->createTestSite();
+
+        // Get available page templates from portal
+        $core = Fabric::getCore();
+        $templatesResponse = $core->call('landing.demos.getPageList', ['type' => 'page']);
+        $templates = $templatesResponse->getResponseData()->getResult();
+
+        // Use the first available template
+        $templateCode = key($templates);
+
+        $addedItemResult = $this->pageService->addByTemplate(
+            $siteId,
+            $templateCode,
+            [
+                'TITLE' => 'Test Page by Template ' . time(),
+                'DESCRIPTION' => 'Test page description'
+            ]
+        );
+
+        $pageId = $addedItemResult->getId();
+        $this->createdPageIds[] = $pageId;
+
+        self::assertGreaterThan(0, $pageId);
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testGetList(): void
+    {
+        $siteId = $this->createTestSite();
+
+        // First create a test page
+        $timestamp = time();
+        $pageFields = [
+            'TITLE' => 'Test Page for List ' . $timestamp,
+            'CODE' => 'testpagelist' . $timestamp,
+            'SITE_ID' => $siteId
+        ];
+
+        $addedItemResult = $this->pageService->add($pageFields);
+        $pageId = $addedItemResult->getId();
+        $this->createdPageIds[] = $pageId;
+
+        // Test getList with no parameters
+        $pagesResult = $this->pageService->getList();
+        $pages = $pagesResult->getPages();
+
+        self::assertIsArray($pages);
+        self::assertNotEmpty($pages);
+
+        // Check that our created page is in the list
+        $foundPage = null;
+        foreach ($pages as $page) {
+            self::assertInstanceOf(PageItemResult::class, $page);
+            if (intval($page->ID) === $pageId) {
+                $foundPage = $page;
+                break;
+            }
+        }
+
+        self::assertNotNull($foundPage, 'Created page should be found in the list');
+        self::assertEquals($pageFields['TITLE'], $foundPage->TITLE);
+        self::assertStringContainsString($pageFields['CODE'], $foundPage->CODE);
+        self::assertEquals($pageFields['SITE_ID'], $foundPage->SITE_ID);
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testGetListWithFilters(): void
+    {
+        $siteId = $this->createTestSite();
+
+        // Create a test page
+        $timestamp = time();
+        $pageFields = [
+            'TITLE' => 'Test Page Filter ' . $timestamp,
+            'CODE' => 'testpagefilter' . $timestamp,
+            'SITE_ID' => $siteId
+        ];
+
+        $addedItemResult = $this->pageService->add($pageFields);
+        $pageId = $addedItemResult->getId();
+        $this->createdPageIds[] = $pageId;
+
+        // Test getList with filters
+        $pagesResult = $this->pageService->getList(
+            ['ID', 'TITLE', 'CODE', 'SITE_ID'],
+            ['SITE_ID' => $siteId],
+            ['ID' => 'DESC']
+        );
+
+        $pages = $pagesResult->getPages();
+
+        self::assertIsArray($pages);
+
+        // All pages should belong to our site
+        foreach ($pages as $page) {
+            self::assertEquals($siteId, $page->SITE_ID);
+        }
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testUpdate(): void
+    {
+        $siteId = $this->createTestSite();
+
+        // Create a test page
+        $pageFields = [
+            'TITLE' => 'Test Page for Update ' . time(),
+            'CODE' => 'testpageupdate' . time(),
+            'SITE_ID' => $siteId
+        ];
+
+        $addedItemResult = $this->pageService->add($pageFields);
+        $pageId = $addedItemResult->getId();
+        $this->createdPageIds[] = $pageId;
+
+        // Update the page
+        $newTitle = 'Updated Page Title ' . time();
+        $updatedItemResult = $this->pageService->update($pageId, [
+            'TITLE' => $newTitle
+        ]);
+
+        self::assertTrue($updatedItemResult->isSuccess());
+
+        // Verify the update
+        $pagesResult = $this->pageService->getList(['ID', 'TITLE'], ['ID' => $pageId]);
+        $pages = $pagesResult->getPages();
+
+        self::assertCount(1, $pages);
+        self::assertEquals($newTitle, $pages[0]->TITLE);
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testCopy(): void
+    {
+        $siteId = $this->createTestSite();
+
+        // Create a test page
+        $pageFields = [
+            'TITLE' => 'Test Page for Copy ' . time(),
+            'CODE' => 'testpagecopy' . time(),
+            'SITE_ID' => $siteId
+        ];
+
+        $addedItemResult = $this->pageService->add($pageFields);
+        $originalPageId = $addedItemResult->getId();
+        $this->createdPageIds[] = $originalPageId;
+
+        // Copy the page
+        $copyResult = $this->pageService->copy($originalPageId);
+        $copiedPageId = $copyResult->getId();
+        $this->createdPageIds[] = $copiedPageId;
+
+        self::assertGreaterThan(0, $copiedPageId);
+        self::assertNotEquals($originalPageId, $copiedPageId);
+
+        // Verify both pages exist
+        $pagesResult = $this->pageService->getList(['ID', 'TITLE'], ['SITE_ID' => $siteId]);
+        $pages = $pagesResult->getPages();
+
+        $pageIds = array_map(fn($page): int => intval($page->ID), $pages);
+        self::assertContains($originalPageId, $pageIds);
+        self::assertContains($copiedPageId, $pageIds);
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testGetAdditionalFields(): void
+    {
+        $siteId = $this->createTestSite();
+
+        // Create a test page with additional fields
+        $pageFields = [
+            'TITLE' => 'Test Page Additional Fields ' . time(),
+            'CODE' => 'testpageadditional' . time(),
+            'SITE_ID' => $siteId,
+            'ADDITIONAL_FIELDS' => [
+                'THEME_CODE' => 'wedding',
+                'METAMAIN_TITLE' => 'Test Meta Title'
+            ]
+        ];
+
+        $addedItemResult = $this->pageService->add($pageFields);
+        $pageId = $addedItemResult->getId();
+        $this->createdPageIds[] = $pageId;
+
+        // Get additional fields
+        $pageAdditionalFieldsResult = $this->pageService->getAdditionalFields($pageId);
+        $additionalFields = $pageAdditionalFieldsResult->getAdditionalFields();
+
+        self::assertIsArray($additionalFields);
+        // Note: The exact structure depends on API response format
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testGetPreview(): void
+    {
+        $siteId = $this->createTestSite();
+
+        // Create a test page
+        $pageFields = [
+            'TITLE' => 'Test Page Preview ' . time(),
+            'CODE' => 'testpagepreview' . time(),
+            'SITE_ID' => $siteId
+        ];
+
+        $addedItemResult = $this->pageService->add($pageFields);
+        $pageId = $addedItemResult->getId();
+        $this->createdPageIds[] = $pageId;
+
+        // Get preview
+        $pagePreviewResult = $this->pageService->getPreview($pageId);
+        $previewPath = $pagePreviewResult->getPreviewPath();
+
+        self::assertIsString($previewPath);
+        // Preview path might be empty or contain URL
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testGetPublicUrl(): void
+    {
+        $siteId = $this->createTestSite();
+
+        // Create a test page
+        $pageFields = [
+            'TITLE' => 'Test Page Public URL ' . time(),
+            'CODE' => 'testpagepublicurl' . time(),
+            'SITE_ID' => $siteId
+        ];
+
+        $addedItemResult = $this->pageService->add($pageFields);
+        $pageId = $addedItemResult->getId();
+        $this->createdPageIds[] = $pageId;
+
+        // Get public URL
+        $pagePublicUrlResult = $this->pageService->getPublicUrl($pageId);
+        $publicUrl = $pagePublicUrlResult->getPublicUrl();
+
+        self::assertIsString($publicUrl);
+        // Public URL might be empty until published
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testPublishAndUnpublish(): void
+    {
+        $siteId = $this->createTestSite();
+
+        // Create a test page
+        $pageFields = [
+            'TITLE' => 'Test Page Publish ' . time(),
+            'CODE' => 'testpagepublish' . time(),
+            'SITE_ID' => $siteId
+        ];
+
+        $addedItemResult = $this->pageService->add($pageFields);
+        $pageId = $addedItemResult->getId();
+        $this->createdPageIds[] = $pageId;
+
+        // Publish the page
+        $updatedItemResult = $this->pageService->publish($pageId);
+        self::assertTrue($updatedItemResult->isSuccess());
+
+        // Unpublish the page
+        $unpublishResult = $this->pageService->unpublish($pageId);
+        self::assertTrue($unpublishResult->isSuccess());
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testMarkDeletedAndUnDeleted(): void
+    {
+        $siteId = $this->createTestSite();
+
+        // Create a test page
+        $pageFields = [
+            'TITLE' => 'Test Page Mark Delete ' . time(),
+            'CODE' => 'testpagemarkdelete' . time(),
+            'SITE_ID' => $siteId
+        ];
+
+        $addedItemResult = $this->pageService->add($pageFields);
+        $pageId = $addedItemResult->getId();
+        $this->createdPageIds[] = $pageId;
+
+        // Mark as deleted
+        $markPageDeletedResult = $this->pageService->markDeleted($pageId);
+        self::assertTrue($markPageDeletedResult->isSuccess());
+
+        // Mark as undeleted
+        $markPageUnDeletedResult = $this->pageService->markUnDeleted($pageId);
+        self::assertTrue($markPageUnDeletedResult->isSuccess());
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testMove(): void
+    {
+        $sourceSiteId = $this->createTestSite();
+        $targetSiteId = $this->createTestSite();
+
+        // Create a test page
+        $pageFields = [
+            'TITLE' => 'Test Page Move ' . time(),
+            'CODE' => 'testpagemove' . time(),
+            'SITE_ID' => $sourceSiteId
+        ];
+
+        $addedItemResult = $this->pageService->add($pageFields);
+        $pageId = $addedItemResult->getId();
+        $this->createdPageIds[] = $pageId;
+
+        // Move the page to another site
+        $updatedItemResult = $this->pageService->move($pageId, $targetSiteId);
+        self::assertTrue($updatedItemResult->isSuccess());
+
+        // Verify the page is now in the target site
+        $pagesResult = $this->pageService->getList(['ID', 'SITE_ID'], ['ID' => $pageId]);
+        $pages = $pagesResult->getPages();
+
+        self::assertCount(1, $pages);
+        self::assertEquals($targetSiteId, $pages[0]->SITE_ID);
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testRemoveEntities(): void
+    {
+        $siteId = $this->createTestSite();
+
+        // Create a test page
+        $pageFields = [
+            'TITLE' => 'Test Page Remove Entities ' . time(),
+            'CODE' => 'testpageremove' . time(),
+            'SITE_ID' => $siteId
+        ];
+
+        $addedItemResult = $this->pageService->add($pageFields);
+        $pageId = $addedItemResult->getId();
+        $this->createdPageIds[] = $pageId;
+
+        // Remove entities (empty data for test)
+        $updatedItemResult = $this->pageService->removeEntities($pageId, [
+            'blocks' => [],
+            'images' => []
+        ]);
+
+        self::assertTrue($updatedItemResult->isSuccess());
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testResolveIdByPublicUrl(): void
+    {
+        $siteId = $this->createTestSite();
+
+        // Create a test page
+        $timestamp = time();
+        $pageCode = 'testpageresolve' . $timestamp;
+        $pageFields = [
+            'TITLE' => 'Test Page Resolve ' . $timestamp,
+            'CODE' => $pageCode,
+            'SITE_ID' => $siteId
+        ];
+
+        $addedItemResult = $this->pageService->add($pageFields);
+        $pageId = $addedItemResult->getId();
+        $this->createdPageIds[] = $pageId;
+
+        // Try to resolve ID by URL
+        $pageIdByUrlResult = $this->pageService->resolveIdByPublicUrl('/' . $pageCode . '/', $siteId);
+        $resolvedPageId = $pageIdByUrlResult->getPageId();
+        self::assertEquals($pageId, $resolvedPageId);
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testDelete(): void
+    {
+        $siteId = $this->createTestSite();
+
+        // Create a test page
+        $pageFields = [
+            'TITLE' => 'Test Page Delete ' . time(),
+            'CODE' => 'testpagedelete' . time(),
+            'SITE_ID' => $siteId
+        ];
+
+        $addedItemResult = $this->pageService->add($pageFields);
+        $pageId = $addedItemResult->getId();
+
+        // Delete the page
+        $deletedItemResult = $this->pageService->delete($pageId);
+        self::assertTrue($deletedItemResult->isSuccess());
+
+        // Remove from cleanup list as it's already deleted
+        $this->createdPageIds = array_filter($this->createdPageIds, fn($id): bool => $id !== $pageId);
+
+        // Verify page is deleted by trying to get it
+        $pagesResult = $this->pageService->getList(['ID'], ['ID' => $pageId]);
+        $pages = $pagesResult->getPages();
+        self::assertEmpty($pages, 'Page should be deleted and not found in list');
+    }
+}
