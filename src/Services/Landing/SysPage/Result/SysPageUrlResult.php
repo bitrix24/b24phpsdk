@@ -23,10 +23,6 @@ class SysPageUrlResult extends AbstractResult
      */
     public function getUrl(): string
     {
-        echo "\n SysPageUrlResult \n";
-        print_r($this->getCoreResponse()->getResponseData()->getResult());
-        echo "\n";
-        
-        return (string)$this->getCoreResponse()->getResponseData()->getResult();
+        return (string)$this->getCoreResponse()->getResponseData()->getResult()[0];
     }
 }

@@ -19,8 +19,6 @@ class BlockMovedResult extends AbstractResult
 {
     /**
      * Check if block move operation was successful
-     *
-     * @return bool
      */
     public function isSuccess(): bool
     {

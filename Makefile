@@ -55,6 +55,7 @@ help:
 	@echo "test-integration-sale-payment-item-shipment - run PaymentItemShipment integration tests"
 	@echo "test-integration-sale-property-relation - run PropertyRelation integration tests"
 	@echo "test-integration-landing-page - run Landing Page integration tests"
+	@echo "test-integration-landing-syspage - run Landing SysPage integration tests"
 
 
 .PHONY: docker-init
@@ -207,6 +208,10 @@ test-integration-landing-site:
 .PHONY: test-integration-landing-page
 test-integration-landing-page:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_page
+
+.PHONY: test-integration-landing-syspage
+test-integration-landing-syspage:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_syspage
 
 .PHONY: test-integration-sale-status
 test-integration-sale-status:

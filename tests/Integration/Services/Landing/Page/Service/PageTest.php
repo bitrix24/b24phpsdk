@@ -614,8 +614,8 @@ class PageTest extends TestCase
             'ACTIVE' => 'Y'
         ];
 
-        $blockAddedResult = $this->pageService->addBlock($pageId, $blockFields);
-        $blockId = $blockAddedResult->getId();
+        $addedItemResult = $this->pageService->addBlock($pageId, $blockFields);
+        $blockId = $addedItemResult->getId();
 
         self::assertGreaterThan(0, $blockId);
     }
@@ -635,8 +635,8 @@ class PageTest extends TestCase
             'ACTIVE' => 'Y'
         ];
 
-        $blockAddedResult = $this->pageService->addBlock($pageId1, $blockFields);
-        $originalBlockId = $blockAddedResult->getId();
+        $addedItemResult = $this->pageService->addBlock($pageId1, $blockFields);
+        $originalBlockId = $addedItemResult->getId();
 
         // Copy the block to the second page
         $blockCopiedResult = $this->pageService->copyBlock($pageId2, $originalBlockId);
@@ -660,12 +660,12 @@ class PageTest extends TestCase
             'ACTIVE' => 'Y'
         ];
 
-        $blockAddedResult = $this->pageService->addBlock($pageId, $blockFields);
-        $blockId = $blockAddedResult->getId();
+        $addedItemResult = $this->pageService->addBlock($pageId, $blockFields);
+        $blockId = $addedItemResult->getId();
 
         // Hide the block
-        $hideResult = $this->pageService->hideBlock($pageId, $blockId);
-        self::assertTrue($hideResult->isSuccess());
+        $updatedItemResult = $this->pageService->hideBlock($pageId, $blockId);
+        self::assertTrue($updatedItemResult->isSuccess());
 
         // Show the block
         $showResult = $this->pageService->showBlock($pageId, $blockId);
@@ -686,8 +686,8 @@ class PageTest extends TestCase
             'ACTIVE' => 'Y'
         ];
 
-        $block1Result = $this->pageService->addBlock($pageId, $blockFields1);
-        $block1Id = $block1Result->getId();
+        $addedItemResult = $this->pageService->addBlock($pageId, $blockFields1);
+        $block1Id = $addedItemResult->getId();
 
         $blockFields2 = [
             //'CODE' => '02.three_cols_text_big',
@@ -697,11 +697,11 @@ class PageTest extends TestCase
         ];
         
         $block2Result = $this->pageService->addBlock($pageId, $blockFields2);
-        $block2Id = $block2Result->getId();
+        $block2Result->getId();
         
         // Move first block down
-        $moveDownResult = $this->pageService->moveBlockDown($pageId, $block1Id);
-        self::assertTrue($moveDownResult->isSuccess());
+        $blockMovedResult = $this->pageService->moveBlockDown($pageId, $block1Id);
+        self::assertTrue($blockMovedResult->isSuccess());
 
         
         // Move second block up
@@ -724,12 +724,12 @@ class PageTest extends TestCase
             'ACTIVE' => 'Y'
         ];
 
-        $blockAddedResult = $this->pageService->addBlock($pageId1, $blockFields);
-        $blockId = $blockAddedResult->getId();
+        $addedItemResult = $this->pageService->addBlock($pageId1, $blockFields);
+        $blockId = $addedItemResult->getId();
 
         // Move the block to the second page
-        $moveResult = $this->pageService->moveBlock($pageId2, $blockId);
-        self::assertTrue($moveResult->isSuccess());
+        $blockMovedResult = $this->pageService->moveBlock($pageId2, $blockId);
+        self::assertTrue($blockMovedResult->isSuccess());
     }
 
     /**
@@ -746,12 +746,12 @@ class PageTest extends TestCase
             'ACTIVE' => 'Y'
         ];
 
-        $blockAddedResult = $this->pageService->addBlock($pageId, $blockFields);
-        $blockId = $blockAddedResult->getId();
+        $addedItemResult = $this->pageService->addBlock($pageId, $blockFields);
+        $blockId = $addedItemResult->getId();
 
         // Mark block as deleted
-        $markDeletedResult = $this->pageService->markBlockDeleted($pageId, $blockId);
-        self::assertTrue($markDeletedResult->isSuccess());
+        $updatedItemResult = $this->pageService->markBlockDeleted($pageId, $blockId);
+        self::assertTrue($updatedItemResult->isSuccess());
 
         // Mark block as undeleted
         $markUnDeletedResult = $this->pageService->markBlockUnDeleted($pageId, $blockId);
@@ -772,8 +772,8 @@ class PageTest extends TestCase
             'ACTIVE' => 'Y'
         ];
 
-        $blockAddedResult = $this->pageService->addBlock($pageId, $blockFields);
-        $blockId = $blockAddedResult->getId();
+        $addedItemResult = $this->pageService->addBlock($pageId, $blockFields);
+        $blockId = $addedItemResult->getId();
 
         // Add block to favorites
         $meta = [
@@ -789,8 +789,8 @@ class PageTest extends TestCase
         self::assertGreaterThan(0, $favoriteBlockId);
 
         // Remove block from favorites
-        $removeFavoriteResult = $this->pageService->removeBlockFromFavorites($favoriteBlockId);
-        self::assertTrue($removeFavoriteResult->isSuccess());
+        $updatedItemResult = $this->pageService->removeBlockFromFavorites($favoriteBlockId);
+        self::assertTrue($updatedItemResult->isSuccess());
     }
 
     /**
@@ -807,12 +807,12 @@ class PageTest extends TestCase
             'ACTIVE' => 'Y'
         ];
 
-        $blockAddedResult = $this->pageService->addBlock($pageId, $blockFields);
-        $blockId = $blockAddedResult->getId();
+        $addedItemResult = $this->pageService->addBlock($pageId, $blockFields);
+        $blockId = $addedItemResult->getId();
 
         // Delete the block
-        $deleteResult = $this->pageService->deleteBlock($pageId, $blockId);
-        self::assertTrue($deleteResult->isSuccess());
+        $deletedItemResult = $this->pageService->deleteBlock($pageId, $blockId);
+        self::assertTrue($deletedItemResult->isSuccess());
     }
 
     /**
@@ -831,8 +831,8 @@ class PageTest extends TestCase
         ];
 
 
-        $block1Result = $this->pageService->addBlock($pageId1, $blockFields1);
-        $block1Id = $block1Result->getId();
+        $addedItemResult = $this->pageService->addBlock($pageId1, $blockFields1);
+        $block1Id = $addedItemResult->getId();
 
         $blockFields2 = [
             'CODE' => '02.three_cols_big_1',
@@ -866,8 +866,8 @@ class PageTest extends TestCase
         ];
 
 
-        $block1Result = $this->pageService->addBlock($pageId1, $blockFields1);
-        $block1Id = $block1Result->getId();
+        $addedItemResult = $this->pageService->addBlock($pageId1, $blockFields1);
+        $block1Id = $addedItemResult->getId();
 
         $blockFields2 = [
             'CODE' => '02.three_cols_big_1',
@@ -883,7 +883,7 @@ class PageTest extends TestCase
 
         // Move block with AFTER_ID parameter
         $params = ['AFTER_ID' => $block3Id];
-        $moveResult = $this->pageService->moveBlock($pageId2, $block2Id, $params);
-        self::assertTrue($moveResult->isSuccess());
+        $blockMovedResult = $this->pageService->moveBlock($pageId2, $block2Id, $params);
+        self::assertTrue($blockMovedResult->isSuccess());
     }
 }

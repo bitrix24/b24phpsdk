@@ -24,10 +24,6 @@ class SysPageListResult extends AbstractResult
      */
     public function getSysPages(): array
     {
-        echo "\n SysPageListResult \n";
-        print_r($this->getCoreResponse()->getResponseData()->getResult());
-        echo "\n";
-        
         $res = [];
         foreach ($this->getCoreResponse()->getResponseData()->getResult() as $sysPage) {
             $res[] = new SysPageItemResult($sysPage);

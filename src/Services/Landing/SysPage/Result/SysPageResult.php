@@ -23,22 +23,6 @@ class SysPageResult extends AbstractResult
      */
     public function isSuccess(): bool
     {
-        echo "\n SysPageResult \n";
-        print_r($this->getCoreResponse()->getResponseData()->getResult());
-        echo "\n";
-        
-        $result = $this->getCoreResponse()->getResponseData()->getResult();
-        
-        // If result is boolean true or array with success status
-        if (is_bool($result)) {
-            return $result;
-        }
-        
-        if (is_array($result) && isset($result['success'])) {
-            return (bool)$result['success'];
-        }
-        
-        // Default to true if no explicit result (void operations)
-        return true;
+        return (bool)$this->getCoreResponse()->getResponseData()->getResult()[0];
     }
 }

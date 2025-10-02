@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
 /**
  * SysPage item result. Represents a system page with its type and configuration.
  * Based on the documentation, each system page item contains:
- * 
+ *
  * @property-read non-negative-int $id System page ID
  * @property-read string $type Type of system page (mainpage, catalog, personal, cart, order, payment, compare)
  * @property-read non-negative-int $siteId Site ID where this system page is configured

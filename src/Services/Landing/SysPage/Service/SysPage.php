@@ -54,16 +54,16 @@ class SysPage extends AbstractService
     public function set(int $siteId, SysPageType|string $type, ?int $pageId = null): SysPageResult
     {
         $typeValue = $type instanceof SysPageType ? $type->value : $type;
-        
+
         $params = [
             'id' => $siteId,
             'type' => $typeValue,
         ];
-        
+
         if ($pageId !== null) {
             $params['lid'] = $pageId;
         }
-        
+
         return new SysPageResult(
             $this->core->call('landing.syspage.set', $params)
         );
@@ -90,11 +90,11 @@ class SysPage extends AbstractService
         $params = [
             'id' => $siteId,
         ];
-        
+
         if ($active !== null) {
             $params['active'] = $active;
         }
-        
+
         return new SysPageListResult(
             $this->core->call('landing.syspage.get', $params)
         );
@@ -120,16 +120,16 @@ class SysPage extends AbstractService
     public function getSpecialPage(int $siteId, SysPageType|string $type, ?array $additional = null): SysPageUrlResult
     {
         $typeValue = $type instanceof SysPageType ? $type->value : $type;
-        
+
         $params = [
             'siteId' => $siteId,
             'type' => $typeValue,
         ];
-        
+
         if ($additional !== null) {
             $params['additional'] = $additional;
         }
-        
+
         return new SysPageUrlResult(
             $this->core->call('landing.syspage.getSpecialPage', $params)
         );
