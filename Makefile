@@ -178,6 +178,10 @@ test-integration-scope-user-consent:
 .PHONY: test-integration-core
 test-integration-core:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_core
+	
+.PHONY: test-integration-core-list
+test-integration-core-list:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_core-list
 
 .PHONY: test-integration-scope-entity
 test-integration-scope-entity:

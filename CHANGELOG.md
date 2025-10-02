@@ -2,6 +2,10 @@
 
 ## Upcoming 1.7.0 - 2025.10.01
 
+### Fixed
+
+- Fixed Incorrect data loading in Core/Batch::getTraversableList() with desc sorting by ID [see details](https://github.com/bitrix24/b24phpsdk/issues/246)
+
 ### Added
 
 - Added service `Services\Sale\Shipment\Service\Shipment` with support methods,

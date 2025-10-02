@@ -145,6 +145,9 @@
         <testsuite name="integration_tests_sale_order">
             <directory>./tests/Integration/Services/Sale/Order/</directory>
         </testsuite>
+        <testsuite name="integration_tests_core-list">
+            <file>./tests/Integration/Core/BatchTraversableListTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_sale_shipment">
             <directory>./tests/Integration/Services/Sale/Shipment/</directory>
         </testsuite>
