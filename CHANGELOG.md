@@ -2,6 +2,10 @@
 
 ## Upcoming 1.7.0 - 2025.10.01
 
+### Fixed
+
+- Fixed Incorrect data loading in Core/Batch::getTraversableList() with desc sorting by ID [see details](https://github.com/bitrix24/b24phpsdk/issues/246)
+
 ### Added
 
 - Added service `Services\Disk\Service\Disk` with support methods,
@@ -48,6 +52,27 @@
     - `getVersions` returns a list of file versions
     - `restoreFromVersion` restores the file from a specific version
     - `getExternalLink` returns a public link to the file
+- Added service `Services\Paysystem\Handler\Service\Handler` with support methods,
+  see [pay_system.handler.* methods](https://github.com/bitrix24/b24phpsdk/issues/260):
+    - `add` adds a payment system handler
+    - `update` updates a payment system handler
+    - `list` returns a list of payment system handlers
+    - `delete` deletes a payment system handler
+- Added service `Services\Paysystem\Service\Paysystem` with support methods,
+  see [sale.paysystem.* methods](https://github.com/bitrix24/b24phpsdk/issues/260):
+    - `add` adds a payment system
+    - `update` updates a payment system
+    - `get` returns a payment system by its identifier
+    - `list` returns a list of payment systems
+    - `delete` deletes a payment system
+    - `payPayment` pays a payment
+    - `payInvoice` pays an invoice (legacy version)
+- Added service `Services\Paysystem\Settings\Service\Settings` with support methods,
+  see [sale.paysystem.settings.* methods](https://github.com/bitrix24/b24phpsdk/issues/260):
+    - `get` returns the settings of the payment system
+    - `update` updates the payment system settings
+    - `getForPayment` returns the payment system settings for a specific payment
+    - `getForInvoice` returns the payment system settings for a specific invoice (legacy version)
 - Added service `Services\Sale\Shipment\Service\Shipment` with support methods,
   see [sale.shipment.* methods](https://github.com/bitrix24/b24phpsdk/issues/250):
     - `add` adds a shipment
