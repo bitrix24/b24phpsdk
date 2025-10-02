@@ -30,14 +30,7 @@ use Bitrix24\SDK\Services\Landing\Page\Result\PagePublicUrlResult;
 use Bitrix24\SDK\Services\Landing\Page\Result\PageIdByUrlResult;
 use Bitrix24\SDK\Services\Landing\Page\Result\MarkPageDeletedResult;
 use Bitrix24\SDK\Services\Landing\Page\Result\MarkPageUnDeletedResult;
-use Bitrix24\SDK\Services\Landing\Page\Result\BlockAddedResult;
-use Bitrix24\SDK\Services\Landing\Page\Result\BlockCopiedResult;
-use Bitrix24\SDK\Services\Landing\Page\Result\BlockDeletedResult;
 use Bitrix24\SDK\Services\Landing\Page\Result\BlockMovedResult;
-use Bitrix24\SDK\Services\Landing\Page\Result\BlockVisibilityResult;
-use Bitrix24\SDK\Services\Landing\Page\Result\BlockMarkDeletedResult;
-use Bitrix24\SDK\Services\Landing\Page\Result\BlockMarkUnDeletedResult;
-use Bitrix24\SDK\Services\Landing\Page\Result\BlockFavoriteResult;
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['landing']))]
@@ -510,9 +503,9 @@ class Page extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-add-block.html',
         'Method for adding a new block to the page.'
     )]
-    public function addBlock(int $lid, array $fields): BlockAddedResult
+    public function addBlock(int $lid, array $fields): AddedItemResult
     {
-        return new BlockAddedResult(
+        return new AddedItemResult(
             $this->core->call('landing.landing.addblock', [
                 'lid' => $lid,
                 'fields' => $fields
@@ -537,7 +530,7 @@ class Page extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-copy-block.html',
         'Method copies a block from one page to another.'
     )]
-    public function copyBlock(int $lid, int $block, array $params = []): BlockCopiedResult
+    public function copyBlock(int $lid, int $block, array $params = []): AddedItemResult
     {
         $callParams = [
             'lid' => $lid,
@@ -548,7 +541,7 @@ class Page extends AbstractService
             $callParams['params'] = $params;
         }
 
-        return new BlockCopiedResult(
+        return new AddedItemResult(
             $this->core->call('landing.landing.copyblock', $callParams)
         );
     }
@@ -569,9 +562,9 @@ class Page extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-delete-block.html',
         'Method for deleting a block from the page.'
     )]
-    public function deleteBlock(int $lid, int $block): BlockDeletedResult
+    public function deleteBlock(int $lid, int $block): DeletedItemResult
     {
-        return new BlockDeletedResult(
+        return new DeletedItemResult(
             $this->core->call('landing.landing.deleteblock', [
                 'lid' => $lid,
                 'block' => $block
@@ -680,9 +673,9 @@ class Page extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-hide-block.html',
         'Method hides a block from the page.'
     )]
-    public function hideBlock(int $lid, int $block): BlockVisibilityResult
+    public function hideBlock(int $lid, int $block): UpdatedItemResult
     {
-        return new BlockVisibilityResult(
+        return new UpdatedItemResult(
             $this->core->call('landing.landing.hideblock', [
                 'lid' => $lid,
                 'block' => $block
@@ -706,9 +699,9 @@ class Page extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-show-block.html',
         'Method displays a block on the page.'
     )]
-    public function showBlock(int $lid, int $block): BlockVisibilityResult
+    public function showBlock(int $lid, int $block): UpdatedItemResult
     {
-        return new BlockVisibilityResult(
+        return new UpdatedItemResult(
             $this->core->call('landing.landing.showblock', [
                 'lid' => $lid,
                 'block' => $block
@@ -732,9 +725,9 @@ class Page extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-mark-deleted-block.html',
         'Method marks a block as deleted but does not physically remove it.'
     )]
-    public function markBlockDeleted(int $lid, int $block): BlockMarkDeletedResult
+    public function markBlockDeleted(int $lid, int $block): UpdatedItemResult
     {
-        return new BlockMarkDeletedResult(
+        return new UpdatedItemResult(
             $this->core->call('landing.landing.markdeletedblock', [
                 'lid' => $lid,
                 'block' => $block
@@ -758,9 +751,9 @@ class Page extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-mark-undeleted-block.html',
         'Method restores a block that has been marked as deleted.'
     )]
-    public function markBlockUnDeleted(int $lid, int $block): BlockMarkUnDeletedResult
+    public function markBlockUnDeleted(int $lid, int $block): UpdatedItemResult
     {
-        return new BlockMarkUnDeletedResult(
+        return new UpdatedItemResult(
             $this->core->call('landing.landing.markundeletedblock', [
                 'lid' => $lid,
                 'block' => $block
@@ -788,9 +781,9 @@ class Page extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-favorite-block.html',
         'Method saves an existing block on the page to My Blocks.'
     )]
-    public function addBlockToFavorites(int $lid, int $block, array $meta): BlockFavoriteResult
+    public function addBlockToFavorites(int $lid, int $block, array $meta): AddedItemResult
     {
-        return new BlockFavoriteResult(
+        return new AddedItemResult(
             $this->core->call('landing.landing.favoriteBlock', [
                 'lid' => $lid,
                 'block' => $block,
@@ -814,9 +807,9 @@ class Page extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/landing/page/block-methods/landing-landing-unfavorite-block.html',
         'Method removes a block that was saved in My Blocks.'
     )]
-    public function removeBlockFromFavorites(int $blockId): BlockFavoriteResult
+    public function removeBlockFromFavorites(int $blockId): UpdatedItemResult
     {
-        return new BlockFavoriteResult(
+        return new UpdatedItemResult(
             $this->core->call('landing.landing.unFavoriteBlock', [
                 'blockId' => $blockId
             ])

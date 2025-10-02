@@ -44,6 +44,18 @@ use PHPUnit\Framework\TestCase;
 #[CoversMethod(Page::class, 'markUnDeleted')]
 #[CoversMethod(Page::class, 'move')]
 #[CoversMethod(Page::class, 'removeEntities')]
+#[CoversMethod(Page::class, 'addBlock')]
+#[CoversMethod(Page::class, 'copyBlock')]
+#[CoversMethod(Page::class, 'deleteBlock')]
+#[CoversMethod(Page::class, 'moveBlockDown')]
+#[CoversMethod(Page::class, 'moveBlockUp')]
+#[CoversMethod(Page::class, 'moveBlock')]
+#[CoversMethod(Page::class, 'hideBlock')]
+#[CoversMethod(Page::class, 'showBlock')]
+#[CoversMethod(Page::class, 'markBlockDeleted')]
+#[CoversMethod(Page::class, 'markBlockUnDeleted')]
+#[CoversMethod(Page::class, 'addBlockToFavorites')]
+#[CoversMethod(Page::class, 'removeBlockFromFavorites')]
 #[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\Landing\Page\Service\Page::class)]
 class PageTest extends TestCase
 {
@@ -566,5 +578,312 @@ class PageTest extends TestCase
         $pagesResult = $this->pageService->getList(['ID'], ['ID' => $pageId]);
         $pages = $pagesResult->getPages();
         self::assertEmpty($pages, 'Page should be deleted and not found in list');
+    }
+
+    /**
+     * Helper method to create a test page with blocks
+     */
+    protected function createTestPageWithBlocks(): int
+    {
+        $siteId = $this->createTestSite();
+
+        $pageFields = [
+            'TITLE' => 'Test Page for Blocks ' . time(),
+            'CODE' => 'testpageblocks' . time(),
+            'SITE_ID' => $siteId
+        ];
+        
+        $addedItemResult = $this->pageService->add($pageFields);
+        $pageId = $addedItemResult->getId();
+        
+        $this->createdPageIds[] = $pageId;
+
+        return $pageId;
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testAddBlock(): void
+    {
+        $pageId = $this->createTestPageWithBlocks();
+
+        $blockFields = [
+            'CODE' => '01.big_with_text_blocks',
+            'ACTIVE' => 'Y'
+        ];
+
+        $blockAddedResult = $this->pageService->addBlock($pageId, $blockFields);
+        $blockId = $blockAddedResult->getId();
+
+        self::assertGreaterThan(0, $blockId);
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testCopyBlock(): void
+    {
+        $pageId1 = $this->createTestPageWithBlocks();
+        $pageId2 = $this->createTestPageWithBlocks();
+
+        // First add a block to the first page
+        $blockFields = [
+            'CODE' => '01.big_with_text_blocks',
+            'ACTIVE' => 'Y'
+        ];
+
+        $blockAddedResult = $this->pageService->addBlock($pageId1, $blockFields);
+        $originalBlockId = $blockAddedResult->getId();
+
+        // Copy the block to the second page
+        $blockCopiedResult = $this->pageService->copyBlock($pageId2, $originalBlockId);
+        $copiedBlockId = $blockCopiedResult->getId();
+
+        self::assertGreaterThan(0, $copiedBlockId);
+        self::assertNotEquals($originalBlockId, $copiedBlockId);
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testHideAndShowBlock(): void
+    {
+        $pageId = $this->createTestPageWithBlocks();
+
+        // Add a block
+        $blockFields = [
+            'CODE' => '01.big_with_text_blocks',
+            'ACTIVE' => 'Y'
+        ];
+
+        $blockAddedResult = $this->pageService->addBlock($pageId, $blockFields);
+        $blockId = $blockAddedResult->getId();
+
+        // Hide the block
+        $hideResult = $this->pageService->hideBlock($pageId, $blockId);
+        self::assertTrue($hideResult->isSuccess());
+
+        // Show the block
+        $showResult = $this->pageService->showBlock($pageId, $blockId);
+        self::assertTrue($showResult->isSuccess());
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testMoveBlockUpAndDown(): void
+    {
+        $pageId = $this->createTestPageWithBlocks();
+
+        // Add two blocks
+        $blockFields1 = [
+            'CODE' => '01.big_with_text_blocks',
+            'ACTIVE' => 'Y'
+        ];
+
+        $block1Result = $this->pageService->addBlock($pageId, $blockFields1);
+        $block1Id = $block1Result->getId();
+
+        $blockFields2 = [
+            //'CODE' => '02.three_cols_text_big',
+            'CODE' => '02.three_cols_big_1',
+            'ACTIVE' => 'Y',
+            'AFTER_ID' => $block1Id,
+        ];
+        
+        $block2Result = $this->pageService->addBlock($pageId, $blockFields2);
+        $block2Id = $block2Result->getId();
+        
+        // Move first block down
+        $moveDownResult = $this->pageService->moveBlockDown($pageId, $block1Id);
+        self::assertTrue($moveDownResult->isSuccess());
+
+        
+        // Move second block up
+        $moveUpResult = $this->pageService->moveBlockUp($pageId, $block1Id);
+        self::assertTrue($moveUpResult->isSuccess());
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testMoveBlockBetweenPages(): void
+    {
+        $pageId1 = $this->createTestPageWithBlocks();
+        $pageId2 = $this->createTestPageWithBlocks();
+
+        // Add a block to the first page
+        $blockFields = [
+            'CODE' => '01.big_with_text_blocks',
+            'ACTIVE' => 'Y'
+        ];
+
+        $blockAddedResult = $this->pageService->addBlock($pageId1, $blockFields);
+        $blockId = $blockAddedResult->getId();
+
+        // Move the block to the second page
+        $moveResult = $this->pageService->moveBlock($pageId2, $blockId);
+        self::assertTrue($moveResult->isSuccess());
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testMarkBlockDeletedAndUnDeleted(): void
+    {
+        $pageId = $this->createTestPageWithBlocks();
+
+        // Add a block
+        $blockFields = [
+            'CODE' => '01.big_with_text_blocks',
+            'ACTIVE' => 'Y'
+        ];
+
+        $blockAddedResult = $this->pageService->addBlock($pageId, $blockFields);
+        $blockId = $blockAddedResult->getId();
+
+        // Mark block as deleted
+        $markDeletedResult = $this->pageService->markBlockDeleted($pageId, $blockId);
+        self::assertTrue($markDeletedResult->isSuccess());
+
+        // Mark block as undeleted
+        $markUnDeletedResult = $this->pageService->markBlockUnDeleted($pageId, $blockId);
+        self::assertTrue($markUnDeletedResult->isSuccess());
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testAddAndRemoveBlockFromFavorites(): void
+    {
+        $pageId = $this->createTestPageWithBlocks();
+
+        // Add a block
+        $blockFields = [
+            'CODE' => '01.big_with_text_blocks',
+            'ACTIVE' => 'Y'
+        ];
+
+        $blockAddedResult = $this->pageService->addBlock($pageId, $blockFields);
+        $blockId = $blockAddedResult->getId();
+
+        // Add block to favorites
+        $meta = [
+            'name' => 'Test Favorite Block',
+            'section' => ['text'],
+            'preview' => 'https://example.com/preview.jpg'
+        ];
+
+        $favoriteResult = $this->pageService->addBlockToFavorites($pageId, $blockId, $meta);
+        $favoriteBlockId = $favoriteResult->getId();
+
+        // Verify it was added (should return a number)
+        self::assertGreaterThan(0, $favoriteBlockId);
+
+        // Remove block from favorites
+        $removeFavoriteResult = $this->pageService->removeBlockFromFavorites($favoriteBlockId);
+        self::assertTrue($removeFavoriteResult->isSuccess());
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testDeleteBlock(): void
+    {
+        $pageId = $this->createTestPageWithBlocks();
+
+        // Add a block
+        $blockFields = [
+            'CODE' => '01.big_with_text_blocks',
+            'ACTIVE' => 'Y'
+        ];
+
+        $blockAddedResult = $this->pageService->addBlock($pageId, $blockFields);
+        $blockId = $blockAddedResult->getId();
+
+        // Delete the block
+        $deleteResult = $this->pageService->deleteBlock($pageId, $blockId);
+        self::assertTrue($deleteResult->isSuccess());
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testCopyBlockWithParameters(): void
+    {
+        $pageId1 = $this->createTestPageWithBlocks();
+        $pageId2 = $this->createTestPageWithBlocks();
+
+        // Add two blocks to the first page
+        $blockFields1 = [
+            'CODE' => '01.big_with_text_blocks',
+            'ACTIVE' => 'Y'
+        ];
+
+
+        $block1Result = $this->pageService->addBlock($pageId1, $blockFields1);
+        $block1Id = $block1Result->getId();
+
+        $blockFields2 = [
+            'CODE' => '02.three_cols_big_1',
+            'ACTIVE' => 'Y',
+            'AFTER_ID' => $block1Id,
+        ];
+        $block2Result = $this->pageService->addBlock($pageId1, $blockFields2);
+        $block2Id = $block2Result->getId();
+
+        // Copy block with AFTER_ID parameter
+        $params = ['AFTER_ID' => $block1Id];
+        $blockCopiedResult = $this->pageService->copyBlock($pageId2, $block2Id, $params);
+        $copiedBlockId = $blockCopiedResult->getId();
+
+        self::assertGreaterThan(0, $copiedBlockId);
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testMoveBlockWithParameters(): void
+    {
+        $pageId1 = $this->createTestPageWithBlocks();
+        $pageId2 = $this->createTestPageWithBlocks();
+
+        // Add two blocks to the first page
+        $blockFields1 = [
+            'CODE' => '01.big_with_text_blocks',
+            'ACTIVE' => 'Y'
+        ];
+
+
+        $block1Result = $this->pageService->addBlock($pageId1, $blockFields1);
+        $block1Id = $block1Result->getId();
+
+        $blockFields2 = [
+            'CODE' => '02.three_cols_big_1',
+            'ACTIVE' => 'Y',
+            'AFTER_ID' => $block1Id,
+        ];
+        $block2Result = $this->pageService->addBlock($pageId1, $blockFields2);
+        $block2Id = $block2Result->getId();
+
+        // Add a block to the second page to use as reference
+        $block3Result = $this->pageService->addBlock($pageId2, $blockFields1);
+        $block3Id = $block3Result->getId();
+
+        // Move block with AFTER_ID parameter
+        $params = ['AFTER_ID' => $block3Id];
+        $moveResult = $this->pageService->moveBlock($pageId2, $block2Id, $params);
+        self::assertTrue($moveResult->isSuccess());
     }
 }
