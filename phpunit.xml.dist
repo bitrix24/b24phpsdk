@@ -28,6 +28,15 @@
         <testsuite name="integration_tests_scope_placement">
             <directory>./tests/Integration/Services/Placement/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_paysystem">
+            <directory>./tests/Integration/Services/Paysystem/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_paysystem_service">
+            <directory>./tests/Integration/Services/Paysystem/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_paysystem_settings">
+            <directory>./tests/Integration/Services/Paysystem/Settings/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_user">
             <directory>./tests/Integration/Services/User/</directory>
         </testsuite>
@@ -156,6 +165,9 @@
         </testsuite>
         <testsuite name="integration_tests_landing_syspage">
             <directory>./tests/Integration/Services/Landing/SysPage/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_core-list">
+            <file>./tests/Integration/Core/BatchTraversableListTest.php</file>
         </testsuite>
         <testsuite name="integration_tests_sale_shipment">
             <directory>./tests/Integration/Services/Sale/Shipment/</directory>

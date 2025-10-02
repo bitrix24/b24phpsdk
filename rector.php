@@ -34,6 +34,8 @@ return RectorConfig::configure()
         __DIR__ . '/tests/Integration/Services/CRM/Address',
         __DIR__ . '/src/Services/Main',
         __DIR__ . '/tests/Integration/Services/Main',
+        __DIR__ . '/src/Services/Paysystem',
+        __DIR__ . '/tests/Integration/Services/Paysystem',
         __DIR__ . '/src/Services/Placement',
         __DIR__ . '/tests/Integration/Services/Placement',
         __DIR__ . '/src/Services/CRM/Deal',

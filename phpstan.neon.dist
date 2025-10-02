@@ -10,6 +10,7 @@ parameters:
     - tests/Integration/Services/Catalog
     - tests/Integration/Services/IMOpenLines
     - tests/Integration/Services/Main
+    - tests/Integration/Services/Paysystem
     - tests/Integration/Services/Placement
     - tests/Integration/Services/CRM/Address
     - tests/Integration/Services/CRM/Deal/Service/DealRecurringTest.php
