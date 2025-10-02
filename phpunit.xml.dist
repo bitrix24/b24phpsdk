@@ -181,6 +181,9 @@
         <testsuite name="integration_tests_sale_shipment_item">
             <directory>./tests/Integration/Services/Sale/ShipmentItem/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_landing_template">
+            <directory>./tests/Integration/Services/Landing/Template/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>

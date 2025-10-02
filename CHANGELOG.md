@@ -36,6 +36,13 @@
     - `getSpecialPage` retrieves the address of the special page on the site
     - `deleteForLanding` deletes all mentions of the page as a special one
     - `deleteForSite` deletes all special pages of the site
+- Added service `Services\Landing\Template\Service\Template` with support methods,
+  see [landing.template.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
+    - `getList` retrieves a list of templates
+    - `getLandingRef` retrieves a list of included areas for the page
+    - `getSiteRef` retrieves a list of included areas for the site
+    - `setLandingRef` sets the included areas for the page
+    - `setSiteRef` sets the included areas for the site
 - Added service `Services\Paysystem\Handler\Service\Handler` with support methods,
   see [pay_system.handler.* methods](https://github.com/bitrix24/b24phpsdk/issues/260):
     - `add` adds a payment system handler
