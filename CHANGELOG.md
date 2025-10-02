@@ -25,6 +25,13 @@
     - `unPublicFolder` unpublishes the site's folder
     - `markFolderDelete` marks the folder as deleted
     - `markFolderUnDelete` restores the folder from the trash
+- Added service `Services\Landing\SysPage\Service\SysPage` with support methods,
+  see [landing.syspage.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
+    - `set` sets a special page for the site
+    - `get` retrieves the list of special pages
+    - `getSpecialPage` retrieves the address of the special page on the site
+    - `deleteForLanding` deletes all mentions of the page as a special one
+    - `deleteForSite` deletes all special pages of the site
 - Added service `Services\Sale\Shipment\Service\Shipment` with support methods,
   see [sale.shipment.* methods](https://github.com/bitrix24/b24phpsdk/issues/250):
     - `add` adds a shipment
