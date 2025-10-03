@@ -558,8 +558,7 @@ class Block extends AbstractService
      *
      * @param int $lid Page identifier
      * @param int $blockId Block identifier
-     * @param string $selector Node selector
-     * @param string $tagName New tag name
+     * @param array $data Array of selectors and new tag names. Example: ['.landing-block-node-text@0' => 'h2']
      *
      * @throws BaseException
      * @throws TransportException
@@ -569,7 +568,7 @@ class Block extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/landing/block/methods/landing-block-change-node-name.html',
         'Method for changing the tag name.'
     )]
-    public function changeNodeName(int $lid, int $blockId, string $selector, string $tagName): UpdateResult
+    public function changeNodeName(int $lid, int $blockId, array $data): UpdateResult
     {
         return new UpdateResult(
             $this->core->call(
@@ -577,8 +576,7 @@ class Block extends AbstractService
                 [
                     'lid' => $lid,
                     'block' => $blockId,
-                    'selector' => $selector,
-                    'tagName' => $tagName,
+                    'data' => $data,
                 ]
             )
         );
