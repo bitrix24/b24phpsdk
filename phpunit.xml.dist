@@ -184,6 +184,9 @@
         <testsuite name="integration_tests_scope_landing_template">
             <directory>./tests/Integration/Services/Landing/Template/</directory>
         </testsuite>
+        <testsuite name="integration_tests_landing_block">
+            <directory>./tests/Integration/Services/Landing/Block/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>

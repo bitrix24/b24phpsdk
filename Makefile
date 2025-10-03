@@ -223,6 +223,10 @@ test-integration-scope-landing:
 test-integration-scope-landing-template:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_landing_template
 
+.PHONY: test-integration-landing-block
+test-integration-landing-block:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_block
+
 .PHONY: test-integration-landing-site
 test-integration-landing-site:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_site
