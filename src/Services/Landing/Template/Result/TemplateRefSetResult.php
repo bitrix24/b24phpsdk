@@ -20,8 +20,7 @@ class TemplateRefSetResult extends AbstractResult
 {
     /**
      * Returns true on success or error on failure
-     * 
-     * @return bool
+     *
      * @throws BaseException
      */
     public function isSuccess(): bool

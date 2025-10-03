@@ -20,12 +20,11 @@ class TemplateRefsResult extends AbstractResult
 {
     /**
      * Returns array where keys are included area identifiers and values are page identifiers
-     * 
-     * @return array
+     *
      * @throws BaseException
      */
     public function getRefs(): array
     {
-        return (array)$this->getCoreResponse()->getResponseData()->getResult();
+        return $this->getCoreResponse()->getResponseData()->getResult();
     }
 }

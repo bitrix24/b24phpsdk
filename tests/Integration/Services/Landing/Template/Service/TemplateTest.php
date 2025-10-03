@@ -39,10 +39,13 @@ class TemplateTest extends TestCase
     use CustomBitrix24Assertions;
 
     protected Template $templateService;
+
     protected Site $siteService;
+
     protected Page $pageService;
 
     protected array $createdPageIds = [];
+
     protected array $createdSiteIds = [];
 
     protected function setUp(): void
@@ -161,8 +164,8 @@ class TemplateTest extends TestCase
         $siteId = $this->createTestSite();
         $pageId = $this->createTestPage($siteId);
 
-        $refsResult = $this->templateService->getLandingRef($pageId);
-        $refs = $refsResult->getRefs();
+        $templateRefsResult = $this->templateService->getLandingRef($pageId);
+        $refs = $templateRefsResult->getRefs();
 
         self::assertIsArray($refs);
         // The refs array might be empty if no template areas are configured for this page
@@ -177,8 +180,8 @@ class TemplateTest extends TestCase
     {
         $siteId = $this->createTestSite();
 
-        $refsResult = $this->templateService->getSiteRef($siteId);
-        $refs = $refsResult->getRefs();
+        $templateRefsResult = $this->templateService->getSiteRef($siteId);
+        $refs = $templateRefsResult->getRefs();
 
         self::assertIsArray($refs);
         // The refs array might be empty if no template areas are configured for this site
@@ -195,12 +198,12 @@ class TemplateTest extends TestCase
         $pageId = $this->createTestPage($siteId);
 
         // Test setting empty data (should reset included areas)
-        $setResult = $this->templateService->setLandingRef($pageId, []);
-        self::assertTrue($setResult->isSuccess());
+        $templateRefSetResult = $this->templateService->setLandingRef($pageId, []);
+        self::assertTrue($templateRefSetResult->isSuccess());
 
         // Verify that refs are now empty
-        $refsResult = $this->templateService->getLandingRef($pageId);
-        $refs = $refsResult->getRefs();
+        $templateRefsResult = $this->templateService->getLandingRef($pageId);
+        $refs = $templateRefsResult->getRefs();
         self::assertIsArray($refs);
     }
 
@@ -213,12 +216,12 @@ class TemplateTest extends TestCase
         $siteId = $this->createTestSite();
 
         // Test setting empty data (should reset included areas)
-        $setResult = $this->templateService->setSiteRef($siteId, []);
-        self::assertTrue($setResult->isSuccess());
+        $templateRefSetResult = $this->templateService->setSiteRef($siteId, []);
+        self::assertTrue($templateRefSetResult->isSuccess());
 
         // Verify that refs are now empty
-        $refsResult = $this->templateService->getSiteRef($siteId);
-        $refs = $refsResult->getRefs();
+        $templateRefsResult = $this->templateService->getSiteRef($siteId);
+        $refs = $templateRefsResult->getRefs();
         self::assertIsArray($refs);
     }
 
@@ -230,7 +233,7 @@ class TemplateTest extends TestCase
     {
         $siteId = $this->createTestSite();
         $pageId = $this->createTestPage($siteId);
-        
+
         // Create additional pages to use as template areas
         $headerPageId = $this->createTestPage($siteId);
         $footerPageId = $this->createTestPage($siteId);
@@ -241,14 +244,14 @@ class TemplateTest extends TestCase
             2 => $footerPageId   // Area 2 -> footer page
         ];
 
-        $setResult = $this->templateService->setLandingRef($pageId, $data);
-        self::assertTrue($setResult->isSuccess());
+        $templateRefSetResult = $this->templateService->setLandingRef($pageId, $data);
+        self::assertTrue($templateRefSetResult->isSuccess());
 
         // Verify that refs are set correctly
-        $refsResult = $this->templateService->getLandingRef($pageId);
-        $refs = $refsResult->getRefs();
+        $templateRefsResult = $this->templateService->getLandingRef($pageId);
+        $refs = $templateRefsResult->getRefs();
         self::assertIsArray($refs);
-        
+
         // Note: The actual refs might not match exactly what we set
         // because the page might not be linked to a template that supports these areas
         // This is expected behavior according to the API documentation
@@ -261,7 +264,7 @@ class TemplateTest extends TestCase
     public function testSetSiteRefWithData(): void
     {
         $siteId = $this->createTestSite();
-        
+
         // Create pages to use as template areas
         $headerPageId = $this->createTestPage($siteId);
         $footerPageId = $this->createTestPage($siteId);
@@ -272,14 +275,14 @@ class TemplateTest extends TestCase
             2 => $footerPageId   // Area 2 -> footer page
         ];
 
-        $setResult = $this->templateService->setSiteRef($siteId, $data);
-        self::assertTrue($setResult->isSuccess());
+        $templateRefSetResult = $this->templateService->setSiteRef($siteId, $data);
+        self::assertTrue($templateRefSetResult->isSuccess());
 
         // Verify that refs are set correctly
-        $refsResult = $this->templateService->getSiteRef($siteId);
-        $refs = $refsResult->getRefs();
+        $templateRefsResult = $this->templateService->getSiteRef($siteId);
+        $refs = $templateRefsResult->getRefs();
         self::assertIsArray($refs);
-        
+
         // Note: The actual refs might not match exactly what we set
         // because the site might not be linked to a template that supports these areas
         // This is expected behavior according to the API documentation

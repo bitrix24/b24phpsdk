@@ -42,7 +42,6 @@ class Template extends AbstractService
      * @param array $filter Optional array of filter conditions
      * @param array $order Optional array of order conditions
      *
-     * @return TemplatesResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -57,9 +56,11 @@ class Template extends AbstractService
         if ($select !== []) {
             $params['select'] = $select;
         }
+
         if ($filter !== []) {
             $params['filter'] = $filter;
         }
+
         if ($order !== []) {
             $params['order'] = $order;
         }
@@ -81,7 +82,6 @@ class Template extends AbstractService
      *
      * @param int $id Page identifier
      *
-     * @return TemplateRefsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -104,7 +104,6 @@ class Template extends AbstractService
      *
      * @param int $id Site identifier
      *
-     * @return TemplateRefsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -128,7 +127,6 @@ class Template extends AbstractService
      * @param int $id Identifier of the page
      * @param array $data Array of data to set (if the array is empty or not provided, the included areas will be reset). The keys of the array are the identifiers of the areas, and the values are the identifiers of the pages that need to be set as the area
      *
-     * @return TemplateRefSetResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -157,7 +155,6 @@ class Template extends AbstractService
      * @param int $id Site identifier
      * @param array $data Array of data to set (if the array is empty or not provided, the included areas will be reset). The keys of the array are the area identifiers, and the values are the identifiers of the pages that need to be set as the area
      *
-     * @return TemplateRefSetResult
      * @throws BaseException
      * @throws TransportException
      */
