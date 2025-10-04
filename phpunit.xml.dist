@@ -169,6 +169,9 @@
         <testsuite name="integration_tests_sale_shipment_item">
             <directory>./tests/Integration/Services/Sale/ShipmentItem/</directory>
         </testsuite>
+        <testsuite name="integration_tests_crm_documentgenerator_numerator">
+            <directory>./tests/Integration/Services/CRM/Documentgenerator/Numerator/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>

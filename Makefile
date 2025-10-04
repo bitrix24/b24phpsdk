@@ -259,7 +259,7 @@ test-integration-sale-payment-item-shipment:
 .PHONY: test-integration-sale-property-relation
 test-integration-sale-property-relation:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_property_relation
- 
+
 .PHONY: test-integration-scope-crm
 test-integration-scope-crm:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm
@@ -356,6 +356,10 @@ integration_tests_sale_payment:
 integration_tests_sale_payment_item_basket:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_payment_item_basket
 
+.PHONY: integration_tests_crm_documentgenerator_numerator
+integration_tests_crm_documentgenerator_numerator:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_documentgenerator_numerator
+
 # work dev environment
 .PHONY: php-dev-server-up
 php-dev-server-up:
@@ -411,4 +415,3 @@ build-examples-for-documentation:
 	--example-template=docs/api/file-templates/examples/master-example.php \
 	--openai-api-key=$(DOCUMENTATION_OPEN_AI_API_KEY) \
 	--docs-repo-folder=$(DOCUMENTATION_REPOSITORY_FOLDER)
-
