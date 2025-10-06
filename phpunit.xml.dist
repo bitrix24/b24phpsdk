@@ -58,6 +58,15 @@
         <testsuite name="integration_tests_scope_sale">
             <directory>./tests/Integration/Services/Sale/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_calendar">
+            <directory>./tests/Integration/Services/Calendar/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_calendar_event">
+            <directory>./tests/Integration/Services/Calendar/Event/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_calendar_resource">
+            <directory>./tests/Integration/Services/Calendar/Resource/</directory>
+        </testsuite>
         <testsuite name="integration_tests_sale_status">
             <directory>./tests/Integration/Services/Sale/Status/</directory>
         </testsuite>
@@ -132,6 +141,18 @@
         </testsuite>
         <testsuite name="integration_tests_scope_sale">
             <directory>./tests/Integration/Services/Sale/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_disk">
+            <directory>./tests/Integration/Services/Disk/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_disk_service">
+            <directory>./tests/Integration/Services/Disk/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_disk_file">
+            <directory>./tests/Integration/Services/Disk/File/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_disk_storage">
+            <directory>./tests/Integration/Services/Disk/Storage/</directory>
         </testsuite>
         <testsuite name="integration_tests_task">
             <directory>./tests/Integration/Services/Task/</directory>

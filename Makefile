@@ -50,6 +50,8 @@ help:
 	@echo "lint-rector-fix           - fix source code with rector"
 	@echo ""
 	@echo "test-unit                 - run unit tests"
+	@echo "test-integration-calendar-event - run Calendar Event integration tests"
+	@echo "test-integration-calendar-resource - run Calendar Resource integration tests"
 	@echo "test-integration-sale-basket-property - run BasketProperty integration tests"
 	@echo "test-integration-sale-delivery - run Delivery integration tests"
 	@echo "test-integration-sale-delivery-extra-service - run DeliveryExtraService integration tests"
@@ -213,6 +215,33 @@ test-integration-scope-log:
 .PHONY: test-integration-scope-sale
 test-integration-scope-sale:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sale
+
+.PHONY: test-integration-scope-disk
+test-integration-scope-disk:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_disk
+
+.PHONY: test-integration-disk-service
+test-integration-disk-service:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_disk_service
+
+.PHONY: test-integration-disk-file
+test-integration-disk-file:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_disk_file
+
+.PHONY: test-integration-disk-storage
+test-integration-disk-storage:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_disk_storage
+.PHONY: test-integration-scope-calendar
+test-integration-scope-calendar:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_calendar
+
+.PHONY: test-integration-calendar-event
+test-integration-calendar-event:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_calendar_event
+
+.PHONY: test-integration-calendar-resource
+test-integration-calendar-resource:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_calendar_resource
 
 .PHONY: test-integration-sale-status
 test-integration-sale-status:
