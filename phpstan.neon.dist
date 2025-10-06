@@ -10,6 +10,7 @@ parameters:
     - tests/Integration/Services/Catalog
     - tests/Integration/Services/IMOpenLines
     - tests/Integration/Services/Main
+    - tests/Integration/Services/Paysystem
     - tests/Integration/Services/Placement
     - tests/Integration/Services/CRM/Address
     - tests/Integration/Services/CRM/Deal/Service/DealRecurringTest.php
@@ -29,6 +30,7 @@ parameters:
     - tests/Integration/Services/CRM/Requisites
     - tests/Integration/Services/Task
     - tests/Integration/Services/Sale
+    - tests/Integration/Services/CRM/Documentgenerator/Numerator
   excludePaths:
     - tests/Integration/Services/CRM/Requisites/Service/RequisiteUserfieldUseCaseTest.php
     - tests/Integration/Services/CRM/Status

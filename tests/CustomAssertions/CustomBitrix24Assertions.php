@@ -443,6 +443,7 @@ trait CustomBitrix24Assertions
                 case 'crm_status_extra':
                 case 'attached_diskfile':
                 case 'disk_file':
+                case 'datatype':
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'array'),
                         sprintf(

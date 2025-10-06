@@ -53,6 +53,10 @@ help:
 	@echo "test-integration-sale-basket-property - run BasketProperty integration tests"
 	@echo "test-integration-sale-delivery - run Delivery integration tests"
 	@echo "test-integration-sale-delivery-extra-service - run DeliveryExtraService integration tests"
+	@echo "test-integration-scope-paysystem - run Payment System integration tests"
+	@echo "test-integration-sale-payment-item-basket - run PaymentItemBasket integration tests"
+	@echo "test-integration-sale-payment-item-shipment - run PaymentItemShipment integration tests"
+	@echo "test-integration-sale-property-relation - run PropertyRelation integration tests"
 
 
 .PHONY: docker-init
@@ -162,6 +166,18 @@ test-integration-scope-im:
 test-integration-scope-placement:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_placement
 
+.PHONY: test-integration-scope-paysystem
+test-integration-scope-paysystem:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_paysystem
+
+.PHONY: test-integration-paysystem-service
+test-integration-paysystem-service:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_paysystem_service
+
+.PHONY: test-integration-paysystem-settings
+test-integration-paysystem-settings:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_paysystem_settings
+
 .PHONY: test-integration-scope-im-open-lines
 test-integration-scope-im-open-lines:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im_open_lines
@@ -177,6 +193,10 @@ test-integration-scope-user-consent:
 .PHONY: test-integration-core
 test-integration-core:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_core
+	
+.PHONY: test-integration-core-list
+test-integration-core-list:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_core-list
 
 .PHONY: test-integration-scope-entity
 test-integration-scope-entity:
@@ -202,6 +222,22 @@ test-integration-sale-status:
 test-integration-sale-status-lang:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_status_lang
 
+.PHONY: test-integration-scope-sale-shipment
+test-integration-scope-sale-shipment:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_shipment
+
+.PHONY: test-integration-scope-sale-shipment-property
+test-integration-scope-sale-shipment-property:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_shipment_property
+
+.PHONY: test-integration-scope-sale-shipment-property-value
+test-integration-scope-sale-shipment-property-value:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_shipment_property_value
+
+.PHONY: test-integration-scope-sale-shipment-item
+test-integration-scope-sale-shipment-item:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_shipment_item
+
 .PHONY: test-integration-sale-basket-property
 test-integration-sale-basket-property:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_basket_property
@@ -213,7 +249,19 @@ test-integration-sale-basket:
 .PHONY: test-integration-sale-order
 test-integration-sale-order:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_order
- 
+
+.PHONY: test-integration-sale-payment-item-basket
+test-integration-sale-payment-item-basket:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_payment_item_basket
+
+.PHONY: test-integration-sale-payment-item-shipment
+test-integration-sale-payment-item-shipment:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_payment_item_shipment
+
+.PHONY: test-integration-sale-property-relation
+test-integration-sale-property-relation:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_property_relation
+
 .PHONY: test-integration-scope-crm
 test-integration-scope-crm:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm
@@ -317,6 +365,13 @@ test-integration-sale-delivery:
 .PHONY: test-integration-sale-delivery-extra-service
 test-integration-sale-delivery-extra-service:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_delivery_extra_service
+.PHONY: integration_tests_sale_payment_item_basket
+integration_tests_sale_payment_item_basket:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_payment_item_basket
+
+.PHONY: integration_tests_crm_documentgenerator_numerator
+integration_tests_crm_documentgenerator_numerator:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_documentgenerator_numerator
 
 # work dev environment
 .PHONY: php-dev-server-up
@@ -373,4 +428,3 @@ build-examples-for-documentation:
 	--example-template=docs/api/file-templates/examples/master-example.php \
 	--openai-api-key=$(DOCUMENTATION_OPEN_AI_API_KEY) \
 	--docs-repo-folder=$(DOCUMENTATION_REPOSITORY_FOLDER)
-

@@ -32,6 +32,7 @@ use Bitrix24\SDK\Services\UserConsent\UserConsentServiceBuilder;
 use Bitrix24\SDK\Services\Placement\PlacementServiceBuilder;
 use Bitrix24\SDK\Services\Workflows\WorkflowsServiceBuilder;
 use Bitrix24\SDK\Services\Sale\SaleServiceBuilder;
+use Bitrix24\SDK\Services\Paysystem\PaysystemServiceBuilder;
 use Psr\Log\LoggerInterface;
 
 class ServiceBuilder extends AbstractServiceBuilder
@@ -195,6 +196,20 @@ class ServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new PlacementServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function getPaysystemScope(): PaysystemServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new PaysystemServiceBuilder(
                 $this->core,
                 $this->batch,
                 $this->bulkItemsReader,
