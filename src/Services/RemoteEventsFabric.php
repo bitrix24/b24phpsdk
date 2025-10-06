@@ -20,6 +20,7 @@ use Bitrix24\SDK\Core\Contracts\Events\EventsFabricInterface;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\WrongSecuritySignatureException;
 use Bitrix24\SDK\Core\Requests\Events\UnsupportedRemoteEvent;
+use Bitrix24\SDK\Services\Calendar\Events\CalendarEventsFactory;
 use Bitrix24\SDK\Services\CRM\Company\Events\CrmCompanyEventsFactory;
 use Bitrix24\SDK\Services\Telephony\Events\TelephonyEventsFabric;
 use JetBrains\PhpStorm\Deprecated;
@@ -148,6 +149,7 @@ readonly class RemoteEventsFabric
                 // register events fabric by scope
                 new ApplicationLifeCycleEventsFabric(),
                 new TelephonyEventsFabric(),
+                new CalendarEventsFactory(),
                 new CrmCompanyEventsFactory(),
             ],
             $logger
