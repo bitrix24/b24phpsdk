@@ -324,7 +324,7 @@ class SaleServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-  
+
     /**
      * DeliveryHandler service (sale.delivery.handler.*)
      */
@@ -354,7 +354,7 @@ class SaleServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-  
+
     /**
      * Delivery service (sale.delivery.*)
      */
