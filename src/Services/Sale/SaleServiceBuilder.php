@@ -367,7 +367,7 @@ class SaleServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-  
+
     /**
      * Property Relation service (sale.propertyRelation.*)
      */
