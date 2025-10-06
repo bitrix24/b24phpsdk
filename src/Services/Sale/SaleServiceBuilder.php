@@ -25,6 +25,12 @@ use Bitrix24\SDK\Services\Sale\PersonTypeStatus\Service\PersonTypeStatus;
 use Bitrix24\SDK\Services\Sale\ShipmentPropertyValue\Service\ShipmentPropertyValue;
 use Bitrix24\SDK\Services\Sale\ShipmentItem\Service\ShipmentItem;
 use Bitrix24\SDK\Services\Sale\BasketProperty\Service\BasketProperty;
+use Bitrix24\SDK\Services\Sale\CashboxHandler\Service\CashboxHandler;
+use Bitrix24\SDK\Services\Sale\Cashbox\Service\Cashbox;
+use Bitrix24\SDK\Services\Sale\DeliveryHandler\Service\DeliveryHandler;
+use Bitrix24\SDK\Services\Sale\Delivery\Service\Delivery;
+use Bitrix24\SDK\Services\Sale\DeliveryRequest\Service\DeliveryRequest;
+use Bitrix24\SDK\Services\Sale\DeliveryExtraService\Service\DeliveryExtraService;
 use Bitrix24\SDK\Services\Sale\Payment;
 use Bitrix24\SDK\Services\Sale\PaymentItemBasket;
 use Bitrix24\SDK\Services\Sale\PaymentItemShipment;
@@ -296,6 +302,96 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new BasketProperty(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * Cash register handlers service (sale.cashbox.handler.*)
+     */
+    public function cashboxHandler(): CashboxHandler
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new CashboxHandler(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * DeliveryHandler service (sale.delivery.handler.*)
+     */
+    public function deliveryHandler(): DeliveryHandler
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new DeliveryHandler(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * Cash registers service (sale.cashbox.*)
+     */
+    public function cashbox(): Cashbox
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Cashbox(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * Delivery service (sale.delivery.*)
+     */
+    public function delivery(): Delivery
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Delivery(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * Delivery request service (sale.delivery.request.*)
+     */
+    public function deliveryRequest(): DeliveryRequest
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new DeliveryRequest(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * Delivery extra service (sale.delivery.extra.service.*)
+     */
+    public function deliveryExtraService(): DeliveryExtraService
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new DeliveryExtraService(
                 $this->core,
                 $this->log
             );

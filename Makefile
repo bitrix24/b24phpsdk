@@ -50,7 +50,13 @@ help:
 	@echo "lint-rector-fix           - fix source code with rector"
 	@echo ""
 	@echo "test-unit                 - run unit tests"
+	@echo "test-integration-calendar-event - run Calendar Event integration tests"
+	@echo "test-integration-calendar-resource - run Calendar Resource integration tests"
 	@echo "test-integration-sale-basket-property - run BasketProperty integration tests"
+	@echo "test-integration-sale-cashbox-handler - run CashboxHandler integration tests"
+	@echo "test-integration-sale-cashbox - run Cashbox integration tests"
+	@echo "test-integration-sale-delivery - run Delivery integration tests"
+	@echo "test-integration-sale-delivery-extra-service - run DeliveryExtraService integration tests"
 	@echo "test-integration-scope-paysystem - run Payment System integration tests"
 	@echo "test-integration-sale-payment-item-basket - run PaymentItemBasket integration tests"
 	@echo "test-integration-sale-payment-item-shipment - run PaymentItemShipment integration tests"
@@ -238,6 +244,32 @@ test-integration-landing-page:
 .PHONY: test-integration-landing-syspage
 test-integration-landing-syspage:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_syspage
+.PHONY: test-integration-scope-disk
+test-integration-scope-disk:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_disk
+
+.PHONY: test-integration-disk-service
+test-integration-disk-service:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_disk_service
+
+.PHONY: test-integration-disk-file
+test-integration-disk-file:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_disk_file
+
+.PHONY: test-integration-disk-storage
+test-integration-disk-storage:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_disk_storage
+.PHONY: test-integration-scope-calendar
+test-integration-scope-calendar:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_calendar
+
+.PHONY: test-integration-calendar-event
+test-integration-calendar-event:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_calendar_event
+
+.PHONY: test-integration-calendar-resource
+test-integration-calendar-resource:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_calendar_resource
 
 .PHONY: test-integration-sale-status
 test-integration-sale-status:
@@ -275,6 +307,14 @@ test-integration-sale-basket:
 test-integration-sale-order:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_order
 
+.PHONY: test-integration-sale-cashbox-handler
+test-integration-sale-cashbox-handler:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_cashbox_handler
+
+.PHONY: test-integration-sale-cashbox
+test-integration-sale-cashbox:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_cashbox
+ 
 .PHONY: test-integration-sale-payment-item-basket
 test-integration-sale-payment-item-basket:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_payment_item_basket
@@ -379,6 +419,17 @@ integration_tests_sale:
 integration_tests_sale_payment:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_payment
 
+.PHONY: test-integration-sale-delivery-handler
+test-integration-sale-delivery-handler:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_delivery_handler
+
+.PHONY: test-integration-sale-delivery
+test-integration-sale-delivery:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_delivery
+
+.PHONY: test-integration-sale-delivery-extra-service
+test-integration-sale-delivery-extra-service:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_delivery_extra_service
 .PHONY: integration_tests_sale_payment_item_basket
 integration_tests_sale_payment_item_basket:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_payment_item_basket

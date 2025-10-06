@@ -93,6 +93,75 @@
     - `getSiteRef` retrieves a list of included areas for the site
     - `setLandingRef` sets the included areas for the page
     - `setSiteRef` sets the included areas for the site
+- Added service `Services\Sale\Delivery\Service\Delivery` with support methods,
+  see [sale.delivery.* methods](https://github.com/bitrix24/b24phpsdk/issues/255):
+    - `add` adds a delivery service
+    - `update` updates a delivery service
+    - `getlist` returns a list of delivery services
+    - `delete` deletes a delivery service
+    - `configUpdate` updates delivery service settings
+    - `configGet` returns delivery service settings
+- Added service `Services\Sale\DeliveryRequest\Service\DeliveryRequest` with support methods,
+  see [sale.delivery.request.* methods](https://github.com/bitrix24/b24phpsdk/issues/255):
+    - `update` updates the delivery request
+    - `sendMessage` creates notifications for the delivery request
+    - `delete` deletes the delivery request
+- Added service `Services\Sale\DeliveryExtraService\Service\DeliveryExtraService` with support methods,
+  see [sale.delivery.extra.service.* methods](https://github.com/bitrix24/b24phpsdk/issues/255):
+    - `add` adds a delivery service
+    - `update` updates a delivery service
+    - `get` returns information about all services of a specific delivery service
+    - `delete` deletes a delivery service
+- Added service `Services\Sale\DeliveryHandler\Service\DeliveryHandler` with support methods,
+  see [sale.delivery.handler.* methods](https://github.com/bitrix24/b24phpsdk/issues/255):
+    - `add` adds a delivery service handler
+    - `update` updates the delivery service handler
+    - `list` returns a list of delivery service handlers
+    - `delete` deletes a delivery service handler
+- Added service `Services\Disk\Service\Disk` with support methods,
+  see [disk service methods](https://github.com/bitrix24/b24phpsdk/issues/265):
+    - `getVersion` returns the version by identifier
+    - `getAttachedObject` returns information about the attached file
+    - `getRightsTasks` returns a list of available access levels that can be used for assigning permissions
+- Added service `Services\Disk\Storage\Service\Storage` with support methods,
+  see [disk.storage.* methods](https://github.com/bitrix24/b24phpsdk/issues/265):
+    - `fields` returns the description of the storage fields
+    - `get` returns the storage by identifier
+    - `rename` renames the storage
+    - `list` returns a list of available storages
+    - `getTypes` returns a list of storage types
+    - `addFolder` creates a folder in the root of the storage
+    - `getChildren` returns a list of files and folders in the root of the storage
+    - `uploadFile` uploads a new file to the root of the storage
+    - `getForApp` returns the description of the storage that the application can work with
+- Added service `Services\Disk\Folder\Service\Folder` with support methods,
+  see [disk.folder.* methods](https://github.com/bitrix24/b24phpsdk/issues/265):
+    - `getFields` returns the description of folder fields
+    - `get` returns the folder by identifier
+    - `getChildren` returns a list of files and folders that are directly in the folder
+    - `addSubfolder` creates a subfolder
+    - `copyTo` copies the folder to the specified folder
+    - `moveTo` moves the folder to the specified folder
+    - `rename` renames the folder
+    - `markDeleted` moves the folder to the trash
+    - `restore` restores the folder from the trash
+    - `deleteTree` permanently destroys the folder and all its child elements
+    - `getExternalLink` returns a public link
+    - `uploadFile` uploads a new file to the specified folder
+- Added service `Services\Disk\File\Service\File` with support methods,
+  see [disk.file.* methods](https://github.com/bitrix24/b24phpsdk/issues/265):
+    - `getFields` returns the description of file fields
+    - `get` returns the file by identifier
+    - `rename` renames the file
+    - `copyTo` copies the file to the specified folder
+    - `moveTo` moves the file to the specified folder
+    - `delete` permanently destroys the file
+    - `markDeleted` moves the file to the trash
+    - `restore` restores the file from the trash
+    - `uploadVersion` uploads a new version of the file
+    - `getVersions` returns a list of file versions
+    - `restoreFromVersion` restores the file from a specific version
+    - `getExternalLink` returns a public link to the file
 - Added service `Services\CRM\Documentgenerator\Numerator` with support methods,
   see [crm.documentgenerator.numerator.* methods](https://github.com/bitrix24/b24phpsdk/issues/215):
     - `add` adds a new numerator, with batch calls support
@@ -145,7 +214,6 @@
     - `list` returns a list of shipment property values
     - `delete` deletes a shipment property value
     - `getFields` returns the fields and settings for shipment property values
-
 - Added service `Services\Sale\ShipmentItem\Service\ShipmentItem` with support methods,
   see [sale.shipmentitem.* methods](https://github.com/bitrix24/b24phpsdk/issues/250):
     - `add` adds a new shipment item
@@ -162,6 +230,50 @@
     - `list` returns a list of payments
     - `delete` deletes a payment
     - `getFields` returns the fields and settings for payments
+- Added service `Services\Sale\CashboxHandler\Service\CashboxHandler` with support methods,
+  see [sale.cashbox.handler.* methods](https://github.com/bitrix24/b24phpsdk/issues/258):
+    - `add` adds a REST cashbox handler
+    - `update` updates the data of the REST cashbox handler
+    - `list` returns a list of available REST cashbox handlers
+    - `delete` deletes the REST cashbox handler
+- Added service `Services\Sale\Cashbox\Service\Cashbox` with support methods,
+  see [sale.cashbox.* methods](https://github.com/bitrix24/b24phpsdk/issues/258):
+    - `add` adds a new cash register
+    - `update` updates an existing cash register
+    - `list` returns a list of configured cash registers
+    - `delete` deletes a cash register
+    - `checkApply` saves the result of printing the receipt
+- Added service `Services\Calendar\Service\Calendar` with support methods,
+  see [calendar.* methods](https://github.com/bitrix24/b24phpsdk/issues/263):
+    - `add` adds a new calendar section
+    - `update` updates a calendar section
+    - `get` returns a list of calendar sections
+    - `delete` deletes a calendar section
+    - `getSettings` returns main calendar settings
+    - `getUserSettings` returns user calendar settings
+    - `setUserSettings` sets user calendar settings
+- Added support for events:
+    - `OnCalendarSectionAdd`
+    - `OnCalendarSectionUpdate`
+    - `OnCalendarSectionDelete`
+- Added service `Services\Calendar\Event\Service\Event` with support methods,
+  see [calendar.event.* methods](https://github.com/bitrix24/b24phpsdk/issues/263):
+    - `add` adds a new calendar event, with batch calls support
+    - `update` updates a calendar event, with batch calls support
+    - `getById` returns calendar event by identifier
+    - `get` returns a list of calendar events
+    - `getNearest` returns a list of upcoming events
+    - `delete` deletes a calendar event, with batch calls support
+    - `getMeetingStatus` gets current user's participation status in event
+    - `setMeetingStatus` sets participation status in event for current user
+    - `getAccessibility` gets users' availability from list
+- Added service `Services\Calendar\Resource\Service\Resource` with support methods,
+  see [calendar.resource.* methods](https://github.com/bitrix24/b24phpsdk/issues/263):
+    - `add` adds a new calendar resource
+    - `update` updates a calendar resource
+    - `list` returns a list of all resources
+    - `bookingList` retrieves resource bookings based on a filter
+    - `delete` deletes a calendar resource
 - Added service `Services\Sale\PaymentItemBasket\Service\PaymentItemBasket` with support methods,
   see [sale.paymentitembasket.* methods](https://github.com/bitrix24/b24phpsdk/issues/253):
     - `add` adds a binding of a basket item to a payment
