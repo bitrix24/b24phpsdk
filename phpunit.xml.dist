@@ -175,6 +175,12 @@
         <testsuite name="integration_tests_sale_order">
             <directory>./tests/Integration/Services/Sale/Order/</directory>
         </testsuite>
+        <testsuite name="integration_tests_sale_cashbox_handler">
+            <directory>./tests/Integration/Services/Sale/CashboxHandler/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_cashbox">
+            <directory>./tests/Integration/Services/Sale/Cashbox/</directory>
+        </testsuite>
         <testsuite name="integration_tests_sale_delivery_handler">
             <directory>./tests/Integration/Services/Sale/DeliveryHandler/Service/</directory>
         </testsuite>

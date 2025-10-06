@@ -25,6 +25,8 @@ use Bitrix24\SDK\Services\Sale\PersonTypeStatus\Service\PersonTypeStatus;
 use Bitrix24\SDK\Services\Sale\ShipmentPropertyValue\Service\ShipmentPropertyValue;
 use Bitrix24\SDK\Services\Sale\ShipmentItem\Service\ShipmentItem;
 use Bitrix24\SDK\Services\Sale\BasketProperty\Service\BasketProperty;
+use Bitrix24\SDK\Services\Sale\CashboxHandler\Service\CashboxHandler;
+use Bitrix24\SDK\Services\Sale\Cashbox\Service\Cashbox;
 use Bitrix24\SDK\Services\Sale\DeliveryHandler\Service\DeliveryHandler;
 use Bitrix24\SDK\Services\Sale\Delivery\Service\Delivery;
 use Bitrix24\SDK\Services\Sale\DeliveryRequest\Service\DeliveryRequest;
@@ -309,12 +311,42 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     }
 
     /**
+     * Cash register handlers service (sale.cashbox.handler.*)
+     */
+    public function cashboxHandler(): CashboxHandler
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new CashboxHandler(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
      * DeliveryHandler service (sale.delivery.handler.*)
      */
     public function deliveryHandler(): DeliveryHandler
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new DeliveryHandler(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * Cash registers service (sale.cashbox.*)
+     */
+    public function cashbox(): Cashbox
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Cashbox(
                 $this->core,
                 $this->log
             );
