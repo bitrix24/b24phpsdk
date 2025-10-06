@@ -253,8 +253,25 @@ trait CustomBitrix24Assertions
                     );
                     break;
                 case 'enum':
+                    if (str_contains($fieldCode, 'DELETED_TYPE'))
+                    {
+                        $this->assertTrue(
+                            str_contains($propsFromAnnotations[$fieldCode], 'int'),
+                            sprintf(
+                                'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                                $resultItemClassName,
+                                $fieldCode,
+                                $propsFromAnnotations[$fieldCode],
+                                $fieldData['type'],
+                                'int|null'
+                            )
+                        );
+                        
+                        break;
+                    }
                     if (str_contains($fieldCode, 'durationType')
                         || str_contains($fieldCode, 'mark')
+                        || str_contains($fieldCode, 'TYPE')
                     ) {
                         $this->assertTrue(
                             str_contains($propsFromAnnotations[$fieldCode], 'string'),
@@ -443,6 +460,7 @@ trait CustomBitrix24Assertions
                 case 'crm_status_extra':
                 case 'attached_diskfile':
                 case 'disk_file':
+                case 'datatype':
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'array'),
                         sprintf(

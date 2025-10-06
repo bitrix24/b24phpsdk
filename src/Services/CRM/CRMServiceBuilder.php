@@ -653,4 +653,22 @@ class CRMServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    public function documentgeneratorNumerator(): Documentgenerator\Numerator\Service\Numerator
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            // Use specialized Batch for Numerator to ensure correct REST parameter mapping (e.g., 'id')
+            $numeratorBatch = new Documentgenerator\Numerator\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Documentgenerator\Numerator\Service\Numerator(
+                new Documentgenerator\Numerator\Service\Batch($numeratorBatch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 }

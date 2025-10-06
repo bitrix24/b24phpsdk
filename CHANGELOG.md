@@ -2,8 +2,141 @@
 
 ## Upcoming 1.7.0 - 2025.10.01
 
+### Fixed
+
+- Fixed Incorrect data loading in Core/Batch::getTraversableList() with desc sorting by ID [see details](https://github.com/bitrix24/b24phpsdk/issues/246)
+
 ### Added
 
+- Added service `Services\Sale\Delivery\Service\Delivery` with support methods,
+  see [sale.delivery.* methods](https://github.com/bitrix24/b24phpsdk/issues/255):
+    - `add` adds a delivery service
+    - `update` updates a delivery service
+    - `getlist` returns a list of delivery services
+    - `delete` deletes a delivery service
+    - `configUpdate` updates delivery service settings
+    - `configGet` returns delivery service settings
+- Added service `Services\Sale\DeliveryRequest\Service\DeliveryRequest` with support methods,
+  see [sale.delivery.request.* methods](https://github.com/bitrix24/b24phpsdk/issues/255):
+    - `update` updates the delivery request
+    - `sendMessage` creates notifications for the delivery request
+    - `delete` deletes the delivery request
+- Added service `Services\Sale\DeliveryExtraService\Service\DeliveryExtraService` with support methods,
+  see [sale.delivery.extra.service.* methods](https://github.com/bitrix24/b24phpsdk/issues/255):
+    - `add` adds a delivery service
+    - `update` updates a delivery service
+    - `get` returns information about all services of a specific delivery service
+    - `delete` deletes a delivery service
+- Added service `Services\Sale\DeliveryHandler\Service\DeliveryHandler` with support methods,
+  see [sale.delivery.handler.* methods](https://github.com/bitrix24/b24phpsdk/issues/255):
+    - `add` adds a delivery service handler
+    - `update` updates the delivery service handler
+    - `list` returns a list of delivery service handlers
+    - `delete` deletes a delivery service handler
+- Added service `Services\Disk\Service\Disk` with support methods,
+  see [disk service methods](https://github.com/bitrix24/b24phpsdk/issues/265):
+    - `getVersion` returns the version by identifier
+    - `getAttachedObject` returns information about the attached file
+    - `getRightsTasks` returns a list of available access levels that can be used for assigning permissions
+- Added service `Services\Disk\Storage\Service\Storage` with support methods,
+  see [disk.storage.* methods](https://github.com/bitrix24/b24phpsdk/issues/265):
+    - `fields` returns the description of the storage fields
+    - `get` returns the storage by identifier
+    - `rename` renames the storage
+    - `list` returns a list of available storages
+    - `getTypes` returns a list of storage types
+    - `addFolder` creates a folder in the root of the storage
+    - `getChildren` returns a list of files and folders in the root of the storage
+    - `uploadFile` uploads a new file to the root of the storage
+    - `getForApp` returns the description of the storage that the application can work with
+- Added service `Services\Disk\Folder\Service\Folder` with support methods,
+  see [disk.folder.* methods](https://github.com/bitrix24/b24phpsdk/issues/265):
+    - `getFields` returns the description of folder fields
+    - `get` returns the folder by identifier
+    - `getChildren` returns a list of files and folders that are directly in the folder
+    - `addSubfolder` creates a subfolder
+    - `copyTo` copies the folder to the specified folder
+    - `moveTo` moves the folder to the specified folder
+    - `rename` renames the folder
+    - `markDeleted` moves the folder to the trash
+    - `restore` restores the folder from the trash
+    - `deleteTree` permanently destroys the folder and all its child elements
+    - `getExternalLink` returns a public link
+    - `uploadFile` uploads a new file to the specified folder
+- Added service `Services\Disk\File\Service\File` with support methods,
+  see [disk.file.* methods](https://github.com/bitrix24/b24phpsdk/issues/265):
+    - `getFields` returns the description of file fields
+    - `get` returns the file by identifier
+    - `rename` renames the file
+    - `copyTo` copies the file to the specified folder
+    - `moveTo` moves the file to the specified folder
+    - `delete` permanently destroys the file
+    - `markDeleted` moves the file to the trash
+    - `restore` restores the file from the trash
+    - `uploadVersion` uploads a new version of the file
+    - `getVersions` returns a list of file versions
+    - `restoreFromVersion` restores the file from a specific version
+    - `getExternalLink` returns a public link to the file
+- Added service `Services\CRM\Documentgenerator\Numerator` with support methods,
+  see [crm.documentgenerator.numerator.* methods](https://github.com/bitrix24/b24phpsdk/issues/215):
+    - `add` adds a new numerator, with batch calls support
+    - `list` gets the list of numerators, with batch calls support
+    - `update` updates an existing numbering with new values, with batch calls support
+    - `delete` deletes a numerator, with batch calls support
+    - `get` gets information about the numerator by its identifier
+    - `count` count numerators
+- Added service `Services\Paysystem\Handler\Service\Handler` with support methods,
+  see [pay_system.handler.* methods](https://github.com/bitrix24/b24phpsdk/issues/260):
+    - `add` adds a payment system handler
+    - `update` updates a payment system handler
+    - `list` returns a list of payment system handlers
+    - `delete` deletes a payment system handler
+- Added service `Services\Paysystem\Service\Paysystem` with support methods,
+  see [sale.paysystem.* methods](https://github.com/bitrix24/b24phpsdk/issues/260):
+    - `add` adds a payment system
+    - `update` updates a payment system
+    - `get` returns a payment system by its identifier
+    - `list` returns a list of payment systems
+    - `delete` deletes a payment system
+    - `payPayment` pays a payment
+    - `payInvoice` pays an invoice (legacy version)
+- Added service `Services\Paysystem\Settings\Service\Settings` with support methods,
+  see [sale.paysystem.settings.* methods](https://github.com/bitrix24/b24phpsdk/issues/260):
+    - `get` returns the settings of the payment system
+    - `update` updates the payment system settings
+    - `getForPayment` returns the payment system settings for a specific payment
+    - `getForInvoice` returns the payment system settings for a specific invoice (legacy version)
+- Added service `Services\Sale\Shipment\Service\Shipment` with support methods,
+  see [sale.shipment.* methods](https://github.com/bitrix24/b24phpsdk/issues/250):
+    - `add` adds a shipment
+    - `update` updates the fields of a shipment
+    - `get` returns a shipment by its identifier
+    - `list` returns a list of shipments
+    - `delete` deletes a shipment
+    - `getFields` returns the fields and settings for shipments
+- Added service `Services\Sale\ShipmentProperty\Service\ShipmentProperty` with support methods,
+  see [sale.shipmentproperty.* methods](https://github.com/bitrix24/b24phpsdk/issues/250):
+    - `add` adds a shipment property
+    - `update` updates the fields of a shipment property
+    - `get` returns a shipment property by its identifier
+    - `list` returns a list of shipment properties
+    - `delete` deletes a shipment property
+    - `getFieldsByType` returns the fields and settings for shipment properties by type
+- Added service `Services\Sale\ShipmentPropertyValue\Service\ShipmentPropertyValue` with support methods,
+  see [sale.shipmentpropertyvalue.* methods](https://github.com/bitrix24/b24phpsdk/issues/250):
+    - `modify` updates shipment property values for a shipment
+    - `get` returns a shipment property value by its identifier
+    - `list` returns a list of shipment property values
+    - `delete` deletes a shipment property value
+    - `getFields` returns the fields and settings for shipment property values
+- Added service `Services\Sale\ShipmentItem\Service\ShipmentItem` with support methods,
+  see [sale.shipmentitem.* methods](https://github.com/bitrix24/b24phpsdk/issues/250):
+    - `add` adds a new shipment item
+    - `update` updates the fields of a shipment item
+    - `get` returns a shipment item by its identifier
+    - `list` returns a list of shipment items
+    - `delete` deletes a shipment item
+    - `getFields` returns the fields and settings for shipment items
 - Added service `Services\Sale\Payment\Service\Payment` with support methods,
   see [sale.payment.* methods](https://github.com/bitrix24/b24phpsdk/issues/248):
     - `add` adds a payment
@@ -25,6 +158,59 @@
     - `list` returns a list of configured cash registers
     - `delete` deletes a cash register
     - `checkApply` saves the result of printing the receipt
+- Added service `Services\Calendar\Service\Calendar` with support methods,
+  see [calendar.* methods](https://github.com/bitrix24/b24phpsdk/issues/263):
+    - `add` adds a new calendar section
+    - `update` updates a calendar section
+    - `get` returns a list of calendar sections
+    - `delete` deletes a calendar section
+    - `getSettings` returns main calendar settings
+    - `getUserSettings` returns user calendar settings
+    - `setUserSettings` sets user calendar settings
+- Added support for events:
+    - `OnCalendarSectionAdd`
+    - `OnCalendarSectionUpdate`
+    - `OnCalendarSectionDelete`
+- Added service `Services\Calendar\Event\Service\Event` with support methods,
+  see [calendar.event.* methods](https://github.com/bitrix24/b24phpsdk/issues/263):
+    - `add` adds a new calendar event, with batch calls support
+    - `update` updates a calendar event, with batch calls support
+    - `getById` returns calendar event by identifier
+    - `get` returns a list of calendar events
+    - `getNearest` returns a list of upcoming events
+    - `delete` deletes a calendar event, with batch calls support
+    - `getMeetingStatus` gets current user's participation status in event
+    - `setMeetingStatus` sets participation status in event for current user
+    - `getAccessibility` gets users' availability from list
+- Added service `Services\Calendar\Resource\Service\Resource` with support methods,
+  see [calendar.resource.* methods](https://github.com/bitrix24/b24phpsdk/issues/263):
+    - `add` adds a new calendar resource
+    - `update` updates a calendar resource
+    - `list` returns a list of all resources
+    - `bookingList` retrieves resource bookings based on a filter
+    - `delete` deletes a calendar resource
+- Added service `Services\Sale\PaymentItemBasket\Service\PaymentItemBasket` with support methods,
+  see [sale.paymentitembasket.* methods](https://github.com/bitrix24/b24phpsdk/issues/253):
+    - `add` adds a binding of a basket item to a payment
+    - `update` updates the binding of a basket item to a payment
+    - `get` returns the values of all fields for the basket item binding to payment
+    - `list` returns a list of bindings of basket items to payments
+    - `delete` deletes the binding of a basket item to a payment
+    - `getFields` returns the available fields for payment item basket bindings
+- Added service `Services\Sale\PaymentItemShipment\Service\PaymentItemShipment` with support methods,
+  see [sale.paymentitemshipment.* methods](https://github.com/bitrix24/b24phpsdk/issues/253):
+    - `add` adds a binding of a payment to a shipment
+    - `update` updates the binding of a payment to a shipment
+    - `get` returns the values of all fields for the payment binding to shipment
+    - `list` returns a list of bindings of payments to shipments
+    - `delete` deletes the binding of a payment to a shipment
+    - `getFields` returns the available fields for payment item shipment bindings
+- Added service `Services\Sale\PropertyRelation\Service\PropertyRelation` with support methods,
+  see [sale.propertyRelation.* methods](https://github.com/bitrix24/b24phpsdk/issues/253):
+    - `add` adds a property binding
+    - `list` retrieves a list of property bindings
+    - `deleteByFilter` removes the property relation
+    - `getFields` returns the available fields for property binding
 
 ## 1.6.0 – 2025.09.01
 
