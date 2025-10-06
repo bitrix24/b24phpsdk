@@ -8,6 +8,31 @@
 
 ### Added
 
+- Added service `Services\Sale\Delivery\Service\Delivery` with support methods,
+  see [sale.delivery.* methods](https://github.com/bitrix24/b24phpsdk/issues/255):
+    - `add` adds a delivery service
+    - `update` updates a delivery service
+    - `getlist` returns a list of delivery services
+    - `delete` deletes a delivery service
+    - `configUpdate` updates delivery service settings
+    - `configGet` returns delivery service settings
+- Added service `Services\Sale\DeliveryRequest\Service\DeliveryRequest` with support methods,
+  see [sale.delivery.request.* methods](https://github.com/bitrix24/b24phpsdk/issues/255):
+    - `update` updates the delivery request
+    - `sendMessage` creates notifications for the delivery request
+    - `delete` deletes the delivery request
+- Added service `Services\Sale\DeliveryExtraService\Service\DeliveryExtraService` with support methods,
+  see [sale.delivery.extra.service.* methods](https://github.com/bitrix24/b24phpsdk/issues/255):
+    - `add` adds a delivery service
+    - `update` updates a delivery service
+    - `get` returns information about all services of a specific delivery service
+    - `delete` deletes a delivery service
+- Added service `Services\Sale\DeliveryHandler\Service\DeliveryHandler` with support methods,
+  see [sale.delivery.handler.* methods](https://github.com/bitrix24/b24phpsdk/issues/255):
+    - `add` adds a delivery service handler
+    - `update` updates the delivery service handler
+    - `list` returns a list of delivery service handlers
+    - `delete` deletes a delivery service handler
 - Added service `Services\Disk\Service\Disk` with support methods,
   see [disk service methods](https://github.com/bitrix24/b24phpsdk/issues/265):
     - `getVersion` returns the version by identifier
@@ -104,7 +129,6 @@
     - `list` returns a list of shipment property values
     - `delete` deletes a shipment property value
     - `getFields` returns the fields and settings for shipment property values
-
 - Added service `Services\Sale\ShipmentItem\Service\ShipmentItem` with support methods,
   see [sale.shipmentitem.* methods](https://github.com/bitrix24/b24phpsdk/issues/250):
     - `add` adds a new shipment item

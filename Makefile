@@ -53,6 +53,8 @@ help:
 	@echo "test-integration-calendar-event - run Calendar Event integration tests"
 	@echo "test-integration-calendar-resource - run Calendar Resource integration tests"
 	@echo "test-integration-sale-basket-property - run BasketProperty integration tests"
+	@echo "test-integration-sale-delivery - run Delivery integration tests"
+	@echo "test-integration-sale-delivery-extra-service - run DeliveryExtraService integration tests"
 	@echo "test-integration-scope-paysystem - run Payment System integration tests"
 	@echo "test-integration-sale-payment-item-basket - run PaymentItemBasket integration tests"
 	@echo "test-integration-sale-payment-item-shipment - run PaymentItemShipment integration tests"
@@ -381,6 +383,17 @@ integration_tests_sale:
 integration_tests_sale_payment:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_payment
 
+.PHONY: test-integration-sale-delivery-handler
+test-integration-sale-delivery-handler:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_delivery_handler
+
+.PHONY: test-integration-sale-delivery
+test-integration-sale-delivery:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_delivery
+
+.PHONY: test-integration-sale-delivery-extra-service
+test-integration-sale-delivery-extra-service:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_delivery_extra_service
 .PHONY: integration_tests_sale_payment_item_basket
 integration_tests_sale_payment_item_basket:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_payment_item_basket
