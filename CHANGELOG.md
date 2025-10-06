@@ -52,6 +52,14 @@
     - `getVersions` returns a list of file versions
     - `restoreFromVersion` restores the file from a specific version
     - `getExternalLink` returns a public link to the file
+- Added service `Services\CRM\Documentgenerator\Numerator` with support methods,
+  see [crm.documentgenerator.numerator.* methods](https://github.com/bitrix24/b24phpsdk/issues/215):
+    - `add` adds a new numerator, with batch calls support
+    - `list` gets the list of numerators, with batch calls support
+    - `update` updates an existing numbering with new values, with batch calls support
+    - `delete` deletes a numerator, with batch calls support
+    - `get` gets information about the numerator by its identifier
+    - `count` count numerators
 - Added service `Services\Paysystem\Handler\Service\Handler` with support methods,
   see [pay_system.handler.* methods](https://github.com/bitrix24/b24phpsdk/issues/260):
     - `add` adds a payment system handler
