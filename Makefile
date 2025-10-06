@@ -214,6 +214,21 @@ test-integration-scope-log:
 test-integration-scope-sale:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sale
 
+.PHONY: test-integration-scope-disk
+test-integration-scope-disk:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_disk
+
+.PHONY: test-integration-disk-service
+test-integration-disk-service:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_disk_service
+
+.PHONY: test-integration-disk-file
+test-integration-disk-file:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_disk_file
+
+.PHONY: test-integration-disk-storage
+test-integration-disk-storage:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_disk_storage
 .PHONY: test-integration-scope-calendar
 test-integration-scope-calendar:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_calendar
