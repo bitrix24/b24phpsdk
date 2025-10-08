@@ -28,6 +28,15 @@
         <testsuite name="integration_tests_scope_placement">
             <directory>./tests/Integration/Services/Placement/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_paysystem">
+            <directory>./tests/Integration/Services/Paysystem/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_paysystem_service">
+            <directory>./tests/Integration/Services/Paysystem/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_paysystem_settings">
+            <directory>./tests/Integration/Services/Paysystem/Settings/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_user">
             <directory>./tests/Integration/Services/User/</directory>
         </testsuite>
@@ -49,11 +58,26 @@
         <testsuite name="integration_tests_scope_sale">
             <directory>./tests/Integration/Services/Sale/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_calendar">
+            <directory>./tests/Integration/Services/Calendar/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_calendar_event">
+            <directory>./tests/Integration/Services/Calendar/Event/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_calendar_resource">
+            <directory>./tests/Integration/Services/Calendar/Resource/</directory>
+        </testsuite>
         <testsuite name="integration_tests_sale_status">
             <directory>./tests/Integration/Services/Sale/Status/</directory>
         </testsuite>
         <testsuite name="integration_tests_sale_status_lang">
             <directory>./tests/Integration/Services/Sale/StatusLang/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_basket">
+            <directory>./tests/Integration/Services/Sale/BasketItem/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_basket_property">
+            <directory>./tests/Integration/Services/Sale/BasketProperty/</directory>
         </testsuite>
         <testsuite name="integration_tests_scope_crm">
             <directory>./tests/Integration/Services/CRM/</directory>
@@ -118,14 +142,71 @@
         <testsuite name="integration_tests_scope_sale">
             <directory>./tests/Integration/Services/Sale/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_disk">
+            <directory>./tests/Integration/Services/Disk/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_disk_service">
+            <directory>./tests/Integration/Services/Disk/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_disk_file">
+            <directory>./tests/Integration/Services/Disk/File/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_disk_storage">
+            <directory>./tests/Integration/Services/Disk/Storage/</directory>
+        </testsuite>
         <testsuite name="integration_tests_task">
             <directory>./tests/Integration/Services/Task/</directory>
         </testsuite>
         <testsuite name="integration_tests_sale">
             <directory>./tests/Integration/Services/Sale/</directory>
         </testsuite>
+        <testsuite name="integration_tests_sale_payment">
+            <directory>./tests/Integration/Services/Sale/Payment/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_payment_item_basket">
+            <directory>./tests/Integration/Services/Sale/PaymentItemBasket/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_payment_item_shipment">
+            <directory>./tests/Integration/Services/Sale/PaymentItemShipment/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_property_relation">
+            <directory>./tests/Integration/Services/Sale/PropertyRelation/</directory>
+        </testsuite>
         <testsuite name="integration_tests_sale_order">
             <directory>./tests/Integration/Services/Sale/Order/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_cashbox_handler">
+            <directory>./tests/Integration/Services/Sale/CashboxHandler/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_cashbox">
+            <directory>./tests/Integration/Services/Sale/Cashbox/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_delivery_handler">
+            <directory>./tests/Integration/Services/Sale/DeliveryHandler/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_delivery">
+            <directory>./tests/Integration/Services/Sale/Delivery/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_delivery_extra_service">
+            <directory>./tests/Integration/Services/Sale/DeliveryExtraService/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_core-list">
+            <file>./tests/Integration/Core/BatchTraversableListTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_sale_shipment">
+            <directory>./tests/Integration/Services/Sale/Shipment/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_shipment_property">
+            <directory>./tests/Integration/Services/Sale/ShipmentProperty/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_shipment_property_value">
+            <directory>./tests/Integration/Services/Sale/ShipmentPropertyValue/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_shipment_item">
+            <directory>./tests/Integration/Services/Sale/ShipmentItem/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_crm_documentgenerator_numerator">
+            <directory>./tests/Integration/Services/CRM/Documentgenerator/Numerator/</directory>
         </testsuite>
     </testsuites>
     <source>
