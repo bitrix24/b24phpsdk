@@ -1,5 +1,18 @@
 # b24-php-sdk change log
 
+## 1.8.0 - 2025.11.01 (in progress)
+### Added
+
+- Added service `Services\CRM\Type\Service\Type` with support methods,
+  see [crm.type.* methods](https://github.com/bitrix24/b24phpsdk/issues/274):
+  - `fields` method retrieves information about the custom fields of the smart process settings
+  - `add` method creates a new SPA
+  - `update` updates an existing SPA by its identifier id
+  - `get` method retrieves information about the SPA with the identifier id
+  - `getByEntityTypeId` method retrieves information about the SPA with the smart process type identifier entityTypeId
+  - `list` Get a list of custom types crm.type.list
+  - `delete` This method deletes an existing smart process by the identifier id
+
 ## 1.7.0 - 2025.10.08
 
 ### Added
