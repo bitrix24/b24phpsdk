@@ -14,13 +14,10 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\CRM\Type\Service;
 
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
-use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Core\Result\AddedItemResult;
 use Bitrix24\SDK\Core\Result\FieldsResult;
-use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Services\CRM\Type\Result\AddedTypeItemResult;
@@ -28,6 +25,7 @@ use Bitrix24\SDK\Services\CRM\Type\Result\DeletedItemResult;
 use Bitrix24\SDK\Services\CRM\Type\Result\TypeItemResult;
 use Bitrix24\SDK\Services\CRM\Type\Result\TypeResult;
 use Bitrix24\SDK\Services\CRM\Type\Result\TypesResult;
+use Bitrix24\SDK\Services\CRM\Type\Result\UpdatedTypeItemResult;
 
 #[ApiServiceMetadata(new Scope(['crm']))]
 class Type extends AbstractService
@@ -72,9 +70,6 @@ class Type extends AbstractService
     {
         $fields = array_merge(['title' => $title], $parameters);
         if ($entityTypeId !== null) {
-            //  Значение entityTypeId обязано быть в одном из двух диапазонов:
-            // четным целым числом, которое больше или равно 1030
-            // в диапазоне от 128 до 192
             $fields['entityTypeId'] = $entityTypeId;
         }
 
@@ -84,11 +79,32 @@ class Type extends AbstractService
     }
 
     /**
+     * This method updates an existing SPA by its identifier id.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/crm/universal/user-defined-object-types/crm-type-update.html
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'crm.type.update',
+        'https://apidocs.bitrix24.com/api-reference/crm/universal/user-defined-object-types/crm-type-update.html',
+        'This method updates an existing SPA by its identifier id.'
+    )]
+    public function update(int $id, array $fields): UpdatedTypeItemResult
+    {
+        return new UpdatedTypeItemResult($this->core->call('crm.type.update', [
+            'id' => $id,
+            'fields' => $fields,
+        ]));
+    }
+
+    /**
      * The method retrieves information about the SPA with the identifier id.
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/universal/user-defined-object-types/crm-type-get.html
      *
-     * @return DeletedItemResult
+     * @return TypeResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -107,7 +123,8 @@ class Type extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/universal/user-defined-object-types/crm-type-get-by-entity-type-id.html
      *
-     * @return DeletedItemResult
+     * @param int $entityTypeId
+     * @return TypeResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -126,7 +143,10 @@ class Type extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/universal/user-defined-object-types/crm-type-get-by-entity-type-id.html
      *
-     * @return DeletedItemResult
+     * @param array $order
+     * @param array $filter
+     * @param int $start
+     * @return TypesResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -149,6 +169,7 @@ class Type extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/universal/user-defined-object-types/crm-type-delete.html
      *
+     * @param int $entityTypeId
      * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
