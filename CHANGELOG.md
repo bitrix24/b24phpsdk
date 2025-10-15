@@ -13,6 +13,18 @@
   - `list` Get a list of custom types crm.type.list
   - `delete` This method deletes an existing smart process by the identifier id
 
+### Fixed
+
+- Fixed wrong offset in `ItemsResult` [see details](https://github.com/bitrix24/b24phpsdk/issues/279)
+
+### Statistics
+
+```
+Bitrix24 API-methods count: 
+Supported in bitrix24-php-sdk methods count: 
+Coverage percentage:
+```
+
 ## 1.7.0 - 2025.10.08
 
 ### Added
