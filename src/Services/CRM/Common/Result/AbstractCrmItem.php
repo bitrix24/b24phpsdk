@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Common\Result;
 
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Result\AbstractItem;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityContentType;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityDirectionType;
@@ -264,6 +265,28 @@ class AbstractCrmItem extends AbstractItem
         }
 
         return $this->$fieldName;
+    }
+
+    /**
+     * Get smart process item by entity type id
+     *
+     * @param positive-int $entityTypeId
+     * @throws InvalidArgumentException
+     */
+    public function getSmartProcessItem(int $entityTypeId): ?int
+    {
+        if ($entityTypeId <= 0) {
+            throw new InvalidArgumentException('entityTypeId must be positive integer');
+        }
+        $fieldKey = sprintf('PARENT_ID_%d', $entityTypeId);
+        if (!array_key_exists($fieldKey, $this->data)) {
+            throw new InvalidArgumentException(sprintf('field «%s» for smart process with entityTypeId «%d» not found', $fieldKey, $entityTypeId));
+        }
+        if ($this->data[$fieldKey] === '' || $this->data[$fieldKey] === null) {
+            return null;
+        }
+
+        return (int)$this->data[$fieldKey];
     }
 
     public function __construct(array $data, Currency $currency = null)
