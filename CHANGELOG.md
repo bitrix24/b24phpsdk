@@ -12,10 +12,14 @@
   - `getByEntityTypeId` method retrieves information about the SPA with the smart process type identifier entityTypeId
   - `list` Get a list of custom types crm.type.list
   - `delete` This method deletes an existing smart process by the identifier id
+- For `AbstractCrmItem` added method `getSmartProcessItem` to get smart process item, [see details](https://github.com/bitrix24/b24phpsdk/issues/282)
+
+
 
 ### Fixed
 
 - Fixed wrong offset in `ItemsResult` [see details](https://github.com/bitrix24/b24phpsdk/issues/279)
+- Fixed wrong exception for method `crm.item.get`, now it `ItemNotFoundException` [see details](https://github.com/bitrix24/b24phpsdk/issues/282)
 
 ### Statistics
 
