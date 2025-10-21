@@ -472,7 +472,7 @@ debug-show-env:
 
 # build documentation
 build-documentation:
-	php bin/console b24-dev:generate-coverage-documentation \
+	docker-compose run --rm php-cli php bin/console b24-dev:generate-coverage-documentation \
 	--webhook=$(BITRIX24_WEBHOOK) \
 	--repository-url=https://github.com/bitrix24/b24phpsdk \
 	--repository-branch=$(DOCUMENTATION_DEFAULT_TARGET_BRANCH) \

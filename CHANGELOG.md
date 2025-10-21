@@ -1,10 +1,6 @@
 # b24-php-sdk change log
 
-## Upcoming 1.7.0 - 2025.10.01
-
-### Fixed
-
-- Fixed Incorrect data loading in Core/Batch::getTraversableList() with desc sorting by ID [see details](https://github.com/bitrix24/b24phpsdk/issues/246)
+## 1.7.0 - 2025.10.08
 
 ### Added
 
@@ -296,6 +292,18 @@
     - `list` retrieves a list of property bindings
     - `deleteByFilter` removes the property relation
     - `getFields` returns the available fields for property binding
+### Fixed
+
+- Fixed Incorrect data loading in `Core\Batch::getTraversableList()` with desc sorting by ID [see details](https://github.com/bitrix24/b24phpsdk/issues/246)
+
+### Statistics
+
+```
+Bitrix24 API-methods count: 1162
+Supported in bitrix24-php-sdk methods count: 632
+Coverage percentage: 54.39% 🚀
+```
+
 
 ## 1.6.0 – 2025.09.01
 
