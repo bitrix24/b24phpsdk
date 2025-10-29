@@ -20,6 +20,7 @@
 
 - Fixed wrong offset in `ItemsResult` [see details](https://github.com/bitrix24/b24phpsdk/issues/279)
 - Fixed wrong exception for method `crm.item.get`, now it `ItemNotFoundException` [see details](https://github.com/bitrix24/b24phpsdk/issues/282)
+- Fixed added type `project` in enum `PortalLicenseFamily` [see details](https://github.com/bitrix24/b24phpsdk/issues/286)
 
 ### Statistics
 
