@@ -13,8 +13,10 @@
   - `list` Get a list of custom types crm.type.list
   - `delete` This method deletes an existing smart process by the identifier id
 - For `AbstractCrmItem` added method `getSmartProcessItem` to get smart process item, [see details](https://github.com/bitrix24/b24phpsdk/issues/282)
-
-
+- Added support for events, [see details](https://github.com/bitrix24/b24phpsdk/issues/288)  
+  - `onCrmContactAdd`
+  - `onCrmContactUpdate`
+  - `onCrmContactDelete`
 
 ### Fixed
 
