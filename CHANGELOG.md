@@ -1,28 +1,35 @@
 # b24-php-sdk change log
 
 ## 1.8.0 - 2025.11.01 (in progress)
+
 ### Added
 
 - Added service `Services\CRM\Type\Service\Type` with support methods,
   see [crm.type.* methods](https://github.com/bitrix24/b24phpsdk/issues/274):
-  - `fields` method retrieves information about the custom fields of the smart process settings
-  - `add` method creates a new SPA
-  - `update` updates an existing SPA by its identifier id
-  - `get` method retrieves information about the SPA with the identifier id
-  - `getByEntityTypeId` method retrieves information about the SPA with the smart process type identifier entityTypeId
-  - `list` Get a list of custom types crm.type.list
-  - `delete` This method deletes an existing smart process by the identifier id
+    - `fields` method retrieves information about the custom fields of the smart process settings
+    - `add` method creates a new SPA
+    - `update` updates an existing SPA by its identifier id
+    - `get` method retrieves information about the SPA with the identifier id
+    - `getByEntityTypeId` method retrieves information about the SPA with the smart process type identifier entityTypeId
+    - `list` Get a list of custom types crm.type.list
+    - `delete` This method deletes an existing smart process by the identifier id
 - For `AbstractCrmItem` added method `getSmartProcessItem` to get smart process item, [see details](https://github.com/bitrix24/b24phpsdk/issues/282)
-- Added support for events, [see details](https://github.com/bitrix24/b24phpsdk/issues/288)  
-  - `onCrmContactAdd`
-  - `onCrmContactUpdate`
-  - `onCrmContactDelete`
+- Added support for events, [see details](https://github.com/bitrix24/b24phpsdk/issues/288)
+    - `onCrmContactAdd`
+    - `onCrmContactUpdate`
+    - `onCrmContactDelete`
+- Added separated methods `RemoteEventsFactory::create` and `RemoteEventsFactory::validate` for create and validate incoming
+  events, [see details](https://github.com/bitrix24/b24phpsdk/issues/291)
 
 ### Fixed
 
 - Fixed wrong offset in `ItemsResult` [see details](https://github.com/bitrix24/b24phpsdk/issues/279)
 - Fixed wrong exception for method `crm.item.get`, now it `ItemNotFoundException` [see details](https://github.com/bitrix24/b24phpsdk/issues/282)
 - Fixed added type `project` in enum `PortalLicenseFamily` [see details](https://github.com/bitrix24/b24phpsdk/issues/286)
+
+### Deprecated
+
+- Method `RemoteEventsFactory::createEvent` marked as deprecated, use `RemoteEventsFactory::create` and `RemoteEventsFactory::validate` instead
 
 ### Statistics
 
@@ -239,6 +246,7 @@ Coverage percentage:
     - `list` retrieves a list of property bindings
     - `deleteByFilter` removes the property relation
     - `getFields` returns the available fields for property binding
+
 ### Fixed
 
 - Fixed Incorrect data loading in `Core\Batch::getTraversableList()` with desc sorting by ID [see details](https://github.com/bitrix24/b24phpsdk/issues/246)
@@ -250,7 +258,6 @@ Bitrix24 API-methods count: 1162
 Supported in bitrix24-php-sdk methods count: 632
 Coverage percentage: 54.39% 🚀
 ```
-
 
 ## 1.6.0 – 2025.09.01
 
@@ -431,7 +438,6 @@ Bitrix24 API-methods count: 1160
 Supported in bitrix24-php-sdk methods count: 476
 Coverage percentage: 41.03% 🚀
 ```
-
 
 ## 1.5.0 – 2025.08.01
 

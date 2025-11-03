@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services;
 
-use Bitrix24\SDK\Application\Requests\Events\ApplicationLifeCycleEventsFabric;
 use Bitrix24\SDK\Application\Requests\Events\ApplicationLifeCycleEventsFactory;
 use Bitrix24\SDK\Application\Requests\Events\OnApplicationInstall\OnApplicationInstall;
 use Bitrix24\SDK\Core\Contracts\Events\EventInterface;
@@ -24,8 +23,6 @@ use Bitrix24\SDK\Core\Requests\Events\UnsupportedRemoteEvent;
 use Bitrix24\SDK\Services\Calendar\Events\CalendarEventsFactory;
 use Bitrix24\SDK\Services\CRM\Company\Events\CrmCompanyEventsFactory;
 use Bitrix24\SDK\Services\CRM\Contact\Events\CrmContactEventsFactory;
-use Bitrix24\SDK\Services\Sale;
-use Bitrix24\SDK\Services\Telephony\Events\TelephonyEventsFabric;
 use Bitrix24\SDK\Services\Telephony\Events\TelephonyEventsFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,6 +63,74 @@ readonly class RemoteEventsFactory
     }
 
     /**
+     * Create an event object from a remote event request from Bitrix24
+     * If event supported in SDK it will create a concrete object, in other cases it will be created UnsupportedRemoteEvent object
+     *
+     * @throws InvalidArgumentException
+     */
+    public function create(Request $request): EventInterface
+    {
+        $payload = [];
+        parse_str($request->getContent(), $payload);
+
+        if (!self::isCanProcess($request)) {
+            throw new InvalidArgumentException('event request is not valid');
+        }
+
+        $event = new UnsupportedRemoteEvent($request);
+        foreach ($this->eventsFabrics as $itemFabric) {
+            if ($itemFabric->isSupport($payload['event'])) {
+                $event = $itemFabric->create($request);
+                break;
+            }
+        }
+
+        $this->logger->debug('RemoteEventsFactory.create.eventCreated', [
+            'eventClassName' => $event::class,
+            'eventCode' => $event->getEventCode()
+        ]);
+        return $event;
+    }
+
+    /**
+     * @param EventInterface $event
+     * @param non-empty-string $applicationToken
+     * @throws WrongSecuritySignatureException
+     * @throws InvalidArgumentException
+     */
+    public function validate(EventInterface $event, string $applicationToken): void
+    {
+        if ($applicationToken === '') {
+            throw new InvalidArgumentException('application token cannot be empty string');
+        }
+
+        if ($event instanceof OnApplicationInstall) {
+            // skip OnApplicationInstall event check because application_token is null
+            // first event in application lifecycle is OnApplicationInstall and this event contains application_token
+            return;
+        }
+
+        // check event security signature
+        // see https://apidocs.bitrix24.com/api-reference/events/safe-event-handlers.html
+        // all next events MUST validate for application_token signature
+        if ($applicationToken !== $event->getAuth()->application_token) {
+            $this->logger->warning('RemoteEventsFactory.validate.eventNotValidSignature', [
+                'eventCode' => $event->getEventCode(),
+                'storedApplicationToken' => $applicationToken,
+                'eventApplicationToken' => $event->getAuth()->application_token,
+                'eventPayload' => $event->getEventPayload(),
+            ]);
+
+            throw new WrongSecuritySignatureException(
+                sprintf(
+                    'Wrong security signature for event %s',
+                    $event->getEventCode()
+                )
+            );
+        }
+    }
+
+    /**
      * Create event object from remote event request from Bitrix24
      * If event supported in SDK it will create concrete object, in other cases it will be created UnsupportedRemoteEvent object
      *
@@ -74,6 +139,7 @@ readonly class RemoteEventsFactory
      * @return EventInterface
      * @throws InvalidArgumentException
      * @throws WrongSecuritySignatureException
+     * @deprecated use RemoteEventsFactory::create and RemoteEventsFactory::validate instead
      */
     public function createEvent(Request $request, ?string $applicationToken): EventInterface
     {
