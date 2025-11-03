@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services;
 
+use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface;
 use Bitrix24\SDK\Application\Requests\Events\ApplicationLifeCycleEventsFactory;
 use Bitrix24\SDK\Application\Requests\Events\OnApplicationInstall\OnApplicationInstall;
 use Bitrix24\SDK\Core\Contracts\Events\EventInterface;
@@ -93,17 +94,14 @@ readonly class RemoteEventsFactory
     }
 
     /**
-     * @param EventInterface $event
-     * @param non-empty-string $applicationToken
+     * Check event security signature for incoming event
+     *
+     * All events MUST validate for application_token signature
+     * @see https://apidocs.bitrix24.com/api-reference/events/safe-event-handlers.html
      * @throws WrongSecuritySignatureException
-     * @throws InvalidArgumentException
      */
-    public function validate(EventInterface $event, string $applicationToken): void
+    public function validate(Bitrix24AccountInterface $bitrix24Account, EventInterface $event): void
     {
-        if ($applicationToken === '') {
-            throw new InvalidArgumentException('application token cannot be empty string');
-        }
-
         if ($event instanceof OnApplicationInstall) {
             // skip OnApplicationInstall event check because application_token is null
             // first event in application lifecycle is OnApplicationInstall and this event contains application_token
@@ -113,18 +111,22 @@ readonly class RemoteEventsFactory
         // check event security signature
         // see https://apidocs.bitrix24.com/api-reference/events/safe-event-handlers.html
         // all next events MUST validate for application_token signature
-        if ($applicationToken !== $event->getAuth()->application_token) {
+        if (!$bitrix24Account->isApplicationTokenValid($event->getAuth()->application_token)) {
             $this->logger->warning('RemoteEventsFactory.validate.eventNotValidSignature', [
                 'eventCode' => $event->getEventCode(),
-                'storedApplicationToken' => $applicationToken,
+                'storedApplicationToken' => $bitrix24Account,
                 'eventApplicationToken' => $event->getAuth()->application_token,
                 'eventPayload' => $event->getEventPayload(),
+                'accountId' => $bitrix24Account->getId()->toRfc4122(),
+                'memberId' => $bitrix24Account->getMemberId(),
+                'domainUrl' => $bitrix24Account->getDomainUrl(),
             ]);
 
             throw new WrongSecuritySignatureException(
                 sprintf(
-                    'Wrong security signature for event %s',
-                    $event->getEventCode()
+                    'Wrong security signature for event %s processed by bitrix24 account %s',
+                    $event->getEventCode(),
+                    $bitrix24Account->getDomainUrl()
                 )
             );
         }

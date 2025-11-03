@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Services;
 
+use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface;
 use Bitrix24\SDK\Application\Requests\Events\OnApplicationInstall\OnApplicationInstall;
 use Bitrix24\SDK\Core\Contracts\Events\EventInterface;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
@@ -217,8 +218,14 @@ class RemoteEventsFactoryTest extends TestCase
         $request = $this->createRequest($rawRequest);
         $event = $this->factory->create($request);
 
+        // Create mock account that validates the token as correct
+        $accountMock = $this->createMock(Bitrix24AccountInterface::class);
+        $accountMock->method('isApplicationTokenValid')
+            ->with($applicationToken)
+            ->willReturn(true);
+
         // Should not throw any exception
-        $this->factory->validate($event, $applicationToken);
+        $this->factory->validate($accountMock, $event);
         $this->assertTrue(true); // If we reach here, validation passed
     }
 
@@ -226,7 +233,6 @@ class RemoteEventsFactoryTest extends TestCase
     #[TestDox('validate() should throw WrongSecuritySignatureException when tokens do not match')]
     public function testValidateThrowsExceptionWithMismatchedToken(): void
     {
-        $storedToken = 'stored_application_token_12345';
         $eventToken = 'different_application_token_67890';
 
         $rawRequest = $this->buildRawRequest([
@@ -252,41 +258,15 @@ class RemoteEventsFactoryTest extends TestCase
         $request = $this->createRequest($rawRequest);
         $event = $this->factory->create($request);
 
+        // Create mock account that validates the token as incorrect
+        $accountMock = $this->createMock(Bitrix24AccountInterface::class);
+        $accountMock->method('isApplicationTokenValid')
+            ->with($eventToken)
+            ->willReturn(false);
+
         $this->expectException(WrongSecuritySignatureException::class);
         $this->expectExceptionMessage('Wrong security signature for event ONCRMCONTACTADD');
-        $this->factory->validate($event, $storedToken);
-    }
-
-    #[Test]
-    #[TestDox('validate() should throw InvalidArgumentException when application token is empty')]
-    public function testValidateThrowsExceptionWithEmptyToken(): void
-    {
-        $rawRequest = $this->buildRawRequest([
-            'event' => 'ONCRMCONTACTADD',
-            'event_handler_id' => '196',
-            'data' => ['FIELDS' => ['ID' => '264442']],
-            'ts' => '1762089975',
-            'auth' => [
-                'access_token' => 'test_access_token',
-                'expires' => '1762093575',
-                'expires_in' => '3600',
-                'scope' => 'crm',
-                'domain' => 'test.bitrix24.com',
-                'server_endpoint' => 'https://oauth.bitrix.info/rest/',
-                'status' => 'L',
-                'client_endpoint' => 'https://test.bitrix24.com/rest/',
-                'member_id' => 'test_member_id',
-                'user_id' => '1',
-                'application_token' => 'test_app_token',
-            ],
-        ]);
-
-        $request = $this->createRequest($rawRequest);
-        $event = $this->factory->create($request);
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('application token cannot be empty string');
-        $this->factory->validate($event, ''); // @phpstan-ignore argument.type
+        $this->factory->validate($accountMock, $event);
     }
 
     #[Test]
@@ -319,44 +299,14 @@ class RemoteEventsFactoryTest extends TestCase
         $request = $this->createRequest($rawRequest);
         $event = $this->factory->create($request);
 
-        // Should not throw exception even with different token
-        $this->factory->validate($event, 'completely_different_token');
+        // Create mock account - should not be called for OnApplicationInstall
+        $accountMock = $this->createMock(Bitrix24AccountInterface::class);
+        $accountMock->expects($this->never())
+            ->method('isApplicationTokenValid');
+
+        // Should not throw exception and should not check token
+        $this->factory->validate($accountMock, $event);
         $this->assertTrue(true); // If we reach here, validation was skipped
-    }
-
-    #[Test]
-    #[TestDox('validate() should still require non-empty token for OnApplicationInstall events')]
-    public function testValidateRequiresNonEmptyTokenForApplicationInstallEvent(): void
-    {
-        $rawRequest = $this->buildRawRequest([
-            'event' => 'ONAPPINSTALL',
-            'event_handler_id' => '1',
-            'data' => [
-                'VERSION' => '1',
-                'LANGUAGE_ID' => 'en',
-            ],
-            'ts' => '1762089975',
-            'auth' => [
-                'access_token' => 'test_access_token',
-                'expires' => '1762093575',
-                'expires_in' => '3600',
-                'scope' => 'crm,placement,user_brief',
-                'domain' => 'test.bitrix24.com',
-                'server_endpoint' => 'https://oauth.bitrix.info/rest/',
-                'status' => 'L',
-                'client_endpoint' => 'https://test.bitrix24.com/rest/',
-                'member_id' => 'test_member_id',
-                'user_id' => '1',
-                'application_token' => 'event_app_token',
-            ],
-        ]);
-
-        $request = $this->createRequest($rawRequest);
-        $event = $this->factory->create($request);
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('application token cannot be empty string');
-        $this->factory->validate($event, ''); // @phpstan-ignore argument.type
     }
 
     #[Test]
@@ -387,8 +337,14 @@ class RemoteEventsFactoryTest extends TestCase
         $request = $this->createRequest($rawRequest);
         $event = $this->factory->create($request);
 
+        // Create mock account that validates the token as correct
+        $accountMock = $this->createMock(Bitrix24AccountInterface::class);
+        $accountMock->method('isApplicationTokenValid')
+            ->with($applicationToken)
+            ->willReturn(true);
+
         // Should not throw exception
-        $this->factory->validate($event, $applicationToken);
+        $this->factory->validate($accountMock, $event);
         $this->assertTrue(true);
     }
 
