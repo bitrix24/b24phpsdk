@@ -20,6 +20,29 @@
     - `onCrmContactDelete`
 - Added separated methods `RemoteEventsFactory::create` and `RemoteEventsFactory::validate` for create and validate incoming
   events, [see details](https://github.com/bitrix24/b24phpsdk/issues/291)
+- Added comprehensive unit tests for `RemoteEventsFactory::create` and `RemoteEventsFactory::validate` methods with 14 test cases covering:
+    - Event creation for supported event types (CRM Contact Add, Application Install)
+    - Handling of unsupported events
+    - Request validation
+    - Token validation with `Bitrix24AccountInterface`
+    - Special handling for `OnApplicationInstall` events
+- Updated `ContactPersonInterface` implementation, [see details](https://github.com/bitrix24/b24phpsdk/issues/290) with new methods:
+    - Added `isEmailVerified(): bool` to check email verification status
+    - Added `isMobilePhoneVerified(): bool` to check mobile phone verification status
+    - Changed `changeEmail(?string $email)` signature (removed optional `$isEmailVerified` parameter)
+    - Changed `changeMobilePhone(?PhoneNumber $phoneNumber)` signature (removed optional `$isMobilePhoneVerified` parameter)
+    - Added `getUserAgentInfo(): UserAgentInfo` to replace separate methods for user agent data
+- Added comprehensive unit tests for `UTMs` class with 28 test cases covering:
+    - Constructor with all, partial, and default parameters
+    - URL parsing with various UTM parameter combinations
+    - Case-insensitive parameter handling
+    - URL encoding and special characters
+    - Real-world URL examples (Google Ads, Facebook, Email, Twitter, LinkedIn, etc.)
+- Added comprehensive unit tests for `UserAgentInfo` class with 33 test cases covering:
+    - Constructor with IP addresses (IPv4, IPv6, localhost)
+    - Various user agent strings (Chrome, Firefox, Safari, Edge, mobile browsers)
+    - UTM extraction from referrer URLs
+    - Real-world scenarios with complete user tracking data
 
 ### Fixed
 

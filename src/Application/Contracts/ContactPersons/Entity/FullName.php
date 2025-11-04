@@ -21,8 +21,7 @@ class FullName implements Stringable
         public string  $name,
         public ?string $surname = null,
         public ?string $patronymic = null
-    )
-    {
+    ) {
         if ($surname !== null) {
             $this->surname = trim($surname);
         }
