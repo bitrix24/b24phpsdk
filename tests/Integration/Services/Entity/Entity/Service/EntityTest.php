@@ -91,6 +91,22 @@ class EntityTest extends TestCase
         $this->assertTrue($this->sb->getEntityScope()->entity()->delete($entity)->isSuccess());
     }
 
+    public function testGetEntity(): void
+    {
+        $entity = (string)time();
+        $this->assertTrue(
+            $this->sb->getEntityScope()->entity()->add(
+                $entity,
+                'test entity',
+                []
+            )->isSuccess()
+        );
+        $entities = $this->sb->getEntityScope()->entity()->get($entity)->getEntities();
+        $this->assertContains($entity, array_column($entities, 'ENTITY'));
+
+        $this->assertTrue($this->sb->getEntityScope()->entity()->delete($entity)->isSuccess());
+    }
+
     public function testRights(): void
     {
         $entity = (string)time();
