@@ -18,6 +18,7 @@ use Bitrix24\SDK\Application\Contracts\ContactPersons\Entity\ContactPersonStatus
 use Bitrix24\SDK\Application\Contracts\ContactPersons\Exceptions\ContactPersonNotFoundException;
 use Bitrix24\SDK\Application\Contracts\ContactPersons\Repository\ContactPersonRepositoryInterface;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Tests\Application\Contracts\TestRepositoryFlusherInterface;
 use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
 use Carbon\CarbonImmutable;
 use Darsyn\IP\Version\Multi as IP;
@@ -56,6 +57,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
 
     abstract protected function createContactPersonRepositoryImplementation(): ContactPersonRepositoryInterface;
 
+    abstract protected function createRepositoryFlusherImplementation(): TestRepositoryFlusherInterface;
     /**
      * @throws ContactPersonNotFoundException
      */
@@ -85,8 +87,11 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
         $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $contactPersonRepository->save($contactPerson);
+        $flusher->flush();
+
         $acc = $contactPersonRepository->getById($contactPerson->getId());
         $this->assertEquals($contactPerson, $acc);
     }
@@ -121,8 +126,11 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
         $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $contactPersonRepository->save($contactPerson);
+        $flusher->flush();
+
         $contactPerson = $contactPersonRepository->getById($contactPerson->getId());
         $contactPerson->markAsDeleted('soft delete account');
 
@@ -194,8 +202,11 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
         $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $contactPersonRepository->save($contactPerson);
+        $flusher->flush();
+
         $acc = $contactPersonRepository->getById($contactPerson->getId());
         $this->assertEquals($contactPerson, $acc);
     }
@@ -256,8 +267,11 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
         $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $contactPersonRepository->save($contactPerson);
+        $flusher->flush();
+
         $contactPersons = $contactPersonRepository->findByEmail($email);
         $this->assertEquals($contactPerson, $contactPersons[0]);
     }
@@ -288,8 +302,11 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
         $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $contactPersonRepository->save($contactPerson);
+        $flusher->flush();
+
         $contactPersons = $contactPersonRepository->findByEmail('this.email.doesnt.exists@b24.com');
         $this->assertEmpty($contactPersons);
     }
@@ -320,8 +337,11 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
         $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $bitrix24PartnerId, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $contactPersonRepository->save($contactPerson);
+        $flusher->flush();
+
         $contactPersons = $contactPersonRepository->findByEmail($email, $contactPersonStatus);
         $this->assertEquals($contactPerson, $contactPersons[0]);
     }
@@ -332,11 +352,14 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     final public function testFindByEmailWithVerifiedEmail(array $items): void
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
         $expectedContactPerson = null;
         foreach ($items as $item) {
             [$uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp] = $item;
             $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+
             $contactPersonRepository->save($contactPerson);
+            $flusher->flush();
             if (!$expectedContactPerson instanceof ContactPersonInterface) {
                 $expectedContactPerson = $contactPerson;
             }
@@ -354,11 +377,14 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     final public function testFindByEmailWithVerifiedPhone(array $items): void
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
+
         $expectedContactPerson = null;
         foreach ($items as $item) {
             [$uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp] = $item;
             $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
             $contactPersonRepository->save($contactPerson);
+            $flusher->flush();
             if (!$expectedContactPerson instanceof ContactPersonInterface) {
                 $expectedContactPerson = $contactPerson;
             }
@@ -399,11 +425,13 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
         $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $externalId = Uuid::v7();
         $contactPerson->setExternalId($externalId->toRfc4122());
 
         $contactPersonRepository->save($contactPerson);
+        $flusher->flush();
         $acc = $contactPersonRepository->findByExternalId($externalId->toRfc4122());
         $this->assertEquals($contactPerson, $acc[0]);
     }
@@ -437,8 +465,10 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
         $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $contactPersonRepository->save($contactPerson);
+        $flusher->flush();
         $this->assertEquals([], $contactPersonRepository->findByExternalId(Uuid::v7()->toRfc4122()));
     }
 
@@ -471,8 +501,11 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
         $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $contactPersonRepository->save($contactPerson);
+        $flusher->flush();
+
         $this->expectException(InvalidArgumentException::class);
         /** @phpstan-ignore-next-line */
         $contactPersonRepository->findByExternalId('');
@@ -485,11 +518,14 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
         $expectedContactPersons = [];
+        $flusher = $this->createRepositoryFlusherImplementation();
         $expectedExternalId = null;
         foreach ($items as $item) {
             [$uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp] = $item;
             $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
             $contactPersonRepository->save($contactPerson);
+            $flusher->flush();
+
             if ($contactPerson->getExternalId() !== null) {
                 $expectedContactPersons[] = $contactPerson;
                 if ($expectedExternalId === null) {

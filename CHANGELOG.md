@@ -44,11 +44,21 @@
     - UTM extraction from referrer URLs
     - Real-world scenarios with complete user tracking data
 
+### Changed
+
+- **Breaking changes** in `ContactPersonInterface` method signatures:
+  - `changeEmail(?string $email)` - removed second parameter `?bool $isEmailVerified`. Migration path: call `markEmailAsVerified()` separately after `changeEmail()` if email needs to be verified
+  - `changeMobilePhone(?PhoneNumber $phoneNumber)` - removed second parameter `?bool $isMobilePhoneVerified`. Migration path: call `markMobilePhoneAsVerified()` separately after `changeMobilePhone()` if phone needs to be verified
+  - Replaced `getUserAgent()`, `getUserAgentReferer()`, `getUserAgentIp()` methods with single `getUserAgentInfo(): UserAgentInfo` method that returns complete user agent information object. Migration path: use `$info->userAgent`, `$info->referrer`, `$info->ip` properties instead
+- Updated `RemoteEventsFactory::validate()` method signature from `validate(EventInterface $event, string $applicationToken)` to `validate(Bitrix24AccountInterface $bitrix24Account, EventInterface $event)`. Now uses `Bitrix24AccountInterface::isApplicationTokenValid()` for token validation instead of direct string comparison
+
+
 ### Fixed
 
 - Fixed wrong offset in `ItemsResult` [see details](https://github.com/bitrix24/b24phpsdk/issues/279)
 - Fixed wrong exception for method `crm.item.get`, now it `ItemNotFoundException` [see details](https://github.com/bitrix24/b24phpsdk/issues/282)
 - Fixed added type `project` in enum `PortalLicenseFamily` [see details](https://github.com/bitrix24/b24phpsdk/issues/286)
+- Fixed errors in `ContactPersonRepositoryInterfaceTest`, [see details](https://github.com/bitrix24/b24phpsdk/issues/294)
 
 ### Deprecated
 
