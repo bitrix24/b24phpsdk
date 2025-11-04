@@ -444,20 +444,6 @@ abstract class ContactPersonInterfaceTest extends TestCase
         $contactPerson->changeEmail($newEmail);
         $this->assertEquals($newEmail, $contactPerson->getEmail());
         $this->assertNull($contactPerson->getEmailVerifiedAt());
-
-        $newEmail = DemoDataGenerator::getEmail();
-        $contactPerson->changeEmail($newEmail, true);
-        $this->assertEquals($newEmail, $contactPerson->getEmail());
-        $this->assertNotNull($contactPerson->getEmailVerifiedAt());
-        $newEmail = DemoDataGenerator::getEmail();
-        $contactPerson->changeEmail($newEmail);
-        $this->assertEquals($newEmail, $contactPerson->getEmail());
-        $this->assertNull($contactPerson->getEmailVerifiedAt());
-
-        $newEmail = DemoDataGenerator::getEmail();
-        $contactPerson->changeEmail($newEmail, false);
-        $this->assertEquals($newEmail, $contactPerson->getEmail());
-        $this->assertNull($contactPerson->getEmailVerifiedAt());
     }
 
     #[Test]
@@ -552,14 +538,6 @@ abstract class ContactPersonInterfaceTest extends TestCase
         $phone = DemoDataGenerator::getMobilePhone();
         $contactPerson->changeMobilePhone($phone);
         $this->assertNull($contactPerson->getMobilePhoneVerifiedAt());
-
-        $phone = DemoDataGenerator::getMobilePhone();
-        $contactPerson->changeMobilePhone($phone, false);
-        $this->assertNull($contactPerson->getMobilePhoneVerifiedAt());
-
-        $phone = DemoDataGenerator::getMobilePhone();
-        $contactPerson->changeMobilePhone($phone, true);
-        $this->assertNotNull($contactPerson->getMobilePhoneVerifiedAt());
     }
 
     #[Test]
@@ -590,7 +568,10 @@ abstract class ContactPersonInterfaceTest extends TestCase
         $this->assertEquals($phoneNumber, $contactPerson->getMobilePhone());
 
         $phone = DemoDataGenerator::getMobilePhone();
-        $contactPerson->changeMobilePhone($phone, true);
+        $contactPerson->changeMobilePhone($phone);
+        $this->assertNull($contactPerson->getMobilePhoneVerifiedAt());
+
+        $contactPerson->markMobilePhoneAsVerified();
         $this->assertNotNull($contactPerson->getMobilePhoneVerifiedAt());
     }
 
@@ -830,8 +811,8 @@ abstract class ContactPersonInterfaceTest extends TestCase
 
     #[Test]
     #[DataProvider('contactPersonDataProvider')]
-    #[TestDox('test getUserAgent method')]
-    final public function testGetUserAgent(
+    #[TestDox('test isEmailVerified method')]
+    final public function testIsEmailVerified(
         Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
@@ -853,13 +834,27 @@ abstract class ContactPersonInterfaceTest extends TestCase
     ): void
     {
         $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
-        $this->assertEquals($userAgent, $contactPerson->getUserAgent());
+
+        if ($emailVerifiedAt !== null) {
+            $this->assertTrue($contactPerson->isEmailVerified());
+        } else {
+            $this->assertFalse($contactPerson->isEmailVerified());
+        }
+
+        // Change email should reset verification
+        $newEmail = DemoDataGenerator::getEmail();
+        $contactPerson->changeEmail($newEmail);
+        $this->assertFalse($contactPerson->isEmailVerified());
+
+        // Mark as verified
+        $contactPerson->markEmailAsVerified();
+        $this->assertTrue($contactPerson->isEmailVerified());
     }
 
     #[Test]
     #[DataProvider('contactPersonDataProvider')]
-    #[TestDox('test getUserAgentReferer method')]
-    final public function testGetUserAgentReferer(
+    #[TestDox('test isMobilePhoneVerified method')]
+    final public function testIsMobilePhoneVerified(
         Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
@@ -881,13 +876,27 @@ abstract class ContactPersonInterfaceTest extends TestCase
     ): void
     {
         $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
-        $this->assertEquals($userAgentReferer, $contactPerson->getUserAgentReferer());
+
+        if ($mobilePhoneVerifiedAt !== null) {
+            $this->assertTrue($contactPerson->isMobilePhoneVerified());
+        } else {
+            $this->assertFalse($contactPerson->isMobilePhoneVerified());
+        }
+
+        // Change phone should reset verification
+        $newPhone = DemoDataGenerator::getMobilePhone();
+        $contactPerson->changeMobilePhone($newPhone);
+        $this->assertFalse($contactPerson->isMobilePhoneVerified());
+
+        // Mark as verified
+        $contactPerson->markMobilePhoneAsVerified();
+        $this->assertTrue($contactPerson->isMobilePhoneVerified());
     }
 
     #[Test]
     #[DataProvider('contactPersonDataProvider')]
-    #[TestDox('test getUserAgentIp method')]
-    final public function testGetUserAgentIp(
+    #[TestDox('test getUserAgentInfo method')]
+    final public function testGetUserAgentInfo(
         Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
@@ -909,7 +918,11 @@ abstract class ContactPersonInterfaceTest extends TestCase
     ): void
     {
         $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
-        $this->assertEquals($userAgentIp, $contactPerson->getUserAgentIp());
+        $userAgentInfo = $contactPerson->getUserAgentInfo();
+
+        $this->assertEquals($userAgent, $userAgentInfo->userAgent);
+        $this->assertEquals($userAgentReferer, $userAgentInfo->referrer);
+        $this->assertEquals($userAgentIp, $userAgentInfo->ip);
     }
 
     public static function contactPersonDataProvider(): Generator

@@ -74,12 +74,17 @@ interface ContactPersonInterface
      */
     public function getEmail(): ?string;
 
-    public function changeEmail(?string $email, ?bool $isEmailVerified = null): void;
+    public function changeEmail(?string $email): void;
 
     /**
      * @return void mark contact person email as verified (send check main)
      */
     public function markEmailAsVerified(): void;
+
+    /**
+     * @return bool is email verified with send code or magic link
+     */
+    public function isEmailVerified(): bool;
 
     /**
      * @return CarbonImmutable|null is contact person email verified
@@ -89,9 +94,14 @@ interface ContactPersonInterface
     /**
      * Change mobile phone for contact person
      */
-    public function changeMobilePhone(?PhoneNumber $phoneNumber, ?bool $isMobilePhoneVerified = null): void;
+    public function changeMobilePhone(?PhoneNumber $phoneNumber): void;
 
     public function getMobilePhone(): ?PhoneNumber;
+
+    /**
+     * @return bool is mobile phone verified with send sms code
+     */
+    public function isMobilePhoneVerified(): bool;
 
     /**
      * @return CarbonImmutable|null is contact person mobile phone verified
@@ -133,18 +143,5 @@ interface ContactPersonInterface
      */
     public function setBitrix24PartnerId(?Uuid $uuid): void;
 
-    /**
-     * get user agent for contact person, use for store metadata in consent agreements facts
-     */
-    public function getUserAgent(): ?string;
-
-    /**
-     * get user agent referer for contact person use for store metadata in consent agreements facts
-     */
-    public function getUserAgentReferer(): ?string;
-
-    /**
-     * get user agent ip for contact person use for store metadata in consent agreements facts
-     */
-    public function getUserAgentIp(): ?IP;
+    public function getUserAgentInfo(): UserAgentInfo;
 }
