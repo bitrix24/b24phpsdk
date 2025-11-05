@@ -1060,6 +1060,7 @@ Supported in bitrix24-php-sdk methods with batch wrapper count: 22
 - Fixed variable names in `Bitrix24\SDK\Services\ServiceBuilderFactory::initFromRequest`,
   see [wrong variable name](https://github.com/bitrix24/b24phpsdk/issues/30).
 - Fixed some corner cases in `Bitrix24\SDK\Core\ApiLevelErrorHandler`
+- Fixed getting entity by its code, see [entity.get issue](https://github.com/bitrix24/b24phpsdk/issues/285)
 
 <!--
 ### Deprecated
