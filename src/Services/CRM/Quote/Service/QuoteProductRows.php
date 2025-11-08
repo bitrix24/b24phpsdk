@@ -31,7 +31,6 @@ class QuoteProductRows extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/quote/crm-quote-product-rows-get.html
      *
-     * @param Currency|null $currency
      * @throws BaseException
      * @throws TransportException
      */

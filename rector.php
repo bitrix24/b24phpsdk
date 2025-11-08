@@ -72,7 +72,7 @@ return RectorConfig::configure()
         __DIR__ . '/tests/Integration/Services/CRM/Documentgenerator/Numerator',
         __DIR__ . '/tests/Unit/',
     ])
-    ->withCache(cacheDirectory: __DIR__ . '.cache/rector')
+    ->withCache(cacheDirectory: __DIR__ . '/.cache/rector')
     ->withSets(
         [
             LevelSetList::UP_TO_PHP_84,

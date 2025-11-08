@@ -31,7 +31,6 @@ class LeadProductRows extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/leads/crm-lead-get.html
      *
-     * @param Currency|null $currency
      * @throws BaseException
      * @throws TransportException
      */

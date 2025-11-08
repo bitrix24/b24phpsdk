@@ -32,7 +32,6 @@ class DealProductRows extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_productrows_get.php
      *
-     * @param Currency|null $currency
      * @throws BaseException
      * @throws TransportException
      */

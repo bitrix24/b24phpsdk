@@ -57,12 +57,12 @@ class StatusLangTest extends TestCase
     protected function tearDown(): void
     {
         // Clean up any test status langs created during tests
-        foreach ($this->createdStatusLangs as $createdRectorPrefix202407StatusLang) {
+        foreach ($this->createdStatusLangs as $createdRectorPrefix202411StatusLang) {
             try {
                 $this->statusLangService->deleteByFilter([
-                    'statusId' => $createdRectorPrefix202407StatusLang['STATUS_ID'],
-                    'lid' => $createdRectorPrefix202407StatusLang['LID'],
-                    'name' => $createdRectorPrefix202407StatusLang['NAME'],
+                    'statusId' => $createdRectorPrefix202411StatusLang['STATUS_ID'],
+                    'lid' => $createdRectorPrefix202411StatusLang['LID'],
+                    'name' => $createdRectorPrefix202411StatusLang['NAME'],
                 ]);
             } catch (\Exception) {
                 // Ignore errors during cleanup
@@ -71,9 +71,9 @@ class StatusLangTest extends TestCase
 
         // Clean up any test statuses created during tests
         $statusService = Fabric::getServiceBuilder()->getSaleScope()->status();
-        foreach ($this->createdStatusIds as $createdRectorPrefix202407StatusId) {
+        foreach ($this->createdStatusIds as $createdRectorPrefix202411StatusId) {
             try {
-                $statusService->delete($createdRectorPrefix202407StatusId);
+                $statusService->delete($createdRectorPrefix202411StatusId);
             } catch (\Exception) {
                 // Ignore errors during cleanup
             }
@@ -208,9 +208,9 @@ class StatusLangTest extends TestCase
 
         // Find our status language
         $found = false;
-        foreach ($statusLangs as $RectorPrefix202407statusLang) {
-            if ($RectorPrefix202407statusLang->statusId === $statusId && $RectorPrefix202407statusLang->lid === $langId) {
-                $this->assertEquals($name, $RectorPrefix202407statusLang->name);
+        foreach ($statusLangs as $RectorPrefix202411statusLang) {
+            if ($RectorPrefix202411statusLang->statusId === $statusId && $RectorPrefix202411statusLang->lid === $langId) {
+                $this->assertEquals($name, $RectorPrefix202411statusLang->name);
                 $found = true;
                 break;
             }
