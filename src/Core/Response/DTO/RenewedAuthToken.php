@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Core\Response\DTO;
 
 use Bitrix24\SDK\Application\ApplicationStatus;
 use Bitrix24\SDK\Core\Credentials\AuthToken;
+use Bitrix24\SDK\Core\Credentials\Endpoints;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 
 readonly class RenewedAuthToken
@@ -33,6 +34,16 @@ readonly class RenewedAuthToken
         public ApplicationStatus $applicationStatus,
         public string            $domain)
     {
+    }
+
+    /**
+     * Get Endpoints object from serverEndpoint and clientEndpoint
+     *
+     * @throws InvalidArgumentException
+     */
+    public function getEndpoints(): Endpoints
+    {
+        return new Endpoints($this->serverEndpoint, $this->clientEndpoint);
     }
 
     /**
