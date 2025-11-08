@@ -56,9 +56,9 @@ class StatusTest extends TestCase
     protected function tearDown(): void
     {
         // Clean up any test statuses created during tests
-        foreach ($this->testStatusIds as $testRectorPrefix202407StatusId) {
+        foreach ($this->testStatusIds as $testRectorPrefix202411StatusId) {
             try {
-                $this->deleteStatus($testRectorPrefix202407StatusId);
+                $this->deleteStatus($testRectorPrefix202411StatusId);
             } catch (\Exception) {
                 // Ignore errors during cleanup
             }

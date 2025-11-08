@@ -1,6 +1,6 @@
 # b24-php-sdk change log
 
-## 1.8.0 - 2025.11.01 (in progress)
+## 1.8.0 - 2025.11.08
 
 ### Added
 
@@ -51,6 +51,20 @@
   - `changeMobilePhone(?PhoneNumber $phoneNumber)` - removed second parameter `?bool $isMobilePhoneVerified`. Migration path: call `markMobilePhoneAsVerified()` separately after `changeMobilePhone()` if phone needs to be verified
   - Replaced `getUserAgent()`, `getUserAgentReferer()`, `getUserAgentIp()` methods with single `getUserAgentInfo(): UserAgentInfo` method that returns complete user agent information object. Migration path: use `$info->userAgent`, `$info->referrer`, `$info->ip` properties instead
 - Updated `RemoteEventsFactory::validate()` method signature from `validate(EventInterface $event, string $applicationToken)` to `validate(Bitrix24AccountInterface $bitrix24Account, EventInterface $event)`. Now uses `Bitrix24AccountInterface::isApplicationTokenValid()` for token validation instead of direct string comparison
+- **Docker configuration updated to PHP 8.4** - Development environment now uses PHP 8.4.14 (docker/php-cli/Dockerfile):
+  - Upgraded from PHP 8.3 to PHP 8.4 base image (`php:8.4-cli-bookworm`)
+  - Updated Composer to version 2.8
+  - Added PHP extension installer v2.4 from mlocati for easier extension management
+  - Added new PHP extensions: `amqp`, `excimer`, `opcache`, `pcntl`, `yaml`, `zip`
+  - Changed base OS from Alpine to Debian Bookworm for better compatibility
+  - Implemented multi-stage Docker build for optimized image size
+  - Added proper user/group ID mapping for www-data user (UID/GID 10001)
+  - Set proper working directory ownership and non-root user execution
+- **PHP 8.4 compatibility improvements**:
+  - Rector configuration updated to use `LevelSetList::UP_TO_PHP_84` for PHP 8.4 feature detection
+  - PHPUnit configuration updated to PHPUnit 11.0 attribute set (`PHPUnitSetList::PHPUNIT_110`)
+  - Fixed all implicitly nullable parameter deprecation warnings (8 occurrences)
+  - Fixed PHPStan internal errors with `random_int()` range handling
 
 
 ### Fixed
