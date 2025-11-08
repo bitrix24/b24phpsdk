@@ -289,7 +289,7 @@ class AbstractCrmItem extends AbstractItem
         return (int)$this->data[$fieldKey];
     }
 
-    public function __construct(array $data, Currency $currency = null)
+    public function __construct(array $data, ?Currency $currency = null)
     {
         parent::__construct($data);
         if ($currency !== null) {

@@ -40,7 +40,7 @@ class QuoteProductRows extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/quote/crm-quote-product-rows-get.html',
         'Returns products inside the specified quote.'
     )]
-    public function get(int $quoteId, Currency $currency = null): QuoteProductRowItemsResult
+    public function get(int $quoteId, ?Currency $currency = null): QuoteProductRowItemsResult
     {
         if (!$currency instanceof \Money\Currency) {
             $res = $this->core->call('batch', [

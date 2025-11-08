@@ -37,7 +37,7 @@ readonly class Batch
         'https://apidocs.bitrix24.com/api-reference/entity/items/entity-item-get.html',
         'Get the list of storage items in batch mode'
     )]
-    public function get(string $entity, array $sort = [], array $filter = [], int $limit = null): Generator
+    public function get(string $entity, array $sort = [], array $filter = [], ?int $limit = null): Generator
     {
         foreach (
             $this->batch->getTraversableList(

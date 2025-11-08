@@ -25,7 +25,7 @@ abstract class AbstractCatalogItem extends AbstractItem
 
     private Currency $currency;
 
-    public function __construct(array $data, Currency $currency = null)
+    public function __construct(array $data, ?Currency $currency = null)
     {
         parent::__construct($data);
         if ($currency instanceof Currency) {

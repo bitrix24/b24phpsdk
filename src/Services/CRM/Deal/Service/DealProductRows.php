@@ -41,7 +41,7 @@ class DealProductRows extends AbstractService
         'https://training.bitrix24.com/rest_help/crm/deals/crm_deal_productrows_get.php',
         'Returns products inside the specified deal.'
     )]
-    public function get(int $dealId, Currency $currency = null): DealProductRowItemsResult
+    public function get(int $dealId, ?Currency $currency = null): DealProductRowItemsResult
     {
         if (!$currency instanceof \Money\Currency) {
             $res = $this->core->call('batch', [

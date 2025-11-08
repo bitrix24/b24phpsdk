@@ -94,7 +94,7 @@ class Workflow extends AbstractService
         int                           $bizProcTemplateId,
         int                           $entityId,
         array                         $callParameters = [],
-        int                           $smartProcessId = null
+        ?int                          $smartProcessId = null
     ): Workflows\Workflow\Result\WorkflowInstanceStartResult
     {
         $documentId = null;
