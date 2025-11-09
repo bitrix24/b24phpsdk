@@ -20,6 +20,8 @@ use Bitrix24\SDK\Core\CoreBuilder;
 use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
 use Bitrix24\SDK\Core\Credentials\Credentials;
+use Bitrix24\SDK\Core\Credentials\DefaultOAuthServerUrl;
+use Bitrix24\SDK\Core\Credentials\Endpoints;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
@@ -44,21 +46,32 @@ class ServiceBuilderFactory
     }
 
     /**
-     * Init service builder from application account
+     * Init service builder from an application account
      *
      * @param ApplicationProfile $applicationProfile
      * @param Bitrix24AccountInterface $bitrix24Account
-     *
+     * @param non-empty-string|null $oauthServerUrl
      * @return ServiceBuilder
      * @throws InvalidArgumentException
      */
-    public function initFromAccount(ApplicationProfile $applicationProfile, Bitrix24AccountInterface $bitrix24Account): ServiceBuilder
-    {
+    public function initFromAccount(
+        ApplicationProfile $applicationProfile,
+        Bitrix24AccountInterface $bitrix24Account,
+        // todo make it required in v2
+        ?string $oauthServerUrl = null
+    ): ServiceBuilder {
+        if ($oauthServerUrl === null) {
+            $this->log->warning('oauthServerUrl not set, you must set it manually or use DefaultOAuthServerUrl presets');
+            $endpoints = new Endpoints($bitrix24Account->getDomainUrl(), DefaultOAuthServerUrl::default());
+        } else {
+            $endpoints = new Endpoints($bitrix24Account->getDomainUrl(), $oauthServerUrl);
+        }
+
         return $this->getServiceBuilder(
             Credentials::createFromOAuth(
                 $bitrix24Account->getAuthToken(),
                 $applicationProfile,
-                $bitrix24Account->getDomainUrl()
+                $endpoints
             )
         );
     }
@@ -68,22 +81,30 @@ class ServiceBuilderFactory
      *
      * @param ApplicationProfile $applicationProfile
      * @param AuthToken $authToken
-     * @param string $bitrix24DomainUrl
-     *
+     * @param non-empty-string $bitrix24DomainUrl
+     * @param non-empty-string|null $oauthServerUrl
      * @return ServiceBuilder
      * @throws InvalidArgumentException
      */
     public function init(
         ApplicationProfile $applicationProfile,
-        AuthToken          $authToken,
-        string             $bitrix24DomainUrl
-    ): ServiceBuilder
-    {
+        AuthToken $authToken,
+        string $bitrix24DomainUrl,
+        // todo make it required in v2
+        ?string $oauthServerUrl = null
+    ): ServiceBuilder {
+        if ($oauthServerUrl === null) {
+            $this->log->warning('oauthServerUrl not set, you must set it manually or use DefaultOAuthServerUrl presets');
+            $endpoints = new Endpoints($bitrix24DomainUrl, DefaultOAuthServerUrl::default());
+        } else {
+            $endpoints = new Endpoints($bitrix24DomainUrl, $oauthServerUrl);
+        }
+
         return $this->getServiceBuilder(
             Credentials::createFromOAuth(
                 $authToken,
                 $applicationProfile,
-                $bitrix24DomainUrl
+                $endpoints
             )
         );
     }
@@ -137,10 +158,10 @@ class ServiceBuilderFactory
      * @throws InvalidArgumentException
      */
     public static function createServiceBuilderFromWebhook(
-        string                    $webhookUrl,
+        string $webhookUrl,
         ?EventDispatcherInterface $eventDispatcher = null,
-        ?LoggerInterface          $logger = null): ServiceBuilder
-    {
+        ?LoggerInterface $logger = null
+    ): ServiceBuilder {
         if ($eventDispatcher === null) {
             $eventDispatcher = new EventDispatcher();
         }
@@ -161,12 +182,13 @@ class ServiceBuilderFactory
      * @throws InvalidArgumentException If the key "DOMAIN" is not found in the request.
      */
     public static function createServiceBuilderFromPlacementRequest(
-        Request                   $placementRequest,
-        ApplicationProfile        $applicationProfile,
+        Request $placementRequest,
+        ApplicationProfile $applicationProfile,
         ?EventDispatcherInterface $eventDispatcher = null,
-        ?LoggerInterface          $logger = null
-    ): ServiceBuilder
-    {
+        ?LoggerInterface $logger = null,
+        // todo make it required in v2
+        ?string $oauthServerUrl = null
+    ): ServiceBuilder {
         if (!in_array('DOMAIN', $placementRequest->query->keys(), true)) {
             throw new InvalidArgumentException('key «DOMAIN» not found in GET request arguments');
         }
@@ -183,11 +205,16 @@ class ServiceBuilderFactory
             $logger = new NullLogger();
         }
 
+        if ($oauthServerUrl === null) {
+            $logger->warning('oauthServerUrl not set, you must set it manually or use DefaultOAuthServerUrl presets');
+        }
+
         return (new ServiceBuilderFactory($eventDispatcher, $logger))
             ->init(
                 $applicationProfile,
                 AuthToken::initFromPlacementRequest($placementRequest),
-                $rawDomainUrl
+                $rawDomainUrl,
+                $oauthServerUrl
             );
     }
 }

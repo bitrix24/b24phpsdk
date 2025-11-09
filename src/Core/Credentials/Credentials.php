@@ -18,28 +18,25 @@ use Bitrix24\SDK\Application\Requests\Placement\PlacementRequest;
 
 class Credentials
 {
-    protected ?string $domainUrl = null;
-
     /**
      * @throws InvalidArgumentException
      */
     public function __construct(
-        protected ?WebhookUrl         $webhookUrl,
-        protected ?AuthToken          $authToken,
+        protected ?WebhookUrl $webhookUrl,
+        protected ?AuthToken $authToken,
         protected ?ApplicationProfile $applicationProfile,
-        ?string                       $domainUrl
-    )
-    {
-        if ($domainUrl !== null) {
-            $this->setDomainUrl($domainUrl);
-        }
-
+        protected ?Endpoints $endpoints,
+    ) {
         if (!$this->authToken instanceof AuthToken && !$this->webhookUrl instanceof WebhookUrl) {
             throw new InvalidArgumentException('you must set on of auth type: webhook or OAuth 2.0');
         }
 
-        if ($this->authToken instanceof AuthToken && $this->domainUrl === null) {
-            throw new InvalidArgumentException('for oauth type you must set domain url');
+        if ($this->authToken instanceof AuthToken && !$this->endpoints instanceof \Bitrix24\SDK\Core\Credentials\Endpoints) {
+            throw new InvalidArgumentException('for oauth type you must set Endpoints url');
+        }
+
+        if ($this->webhookUrl instanceof WebhookUrl && $this->endpoints instanceof Endpoints) {
+            throw new InvalidArgumentException('you cannot set Endpoints url for webhook type');
         }
     }
 
@@ -50,11 +47,11 @@ class Credentials
 
     /**
      * Set domain url
-     *
+     * @param non-empty-string $domainUrl
      *
      * @throws InvalidArgumentException
      */
-    public function setDomainUrl(string $domainUrl): void
+    public function changeDomainUrl(string $domainUrl): void
     {
         $parseResult = parse_url($domainUrl);
         if (!array_key_exists('scheme', $parseResult)) {
@@ -65,7 +62,11 @@ class Credentials
             throw new InvalidArgumentException(sprintf('domain URL %s is invalid', $domainUrl));
         }
 
-        $this->domainUrl = $domainUrl;
+        if ($this->webhookUrl instanceof WebhookUrl) {
+            throw new InvalidArgumentException('you cannot change domain url for webhook context');
+        }
+
+        $this->endpoints->changeClientUrl($domainUrl);
     }
 
     public function isWebhookContext(): bool
@@ -80,7 +81,7 @@ class Credentials
 
     public function getDomainUrl(): string
     {
-        $arUrl = $this->getWebhookUrl() instanceof WebhookUrl ? parse_url($this->getWebhookUrl()->getUrl()) : parse_url((string)$this->domainUrl);
+        $arUrl = $this->getWebhookUrl() instanceof WebhookUrl ? parse_url($this->getWebhookUrl()->getUrl()) : parse_url($this->endpoints->getClientUrl());
 
         return sprintf('%s://%s', $arUrl['scheme'], $arUrl['host']);
     }
@@ -93,6 +94,21 @@ class Credentials
     public function getAuthToken(): ?AuthToken
     {
         return $this->authToken;
+    }
+
+    public function getEndpoints(): Endpoints
+    {
+        return $this->endpoints;
+    }
+
+    /**
+     * Get OAuth server URL
+     * @deprecated
+     * @todo remove on v1.9.0
+     */
+    public function getOauthServerUrl(): string
+    {
+        return $this->endpoints->getAuthServerUrl();
     }
 
     /**
@@ -112,26 +128,34 @@ class Credentials
      *
      * @throws InvalidArgumentException
      */
-    public static function createFromOAuth(AuthToken $authToken, ApplicationProfile $applicationProfile, string $domainUrl): self
-    {
+    public static function createFromOAuth(
+        AuthToken $authToken,
+        ApplicationProfile $applicationProfile,
+        Endpoints $endpoints,
+    ): self {
         return new self(
             null,
             $authToken,
             $applicationProfile,
-            $domainUrl
+            $endpoints
         );
     }
 
     /**
+     * Create credentials from PlacementRequest
      *
      * @throws InvalidArgumentException
      */
-    public static function createFromPlacementRequest(PlacementRequest $placementRequest, ApplicationProfile $applicationProfile): self
-    {
+    public static function createFromPlacementRequest(
+        PlacementRequest $placementRequest,
+        ApplicationProfile $applicationProfile,
+        // todo make it required in v2
+        ?string $oauthServerUrl = null
+    ): self {
         return self::createFromOAuth(
             $placementRequest->getAccessToken(),
             $applicationProfile,
-            $placementRequest->getDomainUrl()
+            new Endpoints($placementRequest->getDomainUrl(), $oauthServerUrl)
         );
     }
 }
