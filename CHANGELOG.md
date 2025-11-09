@@ -1,6 +1,6 @@
 # b24-php-sdk change log
 
-## 1.8.0 - 2025.11.08
+## 1.8.0 - 2025.11.10
 
 ### Added
 
@@ -116,9 +116,10 @@
 ### Statistics
 
 ```
-Bitrix24 API-methods count: 
-Supported in bitrix24-php-sdk methods count: 
-Coverage percentage:
+Bitrix24 API-methods count: 1162
+Supported in bitrix24-php-sdk methods count: 639
+Coverage percentage: 54.99% 🚀
+Supported in bitrix24-php-sdk methods with batch wrapper count: 91
 ```
 
 ## 1.7.0 - 2025.10.08
