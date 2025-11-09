@@ -52,14 +52,16 @@
     - `CoreBuilder` gained `withEndpoints()` and `withOauthServerUrl()` methods for explicit endpoint configuration
     - OAuth server URL is automatically extracted from `server_endpoint` field in API responses
     - Default OAuth server remains `https://oauth.bitrix.info` for backward compatibility
-- Added comprehensive unit tests for `Endpoints` class with 28 test cases covering:
+- Added comprehensive unit tests for `Endpoints` class with 29 test cases covering:
     - Constructor validation for client and auth server URLs
     - `getClientUrl()` and `getAuthServerUrl()` methods
     - `changeClientUrl()` method with immutability checks
     - `initFromArray()` static factory method with validation
     - URL format validation (HTTP/HTTPS, ports, paths, subdomains)
     - Error handling for invalid URLs and missing required fields
-
+    - Automatic addition of `https://` protocol when missing from client URL
+    - Added automatic protocol fallback in `Endpoints` constructor: if client URL is provided without protocol (e.g., `example.bitrix24.com`), `https://` is automatically added
+ 
 ### Changed
 
 - **Breaking changes** in `ContactPersonInterface` method signatures:

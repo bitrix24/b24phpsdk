@@ -80,16 +80,6 @@ class EndpointsTest extends TestCase
             'https://oauth.bitrix.info/',
             new InvalidArgumentException(),
         ];
-        yield 'invalid client URL - not a URL' => [
-            'not-a-url',
-            'https://oauth.bitrix.info/',
-            new InvalidArgumentException(),
-        ];
-        yield 'invalid client URL - missing protocol' => [
-            'example.bitrix24.com',
-            'https://oauth.bitrix.info/',
-            new InvalidArgumentException(),
-        ];
     }
 
     #[Test]
@@ -127,6 +117,56 @@ class EndpointsTest extends TestCase
 
         $this->assertEquals($clientUrl, $endpoints->getClientUrl());
         $this->assertEquals($authServerUrl, $endpoints->getAuthServerUrl());
+    }
+
+    #[Test]
+    #[TestDox('tests constructor adds https:// protocol when missing')]
+    public function testConstructorAddsHttpsProtocolWhenMissing(): void
+    {
+        $clientUrlWithoutProtocol = 'example.bitrix24.com';
+        $authServerUrl = 'https://oauth.bitrix.info/';
+
+        $endpoints = new Endpoints($clientUrlWithoutProtocol, $authServerUrl);
+
+        $this->assertEquals('https://example.bitrix24.com', $endpoints->getClientUrl());
+        $this->assertEquals($authServerUrl, $endpoints->getAuthServerUrl());
+    }
+
+    #[Test]
+    #[TestDox('tests constructor preserves existing protocol')]
+    public function testConstructorPreservesExistingProtocol(): void
+    {
+        $clientUrlWithHttp = 'http://example.bitrix24.com';
+        $authServerUrl = 'https://oauth.bitrix.info/';
+
+        $endpoints = new Endpoints($clientUrlWithHttp, $authServerUrl);
+
+        $this->assertEquals('http://example.bitrix24.com', $endpoints->getClientUrl());
+        $this->assertEquals($authServerUrl, $endpoints->getAuthServerUrl());
+    }
+
+    #[Test]
+    #[TestDox('tests constructor with domain without protocol and trailing slash')]
+    public function testConstructorWithDomainWithoutProtocolAndTrailingSlash(): void
+    {
+        $clientUrl = 'test.bitrix24.ru';
+        $authServerUrl = 'https://oauth.bitrix.info/';
+
+        $endpoints = new Endpoints($clientUrl, $authServerUrl);
+
+        $this->assertEquals('https://test.bitrix24.ru', $endpoints->getClientUrl());
+    }
+
+    #[Test]
+    #[TestDox('tests constructor with subdomain without protocol')]
+    public function testConstructorWithSubdomainWithoutProtocol(): void
+    {
+        $clientUrl = 'subdomain.company.bitrix24.com';
+        $authServerUrl = 'https://oauth.bitrix.info/';
+
+        $endpoints = new Endpoints($clientUrl, $authServerUrl);
+
+        $this->assertEquals('https://subdomain.company.bitrix24.com', $endpoints->getClientUrl());
     }
 
     #[DataProvider('initFromArrayDataProvider')]
@@ -173,15 +213,16 @@ class EndpointsTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('tests initFromArray() with invalid client URL')]
-    public function testInitFromArrayWithInvalidClientUrl(): void
+    #[TestDox('tests initFromArray() adds https protocol to client URL without protocol')]
+    public function testInitFromArrayAddsHttpsProtocol(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-
-        Endpoints::initFromArray([
-            'client_endpoint' => 'invalid-url',
+        $endpoints = Endpoints::initFromArray([
+            'client_endpoint' => 'example.bitrix24.com',
             'server_endpoint' => 'https://oauth.bitrix.info/',
         ]);
+
+        $this->assertEquals('https://example.bitrix24.com', $endpoints->getClientUrl());
+        $this->assertEquals('https://oauth.bitrix.info/', $endpoints->getAuthServerUrl());
     }
 
     #[Test]
@@ -198,13 +239,12 @@ class EndpointsTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('tests that client URL is validated')]
-    public function testClientUrlValidation(): void
+    #[TestDox('tests that empty client URL throws exception')]
+    public function testEmptyClientUrlThrowsException(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('clientUrl endpoint URL «invalid» is invalid');
 
-        new Endpoints('invalid', 'https://oauth.bitrix.info/');
+        new Endpoints('', 'https://oauth.bitrix.info/');
     }
 
     #[Test]
@@ -293,8 +333,8 @@ class EndpointsTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('tests changeClientUrl() throws exception for invalid URL')]
-    public function testChangeClientUrlThrowsExceptionForInvalidUrl(): void
+    #[TestDox('tests changeClientUrl() throws exception for empty URL')]
+    public function testChangeClientUrlThrowsExceptionForEmptyUrl(): void
     {
         $originalClientUrl = 'https://original.bitrix24.com';
         $authServerUrl = 'https://oauth.bitrix.info/';
@@ -302,9 +342,8 @@ class EndpointsTest extends TestCase
         $originalEndpoints = new Endpoints($originalClientUrl, $authServerUrl);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('clientUrl endpoint URL «invalid-url» is invalid');
 
-        $originalEndpoints->changeClientUrl('invalid-url');
+        $originalEndpoints->changeClientUrl('');
     }
 
     #[DataProvider('changeClientUrlDataProvider')]
@@ -323,7 +362,14 @@ class EndpointsTest extends TestCase
         $originalEndpoints = new Endpoints($originalClientUrl, $authServerUrl);
         $newEndpoints = $originalEndpoints->changeClientUrl($newClientUrl);
 
-        $this->assertEquals($newClientUrl, $newEndpoints->getClientUrl());
+        // Check if protocol was added
+        $expectedNewUrl = $newClientUrl;
+        $parseResult = parse_url($newClientUrl);
+        if (!array_key_exists('scheme', $parseResult)) {
+            $expectedNewUrl = 'https://' . $newClientUrl;
+        }
+
+        $this->assertEquals($expectedNewUrl, $newEndpoints->getClientUrl());
         $this->assertEquals($authServerUrl, $newEndpoints->getAuthServerUrl());
         $this->assertEquals($originalClientUrl, $originalEndpoints->getClientUrl());
     }
@@ -360,21 +406,15 @@ class EndpointsTest extends TestCase
             'https://oauth.bitrix.info/',
             null,
         ];
+        yield 'change to URL without protocol (adds https://)' => [
+            'https://old.bitrix24.com',
+            'new.bitrix24.com',
+            'https://oauth.bitrix.info/',
+            null,
+        ];
         yield 'invalid new URL - empty string' => [
             'https://old.bitrix24.com',
             '',
-            'https://oauth.bitrix.info/',
-            new InvalidArgumentException(),
-        ];
-        yield 'invalid new URL - not a URL' => [
-            'https://old.bitrix24.com',
-            'not-a-url',
-            'https://oauth.bitrix.info/',
-            new InvalidArgumentException(),
-        ];
-        yield 'invalid new URL - missing protocol' => [
-            'https://old.bitrix24.com',
-            'new.bitrix24.com',
             'https://oauth.bitrix.info/',
             new InvalidArgumentException(),
         ];
