@@ -1,27 +1,53 @@
-#FROM php:8.3-cli-alpine
 #
-#RUN apk add unzip libpq-dev git icu-dev \
-#    && docker-php-ext-install bcmath intl \
-#    && docker-php-ext-enable bcmath intl
+#  This file is part of the bitrix24-php-sdk package.
 #
-#RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet
+#  © Maksim Mesilov <mesilov.maxim@gmail.com>
 #
-#ENV COMPOSER_ALLOW_SUPERUSER 1
+#  For the full copyright and license information, please view the MIT-LICENSE.txt
+#  file that was distributed with this source code.
+#
 
-FROM php:8.3-cli-alpine
+# Grab the PHP extension installer script from mlocati's image
+# https://github.com/mlocati/docker-php-extension-installer#readme
+FROM mlocati/php-extension-installer:2.4 AS php-extension-installer
 
-# Install system dependencies and PHP extensions
-RUN apk add --no-cache unzip libpq-dev git icu-dev $PHPIZE_DEPS \
-    && docker-php-ext-install bcmath intl \
-    && docker-php-ext-enable bcmath intl
+# Separate Composer stage to install PHP dependencies efficiently
+# https://hub.docker.com/_/composer
+FROM composer:2.8 AS composer
 
-# Install and enable Excimer extension
-# https://www.mediawiki.org/wiki/Excimer
-RUN pecl install excimer \
-    && docker-php-ext-enable excimer
+# Using official PHP 8.3 CLI image based on Debian Bookworm for development purposes
+FROM php:8.4-cli-bookworm AS dev-php
 
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet
+# Copy Composer binary from the official Composer image
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+# Copy PHP extension installer script from mlocati's image
+COPY --from=php-extension-installer /usr/bin/install-php-extensions /usr/bin/install-php-extensions
 
-# Set Composer environment variable
-ENV COMPOSER_ALLOW_SUPERUSER 1
+# Link to the source repository for this image (OCI standard label)
+LABEL "org.opencontainers.image.source"="https://github.com/bitrix24/b24sdk-cli"
+
+ARG UID=10001
+ARG GID=10001
+
+RUN <<EOF
+  groupmod --gid=${GID} www-data
+  usermod --uid=${UID} --gid=${GID} www-data
+EOF
+
+RUN <<EOF
+  apt-get update
+  apt-get install --no-install-recommends --no-install-suggests -q -y \
+          unzip
+  apt-get clean
+  rm -rf /var/lib/apt/lists/*
+EOF
+
+RUN install-php-extensions bcmath excimer intl pcntl opcache yaml zip
+
+WORKDIR /var/www/html
+
+RUN chown www-data:www-data /var/www/html
+
+USER www-data
+
+ENV COMPOSER_CACHE_DIR=/tmp/composer/cache

@@ -60,7 +60,7 @@ class RequisiteBankdetailItemResult extends AbstractCrmItem
      * @return mixed|null
      * @throws \Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException
      */
-    public function getUserfieldByFieldName(string $userfieldName)
+    public function getUserfieldByFieldName(string $userfieldName): mixed
     {
         return $this->getKeyWithUserfieldByFieldName($userfieldName);
     }

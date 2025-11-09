@@ -21,6 +21,8 @@ use Bitrix24\SDK\Application\Contracts\ContactPersons\Repository\ContactPersonRe
 use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Tests\Application\Contracts\ContactPersons\Repository\ContactPersonRepositoryInterfaceTest;
+use Bitrix24\SDK\Tests\Application\Contracts\NullableFlusher;
+use Bitrix24\SDK\Tests\Application\Contracts\TestRepositoryFlusherInterface;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountReferenceEntityImplementation;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\ContactPersons\Entity\ContactPersonReferenceEntityImplementation;
@@ -35,17 +37,16 @@ use Symfony\Component\Uid\Uuid;
 class InMemoryContactPersonRepositoryImplementationTest extends ContactPersonRepositoryInterfaceTest
 {
     protected function createBitrix24AccountImplementation(
-        Uuid                  $uuid,
-        int                   $bitrix24UserId,
-        bool                  $isBitrix24UserAdmin,
-        bool                  $isMasterAccount,
-        string                $memberId,
-        string                $domainUrl,
-        AuthToken             $authToken,
-        int                   $applicationVersion,
-        Scope                 $applicationScope
-    ): Bitrix24AccountInterface
-    {
+        Uuid $uuid,
+        int $bitrix24UserId,
+        bool $isBitrix24UserAdmin,
+        bool $isMasterAccount,
+        string $memberId,
+        string $domainUrl,
+        AuthToken $authToken,
+        int $applicationVersion,
+        Scope $applicationScope
+    ): Bitrix24AccountInterface {
         return new Bitrix24AccountReferenceEntityImplementation(
             $uuid,
             $bitrix24UserId,
@@ -60,26 +61,25 @@ class InMemoryContactPersonRepositoryImplementationTest extends ContactPersonRep
     }
 
     protected function createContactPersonImplementation(
-        Uuid                $uuid,
-        CarbonImmutable     $createdAt,
-        CarbonImmutable     $updatedAt,
+        Uuid $uuid,
+        CarbonImmutable $createdAt,
+        CarbonImmutable $updatedAt,
         ContactPersonStatus $contactPersonStatus,
-        string              $name,
-        ?string             $surname,
-        ?string             $patronymic,
-        ?string             $email,
-        ?CarbonImmutable    $emailVerifiedAt,
-        ?string             $comment,
-        ?PhoneNumber        $phoneNumber,
-        ?CarbonImmutable    $mobilePhoneVerifiedAt,
-        ?string             $externalId,
-        ?int                $bitrix24UserId,
-        ?Uuid               $bitrix24PartnerId,
-        ?string             $userAgent,
-        ?string             $userAgentReferer,
-        ?IP                 $userAgentIp
-    ): ContactPersonInterface
-    {
+        string $name,
+        ?string $surname,
+        ?string $patronymic,
+        ?string $email,
+        ?CarbonImmutable $emailVerifiedAt,
+        ?string $comment,
+        ?PhoneNumber $phoneNumber,
+        ?CarbonImmutable $mobilePhoneVerifiedAt,
+        ?string $externalId,
+        ?int $bitrix24UserId,
+        ?Uuid $bitrix24PartnerId,
+        ?string $userAgent,
+        ?string $userAgentReferer,
+        ?IP $userAgentIp
+    ): ContactPersonInterface {
         return new ContactPersonReferenceEntityImplementation(
             $uuid,
             $createdAt,
@@ -101,6 +101,12 @@ class InMemoryContactPersonRepositoryImplementationTest extends ContactPersonRep
             $userAgentIp
         );
     }
+
+    protected function createRepositoryFlusherImplementation(): TestRepositoryFlusherInterface
+    {
+        return new NullableFlusher();
+    }
+
 
     protected function createContactPersonRepositoryImplementation(): ContactPersonRepositoryInterface
     {

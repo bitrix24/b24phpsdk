@@ -55,7 +55,7 @@
     "monolog/monolog": "^3",
     "nyholm/psr7": "^1.8",
     "openai-php/client": "0.10.*",
-    "phpstan/phpstan": "1.11.7",
+    "phpstan/phpstan": "^1",
     "phpunit/phpunit": "^10 || ^11|| ^12",
     "rector/rector": "^1",
     "roave/security-advisories": "dev-master",

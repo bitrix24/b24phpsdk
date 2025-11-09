@@ -25,7 +25,13 @@ class EntitiesResult extends AbstractResult
     public function getEntities(): array
     {
         $res = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
+        $entities = $this->getCoreResponse()->getResponseData()->getResult();
+
+        if (isset($entities['ID'])) {
+            return [new EntityItemResult($entities)];
+        }
+
+        foreach ($entities as $item) {
             $res[] = new EntityItemResult($item);
         }
 

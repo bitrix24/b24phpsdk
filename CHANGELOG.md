@@ -1,5 +1,127 @@
 # b24-php-sdk change log
 
+## 1.8.0 - 2025.11.10
+
+### Added
+
+- Added service `Services\CRM\Type\Service\Type` with support methods,
+  see [crm.type.* methods](https://github.com/bitrix24/b24phpsdk/issues/274):
+    - `fields` method retrieves information about the custom fields of the smart process settings
+    - `add` method creates a new SPA
+    - `update` updates an existing SPA by its identifier id
+    - `get` method retrieves information about the SPA with the identifier id
+    - `getByEntityTypeId` method retrieves information about the SPA with the smart process type identifier entityTypeId
+    - `list` Get a list of custom types crm.type.list
+    - `delete` This method deletes an existing smart process by the identifier id
+- For `AbstractCrmItem` added method `getSmartProcessItem` to get smart process item, [see details](https://github.com/bitrix24/b24phpsdk/issues/282)
+- Added support for events, [see details](https://github.com/bitrix24/b24phpsdk/issues/288)
+    - `onCrmContactAdd`
+    - `onCrmContactUpdate`
+    - `onCrmContactDelete`
+- Added separated methods `RemoteEventsFactory::create` and `RemoteEventsFactory::validate` for create and validate incoming
+  events, [see details](https://github.com/bitrix24/b24phpsdk/issues/291)
+- Added comprehensive unit tests for `RemoteEventsFactory::create` and `RemoteEventsFactory::validate` methods with 14 test cases covering:
+    - Event creation for supported event types (CRM Contact Add, Application Install)
+    - Handling of unsupported events
+    - Request validation
+    - Token validation with `Bitrix24AccountInterface`
+    - Special handling for `OnApplicationInstall` events
+- Updated `ContactPersonInterface` implementation, [see details](https://github.com/bitrix24/b24phpsdk/issues/290) with new methods:
+    - Added `isEmailVerified(): bool` to check email verification status
+    - Added `isMobilePhoneVerified(): bool` to check mobile phone verification status
+    - Changed `changeEmail(?string $email)` signature (removed optional `$isEmailVerified` parameter)
+    - Changed `changeMobilePhone(?PhoneNumber $phoneNumber)` signature (removed optional `$isMobilePhoneVerified` parameter)
+    - Added `getUserAgentInfo(): UserAgentInfo` to replace separate methods for user agent data
+- Added comprehensive unit tests for `UTMs` class with 28 test cases covering:
+    - Constructor with all, partial, and default parameters
+    - URL parsing with various UTM parameter combinations
+    - Case-insensitive parameter handling
+    - URL encoding and special characters
+    - Real-world URL examples (Google Ads, Facebook, Email, Twitter, LinkedIn, etc.)
+- Added comprehensive unit tests for `UserAgentInfo` class with 33 test cases covering:
+    - Constructor with IP addresses (IPv4, IPv6, localhost)
+    - Various user agent strings (Chrome, Firefox, Safari, Edge, mobile browsers)
+    - UTM extraction from referrer URLs
+    - Real-world scenarios with complete user tracking data
+- Added support for dynamic OAuth server selection based on regional endpoints:
+    - `Credentials` class now supports `Endpoints` object with `authServerUrl` and `clientUrl`
+    - New methods in `Credentials`: `getEndpoints()`, `getOauthServerUrl()`, `getClientUrl()`,
+      `changeDomainUrl()`, [see details](https://github.com/bitrix24/b24phpsdk/issues/273)
+    - `Endpoints` class gained `changeClientUrl()` method to create new instance with updated client URL (immutable)
+    - `RenewedAuthToken` gained `getEndpoints()` method to create `Endpoints` object from server response
+    - `CoreBuilder` gained `withEndpoints()` and `withOauthServerUrl()` methods for explicit endpoint configuration
+    - OAuth server URL is automatically extracted from `server_endpoint` field in API responses
+    - Default OAuth server remains `https://oauth.bitrix.info` for backward compatibility
+- Added comprehensive unit tests for `Endpoints` class with 29 test cases covering:
+    - Constructor validation for client and auth server URLs
+    - `getClientUrl()` and `getAuthServerUrl()` methods
+    - `changeClientUrl()` method with immutability checks
+    - `initFromArray()` static factory method with validation
+    - URL format validation (HTTP/HTTPS, ports, paths, subdomains)
+    - Error handling for invalid URLs and missing required fields
+    - Automatic addition of `https://` protocol when missing from client URL
+    - Added automatic protocol fallback in `Endpoints` constructor: if client URL is provided without protocol (e.g., `example.bitrix24.com`), `https://` is automatically added
+ 
+### Changed
+
+- **Breaking changes** in `ContactPersonInterface` method signatures:
+    - `changeEmail(?string $email)` - removed second parameter `?bool $isEmailVerified`. Migration path: call `markEmailAsVerified()` separately after
+      `changeEmail()` if email needs to be verified
+    - `changeMobilePhone(?PhoneNumber $phoneNumber)` - removed second parameter `?bool $isMobilePhoneVerified`. Migration path: call
+      `markMobilePhoneAsVerified()` separately after `changeMobilePhone()` if phone needs to be verified
+    - Replaced `getUserAgent()`, `getUserAgentReferer()`, `getUserAgentIp()` methods with single `getUserAgentInfo(): UserAgentInfo` method that returns
+      complete user agent information object. Migration path: use `$info->userAgent`, `$info->referrer`, `$info->ip` properties instead
+- Updated `RemoteEventsFactory::validate()` method signature from `validate(EventInterface $event, string $applicationToken)` to
+  `validate(Bitrix24AccountInterface $bitrix24Account, EventInterface $event)`. Now uses `Bitrix24AccountInterface::isApplicationTokenValid()` for token
+  validation instead of direct string comparison
+- **Docker configuration updated to PHP 8.4** - Development environment now uses PHP 8.4.14 (docker/php-cli/Dockerfile):
+    - Upgraded from PHP 8.3 to PHP 8.4 base image (`php:8.4-cli-bookworm`)
+    - Updated Composer to version 2.8
+    - Added PHP extension installer v2.4 from mlocati for easier extension management
+    - Added new PHP extensions: `amqp`, `excimer`, `opcache`, `pcntl`, `yaml`, `zip`
+    - Changed base OS from Alpine to Debian Bookworm for better compatibility
+    - Implemented multi-stage Docker build for optimized image size
+    - Added proper user/group ID mapping for www-data user (UID/GID 10001)
+    - Set proper working directory ownership and non-root user execution
+- **PHP 8.4 compatibility improvements**:
+    - Rector configuration updated to use `LevelSetList::UP_TO_PHP_84` for PHP 8.4 feature detection
+    - PHPUnit configuration updated to PHPUnit 11.0 attribute set (`PHPUnitSetList::PHPUNIT_110`)
+    - Fixed all implicitly nullable parameter deprecation warnings (8 occurrences)
+    - Fixed PHPStan internal errors with `random_int()` range handling
+- **OAuth server selection made dynamic**:
+    - `ApiClient` now uses `Credentials::getOauthServerUrl()` instead of hardcoded constant
+    - `Core` automatically updates endpoints in credentials when receiving renewed auth tokens
+    - OAuth server URL is preserved and updated from `server_endpoint` in token refresh responses
+    - Existing code continues to work without changes (backward compatible)
+
+### Fixed
+
+- Fixed wrong offset in `ItemsResult` [see details](https://github.com/bitrix24/b24phpsdk/issues/279)
+- Fixed wrong exception for method `crm.item.get`, now it `ItemNotFoundException` [see details](https://github.com/bitrix24/b24phpsdk/issues/282)
+- Fixed added type `project` in enum `PortalLicenseFamily` [see details](https://github.com/bitrix24/b24phpsdk/issues/286)
+- Fixed errors in `ContactPersonRepositoryInterfaceTest`, [see details](https://github.com/bitrix24/b24phpsdk/issues/294)
+- **Breaking change**: Fixed method signature `Credentials::createFromOAuth()` - third parameter changed from `string $domainUrl` to `Endpoints $endpoints`
+  object
+    - Migration: Replace `Credentials::createFromOAuth($authToken, $appProfile, 'https://example.com')` with
+      `Credentials::createFromOAuth($authToken, $appProfile, new Endpoints('https://example.com', 'https://oauth.bitrix.info/'))`
+    - Updated all unit and integration tests to use new signature
+- Fixed bug in `Endpoints` class constructor (line 35) - validation should check `$this->authServerUrl` instead of `$authServerUrl` parameter
+- Fixed unit tests in `CredentialsTest.php` to properly instantiate `Endpoints` objects
+- Fixed unit tests in `CoreTest.php` integration test to use `Endpoints` object
+
+### Deprecated
+
+- Method `RemoteEventsFactory::createEvent` marked as deprecated, use `RemoteEventsFactory::create` and `RemoteEventsFactory::validate` instead
+
+### Statistics
+
+```
+Bitrix24 API-methods count: 1162
+Supported in bitrix24-php-sdk methods count: 639
+Coverage percentage: 54.99% 🚀
+Supported in bitrix24-php-sdk methods with batch wrapper count: 91
+```
+
 ## 1.7.0 - 2025.10.08
 
 ### Added
@@ -207,6 +329,7 @@
     - `list` retrieves a list of property bindings
     - `deleteByFilter` removes the property relation
     - `getFields` returns the available fields for property binding
+
 ### Fixed
 
 - Fixed Incorrect data loading in `Core\Batch::getTraversableList()` with desc sorting by ID [see details](https://github.com/bitrix24/b24phpsdk/issues/246)
@@ -218,7 +341,6 @@ Bitrix24 API-methods count: 1162
 Supported in bitrix24-php-sdk methods count: 632
 Coverage percentage: 54.39% 🚀
 ```
-
 
 ## 1.6.0 – 2025.09.01
 
@@ -399,7 +521,6 @@ Bitrix24 API-methods count: 1160
 Supported in bitrix24-php-sdk methods count: 476
 Coverage percentage: 41.03% 🚀
 ```
-
 
 ## 1.5.0 – 2025.08.01
 
@@ -1060,6 +1181,7 @@ Supported in bitrix24-php-sdk methods with batch wrapper count: 22
 - Fixed variable names in `Bitrix24\SDK\Services\ServiceBuilderFactory::initFromRequest`,
   see [wrong variable name](https://github.com/bitrix24/b24phpsdk/issues/30).
 - Fixed some corner cases in `Bitrix24\SDK\Core\ApiLevelErrorHandler`
+- Fixed getting entity by its code, see [entity.get issue](https://github.com/bitrix24/b24phpsdk/issues/285)
 
 <!--
 ### Deprecated

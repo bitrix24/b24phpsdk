@@ -31,7 +31,6 @@ class LeadProductRows extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/leads/crm-lead-get.html
      *
-     * @param Currency|null $currency
      * @throws BaseException
      * @throws TransportException
      */
@@ -40,7 +39,7 @@ class LeadProductRows extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/leads/crm-lead-get.html',
         'Returns products inside the specified lead.'
     )]
-    public function get(int $leadId, Currency $currency = null): LeadProductRowItemsResult
+    public function get(int $leadId, ?Currency $currency = null): LeadProductRowItemsResult
     {
         if (!$currency instanceof \Money\Currency) {
             $res = $this->core->call('batch', [

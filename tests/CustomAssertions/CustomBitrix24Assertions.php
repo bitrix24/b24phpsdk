@@ -48,15 +48,27 @@ trait CustomBitrix24Assertions
         }
         sort($propsFromAnnotations);
 
-        $this->assertEquals(
-            $fieldCodesFromApi,
-            $propsFromAnnotations,
-            sprintf(
-                'in phpdocs annotations for class «%s» we not found fields from actual api response: %s',
-                $resultItemClassName,
-                implode(', ', array_values(array_diff($fieldCodesFromApi, $propsFromAnnotations)))
-            )
-        );
+        if (count($fieldCodesFromApi) >= $propsFromAnnotations) {
+            $this->assertEquals(
+                $fieldCodesFromApi,
+                $propsFromAnnotations,
+                sprintf(
+                    'in phpdocs annotations for class «%s» we not found fields from actual api response: «%s»',
+                    $resultItemClassName,
+                    implode(', ', array_values(array_diff($fieldCodesFromApi, $propsFromAnnotations)))
+                )
+            );
+        } else {
+            $this->assertEquals(
+                $fieldCodesFromApi,
+                $propsFromAnnotations,
+                sprintf(
+                    'in api response for class «%s» we not found some fields from class annotation: «%s»',
+                    $resultItemClassName,
+                    implode(', ', array_values(array_diff($propsFromAnnotations, $fieldCodesFromApi)))
+                )
+            );
+        }
     }
 
     protected function assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
@@ -253,8 +265,7 @@ trait CustomBitrix24Assertions
                     );
                     break;
                 case 'enum':
-                    if (str_contains($fieldCode, 'DELETED_TYPE'))
-                    {
+                    if (str_contains($fieldCode, 'DELETED_TYPE')) {
                         $this->assertTrue(
                             str_contains($propsFromAnnotations[$fieldCode], 'int'),
                             sprintf(
@@ -266,7 +277,7 @@ trait CustomBitrix24Assertions
                                 'int|null'
                             )
                         );
-                        
+
                         break;
                     }
                     if (str_contains($fieldCode, 'durationType')
@@ -284,7 +295,7 @@ trait CustomBitrix24Assertions
                                 'string|null'
                             )
                         );
-                        
+
                         break;
                     }
                     if (str_contains($fieldCode, 'priority')
@@ -301,7 +312,7 @@ trait CustomBitrix24Assertions
                                 'int|null'
                             )
                         );
-                        
+
                         break;
                     }
                     $this->assertTrue(
