@@ -15,7 +15,7 @@ use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 
 class Endpoints
 {
-    private string $clientUrl;
+    private readonly string $clientUrl;
 
     /**
      * @throws InvalidArgumentException
@@ -51,6 +51,7 @@ class Endpoints
         if (!array_key_exists('scheme', $parseResult)) {
             return 'https://' . $url;
         }
+
         return $url;
     }
 
