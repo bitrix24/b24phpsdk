@@ -15,6 +15,8 @@ use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 
 class Endpoints
 {
+    private readonly string $clientUrl;
+
     /**
      * @throws InvalidArgumentException
      */
@@ -22,19 +24,35 @@ class Endpoints
         /**
          * @phpstan-param non-empty-string $clientUrl
          */
-        private readonly string $clientUrl,
+        string $clientUrl,
         /**
          * @phpstan-param non-empty-string|null $authServerUrl
          * @todo in v2 make it required
          */
         private ?string $authServerUrl = null
     ) {
-        $this->validateUrl('clientUrl', $clientUrl);
+        // Normalize client URL - add https:// protocol if not present
+        $this->clientUrl = $this->normalizeUrl($clientUrl);
+
+        $this->validateUrl('clientUrl', $this->clientUrl);
 
         if ($authServerUrl === null) {
             $this->authServerUrl = DefaultOAuthServerUrl::default();
             $this->validateUrl('BITRIX24_PHP_SDK_DEFAULT_AUTH_SERVER_URL', $authServerUrl);
         }
+    }
+
+    /**
+     * Normalize URL by adding https:// protocol if not present
+     */
+    private function normalizeUrl(string $url): string
+    {
+        $parseResult = parse_url($url);
+        if (!array_key_exists('scheme', $parseResult)) {
+            return 'https://' . $url;
+        }
+
+        return $url;
     }
 
     /**
