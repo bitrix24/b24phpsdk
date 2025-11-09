@@ -241,4 +241,141 @@ class EndpointsTest extends TestCase
             $this->assertEquals($url, $endpoints->getAuthServerUrl());
         }
     }
+
+    #[Test]
+    #[TestDox('tests changeClientUrl() returns new instance with updated client URL')]
+    public function testChangeClientUrl(): void
+    {
+        $originalClientUrl = 'https://original.bitrix24.com';
+        $newClientUrl = 'https://new.bitrix24.com';
+        $authServerUrl = 'https://oauth.bitrix.info/';
+
+        $originalEndpoints = new Endpoints($originalClientUrl, $authServerUrl);
+        $newEndpoints = $originalEndpoints->changeClientUrl($newClientUrl);
+
+        // Verify original instance is unchanged
+        $this->assertEquals($originalClientUrl, $originalEndpoints->getClientUrl());
+        $this->assertEquals($authServerUrl, $originalEndpoints->getAuthServerUrl());
+
+        // Verify new instance has updated client URL
+        $this->assertEquals($newClientUrl, $newEndpoints->getClientUrl());
+        $this->assertEquals($authServerUrl, $newEndpoints->getAuthServerUrl());
+    }
+
+    #[Test]
+    #[TestDox('tests changeClientUrl() returns different instance')]
+    public function testChangeClientUrlReturnsDifferentInstance(): void
+    {
+        $originalClientUrl = 'https://original.bitrix24.com';
+        $newClientUrl = 'https://new.bitrix24.com';
+        $authServerUrl = 'https://oauth.bitrix.info/';
+
+        $originalEndpoints = new Endpoints($originalClientUrl, $authServerUrl);
+        $newEndpoints = $originalEndpoints->changeClientUrl($newClientUrl);
+
+        // Verify they are different instances
+        $this->assertNotSame($originalEndpoints, $newEndpoints);
+    }
+
+    #[Test]
+    #[TestDox('tests changeClientUrl() preserves auth server URL')]
+    public function testChangeClientUrlPreservesAuthServerUrl(): void
+    {
+        $originalClientUrl = 'https://original.bitrix24.com';
+        $newClientUrl = 'https://new.bitrix24.com';
+        $authServerUrl = 'https://custom.oauth.server/';
+
+        $originalEndpoints = new Endpoints($originalClientUrl, $authServerUrl);
+        $newEndpoints = $originalEndpoints->changeClientUrl($newClientUrl);
+
+        $this->assertEquals($authServerUrl, $newEndpoints->getAuthServerUrl());
+    }
+
+    #[Test]
+    #[TestDox('tests changeClientUrl() throws exception for invalid URL')]
+    public function testChangeClientUrlThrowsExceptionForInvalidUrl(): void
+    {
+        $originalClientUrl = 'https://original.bitrix24.com';
+        $authServerUrl = 'https://oauth.bitrix.info/';
+
+        $originalEndpoints = new Endpoints($originalClientUrl, $authServerUrl);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('clientUrl endpoint URL «invalid-url» is invalid');
+
+        $originalEndpoints->changeClientUrl('invalid-url');
+    }
+
+    #[DataProvider('changeClientUrlDataProvider')]
+    #[Test]
+    #[TestDox('test changeClientUrl() with various inputs')]
+    public function testChangeClientUrlWithVariousInputs(
+        string $originalClientUrl,
+        string $newClientUrl,
+        string $authServerUrl,
+        ?Throwable $throwable
+    ): void {
+        if ($throwable instanceof Throwable) {
+            $this->expectException($throwable::class);
+        }
+
+        $originalEndpoints = new Endpoints($originalClientUrl, $authServerUrl);
+        $newEndpoints = $originalEndpoints->changeClientUrl($newClientUrl);
+
+        $this->assertEquals($newClientUrl, $newEndpoints->getClientUrl());
+        $this->assertEquals($authServerUrl, $newEndpoints->getAuthServerUrl());
+        $this->assertEquals($originalClientUrl, $originalEndpoints->getClientUrl());
+    }
+
+    public static function changeClientUrlDataProvider(): Generator
+    {
+        yield 'change to different domain' => [
+            'https://old.bitrix24.com',
+            'https://new.bitrix24.com',
+            'https://oauth.bitrix.info/',
+            null,
+        ];
+        yield 'change to subdomain' => [
+            'https://company.bitrix24.com',
+            'https://newcompany.bitrix24.com',
+            'https://oauth.bitrix.info/',
+            null,
+        ];
+        yield 'change with custom auth server' => [
+            'https://old.bitrix24.com',
+            'https://new.bitrix24.com',
+            'https://custom.oauth.server/',
+            null,
+        ];
+        yield 'change to URL with port' => [
+            'https://old.bitrix24.com',
+            'https://new.bitrix24.com:8080',
+            'https://oauth.bitrix.info/',
+            null,
+        ];
+        yield 'change to URL with path' => [
+            'https://old.bitrix24.com',
+            'https://new.bitrix24.com/path',
+            'https://oauth.bitrix.info/',
+            null,
+        ];
+        yield 'invalid new URL - empty string' => [
+            'https://old.bitrix24.com',
+            '',
+            'https://oauth.bitrix.info/',
+            new InvalidArgumentException(),
+        ];
+        yield 'invalid new URL - not a URL' => [
+            'https://old.bitrix24.com',
+            'not-a-url',
+            'https://oauth.bitrix.info/',
+            new InvalidArgumentException(),
+        ];
+        yield 'invalid new URL - missing protocol' => [
+            'https://old.bitrix24.com',
+            'new.bitrix24.com',
+            'https://oauth.bitrix.info/',
+            new InvalidArgumentException(),
+        ];
+    }
 }

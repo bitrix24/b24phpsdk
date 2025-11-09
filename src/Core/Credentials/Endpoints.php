@@ -25,6 +25,7 @@ class Endpoints
         private readonly string $clientUrl,
         /**
          * @phpstan-param non-empty-string|null $authServerUrl
+         * @todo in v2 make it required
          */
         private ?string $authServerUrl = null
     ) {
@@ -34,6 +35,14 @@ class Endpoints
             $this->authServerUrl = DefaultOAuthServerUrl::default();
             $this->validateUrl('BITRIX24_PHP_SDK_DEFAULT_AUTH_SERVER_URL', $authServerUrl);
         }
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function changeClientUrl(string $clientUrl): self
+    {
+        return new self($clientUrl, $this->authServerUrl);
     }
 
     public function getClientUrl(): string

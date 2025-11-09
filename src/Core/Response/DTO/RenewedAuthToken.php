@@ -43,7 +43,7 @@ readonly class RenewedAuthToken
      */
     public function getEndpoints(): Endpoints
     {
-        return new Endpoints($this->serverEndpoint, $this->clientEndpoint);
+        return new Endpoints($this->clientEndpoint, $this->serverEndpoint);
     }
 
     /**
