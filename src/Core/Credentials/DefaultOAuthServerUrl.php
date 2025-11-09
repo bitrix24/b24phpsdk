@@ -49,12 +49,10 @@ class DefaultOAuthServerUrl
     {
         // try to find url in ENV-variable
         if (array_key_exists(self::BITRIX24_PHP_SDK_DEFAULT_AUTH_SERVER_URL, $_ENV) && !empty($_ENV[self::BITRIX24_PHP_SDK_DEFAULT_AUTH_SERVER_URL])) {
-            $defaultOAuthServerUrl = (string)$_ENV[self::BITRIX24_PHP_SDK_DEFAULT_AUTH_SERVER_URL];
-        } else {
-            // default fallback
-            $defaultOAuthServerUrl = self::west();
+            return (string)$_ENV[self::BITRIX24_PHP_SDK_DEFAULT_AUTH_SERVER_URL];
         }
 
-        return $defaultOAuthServerUrl;
+        // default fallback
+        return self::west();
     }
 }

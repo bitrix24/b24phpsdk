@@ -43,6 +43,13 @@
     - Various user agent strings (Chrome, Firefox, Safari, Edge, mobile browsers)
     - UTM extraction from referrer URLs
     - Real-world scenarios with complete user tracking data
+- Added support for dynamic OAuth server selection based on regional endpoints:
+    - `Credentials` class now supports `Endpoints` object with `authServerUrl` and `clientUrl`
+    - New methods in `Credentials`: `getEndpoints()`, `setEndpoints()`, `getOauthServerUrl()`, `getClientUrl()`
+    - `RenewedAuthToken` gained `getEndpoints()` method to create `Endpoints` object from server response
+    - `CoreBuilder` gained `withEndpoints()` and `withOauthServerUrl()` methods for explicit endpoint configuration
+    - OAuth server URL is automatically extracted from `server_endpoint` field in API responses
+    - Default OAuth server remains `https://oauth.bitrix.info` for backward compatibility
 
 ### Changed
 
@@ -65,6 +72,11 @@
   - PHPUnit configuration updated to PHPUnit 11.0 attribute set (`PHPUnitSetList::PHPUNIT_110`)
   - Fixed all implicitly nullable parameter deprecation warnings (8 occurrences)
   - Fixed PHPStan internal errors with `random_int()` range handling
+- **OAuth server selection made dynamic**:
+  - `ApiClient` now uses `Credentials::getOauthServerUrl()` instead of hardcoded constant
+  - `Core` automatically updates endpoints in credentials when receiving renewed auth tokens
+  - OAuth server URL is preserved and updated from `server_endpoint` in token refresh responses
+  - Existing code continues to work without changes (backward compatible)
 
 
 ### Fixed

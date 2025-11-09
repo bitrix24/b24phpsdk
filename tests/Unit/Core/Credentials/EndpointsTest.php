@@ -42,6 +42,7 @@ class EndpointsTest extends TestCase
         if (isset($_ENV[self::ENV_VAR_NAME])) {
             unset($_ENV[self::ENV_VAR_NAME]);
         }
+
         parent::tearDown();
     }
 
@@ -219,9 +220,9 @@ class EndpointsTest extends TestCase
             'https://example.bitrix24.com/path',
         ];
 
-        foreach ($validUrls as $url) {
-            $endpoints = new Endpoints($url, 'https://oauth.bitrix.info/');
-            $this->assertEquals($url, $endpoints->getClientUrl());
+        foreach ($validUrls as $validUrl) {
+            $endpoints = new Endpoints($validUrl, 'https://oauth.bitrix.info/');
+            $this->assertEquals($validUrl, $endpoints->getClientUrl());
         }
     }
 
@@ -236,9 +237,9 @@ class EndpointsTest extends TestCase
             'https://oauth.bitrix.info:8080/',
         ];
 
-        foreach ($validUrls as $url) {
-            $endpoints = new Endpoints('https://example.bitrix24.com', $url);
-            $this->assertEquals($url, $endpoints->getAuthServerUrl());
+        foreach ($validUrls as $validUrl) {
+            $endpoints = new Endpoints('https://example.bitrix24.com', $validUrl);
+            $this->assertEquals($validUrl, $endpoints->getAuthServerUrl());
         }
     }
 

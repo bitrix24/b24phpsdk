@@ -16,6 +16,7 @@ namespace Bitrix24\SDK\Tests\Unit\Core\Credentials;
 use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
 use Bitrix24\SDK\Core\Credentials\Credentials;
+use Bitrix24\SDK\Core\Credentials\Endpoints;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
@@ -50,7 +51,7 @@ class CredentialsTest extends TestCase
         $credentials = Credentials::createFromOAuth(
             new AuthToken('test', 'test', 0),
             new ApplicationProfile('test', 'test', new Scope(['crm'])),
-            'bitrix24-php-sdk-playground.bitrix24.ru'
+            new Endpoints('https://bitrix24-php-sdk-playground.bitrix24.ru', 'https://oauth.bitrix.info/')
         );
         $this->assertEquals(
             'https://bitrix24-php-sdk-playground.bitrix24.ru',
@@ -65,7 +66,7 @@ class CredentialsTest extends TestCase
         $credentials = Credentials::createFromOAuth(
             new AuthToken('test', 'test', 0),
             new ApplicationProfile('test', 'test', new Scope(['crm'])),
-            'bitrix24-php-sdk-playground.bitrix24.ru'
+            new Endpoints('https://bitrix24-php-sdk-playground.bitrix24.ru', 'https://oauth.bitrix.info/')
         );
         $this->assertFalse($credentials->isWebhookContext());
     }
@@ -81,7 +82,7 @@ class CredentialsTest extends TestCase
         $credentials = Credentials::createFromOAuth(
             new AuthToken('test', 'test', 0),
             new ApplicationProfile('test', 'test', new Scope(['crm'])),
-            'https://bitrix24-php-sdk-playground.bitrix24.ru'
+            new Endpoints('https://bitrix24-php-sdk-playground.bitrix24.ru', 'https://oauth.bitrix.info/')
         );
         $this->assertEquals(
             'https://bitrix24-php-sdk-playground.bitrix24.ru',
@@ -103,7 +104,7 @@ class CredentialsTest extends TestCase
             Credentials::createFromOAuth(
                 new AuthToken('test', 'test', 0),
                 new ApplicationProfile('test', 'test', new Scope(['crm'])),
-                'https://bitrix24-php-sdk-playground.bitrix24.ru/'
+                new Endpoints('https://bitrix24-php-sdk-playground.bitrix24.ru/', 'https://oauth.bitrix.info/')
             ),
             'https://bitrix24-php-sdk-playground.bitrix24.ru',
         ];
@@ -111,7 +112,7 @@ class CredentialsTest extends TestCase
             Credentials::createFromOAuth(
                 new AuthToken('test', 'test', 0),
                 new ApplicationProfile('test', 'test', new Scope(['crm'])),
-                'https://bitrix24-php-sdk-playground.bitrix24.ru'
+                new Endpoints('https://bitrix24-php-sdk-playground.bitrix24.ru', 'https://oauth.bitrix.info/')
             ),
             'https://bitrix24-php-sdk-playground.bitrix24.ru',
         ];

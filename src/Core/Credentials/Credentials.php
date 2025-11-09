@@ -18,8 +18,6 @@ use Bitrix24\SDK\Application\Requests\Placement\PlacementRequest;
 
 class Credentials
 {
-    protected ?Endpoints $endpoints = null;
-
     /**
      * @throws InvalidArgumentException
      */
@@ -27,14 +25,13 @@ class Credentials
         protected ?WebhookUrl $webhookUrl,
         protected ?AuthToken $authToken,
         protected ?ApplicationProfile $applicationProfile,
-        ?Endpoints $endpoints,
+        protected ?Endpoints $endpoints,
     ) {
-        $this->endpoints = $endpoints;
         if (!$this->authToken instanceof AuthToken && !$this->webhookUrl instanceof WebhookUrl) {
             throw new InvalidArgumentException('you must set on of auth type: webhook or OAuth 2.0');
         }
 
-        if ($this->authToken instanceof AuthToken && $this->endpoints === null) {
+        if ($this->authToken instanceof AuthToken && !$this->endpoints instanceof \Bitrix24\SDK\Core\Credentials\Endpoints) {
             throw new InvalidArgumentException('for oauth type you must set Endpoints url');
         }
 
@@ -64,6 +61,7 @@ class Credentials
         if (filter_var($domainUrl, FILTER_VALIDATE_URL) === false) {
             throw new InvalidArgumentException(sprintf('domain URL %s is invalid', $domainUrl));
         }
+
         if ($this->webhookUrl instanceof WebhookUrl) {
             throw new InvalidArgumentException('you cannot change domain url for webhook context');
         }
@@ -146,10 +144,6 @@ class Credentials
     /**
      * Create credentials from PlacementRequest
      *
-     * @param PlacementRequest $placementRequest
-     * @param ApplicationProfile $applicationProfile
-     * @param string|null $oauthServerUrl
-     * @return Credentials
      * @throws InvalidArgumentException
      */
     public static function createFromPlacementRequest(

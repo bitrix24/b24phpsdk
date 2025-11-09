@@ -39,6 +39,7 @@ class DefaultOAuthServerUrlTest extends TestCase
         if (isset($_ENV[self::ENV_VAR_NAME])) {
             unset($_ENV[self::ENV_VAR_NAME]);
         }
+
         parent::tearDown();
     }
 
