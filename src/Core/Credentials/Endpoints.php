@@ -13,29 +13,37 @@ namespace Bitrix24\SDK\Core\Credentials;
 
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 
-readonly class Endpoints
+class Endpoints
 {
     /**
      * @throws InvalidArgumentException
      */
     public function __construct(
         /**
-         * @phpstan-param non-empty-string $authServerUrl
-         */
-        public string $authServerUrl,
-        /**
          * @phpstan-param non-empty-string $clientUrl
          */
-        public string $clientUrl,
-    )
-    {
-        if (filter_var($authServerUrl, FILTER_VALIDATE_URL) === false) {
-            throw new InvalidArgumentException(sprintf('authServer endpoint URL «%s» is invalid', $authServerUrl));
-        }
+        private readonly string $clientUrl,
+        /**
+         * @phpstan-param non-empty-string|null $authServerUrl
+         */
+        private ?string $authServerUrl = null
+    ) {
+        $this->validateUrl('clientUrl', $clientUrl);
 
-        if (filter_var($clientUrl, FILTER_VALIDATE_URL) === false) {
-            throw new InvalidArgumentException(sprintf('client endpoint URL «%s» is invalid', $clientUrl));
+        if ($authServerUrl === null) {
+            $this->authServerUrl = DefaultOAuthServerUrl::default();
+            $this->validateUrl('BITRIX24_PHP_SDK_DEFAULT_AUTH_SERVER_URL', $authServerUrl);
         }
+    }
+
+    public function getClientUrl(): string
+    {
+        return $this->clientUrl;
+    }
+
+    public function getAuthServerUrl(): string
+    {
+        return $this->authServerUrl;
     }
 
     /**
@@ -43,9 +51,27 @@ readonly class Endpoints
      */
     public static function initFromArray(array $auth): self
     {
+        if (!array_key_exists('client_endpoint', $auth)) {
+            throw new InvalidArgumentException('field client_endpoint not found in array');
+        }
+
+        if (!array_key_exists('server_endpoint', $auth)) {
+            throw new InvalidArgumentException('field server_endpoint not found in array');
+        }
+
         return new self(
-            $auth['server_endpoint'],
-            $auth['client_endpoint'],
+            (string)$auth['client_endpoint'],
+            (string)$auth['server_endpoint'],
         );
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function validateUrl(string $variableName, mixed $urlValue): void
+    {
+        if (filter_var($urlValue, FILTER_VALIDATE_URL) === false) {
+            throw new InvalidArgumentException(sprintf('%s endpoint URL «%s» is invalid', $variableName, $urlValue));
+        }
     }
 }
