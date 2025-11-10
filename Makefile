@@ -61,6 +61,9 @@ help:
 	@echo "test-integration-sale-payment-item-basket - run PaymentItemBasket integration tests"
 	@echo "test-integration-sale-payment-item-shipment - run PaymentItemShipment integration tests"
 	@echo "test-integration-sale-property-relation - run PropertyRelation integration tests"
+	@echo "test-integration-landing-page - run Landing Page integration tests"
+	@echo "test-integration-landing-syspage - run Landing SysPage integration tests"
+	@echo "test-integration-scope-landing-template - run Landing Template integration tests"
 
 
 .PHONY: docker-init
@@ -218,6 +221,29 @@ test-integration-scope-log:
 test-integration-scope-sale:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sale
 
+.PHONY: test-integration-scope-landing
+test-integration-scope-landing:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_landing
+
+.PHONY: test-integration-scope-landing-template
+test-integration-scope-landing-template:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_landing_template
+
+.PHONY: test-integration-landing-block
+test-integration-landing-block:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_block
+
+.PHONY: test-integration-landing-site
+test-integration-landing-site:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_site
+
+.PHONY: test-integration-landing-page
+test-integration-landing-page:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_page
+
+.PHONY: test-integration-landing-syspage
+test-integration-landing-syspage:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_syspage
 .PHONY: test-integration-scope-disk
 test-integration-scope-disk:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_disk

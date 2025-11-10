@@ -175,6 +175,18 @@
         <testsuite name="integration_tests_sale_order">
             <directory>./tests/Integration/Services/Sale/Order/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_landing">
+            <directory>./tests/Integration/Services/Landing/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_landing_site">
+            <directory>./tests/Integration/Services/Landing/Site/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_landing_page">
+            <directory>./tests/Integration/Services/Landing/Page/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_landing_syspage">
+            <directory>./tests/Integration/Services/Landing/SysPage/</directory>
+        </testsuite>
         <testsuite name="integration_tests_sale_cashbox_handler">
             <directory>./tests/Integration/Services/Sale/CashboxHandler/</directory>
         </testsuite>
@@ -204,6 +216,12 @@
         </testsuite>
         <testsuite name="integration_tests_sale_shipment_item">
             <directory>./tests/Integration/Services/Sale/ShipmentItem/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_landing_template">
+            <directory>./tests/Integration/Services/Landing/Template/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_landing_block">
+            <directory>./tests/Integration/Services/Landing/Block/</directory>
         </testsuite>
         <testsuite name="integration_tests_crm_documentgenerator_numerator">
             <directory>./tests/Integration/Services/CRM/Documentgenerator/Numerator/</directory>
