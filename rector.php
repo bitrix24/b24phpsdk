@@ -12,7 +12,7 @@ declare(strict_types=1);
 use Rector\Config\RectorConfig;
 use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
-use Rector\Set\ValueObject\DowngradeLevelSetList;
+use Rector\Set\ValueObject\LevelSetList;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -74,11 +74,11 @@ return RectorConfig::configure()
         __DIR__ . '/tests/Integration/Services/CRM/Documentgenerator/Numerator',
         __DIR__ . '/tests/Unit/',
     ])
-    ->withCache(cacheDirectory: __DIR__ . '.cache/rector')
+    ->withCache(cacheDirectory: __DIR__ . '/var/.cache/rector')
     ->withSets(
         [
-            DowngradeLevelSetList::DOWN_TO_PHP_82,
-            PHPUnitSetList::PHPUNIT_100
+            LevelSetList::UP_TO_PHP_84,
+            PHPUnitSetList::PHPUNIT_110
         ]
     )
     ->withImportNames(
@@ -88,7 +88,7 @@ return RectorConfig::configure()
         removeUnusedImports: false,
     )
     ->withPhpSets(
-        php82: true   // 8.2
+        php84: true   // 8.4
     )
     ->withPreparedSets(
         deadCode: true,

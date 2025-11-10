@@ -43,7 +43,7 @@ class Batch implements BatchOperationsInterface
         'entity.section.update',
         'entity.item.property.update',
     ];
-    
+
     protected const MAX_BATCH_PACKET_SIZE = 50;
 
     protected const MAX_ELEMENTS_IN_PAGE = 50;
@@ -135,7 +135,7 @@ class Batch implements BatchOperationsInterface
                 'additionalParameters' => $additionalParameters,
             ]
         );
-        
+
         $useFieldsInsteadOfId = $apiMethod === 'crm.address.delete';
 
         try {
@@ -214,9 +214,9 @@ class Batch implements BatchOperationsInterface
 
         try {
             $this->clearCommands();
-            
+
             $useFieldsInsteadOfId = $apiMethod === 'crm.address.update';
-            
+
             foreach ($entityItems as $entityItemId => $entityItem) {
                 if (!$useFieldsInsteadOfId && !is_int($entityItemId)) {
                     throw new InvalidArgumentException(
@@ -287,7 +287,6 @@ class Batch implements BatchOperationsInterface
      * Register api command to command collection for batch calls
      *
      * @param array<mixed,mixed> $parameters
-     * @param callable|null $callback not implemented
      *
      * @throws \Exception
      */
@@ -295,7 +294,6 @@ class Batch implements BatchOperationsInterface
         string $apiMethod,
         array $parameters = [],
         ?string $commandName = null,
-        callable $callback = null
     ): void {
         $this->logger->debug(
             'registerCommand.start',
@@ -315,7 +313,7 @@ class Batch implements BatchOperationsInterface
             ]
         );
     }
-    
+
     /**
      * @param array<string,string> $order
      *
@@ -350,7 +348,7 @@ class Batch implements BatchOperationsInterface
 
         return $reverseOrder;
     }
-    
+
     /**
      * @param array<string,mixed> $oldFilter
      *
@@ -387,9 +385,9 @@ class Batch implements BatchOperationsInterface
 
     /**
      * Get traversable list without count elements
-     * 
+     *
      * @link https://apidocs.bitrix24.com/api-reference/performance/huge-data.html
-     * 
+     *
      * Depending on the requested sorting option, the method uses two scenarios
      * 1. Sorting is not specified or starts with sorting by ID (in any direction)
      * We use fast data loading with start=-1 and a dynamic filter by the ID value from the result of the previous subquery. See
@@ -926,17 +924,17 @@ class Batch implements BatchOperationsInterface
         return $apiCommands;
     }
 
-    
+
     /**
      * Returns relative path to previous ID value
      */
     protected function getReferenceFieldPath(string $prevCommandId, int $lastIndex, string $keyId, bool $isCrmItemsInBatch): string
     {
-        return $isCrmItemsInBatch ? 
-            sprintf('$result[%s][items][%d][%s]', $prevCommandId, $lastIndex, $keyId) : 
+        return $isCrmItemsInBatch ?
+            sprintf('$result[%s][items][%d][%s]', $prevCommandId, $lastIndex, $keyId) :
             sprintf('$result[%s][%d][%s]', $prevCommandId, $lastIndex, $keyId);
     }
-    
+
     /**
      * Determines the ID key based on API method and parameters
      */
@@ -955,9 +953,9 @@ class Batch implements BatchOperationsInterface
         if ($elements === []) {
             return 0;
         }
-        
+
         $lastElement = $isAscendingSort ? end($elements) : end($elements);
-        
+
         return (int)$lastElement[$keyId];
     }
 
@@ -987,7 +985,7 @@ class Batch implements BatchOperationsInterface
         } else {
             return $resultData;
         }
-        
+
         return [];
     }
 }

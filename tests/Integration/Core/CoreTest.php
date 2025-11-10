@@ -18,6 +18,7 @@ use Bitrix24\SDK\Core\CoreBuilder;
 use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
 use Bitrix24\SDK\Core\Credentials\Credentials;
+use Bitrix24\SDK\Core\Credentials\Endpoints;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\MethodNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
@@ -50,7 +51,7 @@ class CoreTest extends TestCase
         ->withCredentials(Credentials::createFromOAuth(
             new AuthToken('non-exists-access-token','refresh-token', 3600),
             new ApplicationProfile('non-exists-client-id', 'non-exists-client-secret', new Scope([])),
-            'non-exists-domain.bitrix24.com'
+            new Endpoints('https://non-exists-domain.bitrix24.com', 'https://oauth.bitrix.info/')
         ))
         ->build();
         $this->expectException(TransportException::class);

@@ -19,9 +19,9 @@ use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Core\Result\FieldsResult;
-use Bitrix24\SDK\Core\Result\UpdatedItemResult;
+use Bitrix24\SDK\Services\CRM\Item\Result\UpdatedItemResult;
+use Bitrix24\SDK\Services\CRM\Item\Result\DeletedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\CRM\Item\Result\ItemResult;
 use Bitrix24\SDK\Services\CRM\Item\Result\ItemsResult;
@@ -137,6 +137,10 @@ class Item extends AbstractService
     )]
     public function list(int $entityTypeId, array $order, array $filter, array $select, int $startItem = 0): ItemsResult
     {
+        if ($select === []) {
+            $select = ['*'];
+        }
+
         return new ItemsResult(
             $this->core->call(
                 'crm.item.list',

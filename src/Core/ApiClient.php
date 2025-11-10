@@ -33,12 +33,7 @@ class ApiClient implements ApiClientInterface
     /**
      * @const string
      */
-    protected const BITRIX24_OAUTH_SERVER_URL = 'https://oauth.bitrix.info';
-
-    /**
-     * @const string
-     */
-    protected const SDK_VERSION = '1.7.0';
+    protected const SDK_VERSION = '1.8.0';
 
     protected const SDK_USER_AGENT = 'b24-php-sdk-vendor';
 
@@ -101,7 +96,7 @@ class ApiClient implements ApiClientInterface
         $method = 'GET';
         $url = sprintf(
             '%s/oauth/token/?%s',
-            $this::BITRIX24_OAUTH_SERVER_URL,
+            $this->getCredentials()->getEndpoints()->getAuthServerUrl(),
             http_build_query(
                 [
                     'grant_type' => 'refresh_token',
@@ -182,7 +177,7 @@ class ApiClient implements ApiClientInterface
         if (!in_array($apiMethod, $caseSensitiveMethods, true)) {
             $apiMethod = strtolower($apiMethod);
         }
-        
+
         $method = 'POST';
         if ($this->getCredentials()->getWebhookUrl() instanceof WebhookUrl) {
             $url = sprintf('%s/%s/', $this->getCredentials()->getWebhookUrl()->getUrl(), $apiMethod);
@@ -193,11 +188,11 @@ class ApiClient implements ApiClientInterface
             // "from which" came a request, and that the token corresponds to our application.
             // that's why we call app.info on OAUTH server
             if (($apiMethod === 'app.info') && array_key_exists(
-                    'IS_NEED_OAUTH_SECURE_CHECK',
-                    $parameters
-                ) && $parameters['IS_NEED_OAUTH_SECURE_CHECK']) {
+                'IS_NEED_OAUTH_SECURE_CHECK',
+                $parameters
+            ) && $parameters['IS_NEED_OAUTH_SECURE_CHECK']) {
                 // call method on vendor OAUTH server
-                $url = sprintf('%s/rest/%s', self::BITRIX24_OAUTH_SERVER_URL, $apiMethod);
+                $url = sprintf('%s/rest/%s', $this->getCredentials()->getEndpoints()->getAuthServerUrl(), $apiMethod);
             } else {
                 // work with portal
                 $url = sprintf('%s/rest/%s', $this->getCredentials()->getDomainUrl(), $apiMethod);

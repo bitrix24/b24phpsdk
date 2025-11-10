@@ -25,7 +25,7 @@ class ItemsResult extends AbstractResult
     public function getItems(): array
     {
         $items = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
+        foreach ($this->getCoreResponse()->getResponseData()->getResult()['items'] as $item) {
             $items[] = new ItemItemResult($item);
         }
 

@@ -156,6 +156,7 @@ class ApiLevelErrorHandler
                 throw new PaymentRequiredException(sprintf('%s - %s', $errorCode, $errorDescription));
             case 'wrong_client':
                 throw new WrongClientException(sprintf('%s - %s', $errorCode, $errorDescription));
+            case 'not_found':
             case 'error_not_found':
                 throw new ItemNotFoundException(sprintf('%s - %s', $errorCode, $errorDescription));
             default:

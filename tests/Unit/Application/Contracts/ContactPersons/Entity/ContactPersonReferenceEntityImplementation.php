@@ -16,6 +16,7 @@ namespace Bitrix24\SDK\Tests\Unit\Application\Contracts\ContactPersons\Entity;
 use Bitrix24\SDK\Application\Contracts\ContactPersons\Entity\ContactPersonInterface;
 use Bitrix24\SDK\Application\Contracts\ContactPersons\Entity\ContactPersonStatus;
 use Bitrix24\SDK\Application\Contracts\ContactPersons\Entity\FullName;
+use Bitrix24\SDK\Application\Contracts\ContactPersons\Entity\UserAgentInfo;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Carbon\CarbonImmutable;
 use Darsyn\IP\Version\Multi as IP;
@@ -123,14 +124,10 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
         return $this->updatedAt;
     }
 
-    public function changeEmail(?string $email, ?bool $isEmailVerified = null): void
+    public function changeEmail(?string $email): void
     {
         $this->emailVerifiedAt = null;
         $this->email = $email;
-        if ($isEmailVerified === true) {
-            $this->emailVerifiedAt = new CarbonImmutable();
-        }
-
         $this->updatedAt = new CarbonImmutable();
     }
 
@@ -144,20 +141,21 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
         return $this->emailVerifiedAt;
     }
 
+    public function isEmailVerified(): bool
+    {
+        return $this->emailVerifiedAt instanceof \Carbon\CarbonImmutable;
+    }
+
     public function markEmailAsVerified(): void
     {
         $this->emailVerifiedAt = new CarbonImmutable();
         $this->updatedAt = new CarbonImmutable();
     }
 
-    public function changeMobilePhone(?PhoneNumber $phoneNumber, ?bool $isMobilePhoneVerified = null): void
+    public function changeMobilePhone(?PhoneNumber $phoneNumber): void
     {
         $this->mobilePhoneVerifiedAt = null;
         $this->mobilePhone = $phoneNumber;
-        if ($isMobilePhoneVerified === true) {
-            $this->mobilePhoneVerifiedAt = new CarbonImmutable();
-        }
-
         $this->updatedAt = new CarbonImmutable();
     }
 
@@ -169,6 +167,11 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
     public function getMobilePhoneVerifiedAt(): ?CarbonImmutable
     {
         return $this->mobilePhoneVerifiedAt;
+    }
+
+    public function isMobilePhoneVerified(): bool
+    {
+        return $this->mobilePhoneVerifiedAt instanceof \Carbon\CarbonImmutable;
     }
 
     public function markMobilePhoneAsVerified(): void
@@ -206,20 +209,15 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
     public function setBitrix24PartnerId(?Uuid $uuid): void
     {
         $this->bitrix24PartnerUuid = $uuid;
+        $this->updatedAt = new CarbonImmutable();
     }
 
-    public function getUserAgent(): ?string
+    public function getUserAgentInfo(): UserAgentInfo
     {
-        return $this->userAgent;
-    }
-
-    public function getUserAgentReferer(): ?string
-    {
-        return $this->userAgentReferer;
-    }
-
-    public function getUserAgentIp(): ?IP
-    {
-        return $this->userAgentIp;
+        return new UserAgentInfo(
+            ip: $this->userAgentIp,
+            userAgent: $this->userAgent,
+            referrer: $this->userAgentReferer
+        );
     }
 }

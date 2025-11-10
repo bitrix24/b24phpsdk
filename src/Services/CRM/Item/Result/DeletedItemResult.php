@@ -11,4 +11,14 @@
 
 declare(strict_types=1);
 
-require_once dirname(__DIR__) . '/vendor/autoload.php';
+namespace Bitrix24\SDK\Services\CRM\Item\Result;
+
+use Bitrix24\SDK\Core\Result\AbstractResult;
+
+class DeletedItemResult extends AbstractResult
+{
+    public function isSuccess(): bool
+    {
+        return true;
+    }
+}

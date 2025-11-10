@@ -73,7 +73,7 @@ class Core implements CoreInterface
                     $portalOldDomainUrlHost = $this->apiClient->getCredentials()->getDomainUrl();
                     $newDomain = parse_url($apiCallResponse->getHeaders(false)['location'][0]);
                     $portalNewDomainUrlHost = sprintf('%s://%s', $newDomain['scheme'], $newDomain['host']);
-                    $this->apiClient->getCredentials()->setDomainUrl($portalNewDomainUrlHost);
+                    $this->apiClient->getCredentials()->changeDomainUrl($portalNewDomainUrlHost);
                     $this->logger->debug('domain url changed', [
                         'oldDomainUrl' => $portalOldDomainUrlHost,
                         'newDomainUrl' => $portalNewDomainUrlHost,
