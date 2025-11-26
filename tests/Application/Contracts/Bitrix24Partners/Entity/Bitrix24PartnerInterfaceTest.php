@@ -189,6 +189,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
         $this->expectException(InvalidArgumentException::class);
+        /** @phpstan-ignore-next-line */
         $bitrix24Partner->setExternalId('');
     }
 
