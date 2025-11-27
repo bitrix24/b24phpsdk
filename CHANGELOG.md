@@ -1,4 +1,16 @@
 # b24-php-sdk change log
+## 1.9.0 - 2025.12.01
+
+### Added
+
+- Added `VersionedScope` container class for managing multiple Scope instances with version support:
+    - Readonly immutable container storing multiple `Scope` instances indexed by version number
+    - Versions must be unique integers starting from 1
+    - `getScope(int $version): Scope` method retrieves Scope by version number (throws `InvalidArgumentException` if version doesn't exist)
+    - `getVersions(): array` method returns sorted array of all available version numbers
+    - `hasVersion(int $version): bool` method checks if a specific version exists
+    - Comprehensive unit tests with 13 test cases covering construction validation, version retrieval, and error handling
+    - Uses standard `InvalidArgumentException` for all validation errors (no custom exceptions)
 
 ## 1.8.0 - 2025.11.10
 
