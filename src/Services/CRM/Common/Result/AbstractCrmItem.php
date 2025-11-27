@@ -59,7 +59,6 @@ class AbstractCrmItem extends AbstractItem
             case 'CREATED_BY_ID':
             case 'MODIFY_BY_ID':
             case 'MOVED_BY_ID':
-            case 'MOVED_TIME':
             case 'createdBy':
             case 'updatedBy':
             case 'movedBy':
@@ -138,6 +137,7 @@ class AbstractCrmItem extends AbstractItem
             case 'createdTime':
             case 'updatedTime':
             case 'movedTime':
+            case 'MOVED_TIME':
             case 'lastActivityTime':
             case 'LAST_ACTIVITY_TIME':
             case 'START_TIME':
