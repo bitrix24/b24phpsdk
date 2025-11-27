@@ -23,68 +23,68 @@ class AbstractCrmItemTest extends TestCase
     public function testMovedTimeReturnsCarbonImmutable(): void
     {
         $testDateTime = '2024-03-17T10:30:45+00:00';
-        $item = new TestCrmItem(['MOVED_TIME' => $testDateTime]);
+        $testCrmItem = new TestCrmItem(['MOVED_TIME' => $testDateTime]);
 
-        $this->assertInstanceOf(CarbonImmutable::class, $item->MOVED_TIME);
-        $this->assertEquals($testDateTime, $item->MOVED_TIME->format(DATE_ATOM));
+        $this->assertInstanceOf(CarbonImmutable::class, $testCrmItem->MOVED_TIME);
+        $this->assertEquals($testDateTime, $testCrmItem->MOVED_TIME->format(DATE_ATOM));
     }
 
     public function testMovedTimeReturnsNullWhenEmpty(): void
     {
-        $item = new TestCrmItem(['MOVED_TIME' => '']);
+        $testCrmItem = new TestCrmItem(['MOVED_TIME' => '']);
 
-        $this->assertNull($item->MOVED_TIME);
+        $this->assertNull($testCrmItem->MOVED_TIME);
     }
 
     public function testMovedTimeCamelCaseReturnsCarbonImmutable(): void
     {
         $testDateTime = '2024-03-17T10:30:45+00:00';
-        $item = new TestCrmItem(['movedTime' => $testDateTime]);
+        $testCrmItem = new TestCrmItem(['movedTime' => $testDateTime]);
 
-        $this->assertInstanceOf(CarbonImmutable::class, $item->movedTime);
-        $this->assertEquals($testDateTime, $item->movedTime->format(DATE_ATOM));
+        $this->assertInstanceOf(CarbonImmutable::class, $testCrmItem->movedTime);
+        $this->assertEquals($testDateTime, $testCrmItem->movedTime->format(DATE_ATOM));
     }
 
     public function testDateCreateReturnsCarbonImmutable(): void
     {
         $testDateTime = '2024-03-17T10:30:45+00:00';
-        $item = new TestCrmItem(['DATE_CREATE' => $testDateTime]);
+        $testCrmItem = new TestCrmItem(['DATE_CREATE' => $testDateTime]);
 
-        $this->assertInstanceOf(CarbonImmutable::class, $item->DATE_CREATE);
-        $this->assertEquals($testDateTime, $item->DATE_CREATE->format(DATE_ATOM));
+        $this->assertInstanceOf(CarbonImmutable::class, $testCrmItem->DATE_CREATE);
+        $this->assertEquals($testDateTime, $testCrmItem->DATE_CREATE->format(DATE_ATOM));
     }
 
     public function testDateModifyReturnsCarbonImmutable(): void
     {
         $testDateTime = '2024-03-17T10:30:45+00:00';
-        $item = new TestCrmItem(['DATE_MODIFY' => $testDateTime]);
+        $testCrmItem = new TestCrmItem(['DATE_MODIFY' => $testDateTime]);
 
-        $this->assertInstanceOf(CarbonImmutable::class, $item->DATE_MODIFY);
-        $this->assertEquals($testDateTime, $item->DATE_MODIFY->format(DATE_ATOM));
+        $this->assertInstanceOf(CarbonImmutable::class, $testCrmItem->DATE_MODIFY);
+        $this->assertEquals($testDateTime, $testCrmItem->DATE_MODIFY->format(DATE_ATOM));
     }
 
     public function testLastActivityTimeReturnsCarbonImmutable(): void
     {
         $testDateTime = '2024-03-17T10:30:45+00:00';
-        $item = new TestCrmItem(['LAST_ACTIVITY_TIME' => $testDateTime]);
+        $testCrmItem = new TestCrmItem(['LAST_ACTIVITY_TIME' => $testDateTime]);
 
-        $this->assertInstanceOf(CarbonImmutable::class, $item->LAST_ACTIVITY_TIME);
-        $this->assertEquals($testDateTime, $item->LAST_ACTIVITY_TIME->format(DATE_ATOM));
+        $this->assertInstanceOf(CarbonImmutable::class, $testCrmItem->LAST_ACTIVITY_TIME);
+        $this->assertEquals($testDateTime, $testCrmItem->LAST_ACTIVITY_TIME->format(DATE_ATOM));
     }
 
     public function testMovedByIdReturnsInt(): void
     {
-        $item = new TestCrmItem(['MOVED_BY_ID' => '123']);
+        $testCrmItem = new TestCrmItem(['MOVED_BY_ID' => '123']);
 
-        $this->assertIsInt($item->MOVED_BY_ID);
-        $this->assertEquals(123, $item->MOVED_BY_ID);
+        $this->assertIsInt($testCrmItem->MOVED_BY_ID);
+        $this->assertEquals(123, $testCrmItem->MOVED_BY_ID);
     }
 
     public function testMovedByIdReturnsNullWhenEmpty(): void
     {
-        $item = new TestCrmItem(['MOVED_BY_ID' => '']);
+        $testCrmItem = new TestCrmItem(['MOVED_BY_ID' => '']);
 
-        $this->assertNull($item->MOVED_BY_ID);
+        $this->assertNull($testCrmItem->MOVED_BY_ID);
     }
 }
 
