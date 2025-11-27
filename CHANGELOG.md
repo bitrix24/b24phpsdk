@@ -12,6 +12,18 @@
     - Comprehensive unit tests with 13 test cases covering construction validation, version retrieval, and error handling
     - Uses standard `InvalidArgumentException` for all validation errors (no custom exceptions)
 
+### Fixed
+
+- Fixed `MOVED_TIME` field in `DealItemResult` and `LeadItemResult` to return `CarbonImmutable` instead of `int`,
+  [see details](https://github.com/bitrix24/b24phpsdk/issues/126):
+    - Moved `MOVED_TIME` from integer casting block to datetime casting block in `AbstractCrmItem::__get()`
+    - Field now correctly returns `CarbonImmutable` object matching the documented type
+    - Added comprehensive unit tests for `AbstractCrmItem` datetime field type casting with 8 test cases covering:
+        - `MOVED_TIME` returns `CarbonImmutable` for both snake_case and camelCase variants
+        - `DATE_CREATE`, `DATE_MODIFY`, `LAST_ACTIVITY_TIME` return `CarbonImmutable`
+        - `MOVED_BY_ID` correctly returns `int`
+        - Null handling for empty datetime and integer fields
+
 ## 1.8.0 - 2025.11.10
 
 ### Added
