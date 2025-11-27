@@ -12,6 +12,23 @@
     - Comprehensive unit tests with 13 test cases covering construction validation, version retrieval, and error handling
     - Uses standard `InvalidArgumentException` for all validation errors (no custom exceptions)
 
+### Changed
+
+- **Breaking changes** in `Bitrix24PartnerInterface`, [see details](https://github.com/bitrix24/b24phpsdk/issues/305):
+    - `getBitrix24PartnerId()` now returns `int` instead of `?int` (non-nullable, partnerId is now required)
+    - Removed `setBitrix24PartnerId()` method - partner ID can now only be set during entity construction (read-only)
+    - `Bitrix24PartnerReferenceEntityImplementation` now uses `readonly int $bitrix24PartnerId` property
+    - Added validation in constructor to ensure partnerId is a positive integer
+    - Migration path: Pass partnerId in constructor instead of calling `setBitrix24PartnerId()`. The partnerId is now immutable and cannot be changed after entity creation.
+
+### Fixed
+
+- Fixed obsolete null check for `getBitrix24PartnerId()` in `InMemoryBitrix24PartnerRepositoryImplementation::save()` method - removed redundant null check since partnerId is now always present (required non-nullable int)
+
+### Deprecated
+
+- `Bitrix24PartnerPartnerIdChangedEvent` is deprecated and will be removed in v2.0.0 - partner ID is now read-only and cannot be changed after construction
+
 ## 1.8.0 - 2025.11.10
 
 ### Added
