@@ -1,4 +1,5 @@
 # b24-php-sdk change log
+
 ## 1.9.0 - 2025.12.01
 
 ### Added
@@ -12,6 +13,11 @@
     - Comprehensive unit tests with 13 test cases covering construction validation, version retrieval, and error handling
     - Uses standard `InvalidArgumentException` for all validation errors (no custom exceptions)
 
+- Added MCP (Model Context Protocol) server configuration for Bitrix24 API documentation [see details](https://github.com/bitrix24/b24phpsdk/issues/126):
+  - Added `.claude/mcp_settings.json` with Bitrix24 MCP server setup
+  - Enables direct access to Bitrix24 REST API documentation within Claude Code
+  - Provides tools for searching methods, viewing method details, and reading articles
+  - Improves developer experience when working with Bitrix24 API
 ### Fixed
 
 - Fixed `MOVED_TIME` field in `DealItemResult` and `LeadItemResult` to return `CarbonImmutable` instead of `int`,
