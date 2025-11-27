@@ -49,7 +49,7 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
         ?int $bitrix24DepartmentId,
         bool $isRequired
     ): void {
-        $item = $this->createApplicationSettingsItemImplementation(
+        $applicationSettingsItem = $this->createApplicationSettingsItemImplementation(
             $uuid,
             $applicationInstallationId,
             $key,
@@ -58,7 +58,7 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
             $bitrix24DepartmentId,
             $isRequired
         );
-        $this->assertEquals($uuid, $item->getId());
+        $this->assertEquals($uuid, $applicationSettingsItem->getId());
     }
 
     #[Test]
@@ -73,7 +73,7 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
         ?int $bitrix24DepartmentId,
         bool $isRequired
     ): void {
-        $item = $this->createApplicationSettingsItemImplementation(
+        $applicationSettingsItem = $this->createApplicationSettingsItemImplementation(
             $uuid,
             $applicationInstallationId,
             $key,
@@ -82,7 +82,7 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
             $bitrix24DepartmentId,
             $isRequired
         );
-        $this->assertEquals($applicationInstallationId, $item->getApplicationInstallationId());
+        $this->assertEquals($applicationInstallationId, $applicationSettingsItem->getApplicationInstallationId());
     }
 
     #[Test]
@@ -97,7 +97,7 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
         ?int $bitrix24DepartmentId,
         bool $isRequired
     ): void {
-        $item = $this->createApplicationSettingsItemImplementation(
+        $applicationSettingsItem = $this->createApplicationSettingsItemImplementation(
             $uuid,
             $applicationInstallationId,
             $key,
@@ -106,7 +106,7 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
             $bitrix24DepartmentId,
             $isRequired
         );
-        $this->assertEquals($key, $item->getKey());
+        $this->assertEquals($key, $applicationSettingsItem->getKey());
     }
 
     #[Test]
@@ -121,7 +121,7 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
         ?int $bitrix24DepartmentId,
         bool $isRequired
     ): void {
-        $item = $this->createApplicationSettingsItemImplementation(
+        $applicationSettingsItem = $this->createApplicationSettingsItemImplementation(
             $uuid,
             $applicationInstallationId,
             $key,
@@ -130,7 +130,7 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
             $bitrix24DepartmentId,
             $isRequired
         );
-        $this->assertEquals($value, $item->getValue());
+        $this->assertEquals($value, $applicationSettingsItem->getValue());
     }
 
     #[Test]
@@ -145,7 +145,7 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
         ?int $bitrix24DepartmentId,
         bool $isRequired
     ): void {
-        $item = $this->createApplicationSettingsItemImplementation(
+        $applicationSettingsItem = $this->createApplicationSettingsItemImplementation(
             $uuid,
             $applicationInstallationId,
             $key,
@@ -154,7 +154,7 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
             $bitrix24DepartmentId,
             $isRequired
         );
-        $this->assertEquals($bitrix24UserId, $item->getBitrix24UserId());
+        $this->assertEquals($bitrix24UserId, $applicationSettingsItem->getBitrix24UserId());
     }
 
     #[Test]
@@ -169,7 +169,7 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
         ?int $bitrix24DepartmentId,
         bool $isRequired
     ): void {
-        $item = $this->createApplicationSettingsItemImplementation(
+        $applicationSettingsItem = $this->createApplicationSettingsItemImplementation(
             $uuid,
             $applicationInstallationId,
             $key,
@@ -178,7 +178,7 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
             $bitrix24DepartmentId,
             $isRequired
         );
-        $this->assertEquals($bitrix24DepartmentId, $item->getBitrix24DepartmentId());
+        $this->assertEquals($bitrix24DepartmentId, $applicationSettingsItem->getBitrix24DepartmentId());
     }
 
     #[Test]
@@ -193,7 +193,7 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
         ?int $bitrix24DepartmentId,
         bool $isRequired
     ): void {
-        $item = $this->createApplicationSettingsItemImplementation(
+        $applicationSettingsItem = $this->createApplicationSettingsItemImplementation(
             $uuid,
             $applicationInstallationId,
             $key,
@@ -202,7 +202,7 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
             $bitrix24DepartmentId,
             $isRequired
         );
-        $this->assertEquals($isRequired, $item->isRequired());
+        $this->assertEquals($isRequired, $applicationSettingsItem->isRequired());
     }
 
     #[Test]
@@ -217,7 +217,7 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
         ?int $bitrix24DepartmentId,
         bool $isRequired
     ): void {
-        $item = $this->createApplicationSettingsItemImplementation(
+        $applicationSettingsItem = $this->createApplicationSettingsItemImplementation(
             $uuid,
             $applicationInstallationId,
             $key,
@@ -226,8 +226,8 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
             $bitrix24DepartmentId,
             $isRequired
         );
-        $this->assertEquals(ApplicationSettingStatus::active, $item->getStatus());
-        $this->assertTrue($item->isActive());
+        $this->assertEquals(ApplicationSettingStatus::active, $applicationSettingsItem->getStatus());
+        $this->assertTrue($applicationSettingsItem->isActive());
     }
 
     #[Test]
@@ -242,7 +242,7 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
         ?int $bitrix24DepartmentId,
         bool $isRequired
     ): void {
-        $item = $this->createApplicationSettingsItemImplementation(
+        $applicationSettingsItem = $this->createApplicationSettingsItemImplementation(
             $uuid,
             $applicationInstallationId,
             $key,
@@ -254,10 +254,10 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
 
         $newValue = 'new-value';
         $changedBy = 123;
-        $item->updateValue($newValue, $changedBy);
+        $applicationSettingsItem->updateValue($newValue, $changedBy);
 
-        $this->assertEquals($newValue, $item->getValue());
-        $this->assertEquals($changedBy, $item->getChangedByBitrix24UserId());
+        $this->assertEquals($newValue, $applicationSettingsItem->getValue());
+        $this->assertEquals($changedBy, $applicationSettingsItem->getChangedByBitrix24UserId());
     }
 
     #[Test]
@@ -272,7 +272,7 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
         ?int $bitrix24DepartmentId,
         bool $isRequired
     ): void {
-        $item = $this->createApplicationSettingsItemImplementation(
+        $applicationSettingsItem = $this->createApplicationSettingsItemImplementation(
             $uuid,
             $applicationInstallationId,
             $key,
@@ -282,10 +282,10 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
             $isRequired
         );
 
-        $this->assertTrue($item->isActive());
-        $item->markAsDeleted();
-        $this->assertFalse($item->isActive());
-        $this->assertEquals(ApplicationSettingStatus::deleted, $item->getStatus());
+        $this->assertTrue($applicationSettingsItem->isActive());
+        $applicationSettingsItem->markAsDeleted();
+        $this->assertFalse($applicationSettingsItem->isActive());
+        $this->assertEquals(ApplicationSettingStatus::deleted, $applicationSettingsItem->getStatus());
     }
 
     #[Test]
@@ -300,7 +300,7 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
         ?int $bitrix24DepartmentId,
         bool $isRequired
     ): void {
-        $item = $this->createApplicationSettingsItemImplementation(
+        $applicationSettingsItem = $this->createApplicationSettingsItemImplementation(
             $uuid,
             $applicationInstallationId,
             $key,
@@ -310,9 +310,9 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
             $isRequired
         );
 
-        $this->assertTrue($item->isGlobal());
-        $this->assertFalse($item->isPersonal());
-        $this->assertFalse($item->isDepartmental());
+        $this->assertTrue($applicationSettingsItem->isGlobal());
+        $this->assertFalse($applicationSettingsItem->isPersonal());
+        $this->assertFalse($applicationSettingsItem->isDepartmental());
     }
 
     #[Test]
@@ -327,7 +327,7 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
         ?int $bitrix24DepartmentId,
         bool $isRequired
     ): void {
-        $item = $this->createApplicationSettingsItemImplementation(
+        $applicationSettingsItem = $this->createApplicationSettingsItemImplementation(
             $uuid,
             $applicationInstallationId,
             $key,
@@ -337,9 +337,9 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
             $isRequired
         );
 
-        $this->assertFalse($item->isGlobal());
-        $this->assertTrue($item->isPersonal());
-        $this->assertFalse($item->isDepartmental());
+        $this->assertFalse($applicationSettingsItem->isGlobal());
+        $this->assertTrue($applicationSettingsItem->isPersonal());
+        $this->assertFalse($applicationSettingsItem->isDepartmental());
     }
 
     #[Test]
@@ -354,7 +354,7 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
         ?int $bitrix24DepartmentId,
         bool $isRequired
     ): void {
-        $item = $this->createApplicationSettingsItemImplementation(
+        $applicationSettingsItem = $this->createApplicationSettingsItemImplementation(
             $uuid,
             $applicationInstallationId,
             $key,
@@ -364,9 +364,9 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
             $isRequired
         );
 
-        $this->assertFalse($item->isGlobal());
-        $this->assertFalse($item->isPersonal());
-        $this->assertTrue($item->isDepartmental());
+        $this->assertFalse($applicationSettingsItem->isGlobal());
+        $this->assertFalse($applicationSettingsItem->isPersonal());
+        $this->assertTrue($applicationSettingsItem->isDepartmental());
     }
 
     #[Test]
@@ -381,7 +381,7 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
         ?int $bitrix24DepartmentId,
         bool $isRequired
     ): void {
-        $item = $this->createApplicationSettingsItemImplementation(
+        $applicationSettingsItem = $this->createApplicationSettingsItemImplementation(
             $uuid,
             $applicationInstallationId,
             $key,
@@ -391,8 +391,8 @@ abstract class ApplicationSettingsItemInterfaceTest extends TestCase
             $isRequired
         );
 
-        $this->assertNotNull($item->getCreatedAt());
-        $this->assertNotNull($item->getUpdatedAt());
+        $this->assertNotNull($applicationSettingsItem->getCreatedAt());
+        $this->assertNotNull($applicationSettingsItem->getUpdatedAt());
     }
 
     public static function applicationSettingsItemDataProvider(): Generator

@@ -30,15 +30,12 @@ interface ApplicationSettingsItemRepositoryInterface
 {
     /**
      * Save application setting to persistence storage
-     *
-     * @param ApplicationSettingsItemInterface $applicationSettingsItem
      */
     public function save(ApplicationSettingsItemInterface $applicationSettingsItem): void;
 
     /**
      * Delete application setting from persistence storage
      *
-     * @param Uuid $uuid
      * @throws ApplicationSettingsItemNotFoundException
      * @throws InvalidArgumentException
      */
@@ -46,17 +43,12 @@ interface ApplicationSettingsItemRepositoryInterface
 
     /**
      * Find application setting by id
-     *
-     * @param Uuid $uuid
-     * @return ApplicationSettingsItemInterface|null
      */
     public function findById(Uuid $uuid): ?ApplicationSettingsItemInterface;
 
     /**
      * Get application setting by id
      *
-     * @param Uuid $uuid
-     * @return ApplicationSettingsItemInterface
      * @throws ApplicationSettingsItemNotFoundException
      */
     public function getById(Uuid $uuid): ApplicationSettingsItemInterface;
@@ -64,10 +56,9 @@ interface ApplicationSettingsItemRepositoryInterface
     /**
      * Find all settings for specific application installation
      *
-     * @param Uuid $applicationInstallationId
      * @return ApplicationSettingsItemInterface[]
      */
-    public function findAllByApplicationInstallationId(Uuid $applicationInstallationId): array;
+    public function findAllByApplicationInstallationId(Uuid $uuid): array;
 
     /**
      * Find settings by application installation id and key
@@ -75,24 +66,21 @@ interface ApplicationSettingsItemRepositoryInterface
      * Returns all settings with the same key across different scopes
      * (global, user-specific, department-specific)
      *
-     * @param Uuid $applicationInstallationId
      * @param non-empty-string $key
      * @return ApplicationSettingsItemInterface[]
      * @throws InvalidArgumentException
      */
-    public function findByApplicationInstallationIdAndKey(Uuid $applicationInstallationId, string $key): array;
+    public function findByApplicationInstallationIdAndKey(Uuid $uuid, string $key): array;
 
     /**
      * Find setting by application installation id, key and user id
      *
-     * @param Uuid $applicationInstallationId
      * @param non-empty-string $key
      * @param positive-int $bitrix24UserId
-     * @return ApplicationSettingsItemInterface|null
      * @throws InvalidArgumentException
      */
     public function findByApplicationInstallationIdAndKeyAndUserId(
-        Uuid $applicationInstallationId,
+        Uuid $uuid,
         string $key,
         int $bitrix24UserId
     ): ?ApplicationSettingsItemInterface;
@@ -100,14 +88,12 @@ interface ApplicationSettingsItemRepositoryInterface
     /**
      * Find setting by application installation id, key and department id
      *
-     * @param Uuid $applicationInstallationId
      * @param non-empty-string $key
      * @param positive-int $bitrix24DepartmentId
-     * @return ApplicationSettingsItemInterface|null
      * @throws InvalidArgumentException
      */
     public function findByApplicationInstallationIdAndKeyAndDepartmentId(
-        Uuid $applicationInstallationId,
+        Uuid $uuid,
         string $key,
         int $bitrix24DepartmentId
     ): ?ApplicationSettingsItemInterface;
@@ -115,13 +101,11 @@ interface ApplicationSettingsItemRepositoryInterface
     /**
      * Find global setting (not user or department scoped) by application installation id and key
      *
-     * @param Uuid $applicationInstallationId
      * @param non-empty-string $key
-     * @return ApplicationSettingsItemInterface|null
      * @throws InvalidArgumentException
      */
     public function findGlobalByApplicationInstallationIdAndKey(
-        Uuid $applicationInstallationId,
+        Uuid $uuid,
         string $key
     ): ?ApplicationSettingsItemInterface;
 }

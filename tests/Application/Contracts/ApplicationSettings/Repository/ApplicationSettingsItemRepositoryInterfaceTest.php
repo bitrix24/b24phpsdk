@@ -55,7 +55,7 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
         ?int $bitrix24DepartmentId,
         bool $isRequired
     ): void {
-        $item = $this->createApplicationSettingsItemImplementation(
+        $applicationSettingsItem = $this->createApplicationSettingsItemImplementation(
             $uuid,
             $applicationInstallationId,
             $key,
@@ -65,16 +65,16 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
             $isRequired
         );
 
-        $repository = $this->createApplicationSettingsItemRepositoryImplementation();
-        $flusher = $this->createRepositoryFlusherImplementation();
+        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
+        $testRepositoryFlusher = $this->createRepositoryFlusherImplementation();
 
-        $repository->save($item);
-        $flusher->flush();
+        $applicationSettingsItemRepository->save($applicationSettingsItem);
+        $testRepositoryFlusher->flush();
 
-        $savedItem = $repository->getById($uuid);
-        $this->assertEquals($item->getId(), $savedItem->getId());
-        $this->assertEquals($item->getKey(), $savedItem->getKey());
-        $this->assertEquals($item->getValue(), $savedItem->getValue());
+        $savedItem = $applicationSettingsItemRepository->getById($uuid);
+        $this->assertEquals($applicationSettingsItem->getId(), $savedItem->getId());
+        $this->assertEquals($applicationSettingsItem->getKey(), $savedItem->getKey());
+        $this->assertEquals($applicationSettingsItem->getValue(), $savedItem->getValue());
     }
 
     #[Test]
@@ -82,8 +82,8 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
     final public function testGetByIdNotExists(): void
     {
         $this->expectException(ApplicationSettingsItemNotFoundException::class);
-        $repository = $this->createApplicationSettingsItemRepositoryImplementation();
-        $repository->getById(Uuid::v7());
+        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
+        $applicationSettingsItemRepository->getById(Uuid::v7());
     }
 
     #[Test]
@@ -98,7 +98,7 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
         ?int $bitrix24DepartmentId,
         bool $isRequired
     ): void {
-        $item = $this->createApplicationSettingsItemImplementation(
+        $applicationSettingsItem = $this->createApplicationSettingsItemImplementation(
             $uuid,
             $applicationInstallationId,
             $key,
@@ -108,23 +108,23 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
             $isRequired
         );
 
-        $repository = $this->createApplicationSettingsItemRepositoryImplementation();
-        $flusher = $this->createRepositoryFlusherImplementation();
+        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
+        $testRepositoryFlusher = $this->createRepositoryFlusherImplementation();
 
-        $repository->save($item);
-        $flusher->flush();
+        $applicationSettingsItemRepository->save($applicationSettingsItem);
+        $testRepositoryFlusher->flush();
 
-        $foundItem = $repository->findById($uuid);
+        $foundItem = $applicationSettingsItemRepository->findById($uuid);
         $this->assertNotNull($foundItem);
-        $this->assertEquals($item->getId(), $foundItem->getId());
+        $this->assertEquals($applicationSettingsItem->getId(), $foundItem->getId());
     }
 
     #[Test]
     #[TestDox('test findById method with non-existing id')]
     final public function testFindByIdNotExists(): void
     {
-        $repository = $this->createApplicationSettingsItemRepositoryImplementation();
-        $foundItem = $repository->findById(Uuid::v7());
+        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
+        $foundItem = $applicationSettingsItemRepository->findById(Uuid::v7());
         $this->assertNull($foundItem);
     }
 
@@ -140,7 +140,7 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
         ?int $bitrix24DepartmentId,
         bool $isRequired
     ): void {
-        $item = $this->createApplicationSettingsItemImplementation(
+        $applicationSettingsItem = $this->createApplicationSettingsItemImplementation(
             $uuid,
             $applicationInstallationId,
             $key,
@@ -150,21 +150,21 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
             $isRequired
         );
 
-        $repository = $this->createApplicationSettingsItemRepositoryImplementation();
-        $flusher = $this->createRepositoryFlusherImplementation();
+        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
+        $testRepositoryFlusher = $this->createRepositoryFlusherImplementation();
 
-        $repository->save($item);
-        $flusher->flush();
+        $applicationSettingsItemRepository->save($applicationSettingsItem);
+        $testRepositoryFlusher->flush();
 
-        $item->markAsDeleted();
-        $repository->save($item);
-        $flusher->flush();
+        $applicationSettingsItem->markAsDeleted();
+        $applicationSettingsItemRepository->save($applicationSettingsItem);
+        $testRepositoryFlusher->flush();
 
-        $repository->delete($uuid);
-        $flusher->flush();
+        $applicationSettingsItemRepository->delete($uuid);
+        $testRepositoryFlusher->flush();
 
         $this->expectException(ApplicationSettingsItemNotFoundException::class);
-        $repository->getById($uuid);
+        $applicationSettingsItemRepository->getById($uuid);
     }
 
     #[Test]
@@ -172,26 +172,27 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
     final public function testDeleteNotExists(): void
     {
         $this->expectException(ApplicationSettingsItemNotFoundException::class);
-        $repository = $this->createApplicationSettingsItemRepositoryImplementation();
-        $repository->delete(Uuid::v7());
+        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
+        $applicationSettingsItemRepository->delete(Uuid::v7());
     }
 
     #[Test]
     #[DataProvider('multipleSettingsDataProvider')]
     #[TestDox('test findAllByApplicationInstallationId method')]
     final public function testFindAllByApplicationInstallationId(
-        Uuid $applicationInstallationId,
+        Uuid $uuid,
         array $items
     ): void {
-        $repository = $this->createApplicationSettingsItemRepositoryImplementation();
-        $flusher = $this->createRepositoryFlusherImplementation();
+        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
+        $testRepositoryFlusher = $this->createRepositoryFlusherImplementation();
 
         foreach ($items as $item) {
-            $repository->save($item);
+            $applicationSettingsItemRepository->save($item);
         }
-        $flusher->flush();
 
-        $foundItems = $repository->findAllByApplicationInstallationId($applicationInstallationId);
+        $testRepositoryFlusher->flush();
+
+        $foundItems = $applicationSettingsItemRepository->findAllByApplicationInstallationId($uuid);
         $this->assertCount(count($items), $foundItems);
     }
 
@@ -199,19 +200,20 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
     #[DataProvider('settingsByKeyDataProvider')]
     #[TestDox('test findByApplicationInstallationIdAndKey method')]
     final public function testFindByApplicationInstallationIdAndKey(
-        Uuid $applicationInstallationId,
+        Uuid $uuid,
         string $key,
         array $items
     ): void {
-        $repository = $this->createApplicationSettingsItemRepositoryImplementation();
-        $flusher = $this->createRepositoryFlusherImplementation();
+        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
+        $testRepositoryFlusher = $this->createRepositoryFlusherImplementation();
 
         foreach ($items as $item) {
-            $repository->save($item);
+            $applicationSettingsItemRepository->save($item);
         }
-        $flusher->flush();
 
-        $foundItems = $repository->findByApplicationInstallationIdAndKey($applicationInstallationId, $key);
+        $testRepositoryFlusher->flush();
+
+        $foundItems = $applicationSettingsItemRepository->findByApplicationInstallationIdAndKey($uuid, $key);
         $this->assertCount(count($items), $foundItems);
 
         foreach ($foundItems as $foundItem) {
@@ -223,25 +225,25 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
     #[DataProvider('personalSettingDataProvider')]
     #[TestDox('test findByApplicationInstallationIdAndKeyAndUserId method')]
     final public function testFindByApplicationInstallationIdAndKeyAndUserId(
-        Uuid $applicationInstallationId,
+        Uuid $uuid,
         string $key,
         int $userId,
-        ApplicationSettingsItemInterface $item
+        ApplicationSettingsItemInterface $applicationSettingsItem
     ): void {
-        $repository = $this->createApplicationSettingsItemRepositoryImplementation();
-        $flusher = $this->createRepositoryFlusherImplementation();
+        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
+        $testRepositoryFlusher = $this->createRepositoryFlusherImplementation();
 
-        $repository->save($item);
-        $flusher->flush();
+        $applicationSettingsItemRepository->save($applicationSettingsItem);
+        $testRepositoryFlusher->flush();
 
-        $foundItem = $repository->findByApplicationInstallationIdAndKeyAndUserId(
-            $applicationInstallationId,
+        $foundItem = $applicationSettingsItemRepository->findByApplicationInstallationIdAndKeyAndUserId(
+            $uuid,
             $key,
             $userId
         );
 
         $this->assertNotNull($foundItem);
-        $this->assertEquals($item->getId(), $foundItem->getId());
+        $this->assertEquals($applicationSettingsItem->getId(), $foundItem->getId());
         $this->assertEquals($userId, $foundItem->getBitrix24UserId());
     }
 
@@ -249,25 +251,25 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
     #[DataProvider('departmentalSettingDataProvider')]
     #[TestDox('test findByApplicationInstallationIdAndKeyAndDepartmentId method')]
     final public function testFindByApplicationInstallationIdAndKeyAndDepartmentId(
-        Uuid $applicationInstallationId,
+        Uuid $uuid,
         string $key,
         int $departmentId,
-        ApplicationSettingsItemInterface $item
+        ApplicationSettingsItemInterface $applicationSettingsItem
     ): void {
-        $repository = $this->createApplicationSettingsItemRepositoryImplementation();
-        $flusher = $this->createRepositoryFlusherImplementation();
+        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
+        $testRepositoryFlusher = $this->createRepositoryFlusherImplementation();
 
-        $repository->save($item);
-        $flusher->flush();
+        $applicationSettingsItemRepository->save($applicationSettingsItem);
+        $testRepositoryFlusher->flush();
 
-        $foundItem = $repository->findByApplicationInstallationIdAndKeyAndDepartmentId(
-            $applicationInstallationId,
+        $foundItem = $applicationSettingsItemRepository->findByApplicationInstallationIdAndKeyAndDepartmentId(
+            $uuid,
             $key,
             $departmentId
         );
 
         $this->assertNotNull($foundItem);
-        $this->assertEquals($item->getId(), $foundItem->getId());
+        $this->assertEquals($applicationSettingsItem->getId(), $foundItem->getId());
         $this->assertEquals($departmentId, $foundItem->getBitrix24DepartmentId());
     }
 
@@ -275,23 +277,23 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
     #[DataProvider('globalSettingDataProvider')]
     #[TestDox('test findGlobalByApplicationInstallationIdAndKey method')]
     final public function testFindGlobalByApplicationInstallationIdAndKey(
-        Uuid $applicationInstallationId,
+        Uuid $uuid,
         string $key,
-        ApplicationSettingsItemInterface $item
+        ApplicationSettingsItemInterface $applicationSettingsItem
     ): void {
-        $repository = $this->createApplicationSettingsItemRepositoryImplementation();
-        $flusher = $this->createRepositoryFlusherImplementation();
+        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
+        $testRepositoryFlusher = $this->createRepositoryFlusherImplementation();
 
-        $repository->save($item);
-        $flusher->flush();
+        $applicationSettingsItemRepository->save($applicationSettingsItem);
+        $testRepositoryFlusher->flush();
 
-        $foundItem = $repository->findGlobalByApplicationInstallationIdAndKey(
-            $applicationInstallationId,
+        $foundItem = $applicationSettingsItemRepository->findGlobalByApplicationInstallationIdAndKey(
+            $uuid,
             $key
         );
 
         $this->assertNotNull($foundItem);
-        $this->assertEquals($item->getId(), $foundItem->getId());
+        $this->assertEquals($applicationSettingsItem->getId(), $foundItem->getId());
         $this->assertTrue($foundItem->isGlobal());
     }
 
@@ -300,9 +302,9 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
     final public function testFindByApplicationInstallationIdAndKeyWithEmptyKey(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $repository = $this->createApplicationSettingsItemRepositoryImplementation();
+        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
         /** @phpstan-ignore-next-line */
-        $repository->findByApplicationInstallationIdAndKey(Uuid::v7(), '');
+        $applicationSettingsItemRepository->findByApplicationInstallationIdAndKey(Uuid::v7(), '');
     }
 
     public static function applicationSettingsItemDataProvider(): Generator
@@ -320,31 +322,31 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
 
     public static function multipleSettingsDataProvider(): Generator
     {
-        $applicationInstallationId = Uuid::v7();
+        $uuidV7 = Uuid::v7();
         $items = [];
 
-        $items[] = self::createTestItem($applicationInstallationId, 'setting1', 'value1', null, null);
-        $items[] = self::createTestItem($applicationInstallationId, 'setting2', 'value2', null, null);
-        $items[] = self::createTestItem($applicationInstallationId, 'setting3', 'value3', 123, null);
+        $items[] = self::createTestItem($uuidV7, 'setting1', 'value1', null, null);
+        $items[] = self::createTestItem($uuidV7, 'setting2', 'value2', null, null);
+        $items[] = self::createTestItem($uuidV7, 'setting3', 'value3', 123, null);
 
         yield 'multiple-settings' => [
-            $applicationInstallationId,
+            $uuidV7,
             $items
         ];
     }
 
     public static function settingsByKeyDataProvider(): Generator
     {
-        $applicationInstallationId = Uuid::v7();
+        $uuidV7 = Uuid::v7();
         $key = 'shared.setting';
         $items = [];
 
-        $items[] = self::createTestItem($applicationInstallationId, $key, 'global-value', null, null);
-        $items[] = self::createTestItem($applicationInstallationId, $key, 'user-value', 123, null);
-        $items[] = self::createTestItem($applicationInstallationId, $key, 'dept-value', null, 456);
+        $items[] = self::createTestItem($uuidV7, $key, 'global-value', null, null);
+        $items[] = self::createTestItem($uuidV7, $key, 'user-value', 123, null);
+        $items[] = self::createTestItem($uuidV7, $key, 'dept-value', null, 456);
 
         yield 'settings-by-key' => [
-            $applicationInstallationId,
+            $uuidV7,
             $key,
             $items
         ];
@@ -352,46 +354,46 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
 
     public static function personalSettingDataProvider(): Generator
     {
-        $applicationInstallationId = Uuid::v7();
+        $uuidV7 = Uuid::v7();
         $key = 'user.preference';
         $userId = 123;
 
         yield 'personal-setting' => [
-            $applicationInstallationId,
+            $uuidV7,
             $key,
             $userId,
-            self::createTestItem($applicationInstallationId, $key, 'user-value', $userId, null)
+            self::createTestItem($uuidV7, $key, 'user-value', $userId, null)
         ];
     }
 
     public static function departmentalSettingDataProvider(): Generator
     {
-        $applicationInstallationId = Uuid::v7();
+        $uuidV7 = Uuid::v7();
         $key = 'department.config';
         $departmentId = 456;
 
         yield 'departmental-setting' => [
-            $applicationInstallationId,
+            $uuidV7,
             $key,
             $departmentId,
-            self::createTestItem($applicationInstallationId, $key, 'dept-value', null, $departmentId)
+            self::createTestItem($uuidV7, $key, 'dept-value', null, $departmentId)
         ];
     }
 
     public static function globalSettingDataProvider(): Generator
     {
-        $applicationInstallationId = Uuid::v7();
+        $uuidV7 = Uuid::v7();
         $key = 'global.config';
 
         yield 'global-setting' => [
-            $applicationInstallationId,
+            $uuidV7,
             $key,
-            self::createTestItem($applicationInstallationId, $key, 'global-value', null, null)
+            self::createTestItem($uuidV7, $key, 'global-value', null, null)
         ];
     }
 
     private static function createTestItem(
-        Uuid $applicationInstallationId,
+        Uuid $uuid,
         string $key,
         string $value,
         ?int $userId,
@@ -399,42 +401,60 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
     ): ApplicationSettingsItemInterface {
         // This is a placeholder - will be overridden by concrete test implementations
         // We need to use a mock or stub here since we can't instantiate the interface
-        return new class($applicationInstallationId, $key, $value, $userId, $departmentId) implements ApplicationSettingsItemInterface {
-            private Uuid $id;
+        return new class($uuid, $key, $value, $userId, $departmentId) implements ApplicationSettingsItemInterface {
+            private readonly Uuid $id;
+
             private string $status = 'active';
+
             private ?int $changedBy = null;
 
             public function __construct(
-                private Uuid $appInstallId,
-                private string $key,
+                private readonly Uuid $appInstallId,
+                private readonly string $key,
                 private string $value,
-                private ?int $userId,
-                private ?int $deptId
+                private readonly ?int $userId,
+                private readonly ?int $deptId
             ) {
                 $this->id = Uuid::v7();
             }
 
             public function getId(): Uuid { return $this->id; }
+
             public function getApplicationInstallationId(): Uuid { return $this->appInstallId; }
+
             public function getKey(): string { return $this->key; }
+
             public function getValue(): string { return $this->value; }
+
             public function getBitrix24UserId(): ?int { return $this->userId; }
+
             public function getBitrix24DepartmentId(): ?int { return $this->deptId; }
+
             public function getChangedByBitrix24UserId(): ?int { return $this->changedBy; }
+
             public function isRequired(): bool { return false; }
+
             public function isActive(): bool { return $this->status === 'active'; }
+
             public function getStatus(): \Bitrix24\SDK\Application\Contracts\ApplicationSettings\Entity\ApplicationSettingStatus {
                 return \Bitrix24\SDK\Application\Contracts\ApplicationSettings\Entity\ApplicationSettingStatus::active;
             }
+
             public function getCreatedAt(): \Carbon\CarbonImmutable { return \Carbon\CarbonImmutable::now(); }
+
             public function getUpdatedAt(): \Carbon\CarbonImmutable { return \Carbon\CarbonImmutable::now(); }
+
             public function updateValue(string $value, ?int $changedByBitrix24UserId = null): void {
                 $this->value = $value;
                 $this->changedBy = $changedByBitrix24UserId;
             }
+
             public function markAsDeleted(): void { $this->status = 'deleted'; }
+
             public function isGlobal(): bool { return $this->userId === null && $this->deptId === null; }
+
             public function isPersonal(): bool { return $this->userId !== null; }
+
             public function isDepartmental(): bool { return $this->deptId !== null; }
         };
     }
