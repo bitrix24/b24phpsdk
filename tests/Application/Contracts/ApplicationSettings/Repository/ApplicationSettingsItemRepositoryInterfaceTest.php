@@ -180,41 +180,59 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
     #[DataProvider('multipleSettingsDataProvider')]
     #[TestDox('test findAllForInstallation method')]
     final public function testFindAllForInstallation(
-        Uuid $uuid,
-        array $items
+        Uuid $applicationInstallationId,
+        array $settingsData
     ): void {
         $applicationSettingsItemRepository = $this->createApplicationSettingsRepositoryImplementation();
         $testRepositoryFlusher = $this->createRepositoryFlusherImplementation();
 
-        foreach ($items as $item) {
+        foreach ($settingsData as $data) {
+            $item = $this->createApplicationSettingsItemImplementation(
+                Uuid::v7(),
+                $applicationInstallationId,
+                $data['key'],
+                $data['value'],
+                $data['userId'],
+                $data['departmentId'],
+                $data['isRequired']
+            );
             $applicationSettingsItemRepository->save($item);
         }
 
         $testRepositoryFlusher->flush();
 
-        $foundItems = $applicationSettingsItemRepository->findAllForInstallation($uuid);
-        $this->assertCount(count($items), $foundItems);
+        $foundItems = $applicationSettingsItemRepository->findAllForInstallation($applicationInstallationId);
+        $this->assertCount(count($settingsData), $foundItems);
     }
 
     #[Test]
     #[DataProvider('settingsByKeyDataProvider')]
     #[TestDox('test findAllForInstallationByKey method')]
     final public function testFindAllForInstallationByKey(
-        Uuid $uuid,
+        Uuid $applicationInstallationId,
         string $key,
-        array $items
+        array $settingsData
     ): void {
         $applicationSettingsItemRepository = $this->createApplicationSettingsRepositoryImplementation();
         $testRepositoryFlusher = $this->createRepositoryFlusherImplementation();
 
-        foreach ($items as $item) {
+        foreach ($settingsData as $data) {
+            $item = $this->createApplicationSettingsItemImplementation(
+                Uuid::v7(),
+                $applicationInstallationId,
+                $data['key'],
+                $data['value'],
+                $data['userId'],
+                $data['departmentId'],
+                $data['isRequired']
+            );
             $applicationSettingsItemRepository->save($item);
         }
 
         $testRepositoryFlusher->flush();
 
-        $foundItems = $applicationSettingsItemRepository->findAllForInstallationByKey($uuid, $key);
-        $this->assertCount(count($items), $foundItems);
+        $foundItems = $applicationSettingsItemRepository->findAllForInstallationByKey($applicationInstallationId, $key);
+        $this->assertCount(count($settingsData), $foundItems);
 
         foreach ($foundItems as $foundItem) {
             $this->assertEquals($key, $foundItem->getKey());
@@ -246,100 +264,33 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
 
     public static function multipleSettingsDataProvider(): Generator
     {
-        $uuidV7 = Uuid::v7();
-        $items = [];
-
-        $items[] = self::createTestItem($uuidV7, 'setting1', 'value1', null, null);
-        $items[] = self::createTestItem($uuidV7, 'setting2', 'value2', null, null);
-        $items[] = self::createTestItem($uuidV7, 'setting3', 'value3', 123, null);
+        $applicationInstallationId = Uuid::v7();
+        $settingsData = [
+            ['key' => 'setting1', 'value' => 'value1', 'userId' => null, 'departmentId' => null, 'isRequired' => false],
+            ['key' => 'setting2', 'value' => 'value2', 'userId' => null, 'departmentId' => null, 'isRequired' => false],
+            ['key' => 'setting3', 'value' => 'value3', 'userId' => 123, 'departmentId' => null, 'isRequired' => false],
+        ];
 
         yield 'multiple-settings' => [
-            $uuidV7,
-            $items
+            $applicationInstallationId,
+            $settingsData
         ];
     }
 
     public static function settingsByKeyDataProvider(): Generator
     {
-        $uuidV7 = Uuid::v7();
+        $applicationInstallationId = Uuid::v7();
         $key = 'shared.setting';
-        $items = [];
-
-        $items[] = self::createTestItem($uuidV7, $key, 'global-value', null, null);
-        $items[] = self::createTestItem($uuidV7, $key, 'user-value', 123, null);
-        $items[] = self::createTestItem($uuidV7, $key, 'dept-value', null, 456);
+        $settingsData = [
+            ['key' => $key, 'value' => 'global-value', 'userId' => null, 'departmentId' => null, 'isRequired' => false],
+            ['key' => $key, 'value' => 'user-value', 'userId' => 123, 'departmentId' => null, 'isRequired' => false],
+            ['key' => $key, 'value' => 'dept-value', 'userId' => null, 'departmentId' => 456, 'isRequired' => false],
+        ];
 
         yield 'settings-by-key' => [
-            $uuidV7,
+            $applicationInstallationId,
             $key,
-            $items
+            $settingsData
         ];
-    }
-
-    private static function createTestItem(
-        Uuid $uuid,
-        string $key,
-        string $value,
-        ?int $userId,
-        ?int $departmentId
-    ): ApplicationSettingsItemInterface {
-        // This is a placeholder - will be overridden by concrete test implementations
-        // We need to use a mock or stub here since we can't instantiate the interface
-        return new class($uuid, $key, $value, $userId, $departmentId) implements ApplicationSettingsItemInterface {
-            private readonly Uuid $id;
-
-            private string $status = 'active';
-
-            private ?int $changedBy = null;
-
-            public function __construct(
-                private readonly Uuid $appInstallId,
-                private readonly string $key,
-                private string $value,
-                private readonly ?int $userId,
-                private readonly ?int $deptId
-            ) {
-                $this->id = Uuid::v7();
-            }
-
-            public function getId(): Uuid { return $this->id; }
-
-            public function getApplicationInstallationId(): Uuid { return $this->appInstallId; }
-
-            public function getKey(): string { return $this->key; }
-
-            public function getValue(): string { return $this->value; }
-
-            public function getBitrix24UserId(): ?int { return $this->userId; }
-
-            public function getBitrix24DepartmentId(): ?int { return $this->deptId; }
-
-            public function getChangedByBitrix24UserId(): ?int { return $this->changedBy; }
-
-            public function isRequired(): bool { return false; }
-
-            public function isActive(): bool { return $this->status === 'active'; }
-
-            public function getStatus(): \Bitrix24\SDK\Application\Contracts\ApplicationSettings\Entity\ApplicationSettingStatus {
-                return \Bitrix24\SDK\Application\Contracts\ApplicationSettings\Entity\ApplicationSettingStatus::active;
-            }
-
-            public function getCreatedAt(): \Carbon\CarbonImmutable { return \Carbon\CarbonImmutable::now(); }
-
-            public function getUpdatedAt(): \Carbon\CarbonImmutable { return \Carbon\CarbonImmutable::now(); }
-
-            public function updateValue(string $value, ?int $changedByBitrix24UserId = null): void {
-                $this->value = $value;
-                $this->changedBy = $changedByBitrix24UserId;
-            }
-
-            public function markAsDeleted(): void { $this->status = 'deleted'; }
-
-            public function isGlobal(): bool { return $this->userId === null && $this->deptId === null; }
-
-            public function isPersonal(): bool { return $this->userId !== null; }
-
-            public function isDepartmental(): bool { return $this->deptId !== null; }
-        };
     }
 }
