@@ -1,5 +1,21 @@
 # b24-php-sdk change log
 
+## Unreleased
+
+### Added
+
+- Added ApplicationSettings contracts for managing application configuration settings with support for multiple scopes (global, user-specific, department-specific):
+  - Entity interface `ApplicationSettingsItemInterface` with methods for managing settings lifecycle
+  - Repository interface `ApplicationSettingsItemRepositoryInterface` with CRUD operations and scope-based queries
+  - Enum `ApplicationSettingStatus` for tracking setting state (active/deleted)
+  - Events for tracking settings changes:
+    - `ApplicationSettingsItemCreatedEvent` - triggered when new setting is created
+    - `ApplicationSettingsItemChangedEvent` - triggered when setting value is updated (includes old/new values and change author)
+    - `ApplicationSettingsItemDeletedEvent` - triggered when setting is soft-deleted
+  - Exception `ApplicationSettingsItemNotFoundException` for handling missing settings
+  - Comprehensive abstract test classes for entity and repository contracts
+  - Documentation in `src/Application/Contracts/ApplicationSettings/Docs/ApplicationSettings.md`
+
 ## 1.8.0 - 2025.11.10
 
 ### Added
