@@ -70,5 +70,5 @@ interface ApplicationSettingsItemRepositoryInterface
      * @return ApplicationSettingsItemInterface[]
      * @throws InvalidArgumentException
      */
-    public function findByApplicationInstallationIdAndKey(Uuid $uuid, string $key): array;
+    public function findAllForInstallationByKey(Uuid $uuid, string $key): array;
 }

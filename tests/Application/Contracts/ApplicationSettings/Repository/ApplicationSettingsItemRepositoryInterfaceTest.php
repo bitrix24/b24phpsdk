@@ -198,8 +198,8 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
 
     #[Test]
     #[DataProvider('settingsByKeyDataProvider')]
-    #[TestDox('test findByApplicationInstallationIdAndKey method')]
-    final public function testFindByApplicationInstallationIdAndKey(
+    #[TestDox('test findAllForInstallationByKey method')]
+    final public function testFindAllForInstallationByKey(
         Uuid $uuid,
         string $key,
         array $items
@@ -213,7 +213,7 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
 
         $testRepositoryFlusher->flush();
 
-        $foundItems = $applicationSettingsItemRepository->findByApplicationInstallationIdAndKey($uuid, $key);
+        $foundItems = $applicationSettingsItemRepository->findAllForInstallationByKey($uuid, $key);
         $this->assertCount(count($items), $foundItems);
 
         foreach ($foundItems as $foundItem) {
@@ -222,13 +222,13 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('test findByApplicationInstallationIdAndKey with empty key')]
-    final public function testFindByApplicationInstallationIdAndKeyWithEmptyKey(): void
+    #[TestDox('test findAllForInstallationByKey with empty key')]
+    final public function testFindAllForInstallationByKeyWithEmptyKey(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
         /** @phpstan-ignore-next-line */
-        $applicationSettingsItemRepository->findByApplicationInstallationIdAndKey(Uuid::v7(), '');
+        $applicationSettingsItemRepository->findAllForInstallationByKey(Uuid::v7(), '');
     }
 
     public static function applicationSettingsItemDataProvider(): Generator
