@@ -71,41 +71,4 @@ interface ApplicationSettingsItemRepositoryInterface
      * @throws InvalidArgumentException
      */
     public function findByApplicationInstallationIdAndKey(Uuid $uuid, string $key): array;
-
-    /**
-     * Find setting by application installation id, key and user id
-     *
-     * @param non-empty-string $key
-     * @param positive-int $bitrix24UserId
-     * @throws InvalidArgumentException
-     */
-    public function findByApplicationInstallationIdAndKeyAndUserId(
-        Uuid $uuid,
-        string $key,
-        int $bitrix24UserId
-    ): ?ApplicationSettingsItemInterface;
-
-    /**
-     * Find setting by application installation id, key and department id
-     *
-     * @param non-empty-string $key
-     * @param positive-int $bitrix24DepartmentId
-     * @throws InvalidArgumentException
-     */
-    public function findByApplicationInstallationIdAndKeyAndDepartmentId(
-        Uuid $uuid,
-        string $key,
-        int $bitrix24DepartmentId
-    ): ?ApplicationSettingsItemInterface;
-
-    /**
-     * Find global setting (not user or department scoped) by application installation id and key
-     *
-     * @param non-empty-string $key
-     * @throws InvalidArgumentException
-     */
-    public function findGlobalByApplicationInstallationIdAndKey(
-        Uuid $uuid,
-        string $key
-    ): ?ApplicationSettingsItemInterface;
 }

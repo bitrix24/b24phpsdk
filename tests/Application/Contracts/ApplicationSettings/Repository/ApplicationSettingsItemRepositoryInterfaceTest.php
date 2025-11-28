@@ -222,82 +222,6 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
     }
 
     #[Test]
-    #[DataProvider('personalSettingDataProvider')]
-    #[TestDox('test findByApplicationInstallationIdAndKeyAndUserId method')]
-    final public function testFindByApplicationInstallationIdAndKeyAndUserId(
-        Uuid $uuid,
-        string $key,
-        int $userId,
-        ApplicationSettingsItemInterface $applicationSettingsItem
-    ): void {
-        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
-        $testRepositoryFlusher = $this->createRepositoryFlusherImplementation();
-
-        $applicationSettingsItemRepository->save($applicationSettingsItem);
-        $testRepositoryFlusher->flush();
-
-        $foundItem = $applicationSettingsItemRepository->findByApplicationInstallationIdAndKeyAndUserId(
-            $uuid,
-            $key,
-            $userId
-        );
-
-        $this->assertNotNull($foundItem);
-        $this->assertEquals($applicationSettingsItem->getId(), $foundItem->getId());
-        $this->assertEquals($userId, $foundItem->getBitrix24UserId());
-    }
-
-    #[Test]
-    #[DataProvider('departmentalSettingDataProvider')]
-    #[TestDox('test findByApplicationInstallationIdAndKeyAndDepartmentId method')]
-    final public function testFindByApplicationInstallationIdAndKeyAndDepartmentId(
-        Uuid $uuid,
-        string $key,
-        int $departmentId,
-        ApplicationSettingsItemInterface $applicationSettingsItem
-    ): void {
-        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
-        $testRepositoryFlusher = $this->createRepositoryFlusherImplementation();
-
-        $applicationSettingsItemRepository->save($applicationSettingsItem);
-        $testRepositoryFlusher->flush();
-
-        $foundItem = $applicationSettingsItemRepository->findByApplicationInstallationIdAndKeyAndDepartmentId(
-            $uuid,
-            $key,
-            $departmentId
-        );
-
-        $this->assertNotNull($foundItem);
-        $this->assertEquals($applicationSettingsItem->getId(), $foundItem->getId());
-        $this->assertEquals($departmentId, $foundItem->getBitrix24DepartmentId());
-    }
-
-    #[Test]
-    #[DataProvider('globalSettingDataProvider')]
-    #[TestDox('test findGlobalByApplicationInstallationIdAndKey method')]
-    final public function testFindGlobalByApplicationInstallationIdAndKey(
-        Uuid $uuid,
-        string $key,
-        ApplicationSettingsItemInterface $applicationSettingsItem
-    ): void {
-        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
-        $testRepositoryFlusher = $this->createRepositoryFlusherImplementation();
-
-        $applicationSettingsItemRepository->save($applicationSettingsItem);
-        $testRepositoryFlusher->flush();
-
-        $foundItem = $applicationSettingsItemRepository->findGlobalByApplicationInstallationIdAndKey(
-            $uuid,
-            $key
-        );
-
-        $this->assertNotNull($foundItem);
-        $this->assertEquals($applicationSettingsItem->getId(), $foundItem->getId());
-        $this->assertTrue($foundItem->isGlobal());
-    }
-
-    #[Test]
     #[TestDox('test findByApplicationInstallationIdAndKey with empty key')]
     final public function testFindByApplicationInstallationIdAndKeyWithEmptyKey(): void
     {
@@ -349,46 +273,6 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
             $uuidV7,
             $key,
             $items
-        ];
-    }
-
-    public static function personalSettingDataProvider(): Generator
-    {
-        $uuidV7 = Uuid::v7();
-        $key = 'user.preference';
-        $userId = 123;
-
-        yield 'personal-setting' => [
-            $uuidV7,
-            $key,
-            $userId,
-            self::createTestItem($uuidV7, $key, 'user-value', $userId, null)
-        ];
-    }
-
-    public static function departmentalSettingDataProvider(): Generator
-    {
-        $uuidV7 = Uuid::v7();
-        $key = 'department.config';
-        $departmentId = 456;
-
-        yield 'departmental-setting' => [
-            $uuidV7,
-            $key,
-            $departmentId,
-            self::createTestItem($uuidV7, $key, 'dept-value', null, $departmentId)
-        ];
-    }
-
-    public static function globalSettingDataProvider(): Generator
-    {
-        $uuidV7 = Uuid::v7();
-        $key = 'global.config';
-
-        yield 'global-setting' => [
-            $uuidV7,
-            $key,
-            self::createTestItem($uuidV7, $key, 'global-value', null, null)
         ];
     }
 
