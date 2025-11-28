@@ -24,6 +24,7 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  * @property-read int $groupId
  * @property-read int $templateId
  * @property-read int $efficiency
+ * @property-read bool $active
  * @property-read int $plannedCompletionTime
  * @property-read string $activity
  * @property-read string $name
