@@ -58,7 +58,7 @@ interface ApplicationSettingsItemRepositoryInterface
      *
      * @return ApplicationSettingsItemInterface[]
      */
-    public function findAllByApplicationInstallationId(Uuid $uuid): array;
+    public function findAllForInstallation(Uuid $uuid): array;
 
     /**
      * Find settings by application installation id and key

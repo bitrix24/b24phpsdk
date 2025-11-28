@@ -178,8 +178,8 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
 
     #[Test]
     #[DataProvider('multipleSettingsDataProvider')]
-    #[TestDox('test findAllByApplicationInstallationId method')]
-    final public function testFindAllByApplicationInstallationId(
+    #[TestDox('test findAllForInstallation method')]
+    final public function testFindAllForInstallation(
         Uuid $uuid,
         array $items
     ): void {
@@ -192,7 +192,7 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
 
         $testRepositoryFlusher->flush();
 
-        $foundItems = $applicationSettingsItemRepository->findAllByApplicationInstallationId($uuid);
+        $foundItems = $applicationSettingsItemRepository->findAllForInstallation($uuid);
         $this->assertCount(count($items), $foundItems);
     }
 
