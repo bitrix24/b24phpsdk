@@ -39,9 +39,9 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
         bool $isRequired
     ): ApplicationSettingsItemInterface;
 
-    abstract protected function createApplicationSettingsItemRepositoryImplementation(): ApplicationSettingsItemRepositoryInterface;
-
     abstract protected function createRepositoryFlusherImplementation(): TestRepositoryFlusherInterface;
+
+    abstract protected function createApplicationSettingsRepositoryImplementation(): ApplicationSettingsItemRepositoryInterface;
 
     #[Test]
     #[DataProvider('applicationSettingsItemDataProvider')]
@@ -65,7 +65,7 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
             $isRequired
         );
 
-        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
+        $applicationSettingsItemRepository = $this->createApplicationSettingsRepositoryImplementation();
         $testRepositoryFlusher = $this->createRepositoryFlusherImplementation();
 
         $applicationSettingsItemRepository->save($applicationSettingsItem);
@@ -82,7 +82,7 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
     final public function testGetByIdNotExists(): void
     {
         $this->expectException(ApplicationSettingsItemNotFoundException::class);
-        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
+        $applicationSettingsItemRepository = $this->createApplicationSettingsRepositoryImplementation();
         $applicationSettingsItemRepository->getById(Uuid::v7());
     }
 
@@ -108,7 +108,7 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
             $isRequired
         );
 
-        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
+        $applicationSettingsItemRepository = $this->createApplicationSettingsRepositoryImplementation();
         $testRepositoryFlusher = $this->createRepositoryFlusherImplementation();
 
         $applicationSettingsItemRepository->save($applicationSettingsItem);
@@ -123,7 +123,7 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
     #[TestDox('test findById method with non-existing id')]
     final public function testFindByIdNotExists(): void
     {
-        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
+        $applicationSettingsItemRepository = $this->createApplicationSettingsRepositoryImplementation();
         $foundItem = $applicationSettingsItemRepository->findById(Uuid::v7());
         $this->assertNull($foundItem);
     }
@@ -150,7 +150,7 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
             $isRequired
         );
 
-        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
+        $applicationSettingsItemRepository = $this->createApplicationSettingsRepositoryImplementation();
         $testRepositoryFlusher = $this->createRepositoryFlusherImplementation();
 
         $applicationSettingsItemRepository->save($applicationSettingsItem);
@@ -172,7 +172,7 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
     final public function testDeleteNotExists(): void
     {
         $this->expectException(ApplicationSettingsItemNotFoundException::class);
-        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
+        $applicationSettingsItemRepository = $this->createApplicationSettingsRepositoryImplementation();
         $applicationSettingsItemRepository->delete(Uuid::v7());
     }
 
@@ -183,7 +183,7 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
         Uuid $uuid,
         array $items
     ): void {
-        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
+        $applicationSettingsItemRepository = $this->createApplicationSettingsRepositoryImplementation();
         $testRepositoryFlusher = $this->createRepositoryFlusherImplementation();
 
         foreach ($items as $item) {
@@ -204,7 +204,7 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
         string $key,
         array $items
     ): void {
-        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
+        $applicationSettingsItemRepository = $this->createApplicationSettingsRepositoryImplementation();
         $testRepositoryFlusher = $this->createRepositoryFlusherImplementation();
 
         foreach ($items as $item) {
@@ -226,7 +226,7 @@ abstract class ApplicationSettingsItemRepositoryInterfaceTest extends TestCase
     final public function testFindAllForInstallationByKeyWithEmptyKey(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $applicationSettingsItemRepository = $this->createApplicationSettingsItemRepositoryImplementation();
+        $applicationSettingsItemRepository = $this->createApplicationSettingsRepositoryImplementation();
         /** @phpstan-ignore-next-line */
         $applicationSettingsItemRepository->findAllForInstallationByKey(Uuid::v7(), '');
     }
