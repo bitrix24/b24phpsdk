@@ -37,6 +37,7 @@ use MoneyPHP\Percentage\Percentage;
 class AbstractCrmItem extends AbstractItem
 {
     private Currency $currency;
+
     private const CRM_USERFIELD_PREFIX = 'UF_CRM_';
 
     /**
@@ -59,7 +60,6 @@ class AbstractCrmItem extends AbstractItem
             case 'CREATED_BY_ID':
             case 'MODIFY_BY_ID':
             case 'MOVED_BY_ID':
-            case 'MOVED_TIME':
             case 'createdBy':
             case 'updatedBy':
             case 'movedBy':
@@ -99,6 +99,7 @@ class AbstractCrmItem extends AbstractItem
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null && $this->data[$offset] !== '0') {
                     return (int)$this->data[$offset];
                 }
+
                 return null;
             case 'EXPORT':
             case 'HAS_PHONE':
@@ -138,6 +139,7 @@ class AbstractCrmItem extends AbstractItem
             case 'createdTime':
             case 'updatedTime':
             case 'movedTime':
+            case 'MOVED_TIME':
             case 'lastActivityTime':
             case 'LAST_ACTIVITY_TIME':
             case 'START_TIME':
@@ -161,18 +163,21 @@ class AbstractCrmItem extends AbstractItem
                     $var = $this->data[$offset] * 100;
                     return new Money((string)$var, new Currency($this->currency->getCode()));
                 }
+
                 return null;
             case 'AMOUNT':
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                     $var = $this->data[$offset] * 100;
                     return new Money((string)$var, new Currency($this->data['CURRENCY']));
                 }
+
                 return null;
             case 'RESULT_CURRENCY_ID':
             case 'CURRENCY':
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                     return new Currency($this->data[$offset]);
                 }
+
                 return null;
             case 'PHONE':
                 if (!$this->isKeyExists($offset)) {
@@ -183,6 +188,7 @@ class AbstractCrmItem extends AbstractItem
                 foreach ($this->data[$offset] as $item) {
                     $items[] = new Phone($item);
                 }
+
                 return $items;
             case 'EMAIL':
                 if (!$this->isKeyExists($offset)) {
@@ -193,6 +199,7 @@ class AbstractCrmItem extends AbstractItem
                 foreach ($this->data[$offset] as $item) {
                     $items[] = new Email($item);
                 }
+
                 return $items;
             case 'WEB':
                 if (!$this->isKeyExists($offset)) {
@@ -203,6 +210,7 @@ class AbstractCrmItem extends AbstractItem
                 foreach ($this->data[$offset] as $item) {
                     $items[] = new Website($item);
                 }
+
                 return $items;
             case 'IM':
                 if (!$this->isKeyExists($offset)) {
@@ -213,6 +221,7 @@ class AbstractCrmItem extends AbstractItem
                 foreach ($this->data[$offset] as $item) {
                     $items[] = new InstantMessenger($item);
                 }
+
                 return $items;
             case 'currencyId':
             case 'accountCurrencyId':
@@ -222,6 +231,7 @@ class AbstractCrmItem extends AbstractItem
                 if ($this->data[$offset] !== null) {
                     return DealSemanticStage::from($this->data[$offset]);
                 }
+
                 return null;
             case 'DISCOUNT_TYPE_ID':
                 return DiscountType::from($this->data[$offset]);
@@ -250,7 +260,6 @@ class AbstractCrmItem extends AbstractItem
     /**
      * get userfield by field name
      *
-     * @param string $fieldName
      *
      * @return mixed|null
      * @throws UserfieldNotFoundException
@@ -260,6 +269,7 @@ class AbstractCrmItem extends AbstractItem
         if (!str_starts_with($fieldName, self::CRM_USERFIELD_PREFIX)) {
             $fieldName = self::CRM_USERFIELD_PREFIX . $fieldName;
         }
+
         if (!$this->isKeyExists($fieldName)) {
             throw new UserfieldNotFoundException(sprintf('crm userfield not found by field name %s', $fieldName));
         }
@@ -278,10 +288,12 @@ class AbstractCrmItem extends AbstractItem
         if ($entityTypeId <= 0) {
             throw new InvalidArgumentException('entityTypeId must be positive integer');
         }
+
         $fieldKey = sprintf('PARENT_ID_%d', $entityTypeId);
         if (!array_key_exists($fieldKey, $this->data)) {
             throw new InvalidArgumentException(sprintf('field «%s» for smart process with entityTypeId «%d» not found', $fieldKey, $entityTypeId));
         }
+
         if ($this->data[$fieldKey] === '' || $this->data[$fieldKey] === null) {
             return null;
         }
@@ -292,7 +304,7 @@ class AbstractCrmItem extends AbstractItem
     public function __construct(array $data, ?Currency $currency = null)
     {
         parent::__construct($data);
-        if ($currency !== null) {
+        if ($currency instanceof \Money\Currency) {
             $this->currency = $currency;
         }
     }
