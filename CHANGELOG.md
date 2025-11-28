@@ -40,10 +40,20 @@
         - `DATE_CREATE`, `DATE_MODIFY`, `LAST_ACTIVITY_TIME` return `CarbonImmutable`
         - `MOVED_BY_ID` correctly returns `int`
         - Null handling for empty datetime and integer fields
-- Fixed missing `active` property type hint in `FlowItemResult`,
+- Fixed invalid type casting hints in `FlowItemResult`,
   [see details](https://github.com/bitrix24/b24phpsdk/issues/275):
-    - Added missing `@property-read bool $active` annotation to match Bitrix24 API documentation
-    - Property represents the flow active status returned by `task.flow.Flow.get` method
+    - Added missing `@property-read bool $active` annotation
+    - Corrected nullable type annotations to match Bitrix24 API documentation for `task.flow.Flow.get` method:
+        - `responsibleList`: changed from `array|null` to `array` (required field)
+        - `demo`: changed from `bool|null` to `bool` (required field)
+        - `responsibleCanChangeDeadline`: changed from `bool|null` to `bool` (required field)
+        - `matchWorkTime`: changed from `bool|null` to `bool` (required field)
+        - `taskControl`: changed from `bool|null` to `bool` (required field)
+        - `notifyAtHalfTime`: changed from `bool|null` to `bool` (required field)
+        - `taskCreators`: changed from `array|null` to `array` (required field)
+        - `team`: changed from `array|null` to `array` (required field)
+        - `trialFeatureEnabled`: changed from `bool|null` to `bool` (required field)
+    - Preserved correct nullable types for notification thresholds: `notifyOnQueueOverflow`, `notifyOnTasksInProgressOverflow`, `notifyWhenEfficiencyDecreases` (int|null)
 
 ## 1.8.0 - 2025.11.10
 
