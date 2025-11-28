@@ -4,6 +4,17 @@
 
 ### Added
 
+- Added ApplicationSettings contracts for managing application configuration settings with support for multiple scopes (global, user-specific, department-specific):
+  - Entity interface `ApplicationSettingsItemInterface` with methods for managing settings lifecycle
+  - Repository interface `ApplicationSettingsItemRepositoryInterface` with CRUD operations and scope-based queries
+  - Enum `ApplicationSettingStatus` for tracking setting state (active/deleted)
+  - Events for tracking settings changes:
+    - `ApplicationSettingsItemCreatedEvent` - triggered when new setting is created
+    - `ApplicationSettingsItemChangedEvent` - triggered when setting value is updated (includes old/new values and change author)
+    - `ApplicationSettingsItemDeletedEvent` - triggered when setting is soft-deleted
+  - Exception `ApplicationSettingsItemNotFoundException` for handling missing settings
+  - Comprehensive abstract test classes for entity and repository contracts
+  - Documentation in `src/Application/Contracts/ApplicationSettings/Docs/ApplicationSettings.md`
 - Added `VersionedScope` container class for managing multiple Scope instances with version support:
     - Readonly immutable container storing multiple `Scope` instances indexed by version number
     - Versions must be unique integers starting from 1
@@ -12,12 +23,12 @@
     - `hasVersion(int $version): bool` method checks if a specific version exists
     - Comprehensive unit tests with 13 test cases covering construction validation, version retrieval, and error handling
     - Uses standard `InvalidArgumentException` for all validation errors (no custom exceptions)
-
 - Added MCP (Model Context Protocol) server configuration for Bitrix24 API documentation [see details](https://github.com/bitrix24/b24phpsdk/issues/126):
   - Added `.claude/mcp_settings.json` with Bitrix24 MCP server setup
   - Enables direct access to Bitrix24 REST API documentation within Claude Code
   - Provides tools for searching methods, viewing method details, and reading articles
   - Improves developer experience when working with Bitrix24 API
+
 ### Fixed
 
 - Fixed `MOVED_TIME` field in `DealItemResult` and `LeadItemResult` to return `CarbonImmutable` instead of `int`,
