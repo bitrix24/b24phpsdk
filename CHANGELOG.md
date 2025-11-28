@@ -40,6 +40,10 @@
         - `DATE_CREATE`, `DATE_MODIFY`, `LAST_ACTIVITY_TIME` return `CarbonImmutable`
         - `MOVED_BY_ID` correctly returns `int`
         - Null handling for empty datetime and integer fields
+- Fixed missing `active` property type hint in `FlowItemResult`,
+  [see details](https://github.com/bitrix24/b24phpsdk/issues/275):
+    - Added missing `@property-read bool $active` annotation to match Bitrix24 API documentation
+    - Property represents the flow active status returned by `task.flow.Flow.get` method
 
 ## 1.8.0 - 2025.11.10
 
