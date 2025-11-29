@@ -30,6 +30,11 @@ If You work on Windows:
 
 Or add `"bitrix24/b24phpsdk": "1.8.*"` to `composer.json` of your application.
 
+## Branch status  
+
+- `main`: current default version, use default API-endpints and datastructures. Use semver with major version `1`.
+- `v3`: new version of REST-API with breaking changes of endpoints and datastructures. Use semver with major version `3`.  
+
 ## B24PhpSdk ✨FEATURES✨
 
 Support both auth modes:
