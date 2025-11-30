@@ -22,10 +22,12 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 interface ApiClientInterface
 {
     /**
+     * @param non-empty-string $apiMethod api method name
+     * @param array<string, mixed> $parameters
      * @throws TransportExceptionInterface
      * @throws InvalidArgumentException
      */
-    public function getResponse(string $apiMethod, array $parameters = []): ResponseInterface;
+    public function getResponse(string $apiMethod, array $parameters = [], ApiVersion $version = ApiVersion::v1): ResponseInterface;
 
     /**
      * @throws InvalidArgumentException

@@ -17,11 +17,14 @@ use Bitrix24\SDK\Core\ApiClient;
 use Bitrix24\SDK\Core\ApiLevelErrorHandler;
 use Bitrix24\SDK\Core\Commands\Command;
 use Bitrix24\SDK\Core\Contracts\ApiClientInterface;
+use Bitrix24\SDK\Core\Contracts\ApiVersion;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
+use Bitrix24\SDK\Core\EndpointUrlFormatter;
 use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Infrastructure\HttpClient\RequestId\DefaultRequestIdGenerator;
+use Exception;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -30,9 +33,12 @@ class NullCore implements CoreInterface
 {
     /**
      *
-     * @throws \Exception
+     * @param non-empty-string $apiMethod
+     * @param array $parameters
+     * @param positive-int $version
+     * @throws Exception
      */
-    public function call(string $apiMethod, array $parameters = []): Response
+    public function call(string $apiMethod, array $parameters = [], ApiVersion $version = ApiVersion::v1): Response
     {
         return new Response(new MockResponse(''), new Command('', []), new ApiLevelErrorHandler(new  NullLogger()), new NullLogger());
     }
@@ -44,6 +50,7 @@ class NullCore implements CoreInterface
             new MockHttpClient(),
             new DefaultRequestIdGenerator(),
             new ApiLevelErrorHandler(new NullLogger()),
+            new EndpointUrlFormatter(new DefaultRequestIdGenerator() ,new NullLogger()),
             new NullLogger());
     }
 }

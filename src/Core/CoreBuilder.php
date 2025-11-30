@@ -42,6 +42,7 @@ class CoreBuilder
     private readonly ApiLevelErrorHandler $apiLevelErrorHandler;
 
     private RequestIdGeneratorInterface $requestIdGenerator;
+    private EndpointUrlFormatter $endpointUrlFormatter;
 
     /**
      * CoreBuilder constructor.
@@ -53,11 +54,12 @@ class CoreBuilder
         $this->httpClient = HttpClient::create(
             [
                 'http_version' => '2.0',
-                'timeout'      => 120,
+                'timeout' => 120,
             ]
         );
         $this->apiLevelErrorHandler = new ApiLevelErrorHandler($this->logger);
         $this->requestIdGenerator = new DefaultRequestIdGenerator();
+        $this->endpointUrlFormatter = new EndpointUrlFormatter($this->requestIdGenerator, $this->logger);
     }
 
     public function withRequestIdGenerator(RequestIdGeneratorInterface $requestIdGenerator): void
@@ -82,7 +84,7 @@ class CoreBuilder
         return $this;
     }
 
-    public function withHttpClient(HttpClientInterface $httpClient):self
+    public function withHttpClient(HttpClientInterface $httpClient): self
     {
         $this->httpClient = $httpClient;
 
@@ -118,6 +120,7 @@ class CoreBuilder
                 $this->httpClient,
                 $this->requestIdGenerator,
                 $this->apiLevelErrorHandler,
+                $this->endpointUrlFormatter,
                 $this->logger
             );
         }
