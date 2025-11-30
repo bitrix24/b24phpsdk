@@ -2,10 +2,10 @@
 
 namespace Bitrix24\SDK\Services\Task\Service;
 
-class TaskItemSelectBuilder
-{
-    protected array $select = [];
+use Bitrix24\SDK\Services\AbstractSelectBuilder;
 
+class TaskItemSelectBuilder extends AbstractSelectBuilder
+{
     public function __construct()
     {
         $this->select[] = 'id';
@@ -45,10 +45,5 @@ class TaskItemSelectBuilder
     {
         $this->select = array_merge($this->select, ['chat.id', 'chat.entityId']);
         return $this;
-    }
-
-    public function buildSelect(): array
-    {
-        return $this->select;
     }
 }

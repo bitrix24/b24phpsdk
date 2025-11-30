@@ -17,6 +17,7 @@ use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\ApiVersion;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\Contracts\SelectBuilderInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
@@ -131,9 +132,9 @@ class Task extends AbstractService
     )]
     /**
      * @param positive-int $id Task ID.
-     * @param array<int,string>|TaskItemSelectBuilder $select
+     * @param array<int,string>|SelectBuilderInterface $select
      */
-    public function get(int $id, array|TaskItemSelectBuilder $select = []): TaskResult
+    public function get(int $id, array|SelectBuilderInterface $select = []): TaskResult
     {
         if ($select instanceof TaskItemSelectBuilder) {
             $select = $select->buildSelect();
