@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -12,6 +13,7 @@ declare(strict_types=1);
 
 use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
+use Bitrix24\SDK\Core\Credentials\DefaultOAuthServerUrl;
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
 use Bitrix24\SDK\Tests\ApplicationBridge\ApplicationCredentialsProvider;
 use Monolog\Handler\StreamHandler;
@@ -39,7 +41,7 @@ if ($_SERVER['APP_DEBUG']) {
     umask(0000);
 
     if (class_exists(
-        Debug::class
+            Debug::class
     )) {
         Debug::enable();
     }
@@ -55,7 +57,12 @@ $log->pushProcessor(new MemoryUsageProcessor(true, true));
 $b24ServiceFactory = new ServiceBuilderFactory(new EventDispatcher(), $log);
 $appProfile = ApplicationProfile::initFromArray($_ENV);
 $accessToken = AuthToken::initFromPlacementRequest($request);
-$b24Service = $b24ServiceFactory->init($appProfile, $accessToken, $_REQUEST['DOMAIN']);
+$b24Service = $b24ServiceFactory->init(
+        $appProfile,
+        $accessToken,
+        $_REQUEST['DOMAIN'],
+        DefaultOAuthServerUrl::default()
+);
 
 // save new access token for integration tests
 $credentialsProvider = ApplicationCredentialsProvider::buildProviderForLocalApplication();

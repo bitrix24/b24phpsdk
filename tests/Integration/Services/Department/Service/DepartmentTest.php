@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Services\Department\Result\DepartmentItemResult;
 use Bitrix24\SDK\Services\Department\Service\Department;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -47,7 +47,7 @@ class DepartmentTest extends TestCase
     
     protected function setUp(): void
     {
-        $this->departmentService = Fabric::getServiceBuilder()->getDepartmentScope()->department();
+        $this->departmentService = Factory::getServiceBuilder()->getDepartmentScope()->department();
         
         $this->rootDepartmentId = intval($this->departmentService->get(['PARENT' => 0])->getDepartments()[0]->ID);
     }

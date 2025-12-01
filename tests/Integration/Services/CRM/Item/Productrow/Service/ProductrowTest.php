@@ -20,7 +20,7 @@ use Bitrix24\SDK\Services\CRM\Item\Productrow\Result\ProductrowItemResult;
 use Bitrix24\SDK\Services\CRM\Item\Productrow\Service\Productrow;
 use Bitrix24\SDK\Services\CRM\Lead\Service\Lead;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -51,8 +51,8 @@ class ProductrowTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productrowService = Fabric::getServiceBuilder()->getCRMScope()->itemProductrow();
-        $this->leadService = Fabric::getServiceBuilder()->getCRMScope()->lead();
+        $this->productrowService = Factory::getServiceBuilder()->getCRMScope()->itemProductrow();
+        $this->leadService = Factory::getServiceBuilder()->getCRMScope()->lead();
         
         $this->leadId = $this->leadService->add(['TITLE' => 'test lead for productRows'])->getId();
     }

@@ -26,7 +26,6 @@ use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Tests\Application\Contracts\Bitrix24Partners\Repository\Bitrix24PartnerRepositoryInterfaceTest;
 use Bitrix24\SDK\Tests\Application\Contracts\ContactPersons\Repository\ContactPersonRepositoryInterfaceTest;
-use Bitrix24\SDK\Tests\Integration\Fabric;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountReferenceEntityImplementation;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\Bitrix24Partners\Entity\Bitrix24PartnerReferenceEntityImplementation;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\ContactPersons\Entity\ContactPersonReferenceEntityImplementation;

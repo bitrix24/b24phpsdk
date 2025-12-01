@@ -24,7 +24,7 @@ use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
 use Bitrix24\SDK\Services\CRM\Deal\Result\DealItemResult;
 use Bitrix24\SDK\Services\CRM\Deal\Result\DealProductRowItemResult;
 use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -301,8 +301,8 @@ class ActivityTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->activityService = Fabric::getServiceBuilder()->getCRMScope()->activity();
-        $this->contactService = Fabric::getServiceBuilder()->getCRMScope()->contact();
+        $this->activityService = Factory::getServiceBuilder()->getCRMScope()->activity();
+        $this->contactService = Factory::getServiceBuilder()->getCRMScope()->contact();
         $this->contactId = [];
         $this->activityId = [];
     }

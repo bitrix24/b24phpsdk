@@ -21,7 +21,7 @@ use Bitrix24\SDK\Services\Placement\Result\PlacementLocationItemResult;
 use Bitrix24\SDK\Services\Placement\Service\Placement;
 use Bitrix24\SDK\Services\Placement\Service\PlacementLocationCode;
 use Bitrix24\SDK\Services\Telephony\Call\Service\Call;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -107,6 +107,6 @@ class PlacementTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->placementService = Fabric::getServiceBuilder(true)->getPlacementScope()->placement();
+        $this->placementService = Factory::getServiceBuilder(true)->getPlacementScope()->placement();
     }
 }

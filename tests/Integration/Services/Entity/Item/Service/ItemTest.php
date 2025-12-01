@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Entity\Item\Service\Item;
 use Bitrix24\SDK\Services\ServiceBuilder;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -35,7 +35,7 @@ class ItemTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->sb = Fabric::getServiceBuilder(true);
+        $this->sb = Factory::getServiceBuilder(true);
     }
 
     protected function tearDown(): void

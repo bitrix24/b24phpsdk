@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Sale\Shipment\Service\Shipment;
 use Bitrix24\SDK\Services\Sale\ShipmentProperty\Service\ShipmentProperty;
 use Bitrix24\SDK\Services\Sale\ShipmentPropertyValue\Service\ShipmentPropertyValue;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -56,7 +56,7 @@ class ShipmentPropertyValueTest extends TestCase
 
     protected function setUp(): void
     {
-        $saleServiceBuilder = Fabric::getServiceBuilder()->getSaleScope();
+        $saleServiceBuilder = Factory::getServiceBuilder()->getSaleScope();
         $this->spvService = $saleServiceBuilder->shipmentPropertyValue();
         $this->shipmentPropertyService = $saleServiceBuilder->shipmentProperty();
         $this->shipmentService = $saleServiceBuilder->shipment();
@@ -104,7 +104,7 @@ class ShipmentPropertyValueTest extends TestCase
 
     protected function createPersonType(): int
     {
-        $personTypeService = Fabric::getServiceBuilder()->getSaleScope()->personType();
+        $personTypeService = Factory::getServiceBuilder()->getSaleScope()->personType();
         $addedPersonTypeResult = $personTypeService->add([
             'name' => 'Test Person Type for SPV',
             'sort' => 100,
@@ -115,7 +115,7 @@ class ShipmentPropertyValueTest extends TestCase
 
     protected function createPropertyGroup(string $name): int
     {
-        $propertyGroup = Fabric::getServiceBuilder()->getSaleScope()->propertyGroup();
+        $propertyGroup = Factory::getServiceBuilder()->getSaleScope()->propertyGroup();
         $propertyGroupAddResult = $propertyGroup->add([
             'name' => $name,
             'personTypeId' => $this->personTypeId,
@@ -126,19 +126,19 @@ class ShipmentPropertyValueTest extends TestCase
 
     protected function deletePropertyGroup(int $id): void
     {
-        $propertyGroup = Fabric::getServiceBuilder()->getSaleScope()->propertyGroup();
+        $propertyGroup = Factory::getServiceBuilder()->getSaleScope()->propertyGroup();
         $propertyGroup->delete($id);
     }
 
     protected function deletePersonType(int $id): void
     {
-        $personTypeService = Fabric::getServiceBuilder()->getSaleScope()->personType();
+        $personTypeService = Factory::getServiceBuilder()->getSaleScope()->personType();
         $personTypeService->delete($id);
     }
 
     protected function createOrder(): int
     {
-        $orderService = Fabric::getServiceBuilder()->getSaleScope()->order();
+        $orderService = Factory::getServiceBuilder()->getSaleScope()->order();
         $orderAddedResult = $orderService->add([
             'personTypeId' => $this->personTypeId,
             'userEmail' => 'test@example.com',
@@ -150,7 +150,7 @@ class ShipmentPropertyValueTest extends TestCase
 
     protected function deleteOrder(int $id): void
     {
-        $orderService = Fabric::getServiceBuilder()->getSaleScope()->order();
+        $orderService = Factory::getServiceBuilder()->getSaleScope()->order();
         $orderService->delete($id);
     }
 
@@ -160,7 +160,7 @@ class ShipmentPropertyValueTest extends TestCase
      */
     protected function getDeliveryId(): int
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         $response = $core->call('sale.delivery.getList', [
             'filter' => ['ACTIVE' => 'Y'],
             'select' => ['ID'],

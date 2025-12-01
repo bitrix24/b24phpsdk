@@ -84,6 +84,7 @@ use Carbon\CarbonImmutable;
  * @property-read array|null $ufCrmTask
  * @property-read array|null $ufTaskWebdavFiles
  * @property-read int|null $ufMailMessage
+ * @property-read int $chatId
  */
 class TaskItemResult extends AbstractItem
 {

@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Services\CRM\Lead\Result\LeadItemResult;
 use Bitrix24\SDK\Services\CRM\Product\Result\ProductItemResult;
 use Bitrix24\SDK\Services\CRM\Product\Service\Product;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -189,6 +189,6 @@ class ProductsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productService = Fabric::getServiceBuilder()->getCRMScope()->product();
+        $this->productService = Factory::getServiceBuilder()->getCRMScope()->product();
     }
 }

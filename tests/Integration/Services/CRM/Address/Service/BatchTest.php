@@ -23,7 +23,7 @@ use Bitrix24\SDK\Services\CRM\Requisites\Service\Requisite;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\CompanyBuilder;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\RequisiteBuilder;
 use Bitrix24\SDK\Services\CRM\Enum\OwnerType;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -48,7 +48,7 @@ class BatchTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->sb = Fabric::getServiceBuilder();
+        $this->sb = Factory::getServiceBuilder();
         $this->addressService = $this->sb->getCRMScope()->address();
         $this->companyService = $this->sb->getCRMScope()->company();
         $this->requisiteService = $this->sb->getCRMScope()->requisite();
@@ -57,7 +57,7 @@ class BatchTest extends TestCase
             $this->presets[] = $addressTypeFieldItemResult->ID;
         }
 
-        $enum = Fabric::getServiceBuilder()->getCRMScope()->enum();
+        $enum = Factory::getServiceBuilder()->getCRMScope()->enum();
         foreach ($enum->addressType()->getItems() as $addressTypeFieldItemResult) {
             $this->addressTypes[] = $addressTypeFieldItemResult->ID;
         }

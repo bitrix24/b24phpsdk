@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Contact\Service;
 
 use Bitrix24\SDK\Services\CRM\Contact\Service\ContactUserfield;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use Generator;
 use PHPUnit\Framework\TestCase;
 
@@ -132,6 +132,6 @@ class ContactUserfieldTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->contactUserfieldService = Fabric::getServiceBuilder()->getCRMScope()->contactUserfield();
+        $this->contactUserfieldService = Factory::getServiceBuilder()->getCRMScope()->contactUserfield();
     }
 }

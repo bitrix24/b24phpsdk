@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Core;
 use Bitrix24\SDK\Core\Batch;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Services\ServiceBuilder;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -375,8 +375,8 @@ class BatchTraversableListTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->batch = Fabric::getBatchService();
-        $this->serviceBuilder = Fabric::getServiceBuilder();
+        $this->batch = Factory::getBatchService();
+        $this->serviceBuilder = Factory::getServiceBuilder();
     }
 
     public function tearDown(): void

@@ -21,7 +21,7 @@ use Bitrix24\SDK\Services\CRM\Currency\Localizations\Result\LocalizationItemResu
 use Bitrix24\SDK\Services\CRM\Currency\Service\Currency;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -50,7 +50,7 @@ class LocalizationsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->sb = Fabric::getServiceBuilder();
+        $this->sb = Factory::getServiceBuilder();
         $this->currencyService = $this->sb->getCRMScope()->currency();
         $this->localizationsService = $this->sb->getCRMScope()->localizations();
         $fields = [

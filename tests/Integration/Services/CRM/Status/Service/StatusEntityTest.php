@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Status\Result\StatusEntityItemResult;
 use Bitrix24\SDK\Services\CRM\Status\Service\StatusEntity;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 use Typhoon\Reflection\TyphoonReflector;
 
@@ -30,7 +30,7 @@ class StatusEntityTest extends TestCase
     
     protected function setUp(): void
     {
-        $this->statusEntityService = Fabric::getServiceBuilder()->getCRMScope()->statusEntity();
+        $this->statusEntityService = Factory::getServiceBuilder()->getCRMScope()->statusEntity();
         $this->typhoonReflector = TyphoonReflector::build();
     }
 

@@ -20,7 +20,7 @@ use Bitrix24\SDK\Services\CRM\Contact\Result\ContactItemResult;
 use Bitrix24\SDK\Services\CRM\Lead\Result\LeadItemResult;
 use Bitrix24\SDK\Services\CRM\Lead\Service\Lead;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -149,6 +149,6 @@ class LeadTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->leadService = Fabric::getServiceBuilder()->getCRMScope()->lead();
+        $this->leadService = Factory::getServiceBuilder()->getCRMScope()->lead();
     }
 }

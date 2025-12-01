@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Sale\Delivery\Service\Delivery;
 use Bitrix24\SDK\Services\Sale\DeliveryHandler\Service\DeliveryHandler;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -43,8 +43,8 @@ class DeliveryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->deliveryService = Fabric::getServiceBuilder()->getSaleScope()->delivery();
-        $this->deliveryHandlerService = Fabric::getServiceBuilder()->getSaleScope()->deliveryHandler();
+        $this->deliveryService = Factory::getServiceBuilder()->getSaleScope()->delivery();
+        $this->deliveryHandlerService = Factory::getServiceBuilder()->getSaleScope()->deliveryHandler();
 
         // Create a test delivery handler for our tests
         $this->createTestDeliveryHandler();

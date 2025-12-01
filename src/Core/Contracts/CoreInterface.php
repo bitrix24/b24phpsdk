@@ -25,10 +25,15 @@ use Bitrix24\SDK\Core\Response\Response;
 interface CoreInterface
 {
     /**
+     * Make an API call.
+     *
+     * @param non-empty-string $apiMethod
+     * @param array<string, mixed> $parameters
+     *
      * @throws BaseException
      * @throws TransportException
      */
-    public function call(string $apiMethod, array $parameters = []): Response;
+    public function call(string $apiMethod, array $parameters = [], ApiVersion $apiVersion = ApiVersion::v1): Response;
 
     public function getApiClient(): ApiClientInterface;
 }

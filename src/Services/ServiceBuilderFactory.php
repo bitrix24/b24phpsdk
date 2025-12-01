@@ -90,21 +90,13 @@ class ServiceBuilderFactory
         ApplicationProfile $applicationProfile,
         AuthToken $authToken,
         string $bitrix24DomainUrl,
-        // todo make it required in v2
-        ?string $oauthServerUrl = null
+        string $oauthServerUrl
     ): ServiceBuilder {
-        if ($oauthServerUrl === null) {
-            $this->log->warning('oauthServerUrl not set, you must set it manually or use DefaultOAuthServerUrl presets');
-            $endpoints = new Endpoints($bitrix24DomainUrl, DefaultOAuthServerUrl::default());
-        } else {
-            $endpoints = new Endpoints($bitrix24DomainUrl, $oauthServerUrl);
-        }
-
         return $this->getServiceBuilder(
             Credentials::createFromOAuth(
                 $authToken,
                 $applicationProfile,
-                $endpoints
+                new Endpoints($bitrix24DomainUrl, $oauthServerUrl)
             )
         );
     }
@@ -186,7 +178,6 @@ class ServiceBuilderFactory
         ApplicationProfile $applicationProfile,
         ?EventDispatcherInterface $eventDispatcher = null,
         ?LoggerInterface $logger = null,
-        // todo make it required in v2
         ?string $oauthServerUrl = null
     ): ServiceBuilder {
         if (!in_array('DOMAIN', $placementRequest->query->keys(), true)) {
@@ -207,6 +198,7 @@ class ServiceBuilderFactory
 
         if ($oauthServerUrl === null) {
             $logger->warning('oauthServerUrl not set, you must set it manually or use DefaultOAuthServerUrl presets');
+            $oauthServerUrl = DefaultOAuthServerUrl::default();
         }
 
         return (new ServiceBuilderFactory($eventDispatcher, $logger))

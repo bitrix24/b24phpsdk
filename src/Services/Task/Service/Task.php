@@ -15,7 +15,9 @@ namespace Bitrix24\SDK\Services\Task\Service;
 
 use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+use Bitrix24\SDK\Core\Contracts\ApiVersion;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\Contracts\SelectBuilderInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
@@ -125,11 +127,20 @@ class Task extends AbstractService
     #[ApiEndpointMetadata(
         'tasks.task.get',
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-get.html',
-        'Returns a task by the task ID'
+        'Returns a task by the task ID',
+        ApiVersion::v3
     )]
-    public function get(int $id, array $select = ['*']): TaskResult
+    /**
+     * @param positive-int $id Task ID.
+     * @param array<int,string>|SelectBuilderInterface $select
+     */
+    public function get(int $id, array|SelectBuilderInterface $select = []): TaskResult
     {
-        return new TaskResult($this->core->call('tasks.task.get', ['taskId' => $id, 'select' => $select]));
+        if ($select instanceof TaskItemSelectBuilder) {
+            $select = $select->buildSelect();
+        }
+
+        return new TaskResult($this->core->call('tasks.task.get', ['id' => $id, 'select' => $select], ApiVersion::v3));
     }
 
     /**

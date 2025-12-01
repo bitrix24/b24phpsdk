@@ -23,7 +23,6 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Tests\Application\Contracts\ContactPersons\Repository\ContactPersonRepositoryInterfaceTest;
 use Bitrix24\SDK\Tests\Application\Contracts\NullableFlusher;
 use Bitrix24\SDK\Tests\Application\Contracts\TestRepositoryFlusherInterface;
-use Bitrix24\SDK\Tests\Integration\Fabric;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountReferenceEntityImplementation;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\ContactPersons\Entity\ContactPersonReferenceEntityImplementation;
 use Carbon\CarbonImmutable;

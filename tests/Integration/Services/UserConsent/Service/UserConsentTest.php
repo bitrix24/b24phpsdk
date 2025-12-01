@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\UserConsent\Service\UserConsent;
 use Bitrix24\SDK\Services\UserConsent\Service\UserConsentAgreement;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
@@ -57,7 +57,7 @@ class UserConsentTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->userConsentService = Fabric::getServiceBuilder()->getUserConsentScope()->UserConsent();
-        $this->userConsentAgreementService = Fabric::getServiceBuilder()->getUserConsentScope()->UserConsentAgreement();
+        $this->userConsentService = Factory::getServiceBuilder()->getUserConsentScope()->UserConsent();
+        $this->userConsentAgreementService = Factory::getServiceBuilder()->getUserConsentScope()->UserConsentAgreement();
     }
 }

@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Catalog\Catalog\Service\Catalog;
 use Bitrix24\SDK\Services\Catalog\Common\ProductType;
 use Bitrix24\SDK\Services\Catalog\Product\Service\Product;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -152,7 +152,7 @@ class ProductTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productService = Fabric::getServiceBuilder()->getCatalogScope()->product();
-        $this->catalogService = Fabric::getServiceBuilder()->getCatalogScope()->catalog();
+        $this->productService = Factory::getServiceBuilder()->getCatalogScope()->product();
+        $this->catalogService = Factory::getServiceBuilder()->getCatalogScope()->catalog();
     }
 }

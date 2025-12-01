@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\IMOpenLines\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\IMOpenLines\Service\Network;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -33,7 +33,7 @@ class NetworkTest extends TestCase
     #[TestDox('test get agreements list')]
     public function testJoin(): void
     {
-        $joinOpenLineResult = $this->networkService->join(Fabric::getOpenLineCode());
+        $joinOpenLineResult = $this->networkService->join(Factory::getOpenLineCode());
         $this->assertGreaterThanOrEqual(1, $joinOpenLineResult->getId());
     }
 
@@ -45,7 +45,7 @@ class NetworkTest extends TestCase
     public function testMessageAdd(): void
     {
         $addedMessageItemResult = $this->networkService->messageAdd(
-            Fabric::getOpenLineCode(),
+            Factory::getOpenLineCode(),
             (int)$this->networkService->core->call('PROFILE')->getResponseData()->getResult()['ID'],
             sprintf('Test message at %s', time())
         );
@@ -55,6 +55,6 @@ class NetworkTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->networkService = Fabric::getServiceBuilder()->getIMOpenLinesScope()->Network();
+        $this->networkService = Factory::getServiceBuilder()->getIMOpenLinesScope()->Network();
     }
 }

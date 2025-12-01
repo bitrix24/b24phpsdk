@@ -15,7 +15,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Activity\ReadModel;
 
 use Bitrix24\SDK\Services\CRM\Activity\ReadModel\VoximplantFetcher;
 use Bitrix24\SDK\Services\CRM\Activity\ReadModel\WebFormFetcher;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Activity\ReadModel\WebFormFetcher::class)]
@@ -45,6 +45,6 @@ class VoximplantFetcherTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->voximplantFetcher = Fabric::getServiceBuilder()->getCRMScope()->activityFetcher()->voximplantFetcher();
+        $this->voximplantFetcher = Factory::getServiceBuilder()->getCRMScope()->activityFetcher()->voximplantFetcher();
     }
 }

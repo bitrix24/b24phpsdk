@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\Paysystem\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Paysystem\Service\Paysystem;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
@@ -39,7 +39,7 @@ class PaysystemBatchTest extends TestCase
      */
     private function getPersonTypeId(): int
     {
-        $personTypeService = Fabric::getServiceBuilder()->getSaleScope()->personType();
+        $personTypeService = Factory::getServiceBuilder()->getSaleScope()->personType();
         $personTypesResult = $personTypeService->list();
         
         if ($personTypesResult->getPersonTypes() !== []) {
@@ -55,7 +55,7 @@ class PaysystemBatchTest extends TestCase
      */
     private function createTestHandler(): string
     {
-        $handlerService = Fabric::getServiceBuilder()->getPaysystemScope()->handler();
+        $handlerService = Factory::getServiceBuilder()->getPaysystemScope()->handler();
         $handlerName = 'Test Handler ' . time();
         $handlerCode = 'test_handler_' . time();
         $handlerSettings = [
@@ -95,7 +95,7 @@ class PaysystemBatchTest extends TestCase
     private function deleteTestHandlerByCode(string $handlerCode): void
     {
         try {
-            $handlerService = Fabric::getServiceBuilder()->getPaysystemScope()->handler();
+            $handlerService = Factory::getServiceBuilder()->getPaysystemScope()->handler();
             $handlers = $handlerService->list();
             foreach ($handlers->getHandlers() as $handlerItemResult) {
                 if ($handlerItemResult->CODE === $handlerCode) {
@@ -280,7 +280,7 @@ class PaysystemBatchTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->paysystemService = Fabric::getServiceBuilder()->getPaysystemScope()->paysystem();
+        $this->paysystemService = Factory::getServiceBuilder()->getPaysystemScope()->paysystem();
     }
 
     protected function tearDown(): void
@@ -295,7 +295,7 @@ class PaysystemBatchTest extends TestCase
     private function cleanupTestHandlers(): void
     {
         try {
-            $handlerService = Fabric::getServiceBuilder()->getPaysystemScope()->handler();
+            $handlerService = Factory::getServiceBuilder()->getPaysystemScope()->handler();
             $handlers = $handlerService->list();
             foreach ($handlers->getHandlers() as $handlerItemResult) {
                 if (str_contains($handlerItemResult->CODE, 'test_handler_')) {

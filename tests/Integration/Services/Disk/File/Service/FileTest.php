@@ -20,7 +20,7 @@ use Bitrix24\SDK\Services\Disk\File\Result\FileItemResult;
 use Bitrix24\SDK\Services\Disk\File\Service\File;
 use Bitrix24\SDK\Services\Disk\Folder\Service\Folder;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -52,8 +52,8 @@ class FileTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->fileService = Fabric::getServiceBuilder()->getDiskScope()->file();
-        $this->folderService = Fabric::getServiceBuilder()->getDiskScope()->folder();
+        $this->fileService = Factory::getServiceBuilder()->getDiskScope()->file();
+        $this->folderService = Factory::getServiceBuilder()->getDiskScope()->folder();
     }
 
     public function testAllSystemFieldsAnnotated(): void
@@ -407,7 +407,7 @@ class FileTest extends TestCase
     protected function getRootFolderId(): int
     {
         // Get user's personal storage root folder
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         $response = $core->call('disk.storage.getlist', [
             'filter' => [
                 'ENTITY_TYPE' => 'user'

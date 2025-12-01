@@ -25,7 +25,7 @@
     }
   },
   "require": {
-    "php": "8.2.* || 8.3.* || 8.4.*",
+    "php": "8.4.* || 8.5.*",
     "ext-json": "*",
     "ext-curl": "*",
     "ext-intl": "*",
@@ -64,7 +64,7 @@
     "symfony/stopwatch": "^6 || ^7",
     "symfony/var-dumper": "^6 || ^7",
     "typhoon/reflection": "^0.4",
-    "sentry/sentry":"^4"
+    "sentry/sentry": "^4"
   },
   "autoload": {
     "psr-4": {

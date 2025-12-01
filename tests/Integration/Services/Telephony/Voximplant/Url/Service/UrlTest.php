@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Integration\Services\Telephony\Voximplant\Url\Service;
 
 use Bitrix24\SDK\Services\Telephony\Voximplant\Url\Service\Url;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -37,6 +37,6 @@ class UrlTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->url = Fabric::getServiceBuilder(true)->getTelephonyScope()->getVoximplantServiceBuilder()->url();
+        $this->url = Factory::getServiceBuilder(true)->getTelephonyScope()->getVoximplantServiceBuilder()->url();
     }
 }

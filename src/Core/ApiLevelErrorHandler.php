@@ -21,6 +21,7 @@ use Bitrix24\SDK\Core\Exceptions\MethodNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\OperationTimeLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\PaymentRequiredException;
 use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
+use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Exceptions\UserNotFoundOrIsNotActiveException;
 use Bitrix24\SDK\Core\Exceptions\WrongAuthTypeException;
 use Bitrix24\SDK\Core\Exceptions\WrongClientException;
@@ -87,7 +88,9 @@ class ApiLevelErrorHandler
     private function handleError(array $responseBody, ?string $batchCommandId = null): void
     {
         $errorCode = strtolower(trim((string)$responseBody[self::ERROR_KEY]));
-        $errorDescription = array_key_exists(self::ERROR_DESCRIPTION_KEY, $responseBody) ? strtolower(trim((string)$responseBody[self::ERROR_DESCRIPTION_KEY])) : null;
+        $errorDescription = array_key_exists(self::ERROR_DESCRIPTION_KEY, $responseBody) ? strtolower(
+            trim((string)$responseBody[self::ERROR_DESCRIPTION_KEY])
+        ) : null;
 
         $this->logger->debug(
             'handle.errorInformation',
@@ -104,20 +107,20 @@ class ApiLevelErrorHandler
 
         // todo send issues to bitrix24
         // fix errors without error_code responses
-        if ($errorCode === '' && strtolower((string) $errorDescription) === strtolower('You can delete ONLY templates created by current application')) {
+        if ($errorCode === '' && strtolower((string)$errorDescription) === strtolower('You can delete ONLY templates created by current application')) {
             $errorCode = 'bizproc_workflow_template_access_denied';
         }
 
-        if ($errorCode === '' && strtolower((string) $errorDescription) === strtolower('No fields to update.')) {
+        if ($errorCode === '' && strtolower((string)$errorDescription) === strtolower('No fields to update.')) {
             $errorCode = 'bad_request_no_fields_to_update';
         }
 
-        if ($errorCode === '' && strtolower((string) $errorDescription) === strtolower('User is not found or is not active')) {
+        if ($errorCode === '' && strtolower((string)$errorDescription) === strtolower('User is not found or is not active')) {
             $errorCode = 'user_not_found_or_is_not_active';
         }
 
         // crm.requisite.get
-        if ($errorCode === '' && str_contains(strtolower((string)$errorDescription),'not found')) {
+        if ($errorCode === '' && str_contains(strtolower((string)$errorDescription), 'not found')) {
             $errorCode = 'error_not_found';
         }
 
@@ -130,7 +133,9 @@ class ApiLevelErrorHandler
         // NO_AUTH_FOUND
         // INSUFFICIENT_SCOPE
 
-        switch ($errorCode) {
+        switch (strtolower($errorCode)) {
+            case 'internal_server_error':
+                throw new TransportException(sprintf('%s - %s', $errorCode, $errorDescription));
             case 'error_task_completed':
                 throw new WorkflowTaskAlreadyCompletedException(sprintf('%s - %s', $errorCode, $errorDescription));
             case 'bad_request_no_fields_to_update':

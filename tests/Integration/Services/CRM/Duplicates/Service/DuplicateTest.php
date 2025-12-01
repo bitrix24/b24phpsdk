@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
 use Bitrix24\SDK\Services\CRM\Duplicates\Service\Duplicate;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Duplicates\Service\Duplicate::class)]
@@ -78,8 +78,8 @@ class DuplicateTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->contactService = Fabric::getServiceBuilder()->getCRMScope()->contact();
-        $this->duplicate = Fabric::getServiceBuilder()->getCRMScope()->duplicate();
+        $this->contactService = Factory::getServiceBuilder()->getCRMScope()->contact();
+        $this->duplicate = Factory::getServiceBuilder()->getCRMScope()->duplicate();
 
     }
 }

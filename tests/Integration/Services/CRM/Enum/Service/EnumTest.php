@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Enum\Service;
 
 use Bitrix24\SDK\Services\CRM\Enum\Service\Enum;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -108,6 +108,6 @@ class EnumTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->enumService = Fabric::getServiceBuilder()->getCRMScope()->enum();
+        $this->enumService = Factory::getServiceBuilder()->getCRMScope()->enum();
     }
 }

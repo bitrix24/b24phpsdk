@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Activity\ReadModel;
 
 use Bitrix24\SDK\Services\CRM\Activity\ReadModel\EmailFetcher;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Activity\ReadModel\WebFormFetcher::class)]
@@ -44,6 +44,6 @@ class EmailFetcherTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->emailFetcher = Fabric::getServiceBuilder()->getCRMScope()->activityFetcher()->emailFetcher();
+        $this->emailFetcher = Factory::getServiceBuilder()->getCRMScope()->activityFetcher()->emailFetcher();
     }
 }

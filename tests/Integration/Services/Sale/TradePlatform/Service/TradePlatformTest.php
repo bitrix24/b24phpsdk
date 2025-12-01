@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Integration\Services\Sale\TradePlatform\Service;
 
 use Bitrix24\SDK\Services\Sale\TradePlatform\Service\TradePlatform;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
@@ -60,6 +60,6 @@ class TradePlatformTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->tradePlatformService = Fabric::getServiceBuilder()->getSaleScope()->tradePlatform();
+        $this->tradePlatformService = Factory::getServiceBuilder()->getSaleScope()->tradePlatform();
     }
 }

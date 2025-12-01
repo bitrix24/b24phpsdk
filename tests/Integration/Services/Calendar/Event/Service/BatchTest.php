@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Calendar\Event\Service\Event;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -46,7 +46,7 @@ class BatchTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->serviceBuilder = Fabric::getServiceBuilder();
+        $this->serviceBuilder = Factory::getServiceBuilder();
         $this->eventService = $this->serviceBuilder->getCalendarScope()->event();
 
         // Get current user ID
