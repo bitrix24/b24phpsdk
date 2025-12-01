@@ -99,10 +99,10 @@ readonly class EndpointUrlFormatter
             ) && $parameters['IS_NEED_OAUTH_SECURE_CHECK']) {
                 // call method on vendor OAUTH server
                 $url = sprintf('%s/rest/%s', $credentials->getEndpoints()->getAuthServerUrl(), $apiMethod);
-            } else {
-
-                //todo add support for v3 api
+            } elseif ($apiVersion->isV3()) {
                 // work with portal
+                $url = sprintf('%s/rest/api/%s', $credentials->getDomainUrl(), $apiMethod);
+            } else {
                 $url = sprintf('%s/rest/%s', $credentials->getDomainUrl(), $apiMethod);
             }
         }
