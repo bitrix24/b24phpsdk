@@ -78,7 +78,7 @@ class TaskTest extends TestCase
     {
         $taskItem = $this->taskService->get(
             26,
-            new TaskItemSelectBuilder()
+            (new TaskItemSelectBuilder())
                 ->title()
                 ->creatorId()
                 ->creator()
