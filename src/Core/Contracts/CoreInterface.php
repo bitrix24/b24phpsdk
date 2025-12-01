@@ -33,7 +33,7 @@ interface CoreInterface
      * @throws BaseException
      * @throws TransportException
      */
-    public function call(string $apiMethod, array $parameters = [], ApiVersion $version = ApiVersion::v1): Response;
+    public function call(string $apiMethod, array $parameters = [], ApiVersion $apiVersion = ApiVersion::v1): Response;
 
     public function getApiClient(): ApiClientInterface;
 }

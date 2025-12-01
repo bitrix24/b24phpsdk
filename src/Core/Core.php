@@ -43,30 +43,27 @@ class Core implements CoreInterface
 
     /**
      * @param non-empty-string $apiMethod
-     * @param array $parameters
-     * @param ApiVersion $version
-     * @return Response
      * @throws BaseException
      * @throws InvalidArgumentException
      * @throws MethodConfirmWaitingException
      * @throws QueryLimitExceededException
      * @throws TransportException
      */
-    public function call(string $apiMethod, array $parameters = [], ApiVersion $version = ApiVersion::v1): Response
+    public function call(string $apiMethod, array $parameters = [], ApiVersion $apiVersion = ApiVersion::v1): Response
     {
         $this->logger->debug(
             'call.start',
             [
                 'apiMethod' => $apiMethod,
                 'parameters' => $parameters,
-                'ApiVersion' => $version->value,
+                'apiVersion' => $apiVersion->value,
             ]
         );
 
         $response = null;
         try {
             // make async request
-            $apiCallResponse = $this->apiClient->getResponse($apiMethod, $parameters, version: $version);
+            $apiCallResponse = $this->apiClient->getResponse($apiMethod, $parameters, apiVersion: $apiVersion);
             $this->logger->debug(
                 'call.responseInfo',
                 [
@@ -78,7 +75,7 @@ class Core implements CoreInterface
                     //todo check with empty response size from server
                     $response = new Response(
                         $apiCallResponse,
-                        new Command($apiMethod, $parameters, version: $version),
+                        new Command($apiMethod, $parameters, version: $apiVersion),
                         $this->apiLevelErrorHandler,
                         $this->logger
                     );
@@ -95,7 +92,7 @@ class Core implements CoreInterface
                     ]);
 
                     // repeat api-call to new domain url
-                    $response = $this->call($apiMethod, $parameters, $version);
+                    $response = $this->call($apiMethod, $parameters, $apiVersion);
                     $this->logger->debug(
                         'api call repeated to new domain url',
                         [

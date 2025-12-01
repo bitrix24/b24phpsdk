@@ -42,7 +42,8 @@ class CoreBuilder
     private readonly ApiLevelErrorHandler $apiLevelErrorHandler;
 
     private RequestIdGeneratorInterface $requestIdGenerator;
-    private EndpointUrlFormatter $endpointUrlFormatter;
+
+    private readonly EndpointUrlFormatter $endpointUrlFormatter;
 
     /**
      * CoreBuilder constructor.

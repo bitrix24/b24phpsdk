@@ -155,7 +155,7 @@ class ApiClient implements ApiClientInterface
      * @throws TransportExceptionInterface
      * @throws InvalidArgumentException
      */
-    public function getResponse(string $apiMethod, array $parameters = [], ApiVersion $version = ApiVersion::v1): ResponseInterface
+    public function getResponse(string $apiMethod, array $parameters = [], ApiVersion $apiVersion = ApiVersion::v1): ResponseInterface
     {
         $requestId = $this->requestIdGenerator->getRequestId();
         $this->logger->info(
@@ -164,7 +164,7 @@ class ApiClient implements ApiClientInterface
                 'apiMethod' => $apiMethod,
                 'domainUrl' => $this->credentials->getDomainUrl(),
                 'parameters' => $parameters,
-                'apiVersion' => $version->value,
+                'apiVersion' => $apiVersion->value,
                 'requestId' => $requestId
             ]
         );
@@ -176,8 +176,9 @@ class ApiClient implements ApiClientInterface
 
             $parameters['auth'] = $this->getCredentials()->getAuthToken()->accessToken;
         }
+
         $method = 'POST';
-        $url = $this->urlFormatter->format($version, $this->credentials, $apiMethod, $parameters, $requestId);
+        $url = $this->urlFormatter->format($apiVersion, $this->credentials, $apiMethod, $parameters, $requestId);
         $requestOptions = [
             'json' => $parameters,
             'headers' => array_merge(

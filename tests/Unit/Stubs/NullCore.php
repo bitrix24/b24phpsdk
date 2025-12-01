@@ -34,11 +34,10 @@ class NullCore implements CoreInterface
     /**
      *
      * @param non-empty-string $apiMethod
-     * @param array $parameters
-     * @param positive-int $version
+     * @param positive-int $apiVersion
      * @throws Exception
      */
-    public function call(string $apiMethod, array $parameters = [], ApiVersion $version = ApiVersion::v1): Response
+    public function call(string $apiMethod, array $parameters = [], ApiVersion $apiVersion = ApiVersion::v1): Response
     {
         return new Response(new MockResponse(''), new Command('', []), new ApiLevelErrorHandler(new  NullLogger()), new NullLogger());
     }

@@ -87,24 +87,22 @@ readonly class EndpointUrlFormatter
             } else {
                 $url = sprintf('%s/%s/', $credentials->getWebhookUrl()->getUrl(), $apiMethod);
             }
-        } else {
+        } elseif (($apiMethod === 'app.info') && array_key_exists(
+            'IS_NEED_OAUTH_SECURE_CHECK',
+            $parameters
+        ) && $parameters['IS_NEED_OAUTH_SECURE_CHECK']) {
             // all api calls work with current portal and credentials related with this portal,
             // portal url stored in credentials, but if we work with on-premise installation we can't trust tokens from portal placement or portal event
             // we must make sure that the token is alive that the token corresponds to the portal,
             // "from which" came a request, and that the token corresponds to our application.
             // that's why we call app.info on OAUTH server
-            if (($apiMethod === 'app.info') && array_key_exists(
-                'IS_NEED_OAUTH_SECURE_CHECK',
-                $parameters
-            ) && $parameters['IS_NEED_OAUTH_SECURE_CHECK']) {
-                // call method on vendor OAUTH server
-                $url = sprintf('%s/rest/%s', $credentials->getEndpoints()->getAuthServerUrl(), $apiMethod);
-            } elseif ($apiVersion->isV3()) {
-                // work with portal
-                $url = sprintf('%s/rest/api/%s', $credentials->getDomainUrl(), $apiMethod);
-            } else {
-                $url = sprintf('%s/rest/%s', $credentials->getDomainUrl(), $apiMethod);
-            }
+            // call method on vendor OAUTH server
+            $url = sprintf('%s/rest/%s', $credentials->getEndpoints()->getAuthServerUrl(), $apiMethod);
+        } elseif ($apiVersion->isV3()) {
+            // work with portal
+            $url = sprintf('%s/rest/api/%s', $credentials->getDomainUrl(), $apiMethod);
+        } else {
+            $url = sprintf('%s/rest/%s', $credentials->getDomainUrl(), $apiMethod);
         }
 
         // todo must be fixed by vendor in API v3

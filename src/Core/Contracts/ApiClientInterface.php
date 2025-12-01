@@ -27,7 +27,7 @@ interface ApiClientInterface
      * @throws TransportExceptionInterface
      * @throws InvalidArgumentException
      */
-    public function getResponse(string $apiMethod, array $parameters = [], ApiVersion $version = ApiVersion::v1): ResponseInterface;
+    public function getResponse(string $apiMethod, array $parameters = [], ApiVersion $apiVersion = ApiVersion::v1): ResponseInterface;
 
     /**
      * @throws InvalidArgumentException
