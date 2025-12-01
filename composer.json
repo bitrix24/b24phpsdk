@@ -76,5 +76,16 @@
       "Bitrix24\\SDK\\Tools\\": "tools",
       "Bitrix24\\SDK\\Tests\\": "tests"
     }
+  },
+  "scripts": {
+    "phpunit-run-unit-tests": [
+      "phpunit --testsuite unit_tests"
+    ],
+    "phpunit-run-integration-tests": [
+      "phpunit --testsuite integration_tests"
+    ],
+    "phpstan-analyse": [
+      "vendor/bin/phpstan analyse --memory-limit 1G"
+    ]
   }
 }
