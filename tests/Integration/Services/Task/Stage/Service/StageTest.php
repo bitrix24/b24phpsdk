@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Services\Task\Stage\Service\Stage;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -48,8 +48,8 @@ class StageTest extends TestCase
     
     protected function setUp(): void
     {
-        $this->stageService = Fabric::getServiceBuilder()->getTaskScope()->stage();
-        $this->userId = Fabric::getServiceBuilder()->getUserScope()->user()->current()->user()->ID;
+        $this->stageService = Factory::getServiceBuilder()->getTaskScope()->stage();
+        $this->userId = Factory::getServiceBuilder()->getUserScope()->user()->current()->user()->ID;
         $stages = $this->stageService->get(0)->getStages();
         $this->afterStageId = intval($stages[0]->ID);
     }
@@ -126,7 +126,7 @@ class StageTest extends TestCase
         self::assertTrue($this->stageService->moveTask($taskId, $itemId)->isSuccess());
         self::assertTrue($this->stageService->moveTask($taskId, $this->afterStageId)->isSuccess());
         
-        self::assertTrue(Fabric::getServiceBuilder()->getTaskScope()->task()->delete($taskId)->isSuccess());
+        self::assertTrue(Factory::getServiceBuilder()->getTaskScope()->task()->delete($taskId)->isSuccess());
         $this->stageService->delete($itemId, true);
     }
     
@@ -141,7 +141,7 @@ class StageTest extends TestCase
             return $taskId;
         }
         
-        $taskId = Fabric::getServiceBuilder()->getTaskScope()->task()->add(
+        $taskId = Factory::getServiceBuilder()->getTaskScope()->task()->add(
             [
                 'TITLE' => $title,
                 'RESPONSIBLE_ID' => $this->userId,

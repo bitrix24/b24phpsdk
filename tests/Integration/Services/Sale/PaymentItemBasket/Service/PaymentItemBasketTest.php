@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Services\Sale\PaymentItemBasket\Result\PaymentItemBasketItemResult;
 use Bitrix24\SDK\Services\Sale\PaymentItemBasket\Service\PaymentItemBasket;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -53,7 +53,7 @@ class PaymentItemBasketTest extends TestCase
 
     protected function setUp(): void
     {
-        $serviceBuilder = Fabric::getServiceBuilder();
+        $serviceBuilder = Factory::getServiceBuilder();
         $this->paymentItemBasketService = $serviceBuilder->getSaleScope()->paymentItemBasket();
         $this->personTypeId = $this->getPersonTypeId();
         $this->paySystemId = $this->getPaySystemId();
@@ -93,7 +93,7 @@ class PaymentItemBasketTest extends TestCase
      */
     protected function getPersonTypeId(): int
     {
-        $personTypeService = Fabric::getServiceBuilder()->getSaleScope()->personType();
+        $personTypeService = Factory::getServiceBuilder()->getSaleScope()->personType();
         return $personTypeService->add([
             'name' => 'Test Person Type for PaymentItemBasket',
             'sort' => 100,
@@ -105,7 +105,7 @@ class PaymentItemBasketTest extends TestCase
      */
     protected function deletePersonType(int $id): void
     {
-        $personTypeService = Fabric::getServiceBuilder()->getSaleScope()->personType();
+        $personTypeService = Factory::getServiceBuilder()->getSaleScope()->personType();
         $personTypeService->delete($id);
     }
 
@@ -115,7 +115,7 @@ class PaymentItemBasketTest extends TestCase
      */
     protected function getPaySystemId(): int
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         $response = $core->call('sale.paysystem.list', [
             'select' => ['id'],
             'filter' => ['active' => 'Y'],
@@ -133,7 +133,7 @@ class PaymentItemBasketTest extends TestCase
      */
     protected function createTestOrder(): int
     {
-        $orderService = Fabric::getServiceBuilder()->getSaleScope()->order();
+        $orderService = Factory::getServiceBuilder()->getSaleScope()->order();
         $orderFields = [
             'lid' => 's1',
             'personTypeId' => $this->personTypeId,
@@ -149,7 +149,7 @@ class PaymentItemBasketTest extends TestCase
      */
     protected function deleteTestOrder(int $id): void
     {
-        $orderService = Fabric::getServiceBuilder()->getSaleScope()->order();
+        $orderService = Factory::getServiceBuilder()->getSaleScope()->order();
         try {
             $orderService->delete($id);
         } catch (\Exception) {
@@ -162,7 +162,7 @@ class PaymentItemBasketTest extends TestCase
      */
     protected function createTestPayment(): int
     {
-        $paymentService = Fabric::getServiceBuilder()->getSaleScope()->payment();
+        $paymentService = Factory::getServiceBuilder()->getSaleScope()->payment();
         $paymentFields = [
             'orderId' => $this->orderId,
             'paySystemId' => $this->paySystemId,
@@ -178,7 +178,7 @@ class PaymentItemBasketTest extends TestCase
      */
     protected function deleteTestPayment(int $id): void
     {
-        $paymentService = Fabric::getServiceBuilder()->getSaleScope()->payment();
+        $paymentService = Factory::getServiceBuilder()->getSaleScope()->payment();
         try {
             $paymentService->delete($id);
         } catch (\Exception) {
@@ -191,7 +191,7 @@ class PaymentItemBasketTest extends TestCase
      */
     protected function createTestBasketItem(): int
     {
-        $basketItemService = Fabric::getServiceBuilder()->getSaleScope()->basketItem();
+        $basketItemService = Factory::getServiceBuilder()->getSaleScope()->basketItem();
         $basketItemFields = [
             'orderId' => $this->orderId,
             'productId' => 0,
@@ -209,7 +209,7 @@ class PaymentItemBasketTest extends TestCase
      */
     protected function deleteTestBasketItem(int $id): void
     {
-        $basketItemService = Fabric::getServiceBuilder()->getSaleScope()->basketItem();
+        $basketItemService = Factory::getServiceBuilder()->getSaleScope()->basketItem();
         try {
             $basketItemService->delete($id);
         } catch (\Exception) {

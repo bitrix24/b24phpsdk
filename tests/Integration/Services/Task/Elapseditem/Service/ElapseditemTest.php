@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Services\Task\Elapseditem\Service\Elapseditem;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -47,7 +47,7 @@ class ElapseditemTest extends TestCase
     
     protected function setUp(): void
     {
-        $this->elapseditemService = Fabric::getServiceBuilder()->getTaskScope()->elapseditem();
+        $this->elapseditemService = Factory::getServiceBuilder()->getTaskScope()->elapseditem();
         $this->taskId = $this->getTaskId();
     }
 
@@ -175,8 +175,8 @@ class ElapseditemTest extends TestCase
             return $taskId;
         }
         
-        $userId = Fabric::getServiceBuilder()->getUserScope()->user()->current()->user()->ID;
-        $taskId = Fabric::getServiceBuilder()->getTaskScope()->task()->add(
+        $userId = Factory::getServiceBuilder()->getUserScope()->user()->current()->user()->ID;
+        $taskId = Factory::getServiceBuilder()->getTaskScope()->task()->add(
             [
                 'TITLE' => $title,
                 'RESPONSIBLE_ID' => $userId,

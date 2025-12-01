@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Lead\Service\Lead;
 use Bitrix24\SDK\Services\CRM\Lead\Service\LeadUserfield;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Lead\Service\LeadUserfield::class)]
@@ -73,8 +73,8 @@ class LeadUserfieldUseCaseTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->leadService = Fabric::getServiceBuilder()->getCRMScope()->lead();
-        $this->leadUserfieldService = Fabric::getServiceBuilder()->getCRMScope()->leadUserfield();
+        $this->leadService = Factory::getServiceBuilder()->getCRMScope()->lead();
+        $this->leadUserfieldService = Factory::getServiceBuilder()->getCRMScope()->leadUserfield();
 
         $this->leadUserfieldId = $this->leadUserfieldService->add(
             [

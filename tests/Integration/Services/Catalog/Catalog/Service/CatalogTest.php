@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\Catalog\Catalog\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Catalog\Catalog\Service\Catalog;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -59,6 +59,6 @@ class CatalogTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->service = Fabric::getServiceBuilder()->getCatalogScope()->catalog();
+        $this->service = Factory::getServiceBuilder()->getCatalogScope()->catalog();
     }
 }

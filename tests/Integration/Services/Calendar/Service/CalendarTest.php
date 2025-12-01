@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Calendar\Result\CalendarSectionItemResult;
 use Bitrix24\SDK\Services\Calendar\Service\Calendar;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -47,7 +47,7 @@ class CalendarTest extends TestCase
 
     protected function setUp(): void
     {
-        $serviceBuilder = Fabric::getServiceBuilder();
+        $serviceBuilder = Factory::getServiceBuilder();
         $this->calendarService = $serviceBuilder->getCalendarScope()->calendar();
         $this->currentUserId = $this->getCurrentUserId();
     }
@@ -69,7 +69,7 @@ class CalendarTest extends TestCase
      */
     protected function getCurrentUserId(): int
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         $response = $core->call('user.current', []);
         return (int)$response->getResponseData()->getResult()['ID'];
     }

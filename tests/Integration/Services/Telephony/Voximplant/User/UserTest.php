@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Telephony\Common\PbxType;
 use Bitrix24\SDK\Services\Telephony\ExternalLine\Service\ExternalLine;
 use Bitrix24\SDK\Services\Telephony\Voximplant\User\Service\User;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -38,7 +38,7 @@ class UserTest extends TestCase
             $this->markTestSkipped('this method needs application context, now webhook context available');
         }
 
-        $userId = Fabric::getServiceBuilder()->getMainScope()->main()->getCurrentUserProfile()->getUserProfile()->ID;
+        $userId = Factory::getServiceBuilder()->getMainScope()->main()->getCurrentUserProfile()->getUserProfile()->ID;
         $this->assertTrue($this->user->deactivatePhone($userId)->isSuccess());
     }
 
@@ -50,7 +50,7 @@ class UserTest extends TestCase
             $this->markTestSkipped('this method needs application context, now webhook context available');
         }
 
-        $userId = Fabric::getServiceBuilder()->getMainScope()->main()->getCurrentUserProfile()->getUserProfile()->ID;
+        $userId = Factory::getServiceBuilder()->getMainScope()->main()->getCurrentUserProfile()->getUserProfile()->ID;
         $this->assertTrue($this->user->activatePhone($userId)->isSuccess());
     }
 
@@ -67,7 +67,7 @@ class UserTest extends TestCase
         }
 
         try {
-            $userId = Fabric::getServiceBuilder()->getMainScope()->main()->getCurrentUserProfile()->getUserProfile()->ID;
+            $userId = Factory::getServiceBuilder()->getMainScope()->main()->getCurrentUserProfile()->getUserProfile()->ID;
             $users = $this->user->get([$userId, 2, 3]);
             $this->assertGreaterThanOrEqual(1, count($users->getUsers()));
         } catch (MethodConfirmWaitingException) {
@@ -77,6 +77,6 @@ class UserTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->user = Fabric::getServiceBuilder(true)->getTelephonyScope()->getVoximplantServiceBuilder()->user();
+        $this->user = Factory::getServiceBuilder(true)->getTelephonyScope()->getVoximplantServiceBuilder()->user();
     }
 }

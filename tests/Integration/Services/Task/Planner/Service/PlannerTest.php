@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Services\Task\Planner\Service\Planner;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -38,7 +38,7 @@ class PlannerTest extends TestCase
     
     protected function setUp(): void
     {
-        $this->plannerService = Fabric::getServiceBuilder()->getTaskScope()->planner();
+        $this->plannerService = Factory::getServiceBuilder()->getTaskScope()->planner();
     }
 
     /**

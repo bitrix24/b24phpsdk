@@ -21,7 +21,6 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Tests\Application\Contracts\Bitrix24Accounts\Repository\Bitrix24AccountRepositoryInterfaceTest;
 use Bitrix24\SDK\Tests\Application\Contracts\NullableFlusher;
 use Bitrix24\SDK\Tests\Application\Contracts\TestRepositoryFlusherInterface;
-use Bitrix24\SDK\Tests\Integration\Fabric;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountReferenceEntityImplementation;
 use Carbon\CarbonImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;

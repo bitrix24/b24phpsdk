@@ -15,7 +15,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\Task\Userfield\Service;
 
 use Bitrix24\SDK\Services\Task\Userfield\Service\Userfield;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\Userfield\SystemUserfieldBuilder;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -36,7 +36,7 @@ class UserfieldTest extends TestCase
     
     protected function setUp(): void
     {
-        $this->userfieldService = Fabric::getServiceBuilder()->getTaskScope()->userfield();
+        $this->userfieldService = Factory::getServiceBuilder()->getTaskScope()->userfield();
         $this->userfieldService->getList([], []);
     }
 

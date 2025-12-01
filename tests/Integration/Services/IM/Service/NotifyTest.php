@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\IM\Notify\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\IM\Notify\Service\Notify;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -164,6 +164,6 @@ class NotifyTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->imNotifyService = Fabric::getServiceBuilder()->getIMScope()->notify();
+        $this->imNotifyService = Factory::getServiceBuilder()->getIMScope()->notify();
     }
 }

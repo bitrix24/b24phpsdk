@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Services\Sale\ShipmentProperty\Result\ShipmentPropertyItemResult;
 use Bitrix24\SDK\Services\Sale\ShipmentProperty\Service\ShipmentProperty;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -56,7 +56,7 @@ class ShipmentPropertyTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->shipmentPropertyService = Fabric::getServiceBuilder()->getSaleScope()->shipmentProperty();
+        $this->shipmentPropertyService = Factory::getServiceBuilder()->getSaleScope()->shipmentProperty();
         $this->propertyName = 'Test Shipment Property ' . uniqid();
         $this->personTypeId = $this->getPersonTypeId();
         $this->propertyGroupId = $this->getPropertyGroupId();
@@ -296,7 +296,7 @@ class ShipmentPropertyTest extends TestCase
      */
     protected function getPersonTypeId(): int
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         return (int)$core->call('sale.persontype.add', [
             'fields' => [
                 'name' => 'Test Person Type ' . uniqid(),
@@ -311,7 +311,7 @@ class ShipmentPropertyTest extends TestCase
     protected function deletePersonType(int $id): void
     {
         try {
-            $core = Fabric::getCore();
+            $core = Factory::getCore();
             $core->call('sale.persontype.delete', [
                 'id' => $id
             ]);
@@ -325,7 +325,7 @@ class ShipmentPropertyTest extends TestCase
      */
     protected function getPropertyGroupId(): int
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         return (int)$core->call('sale.propertygroup.add', [
             'fields' => [
                 'name' => 'Test Property Group ' . uniqid(),
@@ -341,7 +341,7 @@ class ShipmentPropertyTest extends TestCase
     protected function deletePropertyGroup(int $id): void
     {
         try {
-            $core = Fabric::getCore();
+            $core = Factory::getCore();
             $core->call('sale.propertygroup.delete', [
                 'id' => $id
             ]);

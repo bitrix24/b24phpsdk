@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Services\Sale\PropertyRelation\Result\PropertyRelationItemResult;
 use Bitrix24\SDK\Services\Sale\PropertyRelation\Service\PropertyRelation;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -49,7 +49,7 @@ class PropertyRelationTest extends TestCase
 
     protected function setUp(): void
     {
-        $serviceBuilder = Fabric::getServiceBuilder();
+        $serviceBuilder = Factory::getServiceBuilder();
         $this->propertyRelationService = $serviceBuilder->getSaleScope()->propertyRelation();
         $this->personTypeId = $this->getPersonTypeId();
         $this->propsGroupId = $this->createTestPropertyGroup();
@@ -87,7 +87,7 @@ class PropertyRelationTest extends TestCase
      */
     protected function getPersonTypeId(): int
     {
-        $personTypeService = Fabric::getServiceBuilder()->getSaleScope()->personType();
+        $personTypeService = Factory::getServiceBuilder()->getSaleScope()->personType();
         return $personTypeService->add([
             'name' => 'Test Person Type for PropertyRelation',
             'sort' => 100,
@@ -99,7 +99,7 @@ class PropertyRelationTest extends TestCase
      */
     protected function deletePersonType(int $id): void
     {
-        $personTypeService = Fabric::getServiceBuilder()->getSaleScope()->personType();
+        $personTypeService = Factory::getServiceBuilder()->getSaleScope()->personType();
         $personTypeService->delete($id);
     }
 
@@ -108,7 +108,7 @@ class PropertyRelationTest extends TestCase
      */
     protected function createTestPropertyGroup(): int
     {
-        $propertyGroupService = Fabric::getServiceBuilder()->getSaleScope()->propertyGroup();
+        $propertyGroupService = Factory::getServiceBuilder()->getSaleScope()->propertyGroup();
         return $propertyGroupService->add([
             'personTypeId' => $this->personTypeId,
             'name' => 'Test Property Group for PropertyRelation',
@@ -121,7 +121,7 @@ class PropertyRelationTest extends TestCase
      */
     protected function deleteTestPropertyGroup(int $id): void
     {
-        $propertyGroupService = Fabric::getServiceBuilder()->getSaleScope()->propertyGroup();
+        $propertyGroupService = Factory::getServiceBuilder()->getSaleScope()->propertyGroup();
         try {
             $propertyGroupService->delete($id);
         } catch (\Exception) {
@@ -135,7 +135,7 @@ class PropertyRelationTest extends TestCase
      */
     protected function getDeliveryServiceId(): int
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         $response = $core->call('sale.delivery.getlist', [
             'select' => ['ID'],
             'filter' => ['ACTIVE' => 'Y'],
@@ -153,7 +153,7 @@ class PropertyRelationTest extends TestCase
      */
     protected function createTestProperty(): int
     {
-        $propertyService = Fabric::getServiceBuilder()->getSaleScope()->property();
+        $propertyService = Factory::getServiceBuilder()->getSaleScope()->property();
         $propertyFields = [
             'personTypeId' => $this->personTypeId,
             'propsGroupId' => $this->propsGroupId,
@@ -172,7 +172,7 @@ class PropertyRelationTest extends TestCase
      */
     protected function deleteTestProperty(int $id): void
     {
-        $propertyService = Fabric::getServiceBuilder()->getSaleScope()->property();
+        $propertyService = Factory::getServiceBuilder()->getSaleScope()->property();
         try {
             $propertyService->delete($id);
         } catch (\Exception) {

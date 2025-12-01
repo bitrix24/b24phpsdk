@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Services\Task\Commentitem\Service\Commentitem;
 use Bitrix24\SDK\Services\Task\TaskResult\Service\Result;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -47,9 +47,9 @@ class ResultTest extends TestCase
     
     protected function setUp(): void
     {
-        $this->commentitemService = Fabric::getServiceBuilder()->getTaskScope()->commentitem();
-        $this->resultService = Fabric::getServiceBuilder()->getTaskScope()->result();
-        $this->userId = Fabric::getServiceBuilder()->getUserScope()->user()->current()->user()->ID;
+        $this->commentitemService = Factory::getServiceBuilder()->getTaskScope()->commentitem();
+        $this->resultService = Factory::getServiceBuilder()->getTaskScope()->result();
+        $this->userId = Factory::getServiceBuilder()->getUserScope()->user()->current()->user()->ID;
         $this->taskId = $this->getTaskId();
     }
 
@@ -136,7 +136,7 @@ class ResultTest extends TestCase
             return $taskId;
         }
         
-        $taskId = Fabric::getServiceBuilder()->getTaskScope()->task()->add(
+        $taskId = Factory::getServiceBuilder()->getTaskScope()->task()->add(
             [
                 'TITLE' => $title,
                 'RESPONSIBLE_ID' => $this->userId,

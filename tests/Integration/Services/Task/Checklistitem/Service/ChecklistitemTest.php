@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Services\Task\Checklistitem\Service\Checklistitem;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -50,7 +50,7 @@ class ChecklistitemTest extends TestCase
     
     protected function setUp(): void
     {
-        $this->checklistitemService = Fabric::getServiceBuilder()->getTaskScope()->checklistitem();
+        $this->checklistitemService = Factory::getServiceBuilder()->getTaskScope()->checklistitem();
         $this->taskId = $this->getTaskId();
     }
 
@@ -215,8 +215,8 @@ class ChecklistitemTest extends TestCase
             return $taskId;
         }
         
-        $userId = Fabric::getServiceBuilder()->getUserScope()->user()->current()->user()->ID;
-        $taskId = Fabric::getServiceBuilder()->getTaskScope()->task()->add(
+        $userId = Factory::getServiceBuilder()->getUserScope()->user()->current()->user()->ID;
+        $taskId = Factory::getServiceBuilder()->getTaskScope()->task()->add(
             [
                 'TITLE' => $title,
                 'RESPONSIBLE_ID' => $userId,

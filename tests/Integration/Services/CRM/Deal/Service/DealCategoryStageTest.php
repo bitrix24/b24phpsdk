@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Deal\Service\DealCategory;
 use Bitrix24\SDK\Services\CRM\Deal\Service\DealCategoryStage;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -48,7 +48,7 @@ class DealCategoryStageTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->dealCategoryStage = Fabric::getServiceBuilder()->getCRMScope()->dealCategoryStage();
-        $this->dealCategory = Fabric::getServiceBuilder()->getCRMScope()->dealCategory();
+        $this->dealCategoryStage = Factory::getServiceBuilder()->getCRMScope()->dealCategoryStage();
+        $this->dealCategory = Factory::getServiceBuilder()->getCRMScope()->dealCategory();
     }
 }

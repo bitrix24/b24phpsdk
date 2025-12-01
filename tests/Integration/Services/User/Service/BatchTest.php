@@ -15,7 +15,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\User\Service;
 
 use Bitrix24\SDK\Services\User\Service\Batch;
 use Bitrix24\SDK\Services\User\Service\User;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -61,6 +61,6 @@ class BatchTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->userService = Fabric::getServiceBuilder()->getUserScope()->user();
+        $this->userService = Factory::getServiceBuilder()->getUserScope()->user();
     }
 }

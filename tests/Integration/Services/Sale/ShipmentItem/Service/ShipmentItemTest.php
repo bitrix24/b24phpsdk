@@ -15,7 +15,7 @@ use Bitrix24\SDK\Services\Sale\Shipment\Service\Shipment;
 use Bitrix24\SDK\Services\Sale\ShipmentItem\Result\ShipmentItemItemResult;
 use Bitrix24\SDK\Services\Sale\ShipmentItem\Service\ShipmentItem;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -46,7 +46,7 @@ class ShipmentItemTest extends TestCase
 
     protected function setUp(): void
     {
-        $saleServiceBuilder = Fabric::getServiceBuilder()->getSaleScope();
+        $saleServiceBuilder = Factory::getServiceBuilder()->getSaleScope();
         $this->shipmentItemService = $saleServiceBuilder->shipmentItem();
         $this->shipmentService = $saleServiceBuilder->shipment();
 
@@ -79,7 +79,7 @@ class ShipmentItemTest extends TestCase
 
     protected function createPersonType(): int
     {
-        $personTypeService = Fabric::getServiceBuilder()->getSaleScope()->personType();
+        $personTypeService = Factory::getServiceBuilder()->getSaleScope()->personType();
         $addedPersonTypeResult = $personTypeService->add([
             'name' => 'Test Person Type for ShipmentItem',
             'sort' => 100,
@@ -90,13 +90,13 @@ class ShipmentItemTest extends TestCase
 
     protected function deletePersonType(int $id): void
     {
-        $personTypeService = Fabric::getServiceBuilder()->getSaleScope()->personType();
+        $personTypeService = Factory::getServiceBuilder()->getSaleScope()->personType();
         $personTypeService->delete($id);
     }
 
     protected function createOrder(): int
     {
-        $orderService = Fabric::getServiceBuilder()->getSaleScope()->order();
+        $orderService = Factory::getServiceBuilder()->getSaleScope()->order();
         $orderAddedResult = $orderService->add([
             'personTypeId' => $this->personTypeId,
             'userEmail' => 'test@example.com',
@@ -108,7 +108,7 @@ class ShipmentItemTest extends TestCase
 
     protected function deleteOrder(int $id): void
     {
-        $orderService = Fabric::getServiceBuilder()->getSaleScope()->order();
+        $orderService = Factory::getServiceBuilder()->getSaleScope()->order();
         $orderService->delete($id);
     }
 
@@ -118,7 +118,7 @@ class ShipmentItemTest extends TestCase
      */
     protected function getDeliveryId(): int
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         $response = $core->call('sale.delivery.getList', [
             'filter' => ['ACTIVE' => 'Y'],
             'select' => ['ID'],
@@ -145,7 +145,7 @@ class ShipmentItemTest extends TestCase
 
     protected function createBasketItem(): int
     {
-        $basketItem = Fabric::getServiceBuilder()->getSaleScope()->basketItem();
+        $basketItem = Factory::getServiceBuilder()->getSaleScope()->basketItem();
         $addedBasketItemResult = $basketItem->add([
             'orderId' => $this->orderId,
             'productId' => 0, // there is no product from the catalog
@@ -159,7 +159,7 @@ class ShipmentItemTest extends TestCase
 
     protected function deleteBasketItem(int $id): void
     {
-        $basketItem = Fabric::getServiceBuilder()->getSaleScope()->basketItem();
+        $basketItem = Factory::getServiceBuilder()->getSaleScope()->basketItem();
         $basketItem->delete($id);
     }
 

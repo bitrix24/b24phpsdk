@@ -15,7 +15,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Quote\Service;
 
 use Bitrix24\SDK\Services\CRM\Quote\Service\QuoteUserfield;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\Userfield\SystemUserfieldBuilder;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -34,7 +34,7 @@ class QuoteUserfieldTest extends TestCase
     
     protected function setUp(): void
     {
-        $this->userfieldService = Fabric::getServiceBuilder()->getCRMScope()->quoteUserfield();
+        $this->userfieldService = Factory::getServiceBuilder()->getCRMScope()->quoteUserfield();
     }
 
     /**

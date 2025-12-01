@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Paysystem\Settings\Result\SettingsItemResult;
 use Bitrix24\SDK\Services\Paysystem\Settings\Service\Settings;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -50,7 +50,7 @@ class SettingsTest extends TestCase
      */
     private function getPersonTypeId(): int
     {
-        $personTypeService = Fabric::getServiceBuilder()->getSaleScope()->personType();
+        $personTypeService = Factory::getServiceBuilder()->getSaleScope()->personType();
         $personTypesResult = $personTypeService->list();
 
         return $personTypesResult->getPersonTypes()[0]->id;
@@ -65,7 +65,7 @@ class SettingsTest extends TestCase
      */
     private function createTestHandler(): string
     {
-        $handlerService = Fabric::getServiceBuilder()->getPaysystemScope()->handler();
+        $handlerService = Factory::getServiceBuilder()->getPaysystemScope()->handler();
 
         $handlerName = 'Test Settings Handler ' . time();
         $handlerCode = 'test_settings_handler_' . time();
@@ -131,7 +131,7 @@ class SettingsTest extends TestCase
      */
     private function createTestPaymentSystem(string $handlerCode): int
     {
-        $paysystemService = Fabric::getServiceBuilder()->getPaysystemScope()->paysystem();
+        $paysystemService = Factory::getServiceBuilder()->getPaysystemScope()->paysystem();
         $personTypeId = $this->getPersonTypeId();
 
         $name = 'Test Payment System for Settings ' . time();
@@ -162,7 +162,7 @@ class SettingsTest extends TestCase
      */
     private function createTestOrder(int $personTypeId): int
     {
-        $orderService = Fabric::getServiceBuilder()->getSaleScope()->order();
+        $orderService = Factory::getServiceBuilder()->getSaleScope()->order();
         $orderFields = [
             'lid' => 's1',
             'personTypeId' => $personTypeId,
@@ -185,7 +185,7 @@ class SettingsTest extends TestCase
      */
     private function createTestPayment(int $orderId, int $paySystemId): int
     {
-        $paymentService = Fabric::getServiceBuilder()->getSaleScope()->payment();
+        $paymentService = Factory::getServiceBuilder()->getSaleScope()->payment();
         $paymentFields = [
             'orderId' => $orderId,
             'paySystemId' => $paySystemId,
@@ -315,7 +315,7 @@ class SettingsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->settingsService = Fabric::getServiceBuilder()->getPaysystemScope()->settings();
+        $this->settingsService = Factory::getServiceBuilder()->getPaysystemScope()->settings();
         $this->testDataCleanup = [];
     }
 
@@ -333,7 +333,7 @@ class SettingsTest extends TestCase
         try {
             // Delete payment first (if exists)
             if (isset($this->testDataCleanup['payment_id'])) {
-                $paymentService = Fabric::getServiceBuilder()->getSaleScope()->payment();
+                $paymentService = Factory::getServiceBuilder()->getSaleScope()->payment();
                 try {
                     $paymentService->delete($this->testDataCleanup['payment_id']);
                 } catch (\Exception $e) {
@@ -343,7 +343,7 @@ class SettingsTest extends TestCase
 
             // Delete order (if exists)
             if (isset($this->testDataCleanup['order_id'])) {
-                $orderService = Fabric::getServiceBuilder()->getSaleScope()->order();
+                $orderService = Factory::getServiceBuilder()->getSaleScope()->order();
                 try {
                     $orderService->delete($this->testDataCleanup['order_id']);
                 } catch (\Exception $e) {
@@ -353,7 +353,7 @@ class SettingsTest extends TestCase
 
             // Delete payment system (if exists)
             if (isset($this->testDataCleanup['paysystem_id'])) {
-                $paysystemService = Fabric::getServiceBuilder()->getPaysystemScope()->paysystem();
+                $paysystemService = Factory::getServiceBuilder()->getPaysystemScope()->paysystem();
                 try {
                     $paysystemService->delete($this->testDataCleanup['paysystem_id']);
                 } catch (\Exception $e) {
@@ -363,7 +363,7 @@ class SettingsTest extends TestCase
 
             // Delete handler last (if exists)
             if (isset($this->testDataCleanup['handler_code'])) {
-                $handlerService = Fabric::getServiceBuilder()->getPaysystemScope()->handler();
+                $handlerService = Factory::getServiceBuilder()->getPaysystemScope()->handler();
                 try {
                     // We need to get the handler ID first to delete it
                     $handlers = $handlerService->list();

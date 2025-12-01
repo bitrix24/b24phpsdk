@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Deal\Service\Deal;
 use Bitrix24\SDK\Services\CRM\Deal\Service\DealUserfield;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Deal\Service\Deal::class)]
@@ -73,8 +73,8 @@ class DealUserfieldUseCaseTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->dealService = Fabric::getServiceBuilder()->getCRMScope()->deal();
-        $this->dealUserfieldService = Fabric::getServiceBuilder()->getCRMScope()->dealUserfield();
+        $this->dealService = Factory::getServiceBuilder()->getCRMScope()->deal();
+        $this->dealUserfieldService = Factory::getServiceBuilder()->getCRMScope()->dealUserfield();
 
         $this->dealUserfieldId = $this->dealUserfieldService->add(
             [

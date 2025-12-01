@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Entity\Section\Service\Section;
 use Bitrix24\SDK\Services\ServiceBuilder;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -38,7 +38,7 @@ class SectionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->sb = Fabric::getServiceBuilder(true);
+        $this->sb = Factory::getServiceBuilder(true);
         $this->sectionService = $this->sb->getEntityScope()->section();
         $this->entity = (string)time();
         $this->sb->getEntityScope()->entity()->add($this->entity, 'Test entity', []);

@@ -22,7 +22,7 @@ use Bitrix24\SDK\Services\Telephony\Voximplant\InfoCall\Service\InfoCall;
 use Bitrix24\SDK\Services\Telephony\Voximplant\Line\Service\Line;
 use Bitrix24\SDK\Services\Telephony\Voximplant\User\Service\User;
 use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -69,7 +69,7 @@ class InfoCallTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->infoCall = Fabric::getServiceBuilder(false)->getTelephonyScope()->getVoximplantServiceBuilder()->infoCall();
-        $this->line = Fabric::getServiceBuilder(false)->getTelephonyScope()->getVoximplantServiceBuilder()->line();
+        $this->infoCall = Factory::getServiceBuilder(false)->getTelephonyScope()->getVoximplantServiceBuilder()->infoCall();
+        $this->line = Factory::getServiceBuilder(false)->getTelephonyScope()->getVoximplantServiceBuilder()->line();
     }
 }

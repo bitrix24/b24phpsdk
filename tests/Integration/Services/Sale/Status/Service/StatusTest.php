@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Sale\Status\Result\StatusItemResult;
 use Bitrix24\SDK\Services\Sale\Status\Service\Status;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
@@ -46,7 +46,7 @@ class StatusTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->statusService = Fabric::getServiceBuilder()->getSaleScope()->status();
+        $this->statusService = Factory::getServiceBuilder()->getSaleScope()->status();
     }
 
     /**

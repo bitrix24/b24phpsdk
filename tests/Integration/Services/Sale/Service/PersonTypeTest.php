@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Services\Sale\PersonType\Service\PersonType;
 use Bitrix24\SDK\Services\Sale\PersonType\Result\PersonTypeItemResult;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -43,7 +43,7 @@ class PersonTypeTest extends TestCase
     
     protected function setUp(): void
     {
-        $this->personTypeService = Fabric::getServiceBuilder()->getSaleScope()->personType();
+        $this->personTypeService = Factory::getServiceBuilder()->getSaleScope()->personType();
     }
 
     public function testAllSystemFieldsAnnotated(): void
