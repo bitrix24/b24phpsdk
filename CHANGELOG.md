@@ -1,5 +1,108 @@
 # b24-php-sdk change log
 
+## Upcoming 1.9.0 - 2026.01.01
+
+### Added
+
+- Added service `Services\Landing\Site\Service\Site` with support methods,
+  see [landing.site.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
+    - `add` adds a site
+    - `getList` retrieves a list of sites
+    - `update` updates site parameters
+    - `delete` deletes a site
+    - `getPublicUrl` returns the full URL of the site(s)
+    - `getPreview` returns the preview image URL of the site
+    - `publication` publishes the site and all its pages
+    - `unpublic` unpublishes the site and all its pages
+    - `markDelete` marks the site as deleted
+    - `markUnDelete` restores the site from the trash
+    - `getAdditionalFields` returns additional fields of the site
+    - `fullExport` exports the site to ZIP archive
+    - `getFolders` retrieves the site folders
+    - `addFolder` adds a folder to the site
+    - `updateFolder` updates folder parameters
+    - `publicationFolder` publishes the site's folder
+    - `unPublicFolder` unpublishes the site's folder
+    - `markFolderDelete` marks the folder as deleted
+    - `markFolderUnDelete` restores the folder from the trash
+- Added service `Services\Landing\SysPage\Service\SysPage` with support methods,
+  see [landing.syspage.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
+    - `set` sets a special page for the site
+    - `get` retrieves the list of special pages
+    - `getSpecialPage` retrieves the address of the special page on the site
+    - `deleteForLanding` deletes all mentions of the page as a special one
+    - `deleteForSite` deletes all special pages of the site
+- Added service `Services\Landing\Page\Service\Page` with support methods,
+  see [landing.landing.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
+    - `add` adds a page
+    - `addByTemplate` creates a page from a template
+    - `copy` copies a page
+    - `delete` deletes a page
+    - `update` updates page parameters
+    - `getList` retrieves a list of pages
+    - `getAdditionalFields` returns additional fields of the page
+    - `getPreview` returns the preview image URL of the page
+    - `getPublicUrl` returns the full URL of the page
+    - `resolveIdByPublicUrl` resolves page ID by its public URL
+    - `publish` publishes the page
+    - `unpublish` unpublishes the page
+    - `markDeleted` marks the page as deleted
+    - `markUnDeleted` restores the page from the trash
+    - `move` moves a page to another site or folder
+    - `removeEntities` removes entities from the page
+    - `addBlock` adds a block to the page
+    - `copyBlock` copies a block within the page
+    - `deleteBlock` deletes a block from the page
+    - `moveBlockDown` moves a block down on the page
+    - `moveBlockUp` moves a block up on the page
+    - `moveBlock` moves a block to a specific position
+    - `hideBlock` hides a block on the page
+    - `showBlock` shows a block on the page
+    - `markBlockDeleted` marks a block as deleted
+    - `markBlockUnDeleted` restores a block from the trash
+    - `addBlockToFavorites` adds a block to favorites
+    - `removeBlockFromFavorites` removes a block from favorites
+- Added service `Services\Landing\Block\Service\Block` with support methods,
+  see [landing.block.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
+    - `list` retrieves a list of page blocks
+    - `getById` retrieves a block by its identifier
+    - `getContent` retrieves the content of a block
+    - `getManifest` retrieves the manifest of a block
+    - `getRepository` retrieves blocks from the repository
+    - `getManifestFile` retrieves block manifest from repository
+    - `getContentFromRepository` retrieves block content from repository
+    - `updateNodes` updates block content
+    - `updateAttrs` updates block node attributes
+    - `updateStyles` updates block styles
+    - `updateContent` updates block content with arbitrary content
+    - `updateCards` bulk updates block cards
+    - `cloneCard` clones a block card
+    - `addCard` adds a card with modified content
+    - `removeCard` removes a block card
+    - `uploadFile` uploads and attaches image to block
+    - `changeAnchor` changes anchor symbol code
+    - `changeNodeName` changes tag name
+- Added service `Services\Landing\Template\Service\Template` with support methods,
+  see [landing.template.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
+    - `getList` retrieves a list of templates
+    - `getLandingRef` retrieves a list of included areas for the page
+    - `getSiteRef` retrieves a list of included areas for the site
+    - `setLandingRef` sets the included areas for the page
+    - `setSiteRef` sets the included areas for the site
+- Added service `Services\Landing\Repo\Service\Repo` with support methods,
+  see [landing.repo.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
+    - `getList` retrieves a list of blocks from the current application
+    - `register` adds a block to the repository
+    - `unregister` deletes a block from the repository
+    - `checkContent` checks the content for dangerous substrings
+- Added service `Services\Landing\Demos\Service\Demos` with support methods,
+  see [landing.demos.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
+    - `register` registers a template in the site and page creation wizard
+    - `unregister` deletes the registered partner template
+    - `getList` retrieves a list of available partner templates for the current application
+    - `getSiteList` retrieves a list of available templates for creating sites
+    - `getPageList` retrieves a list of available templates for creating pages
+
 ## 1.8.0 - 2025.11.10
 
 ### Added
@@ -126,91 +229,6 @@ Supported in bitrix24-php-sdk methods with batch wrapper count: 91
 
 ### Added
 
-- Added service `Services\Landing\Site\Service\Site` with support methods,
-  see [landing.site.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
-    - `add` adds a site
-    - `getList` retrieves a list of sites
-    - `update` updates site parameters
-    - `delete` deletes a site
-    - `getPublicUrl` returns the full URL of the site(s)
-    - `getPreview` returns the preview image URL of the site
-    - `publication` publishes the site and all its pages
-    - `unpublic` unpublishes the site and all its pages
-    - `markDelete` marks the site as deleted
-    - `markUnDelete` restores the site from the trash
-    - `getAdditionalFields` returns additional fields of the site
-    - `fullExport` exports the site to ZIP archive
-    - `getFolders` retrieves the site folders
-    - `addFolder` adds a folder to the site
-    - `updateFolder` updates folder parameters
-    - `publicationFolder` publishes the site's folder
-    - `unPublicFolder` unpublishes the site's folder
-    - `markFolderDelete` marks the folder as deleted
-    - `markFolderUnDelete` restores the folder from the trash
-- Added service `Services\Landing\SysPage\Service\SysPage` with support methods,
-  see [landing.syspage.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
-    - `set` sets a special page for the site
-    - `get` retrieves the list of special pages
-    - `getSpecialPage` retrieves the address of the special page on the site
-    - `deleteForLanding` deletes all mentions of the page as a special one
-    - `deleteForSite` deletes all special pages of the site
-- Added service `Services\Landing\Page\Service\Page` with support methods,
-  see [landing.landing.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
-    - `add` adds a page
-    - `addByTemplate` creates a page from a template
-    - `copy` copies a page
-    - `delete` deletes a page
-    - `update` updates page parameters
-    - `getList` retrieves a list of pages
-    - `getAdditionalFields` returns additional fields of the page
-    - `getPreview` returns the preview image URL of the page
-    - `getPublicUrl` returns the full URL of the page
-    - `resolveIdByPublicUrl` resolves page ID by its public URL
-    - `publish` publishes the page
-    - `unpublish` unpublishes the page
-    - `markDeleted` marks the page as deleted
-    - `markUnDeleted` restores the page from the trash
-    - `move` moves a page to another site or folder
-    - `removeEntities` removes entities from the page
-    - `addBlock` adds a block to the page
-    - `copyBlock` copies a block within the page
-    - `deleteBlock` deletes a block from the page
-    - `moveBlockDown` moves a block down on the page
-    - `moveBlockUp` moves a block up on the page
-    - `moveBlock` moves a block to a specific position
-    - `hideBlock` hides a block on the page
-    - `showBlock` shows a block on the page
-    - `markBlockDeleted` marks a block as deleted
-    - `markBlockUnDeleted` restores a block from the trash
-    - `addBlockToFavorites` adds a block to favorites
-    - `removeBlockFromFavorites` removes a block from favorites
-- Added service `Services\Landing\Block\Service\Block` with support methods,
-  see [landing.block.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
-    - `list` retrieves a list of page blocks
-    - `getById` retrieves a block by its identifier
-    - `getContent` retrieves the content of a block
-    - `getManifest` retrieves the manifest of a block
-    - `getRepository` retrieves blocks from the repository
-    - `getManifestFile` retrieves block manifest from repository
-    - `getContentFromRepository` retrieves block content from repository
-    - `updateNodes` updates block content
-    - `updateAttrs` updates block node attributes
-    - `updateStyles` updates block styles
-    - `updateContent` updates block content with arbitrary content
-    - `updateCards` bulk updates block cards
-    - `cloneCard` clones a block card
-    - `addCard` adds a card with modified content
-    - `removeCard` removes a block card
-    - `uploadFile` uploads and attaches image to block
-    - `changeAnchor` changes anchor symbol code
-    - `changeNodeName` changes tag name
-- Added service `Services\Landing\Template\Service\Template` with support methods,
-  see [landing.template.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
-    - `getList` retrieves a list of templates
-    - `getLandingRef` retrieves a list of included areas for the page
-    - `getSiteRef` retrieves a list of included areas for the site
-    - `setLandingRef` sets the included areas for the page
-    - `setSiteRef` sets the included areas for the site
 - Added service `Services\Sale\Delivery\Service\Delivery` with support methods,
   see [sale.delivery.* methods](https://github.com/bitrix24/b24phpsdk/issues/255):
     - `add` adds a delivery service

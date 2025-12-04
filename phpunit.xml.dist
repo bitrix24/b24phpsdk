@@ -187,6 +187,12 @@
         <testsuite name="integration_tests_landing_syspage">
             <directory>./tests/Integration/Services/Landing/SysPage/</directory>
         </testsuite>
+        <testsuite name="integration_tests_landing_repo">
+            <directory>./tests/Integration/Services/Landing/Repo/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_landing_demos">
+            <directory>./tests/Integration/Services/Landing/Demos/</directory>
+        </testsuite>
         <testsuite name="integration_tests_sale_cashbox_handler">
             <directory>./tests/Integration/Services/Sale/CashboxHandler/</directory>
         </testsuite>

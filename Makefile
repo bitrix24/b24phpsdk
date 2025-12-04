@@ -63,6 +63,8 @@ help:
 	@echo "test-integration-sale-property-relation - run PropertyRelation integration tests"
 	@echo "test-integration-landing-page - run Landing Page integration tests"
 	@echo "test-integration-landing-syspage - run Landing SysPage integration tests"
+	@echo "test-integration-landing-repo - run Landing Repo integration tests"
+	@echo "test-integration-landing-demos - run Landing Demos integration tests"
 	@echo "test-integration-scope-landing-template - run Landing Template integration tests"
 
 
@@ -244,6 +246,14 @@ test-integration-landing-page:
 .PHONY: test-integration-landing-syspage
 test-integration-landing-syspage:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_syspage
+
+.PHONY: test-integration-landing-repo
+test-integration-landing-repo:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_repo
+
+.PHONY: test-integration-landing-demos
+test-integration-landing-demos:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_demos
 .PHONY: test-integration-scope-disk
 test-integration-scope-disk:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_disk
