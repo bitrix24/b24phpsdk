@@ -144,15 +144,10 @@ interface Bitrix24PartnerInterface
 
     /**
      * Get bitrix24 partner id
+     *
+     * @return positive-int bitrix24 partner id from vendor site
      */
-    public function getBitrix24PartnerId(): ?int;
-
-    /**
-     * Set bitrix24 partner id
-     * @param positive-int|null $bitrix24PartnerId bitrix24 partner id from vendor site
-     * @throws InvalidArgumentException
-     */
-    public function setBitrix24PartnerId(?int $bitrix24PartnerId): void;
+    public function getBitrix24PartnerId(): int;
 
     /**
      * Get open line id
