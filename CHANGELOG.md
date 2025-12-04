@@ -25,6 +25,8 @@
     - `unPublicFolder` unpublishes the site's folder
     - `markFolderDelete` marks the folder as deleted
     - `markFolderUnDelete` restores the folder from the trash
+    - `getRights` returns access permissions of the current user for the specified site
+    - `setRights` sets access permissions for the site
 - Added service `Services\Landing\SysPage\Service\SysPage` with support methods,
   see [landing.syspage.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
     - `set` sets a special page for the site

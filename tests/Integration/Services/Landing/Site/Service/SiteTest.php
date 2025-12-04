@@ -46,6 +46,8 @@ use PHPUnit\Framework\TestCase;
 #[CoversMethod(Site::class, 'markFolderUnDelete')]
 #[CoversMethod(Site::class, 'getAdditionalFields')]
 #[CoversMethod(Site::class, 'fullExport')]
+#[CoversMethod(Site::class, 'getRights')]
+#[CoversMethod(Site::class, 'setRights')]
 #[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\Landing\Site\Service\Site::class)]
 class SiteTest extends TestCase
 {
@@ -651,5 +653,132 @@ class SiteTest extends TestCase
         
         $exportData = $siteExportResult->getExportData();
         self::assertIsArray($exportData, 'Complex export data should be an array');
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testGetRights(): void
+    {
+        // Create a test site
+        $timestamp = time();
+        $siteFields = [
+            'TITLE' => 'Test Site for Rights ' . $timestamp,
+            'CODE' => 'testsiteforrights' . $timestamp,
+            'TYPE' => 'PAGE'
+        ];
+
+        $addedItemResult = $this->siteService->add($siteFields);
+        $siteId = $addedItemResult->getId();
+        $this->createdSiteIds[] = $siteId;
+
+        // Get rights for the site
+        $siteRightsResult = $this->siteService->getRights($siteId);
+        
+        // Verify result structure
+        self::assertInstanceOf(
+            \Bitrix24\SDK\Services\Landing\Site\Result\SiteRightsResult::class, 
+            $siteRightsResult,
+            'Result should be instance of SiteRightsResult'
+        );
+        
+        // Verify rights data
+        $rights = $siteRightsResult->getRights();
+        self::assertIsArray($rights, 'Rights should be an array');
+        
+        // Test convenience methods
+        self::assertIsBool($siteRightsResult->canRead(), 'canRead should return boolean');
+        self::assertIsBool($siteRightsResult->canEdit(), 'canEdit should return boolean');
+        self::assertIsBool($siteRightsResult->canChangeSett(), 'canChangeSett should return boolean');
+        self::assertIsBool($siteRightsResult->canPublish(), 'canPublish should return boolean');
+        self::assertIsBool($siteRightsResult->canDelete(), 'canDelete should return boolean');
+        self::assertIsBool($siteRightsResult->isDenied(), 'isDenied should return boolean');
+        
+        // Test hasRight method for each possible right
+        $possibleRights = ['denied', 'read', 'edit', 'sett', 'public', 'delete'];
+        foreach ($possibleRights as $possibleRight) {
+            self::assertIsBool($siteRightsResult->hasRight($possibleRight), sprintf("hasRight('%s') should return boolean", $possibleRight));
+        }
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testSetRights(): void
+    {
+        // Create a test site
+        $timestamp = time();
+        $siteFields = [
+            'TITLE' => 'Test Site for Set Rights ' . $timestamp,
+            'CODE' => 'testsiteforsetrights' . $timestamp,
+            'TYPE' => 'PAGE'
+        ];
+
+        $addedItemResult = $this->siteService->add($siteFields);
+        $siteId = $addedItemResult->getId();
+        $this->createdSiteIds[] = $siteId;
+
+        // Get current user ID for rights setting
+        // We'll use a basic rights configuration for testing
+        $rightsConfig = [
+            'UA' => ['read', 'edit'], // All authorized users can read and edit
+        ];
+
+        // Set rights for the site
+        $updatedItemResult = $this->siteService->setRights($siteId, $rightsConfig);
+        
+        // Verify result structure
+        self::assertInstanceOf(
+            \Bitrix24\SDK\Core\Result\UpdatedItemResult::class, 
+            $updatedItemResult,
+            'Result should be instance of UpdatedItemResult'
+        );
+        
+        // Verify the operation was successful
+        self::assertTrue($updatedItemResult->isSuccess(), 'Setting rights should be successful');
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testSetRightsWithMultipleEntities(): void
+    {
+        // Create a test site
+        $timestamp = time();
+        $siteFields = [
+            'TITLE' => 'Test Site for Multiple Rights ' . $timestamp,
+            'CODE' => 'testsiteformultiplerights' . $timestamp,
+            'TYPE' => 'PAGE'
+        ];
+
+        $addedItemResult = $this->siteService->add($siteFields);
+        $siteId = $addedItemResult->getId();
+        $this->createdSiteIds[] = $siteId;
+
+        // Set comprehensive rights for multiple entities
+        $comprehensiveRights = [
+            'UA' => ['read'], // All authorized users can read
+            'U1' => ['read', 'edit', 'sett'], // User with ID 1 has extended rights
+        ];
+
+        // Set rights for the site
+        $updatedItemResult = $this->siteService->setRights($siteId, $comprehensiveRights);
+        
+        // Verify the operation was successful
+        self::assertTrue($updatedItemResult->isSuccess(), 'Setting comprehensive rights should be successful');
+        
+        // Verify we can still get rights after setting them
+        $siteRightsResult = $this->siteService->getRights($siteId);
+        self::assertInstanceOf(
+            \Bitrix24\SDK\Services\Landing\Site\Result\SiteRightsResult::class, 
+            $siteRightsResult,
+            'Getting rights after setting should work'
+        );
+        
+        $rights = $siteRightsResult->getRights();
+        self::assertIsArray($rights, 'Rights after setting should still be an array');
     }
 }

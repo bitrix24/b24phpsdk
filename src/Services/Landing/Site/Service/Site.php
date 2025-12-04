@@ -35,6 +35,7 @@ use Bitrix24\SDK\Services\Landing\Site\Result\FolderPublishedResult;
 use Bitrix24\SDK\Services\Landing\Site\Result\FolderUnpublishedResult;
 use Bitrix24\SDK\Services\Landing\Site\Result\SiteAdditionalFieldsResult;
 use Bitrix24\SDK\Services\Landing\Site\Result\SiteExportResult;
+use Bitrix24\SDK\Services\Landing\Site\Result\SiteRightsResult;
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['landing']))]
@@ -499,6 +500,55 @@ class Site extends AbstractService
     {
         return new DeletedItemResult(
             $this->core->call('landing.site.markFolderUnDelete', ['id' => $id])
+        );
+    }
+
+    /**
+     * Returns access permissions of the current user for the specified site.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/landing/rights/extended-model/landing-site-get-rights.html
+     *
+     * @param int $id Site identifier
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'landing.site.getRights',
+        'https://apidocs.bitrix24.com/api-reference/landing/rights/extended-model/landing-site-get-rights.html',
+        'Method returns access permissions of the current user for the specified site.'
+    )]
+    public function getRights(int $id): SiteRightsResult
+    {
+        return new SiteRightsResult(
+            $this->core->call('landing.site.getRights', ['id' => $id])
+        );
+    }
+
+    /**
+     * Sets access permissions for the site.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/landing/rights/extended-model/landing-site-set-rights.html
+     *
+     * @param int $id Site identifier
+     * @param array $rights Array of rights where keys are entity identifiers (U1, SG2, DR3, etc.)
+     *                      and values are arrays of permissions: ['denied', 'read', 'edit', 'sett', 'public', 'delete']
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'landing.site.setRights',
+        'https://apidocs.bitrix24.com/api-reference/landing/rights/extended-model/landing-site-set-rights.html',
+        'Method sets access permissions for the site.'
+    )]
+    public function setRights(int $id, array $rights): UpdatedItemResult
+    {
+        return new UpdatedItemResult(
+            $this->core->call('landing.site.setRights', [
+                'id' => $id,
+                'rights' => $rights
+            ])
         );
     }
 }
