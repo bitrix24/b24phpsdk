@@ -21,13 +21,12 @@ class RepoCheckContentResult extends AbstractResult
     /**
      * Get the checked content with dangerous parts marked
      *
-     * @return string|null
      * @throws BaseException
      */
     public function getContent(): ?string
     {
         $result = $this->getCoreResponse()->getResponseData()->getResult();
-        
+
         // API возвращает объект с полями content и is_bad
         return $result['content'] ?? null;
     }
@@ -35,14 +34,13 @@ class RepoCheckContentResult extends AbstractResult
     /**
      * Check if content contains dangerous substrings
      *
-     * @return bool
      * @throws BaseException
      */
     public function isBad(): bool
     {
         $result = $this->getCoreResponse()->getResponseData()->getResult();
-        
+
         // API возвращает boolean флаг is_bad
-        return isset($result['is_bad']) ? (bool)$result['is_bad'] : false;
+        return isset($result['is_bad']) && (bool)$result['is_bad'];
     }
 }

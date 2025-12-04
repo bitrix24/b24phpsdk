@@ -26,19 +26,17 @@ class DemosGetListResult extends AbstractResult
     {
         $res = [];
         $result = $this->getCoreResponse()->getResponseData()->getResult();
-        
+
         // API returns array of demo templates
-        if (is_array($result)) {
-            foreach ($result as $item) {
-                if (is_array($item)) {
-                    $res[] = new DemosItemResult($item);
-                }
+        foreach ($result as $item) {
+            if (is_array($item)) {
+                $res[] = new DemosItemResult($item);
             }
         }
 
         return $res;
     }
-    
+
     /**
      * Alias for getDemos() to match naming convention
      * @return DemosItemResult[]

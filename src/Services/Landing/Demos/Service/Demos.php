@@ -53,7 +53,7 @@ class Demos extends AbstractService
     public function register(array $data, array $params = []): DemoResult
     {
         $callParams = ['data' => $data];
-        
+
         if ($params !== []) {
             $callParams['params'] = $params;
         }

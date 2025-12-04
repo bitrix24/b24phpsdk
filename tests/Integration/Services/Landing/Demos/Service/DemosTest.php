@@ -52,9 +52,9 @@ class DemosTest extends TestCase
     protected function tearDown(): void
     {
         // Clean up created templates
-        foreach ($this->createdTemplateCodes as $templateCode) {
+        foreach ($this->createdTemplateCodes as $createdTemplateCode) {
             try {
-                $this->demosService->unregister($templateCode);
+                $this->demosService->unregister($createdTemplateCode);
             } catch (\Exception) {
                 // Ignore if template doesn't exist
             }
@@ -81,11 +81,11 @@ class DemosTest extends TestCase
             self::assertNotEmpty($demo->TITLE, 'Demo title should not be empty');
             self::assertContains($demo->ACTIVE, ['Y', 'N'], 'Active field should be Y or N');
             
-            if (isset($demo->TYPE)) {
+            if ($demo->TYPE !== null) {
                 self::assertContains($demo->TYPE, ['page', 'store'], 'Type should be page or store');
             }
             
-            if (isset($demo->TPL_TYPE)) {
+            if ($demo->TPL_TYPE !== null) {
                 self::assertContains($demo->TPL_TYPE, ['S', 'P'], 'Template type should be S or P');
             }
         }
@@ -109,11 +109,12 @@ class DemosTest extends TestCase
         // Test ordering - if we have multiple items
         if (count($demosFiltered) > 1) {
             $prevId = null;
-            foreach ($demosFiltered as $demo) {
+            foreach ($demosFiltered as $demoFiltered) {
                 if ($prevId !== null) {
-                    self::assertLessThanOrEqual((int)$prevId, (int)$demo->ID, 'Results should be ordered by ID DESC');
+                    self::assertLessThanOrEqual((int)$prevId, (int)$demoFiltered->ID, 'Results should be ordered by ID DESC');
                 }
-                $prevId = $demo->ID;
+
+                $prevId = $demoFiltered->ID;
             }
         }
     }
@@ -171,10 +172,10 @@ class DemosTest extends TestCase
         $allDemos = $allDemosResult->getDemos();
         
         $foundInList = false;
-        foreach ($allDemos as $demo) {
-            if ((string)$demo->ID === (string)$registeredId) {
+        foreach ($allDemos as $allDemo) {
+            if ((string)$allDemo->ID === (string)$registeredId) {
                 $foundInList = true;
-                self::assertEquals('Test Demo Site ' . $timestamp, $demo->TITLE, 'Registered template should have correct title');
+                self::assertEquals('Test Demo Site ' . $timestamp, $allDemo->TITLE, 'Registered template should have correct title');
                 break;
             }
         }
@@ -186,7 +187,7 @@ class DemosTest extends TestCase
         );
         $filteredDemos = $filteredDemosResult->getDemos();
         
-        if (!empty($filteredDemos)) {
+        if ($filteredDemos !== []) {
             $registeredDemo = $filteredDemos[0];
             self::assertInstanceOf(DemosItemResult::class, $registeredDemo);
             self::assertEquals((string)$registeredId, (string)$registeredDemo->ID, 'Found demo should have matching ID');
@@ -214,18 +215,15 @@ class DemosTest extends TestCase
             
             // The demo might still be in list but marked as inactive, or completely removed
             $stillActive = false;
-            foreach ($updatedDemos as $demo) {
-                if ((string)$demo->ID === (string)$registeredId && $demo->ACTIVE === 'Y') {
+            foreach ($updatedDemos as $updatedDemo) {
+                if ((string)$updatedDemo->ID === (string)$registeredId && $updatedDemo->ACTIVE === 'Y') {
                     $stillActive = true;
                     break;
                 }
             }
             
             // Template should either be removed or deactivated
-            if (!$stillActive) {
-                // This is expected behavior - template was properly unregistered
-                self::assertTrue(true, 'Template was successfully unregistered');
-            }
+            self::assertTrue(true, 'Template was successfully unregistered');
         }
         
         // Remove from cleanup list as it's already unregistered
@@ -233,12 +231,12 @@ class DemosTest extends TestCase
             $this->createdTemplateCodes, 
             fn($code): bool => $code !== $templateCode
         );
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             // Handle content_is_bad error or other API errors
-            if (str_contains($e->getMessage(), 'content_is_bad')) {
-                self::markTestSkipped('Template content was marked as unsafe: ' . $e->getMessage());
+            if (str_contains($exception->getMessage(), 'content_is_bad')) {
+                self::markTestSkipped('Template content was marked as unsafe: ' . $exception->getMessage());
             } else {
-                throw $e;
+                throw $exception;
             }
         }
     }
@@ -253,8 +251,8 @@ class DemosTest extends TestCase
         $nonExistentCode = 'non_existent_template_' . $timestamp;
         
         // Try to unregister a template that doesn't exist
-        $unregisterResult = $this->demosService->unregister($nonExistentCode);
-        $result = $unregisterResult->getResult();
+        $demoResult = $this->demosService->unregister($nonExistentCode);
+        $result = $demoResult->getResult();
         
         // Should return boolean false for non-existent template
         self::assertIsBool($result);
@@ -276,32 +274,32 @@ class DemosTest extends TestCase
         
         // Validate each template structure
         foreach ($siteTemplates as $index => $template) {
-            self::assertInstanceOf(SiteTemplateItemResult::class, $template, "Template at index {$index} should be SiteTemplateItemResult");
+            self::assertInstanceOf(SiteTemplateItemResult::class, $template, sprintf('Template at index %s should be SiteTemplateItemResult', $index));
             
             // Validate required fields
-            self::assertNotEmpty($template->ID, "Template at index {$index} should have non-empty ID");
+            self::assertNotEmpty($template->ID, sprintf('Template at index %s should have non-empty ID', $index));
             
-            if (isset($template->TYPE)) {
+            if ($template->TYPE !== null) {
                 // TYPE can be string or array depending on template
                 self::assertTrue(is_string($template->TYPE) || is_array($template->TYPE), "Template TYPE should be string or array");
                 // For page templates, TYPE might contain different values
             }
             
-            if (isset($template->TITLE)) {
-                self::assertNotEmpty($template->TITLE, "Template at index {$index} should have non-empty title");
+            if ($template->TITLE !== null) {
+                self::assertNotEmpty($template->TITLE, sprintf('Template at index %s should have non-empty title', $index));
             }
             
-            if (isset($template->ACTIVE)) {
+            if ($template->ACTIVE !== null) {
                 self::assertContains($template->ACTIVE, ['Y', 'N', true, false], "Template ACTIVE should be 'Y', 'N', true, or false");
             }
             
-            if (isset($template->PREVIEW)) {
+            if ($template->PREVIEW !== null) {
                 self::assertIsString($template->PREVIEW, "Template PREVIEW should be string");
             }
         }
         
         // Log some statistics for debugging
-        if (!empty($siteTemplates)) {
+        if ($siteTemplates !== []) {
             $this->addToAssertionCount(1); // Count this as a successful assertion
             // We can add more specific validations based on what we find
         }
@@ -322,31 +320,31 @@ class DemosTest extends TestCase
         
         // Validate each template structure
         foreach ($siteTemplates as $index => $template) {
-            self::assertInstanceOf(SiteTemplateItemResult::class, $template, "Store template at index {$index} should be SiteTemplateItemResult");
+            self::assertInstanceOf(SiteTemplateItemResult::class, $template, sprintf('Store template at index %s should be SiteTemplateItemResult', $index));
             
             // Validate required fields
-            self::assertNotEmpty($template->ID, "Store template at index {$index} should have non-empty ID");
+            self::assertNotEmpty($template->ID, sprintf('Store template at index %s should have non-empty ID', $index));
             
-            if (isset($template->TYPE)) {
+            if ($template->TYPE !== null) {
                 self::assertIsArray($template->TYPE, "Store template TYPE should be array");
                 // For store templates, TYPE should typically contain 'STORE'
                 self::assertContains('STORE', (array)$template->TYPE, "Store template should have STORE in TYPE array");
             }
             
-            if (isset($template->TITLE)) {
-                self::assertNotEmpty($template->TITLE, "Store template at index {$index} should have non-empty title");
+            if ($template->TITLE !== null) {
+                self::assertNotEmpty($template->TITLE, sprintf('Store template at index %s should have non-empty title', $index));
             }
             
-            if (isset($template->ACTIVE)) {
+            if ($template->ACTIVE !== null) {
                 self::assertContains($template->ACTIVE, ['Y', 'N', true, false], "Store template ACTIVE should be 'Y', 'N', true, or false");
             }
             
-            if (isset($template->PREVIEW)) {
+            if ($template->PREVIEW !== null) {
                 self::assertIsString($template->PREVIEW, "Store template PREVIEW should be string");
             }
             
             // Store-specific validations
-            if (isset($template->DATA) && isset($template->DATA['layout'])) {
+            if ($template->DATA !== null && isset($template->DATA['layout'])) {
                 self::assertIsArray($template->DATA, "Store template DATA should be array");
             }
         }
@@ -370,30 +368,30 @@ class DemosTest extends TestCase
         
         // Validate each template structure
         foreach ($pageTemplates as $index => $template) {
-            self::assertInstanceOf(PageTemplateItemResult::class, $template, "Page template at index {$index} should be PageTemplateItemResult");
+            self::assertInstanceOf(PageTemplateItemResult::class, $template, sprintf('Page template at index %s should be PageTemplateItemResult', $index));
             
             // Validate required fields
-            self::assertNotEmpty($template->ID, "Page template at index {$index} should have non-empty ID");
+            self::assertNotEmpty($template->ID, sprintf('Page template at index %s should have non-empty ID', $index));
             
-            if (isset($template->TYPE)) {
+            if ($template->TYPE !== null) {
                 // TYPE can be string or array depending on page template
                 self::assertTrue(is_string($template->TYPE) || is_array($template->TYPE), "Page template TYPE should be string or array");
             }
             
-            if (isset($template->TITLE)) {
-                self::assertNotEmpty($template->TITLE, "Page template at index {$index} should have non-empty title");
+            if ($template->TITLE !== null) {
+                self::assertNotEmpty($template->TITLE, sprintf('Page template at index %s should have non-empty title', $index));
             }
             
-            if (isset($template->ACTIVE)) {
+            if ($template->ACTIVE !== null) {
                 self::assertContains($template->ACTIVE, ['Y', 'N', true, false], "Page template ACTIVE should be 'Y', 'N', true, or false");
             }
             
-            if (isset($template->PREVIEW)) {
+            if ($template->PREVIEW !== null) {
                 self::assertIsString($template->PREVIEW, "Page template PREVIEW should be string");
             }
             
             // Page-specific validations
-            if (isset($template->DATA)) {
+            if ($template->DATA !== null) {
                 self::assertIsArray($template->DATA, "Page template DATA should be array");
                 
                 if (isset($template->DATA['fields'])) {
@@ -429,31 +427,31 @@ class DemosTest extends TestCase
         
         // Validate each template structure
         foreach ($pageTemplates as $index => $template) {
-            self::assertInstanceOf(PageTemplateItemResult::class, $template, "Store page template at index {$index} should be PageTemplateItemResult");
+            self::assertInstanceOf(PageTemplateItemResult::class, $template, sprintf('Store page template at index %s should be PageTemplateItemResult', $index));
             
             // Validate required fields
-            self::assertNotEmpty($template->ID, "Store page template at index {$index} should have non-empty ID");
+            self::assertNotEmpty($template->ID, sprintf('Store page template at index %s should have non-empty ID', $index));
             
-            if (isset($template->TYPE)) {
+            if ($template->TYPE !== null) {
                 self::assertIsArray($template->TYPE, "Store page template TYPE should be array");
                 // For store page templates, TYPE should typically contain 'STORE'
                 self::assertContains('STORE', (array)$template->TYPE, "Store page template should have STORE in TYPE array");
             }
             
-            if (isset($template->TITLE)) {
-                self::assertNotEmpty($template->TITLE, "Store page template at index {$index} should have non-empty title");
+            if ($template->TITLE !== null) {
+                self::assertNotEmpty($template->TITLE, sprintf('Store page template at index %s should have non-empty title', $index));
             }
             
-            if (isset($template->ACTIVE)) {
+            if ($template->ACTIVE !== null) {
                 self::assertContains($template->ACTIVE, ['Y', 'N', true, false], "Store page template ACTIVE should be 'Y', 'N', true, or false");
             }
             
-            if (isset($template->PREVIEW)) {
+            if ($template->PREVIEW !== null) {
                 self::assertIsString($template->PREVIEW, "Store page template PREVIEW should be string");
             }
             
             // Store page-specific validations
-            if (isset($template->DATA)) {
+            if ($template->DATA !== null) {
                 self::assertIsArray($template->DATA, "Store page template DATA should be array");
                 
                 if (isset($template->DATA['fields']) && isset($template->DATA['fields']['RULE'])) {
@@ -492,8 +490,8 @@ class DemosTest extends TestCase
             $exportData['items'] = $firstItem;
         }
         
-        $registerResult = $this->demosService->register($exportData);
-        $result = $registerResult->getResult();
+        $demoResult = $this->demosService->register($exportData);
+        $result = $demoResult->getResult();
         $this->createdTemplateCodes[] = $templateCode;
         
         self::assertIsInt($result);
@@ -526,12 +524,12 @@ class DemosTest extends TestCase
         
         self::assertIsInt($result);
         self::assertGreaterThan(0, $result);
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             // Handle content_is_bad error or other API errors
-            if (str_contains($e->getMessage(), 'content_is_bad')) {
-                self::markTestSkipped('Template content was marked as unsafe: ' . $e->getMessage());
+            if (str_contains($exception->getMessage(), 'content_is_bad')) {
+                self::markTestSkipped('Template content was marked as unsafe: ' . $exception->getMessage());
             } else {
-                throw $e;
+                throw $exception;
             }
         }
     }
@@ -597,9 +595,9 @@ class DemosTest extends TestCase
             $siteTemplateResult = $this->demosService->getSiteList('invalid_type');
             $siteTemplates = $siteTemplateResult->getSiteTemplates();
             self::assertIsArray($siteTemplates);
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             // If the API throws an exception for invalid type, that's expected behavior
-            self::assertNotNull($e);
+            self::assertNotNull($exception);
         }
     }
 
@@ -616,9 +614,9 @@ class DemosTest extends TestCase
             $pageTemplateResult = $this->demosService->getPageList('invalid_type');
             $pageTemplates = $pageTemplateResult->getPageTemplates();
             self::assertIsArray($pageTemplates);
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             // If the API throws an exception for invalid type, that's expected behavior
-            self::assertNotNull($e);
+            self::assertNotNull($exception);
         }
     }
 
@@ -631,8 +629,6 @@ class DemosTest extends TestCase
      */
     /**
      * Get export data from an existing site for template registration
-     * 
-     * @return array
      */
     private function getExportDataFromExistingSite(): array
     {
@@ -666,70 +662,6 @@ class DemosTest extends TestCase
                 'TITLE' => 'Safe Test Template',
                 'LANDING_ID_INDEX' => 'test_safe_template',
                 'LANDING_ID_404' => '0'
-            ],
-            'layout' => [],
-            'folders' => [],
-            'syspages' => [],
-            'items' => []
-        ];
-    }
-    
-    /**
-     * Create minimal export structure when no sites are available
-     */
-    private function createMinimalExportStructure(): array
-    {
-        $timestamp = time();
-        return [
-            'charset' => 'UTF-8',
-            'code' => 'test_minimal_' . $timestamp,
-            'site_code' => '/test_minimal_' . $timestamp . '/',
-            'name' => 'Test Site',
-            'description' => 'Test site for demo template',
-            'preview' => '',
-            'preview2x' => '',
-            'preview3x' => '',
-            'preview_url' => '',
-            'show_in_list' => 'Y',
-            'type' => 'page',
-            'version' => 3,
-            'fields' => [
-                'ADDITIONAL_FIELDS' => [],
-                'TITLE' => 'Test Site',
-                'LANDING_ID_INDEX' => 'index',
-                'LANDING_ID_404' => null
-            ],
-            'layout' => [],
-            'folders' => [],
-            'syspages' => [],
-            'items' => []
-        ];
-    }
-    
-    /**
-     * Create minimal export structure based on existing site data
-     */
-    private function createMinimalExportStructureFromSite($site): array
-    {
-        $timestamp = time();
-        return [
-            'charset' => 'UTF-8',
-            'code' => 'test_from_site_' . ($site->ID ?? 'unknown') . '_' . $timestamp,
-            'site_code' => '/test_from_site_' . ($site->ID ?? 'unknown') . '_' . $timestamp . '/',
-            'name' => 'Test Site Based on ' . ($site->ID ?? 'Unknown'),
-            'description' => 'Test site for demo template based on site ' . ($site->ID ?? 'Unknown'),
-            'preview' => '',
-            'preview2x' => '',
-            'preview3x' => '',
-            'preview_url' => '',
-            'show_in_list' => 'Y',
-            'type' => strtolower($site->TYPE ?? 'page'),
-            'version' => 3,
-            'fields' => [
-                'ADDITIONAL_FIELDS' => [],
-                'TITLE' => 'Test Site Based on ' . ($site->ID ?? 'Unknown'),
-                'LANDING_ID_INDEX' => 'index',
-                'LANDING_ID_404' => null
             ],
             'layout' => [],
             'folders' => [],
@@ -775,10 +707,10 @@ class DemosTest extends TestCase
         
         // Find our registered template
         $foundRegistered = false;
-        foreach ($afterRegisterDemos as $demo) {
-            if ((string)$demo->ID === (string)$registeredId) {
+        foreach ($afterRegisterDemos as $afterRegisterDemo) {
+            if ((string)$afterRegisterDemo->ID === (string)$registeredId) {
                 $foundRegistered = true;
-                self::assertStringContainsString('Lifecycle Test Template', $demo->TITLE, 'Template title should match');
+                self::assertStringContainsString('Lifecycle Test Template', $afterRegisterDemo->TITLE, 'Template title should match');
                 break;
             }
         }
@@ -796,8 +728,8 @@ class DemosTest extends TestCase
         $afterUnregisterDemos = $afterUnregisterResult->getDemos();
         
         $stillActiveFound = false;
-        foreach ($afterUnregisterDemos as $demo) {
-            if ((string)$demo->ID === (string)$registeredId && $demo->ACTIVE === 'Y') {
+        foreach ($afterUnregisterDemos as $afterUnregisterDemo) {
+            if ((string)$afterUnregisterDemo->ID === (string)$registeredId && $afterUnregisterDemo->ACTIVE === 'Y') {
                 $stillActiveFound = true;
                 break;
             }
@@ -811,12 +743,12 @@ class DemosTest extends TestCase
             $this->createdTemplateCodes, 
             fn($code): bool => $code !== $templateCode
         );
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             // Handle content_is_bad error or other API errors
-            if (str_contains($e->getMessage(), 'content_is_bad')) {
-                self::markTestSkipped('Template content was marked as unsafe: ' . $e->getMessage());
+            if (str_contains($exception->getMessage(), 'content_is_bad')) {
+                self::markTestSkipped('Template content was marked as unsafe: ' . $exception->getMessage());
             } else {
-                throw $e;
+                throw $exception;
             }
         }
     }
@@ -848,12 +780,12 @@ class DemosTest extends TestCase
         
         self::assertIsInt($result, 'Registration with custom params should return integer ID');
         self::assertGreaterThan(0, $result, 'Registration ID should be positive');
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             // Handle content_is_bad error or other API errors
-            if (str_contains($e->getMessage(), 'content_is_bad')) {
-                self::markTestSkipped('Template content was marked as unsafe: ' . $e->getMessage());
+            if (str_contains($exception->getMessage(), 'content_is_bad')) {
+                self::markTestSkipped('Template content was marked as unsafe: ' . $exception->getMessage());
             } else {
-                throw $e;
+                throw $exception;
             }
         }
     }
@@ -904,9 +836,9 @@ class DemosTest extends TestCase
             } else {
                 self::markTestSkipped('API does not accept minimal data structure');
             }
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             // If minimal data is rejected, this is expected behavior
-            self::assertInstanceOf(\Exception::class, $e, 'API should handle invalid data gracefully');
+            self::assertInstanceOf(\Exception::class, $exception, 'API should handle invalid data gracefully');
         }
     }
 
@@ -925,7 +857,7 @@ class DemosTest extends TestCase
             $demosResult = $this->demosService->getList(['ID', 'TITLE']);
             $demos = $demosResult->getDemos();
             
-            self::assertIsArray($demos, "Call {$i} should return array");
+            self::assertIsArray($demos, sprintf('Call %d should return array', $i));
         }
         
         $endTime = microtime(true);
@@ -944,16 +876,16 @@ class DemosTest extends TestCase
     public function testDataConsistencyAcrossMethods(): void
     {
         // Get demos from general list
-        $demosFromList = $this->demosService->getList(['ID', 'TITLE', 'TYPE']);
-        $demos = $demosFromList->getDemos();
+        $demosGetListResult = $this->demosService->getList(['ID', 'TITLE', 'TYPE']);
+        $demos = $demosGetListResult->getDemos();
         
         // Get page templates
-        $pageTemplatesResult = $this->demosService->getPageList('page');
-        $pageTemplates = $pageTemplatesResult->getPageTemplates();
+        $pageTemplateResult = $this->demosService->getPageList('page');
+        $pageTemplates = $pageTemplateResult->getPageTemplates();
         
         // Get site templates
-        $siteTemplatesResult = $this->demosService->getSiteList('page');
-        $siteTemplates = $siteTemplatesResult->getSiteTemplates();
+        $siteTemplateResult = $this->demosService->getSiteList('page');
+        $siteTemplates = $siteTemplateResult->getSiteTemplates();
         
         // All methods should return arrays
         self::assertIsArray($demos, 'General list should return array');

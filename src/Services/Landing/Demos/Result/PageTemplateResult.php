@@ -28,19 +28,19 @@ class PageTemplateResult extends AbstractResult
     public function getPageTemplates(): array
     {
         $pageTemplates = $this->getCoreResponse()->getResponseData()->getResult();
-        
+
         if (!is_array($pageTemplates)) {
             return [];
         }
-        
+
         $items = [];
         foreach ($pageTemplates as $pageTemplate) {
             $items[] = new PageTemplateItemResult($pageTemplate);
         }
-        
+
         return $items;
     }
-    
+
     /**
      * Alias for getPageTemplates() to match naming convention
      * @return PageTemplateItemResult[]
@@ -50,4 +50,3 @@ class PageTemplateResult extends AbstractResult
         return $this->getPageTemplates();
     }
 }
-

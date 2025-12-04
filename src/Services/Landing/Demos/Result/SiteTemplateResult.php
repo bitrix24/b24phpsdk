@@ -28,19 +28,19 @@ class SiteTemplateResult extends AbstractResult
     public function getSiteTemplates(): array
     {
         $siteTemplates = $this->getCoreResponse()->getResponseData()->getResult();
-        
+
         if (!is_array($siteTemplates)) {
             return [];
         }
-        
+
         $items = [];
         foreach ($siteTemplates as $siteTemplate) {
             $items[] = new SiteTemplateItemResult($siteTemplate);
         }
-        
+
         return $items;
     }
-    
+
     /**
      * Alias for getSiteTemplates() to match naming convention
      * @return SiteTemplateItemResult[]
@@ -50,4 +50,3 @@ class SiteTemplateResult extends AbstractResult
         return $this->getSiteTemplates();
     }
 }
-

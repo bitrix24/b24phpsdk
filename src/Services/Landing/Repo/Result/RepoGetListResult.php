@@ -26,19 +26,17 @@ class RepoGetListResult extends AbstractResult
     {
         $res = [];
         $result = $this->getCoreResponse()->getResponseData()->getResult();
-        
+
         // API возвращает массив элементов репозитория
-        if (is_array($result)) {
-            foreach ($result as $item) {
-                if (is_array($item)) {
-                    $res[] = new RepoItemResult($item);
-                }
+        foreach ($result as $item) {
+            if (is_array($item)) {
+                $res[] = new RepoItemResult($item);
             }
         }
 
         return $res;
     }
-    
+
     /**
      * Alias for getRepoItems() to match naming convention
      * @return RepoItemResult[]

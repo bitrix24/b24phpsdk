@@ -21,13 +21,13 @@ class DemoResult extends AbstractResult
      * Get operation result
      * For register: array of created template identifiers
      * For unregister: boolean result
-     * 
+     *
      * @return array|bool
      */
     public function getResult()
     {
         $result = $this->getCoreResponse()->getResponseData()->getResult();
-        
+
         return $result[0];
     }
 }

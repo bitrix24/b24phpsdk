@@ -49,9 +49,9 @@ class RepoTest extends TestCase
     protected function tearDown(): void
     {
         // Clean up created blocks
-        foreach ($this->createdBlockCodes as $blockCode) {
+        foreach ($this->createdBlockCodes as $createdBlockCode) {
             try {
-                $this->repoService->unregister($blockCode);
+                $this->repoService->unregister($createdBlockCode);
             } catch (\Exception) {
                 // Ignore if block doesn't exist
             }
@@ -84,8 +84,8 @@ class RepoTest extends TestCase
             ]
         ];
         
-        $registerResult = $this->repoService->register($blockCode, $fields, $manifest);
-        $blockId = $registerResult->getId();
+        $addedItemResult = $this->repoService->register($blockCode, $fields, $manifest);
+        $blockId = $addedItemResult->getId();
         $this->createdBlockCodes[] = $blockCode;
         
         self::assertGreaterThan(0, $blockId);
@@ -138,8 +138,8 @@ class RepoTest extends TestCase
             ]
         ];
         
-        $registerResult = $this->repoService->register($blockCode, $fields, $manifest);
-        $blockId = $registerResult->getId();
+        $addedItemResult = $this->repoService->register($blockCode, $fields, $manifest);
+        $blockId = $addedItemResult->getId();
         $this->createdBlockCodes[] = $blockCode;
 
         // Test getList with filters
@@ -185,8 +185,8 @@ class RepoTest extends TestCase
             ]
         ];
         
-        $registerResult = $this->repoService->register($blockCode, $fields, $manifest);
-        $blockId = $registerResult->getId();
+        $addedItemResult = $this->repoService->register($blockCode, $fields, $manifest);
+        $blockId = $addedItemResult->getId();
         $this->createdBlockCodes[] = $blockCode;
         
         self::assertGreaterThan(0, $blockId);
@@ -225,8 +225,8 @@ class RepoTest extends TestCase
         ];
         
         // Register first block
-        $registerResult1 = $this->repoService->register($blockCode, $fields1, $manifest1);
-        $blockId1 = $registerResult1->getId();
+        $addedItemResult = $this->repoService->register($blockCode, $fields1, $manifest1);
+        $blockId1 = $addedItemResult->getId();
         $this->createdBlockCodes[] = $blockCode;
         
         self::assertGreaterThan(0, $blockId1);
@@ -287,15 +287,15 @@ class RepoTest extends TestCase
         ];
         
         // Register the block first
-        $registerResult = $this->repoService->register($blockCode, $fields, $manifest);
-        $blockId = $registerResult->getId();
+        $addedItemResult = $this->repoService->register($blockCode, $fields, $manifest);
+        $blockId = $addedItemResult->getId();
         
         self::assertGreaterThan(0, $blockId);
         
         // Unregister the block
-        $unregisterResult = $this->repoService->unregister($blockCode);
+        $deletedItemResult = $this->repoService->unregister($blockCode);
         
-        self::assertTrue($unregisterResult->isSuccess());
+        self::assertTrue($deletedItemResult->isSuccess());
         
         // Remove from cleanup list as it's already unregistered
         $this->createdBlockCodes = array_filter($this->createdBlockCodes, fn($code): bool => $code !== $blockCode);
@@ -317,10 +317,10 @@ class RepoTest extends TestCase
         $nonExistentCode = 'non_existent_block_' . $timestamp;
         
         // Try to unregister a block that doesn't exist
-        $unregisterResult = $this->repoService->unregister($nonExistentCode);
+        $deletedItemResult = $this->repoService->unregister($nonExistentCode);
         
         // Should return false for non-existent block
-        self::assertFalse($unregisterResult->isSuccess());
+        self::assertFalse($deletedItemResult->isSuccess());
     }
 
     /**
@@ -331,10 +331,10 @@ class RepoTest extends TestCase
     {
         $safeContent = '<div class="safe-block"><h2>Safe Title</h2><p>This is safe content</p></div>';
         
-        $checkResult = $this->repoService->checkContent($safeContent);
+        $repoCheckContentResult = $this->repoService->checkContent($safeContent);
         
-        self::assertFalse($checkResult->isBad(), 'Safe content should not be marked as bad');
-        self::assertEquals($safeContent, $checkResult->getContent());
+        self::assertFalse($repoCheckContentResult->isBad(), 'Safe content should not be marked as bad');
+        self::assertEquals($safeContent, $repoCheckContentResult->getContent());
     }
 
     /**
@@ -345,11 +345,11 @@ class RepoTest extends TestCase
     {
         $dangerousContent = '<div onclick="alert(\'danger\')" style="color: red"><iframe src="//evil.com"></iframe></div>';
         
-        $checkResult = $this->repoService->checkContent($dangerousContent);
+        $repoCheckContentResult = $this->repoService->checkContent($dangerousContent);
         
-        self::assertTrue($checkResult->isBad(), 'Dangerous content should be marked as bad');
+        self::assertTrue($repoCheckContentResult->isBad(), 'Dangerous content should be marked as bad');
         
-        $processedContent = $checkResult->getContent();
+        $processedContent = $repoCheckContentResult->getContent();
         self::assertNotNull($processedContent);
         
         // The processed content should contain the sanitization markers
@@ -365,10 +365,10 @@ class RepoTest extends TestCase
         $dangerousContent = '<div onclick="alert(\'test\')" style="background: blue">Test</div>';
         $customSplitter = '#CUSTOM_SPLITTER#';
         
-        $checkResult = $this->repoService->checkContent($dangerousContent, $customSplitter);
+        $repoCheckContentResult = $this->repoService->checkContent($dangerousContent, $customSplitter);
         
-        if ($checkResult->isBad()) {
-            $processedContent = $checkResult->getContent();
+        if ($repoCheckContentResult->isBad()) {
+            $processedContent = $repoCheckContentResult->getContent();
             self::assertNotNull($processedContent);
             
             // The processed content should contain the custom sanitization markers
@@ -376,7 +376,7 @@ class RepoTest extends TestCase
             self::assertStringNotContainsString('#SANITIZE#', $processedContent);
         } else {
             // If content is not marked as bad, it should be unchanged
-            self::assertEquals($dangerousContent, $checkResult->getContent());
+            self::assertEquals($dangerousContent, $repoCheckContentResult->getContent());
         }
     }
 
@@ -391,16 +391,16 @@ class RepoTest extends TestCase
         
         // First check if the content is safe
         $contentToCheck = '<div class="clean-block"><h3>Clean Content</h3><p>No dangerous elements here</p></div>';
-        $checkResult = $this->repoService->checkContent($contentToCheck);
+        $repoCheckContentResult = $this->repoService->checkContent($contentToCheck);
         
-        self::assertFalse($checkResult->isBad(), 'Content should be safe');
+        self::assertFalse($repoCheckContentResult->isBad(), 'Content should be safe');
         
         $fields = [
             'NAME' => 'Test Sanitized Block ' . $timestamp,
             'DESCRIPTION' => 'Block with pre-checked content',
             'SECTIONS' => 'content',
             'PREVIEW' => 'https://example.com/sanitized-preview.png',
-            'CONTENT' => $checkResult->getContent(),
+            'CONTENT' => $repoCheckContentResult->getContent(),
             'ACTIVE' => 'Y'
         ];
         
@@ -411,8 +411,8 @@ class RepoTest extends TestCase
             ]
         ];
         
-        $registerResult = $this->repoService->register($blockCode, $fields, $manifest);
-        $blockId = $registerResult->getId();
+        $addedItemResult = $this->repoService->register($blockCode, $fields, $manifest);
+        $blockId = $addedItemResult->getId();
         $this->createdBlockCodes[] = $blockCode;
         
         self::assertGreaterThan(0, $blockId);
@@ -461,8 +461,8 @@ class RepoTest extends TestCase
             ]
         ];
         
-        $registerResult = $this->repoService->register($blockCode, $fields, $manifest);
-        $blockId = $registerResult->getId();
+        $addedItemResult = $this->repoService->register($blockCode, $fields, $manifest);
+        $blockId = $addedItemResult->getId();
         $this->createdBlockCodes[] = $blockCode;
         
         self::assertGreaterThan(0, $blockId);
