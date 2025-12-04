@@ -21,7 +21,6 @@ class SetAccessCodesResult extends AbstractResult
     /**
      * Check if operation was successful
      *
-     * @return bool
      * @throws BaseException
      */
     public function isSuccess(): bool

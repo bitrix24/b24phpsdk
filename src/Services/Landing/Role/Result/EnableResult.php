@@ -21,7 +21,6 @@ class EnableResult extends AbstractResult
     /**
      * Check if operation was successful
      *
-     * @return bool
      * @throws BaseException
      */
     public function isSuccess(): bool

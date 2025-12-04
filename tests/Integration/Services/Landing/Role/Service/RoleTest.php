@@ -82,7 +82,7 @@ class RoleTest extends TestCase
             self::assertInstanceOf(RoleItemResult::class, $role, 'Each role should be RoleItemResult instance');
             
             // Validate that ID and TITLE properties are accessible
-            if (isset($role->ID)) {
+            if ($role->ID !== null) {
                 self::assertTrue(
                     is_numeric($role->ID), 
                     'Role ID should be numeric (string or integer)'
@@ -90,12 +90,12 @@ class RoleTest extends TestCase
                 self::assertGreaterThan(0, (int)$role->ID, 'Role ID should be positive');
             }
             
-            if (isset($role->TITLE)) {
+            if ($role->TITLE !== null) {
                 self::assertIsString($role->TITLE, 'Role title should be string');
                 self::assertNotEmpty($role->TITLE, 'Role title should not be empty');
             }
             
-            if (isset($role->XML_ID)) {
+            if ($role->XML_ID !== null) {
                 self::assertIsString($role->XML_ID, 'Role XML_ID should be string');
             }
         }
@@ -114,9 +114,8 @@ class RoleTest extends TestCase
         $rolesResult = $this->roleService->getList();
         $roles = $rolesResult->getRoles();
         
-        if (empty($roles)) {
+        if ($roles === []) {
             self::markTestSkipped('No roles available for testing getRights');
-            return;
         }
         
         // Test getRights with first available role
@@ -136,10 +135,10 @@ class RoleTest extends TestCase
             // Permissions should be array of strings
             self::assertIsArray($permissionsArray, 'Permissions should be array');
             
-            foreach ($permissionsArray as $permission) {
-                self::assertIsString($permission, 'Each permission should be string');
+            foreach ($permissionsArray as $permissionArray) {
+                self::assertIsString($permissionArray, 'Each permission should be string');
                 self::assertContains(
-                    $permission,
+                    $permissionArray,
                     ['denied', 'read', 'edit', 'sett', 'public', 'delete'],
                     'Permission should be valid value'
                 );
@@ -157,9 +156,8 @@ class RoleTest extends TestCase
         $rolesResult = $this->roleService->getList();
         $roles = $rolesResult->getRoles();
         
-        if (empty($roles)) {
+        if ($roles === []) {
             self::markTestSkipped('No roles available for testing setAccessCodes');
-            return;
         }
         
         // Test setAccessCodes with first available role
@@ -196,9 +194,8 @@ class RoleTest extends TestCase
         $rolesResult = $this->roleService->getList();
         $roles = $rolesResult->getRoles();
         
-        if (empty($roles)) {
+        if ($roles === []) {
             self::markTestSkipped('No roles available for testing setRights');
-            return;
         }
         
         // Test setRights with first available role
@@ -246,8 +243,8 @@ class RoleTest extends TestCase
     public function testEnableAndDisableRoleModel(): void
     {
         // Get current state
-        $currentStateResult = $this->roleService->isEnabled();
-        $currentState = $currentStateResult->isEnabled();
+        $isEnabledResult = $this->roleService->isEnabled();
+        $currentState = $isEnabledResult->isEnabled();
         
         // Test enabling role model
         $enableResult = $this->roleService->enable(1);
@@ -287,12 +284,12 @@ class RoleTest extends TestCase
     public function testRoleModelToggleConsistency(): void
     {
         // Test that enable/isEnabled work consistently
-        $initialStateResult = $this->roleService->isEnabled();
-        $initialState = $initialStateResult->isEnabled();
+        $isEnabledResult = $this->roleService->isEnabled();
+        $initialState = $isEnabledResult->isEnabled();
         
         // Toggle to opposite state
-        $toggleResult = $this->roleService->enable($initialState ? 0 : 1);
-        $toggleSuccess = $toggleResult->isSuccess();
+        $enableResult = $this->roleService->enable($initialState ? 0 : 1);
+        $toggleSuccess = $enableResult->isSuccess();
         
         self::assertIsBool($toggleSuccess, 'Toggle should return boolean result');
         
@@ -325,16 +322,15 @@ class RoleTest extends TestCase
         // Test a complete workflow of role management
         
         // 1. Check initial state
-        $initialStateResult = $this->roleService->isEnabled();
-        $initialState = $initialStateResult->isEnabled();
+        $isEnabledResult = $this->roleService->isEnabled();
+        $isEnabledResult->isEnabled();
         
         // 2. Get available roles
         $rolesResult = $this->roleService->getList();
         $roles = $rolesResult->getRoles();
         
-        if (empty($roles)) {
+        if ($roles === []) {
             self::markTestSkipped('No roles available for complete workflow test');
-            return;
         }
         
         $testRole = $roles[0];
@@ -348,9 +344,9 @@ class RoleTest extends TestCase
         
         // 4. Set new access codes
         $testCodes = ['UA']; // All authorized users
-        $setCodesResult = $this->roleService->setAccessCodes($roleId, $testCodes);
+        $setAccessCodesResult = $this->roleService->setAccessCodes($roleId, $testCodes);
         
-        self::assertIsBool($setCodesResult->isSuccess(), 'Setting access codes should return boolean');
+        self::assertIsBool($setAccessCodesResult->isSuccess(), 'Setting access codes should return boolean');
         
         // 5. Set new rights
         $testRights = [
@@ -407,11 +403,11 @@ class RoleTest extends TestCase
         // Test that both permission models are accessible
         
         // Enable role model
-        $enableRoleResult = $this->roleService->enable(1);
-        self::assertIsBool($enableRoleResult->isSuccess(), 'Enabling role model should work');
+        $enableResult = $this->roleService->enable(1);
+        self::assertIsBool($enableResult->isSuccess(), 'Enabling role model should work');
         
-        $roleEnabledState = $this->roleService->isEnabled();
-        self::assertIsBool($roleEnabledState->isEnabled(), 'Should get boolean state for role model');
+        $isEnabledResult = $this->roleService->isEnabled();
+        self::assertIsBool($isEnabledResult->isEnabled(), 'Should get boolean state for role model');
         
         // Enable extended model
         $enableExtendedResult = $this->roleService->enable(0);
@@ -435,16 +431,15 @@ class RoleTest extends TestCase
         $rolesResult = $this->roleService->getList();
         $roles = $rolesResult->getRoles();
         
-        if (empty($roles)) {
+        if ($roles === []) {
             self::markTestSkipped('No roles available for access codes edge cases test');
-            return;
         }
         
         $roleId = (int)($roles[0]->ID ?? 1);
         
         // Test with empty array (should reset codes)
-        $emptyResult = $this->roleService->setAccessCodes($roleId, []);
-        self::assertIsBool($emptyResult->isSuccess(), 'Empty access codes should work');
+        $setAccessCodesResult = $this->roleService->setAccessCodes($roleId, []);
+        self::assertIsBool($setAccessCodesResult->isSuccess(), 'Empty access codes should work');
         
         // Test with various valid codes
         $validCodes = ['UA', 'G1', 'U1'];
@@ -466,17 +461,16 @@ class RoleTest extends TestCase
         $rolesResult = $this->roleService->getList();
         $roles = $rolesResult->getRoles();
         
-        if (empty($roles)) {
+        if ($roles === []) {
             self::markTestSkipped('No roles available for rights configuration edge cases test');
-            return;
         }
         
         $roleId = (int)($roles[0]->ID ?? 1);
         
         // Test with empty rights
         $emptyRights = [];
-        $emptyResult = $this->roleService->setRights($roleId, $emptyRights);
-        self::assertIsBool($emptyResult->isSuccess(), 'Empty rights should work');
+        $setRightsResult = $this->roleService->setRights($roleId, $emptyRights);
+        self::assertIsBool($setRightsResult->isSuccess(), 'Empty rights should work');
         
         // Test with only default rights (key '0')
         $defaultRights = ['0' => ['read']];
