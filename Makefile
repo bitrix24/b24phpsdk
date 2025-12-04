@@ -65,6 +65,7 @@ help:
 	@echo "test-integration-landing-syspage - run Landing SysPage integration tests"
 	@echo "test-integration-landing-repo - run Landing Repo integration tests"
 	@echo "test-integration-landing-demos - run Landing Demos integration tests"
+	@echo "test-integration-landing-role - run Landing Role integration tests"
 	@echo "test-integration-scope-landing-template - run Landing Template integration tests"
 
 
@@ -254,6 +255,11 @@ test-integration-landing-repo:
 .PHONY: test-integration-landing-demos
 test-integration-landing-demos:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_demos
+
+.PHONY: test-integration-landing-role
+test-integration-landing-role:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_role
+
 .PHONY: test-integration-scope-disk
 test-integration-scope-disk:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_disk

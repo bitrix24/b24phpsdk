@@ -29,6 +29,14 @@
   see [landing.syspage.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
     - `set` sets a special page for the site
     - `get` retrieves the list of special pages
+- Added service `Services\Landing\Role\Service\Role` with support methods,
+  see [landing.role.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
+    - `isEnabled` checks if role model is enabled
+    - `enable` enables or disables the role model
+    - `getList` retrieves a list of available roles
+    - `getRights` gets role rights for sites
+    - `setRights` sets role rights for sites
+    - `setAccessCodes` sets access codes for a role
     - `getSpecialPage` retrieves the address of the special page on the site
     - `deleteForLanding` deletes all mentions of the page as a special one
     - `deleteForSite` deletes all special pages of the site

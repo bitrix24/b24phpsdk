@@ -229,6 +229,9 @@
         <testsuite name="integration_tests_landing_block">
             <directory>./tests/Integration/Services/Landing/Block/</directory>
         </testsuite>
+        <testsuite name="integration_tests_landing_role">
+            <directory>./tests/Integration/Services/Landing/Role/</directory>
+        </testsuite>
         <testsuite name="integration_tests_crm_documentgenerator_numerator">
             <directory>./tests/Integration/Services/CRM/Documentgenerator/Numerator/</directory>
         </testsuite>
