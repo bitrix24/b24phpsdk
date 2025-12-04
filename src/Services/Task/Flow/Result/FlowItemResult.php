@@ -24,23 +24,24 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  * @property-read int $groupId
  * @property-read int $templateId
  * @property-read int $efficiency
+ * @property-read bool $active
  * @property-read int $plannedCompletionTime
  * @property-read string $activity
  * @property-read string $name
  * @property-read string $description
  * @property-read string $distributionType
- * @property-read array|null $responsibleList
- * @property-read bool|null $demo
- * @property-read bool|null $responsibleCanChangeDeadline
- * @property-read bool|null $matchWorkTime
- * @property-read bool|null $taskControl
- * @property-read bool|null $notifyAtHalfTime
+ * @property-read array $responsibleList
+ * @property-read bool $demo
+ * @property-read bool $responsibleCanChangeDeadline
+ * @property-read bool $matchWorkTime
+ * @property-read bool $taskControl
+ * @property-read bool $notifyAtHalfTime
  * @property-read int|null $notifyOnQueueOverflow
  * @property-read int|null $notifyOnTasksInProgressOverflow
  * @property-read int|null $notifyWhenEfficiencyDecreases
- * @property-read array|null $taskCreators
- * @property-read array|null $team
- * @property-read bool|null $trialFeatureEnabled
+ * @property-read array $taskCreators
+ * @property-read array $team
+ * @property-read bool $trialFeatureEnabled
  */
 class FlowItemResult extends AbstractItem
 {
