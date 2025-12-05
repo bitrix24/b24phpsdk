@@ -16,30 +16,28 @@ namespace Bitrix24\SDK\Services\IMOpenLines\Connector\Result;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
 /**
- * Class StatusResult
+ * Class SetDataResult
  *
- * Result class for imconnector.status method
+ * Result class for imconnector.set.data method
  *
  * @package Bitrix24\SDK\Services\IMOpenLines\Connector\Result
  */
-class StatusResult extends AbstractResult
+class SetDataResult extends AbstractResult
 {
     /**
-     * Get connector status information
+     * Check if operation was successful
      *
-     * @return array{
-     *   LINE: int,
-     *   CONNECTOR: string,
-     *   ERROR: bool|string,
-     *   CONFIGURED: bool|string,
-     *   STATUS: bool|string
-     * }
+     * @return bool
      */
-    public function getStatus(): array
+    public function isSuccess(): bool
     {
         $result = $this->getCoreResponse()->getResponseData()->getResult();
         
-        // Response format: [LINE], [CONNECTOR], [ERROR], [CONFIGURED], [STATUS]
-        return $result;
+        // Response format: [0] => 1
+        if (is_array($result) && isset($result[0])) {
+            return (bool)$result[0];
+        }
+        
+        return false;
     }
 }

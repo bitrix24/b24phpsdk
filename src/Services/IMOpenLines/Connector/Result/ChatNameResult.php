@@ -13,27 +13,31 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\IMOpenLines\Connector\Result;
 
-use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
 /**
  * Class ChatNameResult
  *
- * Represents the result of imconnector.chat.name.set method
+ * Result class for imconnector.chat.name.set method
+ *
+ * @package Bitrix24\SDK\Services\IMOpenLines\Connector\Result
  */
 class ChatNameResult extends AbstractResult
 {
     /**
-     * Get chat name operation result
+     * Check if operation was successful
      *
-     * @throws BaseException
+     * @return bool
      */
-    public function getResult(): array
+    public function isSuccess(): bool
     {
-        echo "\n\n ChatNameResult \n";
-        print_r($this->getCoreResponse()->getResponseData()->getResult());
-        echo "\n\n";
+        $result = $this->getCoreResponse()->getResponseData()->getResult();
         
-        return $this->getCoreResponse()->getResponseData()->getResult();
+        // Response format: [SUCCESS] => 1 and [DATA] => Array(...)
+        if (isset($result['SUCCESS'])) {
+            return (bool)$result['SUCCESS'];
+        }
+        
+        return false;
     }
 }

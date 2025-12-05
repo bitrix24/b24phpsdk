@@ -139,10 +139,9 @@ class ConnectorTest extends TestCase
     {
         $connectorData = $this->getTestConnectorData();
         
-        $connectorResult = $this->connectorService->register($connectorData);
-        $resultData = $connectorResult->getResult();
+        $registerResult = $this->connectorService->register($connectorData);
         
-        self::assertIsArray($resultData);
+        self::assertTrue($registerResult->isSuccess());
         
         // Clean up: unregister the test connector
         try {
@@ -169,15 +168,13 @@ class ConnectorTest extends TestCase
         try {
             // Test activation
             $activateResult = $this->connectorService->activate($connectorData['ID'], $lineId, 1);
-            $resultData = $activateResult->getResult();
             
-            self::assertIsArray($resultData);
+            self::assertTrue($activateResult->isSuccess());
             
             // Test deactivation
             $deactivateResult = $this->connectorService->activate($connectorData['ID'], $lineId, 0);
-            $deactivateData = $deactivateResult->getResult();
             
-            self::assertIsArray($deactivateData);
+            self::assertTrue($deactivateResult->isSuccess());
             
         } finally {
             // Clean up
@@ -241,9 +238,8 @@ class ConnectorTest extends TestCase
             ];
             
             $result = $this->connectorService->setData($connectorData['ID'], $lineId, $data);
-            $resultData = $result->getResult();
             
-            self::assertIsArray($resultData);
+            self::assertTrue($result->isSuccess());
             
         } finally {
             // Clean up
@@ -275,9 +271,14 @@ class ConnectorTest extends TestCase
             $this->connectorService->activate($connectorData['ID'], $lineId, 1);
             
             $result = $this->connectorService->sendMessages($connectorData['ID'], $lineId, $messages);
-            $resultData = $result->getResult();
             
-            self::assertIsArray($resultData);
+            self::assertTrue($result->isSuccess());
+            
+            // Optionally check data if needed
+            $data = $result->getData();
+            if ($data !== null) {
+                self::assertIsArray($data);
+            }
             
         } finally {
             // Clean up
@@ -312,9 +313,14 @@ class ConnectorTest extends TestCase
             $messages[0]['message']['text'] = 'Updated test message';
             
             $result = $this->connectorService->updateMessages($connectorData['ID'], $lineId, $messages);
-            $resultData = $result->getResult();
             
-            self::assertIsArray($resultData);
+            self::assertTrue($result->isSuccess());
+            
+            // Optionally check data if needed
+            $data = $result->getData();
+            if ($data !== null) {
+                self::assertIsArray($data);
+            }
             
         } finally {
             // Clean up
@@ -354,9 +360,14 @@ class ConnectorTest extends TestCase
             $this->connectorService->activate($connectorData['ID'], $lineId, 1);
             
             $result = $this->connectorService->deleteMessages($connectorData['ID'], $lineId, $deleteMessages);
-            $resultData = $result->getResult();
             
-            self::assertIsArray($resultData);
+            self::assertTrue($result->isSuccess());
+            
+            // Optionally check data if needed
+            $data = $result->getData();
+            if ($data !== null) {
+                self::assertIsArray($data);
+            }
             
         } finally {
             // Clean up
@@ -396,9 +407,8 @@ class ConnectorTest extends TestCase
             $this->connectorService->activate($connectorData['ID'], $lineId, 1);
             
             $result = $this->connectorService->sendStatusDelivery($connectorData['ID'], $lineId, $statusMessages);
-            $resultData = $result->getResult();
             
-            self::assertIsArray($resultData);
+            self::assertTrue($result->isSuccess());
             
         } finally {
             // Clean up
@@ -438,9 +448,8 @@ class ConnectorTest extends TestCase
             $this->connectorService->activate($connectorData['ID'], $lineId, 1);
             
             $result = $this->connectorService->sendStatusReading($connectorData['ID'], $lineId, $statusMessages);
-            $resultData = $result->getResult();
             
-            self::assertIsArray($resultData);
+            self::assertTrue($result->isSuccess());
             
         } finally {
             // Clean up
@@ -474,10 +483,12 @@ class ConnectorTest extends TestCase
             $chatId = 'test_chat_' . $timestamp;
             $newName = 'New Test Chat Name ' . $timestamp;
             
-            $result = $this->connectorService->setChatName($connectorData['ID'], $lineId, $chatId, $newName);
-            $resultData = $result->getResult();
+            // Get current user ID
+            $userId = (string)Fabric::getServiceBuilder(true)->getMainScope()->main()->getCurrentUserProfile()->getUserProfile()->ID;
             
-            self::assertIsArray($resultData);
+            $result = $this->connectorService->setChatName($connectorData['ID'], $lineId, $chatId, $newName, $userId);
+            
+            self::assertTrue($result->isSuccess());
             
         } finally {
             // Clean up
@@ -503,10 +514,9 @@ class ConnectorTest extends TestCase
         $this->connectorService->register($connectorData);
         
         // Then unregister it
-        $connectorResult = $this->connectorService->unregister($connectorData['ID']);
-        $resultData = $connectorResult->getResult();
+        $unregisterResult = $this->connectorService->unregister($connectorData['ID']);
         
-        self::assertIsArray($resultData);
+        self::assertTrue($unregisterResult->isSuccess());
     }
 
     protected function setUp(): void

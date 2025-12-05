@@ -13,27 +13,56 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\IMOpenLines\Connector\Result;
 
-use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
 /**
  * Class SendMessagesResult
  *
- * Represents the result of imconnector.send.messages, imconnector.update.messages methods
+ * Result class for imconnector.send.messages, imconnector.update.messages, imconnector.delete.messages methods
+ *
+ * @package Bitrix24\SDK\Services\IMOpenLines\Connector\Result
  */
 class SendMessagesResult extends AbstractResult
 {
     /**
-     * Get send messages operation result
+     * Check if operation was successful
      *
-     * @throws BaseException
+     * @return bool
+     */
+    public function isSuccess(): bool
+    {
+        $result = $this->getCoreResponse()->getResponseData()->getResult();
+        
+        // Response format: [SUCCESS] => 1
+        if (isset($result['SUCCESS'])) {
+            return (bool)$result['SUCCESS'];
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Get operation result data
+     *
+     * @return array{
+     *   SUCCESS?: int,
+     *   DATA?: array
+     * }
      */
     public function getResult(): array
     {
-        echo "\n\n SendMessagesResult \n";
-        print_r($this->getCoreResponse()->getResponseData()->getResult());
-        echo "\n\n";
-        
         return $this->getCoreResponse()->getResponseData()->getResult();
+    }
+    
+    /**
+     * Get result data
+     *
+     * @return array|null
+     */
+    public function getData(): ?array
+    {
+        $result = $this->getResult();
+        
+        return $result['DATA'] ?? null;
     }
 }

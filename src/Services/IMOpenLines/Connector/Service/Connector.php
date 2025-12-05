@@ -20,11 +20,16 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\AbstractService;
-use Bitrix24\SDK\Services\IMOpenLines\Connector\Result\ConnectorResult;
+use Bitrix24\SDK\Services\IMOpenLines\Connector\Result\RegisterResult;
+use Bitrix24\SDK\Services\IMOpenLines\Connector\Result\ActivateResult;
+use Bitrix24\SDK\Services\IMOpenLines\Connector\Result\UnregisterResult;
+use Bitrix24\SDK\Services\IMOpenLines\Connector\Result\SetDataResult;
 use Bitrix24\SDK\Services\IMOpenLines\Connector\Result\ConnectorsResult;
 use Bitrix24\SDK\Services\IMOpenLines\Connector\Result\StatusResult;
 use Bitrix24\SDK\Services\IMOpenLines\Connector\Result\SendMessagesResult;
 use Bitrix24\SDK\Services\IMOpenLines\Connector\Result\ChatNameResult;
+use Bitrix24\SDK\Services\IMOpenLines\Connector\Result\StatusDeliveryResult;
+use Bitrix24\SDK\Services\IMOpenLines\Connector\Result\StatusReadingResult;
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['imopenlines']))]
@@ -69,9 +74,9 @@ class Connector extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/imopenlines/imconnector/imconnector-register.html',
         'Register a new connector'
     )]
-    public function register(array $connectorData): ConnectorResult
+    public function register(array $connectorData): RegisterResult
     {
-        return new ConnectorResult(
+        return new RegisterResult(
             $this->core->call('imconnector.register', $connectorData)
         );
     }
@@ -93,9 +98,9 @@ class Connector extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/imopenlines/imconnector/imconnector-activate.html',
         'Activate or deactivate a connector'
     )]
-    public function activate(string $connector, string $line, int $active): ConnectorResult
+    public function activate(string $connector, string $line, int $active): ActivateResult
     {
-        return new ConnectorResult(
+        return new ActivateResult(
             $this->core->call('imconnector.activate', [
                 'CONNECTOR' => $connector,
                 'LINE' => $line,
@@ -169,9 +174,9 @@ class Connector extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/imopenlines/imconnector/imconnector-connector-data-set.html',
         'Change connector settings'
     )]
-    public function setData(string $connector, string $line, array $data): ConnectorResult
+    public function setData(string $connector, string $line, array $data): SetDataResult
     {
-        return new ConnectorResult(
+        return new SetDataResult(
             $this->core->call('imconnector.connector.data.set', [
                 'CONNECTOR' => $connector,
                 'LINE' => $line,
@@ -215,9 +220,9 @@ class Connector extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/imopenlines/imconnector/imconnector-unregister.html',
         'Unregister a connector'
     )]
-    public function unregister(string $id): ConnectorResult
+    public function unregister(string $id): UnregisterResult
     {
-        return new ConnectorResult(
+        return new UnregisterResult(
             $this->core->call('imconnector.unregister', [
                 'ID' => $id
             ])
@@ -297,9 +302,9 @@ class Connector extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/imopenlines/imconnector/imconnector-delete-messages.html',
         'Delete sent messages'
     )]
-    public function deleteMessages(string $connector, string $line, array $messages): ConnectorResult
+    public function deleteMessages(string $connector, string $line, array $messages): SendMessagesResult
     {
-        return new ConnectorResult(
+        return new SendMessagesResult(
             $this->core->call('imconnector.delete.messages', [
                 'CONNECTOR' => $connector,
                 'LINE' => $line,
@@ -325,9 +330,9 @@ class Connector extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/imopenlines/imconnector/imconnector-send-status-delivery.html',
         'Update delivery status'
     )]
-    public function sendStatusDelivery(string $connector, string $line, array $messages): ConnectorResult
+    public function sendStatusDelivery(string $connector, string $line, array $messages): StatusDeliveryResult
     {
-        return new ConnectorResult(
+        return new StatusDeliveryResult(
             $this->core->call('imconnector.send.status.delivery', [
                 'CONNECTOR' => $connector,
                 'LINE' => $line,
@@ -353,9 +358,9 @@ class Connector extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/imopenlines/imconnector/imconnector-send-status-reading.html',
         'Update reading status'
     )]
-    public function sendStatusReading(string $connector, string $line, array $messages): ConnectorResult
+    public function sendStatusReading(string $connector, string $line, array $messages): StatusReadingResult
     {
-        return new ConnectorResult(
+        return new StatusReadingResult(
             $this->core->call('imconnector.send.status.reading', [
                 'CONNECTOR' => $connector,
                 'LINE' => $line,

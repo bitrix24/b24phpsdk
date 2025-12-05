@@ -24,17 +24,13 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 class ConnectorsResult extends AbstractResult
 {
     /**
-     * Get list of connectors
+     * Get available connectors
      *
      * @return ConnectorItemResult[]
      * @throws BaseException
      */
     public function getConnectors(): array
     {
-        echo "\n\n ConnectorsResult \n";
-        print_r($this->getCoreResponse()->getResponseData()->getResult());
-        echo "\n\n";
-        
         $connectors = [];
         $result = $this->getCoreResponse()->getResponseData()->getResult();
         

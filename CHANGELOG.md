@@ -1,5 +1,24 @@
 # b24-php-sdk change log
 
+## Upcoming  1.9.0 - 2026.01.01
+
+### Added
+
+- Added service `Services\IMOpenLines\Connector\Service\Connector` with support methods,
+  see [imconnector.* methods](https://github.com/bitrix24/b24phpsdk/issues/320):
+    - `list` method returns a list of available connectors
+    - `register` method registers a new connector
+    - `activate` method activates or deactivates a connector
+    - `unregister` method unregisters a connector
+    - `status` method retrieves connector status information
+    - `setData` method sets connector data
+    - `sendMessages` method sends messages through the connector
+    - `updateMessages` method updates messages
+    - `deleteMessages` method deletes messages
+    - `sendStatusDelivery` method sends message delivery status
+    - `sendStatusReading` method sends message reading status
+    - `setChatName` method sets chat name
+
 ## 1.8.0 - 2025.11.10
 
 ### Added
