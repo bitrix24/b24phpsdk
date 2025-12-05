@@ -37,9 +37,7 @@ class StatusResult extends AbstractResult
      */
     public function getStatus(): array
     {
-        $result = $this->getCoreResponse()->getResponseData()->getResult();
-        
         // Response format: [LINE], [CONNECTOR], [ERROR], [CONFIGURED], [STATUS]
-        return $result;
+        return $this->getCoreResponse()->getResponseData()->getResult();
     }
 }

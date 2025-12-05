@@ -26,8 +26,6 @@ class SendMessagesResult extends AbstractResult
 {
     /**
      * Check if operation was successful
-     *
-     * @return bool
      */
     public function isSuccess(): bool
     {
@@ -56,8 +54,6 @@ class SendMessagesResult extends AbstractResult
     
     /**
      * Get result data
-     *
-     * @return array|null
      */
     public function getData(): ?array
     {

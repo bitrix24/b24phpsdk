@@ -26,8 +26,6 @@ class RegisterResult extends AbstractResult
 {
     /**
      * Check if operation was successful
-     *
-     * @return bool
      */
     public function isSuccess(): bool
     {

@@ -26,15 +26,13 @@ class SetDataResult extends AbstractResult
 {
     /**
      * Check if operation was successful
-     *
-     * @return bool
      */
     public function isSuccess(): bool
     {
         $result = $this->getCoreResponse()->getResponseData()->getResult();
         
         // Response format: [0] => 1
-        if (is_array($result) && isset($result[0])) {
+        if (isset($result[0])) {
             return (bool)$result[0];
         }
         
