@@ -19,7 +19,10 @@ use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Exceptions\InvalidGrantException;
+use Bitrix24\SDK\Core\Exceptions\PortalDomainNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Core\Exceptions\WrongClientException;
 use Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken;
 use Bitrix24\SDK\Infrastructure\HttpClient\RequestId\RequestIdGeneratorInterface;
 use Fig\Http\Message\StatusCodeInterface;
@@ -78,6 +81,9 @@ class ApiClient implements ApiClientInterface
      * @throws InvalidArgumentException
      * @throws TransportExceptionInterface
      * @throws TransportException
+     * @throws InvalidGrantException
+     * @throws PortalDomainNotFoundException
+     * @throws WrongClientException
      */
     public function getNewAuthToken(): RenewedAuthToken
     {
@@ -123,28 +129,131 @@ class ApiClient implements ApiClientInterface
             'responseData' => $responseData,
             'requestId' => $requestId
         ]);
-        if ($response->getStatusCode() === StatusCodeInterface::STATUS_OK) {
-            $this->apiLevelErrorHandler->handle($responseData);
+        // Handle different HTTP status codes with specific exceptions
+        switch ($response->getStatusCode()) {
+            case StatusCodeInterface::STATUS_OK:
+                $this->apiLevelErrorHandler->handle($responseData);
 
-            $newAuthToken = RenewedAuthToken::initFromArray($responseData);
+                $newAuthToken = RenewedAuthToken::initFromArray($responseData);
 
-            $this->logger->debug('getNewAuthToken.finish', [
-                'requestId' => $requestId
-            ]);
-            return $newAuthToken;
+                $this->logger->debug('getNewAuthToken.finish', [
+                    'requestId' => $requestId
+                ]);
+                return $newAuthToken;
+
+            case StatusCodeInterface::STATUS_BAD_REQUEST:
+                $this->logger->warning('getNewAuthToken.badRequest', [
+                    'url' => $url,
+                    'error' => $responseData['error'] ?? 'unknown',
+                    'error_description' => $responseData['error_description'] ?? 'no description'
+                ]);
+
+                $errorCode = strtolower(trim((string)($responseData['error'] ?? '')));
+                $errorDescription = strtolower(trim((string)($responseData['error_description'] ?? '')));
+
+                // Handle specific OAuth error codes
+                switch ($errorCode) {
+                    case 'invalid_grant':
+                    case 'bad_verification_code':
+                        throw new InvalidGrantException(
+                            sprintf(
+                                'OAuth refresh token is invalid or expired (error: %s, description: %s). User re-authorization required.',
+                                $responseData['error'] ?? 'unknown',
+                                $responseData['error_description'] ?? 'no description'
+                            )
+                        );
+
+                    default:
+                        // Check if error is related to portal domain
+                        if (str_contains($errorDescription, 'portal') ||
+                            str_contains($errorDescription, 'domain') ||
+                            str_contains($errorDescription, 'not found')) {
+                            throw new PortalDomainNotFoundException(
+                                sprintf(
+                                    'Bitrix24 portal domain not found or inaccessible (error: %s, description: %s)',
+                                    $responseData['error'] ?? 'unknown',
+                                    $responseData['error_description'] ?? 'no description'
+                                )
+                            );
+                        }
+
+                        // Generic bad request error
+                        throw new TransportException(
+                            sprintf(
+                                'Getting new access token failure (error: %s, description: %s)',
+                                $responseData['error'] ?? 'unknown',
+                                $responseData['error_description'] ?? 'no description'
+                            )
+                        );
+                }
+
+            case StatusCodeInterface::STATUS_UNAUTHORIZED:
+                $this->logger->warning('getNewAuthToken.unauthorized', [
+                    'url' => $url,
+                    'error' => $responseData['error'] ?? 'unknown'
+                ]);
+
+                $errorCode = strtolower(trim((string)($responseData['error'] ?? '')));
+                if ($errorCode === 'invalid_client') {
+                    throw new WrongClientException(
+                        sprintf(
+                            'OAuth client credentials are invalid (client_id or client_secret is wrong). Error: %s, description: %s',
+                            $responseData['error'] ?? 'unknown',
+                            $responseData['error_description'] ?? 'no description'
+                        )
+                    );
+                }
+
+                throw new TransportException(
+                    sprintf(
+                        'Getting new access token failure: unauthorized (error: %s, description: %s)',
+                        $responseData['error'] ?? 'unknown',
+                        $responseData['error_description'] ?? 'no description'
+                    )
+                );
+
+            case StatusCodeInterface::STATUS_NOT_FOUND:
+                $this->logger->warning('getNewAuthToken.notFound', [
+                    'url' => $url
+                ]);
+
+                throw new PortalDomainNotFoundException(
+                    sprintf(
+                        'Bitrix24 portal domain not found (HTTP 404). Portal may not exist or has been deleted.'
+                    )
+                );
+
+            case StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR:
+            case StatusCodeInterface::STATUS_BAD_GATEWAY:
+            case StatusCodeInterface::STATUS_SERVICE_UNAVAILABLE:
+            case StatusCodeInterface::STATUS_GATEWAY_TIMEOUT:
+                $this->logger->error('getNewAuthToken.serverError', [
+                    'url' => $url,
+                    'httpStatus' => $response->getStatusCode(),
+                    'responseData' => $responseData
+                ]);
+
+                throw new TransportException(
+                    sprintf(
+                        'OAuth server error (HTTP %s). Please retry later.',
+                        $response->getStatusCode()
+                    )
+                );
+
+            default:
+                $this->logger->error('getNewAuthToken.unknownHttpStatus', [
+                    'url' => $url,
+                    'httpStatus' => $response->getStatusCode(),
+                    'responseData' => $responseData
+                ]);
+
+                throw new TransportException(
+                    sprintf(
+                        'Getting new access token failure with unknown HTTP status code %s',
+                        $response->getStatusCode()
+                    )
+                );
         }
-
-        if ($response->getStatusCode() === StatusCodeInterface::STATUS_BAD_REQUEST) {
-            $this->logger->warning('getNewAuthToken.badRequest', [
-                'url' => $url
-            ]);
-            throw new TransportException(sprintf('getting new access token failure: %s', $responseData['error']));
-        }
-
-        throw new TransportException(
-            'getting new access token failure with unknown http-status code %s',
-            $response->getStatusCode()
-        );
     }
 
     /**
