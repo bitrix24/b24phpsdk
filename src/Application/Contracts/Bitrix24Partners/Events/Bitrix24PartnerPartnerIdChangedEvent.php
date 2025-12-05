@@ -17,6 +17,10 @@ use Carbon\CarbonImmutable;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\EventDispatcher\Event;
 
+/**
+ * @deprecated This event is deprecated since version 1.9.0 and will be removed in version 2.0.0.
+ *             The Bitrix24 partner ID is now read-only and can only be set during entity construction.
+ */
 class Bitrix24PartnerPartnerIdChangedEvent extends Event
 {
     public function __construct(
