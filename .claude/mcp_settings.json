@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "bitrix24": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-bitrix24-ru"
+      ],
+      "env": {}
+    }
+  }
+}

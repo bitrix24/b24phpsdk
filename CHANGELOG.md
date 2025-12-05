@@ -1,6 +1,33 @@
 # b24-php-sdk change log
 
-## Unreleased
+## 1.9.0 - 2025.12.01
+
+### Added
+
+- Added ApplicationSettings contracts for managing application configuration settings with support for multiple scopes (global, user-specific, department-specific):
+  - Entity interface `ApplicationSettingsItemInterface` with methods for managing settings lifecycle
+  - Repository interface `ApplicationSettingsItemRepositoryInterface` with CRUD operations and scope-based queries
+  - Enum `ApplicationSettingStatus` for tracking setting state (active/deleted)
+  - Events for tracking settings changes:
+    - `ApplicationSettingsItemCreatedEvent` - triggered when new setting is created
+    - `ApplicationSettingsItemChangedEvent` - triggered when setting value is updated (includes old/new values and change author)
+    - `ApplicationSettingsItemDeletedEvent` - triggered when setting is soft-deleted
+  - Exception `ApplicationSettingsItemNotFoundException` for handling missing settings
+  - Comprehensive abstract test classes for entity and repository contracts
+  - Documentation in `src/Application/Contracts/ApplicationSettings/Docs/ApplicationSettings.md`
+- Added `VersionedScope` container class for managing multiple Scope instances with version support:
+    - Readonly immutable container storing multiple `Scope` instances indexed by version number
+    - Versions must be unique integers starting from 1
+    - `getScope(int $version): Scope` method retrieves Scope by version number (throws `InvalidArgumentException` if version doesn't exist)
+    - `getVersions(): array` method returns sorted array of all available version numbers
+    - `hasVersion(int $version): bool` method checks if a specific version exists
+    - Comprehensive unit tests with 13 test cases covering construction validation, version retrieval, and error handling
+    - Uses standard `InvalidArgumentException` for all validation errors (no custom exceptions)
+- Added MCP (Model Context Protocol) server configuration for Bitrix24 API documentation [see details](https://github.com/bitrix24/b24phpsdk/issues/126):
+  - Added `.claude/mcp_settings.json` with Bitrix24 MCP server setup
+  - Enables direct access to Bitrix24 REST API documentation within Claude Code
+  - Provides tools for searching methods, viewing method details, and reading articles
+  - Improves developer experience when working with Bitrix24 API
 
 ### Changed
 
@@ -9,6 +36,32 @@
     - Version 6.0.0 is compatible with PHP 7.1+ (exceeds project requirement of PHP 8.2+)
     - All existing code remains fully compatible with version 6.x
     - API methods like `IP::factory()` continue to work without changes
+
+### Fixed
+
+- Fixed `MOVED_TIME` field in `DealItemResult` and `LeadItemResult` to return `CarbonImmutable` instead of `int`,
+  [see details](https://github.com/bitrix24/b24phpsdk/issues/126):
+    - Moved `MOVED_TIME` from integer casting block to datetime casting block in `AbstractCrmItem::__get()`
+    - Field now correctly returns `CarbonImmutable` object matching the documented type
+    - Added comprehensive unit tests for `AbstractCrmItem` datetime field type casting with 8 test cases covering:
+        - `MOVED_TIME` returns `CarbonImmutable` for both snake_case and camelCase variants
+        - `DATE_CREATE`, `DATE_MODIFY`, `LAST_ACTIVITY_TIME` return `CarbonImmutable`
+        - `MOVED_BY_ID` correctly returns `int`
+        - Null handling for empty datetime and integer fields
+- Fixed invalid type casting hints in `FlowItemResult`,
+  [see details](https://github.com/bitrix24/b24phpsdk/issues/275):
+    - Added missing `@property-read bool $active` annotation
+    - Corrected nullable type annotations to match Bitrix24 API documentation for `task.flow.Flow.get` method:
+        - `responsibleList`: changed from `array|null` to `array` (required field)
+        - `demo`: changed from `bool|null` to `bool` (required field)
+        - `responsibleCanChangeDeadline`: changed from `bool|null` to `bool` (required field)
+        - `matchWorkTime`: changed from `bool|null` to `bool` (required field)
+        - `taskControl`: changed from `bool|null` to `bool` (required field)
+        - `notifyAtHalfTime`: changed from `bool|null` to `bool` (required field)
+        - `taskCreators`: changed from `array|null` to `array` (required field)
+        - `team`: changed from `array|null` to `array` (required field)
+        - `trialFeatureEnabled`: changed from `bool|null` to `bool` (required field)
+    - Preserved correct nullable types for notification thresholds: `notifyOnQueueOverflow`, `notifyOnTasksInProgressOverflow`, `notifyWhenEfficiencyDecreases` (int|null)
 
 ## 1.8.0 - 2025.11.10
 
