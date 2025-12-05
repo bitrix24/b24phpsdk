@@ -129,129 +129,25 @@ class ApiClient implements ApiClientInterface
             'responseData' => $responseData,
             'requestId' => $requestId
         ]);
-        // Handle different HTTP status codes with specific exceptions
-        switch ($response->getStatusCode()) {
-            case StatusCodeInterface::STATUS_OK:
-                $this->apiLevelErrorHandler->handle($responseData);
 
-                $newAuthToken = RenewedAuthToken::initFromArray($responseData);
+        // Handle success case
+        if ($response->getStatusCode() === StatusCodeInterface::STATUS_OK) {
+            $this->apiLevelErrorHandler->handle($responseData);
 
-                $this->logger->debug('getNewAuthToken.finish', [
-                    'requestId' => $requestId
-                ]);
-                return $newAuthToken;
+            $newAuthToken = RenewedAuthToken::initFromArray($responseData);
 
-            case StatusCodeInterface::STATUS_BAD_REQUEST:
-                $this->logger->warning('getNewAuthToken.badRequest', [
-                    'url' => $url,
-                    'error' => $responseData['error'] ?? 'unknown',
-                    'error_description' => $responseData['error_description'] ?? 'no description'
-                ]);
-
-                $errorCode = strtolower(trim((string)($responseData['error'] ?? '')));
-                $errorDescription = strtolower(trim((string)($responseData['error_description'] ?? '')));
-
-                // Handle specific OAuth error codes
-                switch ($errorCode) {
-                    case 'invalid_grant':
-                    case 'bad_verification_code':
-                        throw new InvalidGrantException(
-                            sprintf(
-                                'OAuth refresh token is invalid or expired (error: %s, description: %s). User re-authorization required.',
-                                $responseData['error'] ?? 'unknown',
-                                $responseData['error_description'] ?? 'no description'
-                            )
-                        );
-
-                    default:
-                        // Check if error is related to portal domain
-                        if (str_contains($errorDescription, 'portal') ||
-                            str_contains($errorDescription, 'domain') ||
-                            str_contains($errorDescription, 'not found')) {
-                            throw new PortalDomainNotFoundException(
-                                sprintf(
-                                    'Bitrix24 portal domain not found or inaccessible (error: %s, description: %s)',
-                                    $responseData['error'] ?? 'unknown',
-                                    $responseData['error_description'] ?? 'no description'
-                                )
-                            );
-                        }
-
-                        // Generic bad request error
-                        throw new TransportException(
-                            sprintf(
-                                'Getting new access token failure (error: %s, description: %s)',
-                                $responseData['error'] ?? 'unknown',
-                                $responseData['error_description'] ?? 'no description'
-                            )
-                        );
-                }
-
-            case StatusCodeInterface::STATUS_UNAUTHORIZED:
-                $this->logger->warning('getNewAuthToken.unauthorized', [
-                    'url' => $url,
-                    'error' => $responseData['error'] ?? 'unknown'
-                ]);
-
-                $errorCode = strtolower(trim((string)($responseData['error'] ?? '')));
-                if ($errorCode === 'invalid_client') {
-                    throw new WrongClientException(
-                        sprintf(
-                            'OAuth client credentials are invalid (client_id or client_secret is wrong). Error: %s, description: %s',
-                            $responseData['error'] ?? 'unknown',
-                            $responseData['error_description'] ?? 'no description'
-                        )
-                    );
-                }
-
-                throw new TransportException(
-                    sprintf(
-                        'Getting new access token failure: unauthorized (error: %s, description: %s)',
-                        $responseData['error'] ?? 'unknown',
-                        $responseData['error_description'] ?? 'no description'
-                    )
-                );
-
-            case StatusCodeInterface::STATUS_NOT_FOUND:
-                $this->logger->warning('getNewAuthToken.notFound', [
-                    'url' => $url
-                ]);
-
-                throw new PortalDomainNotFoundException(
-                    'Bitrix24 portal domain not found (HTTP 404). Portal may not exist or has been deleted.'
-                );
-
-            case StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR:
-            case StatusCodeInterface::STATUS_BAD_GATEWAY:
-            case StatusCodeInterface::STATUS_SERVICE_UNAVAILABLE:
-            case StatusCodeInterface::STATUS_GATEWAY_TIMEOUT:
-                $this->logger->error('getNewAuthToken.serverError', [
-                    'url' => $url,
-                    'httpStatus' => $response->getStatusCode(),
-                    'responseData' => $responseData
-                ]);
-
-                throw new TransportException(
-                    sprintf(
-                        'OAuth server error (HTTP %s). Please retry later.',
-                        $response->getStatusCode()
-                    )
-                );
-
-            default:
-                $this->logger->error('getNewAuthToken.unknownHttpStatus', [
-                    'url' => $url,
-                    'httpStatus' => $response->getStatusCode(),
-                    'responseData' => $responseData
-                ]);
-
-                throw new TransportException(
-                    sprintf(
-                        'Getting new access token failure with unknown HTTP status code %s',
-                        $response->getStatusCode()
-                    )
-                );
+            $this->logger->debug('getNewAuthToken.finish', [
+                'requestId' => $requestId
+            ]);
+            return $newAuthToken;
         }
+
+        // Handle error cases via ApiLevelErrorHandler
+        $this->apiLevelErrorHandler->handleOAuthError(
+            $response->getStatusCode(),
+            $responseData,
+            $url
+        );
     }
 
     /**
