@@ -26,7 +26,6 @@ class SendMessagesResult extends AbstractResult
     /**
      * Get send messages operation result
      *
-     * @return array
      * @throws BaseException
      */
     public function getResult(): array

@@ -133,9 +133,11 @@ class Connector extends AbstractService
         if ($error !== null) {
             $params['ERROR'] = $error;
         }
+
         if ($configured !== null) {
             $params['CONFIGURED'] = $configured;
         }
+
         if ($status !== null) {
             $params['STATUS'] = $status;
         }

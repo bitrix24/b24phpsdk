@@ -26,7 +26,6 @@ class ChatNameResult extends AbstractResult
     /**
      * Get chat name operation result
      *
-     * @return array
      * @throws BaseException
      */
     public function getResult(): array

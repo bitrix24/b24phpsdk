@@ -51,8 +51,6 @@ class ConnectorTest extends TestCase
 
     /**
      * Helper method to create test connector data
-     *
-     * @return array
      */
     private function getTestConnectorData(): array
     {
@@ -74,7 +72,6 @@ class ConnectorTest extends TestCase
     /**
      * Helper method to get or create open line ID for tests
      *
-     * @return string
      * @throws BaseException
      * @throws TransportException
      */
@@ -87,8 +84,6 @@ class ConnectorTest extends TestCase
 
     /**
      * Helper method to create test messages data
-     *
-     * @return array
      */
     private function getTestMessagesData(): array
     {
@@ -127,12 +122,10 @@ class ConnectorTest extends TestCase
 
         self::assertIsArray($connectors);
         
-        if (!empty($connectors)) {
-            foreach ($connectors as $connectorItemResult) {
-                self::assertInstanceOf(ConnectorItemResult::class, $connectorItemResult);
-                self::assertNotEmpty($connectorItemResult->id);
-                self::assertNotEmpty($connectorItemResult->name);
-            }
+        foreach ($connectors as $connector) {
+            self::assertInstanceOf(ConnectorItemResult::class, $connector);
+            self::assertNotEmpty($connector->id);
+            self::assertNotEmpty($connector->name);
         }
     }
 
@@ -146,8 +139,8 @@ class ConnectorTest extends TestCase
     {
         $connectorData = $this->getTestConnectorData();
         
-        $result = $this->connectorService->register($connectorData);
-        $resultData = $result->getResult();
+        $connectorResult = $this->connectorService->register($connectorData);
+        $resultData = $connectorResult->getResult();
         
         self::assertIsArray($resultData);
         
@@ -510,8 +503,8 @@ class ConnectorTest extends TestCase
         $this->connectorService->register($connectorData);
         
         // Then unregister it
-        $result = $this->connectorService->unregister($connectorData['ID']);
-        $resultData = $result->getResult();
+        $connectorResult = $this->connectorService->unregister($connectorData['ID']);
+        $resultData = $connectorResult->getResult();
         
         self::assertIsArray($resultData);
     }

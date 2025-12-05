@@ -26,7 +26,6 @@ class StatusResult extends AbstractResult
     /**
      * Get connector status information
      *
-     * @return array
      * @throws BaseException
      */
     public function getStatus(): array

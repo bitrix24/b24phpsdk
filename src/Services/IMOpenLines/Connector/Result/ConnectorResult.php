@@ -26,7 +26,6 @@ class ConnectorResult extends AbstractResult
     /**
      * Get operation result
      *
-     * @return array
      * @throws BaseException
      */
     public function getResult(): array
