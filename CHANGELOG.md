@@ -29,6 +29,14 @@
   - Provides tools for searching methods, viewing method details, and reading articles
   - Improves developer experience when working with Bitrix24 API
 
+### Changed
+
+- Updated `darsyn/ip` dependency constraint to support version 6.x alongside versions 4.x and 5.x, [see details](https://github.com/bitrix24/b24phpsdk/issues/236)
+    - New version constraint: `^4 || ^5 || ^6`
+    - Version 6.0.0 is compatible with PHP 7.1+ (exceeds project requirement of PHP 8.2+)
+    - All existing code remains fully compatible with version 6.x
+    - API methods like `IP::factory()` continue to work without changes
+
 ### Fixed
 
 - Fixed `MOVED_TIME` field in `DealItemResult` and `LeadItemResult` to return `CarbonImmutable` instead of `int`,
