@@ -218,9 +218,7 @@ class ApiClient implements ApiClientInterface
                 ]);
 
                 throw new PortalDomainNotFoundException(
-                    sprintf(
-                        'Bitrix24 portal domain not found (HTTP 404). Portal may not exist or has been deleted.'
-                    )
+                    'Bitrix24 portal domain not found (HTTP 404). Portal may not exist or has been deleted.'
                 );
 
             case StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR:

@@ -46,10 +46,10 @@ class ApiClientTest extends TestCase
     public function testGetNewAuthTokenErrorHandling(
         int $httpStatusCode,
         array $responseBody,
-        ?Throwable $expectedException
+        ?Throwable $throwable
     ): void {
-        if ($expectedException instanceof Throwable) {
-            $this->expectException($expectedException::class);
+        if ($throwable instanceof Throwable) {
+            $this->expectException($throwable::class);
         }
 
         // Create mock HTTP client with predefined response
@@ -193,9 +193,11 @@ class ApiClientTest extends TestCase
     #[TestDox('test getNewAuthToken success')]
     public function testGetNewAuthTokenSuccess(): void
     {
+        $expiresTimestamp = time() + 3600;
         $successResponse = [
             'access_token' => 'new-access-token',
             'refresh_token' => 'new-refresh-token',
+            'expires' => $expiresTimestamp,
             'expires_in' => 3600,
             'scope' => 'user',
             'domain' => 'test.bitrix24.com',
@@ -226,11 +228,11 @@ class ApiClientTest extends TestCase
             new NullLogger()
         );
 
-        $renewedToken = $apiClient->getNewAuthToken();
+        $renewedAuthToken = $apiClient->getNewAuthToken();
 
-        $this->assertEquals('new-access-token', $renewedToken->authToken->accessToken);
-        $this->assertEquals('new-refresh-token', $renewedToken->authToken->refreshToken);
-        $this->assertEquals(3600, $renewedToken->authToken->expires);
+        $this->assertEquals('new-access-token', $renewedAuthToken->authToken->accessToken);
+        $this->assertEquals('new-refresh-token', $renewedAuthToken->authToken->refreshToken);
+        $this->assertEquals($expiresTimestamp, $renewedAuthToken->authToken->expires);
     }
 
     protected function setUp(): void
