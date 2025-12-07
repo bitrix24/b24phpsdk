@@ -76,6 +76,10 @@
     - Enhanced error messages include both OAuth error code and description for better diagnostics
     - Developers can now distinguish between different failure causes and implement specific recovery logic
     - Added comprehensive unit tests covering all error scenarios
+- Fixed `testFindByEmailWithVerifiedEmail` test in `ContactPersonRepositoryInterfaceTest` to properly mark email as verified,
+  [see details](https://github.com/bitrix24/b24phpsdk/issues/316):
+    - Added `markEmailAsVerified()` call for the first contact person after save and before flush
+    - Ensures the test correctly validates the `findByEmail` method with `onlyVerified=true` flag
 
 ## 1.8.0 - 2025.11.10
 
