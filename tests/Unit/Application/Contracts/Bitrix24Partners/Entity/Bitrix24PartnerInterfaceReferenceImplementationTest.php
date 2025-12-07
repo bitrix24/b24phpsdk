@@ -30,7 +30,7 @@ class Bitrix24PartnerInterfaceReferenceImplementationTest extends Bitrix24Partne
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
