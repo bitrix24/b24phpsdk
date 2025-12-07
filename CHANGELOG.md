@@ -80,6 +80,10 @@
   [see details](https://github.com/bitrix24/b24phpsdk/issues/316):
     - Added `markEmailAsVerified()` call for the first contact person after save and before flush
     - Ensures the test correctly validates the `findByEmail` method with `onlyVerified=true` flag
+- Fixed `testDelete` test in `ContactPersonRepositoryInterfaceTest` to call `flush()` after delete,
+  [see details](https://github.com/bitrix24/b24phpsdk/issues/314):
+    - Added `$flusher->flush()` call after `$contactPersonRepository->delete()` to persist changes
+    - Ensures the test accurately reflects actual system behavior by persisting deletion before verifying the exception
 
 ## 1.8.0 - 2025.11.10
 
