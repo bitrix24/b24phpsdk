@@ -360,10 +360,11 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
             $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
 
             $contactPersonRepository->save($contactPerson);
-            $flusher->flush();
             if (!$expectedContactPerson instanceof ContactPersonInterface) {
+                $contactPerson->markEmailAsVerified();
                 $expectedContactPerson = $contactPerson;
             }
+            $flusher->flush();
         }
 
         $result = $contactPersonRepository->findByEmail($expectedContactPerson->getEmail(), null, true);

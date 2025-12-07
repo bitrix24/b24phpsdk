@@ -40,7 +40,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -57,7 +57,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -79,7 +79,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -104,7 +104,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -127,7 +127,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -155,7 +155,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -178,7 +178,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -189,6 +189,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
         $this->expectException(InvalidArgumentException::class);
+        /** @phpstan-ignore-next-line */
         $bitrix24Partner->setExternalId('');
     }
 
@@ -201,7 +202,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -226,7 +227,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -259,7 +260,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -288,7 +289,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -317,7 +318,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -339,7 +340,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -368,7 +369,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -393,7 +394,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -424,7 +425,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -446,7 +447,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -473,7 +474,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -495,7 +496,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -527,7 +528,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -552,7 +553,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -567,37 +568,6 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
 
     #[Test]
     #[DataProvider('bitrix24PartnerDataProvider')]
-    #[TestDox('test setBitrix24PartnerId')]
-    final public function testSetBitrix24PartnerId(
-        Uuid                  $uuid,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
-        Bitrix24PartnerStatus $bitrix24PartnerStatus,
-        string                $title,
-        ?int                  $bitrix24PartnerId,
-        ?string               $site,
-        ?PhoneNumber          $phoneNumber,
-        ?string               $email,
-        ?string               $openLineId,
-        ?string               $externalId,
-        string                $comment
-    ): void
-    {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
-        $newBitrix24PartnerId = 123;
-        $bitrix24Partner->setBitrix24PartnerId($newBitrix24PartnerId);
-        $this->assertEquals($newBitrix24PartnerId, $bitrix24Partner->getBitrix24PartnerId());
-
-        $bitrix24Partner->setBitrix24PartnerId(null);
-        $this->assertNull($bitrix24Partner->getBitrix24PartnerId());
-
-        $this->expectException(InvalidArgumentException::class);
-        /** @phpstan-ignore-next-line */
-        $bitrix24Partner->setBitrix24PartnerId(0);
-    }
-
-    #[Test]
-    #[DataProvider('bitrix24PartnerDataProvider')]
     #[TestDox('test getOpenLineId')]
     final public function testGetOpenLineId(
         Uuid                  $uuid,
@@ -605,7 +575,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -627,7 +597,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        ?int                  $bitrix24PartnerId,
+        int                   $bitrix24PartnerId,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
