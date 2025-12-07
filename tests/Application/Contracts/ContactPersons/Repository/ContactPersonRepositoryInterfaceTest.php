@@ -385,11 +385,13 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         foreach ($items as $item) {
             [$uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp] = $item;
             $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+
             $contactPersonRepository->save($contactPerson);
-            $flusher->flush();
             if (!$expectedContactPerson instanceof ContactPersonInterface) {
+                $contactPerson->markMobilePhoneAsVerified();
                 $expectedContactPerson = $contactPerson;
             }
+            $flusher->flush();
         }
 
         $result = $contactPersonRepository->findByPhone($expectedContactPerson->getMobilePhone(), null, true);

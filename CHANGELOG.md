@@ -1,5 +1,14 @@
 # b24-php-sdk change log
 
+## Unreleased
+
+### Fixed
+
+- Fixed `testFindByEmailWithVerifiedPhone` test in `ContactPersonRepositoryInterfaceTest` to properly mark phone as verified,
+  [see details](https://github.com/bitrix24/b24phpsdk/issues/315):
+    - Added `markMobilePhoneAsVerified()` call for the first contact person after save and before flush
+    - Ensures the test correctly validates the `findByPhone` method with `onlyVerified=true` flag
+
 ## 1.9.0 - 2025.12.01
 
 ### Added
