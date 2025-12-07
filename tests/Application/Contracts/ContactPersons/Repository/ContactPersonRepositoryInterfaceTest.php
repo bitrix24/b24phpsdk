@@ -135,6 +135,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         $contactPerson->markAsDeleted('soft delete account');
 
         $contactPersonRepository->delete($contactPerson->getId());
+        $flusher->flush();
 
         $this->expectException(ContactPersonNotFoundException::class);
         $contactPersonRepository->getById($contactPerson->getId());
