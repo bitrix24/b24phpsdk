@@ -25,6 +25,9 @@
         <testsuite name="integration_tests_scope_im_open_lines">
             <directory>./tests/Integration/Services/IMOpenLines/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_im_open_lines_connector">
+            <directory>./tests/Integration/Services/IMOpenLines/Connector/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_placement">
             <directory>./tests/Integration/Services/Placement/</directory>
         </testsuite>
