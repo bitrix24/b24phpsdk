@@ -19,7 +19,10 @@ use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Exceptions\InvalidGrantException;
+use Bitrix24\SDK\Core\Exceptions\PortalDomainNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Core\Exceptions\WrongClientException;
 use Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken;
 use Bitrix24\SDK\Infrastructure\HttpClient\RequestId\RequestIdGeneratorInterface;
 use Fig\Http\Message\StatusCodeInterface;
@@ -33,7 +36,7 @@ class ApiClient implements ApiClientInterface
     /**
      * @const string
      */
-    protected const SDK_VERSION = '1.8.0';
+    protected const SDK_VERSION = '1.9.0';
 
     protected const SDK_USER_AGENT = 'b24-php-sdk-vendor';
 
@@ -78,6 +81,9 @@ class ApiClient implements ApiClientInterface
      * @throws InvalidArgumentException
      * @throws TransportExceptionInterface
      * @throws TransportException
+     * @throws InvalidGrantException
+     * @throws PortalDomainNotFoundException
+     * @throws WrongClientException
      */
     public function getNewAuthToken(): RenewedAuthToken
     {
@@ -123,6 +129,8 @@ class ApiClient implements ApiClientInterface
             'responseData' => $responseData,
             'requestId' => $requestId
         ]);
+
+        // Handle success case
         if ($response->getStatusCode() === StatusCodeInterface::STATUS_OK) {
             $this->apiLevelErrorHandler->handle($responseData);
 
@@ -134,16 +142,11 @@ class ApiClient implements ApiClientInterface
             return $newAuthToken;
         }
 
-        if ($response->getStatusCode() === StatusCodeInterface::STATUS_BAD_REQUEST) {
-            $this->logger->warning('getNewAuthToken.badRequest', [
-                'url' => $url
-            ]);
-            throw new TransportException(sprintf('getting new access token failure: %s', $responseData['error']));
-        }
-
-        throw new TransportException(
-            'getting new access token failure with unknown http-status code %s',
-            $response->getStatusCode()
+        // Handle error cases via ApiLevelErrorHandler
+        $this->apiLevelErrorHandler->handleOAuthError(
+            $response->getStatusCode(),
+            $responseData,
+            $url
         );
     }
 
