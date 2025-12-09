@@ -35,10 +35,6 @@ class OptionsResult extends AbstractResult
     {
         $result = $this->getCoreResponse()->getResponseData()->getResult();
         
-        echo "\n\n OptionsResult \n";
-            print_r($this->getCoreResponse()->getResponseData()->getResult());
-        echo "\n\n";
-
         $options = [];
         foreach ($result as $data) {
             $options[] = new OptionItemResult($data);

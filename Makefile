@@ -61,6 +61,7 @@ help:
 	@echo "test-integration-sale-payment-item-basket - run PaymentItemBasket integration tests"
 	@echo "test-integration-sale-payment-item-shipment - run PaymentItemShipment integration tests"
 	@echo "test-integration-sale-property-relation - run PropertyRelation integration tests"
+	@echo "test-integration-im-open-lines-config - run IMOpenLines Config integration tests"
 
 
 .PHONY: docker-init
@@ -185,6 +186,10 @@ test-integration-paysystem-settings:
 .PHONY: test-integration-scope-im-open-lines
 test-integration-scope-im-open-lines:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im_open_lines
+
+.PHONY: test-integration-im-open-lines-config
+test-integration-im-open-lines-config:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_open_lines_config
 
 .PHONY: test-integration-scope-user
 test-integration-scope-user:

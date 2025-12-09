@@ -21,12 +21,12 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Core\Result\AddedItemResult;
-use Bitrix24\SDK\Services\IMOpenLines\Config\Result\AddResult;
-use Bitrix24\SDK\Services\IMOpenLines\Config\Result\DeleteResult;
+use Bitrix24\SDK\Core\Result\DeletedItemResult;
+use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\IMOpenLines\Config\Result\GetResult;
+use Bitrix24\SDK\Services\IMOpenLines\Config\Result\GetRevisionResult;
 use Bitrix24\SDK\Services\IMOpenLines\Config\Result\OptionsResult;
 use Bitrix24\SDK\Services\IMOpenLines\Config\Result\PathResult;
-use Bitrix24\SDK\Services\IMOpenLines\Config\Result\UpdateResult;
 
 use Psr\Log\LoggerInterface;
 
@@ -106,9 +106,9 @@ class Config extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/imopenlines/openlines/imopenlines-config-add.html',
         'Adds a new open line'
     )]
-    public function add(array $params): AddResult
+    public function add(array $params): AddedItemResult
     {
-        return new RegisterResult(
+        return new AddedItemResult(
             $this->core->call(
                 'imopenlines.config.add', 
                 [
@@ -133,9 +133,9 @@ class Config extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/imopenlines/openlines/imopenlines-config-delete.html',
         'Deletes an open line'
     )]
-    public function delete(int $configId): DeleteResult
+    public function delete(int $configId): DeletedItemResult
     {
-        return new DeleteResult(
+        return new DeletedItemResult(
             $this->core->call('imopenlines.config.delete', [
                 'CONFIG_ID' => $configId,
             ])
@@ -258,9 +258,9 @@ class Config extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/imopenlines/openlines/imopenlines-config-update.html',
         'Modifies an open line'
     )]
-    public function update(int $id, array $params): UpdateResult
+    public function update(int $id, array $params): UpdatedItemResult
     {
-        return new UpdateResult(
+        return new UpdatedItemResult(
             $this->core->call('imopenlines.config.update', [
                 'CONFIG_ID' => $id, 
                 'PARAMS' => $params

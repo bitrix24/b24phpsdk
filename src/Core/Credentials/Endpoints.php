@@ -38,7 +38,7 @@ class Endpoints
 
         if ($authServerUrl === null) {
             $this->authServerUrl = DefaultOAuthServerUrl::default();
-            $this->validateUrl('BITRIX24_PHP_SDK_DEFAULT_AUTH_SERVER_URL', $authServerUrl);
+            $this->validateUrl('BITRIX24_PHP_SDK_DEFAULT_AUTH_SERVER_URL', $this->authServerUrl);
         }
     }
 

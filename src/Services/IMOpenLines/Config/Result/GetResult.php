@@ -35,6 +35,6 @@ class GetResult extends AbstractResult
             print_r($this->getCoreResponse()->getResponseData()->getResult());
         echo "\n\n";
 
-        return return new OptionItemResult($result);
+        return new OptionItemResult($result);
     }
 }

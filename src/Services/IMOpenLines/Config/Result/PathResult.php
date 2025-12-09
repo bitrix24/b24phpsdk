@@ -29,12 +29,12 @@ class PathResult extends AbstractResult
      */
     public function getPath(): string
     {
+        $path = '';
         $result = $this->getCoreResponse()->getResponseData()->getResult();
-        
-        echo "\n\n PathResult \n";
-            print_r($this->getCoreResponse()->getResponseData()->getResult());
-        echo "\n\n";
+        if (!empty($result['SERVER_ADDRESS'])) {
+            $path .= $result['SERVER_ADDRESS'].$result['PUBLIC_PATH'];
+        }
 
-        return (string)$result['result'][0];
+        return $path;
     }
 }
