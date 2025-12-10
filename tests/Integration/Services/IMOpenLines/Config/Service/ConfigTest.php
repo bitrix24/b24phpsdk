@@ -42,6 +42,7 @@ use PHPUnit\Framework\TestCase;
 class ConfigTest extends TestCase
 {
     private Config $configService;
+
     private array $createdConfigIds = [];
 
     /**
@@ -64,11 +65,11 @@ class ConfigTest extends TestCase
      */
     public function testGetRevision(): void
     {
-        $result = $this->configService->getRevision();
-        
-        self::assertInstanceOf(GetRevisionResult::class, $result);
-        
-        $revision = $result->revision();
+        $getRevisionResult = $this->configService->getRevision();
+
+        self::assertInstanceOf(GetRevisionResult::class, $getRevisionResult);
+
+        $revision = $getRevisionResult->revision();
         self::assertGreaterThan(0, $revision->rest);
         self::assertGreaterThan(0, $revision->web);
         self::assertGreaterThan(0, $revision->mobile);
@@ -82,11 +83,11 @@ class ConfigTest extends TestCase
      */
     public function testGetPath(): void
     {
-        $result = $this->configService->getPath();
-        
-        self::assertInstanceOf(PathResult::class, $result);
-        
-        $path = $result->getPath();
+        $pathResult = $this->configService->getPath();
+
+        self::assertInstanceOf(PathResult::class, $pathResult);
+
+        $path = $pathResult->getPath();
         self::assertNotEmpty($path);
         self::assertIsString($path);
     }
@@ -99,12 +100,12 @@ class ConfigTest extends TestCase
      */
     public function testGetList(): void
     {
-        $result = $this->configService->getList();
-        
-        self::assertIsArray($result->getOptions());
-        
-        if (count($result->getOptions()) > 0) {
-            $firstOption = $result->getOptions()[0];
+        $optionsResult = $this->configService->getList();
+
+        self::assertIsArray($optionsResult->getOptions());
+
+        if ($optionsResult->getOptions() !== []) {
+            $firstOption = $optionsResult->getOptions()[0];
             self::assertInstanceOf(OptionItemResult::class, $firstOption);
         }
     }
@@ -117,13 +118,13 @@ class ConfigTest extends TestCase
      */
     public function testGetListWithFilters(): void
     {
-        $result = $this->configService->getList(
+        $optionsResult = $this->configService->getList(
             ['ID', 'LINE_NAME'],
             ['ID' => 'DESC'],
             ['ACTIVE' => 'Y']
         );
-        
-        self::assertIsArray($result->getOptions());
+
+        self::assertIsArray($optionsResult->getOptions());
     }
 
     /**
@@ -148,11 +149,11 @@ class ConfigTest extends TestCase
             'LANGUAGE_ID' => 'en'
         ];
 
-        $result = $this->configService->add($params);
-        $configId = $result->getId();
-        
+        $addedItemResult = $this->configService->add($params);
+        $configId = $addedItemResult->getId();
+
         self::assertGreaterThan(0, $configId);
-        
+
         // Track for cleanup
         $this->createdConfigIds[] = $configId;
     }
@@ -166,17 +167,17 @@ class ConfigTest extends TestCase
     public function testGet(): void
     {
         // First, get any existing config from the list
-        $listResult = $this->configService->getList(['ID'], ['ID' => 'ASC'], null, ['limit' => 1]);
-        $options = $listResult->getOptions();
-        
+        $optionsResult = $this->configService->getList(['ID'], ['ID' => 'ASC'], null, ['limit' => 1]);
+        $options = $optionsResult->getOptions();
+
         self::assertGreaterThan(0, count($options), 'No open lines available to test get method');
-        
+
         $configId = (int)$options[0]->ID;
-        
-        $result = $this->configService->get($configId);
-        
-        self::assertInstanceOf(OptionItemResult::class, $result->config());
-        self::assertEquals($configId, $result->config()->ID);
+
+        $getResult = $this->configService->get($configId);
+
+        self::assertInstanceOf(OptionItemResult::class, $getResult->config());
+        self::assertEquals($configId, $getResult->config()->ID);
     }
 
     /**
@@ -188,16 +189,16 @@ class ConfigTest extends TestCase
     public function testGetWithParameters(): void
     {
         // First, get any existing config from the list
-        $listResult = $this->configService->getList(['ID'], ['ID' => 'ASC'], null, ['limit' => 1]);
-        $options = $listResult->getOptions();
-        
+        $optionsResult = $this->configService->getList(['ID'], ['ID' => 'ASC'], null, ['limit' => 1]);
+        $options = $optionsResult->getOptions();
+
         self::assertGreaterThan(0, count($options), 'No open lines available to test get method');
-        
+
         $configId = (int)$options[0]->ID;
-        
-        $result = $this->configService->get($configId, false, false);
-        
-        self::assertInstanceOf(OptionItemResult::class, $result->config());
+
+        $getResult = $this->configService->get($configId, false, false);
+
+        self::assertInstanceOf(OptionItemResult::class, $getResult->config());
     }
 
     /**
@@ -209,20 +210,20 @@ class ConfigTest extends TestCase
     public function testUpdate(): void
     {
         // First, get any existing config from the list
-        $listResult = $this->configService->getList(['ID'], ['ID' => 'ASC'], null, ['limit' => 1]);
-        $options = $listResult->getOptions();
-        
+        $optionsResult = $this->configService->getList(['ID'], ['ID' => 'ASC'], null, ['limit' => 1]);
+        $options = $optionsResult->getOptions();
+
         self::assertGreaterThan(0, count($options), 'No open lines available to test update method');
-        
+
         $configId = (int)$options[0]->ID;
-        
+
         $params = [
             'LINE_NAME' => 'Updated Test Line ' . time()
         ];
-        
-        $result = $this->configService->update($configId, $params);
-        
-        self::assertTrue($result->isSuccess());
+
+        $updatedItemResult = $this->configService->update($configId, $params);
+
+        self::assertTrue($updatedItemResult->isSuccess());
     }
 
     /**
@@ -248,12 +249,12 @@ class ConfigTest extends TestCase
             'LANGUAGE_ID' => 'en'
         ];
 
-        $addResult = $this->configService->add($params);
-        $configId = $addResult->getId();
+        $addedItemResult = $this->configService->add($params);
+        $configId = $addedItemResult->getId();
         self::assertGreaterThan(0, $configId);
-        
-        $deleteResult = $this->configService->delete($configId);
-        self::assertTrue($deleteResult->isSuccess());
+
+        $deletedItemResult = $this->configService->delete($configId);
+        self::assertTrue($deletedItemResult->isSuccess());
     }
 
 
@@ -266,9 +267,10 @@ class ConfigTest extends TestCase
     protected function tearDown(): void
     {
         // Clean up any created configs
-        foreach ($this->createdConfigIds as $configId) {
-            $this->deleteTestConfig($configId);
+        foreach ($this->createdConfigIds as $createdConfigId) {
+            $this->deleteTestConfig($createdConfigId);
         }
+
         $this->createdConfigIds = [];
     }
 }

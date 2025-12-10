@@ -14,6 +14,17 @@
     - `update` modifies an open line
     - `joinNetwork` connects an external open line to the account
     - `getRevision` retrieves information about API revisions
+- Added service `Services\IMOpenLines\CRMChat\Service\Chat` with support methods,
+  see [imopenlines.crm.chat.*](https://github.com/bitrix24/b24phpsdk/issues/327):
+    - `get` retrieves chats for a CRM object
+    - `getLastId` retrieves the ID of the last chat associated with a CRM entity
+    - `addUser` adds a user to a CRM entity chat
+    - `deleteUser` removes a user from the CRM entity chat
+- Added service `Services\IMOpenLines\Message\Service\Message` with support methods,
+  see [imopenlines.crm.message.*, imopenlines.message.*](https://github.com/bitrix24/b24phpsdk/issues/327):
+    - `addCrmMessage` sends a message to the open line on behalf of an employee or bot in a chat linked to a CRM entity
+    - `quickSave` saves a message from the open line chat to the list of quick answers
+    - `sessionStart` starts a new dialogue session based on a message
     
 ## 1.8.0 - 2025.11.10
 

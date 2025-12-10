@@ -40,12 +40,17 @@ use PHPUnit\Framework\TestCase;
 class ChatTest extends TestCase
 {
     private Chat $chatService;
+
     private ContactService $contactService;
+
     private DealService $dealService;
+
     private UserService $userService;
+
     private ServiceBuilder $serviceBuilder;
-    
+
     private array $createdContactIds = [];
+
     private array $createdDealIds = [];
 
     protected function setUp(): void
@@ -60,23 +65,23 @@ class ChatTest extends TestCase
     protected function tearDown(): void
     {
         // Clean up created contacts
-        foreach ($this->createdContactIds as $contactId) {
+        foreach ($this->createdContactIds as $createdContactId) {
             try {
-                $this->contactService->delete($contactId);
+                $this->contactService->delete($createdContactId);
             } catch (\Exception) {
                 // Ignore if contact doesn't exist
             }
         }
-        
+
         // Clean up created deals
-        foreach ($this->createdDealIds as $dealId) {
+        foreach ($this->createdDealIds as $createdDealId) {
             try {
-                $this->dealService->delete($dealId);
+                $this->dealService->delete($createdDealId);
             } catch (\Exception) {
                 // Ignore if deal doesn't exist
             }
         }
-        
+
         $this->createdContactIds = [];
         $this->createdDealIds = [];
     }
@@ -97,20 +102,20 @@ class ChatTest extends TestCase
         $this->createdContactIds[] = $contactId;
 
         // Get current user ID
-        $currentUser = $this->userService->current();
-        $userId = $currentUser->user()->ID;
+        $userResult = $this->userService->current();
+        $userId = $userResult->user()->ID;
 
         // Try to add user to the contact (may return 0 if no active open lines)
-        $addUserResult = $this->chatService->addUser('contact', $contactId, $userId);
-        self::assertInstanceOf(ChatUserAddedResult::class, $addUserResult);
-        
+        $chatUserAddedResult = $this->chatService->addUser('contact', $contactId, $userId);
+        self::assertInstanceOf(ChatUserAddedResult::class, $chatUserAddedResult);
+
         // Get chats for the contact - may be empty if no chats exist
-        $result = $this->chatService->get('contact', $contactId);
-        self::assertInstanceOf(ChatListResult::class, $result);
-        
-        $chats = $result->getChats();
+        $chatListResult = $this->chatService->get('contact', $contactId);
+        self::assertInstanceOf(ChatListResult::class, $chatListResult);
+
+        $chats = $chatListResult->getChats();
         self::assertIsArray($chats);
-        
+
         // If no chats exist, that's okay - open lines need to be configured
         // We just verify the API call works and returns proper result structure
     }
@@ -130,20 +135,20 @@ class ChatTest extends TestCase
         $this->createdDealIds[] = $dealId;
 
         // Get current user ID
-        $currentUser = $this->userService->current();
-        $userId = $currentUser->user()->ID;
+        $userResult = $this->userService->current();
+        $userId = $userResult->user()->ID;
 
         // Try to add user to the deal (may return 0 if no active open lines)
-        $addUserResult = $this->chatService->addUser('deal', $dealId, $userId);
-        self::assertInstanceOf(ChatUserAddedResult::class, $addUserResult);
-        
+        $chatUserAddedResult = $this->chatService->addUser('deal', $dealId, $userId);
+        self::assertInstanceOf(ChatUserAddedResult::class, $chatUserAddedResult);
+
         // Get chats for the deal - may be empty if no chats exist
-        $result = $this->chatService->get('deal', $dealId);
-        self::assertInstanceOf(ChatListResult::class, $result);
-        
-        $chats = $result->getChats();
+        $chatListResult = $this->chatService->get('deal', $dealId);
+        self::assertInstanceOf(ChatListResult::class, $chatListResult);
+
+        $chats = $chatListResult->getChats();
         self::assertIsArray($chats);
-        
+
         // If no chats exist, that's okay - open lines need to be configured
         // We just verify the API call works and returns proper result structure
     }
@@ -163,18 +168,18 @@ class ChatTest extends TestCase
         $this->createdContactIds[] = $contactId;
 
         // Get current user ID
-        $currentUser = $this->userService->current();
-        $userId = $currentUser->user()->ID;
+        $userResult = $this->userService->current();
+        $userId = $userResult->user()->ID;
 
         // Try to add user to the contact
-        $addUserResult = $this->chatService->addUser('contact', $contactId, $userId);
-        self::assertInstanceOf(ChatUserAddedResult::class, $addUserResult);
+        $chatUserAddedResult = $this->chatService->addUser('contact', $contactId, $userId);
+        self::assertInstanceOf(ChatUserAddedResult::class, $chatUserAddedResult);
 
         // Get only active chats - may be empty if no active open lines configured
-        $activeResult = $this->chatService->get('contact', $contactId, true);
-        self::assertInstanceOf(ChatListResult::class, $activeResult);
-        self::assertIsArray($activeResult->getChats());
-        
+        $chatListResult = $this->chatService->get('contact', $contactId, true);
+        self::assertInstanceOf(ChatListResult::class, $chatListResult);
+        self::assertIsArray($chatListResult->getChats());
+
         // Get all chats - may be empty if no open lines configured
         $allResult = $this->chatService->get('contact', $contactId, false);
         self::assertInstanceOf(ChatListResult::class, $allResult);
@@ -198,7 +203,7 @@ class ChatTest extends TestCase
         // Try to get last chat ID for contact without chats - should throw exception
         $this->expectException(BaseException::class);
         $this->expectExceptionMessage('crm_chat_empty_crm_data');
-        
+
         $this->chatService->getLastId('CONTACT', $contactId);
     }
 
@@ -219,7 +224,7 @@ class ChatTest extends TestCase
         // Try to get last chat ID for deal without chats - should throw exception
         $this->expectException(BaseException::class);
         $this->expectExceptionMessage('crm_chat_empty_crm_data');
-        
+
         $this->chatService->getLastId('DEAL', $dealId);
     }
 
@@ -238,15 +243,15 @@ class ChatTest extends TestCase
         $this->createdContactIds[] = $contactId;
 
         // Get current user ID
-        $currentUser = $this->userService->current();
-        $userId = $currentUser->user()->ID;
+        $userResult = $this->userService->current();
+        $userId = $userResult->user()->ID;
 
         // Add user to chat (will use the last chat for this contact)
-        $result = $this->chatService->addUser('contact', $contactId, $userId);
-        
-        self::assertInstanceOf(ChatUserAddedResult::class, $result);
-        
-        $chatId = $result->getChatId();
+        $chatUserAddedResult = $this->chatService->addUser('contact', $contactId, $userId);
+
+        self::assertInstanceOf(ChatUserAddedResult::class, $chatUserAddedResult);
+
+        $chatId = $chatUserAddedResult->getChatId();
         self::assertIsInt($chatId);
     }
 
@@ -265,19 +270,19 @@ class ChatTest extends TestCase
         $this->createdContactIds[] = $contactId;
 
         // Get current user ID
-        $currentUser = $this->userService->current();
-        $userId = $currentUser->user()->ID;
+        $userResult = $this->userService->current();
+        $userId = $userResult->user()->ID;
 
         // First add user to chat
-        $addResult = $this->chatService->addUser('contact', $contactId, $userId);
-        self::assertInstanceOf(ChatUserAddedResult::class, $addResult);
+        $chatUserAddedResult = $this->chatService->addUser('contact', $contactId, $userId);
+        self::assertInstanceOf(ChatUserAddedResult::class, $chatUserAddedResult);
 
         // Then delete user from chat
-        $deleteResult = $this->chatService->deleteUser('contact', $contactId, $userId);
-        
-        self::assertInstanceOf(ChatUserDeletedResult::class, $deleteResult);
-        
-        $chatId = $deleteResult->getChatId();
+        $chatUserDeletedResult = $this->chatService->deleteUser('contact', $contactId, $userId);
+
+        self::assertInstanceOf(ChatUserDeletedResult::class, $chatUserDeletedResult);
+
+        $chatId = $chatUserDeletedResult->getChatId();
         self::assertIsInt($chatId);
     }
 
@@ -290,7 +295,7 @@ class ChatTest extends TestCase
     public function testDifferentCrmEntityTypes(): void
     {
         $entityTypes = ['contact', 'deal'];
-        
+
         foreach ($entityTypes as $entityType) {
             if ($entityType === 'contact') {
                 $entityId = $this->contactService->add([

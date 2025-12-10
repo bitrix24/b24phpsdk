@@ -28,7 +28,6 @@ class GetRevisionResult extends AbstractResult
     /**
      * Return a list of revisions for rest, web, mobile
      *
-     * @return RevisionItemResult
      * @throws BaseException
      */
     public function revision(): RevisionItemResult

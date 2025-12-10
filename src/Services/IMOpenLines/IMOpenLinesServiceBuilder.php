@@ -18,6 +18,7 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\IMOpenLines\Config\Service\Config;
 use Bitrix24\SDK\Services\IMOpenLines\CRMChat\Service\Chat;
+use Bitrix24\SDK\Services\IMOpenLines\Message\Service\Message;
 use Bitrix24\SDK\Services\IMOpenLines\Service\Network;
 #[ApiServiceBuilderMetadata(new Scope(['imopenlines']))]
 
@@ -36,6 +37,15 @@ class IMOpenLinesServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Chat($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function message(): Message
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Message($this->core, $this->log);
         }
 
         return $this->serviceCache[__METHOD__];

@@ -43,60 +43,16 @@ class Config extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/imopenlines/openlines/imopenlines-config-add.html
      *
-     * @param array{
-     *   WELCOME_BOT_ENABLE: bool,
-     *   WELCOME_BOT_JOIN: string,
-     *   WELCOME_BOT_ID: int,
-     *   WELCOME_BOT_TIME: int,
-     *   WELCOME_BOT_LEFT: string,
-     *   ACTIVE: bool,
-     *   LINE_NAME: string,
-     *   CRM: bool,
-     *   CRM_CREATE: string,
-     *   CRM_FORWARD: bool,
-     *   CRM_SOURCE: string,
-     *   CRM_TRANSFER_CHANGE: bool,
-     *   QUEUE_TIME: int,
-     *   NO_ANSWER_TIME: int,
-     *   QUEUE_TYPE: string
-     *   TIMEMAN: bool,
-     *   CHECK_ONLINE: bool,
-     *   CHECKING_OFFLINE: bool,
-     *   WELCOME_MESSAGE: bool,
-     *   WELCOME_MESSAGE_TEXT: string,
-     *   AGREEMENT_MESSAGE: bool,
-     *   AGREEMENT_ID: int,
-     *   NO_ANSWER_RULE: string,
-     *   NO_ANSWER_TEXT: string,
-     *   WORKTIME_ENABLE: bool,
-     *   WORKTIME_FROM: string,
-     *   WORKTIME_TO: string,
-     *   WORKTIME_TIMEZONE: string,
-     *   WORKTIME_HOLIDAYS: string,
-     *   WORKTIME_DAYOFF: array,
-     *   WORKTIME_DAYOFF_RULE: string,
-     *   WORKTIME_DAYOFF_TEXT: string,
-     *   CLOSE_RULE: string,
-     *   CLOSE_TEXT: string,
-     *   FULL_CLOSE_TIME: int,
-     *   AUTO_CLOSE_RULE: string,
-     *   AUTO_CLOSE_TEXT: string,
-     *   AUTO_CLOSE_TIME: int,
-     *   VOTE_MESSAGE: bool,
-     *   VOTE_CLOSING_DELAY: bool,
-     *   VOTE_MESSAGE_1_TEXT: string,
-     *   VOTE_MESSAGE_1_LIKE: string,
-     *   VOTE_MESSAGE_1_DISLIKE: string,
-     *   VOTE_MESSAGE_2_TEXT: string,
-     *   VOTE_MESSAGE_2_LIKE: string,
-     *   VOTE_MESSAGE_2_DISLIKE: string,
-     *   QUICK_ANSWERS_IBLOCK_ID: int,
-     *   LANGUAGE_ID: string,
-     *   OPERATOR_DATA: string,
-     *   DEFAULT_OPERATOR_DATA: array,
-     *   QUEUE: array,
-     *   QUEUE_OPERATOR_DATA: array
-     * } $params
+     * @param array<string, mixed> $params Configuration parameters for the open line.
+     *                                     Available parameters include:
+     *                                     - WELCOME_BOT_ENABLE (bool): Enable welcome bot
+     *                                     - WELCOME_BOT_JOIN (string): Welcome bot join message  
+     *                                     - ACTIVE (bool): Line active status
+     *                                     - LINE_NAME (string): Open line name
+     *                                     - CRM (bool): Enable CRM integration
+     *                                     - QUEUE_TYPE (string): Queue type
+     *                                     - LANGUAGE_ID (string): Language ID
+     *                                     and many other configuration options
      *
      * @throws BaseException
      * @throws TransportException
@@ -147,11 +103,9 @@ class Config extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/imopenlines/openlines/imopenlines-config-get.html
      *
-     * @param string    $line        Open line ID
-     * @param string    $connector   Connector ID
-     * @param bool|null $error       Filter by error status
-     * @param bool|null $configured  Filter by configured status
-     * @param bool|null $status      Filter by status
+     * @param int  $configId     Open line configuration ID
+     * @param bool $withQueue    Include queue information
+     * @param bool $showOffline  Show offline operators
      *
      * @throws BaseException
      * @throws TransportException
@@ -179,10 +133,6 @@ class Config extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/imopenlines/openlines/imopenlines-config-list-get.html
      *
-     * @param array|null $select
-     * @param array|null $order
-     * @param array|null $filter
-     * @param array|null $options
      *
      * @throws BaseException
      * @throws TransportException
@@ -248,7 +198,8 @@ class Config extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/imopenlines/openlines/imopenlines-config-update.html
      *
-     * @param string $id Connector unique identifier
+     * @param int   $id     Configuration ID to update
+     * @param array $params Parameters to update
      *
      * @throws BaseException
      * @throws TransportException
@@ -275,7 +226,6 @@ class Config extends AbstractService
      *
      * @param string $code Code for searching from the connectors page
      *
-     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      */
