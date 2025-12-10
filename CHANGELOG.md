@@ -1,5 +1,20 @@
 # b24-php-sdk change log
 
+## Upcoming  1.9.0 - 2026.01.01
+
+### Added
+
+- Added service `Services\IMOpenLines\Config\Service\Config` with support methods,
+  see [imopenlines.config.*](https://github.com/bitrix24/b24phpsdk/issues/327):
+    - `add` adds a new open line
+    - `delete` deletes an open line
+    - `get` retrieves an open line by Id
+    - `getList` retrieves a list of open lines
+    - `getPath` gets a link to the public page of open lines in the account
+    - `update` modifies an open line
+    - `joinNetwork` connects an external open line to the account
+    - `getRevision` retrieves information about API revisions
+    
 ## 1.8.0 - 2025.11.10
 
 ### Added
