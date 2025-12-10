@@ -62,6 +62,7 @@ help:
 	@echo "test-integration-sale-payment-item-shipment - run PaymentItemShipment integration tests"
 	@echo "test-integration-sale-property-relation - run PropertyRelation integration tests"
 	@echo "test-integration-im-open-lines-config - run IMOpenLines Config integration tests"
+	@echo "test-integration-im-open-lines-crm-chat - run IMOpenLines CRMChat integration tests"
 
 
 .PHONY: docker-init
@@ -190,6 +191,10 @@ test-integration-scope-im-open-lines:
 .PHONY: test-integration-im-open-lines-config
 test-integration-im-open-lines-config:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_open_lines_config
+
+.PHONY: test-integration-im-open-lines-crm-chat
+test-integration-im-open-lines-crm-chat:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_open_lines_crm_chat
 
 .PHONY: test-integration-scope-user
 test-integration-scope-user:

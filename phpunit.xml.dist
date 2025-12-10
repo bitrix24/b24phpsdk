@@ -28,6 +28,9 @@
         <testsuite name="integration_tests_im_open_lines_config">
             <directory>./tests/Integration/Services/IMOpenLines/Config/</directory>
         </testsuite>
+        <testsuite name="integration_tests_im_open_lines_crm_chat">
+            <directory>./tests/Integration/Services/IMOpenLines/CRMChat/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_placement">
             <directory>./tests/Integration/Services/Placement/</directory>
         </testsuite>
