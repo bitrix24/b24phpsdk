@@ -116,11 +116,6 @@ class InMemoryBitrix24PartnerRepositoryImplementation implements Bitrix24Partner
             'bitrix24PartnerId' => $bitrix24Partner->getBitrix24PartnerId()
         ]);
 
-        if ($bitrix24Partner->getBitrix24PartnerId() === null) {
-            $this->items[$bitrix24Partner->getId()->toRfc4122()] = $bitrix24Partner;
-            return;
-        }
-
         $existsPartner = $this->findByBitrix24PartnerId($bitrix24Partner->getBitrix24PartnerId());
         if ($existsPartner instanceof Bitrix24PartnerInterface && $existsPartner->getId() !== $bitrix24Partner->getId()) {
             throw new InvalidArgumentException(sprintf(

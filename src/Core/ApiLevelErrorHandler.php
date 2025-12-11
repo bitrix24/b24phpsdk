@@ -16,17 +16,21 @@ namespace Bitrix24\SDK\Core;
 use Bitrix24\SDK\Core\Exceptions\AuthForbiddenException;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Exceptions\InvalidGrantException;
 use Bitrix24\SDK\Core\Exceptions\ItemNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\MethodNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\OperationTimeLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\PaymentRequiredException;
+use Bitrix24\SDK\Core\Exceptions\PortalDomainNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
+use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Exceptions\UserNotFoundOrIsNotActiveException;
 use Bitrix24\SDK\Core\Exceptions\WrongAuthTypeException;
 use Bitrix24\SDK\Core\Exceptions\WrongClientException;
 use Bitrix24\SDK\Services\Workflows\Exceptions\ActivityOrRobotAlreadyInstalledException;
 use Bitrix24\SDK\Services\Workflows\Exceptions\ActivityOrRobotValidationFailureException;
 use Bitrix24\SDK\Services\Workflows\Exceptions\WorkflowTaskAlreadyCompletedException;
+use Fig\Http\Message\StatusCodeInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -161,6 +165,144 @@ class ApiLevelErrorHandler
                 throw new ItemNotFoundException(sprintf('%s - %s', $errorCode, $errorDescription));
             default:
                 throw new BaseException(sprintf('%s - %s %s', $errorCode, $errorDescription, $batchErrorPrefix));
+        }
+    }
+
+    /**
+     * Handle OAuth token refresh errors and throw appropriate exceptions
+     *
+     * @param int $httpStatusCode HTTP status code from OAuth server
+     * @param array<string, mixed> $responseBody Response body with error details
+     * @param string $requestUrl Original request URL for logging
+     *
+     *
+     * @throws InvalidGrantException When refresh token is invalid or expired
+     * @throws WrongClientException When client credentials are invalid
+     * @throws PortalDomainNotFoundException When portal domain is not found
+     * @throws TransportException For server errors and other issues
+     */
+    public function handleOAuthError(int $httpStatusCode, array $responseBody, string $requestUrl): never
+    {
+        $errorCode = strtolower(trim((string)($responseBody[self::ERROR_KEY] ?? '')));
+        $errorDescription = strtolower(trim((string)($responseBody[self::ERROR_DESCRIPTION_KEY] ?? '')));
+
+        $this->logger->debug(
+            'handleOAuthError.errorInformation',
+            [
+                'httpStatusCode' => $httpStatusCode,
+                'errorCode' => $errorCode,
+                'errorDescription' => $errorDescription,
+                'requestUrl' => $requestUrl,
+            ]
+        );
+
+        switch ($httpStatusCode) {
+            case StatusCodeInterface::STATUS_BAD_REQUEST:
+                $this->logger->warning('handleOAuthError.badRequest', [
+                    'url' => $requestUrl,
+                    'error' => $responseBody[self::ERROR_KEY] ?? 'unknown',
+                    'error_description' => $responseBody[self::ERROR_DESCRIPTION_KEY] ?? 'no description'
+                ]);
+
+                // Handle specific OAuth error codes
+                switch ($errorCode) {
+                    case 'invalid_grant':
+                    case 'bad_verification_code':
+                        throw new InvalidGrantException(
+                            sprintf(
+                                'OAuth refresh token is invalid or expired (error: %s, description: %s). User re-authorization required.',
+                                $responseBody[self::ERROR_KEY] ?? 'unknown',
+                                $responseBody[self::ERROR_DESCRIPTION_KEY] ?? 'no description'
+                            )
+                        );
+
+                    default:
+                        // Check if error is related to portal domain
+                        if (str_contains($errorDescription, 'portal') ||
+                            str_contains($errorDescription, 'domain') ||
+                            str_contains($errorDescription, 'not found')) {
+                            throw new PortalDomainNotFoundException(
+                                sprintf(
+                                    'Bitrix24 portal domain not found or inaccessible (error: %s, description: %s)',
+                                    $responseBody[self::ERROR_KEY] ?? 'unknown',
+                                    $responseBody[self::ERROR_DESCRIPTION_KEY] ?? 'no description'
+                                )
+                            );
+                        }
+
+                        // Generic bad request error
+                        throw new TransportException(
+                            sprintf(
+                                'Getting new access token failure (error: %s, description: %s)',
+                                $responseBody[self::ERROR_KEY] ?? 'unknown',
+                                $responseBody[self::ERROR_DESCRIPTION_KEY] ?? 'no description'
+                            )
+                        );
+                }
+
+            case StatusCodeInterface::STATUS_UNAUTHORIZED:
+                $this->logger->warning('handleOAuthError.unauthorized', [
+                    'url' => $requestUrl,
+                    'error' => $responseBody[self::ERROR_KEY] ?? 'unknown'
+                ]);
+
+                if ($errorCode === 'invalid_client') {
+                    throw new WrongClientException(
+                        sprintf(
+                            'OAuth client credentials are invalid (client_id or client_secret is wrong). Error: %s, description: %s',
+                            $responseBody[self::ERROR_KEY] ?? 'unknown',
+                            $responseBody[self::ERROR_DESCRIPTION_KEY] ?? 'no description'
+                        )
+                    );
+                }
+
+                throw new TransportException(
+                    sprintf(
+                        'Getting new access token failure: unauthorized (error: %s, description: %s)',
+                        $responseBody[self::ERROR_KEY] ?? 'unknown',
+                        $responseBody[self::ERROR_DESCRIPTION_KEY] ?? 'no description'
+                    )
+                );
+
+            case StatusCodeInterface::STATUS_NOT_FOUND:
+                $this->logger->warning('handleOAuthError.notFound', [
+                    'url' => $requestUrl
+                ]);
+
+                throw new PortalDomainNotFoundException(
+                    'Bitrix24 portal domain not found (HTTP 404). Portal may not exist or has been deleted.'
+                );
+
+            case StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR:
+            case StatusCodeInterface::STATUS_BAD_GATEWAY:
+            case StatusCodeInterface::STATUS_SERVICE_UNAVAILABLE:
+            case StatusCodeInterface::STATUS_GATEWAY_TIMEOUT:
+                $this->logger->error('handleOAuthError.serverError', [
+                    'url' => $requestUrl,
+                    'httpStatus' => $httpStatusCode,
+                    'responseData' => $responseBody
+                ]);
+
+                throw new TransportException(
+                    sprintf(
+                        'OAuth server error (HTTP %s). Please retry later.',
+                        $httpStatusCode
+                    )
+                );
+
+            default:
+                $this->logger->error('handleOAuthError.unknownHttpStatus', [
+                    'url' => $requestUrl,
+                    'httpStatus' => $httpStatusCode,
+                    'responseData' => $responseBody
+                ]);
+
+                throw new TransportException(
+                    sprintf(
+                        'Getting new access token failure with unknown HTTP status code %s',
+                        $httpStatusCode
+                    )
+                );
         }
     }
 }
