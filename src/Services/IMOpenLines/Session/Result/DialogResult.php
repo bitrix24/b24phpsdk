@@ -11,19 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\IMOpenLines\Result;
+namespace Bitrix24\SDK\Services\IMOpenLines\Session\Result;
 
-use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
-
-class AddedMessageItemResult extends AbstractResult
+class DialogResult extends AbstractResult
 {
-    /**
-     * @throws BaseException
-     */
-    public function isSuccess(): bool
+    public function dialog(): DialogItemResult
     {
-        return (bool)$this->getCoreResponse()->getResponseData()->getResult()[0];
+        return new DialogItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }
