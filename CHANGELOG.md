@@ -25,6 +25,36 @@
     - `addCrmMessage` sends a message to the open line on behalf of an employee or bot in a chat linked to a CRM entity
     - `quickSave` saves a message from the open line chat to the list of quick answers
     - `sessionStart` starts a new dialogue session based on a message
+- Added service `Services\IMOpenLines\Bot\Service\Bot` with support methods,
+  see [imopenlines.bot.*](https://github.com/bitrix24/b24phpsdk/issues/327):
+    - `sendMessage` sends an automatic message via the chatbot
+    - `transferToOperator` switches the conversation to a free operator
+    - `transferToUser` transfers the conversation to a specific operator by user ID
+    - `transferToQueue` transfers the conversation to another open line queue
+    - `finishSession` ends the current session
+- Added service `Services\IMOpenLines\Operator\Service\Operator` with support methods,
+  see [imopenlines.operator.*](https://github.com/bitrix24/b24phpsdk/issues/327):
+    - `answer` takes the dialog for the current operator
+    - `finish` ends the dialogue by the current operator
+    - `anotherFinish` finishes the dialog of another operator
+    - `skip` skips the dialog for the current operator
+    - `spam` marks the conversation as "spam" by the current operator
+    - `transfer` transfers the dialogue to another operator or line
+- Added service `Services\IMOpenLines\Session\Service\Session` with support methods,
+  see [imopenlines.session.*](https://github.com/bitrix24/b24phpsdk/issues/327):
+    - `createCrmLead` creates a lead based on the dialogue
+    - `getDialog` retrieves information about the operator's dialogue (chat) in the open line
+    - `startMessageSession` starts a new dialogue session based on a message
+    - `voteHead` votes for the session head
+    - `getHistory` gets session history
+    - `intercept` intercepts the session
+    - `join` joins the session
+    - `pinAll` pins all sessions
+    - `pin` pins a specific session
+    - `setSilent` sets silent mode for session
+    - `unpinAll` unpins all sessions
+    - `open` opens a session
+    - `start` starts a session
     
 ## 1.9.0 - 2025.12.01
 
