@@ -11,19 +11,17 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\IMOpenLines\Result;
+namespace Bitrix24\SDK\Services\IMOpenLines\Session\Result;
 
-use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
-
-class AddedMessageItemResult extends AbstractResult
+class OpenResult extends AbstractResult
 {
     /**
-     * @throws BaseException
+     * @return int Chat ID
      */
-    public function isSuccess(): bool
+    public function getChatId(): int
     {
-        return (bool)$this->getCoreResponse()->getResponseData()->getResult()[0];
+        return (int)$this->getCoreResponse()->getResponseData()->getResult()['chatId'];
     }
 }

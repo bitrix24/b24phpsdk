@@ -61,6 +61,10 @@ help:
 	@echo "test-integration-sale-payment-item-basket - run PaymentItemBasket integration tests"
 	@echo "test-integration-sale-payment-item-shipment - run PaymentItemShipment integration tests"
 	@echo "test-integration-sale-property-relation - run PropertyRelation integration tests"
+	@echo "test-integration-im-open-lines-config - run IMOpenLines Config integration tests"
+	@echo "test-integration-im-open-lines-crm-chat - run IMOpenLines CRMChat integration tests"
+	@echo "test-integration-im-open-lines-session - run IMOpenLines Session integration tests"
+	@echo "test-integration-im-open-lines-operator - run IMOpenLines Operator integration tests"
 
 
 .PHONY: docker-init
@@ -185,6 +189,22 @@ test-integration-paysystem-settings:
 .PHONY: test-integration-scope-im-open-lines
 test-integration-scope-im-open-lines:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im_open_lines
+
+.PHONY: test-integration-im-open-lines-config
+test-integration-im-open-lines-config:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_open_lines_config
+
+.PHONY: test-integration-im-open-lines-crm-chat
+test-integration-im-open-lines-crm-chat:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_open_lines_crm_chat
+
+.PHONY: test-integration-im-open-lines-session
+test-integration-im-open-lines-session:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_open_lines_session
+
+.PHONY: test-integration-im-open-lines-operator
+test-integration-im-open-lines-operator:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_open_lines_operator
 
 .PHONY: test-integration-scope-user
 test-integration-scope-user:

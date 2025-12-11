@@ -17,6 +17,7 @@ namespace Bitrix24\SDK\Tests\ApplicationBridge;
 use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
 use Bitrix24\SDK\Core\Credentials\Credentials;
+use Bitrix24\SDK\Core\Credentials\Endpoints;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Events\AuthTokenRenewedEvent;
 use JetBrains\PhpStorm\NoReturn;
@@ -43,11 +44,12 @@ readonly class ApplicationCredentialsProvider
      */
     public function getCredentials(ApplicationProfile $applicationProfile, string $domainUrl): Credentials
     {
+        $endpoints = new Endpoints($domainUrl);
         return new Credentials(
             null,
             $this->repository->getToken(),
             $applicationProfile,
-            $domainUrl
+            $endpoints //$domainUrl
         );
     }
 

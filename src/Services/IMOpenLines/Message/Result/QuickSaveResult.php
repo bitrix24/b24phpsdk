@@ -11,19 +11,24 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\IMOpenLines\Result;
+namespace Bitrix24\SDK\Services\IMOpenLines\Message\Result;
 
-use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
-
-class AddedMessageItemResult extends AbstractResult
+/**
+ * Class QuickSaveResult
+ *
+ * Result class for imopenlines.message.quick.save
+ *
+ * @package Bitrix24\SDK\Services\IMOpenLines\Message\Result
+ */
+class QuickSaveResult extends AbstractResult
 {
     /**
-     * @throws BaseException
+     * Returns true when successfully saved to quick answers
      */
     public function isSuccess(): bool
     {
-        return (bool)$this->getCoreResponse()->getResponseData()->getResult()[0];
+        return (bool)$this->getCoreResponse()->getResponseData()->getResult();
     }
 }
