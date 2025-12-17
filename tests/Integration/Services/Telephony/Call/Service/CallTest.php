@@ -133,6 +133,7 @@ class CallTest extends TestCase
         $this->assertGreaterThan(0, $transcriptAttachedResult->getTranscriptAttachItem()->TRANSCRIPT_ID);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->call = Factory::getServiceBuilder(true)->getTelephonyScope()->call();

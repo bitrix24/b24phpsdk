@@ -60,6 +60,7 @@ class AddressTest extends TestCase
 
     protected array   $presets = [];
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->sb = Factory::getServiceBuilder();

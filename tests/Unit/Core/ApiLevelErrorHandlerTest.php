@@ -102,6 +102,7 @@ class ApiLevelErrorHandlerTest extends TestCase
         ];
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->apiLevelErrorHandler = new ApiLevelErrorHandler(new NullLogger());

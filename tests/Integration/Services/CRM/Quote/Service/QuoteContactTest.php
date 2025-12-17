@@ -42,11 +42,13 @@ class QuoteContactTest extends TestCase
 
     private array $createdContacts = [];
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->sb = Factory::getServiceBuilder();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         foreach ($this->sb->getCRMScope()->quote()->batch->delete($this->createdQuotes) as $result) {

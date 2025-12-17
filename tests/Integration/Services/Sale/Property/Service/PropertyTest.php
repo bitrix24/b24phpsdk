@@ -41,6 +41,7 @@ class PropertyTest extends TestCase
 
     protected int $propertyGroupId;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->propertyService = Factory::getServiceBuilder()->getSaleScope()->property();
@@ -48,6 +49,7 @@ class PropertyTest extends TestCase
         $this->propertyGroupId = $this->getPropertyGroupId($this->personTypeId);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created resources

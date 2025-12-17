@@ -47,6 +47,7 @@ class CurrencyTest extends TestCase
 
     protected Currency $currencyService;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->sb = Factory::getServiceBuilder();

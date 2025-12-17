@@ -55,6 +55,7 @@ class UserConsentTest extends TestCase
         $this->assertIsInt($addedItemResult->getId());
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->userConsentService = Factory::getServiceBuilder()->getUserConsentScope()->UserConsent();

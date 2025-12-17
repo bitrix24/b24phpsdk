@@ -32,6 +32,7 @@ class DealRecurringTest extends TestCase
 
     protected Deal $dealService;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->dealRecurring = Factory::getServiceBuilder()->getCRMScope()->dealRecurring();

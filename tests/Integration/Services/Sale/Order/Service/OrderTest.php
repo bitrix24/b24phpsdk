@@ -41,6 +41,7 @@ class OrderTest extends TestCase
     
     protected Order $orderService;
     
+    #[\Override]
     protected function setUp(): void
     {
         $this->orderService = Factory::getServiceBuilder()->getSaleScope()->order();

@@ -41,6 +41,7 @@ class BatchTest extends TestCase
 
     protected Localizations $localizationsService;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->sb = Factory::getServiceBuilder();
@@ -52,6 +53,7 @@ class BatchTest extends TestCase
         }
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         foreach (self::TEST_LETTERS as $letter) {

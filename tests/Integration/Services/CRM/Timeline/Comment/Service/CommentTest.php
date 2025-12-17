@@ -48,6 +48,7 @@ class CommentTest extends TestCase
     
     protected int $companyId = 0;
     
+    #[\Override]
     protected function setUp(): void
     {
         $this->commentService = Factory::getServiceBuilder()->getCRMScope()->timelineComment();
@@ -55,6 +56,7 @@ class CommentTest extends TestCase
         $this->companyId = $this->companyService->add((new CompanyBuilder())->build())->getId();
     }
     
+    #[\Override]
     protected function tearDown(): void
     {
         $this->companyService->delete($this->companyId);

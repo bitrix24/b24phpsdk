@@ -52,6 +52,7 @@ class BasketPropertyTest extends TestCase
 
     protected int $personTypeId;
 
+    #[\Override]
     protected function setUp(): void
     {
         $serviceBuilder = Factory::getServiceBuilder();
@@ -68,6 +69,7 @@ class BasketPropertyTest extends TestCase
         $this->basketItemId = $this->createBasketItem($this->orderId);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created resources in reverse order

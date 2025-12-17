@@ -38,6 +38,7 @@ class UserfieldUseCaseTest extends TestCase
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\Override]
     protected function setUp(): void
     {
         $this->taskService = Factory::getServiceBuilder()->getTaskScope()->task();
@@ -64,6 +65,7 @@ class UserfieldUseCaseTest extends TestCase
         )->getId();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->userfieldService->delete($this->userfieldId);

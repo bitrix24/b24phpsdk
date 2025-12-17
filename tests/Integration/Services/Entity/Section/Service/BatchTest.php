@@ -37,6 +37,7 @@ class BatchTest extends TestCase
     
     private string $entity = '';
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->sb = Factory::getServiceBuilder(true);
@@ -45,6 +46,7 @@ class BatchTest extends TestCase
         $this->sb->getEntityScope()->entity()->add($this->entity, 'Test entity', []);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->sb->getEntityScope()->entity()->delete($this->entity);

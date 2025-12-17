@@ -45,6 +45,7 @@ class ShipmentTest extends TestCase
     /**
      * Set up test environment
      */
+    #[\Override]
     protected function setUp(): void
     {
         $this->shipmentService = Factory::getServiceBuilder()->getSaleScope()->shipment();
@@ -56,6 +57,7 @@ class ShipmentTest extends TestCase
     /**
      * Clean up resources after tests
      */
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created resources

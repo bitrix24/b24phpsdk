@@ -72,6 +72,7 @@ class ExternalLineTest extends TestCase
         $this->assertNotContains($lineNumber, array_column($this->externalLine->get()->getExternalLines(), 'NUMBER'));
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->externalLine = Factory::getServiceBuilder(true)->getTelephonyScope()->externalLine();

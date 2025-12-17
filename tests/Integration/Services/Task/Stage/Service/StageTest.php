@@ -46,6 +46,7 @@ class StageTest extends TestCase
     protected int $afterStageId = 0;
     
     
+    #[\Override]
     protected function setUp(): void
     {
         $this->stageService = Factory::getServiceBuilder()->getTaskScope()->stage();

@@ -34,6 +34,7 @@ class DeliveryHandlerTest extends TestCase
 {
     protected DeliveryHandler $deliveryHandlerService;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->deliveryHandlerService = Factory::getServiceBuilder()->getSaleScope()->deliveryHandler();

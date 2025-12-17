@@ -41,6 +41,7 @@ class DeliveryTest extends TestCase
 
     protected ?int $testHandlerId = null;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->deliveryService = Factory::getServiceBuilder()->getSaleScope()->delivery();
@@ -50,6 +51,7 @@ class DeliveryTest extends TestCase
         $this->createTestDeliveryHandler();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up test delivery handler

@@ -32,6 +32,7 @@ readonly class AppAuthFileStorage implements LocalAppAuthRepositoryInterface
     {
     }
 
+    #[\Override]
     public function getApplicationToken(): ?string
     {
         $this->logger->debug('AppAuthFileStorage.getApplicationToken.start', [
@@ -57,6 +58,7 @@ readonly class AppAuthFileStorage implements LocalAppAuthRepositoryInterface
      * If the file does not exist, it throws a FileNotFoundException indicating that the file with the stored access token was not found.
      * If the file exists, it reads the contents of the file and decodes it using JSON.
      **/
+    #[\Override]
     public function getAuth(): LocalAppAuth
     {
         $this->logger->debug('AppAuthFileStorage.getAuth.start', [
@@ -93,6 +95,7 @@ readonly class AppAuthFileStorage implements LocalAppAuthRepositoryInterface
      * @throws JsonException If there is an error decoding the local app auth payload.
      * @throws InvalidArgumentException If the local app auth is empty.
      */
+    #[\Override]
     public function saveRenewedToken(RenewedAuthToken $renewedAuthToken): void
     {
         $this->logger->debug('AppAuthFileStorage.saveRenewedToken.start');
@@ -109,6 +112,7 @@ readonly class AppAuthFileStorage implements LocalAppAuthRepositoryInterface
      * @param LocalAppAuth $localAppAuth The LocalAppAuth object to be saved.
      * @throws JsonException If the JSON encoding fails.
      */
+    #[\Override]
     public function save(LocalAppAuth $localAppAuth): void
     {
         $this->logger->debug('AppAuthFileStorage.save.start', [

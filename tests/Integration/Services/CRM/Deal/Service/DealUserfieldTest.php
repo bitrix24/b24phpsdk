@@ -100,6 +100,7 @@ class DealUserfieldTest extends TestCase
         $this->assertGreaterThanOrEqual(0, count($dealUserfieldsResult->getUserfields()));
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->userfieldService = Factory::getServiceBuilder()->getCRMScope()->dealUserfield();

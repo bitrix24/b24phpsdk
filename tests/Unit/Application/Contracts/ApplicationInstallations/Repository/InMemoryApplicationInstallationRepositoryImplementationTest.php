@@ -31,6 +31,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(ApplicationInstallationRepositoryInterface::class)]
 class InMemoryApplicationInstallationRepositoryImplementationTest extends ApplicationInstallationRepositoryInterfaceTest
 {
+    #[\Override]
     protected function createApplicationInstallationImplementation(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
@@ -57,11 +58,13 @@ class InMemoryApplicationInstallationRepositoryImplementationTest extends Applic
         );
     }
 
+    #[\Override]
     protected function createRepositoryFlusherImplementation(): TestRepositoryFlusherInterface
     {
         return new NullableFlusher();
     }
 
+    #[\Override]
     protected function createApplicationInstallationRepositoryImplementation(): ApplicationInstallationRepositoryInterface
     {
         return new InMemoryApplicationInstallationRepositoryImplementation(

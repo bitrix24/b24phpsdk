@@ -48,6 +48,7 @@ class LocalizationsTest extends TestCase
 
     protected Localizations $localizationsService;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->sb = Factory::getServiceBuilder();
@@ -74,6 +75,7 @@ class LocalizationsTest extends TestCase
         $this->currencyService->add($fields);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->currencyService->delete(self::CURRENCY_CODE);

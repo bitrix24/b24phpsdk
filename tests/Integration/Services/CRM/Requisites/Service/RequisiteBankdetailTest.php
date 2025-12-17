@@ -61,6 +61,7 @@ class RequisiteBankdetailTest extends TestCase
 
     private array $createdCompanies = [];
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->sb = Factory::getServiceBuilder();
@@ -73,6 +74,7 @@ class RequisiteBankdetailTest extends TestCase
         }
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         foreach ($this->companyService->batch->delete($this->createdCompanies) as $result) {

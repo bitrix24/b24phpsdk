@@ -157,6 +157,7 @@ class DealCategoryTest extends TestCase
         $this::assertEquals('updated', $this->dealCategory->get($newCategoryId)->getDealCategoryFields()->NAME);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->dealCategory = Factory::getServiceBuilder()->getCRMScope()->dealCategory();

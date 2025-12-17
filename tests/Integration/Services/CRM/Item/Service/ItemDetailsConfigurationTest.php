@@ -44,12 +44,14 @@ class ItemDetailsConfigurationTest extends TestCase
 
     private ItemDetailsConfiguration $itemConfig;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->sb = Factory::getServiceBuilder();
         $this->itemConfig = $this->sb->getCRMScope()->itemDetailsConfiguration();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
           $this->itemConfig->resetGeneral(self::ENTITY_TYPE_ID);

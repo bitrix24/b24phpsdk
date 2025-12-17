@@ -58,6 +58,7 @@ class TradePlatformTest extends TestCase
         }
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->tradePlatformService = Factory::getServiceBuilder()->getSaleScope()->tradePlatform();

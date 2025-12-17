@@ -46,6 +46,7 @@ class DealCategoryStageTest extends TestCase
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     protected function setUp(): void
     {
         $this->dealCategoryStage = Factory::getServiceBuilder()->getCRMScope()->dealCategoryStage();

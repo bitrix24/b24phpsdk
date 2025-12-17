@@ -40,6 +40,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(Bitrix24PartnerRepositoryInterface::class)]
 class InMemoryBitrix24PartnerRepositoryImplementationTest extends Bitrix24PartnerRepositoryInterfaceTest
 {
+    #[\Override]
     protected function createBitrix24PartnerImplementation(
         Uuid                  $uuid,
         CarbonImmutable       $createdAt,
@@ -67,6 +68,7 @@ class InMemoryBitrix24PartnerRepositoryImplementationTest extends Bitrix24Partne
             $externalId);
     }
 
+    #[\Override]
     protected function createBitrix24PartnerRepositoryImplementation(): Bitrix24PartnerRepositoryInterface
     {
         return new InMemoryBitrix24PartnerRepositoryImplementation(new NullLogger());

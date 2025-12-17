@@ -147,6 +147,7 @@ class LeadTest extends TestCase
         $this->assertEquals($before + $newItemsCount, $after);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->leadService = Factory::getServiceBuilder()->getCRMScope()->lead();

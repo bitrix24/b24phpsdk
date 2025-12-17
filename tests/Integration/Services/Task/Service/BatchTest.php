@@ -32,6 +32,7 @@ class BatchTest extends TestCase
     
     protected int $userId = 0;
     
+    #[\Override]
     protected function setUp(): void
     {
         $this->taskService = Factory::getServiceBuilder()->getTaskScope()->task();

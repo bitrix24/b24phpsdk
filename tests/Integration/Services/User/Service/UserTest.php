@@ -146,6 +146,7 @@ class UserTest extends TestCase
         $this->assertIsArray($this->userService->fields()->getFieldsDescription());
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->userService = Factory::getServiceBuilder()->getUserScope()->user();

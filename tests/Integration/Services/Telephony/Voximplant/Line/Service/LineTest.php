@@ -78,6 +78,7 @@ class LineTest extends TestCase
        $this->assertTrue($this->line->outgoingSet('1')->isSuccess());
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->line = Factory::getServiceBuilder(false)->getTelephonyScope()->getVoximplantServiceBuilder()->line();

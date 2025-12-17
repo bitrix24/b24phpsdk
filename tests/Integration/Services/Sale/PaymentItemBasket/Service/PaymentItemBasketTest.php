@@ -51,6 +51,7 @@ class PaymentItemBasketTest extends TestCase
 
     protected int $paySystemId = 0;
 
+    #[\Override]
     protected function setUp(): void
     {
         $serviceBuilder = Factory::getServiceBuilder();
@@ -62,6 +63,7 @@ class PaymentItemBasketTest extends TestCase
         $this->basketId = $this->createTestBasketItem();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created resources in reverse order

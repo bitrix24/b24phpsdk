@@ -45,6 +45,7 @@ class DepartmentTest extends TestCase
     protected int $rootDepartmentId = 0;
     
     
+    #[\Override]
     protected function setUp(): void
     {
         $this->departmentService = Factory::getServiceBuilder()->getDepartmentScope()->department();

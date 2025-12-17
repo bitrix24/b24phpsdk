@@ -40,12 +40,14 @@ class PropertyGroupTest extends TestCase
     /** @var int[] */
     private array $createdIds = [];
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->service = Factory::getServiceBuilder()->getSaleScope()->propertyGroup();
         $this->personTypeId = $this->getPersonTypeId();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->deletePersonType($this->personTypeId);

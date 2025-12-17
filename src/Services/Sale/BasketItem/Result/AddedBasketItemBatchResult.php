@@ -26,6 +26,7 @@ class AddedBasketItemBatchResult extends AddedItemBatchResult
     /**
      * @throws BaseException
      */
+    #[\Override]
     public function getId(): int
     {
         return (int)$this->getResponseData()->getResult()['basketItem']['id'];

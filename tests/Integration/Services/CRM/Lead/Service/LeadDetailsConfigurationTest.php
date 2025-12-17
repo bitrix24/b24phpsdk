@@ -42,12 +42,14 @@ class LeadDetailsConfigurationTest extends TestCase
 
     private LeadDetailsConfiguration $leadConfig;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->sb = Factory::getServiceBuilder();
         $this->leadConfig = $this->sb->getCRMScope()->leadDetailsConfiguration();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
           $this->leadConfig->resetGeneral();

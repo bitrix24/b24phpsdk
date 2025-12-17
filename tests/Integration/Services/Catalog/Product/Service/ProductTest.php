@@ -150,6 +150,7 @@ class ProductTest extends TestCase
         $this->assertCount(1, $productsResult->getProducts());
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->productService = Factory::getServiceBuilder()->getCatalogScope()->product();

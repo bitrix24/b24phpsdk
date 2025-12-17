@@ -179,6 +179,7 @@ class ItemTest extends TestCase
         $this->assertTrue($this->typeService->delete($addedTypeItemResult->type()->entityTypeId)->isSuccess());
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->typeService = Factory::getServiceBuilder()->getCRMScope()->type();

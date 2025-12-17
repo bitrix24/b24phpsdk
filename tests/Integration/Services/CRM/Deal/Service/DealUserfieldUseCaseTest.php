@@ -71,6 +71,7 @@ class DealUserfieldUseCaseTest extends TestCase
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\Override]
     protected function setUp(): void
     {
         $this->dealService = Factory::getServiceBuilder()->getCRMScope()->deal();
@@ -96,6 +97,7 @@ class DealUserfieldUseCaseTest extends TestCase
         )->getId();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->dealUserfieldService->delete($this->dealUserfieldId);

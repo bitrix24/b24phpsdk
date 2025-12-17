@@ -53,6 +53,7 @@ class PaymentItemShipmentTest extends TestCase
 
     protected int $deliveryId = 0;
 
+    #[\Override]
     protected function setUp(): void
     {
         $serviceBuilder = Factory::getServiceBuilder();
@@ -65,6 +66,7 @@ class PaymentItemShipmentTest extends TestCase
         $this->shipmentId = $this->createTestShipment();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created resources in reverse order

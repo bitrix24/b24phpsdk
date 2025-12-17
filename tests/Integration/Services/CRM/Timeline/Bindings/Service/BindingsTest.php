@@ -52,6 +52,7 @@ class BindingsTest extends TestCase
     
     protected int $companyTwoId = 0;
     
+    #[\Override]
     protected function setUp(): void
     {
         $this->bindingService = Factory::getServiceBuilder()->getCRMScope()->timelineBindings();
@@ -61,6 +62,7 @@ class BindingsTest extends TestCase
         $this->companyTwoId = $this->companyService->add((new CompanyBuilder())->build())->getId();
     }
     
+    #[\Override]
     protected function tearDown(): void
     {
         $this->companyService->delete($this->companyOneId);

@@ -166,6 +166,7 @@ class SipTest extends TestCase
      * @throws TransportException
      * @throws BaseException
      */
+    #[\Override]
     protected function tearDown(): void
     {
         //delete all cloud pbx
@@ -175,6 +176,7 @@ class SipTest extends TestCase
         }
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->sip = Factory::getServiceBuilder()->getTelephonyScope()->getVoximplantServiceBuilder()->sip();

@@ -45,6 +45,7 @@ class StatusLangTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    #[\Override]
     protected function setUp(): void
     {
         $this->statusLangService = Factory::getServiceBuilder()->getSaleScope()->statusLang();
@@ -54,6 +55,7 @@ class StatusLangTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up any test status langs created during tests

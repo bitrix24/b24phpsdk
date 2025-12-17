@@ -136,6 +136,7 @@ class LeadProductRowsTest extends TestCase
         $this->leadService->delete($leadId);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->leadService = Factory::getServiceBuilder()->getCRMScope()->lead();

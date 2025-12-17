@@ -36,6 +36,7 @@ class SectionTest extends TestCase
     
     private string $entity = '';
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->sb = Factory::getServiceBuilder(true);
@@ -44,6 +45,7 @@ class SectionTest extends TestCase
         $this->sb->getEntityScope()->entity()->add($this->entity, 'Test entity', []);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->sb->getEntityScope()->entity()->delete($this->entity);

@@ -105,6 +105,7 @@ class PlacementTest extends TestCase
         $this->assertGreaterThanOrEqual(0, count($placementLocationCodesResult->getLocationCodes()));
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->placementService = Factory::getServiceBuilder(true)->getPlacementScope()->placement();

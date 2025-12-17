@@ -48,6 +48,7 @@ class PropertyVariantTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    #[\Override]
     protected function setUp(): void
     {
         $this->propertyVariantService = Factory::getServiceBuilder()->getSaleScope()->propertyVariant();
@@ -62,6 +63,7 @@ class PropertyVariantTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created resources in reverse order of creation

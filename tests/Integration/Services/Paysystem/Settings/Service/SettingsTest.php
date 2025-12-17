@@ -313,12 +313,14 @@ class SettingsTest extends TestCase
         self::assertIsArray($settings);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->settingsService = Factory::getServiceBuilder()->getPaysystemScope()->settings();
         $this->testDataCleanup = [];
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up test data in reverse order of creation

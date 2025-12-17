@@ -71,6 +71,7 @@ class LeadUserfieldUseCaseTest extends TestCase
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\Override]
     protected function setUp(): void
     {
         $this->leadService = Factory::getServiceBuilder()->getCRMScope()->lead();
@@ -96,6 +97,7 @@ class LeadUserfieldUseCaseTest extends TestCase
         )->getId();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->leadUserfieldService->delete($this->leadUserfieldId);

@@ -44,6 +44,7 @@ class BatchTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    #[\Override]
     protected function setUp(): void
     {
         $this->serviceBuilder = Factory::getServiceBuilder();
@@ -68,6 +69,7 @@ class BatchTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    #[\Override]
     protected function tearDown(): void
     {
         // Delete test calendar

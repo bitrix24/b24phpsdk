@@ -75,6 +75,7 @@ class UserTest extends TestCase
         }
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->user = Factory::getServiceBuilder(true)->getTelephonyScope()->getVoximplantServiceBuilder()->user();

@@ -44,6 +44,7 @@ class DeliveryExtraServiceTest extends TestCase
 
     protected ?int $testDeliveryId = null;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->deliveryExtraService = Factory::getServiceBuilder()->getSaleScope()->deliveryExtraService();
@@ -55,6 +56,7 @@ class DeliveryExtraServiceTest extends TestCase
         $this->createTestDeliveryService();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up test delivery service and handler

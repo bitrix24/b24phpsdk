@@ -216,6 +216,7 @@ class ExternalCallTest extends TestCase
         $this->assertGreaterThanOrEqual(0, count($searchCrmEntitiesResult->getCrmEntities()));
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->externalCall = Factory::getServiceBuilder(true)->getTelephonyScope()->externalCall();

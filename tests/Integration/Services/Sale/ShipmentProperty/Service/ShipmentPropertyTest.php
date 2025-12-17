@@ -54,6 +54,7 @@ class ShipmentPropertyTest extends TestCase
     /**
      * Set up test environment
      */
+    #[\Override]
     protected function setUp(): void
     {
         $this->shipmentPropertyService = Factory::getServiceBuilder()->getSaleScope()->shipmentProperty();
@@ -82,6 +83,7 @@ class ShipmentPropertyTest extends TestCase
     /**
      * Clean up resources after tests
      */
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created property if it exists

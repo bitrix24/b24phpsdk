@@ -51,6 +51,7 @@ class PaymentTest extends TestCase
 
     protected int $paySystemId = 0;
 
+    #[\Override]
     protected function setUp(): void
     {
         $serviceBuilder = Factory::getServiceBuilder();
@@ -60,6 +61,7 @@ class PaymentTest extends TestCase
         $this->orderId = $this->createTestOrder();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created resources

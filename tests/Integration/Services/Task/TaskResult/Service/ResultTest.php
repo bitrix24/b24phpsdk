@@ -45,6 +45,7 @@ class ResultTest extends TestCase
     
     protected int $userId = 0;
     
+    #[\Override]
     protected function setUp(): void
     {
         $this->commentitemService = Factory::getServiceBuilder()->getTaskScope()->commentitem();

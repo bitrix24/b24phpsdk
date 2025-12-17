@@ -48,6 +48,7 @@ class ResourceTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    #[\Override]
     protected function setUp(): void
     {
         $this->serviceBuilder = Factory::getServiceBuilder();
@@ -58,6 +59,7 @@ class ResourceTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created resources

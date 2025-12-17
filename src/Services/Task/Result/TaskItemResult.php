@@ -88,7 +88,7 @@ use Carbon\CarbonImmutable;
  */
 class TaskItemResult extends AbstractItem
 {
-    private const TASK_USERFIELD_PREFIX = 'UF_';
+    private const string TASK_USERFIELD_PREFIX = 'UF_';
 
     /**
      *

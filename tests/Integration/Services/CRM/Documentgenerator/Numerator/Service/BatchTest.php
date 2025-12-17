@@ -34,6 +34,7 @@ class BatchTest extends TestCase
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     protected function setUp(): void
     {
         $this->numeratorService = Factory::getServiceBuilder()->getCRMScope()->documentgeneratorNumerator();

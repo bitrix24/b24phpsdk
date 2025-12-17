@@ -44,6 +44,7 @@ class StatusTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    #[\Override]
     protected function setUp(): void
     {
         $this->statusService = Factory::getServiceBuilder()->getSaleScope()->status();
@@ -53,6 +54,7 @@ class StatusTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up any test statuses created during tests

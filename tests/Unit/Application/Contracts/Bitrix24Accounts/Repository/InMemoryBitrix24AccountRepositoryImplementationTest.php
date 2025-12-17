@@ -30,6 +30,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(Bitrix24AccountRepositoryInterface::class)]
 class InMemoryBitrix24AccountRepositoryImplementationTest extends Bitrix24AccountRepositoryInterfaceTest
 {
+    #[\Override]
     protected function createBitrix24AccountImplementation(
         Uuid                  $uuid,
         int                   $bitrix24UserId,
@@ -55,11 +56,13 @@ class InMemoryBitrix24AccountRepositoryImplementationTest extends Bitrix24Accoun
         );
     }
 
+    #[\Override]
     protected function createBitrix24AccountRepositoryImplementation(): Bitrix24AccountRepositoryInterface
     {
         return new InMemoryBitrix24AccountRepositoryImplementation(new NullLogger());
     }
 
+    #[\Override]
     protected function createRepositoryFlusherImplementation(): TestRepositoryFlusherInterface
     {
         return new NullableFlusher();

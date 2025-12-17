@@ -29,6 +29,7 @@ class FilterWithoutBatchWithoutCountOrder implements BulkItemsReaderInterface
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      */
+    #[\Override]
     public function getTraversableList(string $apiMethod, array $order, array $filter, array $select, ?int $limit = null): Generator
     {
         $this->log->debug('FilterWithoutBatchWithoutCountOrder.getTraversableList.start', [

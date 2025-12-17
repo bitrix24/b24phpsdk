@@ -41,6 +41,7 @@ class QuoteTest extends TestCase
     use CustomBitrix24Assertions;
     protected Quote $quoteService;
     
+    #[\Override]
     protected function setUp(): void
     {
         $this->quoteService = Factory::getServiceBuilder()->getCRMScope()->quote();

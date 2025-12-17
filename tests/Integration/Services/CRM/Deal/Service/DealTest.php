@@ -123,6 +123,7 @@ class DealTest extends TestCase
         $this->assertEquals($before + $newDealsCount, $after);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->dealService = Factory::getServiceBuilder()->getCRMScope()->deal();

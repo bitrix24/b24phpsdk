@@ -53,6 +53,7 @@ class RequisiteUserfieldUseCaseTest extends TestCase
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\Override]
     protected function setUp(): void
     {
         $this->sb = Factory::getServiceBuilder();
@@ -122,6 +123,7 @@ class RequisiteUserfieldUseCaseTest extends TestCase
         );
     }
     
+    #[\Override]
     protected function tearDown(): void
     {
         $this->requisiteService->delete($this->requisiteId);

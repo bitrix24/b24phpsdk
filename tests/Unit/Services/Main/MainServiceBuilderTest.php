@@ -33,6 +33,7 @@ class MainServiceBuilderTest extends TestCase
         $this::assertSame($this->serviceBuilder->main(), $this->serviceBuilder->main());
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->serviceBuilder = (new ServiceBuilder(

@@ -69,6 +69,7 @@ class RequisiteLinkTest extends TestCase
 
     private int $dealId = 0;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->sb = Factory::getServiceBuilder();
@@ -92,6 +93,7 @@ class RequisiteLinkTest extends TestCase
         )->getId();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->companyService->delete($this->companyId);

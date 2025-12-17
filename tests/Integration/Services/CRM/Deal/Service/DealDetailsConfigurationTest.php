@@ -42,12 +42,14 @@ class DealDetailsConfigurationTest extends TestCase
 
     private DealDetailsConfiguration $dealConfig;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->sb = Factory::getServiceBuilder();
         $this->dealConfig = $this->sb->getCRMScope()->dealDetailsConfiguration();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
           $this->dealConfig->resetGeneral();

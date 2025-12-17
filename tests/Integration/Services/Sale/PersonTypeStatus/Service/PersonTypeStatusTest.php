@@ -15,6 +15,7 @@ class PersonTypeStatusTest extends TestCase
 {
     protected PersonTypeStatus $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->service = Factory::getServiceBuilder()->getSaleScope()->personTypeStatus();

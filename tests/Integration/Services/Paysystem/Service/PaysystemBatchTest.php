@@ -30,7 +30,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(\Bitrix24\SDK\Services\Paysystem\Service\Batch::class)]
 class PaysystemBatchTest extends TestCase
 {
-    private const TEST_SEGMENT_ELEMENTS_COUNT = 50;
+    private const int TEST_SEGMENT_ELEMENTS_COUNT = 50;
 
     protected Paysystem $paysystemService;
 
@@ -278,11 +278,13 @@ class PaysystemBatchTest extends TestCase
         $this->deleteTestHandlerByCode($handlerCode);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->paysystemService = Factory::getServiceBuilder()->getPaysystemScope()->paysystem();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Additional cleanup: remove any remaining test handlers that might have been left

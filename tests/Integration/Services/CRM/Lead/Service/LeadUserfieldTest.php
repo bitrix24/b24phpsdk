@@ -100,6 +100,7 @@ class LeadUserfieldTest extends TestCase
         $this->assertGreaterThanOrEqual(0, count($leadUserfieldsResult->getUserfields()));
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->userfieldService = Factory::getServiceBuilder()->getCRMScope()->leadUserfield();

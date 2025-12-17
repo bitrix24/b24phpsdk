@@ -53,6 +53,7 @@ class NetworkTest extends TestCase
         $this->assertTrue($addedMessageItemResult->isSuccess());
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->networkService = Factory::getServiceBuilder()->getIMOpenLinesScope()->Network();

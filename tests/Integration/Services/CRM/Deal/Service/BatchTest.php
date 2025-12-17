@@ -155,6 +155,7 @@ class BatchTest extends TestCase
         $this->assertEquals($resultDeals, $updateResult);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->dealService = Factory::getServiceBuilder()->getCRMScope()->deal();

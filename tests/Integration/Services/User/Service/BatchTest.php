@@ -59,6 +59,7 @@ class BatchTest extends TestCase
         $this->assertGreaterThan(1, count($users));
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->userService = Factory::getServiceBuilder()->getUserScope()->user();

@@ -35,6 +35,7 @@ class UrlTest extends TestCase
         );
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->url = Factory::getServiceBuilder(true)->getTelephonyScope()->getVoximplantServiceBuilder()->url();

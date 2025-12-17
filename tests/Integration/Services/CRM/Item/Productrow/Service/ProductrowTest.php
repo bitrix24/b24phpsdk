@@ -49,6 +49,7 @@ class ProductrowTest extends TestCase
     
     protected int $leadId = 0;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->productrowService = Factory::getServiceBuilder()->getCRMScope()->itemProductrow();
@@ -57,6 +58,7 @@ class ProductrowTest extends TestCase
         $this->leadId = $this->leadService->add(['TITLE' => 'test lead for productRows'])->getId();
     }
     
+    #[\Override]
     protected function tearDown(): void
     {
         $this->leadService->delete($this->leadId);

@@ -49,6 +49,7 @@ class RequisiteTest extends TestCase
 
     private int $entityTypeIdCompany;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->sb = Factory::getServiceBuilder();
@@ -66,6 +67,7 @@ class RequisiteTest extends TestCase
         )->ID;
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         foreach ($this->sb->getCRMScope()->company()->batch->delete($this->createdCompanies) as $result) {

@@ -186,6 +186,7 @@ class DealContactTest extends TestCase
         $this::assertCount(1, $this->dealContactService->itemsGet($dealId)->getDealContacts());
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->dealService = Factory::getServiceBuilder()->getCRMScope()->deal();

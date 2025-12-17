@@ -60,6 +60,7 @@ class UserConsentAgreementTest extends TestCase
         $this->assertNotNull($userConsentAgreementTextItemResult->LABEL);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->userConsentAgreementService = Factory::getServiceBuilder()->getUserConsentScope()->UserConsentAgreement();

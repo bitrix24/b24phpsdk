@@ -67,6 +67,7 @@ class InfoCallTest extends TestCase
         )->getCallResult()->RESULT);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->infoCall = Factory::getServiceBuilder(false)->getTelephonyScope()->getVoximplantServiceBuilder()->infoCall();

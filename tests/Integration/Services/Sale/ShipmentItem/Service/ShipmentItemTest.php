@@ -44,6 +44,7 @@ class ShipmentItemTest extends TestCase
 
     protected int $basketId;
 
+    #[\Override]
     protected function setUp(): void
     {
         $saleServiceBuilder = Factory::getServiceBuilder()->getSaleScope();
@@ -57,6 +58,7 @@ class ShipmentItemTest extends TestCase
         $this->basketId = $this->createBasketItem();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean-up in reverse order

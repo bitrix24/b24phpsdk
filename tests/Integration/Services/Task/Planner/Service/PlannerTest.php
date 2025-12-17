@@ -36,6 +36,7 @@ class PlannerTest extends TestCase
     
     protected Planner $plannerService;
     
+    #[\Override]
     protected function setUp(): void
     {
         $this->plannerService = Factory::getServiceBuilder()->getTaskScope()->planner();

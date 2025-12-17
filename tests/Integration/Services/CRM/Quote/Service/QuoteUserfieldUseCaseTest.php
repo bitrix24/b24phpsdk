@@ -35,6 +35,7 @@ class QuoteUserfieldUseCaseTest extends TestCase
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\Override]
     protected function setUp(): void
     {
         $this->quoteService = Factory::getServiceBuilder()->getCRMScope()->quote();
@@ -60,6 +61,7 @@ class QuoteUserfieldUseCaseTest extends TestCase
         )->getId();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->quoteUserfieldService->delete($this->quoteUserfieldId);

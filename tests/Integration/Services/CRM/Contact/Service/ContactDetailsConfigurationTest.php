@@ -42,12 +42,14 @@ class ContactDetailsConfigurationTest extends TestCase
 
     private ContactDetailsConfiguration $contactConfig;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->sb = Factory::getServiceBuilder();
         $this->contactConfig = $this->sb->getCRMScope()->contactDetailsConfiguration();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
           $this->contactConfig->resetGeneral();

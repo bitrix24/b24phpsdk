@@ -45,6 +45,7 @@ class CalendarTest extends TestCase
 
     protected array $createdCalendarIds = [];
 
+    #[\Override]
     protected function setUp(): void
     {
         $serviceBuilder = Factory::getServiceBuilder();
@@ -52,6 +53,7 @@ class CalendarTest extends TestCase
         $this->currentUserId = $this->getCurrentUserId();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created calendar sections

@@ -47,6 +47,7 @@ class PropertyRelationTest extends TestCase
 
     protected int $propsGroupId = 0;
 
+    #[\Override]
     protected function setUp(): void
     {
         $serviceBuilder = Factory::getServiceBuilder();
@@ -57,6 +58,7 @@ class PropertyRelationTest extends TestCase
         $this->deliveryServiceId = $this->getDeliveryServiceId();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created resources in reverse order

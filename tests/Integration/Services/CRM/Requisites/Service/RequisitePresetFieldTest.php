@@ -48,6 +48,7 @@ class RequisitePresetFieldTest extends TestCase
 
     protected int $presetId;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->sb = Factory::getServiceBuilder();
@@ -83,6 +84,7 @@ class RequisitePresetFieldTest extends TestCase
         $this->presetFieldService = $this->sb->getCRMScope()->requisitePresetField();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->sb->getCRMScope()->requisitePreset()->delete($this->presetId);

@@ -30,6 +30,7 @@ class BatchTest extends TestCase
     protected Quote $quoteService;
     
     
+    #[\Override]
     protected function setUp(): void
     {
         $this->quoteService = Factory::getServiceBuilder()->getCRMScope()->quote();

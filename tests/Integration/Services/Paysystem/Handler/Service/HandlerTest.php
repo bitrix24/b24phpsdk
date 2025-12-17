@@ -34,6 +34,7 @@ class HandlerTest extends TestCase
 {
     protected Handler $handlerService;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->handlerService = Factory::getServiceBuilder()->getPaysystemScope()->handler();

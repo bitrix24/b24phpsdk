@@ -59,6 +59,7 @@ class InMemoryContactPersonRepositoryImplementationTest extends ContactPersonRep
         );
     }
 
+    #[\Override]
     protected function createContactPersonImplementation(
         Uuid $uuid,
         CarbonImmutable $createdAt,
@@ -101,12 +102,14 @@ class InMemoryContactPersonRepositoryImplementationTest extends ContactPersonRep
         );
     }
 
+    #[\Override]
     protected function createRepositoryFlusherImplementation(): TestRepositoryFlusherInterface
     {
         return new NullableFlusher();
     }
 
 
+    #[\Override]
     protected function createContactPersonRepositoryImplementation(): ContactPersonRepositoryInterface
     {
         return new InMemoryContactPersonRepositoryImplementation(new NullLogger());

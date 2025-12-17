@@ -104,6 +104,7 @@ class BatchTest extends TestCase
         self::assertEquals(count($leads), $cnt);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->leadService = Factory::getServiceBuilder()->getCRMScope()->lead();

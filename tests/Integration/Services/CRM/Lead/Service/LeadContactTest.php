@@ -48,6 +48,7 @@ class LeadContactTest extends TestCase
 
     private Contact  $contactService;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->sb = Factory::getServiceBuilder();
@@ -55,6 +56,7 @@ class LeadContactTest extends TestCase
         $this->contactService = $this->sb->getCRMScope()->contact();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         foreach ($this->leadService->batch->delete($this->createdLeads) as $result) {

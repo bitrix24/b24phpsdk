@@ -162,6 +162,7 @@ class NotifyTest extends TestCase
         $this->imNotifyService->confirm($addedItemResult->getId(), true);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->imNotifyService = Factory::getServiceBuilder()->getIMScope()->notify();

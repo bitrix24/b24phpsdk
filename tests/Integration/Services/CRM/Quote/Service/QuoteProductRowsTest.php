@@ -40,6 +40,7 @@ class QuoteProductRowsTest extends TestCase
 
     private TyphoonReflector $typhoonReflector;
     
+    #[\Override]
     protected function setUp(): void
     {
         $this->quoteService = Factory::getServiceBuilder()->getCRMScope()->quote();

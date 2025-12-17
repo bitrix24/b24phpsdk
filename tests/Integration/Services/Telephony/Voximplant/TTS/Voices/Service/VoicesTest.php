@@ -43,6 +43,7 @@ class VoicesTest extends TestCase
         $this->assertGreaterThanOrEqual(1, count($voximplantVoicesResult->getVoices()));
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->voices = Factory::getServiceBuilder()->getTelephonyScope()->getVoximplantServiceBuilder()->ttsVoices();

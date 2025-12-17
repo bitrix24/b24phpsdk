@@ -130,6 +130,7 @@ class DealProductRowsTest extends TestCase
         $this->assertEquals(Percentage::zero(), $productRow->DISCOUNT_RATE);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->dealService = Factory::getServiceBuilder()->getCRMScope()->deal();

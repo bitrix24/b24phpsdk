@@ -123,6 +123,7 @@ class MainTest extends TestCase
         $this->assertIsArray($this->mainService->getAvailableMethods()->getResponseData()->getResult());
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->mainService = Factory::getServiceBuilder()->getMainScope()->main();

@@ -34,6 +34,7 @@ class CashboxHandlerTest extends TestCase
 {
     protected CashboxHandler $cashboxHandlerService;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->cashboxHandlerService = Factory::getServiceBuilder()->getSaleScope()->cashboxHandler();
