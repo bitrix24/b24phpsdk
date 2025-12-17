@@ -38,7 +38,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  *
  * @package Bitrix24\SDK\Tests\Integration
  */
-class Fabric
+class Factory
 {
     /**
      * @param bool $isNeedApplicationCredentials some rest-api methods need application credentials, incoming webhook doesn't work for call this methods

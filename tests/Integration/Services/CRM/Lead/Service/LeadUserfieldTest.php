@@ -15,7 +15,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Lead\Service;
 
 use Bitrix24\SDK\Services\CRM\Lead\Service\LeadUserfield;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\Userfield\SystemUserfieldBuilder;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -100,8 +100,9 @@ class LeadUserfieldTest extends TestCase
         $this->assertGreaterThanOrEqual(0, count($leadUserfieldsResult->getUserfields()));
     }
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->userfieldService = Fabric::getServiceBuilder()->getCRMScope()->leadUserfield();
+        $this->userfieldService = Factory::getServiceBuilder()->getCRMScope()->leadUserfield();
     }
 }

@@ -22,6 +22,7 @@ use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
  */
 class AddedNumeratorBatchResult extends AddedItemBatchResult
 {
+    #[\Override]
     public function getId(): int
     {
         return (int)$this->getResponseData()->getResult()['numerator']['id'];

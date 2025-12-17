@@ -21,7 +21,7 @@ use Bitrix24\SDK\Services\CRM\Company\Service\Company;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\CompanyBuilder;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\RequisiteBuilder;
 
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\Uuid;
@@ -53,9 +53,10 @@ class RequisiteUserfieldUseCaseTest extends TestCase
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\Override]
     protected function setUp(): void
     {
-        $this->sb = Fabric::getServiceBuilder();
+        $this->sb = Factory::getServiceBuilder();
         $this->requisiteService = $this->sb->getCRMScope()->requisite();
         $this->requisiteUserfieldService = $this->sb->getCRMScope()->requisiteUserfield();
 
@@ -122,6 +123,7 @@ class RequisiteUserfieldUseCaseTest extends TestCase
         );
     }
     
+    #[\Override]
     protected function tearDown(): void
     {
         $this->requisiteService->delete($this->requisiteId);

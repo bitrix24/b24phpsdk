@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Task\Service\Task;
 use Bitrix24\SDK\Services\User\Service\User;
 use Bitrix24\SDK\Services\Task\Userfield\Service\Userfield;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\Task\Userfield\Service\Userfield::class)]
@@ -38,11 +38,12 @@ class UserfieldUseCaseTest extends TestCase
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\Override]
     protected function setUp(): void
     {
-        $this->taskService = Fabric::getServiceBuilder()->getTaskScope()->task();
-        $this->userService = Fabric::getServiceBuilder()->getUserScope()->user();
-        $this->userfieldService = Fabric::getServiceBuilder()->getTaskScope()->userfield();
+        $this->taskService = Factory::getServiceBuilder()->getTaskScope()->task();
+        $this->userService = Factory::getServiceBuilder()->getUserScope()->user();
+        $this->userfieldService = Factory::getServiceBuilder()->getTaskScope()->userfield();
 
         $this->userfieldId = $this->userfieldService->add(
             [
@@ -64,6 +65,7 @@ class UserfieldUseCaseTest extends TestCase
         )->getId();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->userfieldService->delete($this->userfieldId);

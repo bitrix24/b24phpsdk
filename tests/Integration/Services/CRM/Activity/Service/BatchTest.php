@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Activity\Service\Activity;
 use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
 use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Activity\Service\Batch::class)]
@@ -199,8 +199,8 @@ class BatchTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->activityService = Fabric::getServiceBuilder()->getCRMScope()->activity();
-        $this->contactService = Fabric::getServiceBuilder()->getCRMScope()->contact();
+        $this->activityService = Factory::getServiceBuilder()->getCRMScope()->activity();
+        $this->contactService = Factory::getServiceBuilder()->getCRMScope()->contact();
         $this->contactId = [];
     }
 }

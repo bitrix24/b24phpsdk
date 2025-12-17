@@ -27,6 +27,7 @@ class BulkItemsReader implements BulkItemsReaderInterface
      *
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\Override]
     public function getTraversableList(string $apiMethod, array $order, array $filter, array $select, ?int $limit = null): Generator
     {
         foreach ($this->readStrategy->getTraversableList($apiMethod, $order, $filter, $select, $limit) as $cnt => $item) {

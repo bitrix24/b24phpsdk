@@ -22,8 +22,9 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(DefaultOAuthServerUrl::class)]
 class DefaultOAuthServerUrlTest extends TestCase
 {
-    private const ENV_VAR_NAME = 'BITRIX24_PHP_SDK_DEFAULT_AUTH_SERVER_URL';
+    private const string ENV_VAR_NAME = 'BITRIX24_PHP_SDK_DEFAULT_AUTH_SERVER_URL';
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -33,6 +34,7 @@ class DefaultOAuthServerUrlTest extends TestCase
         }
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up environment variable after each test

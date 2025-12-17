@@ -24,7 +24,7 @@ use Bitrix24\SDK\Services\CRM\Lead\Result\LeadProductRowItemResult;
 use Bitrix24\SDK\Services\CRM\Lead\Service\Lead;
 use Bitrix24\SDK\Services\CRM\Lead\Service\LeadProductRows;
 use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use MoneyPHP\Percentage\Percentage;
 use PHPUnit\Framework\TestCase;
 use Typhoon\Reflection\TyphoonReflector;
@@ -136,10 +136,11 @@ class LeadProductRowsTest extends TestCase
         $this->leadService->delete($leadId);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->leadService = Fabric::getServiceBuilder()->getCRMScope()->lead();
-        $this->leadProductRowsService = Fabric::getServiceBuilder()->getCRMScope()->leadProductRows();
+        $this->leadService = Factory::getServiceBuilder()->getCRMScope()->lead();
+        $this->leadProductRowsService = Factory::getServiceBuilder()->getCRMScope()->leadProductRows();
         $this->decimalMoneyFormatter = new DecimalMoneyFormatter(new ISOCurrencies());
         $this->typhoonReflector = TyphoonReflector::build();
     }

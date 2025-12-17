@@ -26,6 +26,7 @@ class ServiceBuilderCacheTest extends TestCase
 {
     private ServiceBuilder $serviceBuilder;
     
+    #[\Override]
     protected function setUp(): void
     {
         $this->serviceBuilder = new ServiceBuilder(

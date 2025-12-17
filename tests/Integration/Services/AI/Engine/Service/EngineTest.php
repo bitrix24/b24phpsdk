@@ -17,7 +17,7 @@ use Bitrix24\SDK\Services\AI\Engine\EngineCategory;
 use Bitrix24\SDK\Services\AI\Engine\EngineSettings;
 use Bitrix24\SDK\Services\AI\Engine\Service\Engine;
 use Bitrix24\SDK\Services\ServiceBuilder;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -97,7 +97,7 @@ class EngineTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->serviceBuilder = Fabric::getServiceBuilder();
+        $this->serviceBuilder = Factory::getServiceBuilder();
     }
 
     protected function tearDown(): void
