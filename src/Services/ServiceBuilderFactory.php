@@ -82,7 +82,7 @@ class ServiceBuilderFactory
      * @param ApplicationProfile $applicationProfile
      * @param AuthToken $authToken
      * @param non-empty-string $bitrix24DomainUrl
-     * @param non-empty-string|null $oauthServerUrl
+     * @param string $oauthServerUrl
      * @return ServiceBuilder
      * @throws InvalidArgumentException
      */

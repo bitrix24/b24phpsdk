@@ -46,6 +46,6 @@ class Documentation extends AbstractService
     )]
     public function getSchema(): DocumentationResult
     {
-        return new DocumentationResult($this->core->call('documentation', version: ApiVersion::v3));
+        return new DocumentationResult($this->core->call('documentation', apiVersion: ApiVersion::v3));
     }
 }

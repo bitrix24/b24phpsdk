@@ -34,12 +34,13 @@ class NullCore implements CoreInterface
     /**
      *
      * @param non-empty-string $apiMethod
-     * @param positive-int $apiVersion
-     * @throws Exception
+     * @param array $parameters
+     * @param ApiVersion $apiVersion
+     * @return Response
      */
     public function call(string $apiMethod, array $parameters = [], ApiVersion $apiVersion = ApiVersion::v1): Response
     {
-        return new Response(new MockResponse(''), new Command('', []), new ApiLevelErrorHandler(new  NullLogger()), new NullLogger());
+        return new Response(new MockResponse(''), new Command('', []), new ApiLevelErrorHandler(new NullLogger()), new NullLogger());
     }
 
     public function getApiClient(): ApiClientInterface
@@ -49,7 +50,8 @@ class NullCore implements CoreInterface
             new MockHttpClient(),
             new DefaultRequestIdGenerator(),
             new ApiLevelErrorHandler(new NullLogger()),
-            new EndpointUrlFormatter(new DefaultRequestIdGenerator() ,new NullLogger()),
-            new NullLogger());
+            new EndpointUrlFormatter(new DefaultRequestIdGenerator(), new NullLogger()),
+            new NullLogger()
+        );
     }
 }
