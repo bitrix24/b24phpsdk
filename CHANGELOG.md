@@ -1,5 +1,15 @@
 # b24-php-sdk change log
 
+## 3.0.0 - 2026.01.01
+
+### Added
+= Added support for Bitrix24 API v3
+
+### Changed
+
+
+
+
 ## 1.9.0 - 2025.12.01
 
 ### Added
