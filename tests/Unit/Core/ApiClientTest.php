@@ -238,6 +238,7 @@ class ApiClientTest extends TestCase
         $this->assertEquals($expiresTimestamp, $renewedAuthToken->authToken->expires);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

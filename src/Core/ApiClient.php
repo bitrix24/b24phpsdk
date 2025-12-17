@@ -74,6 +74,7 @@ class ApiClient implements ApiClientInterface
         ];
     }
 
+    #[\Override]
     public function getCredentials(): Credentials
     {
         return $this->credentials;
@@ -87,6 +88,7 @@ class ApiClient implements ApiClientInterface
      * @throws PortalDomainNotFoundException
      * @throws WrongClientException
      */
+    #[\Override]
     public function getNewAuthToken(): RenewedAuthToken
     {
         $requestId = $this->requestIdGenerator->getRequestId();
@@ -158,6 +160,7 @@ class ApiClient implements ApiClientInterface
      * @throws TransportExceptionInterface
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function getResponse(string $apiMethod, array $parameters = [], ApiVersion $apiVersion = ApiVersion::v1): ResponseInterface
     {
         $requestId = $this->requestIdGenerator->getRequestId();

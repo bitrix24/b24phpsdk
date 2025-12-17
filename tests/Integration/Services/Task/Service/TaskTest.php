@@ -76,7 +76,7 @@ class TaskTest extends TestCase
      */
     public function testNewChatComments(): void
     {
-        $taskItem = $this->taskService->get(
+        $this->taskService->get(
             26,
             (new TaskItemSelectBuilder())
                 ->title()
@@ -87,6 +87,7 @@ class TaskTest extends TestCase
         )->task();
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->taskService = Factory::getServiceBuilder(true)->getTaskScope()->task();

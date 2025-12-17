@@ -49,6 +49,7 @@ class Core implements CoreInterface
      * @throws QueryLimitExceededException
      * @throws TransportException
      */
+    #[\Override]
     public function call(string $apiMethod, array $parameters = [], ApiVersion $apiVersion = ApiVersion::v1): Response
     {
         $this->logger->debug(
@@ -230,6 +231,7 @@ class Core implements CoreInterface
         return $response;
     }
 
+    #[\Override]
     public function getApiClient(): ApiClientInterface
     {
         return $this->apiClient;
