@@ -20,7 +20,7 @@ use Bitrix24\SDK\Services\Sale\BasketProperty\Service\BasketProperty;
 use Bitrix24\SDK\Services\Sale\BasketItem\Service\BasketItem;
 use Bitrix24\SDK\Services\Sale\Order\Service\Order;
 use Bitrix24\SDK\Services\Sale\PersonType\Service\PersonType;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -52,9 +52,10 @@ class BasketPropertyTest extends TestCase
 
     protected int $personTypeId;
 
+    #[\Override]
     protected function setUp(): void
     {
-        $serviceBuilder = Fabric::getServiceBuilder();
+        $serviceBuilder = Factory::getServiceBuilder();
         $saleServiceBuilder = $serviceBuilder->getSaleScope();
 
         $this->basketPropertyService = $saleServiceBuilder->basketProperty();
@@ -68,6 +69,7 @@ class BasketPropertyTest extends TestCase
         $this->basketItemId = $this->createBasketItem($this->orderId);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created resources in reverse order

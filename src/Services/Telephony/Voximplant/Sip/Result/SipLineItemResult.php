@@ -38,6 +38,7 @@ use Money\Money;
  */
 class SipLineItemResult extends AbstractItem
 {
+    #[\Override]
     public function __get($offset)
     {
         return match ($offset) {

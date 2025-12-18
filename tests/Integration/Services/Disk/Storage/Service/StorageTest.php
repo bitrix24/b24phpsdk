@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Services\Disk\Storage\Result\StorageItemResult;
 use Bitrix24\SDK\Services\Disk\Storage\Service\Storage;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -44,9 +44,10 @@ class StorageTest extends TestCase
     
     protected Storage $storageService;
     
+    #[\Override]
     protected function setUp(): void
     {
-        $this->storageService = Fabric::getServiceBuilder(true)->getDiskScope()->storage();
+        $this->storageService = Factory::getServiceBuilder(true)->getDiskScope()->storage();
     }
 
     public function testAllSystemFieldsAnnotated(): void
@@ -192,7 +193,7 @@ class StorageTest extends TestCase
         self::assertEquals('folder', $folder->TYPE);
         
         // Clean up: delete the test folder
-        $folderService = Fabric::getServiceBuilder(true)->getDiskScope()->folder();
+        $folderService = Factory::getServiceBuilder(true)->getDiskScope()->folder();
         $folderService->deleteTree($addFolderResult->getId());
     }
 
@@ -238,7 +239,7 @@ class StorageTest extends TestCase
         self::assertEquals(count($folders) + count($files), count($childrenAfter));
         
         // Clean up
-        $folderService = Fabric::getServiceBuilder(true)->getDiskScope()->folder();
+        $folderService = Factory::getServiceBuilder(true)->getDiskScope()->folder();
         $folderService->deleteTree($parentFolderId);
         $folderService->deleteTree($subfolder->getId());
     }
@@ -266,7 +267,7 @@ class StorageTest extends TestCase
         self::assertEquals('file', $fileItemResult->TYPE);
         
         // Clean up: delete the uploaded file
-        $fileService = Fabric::getServiceBuilder(true)->getDiskScope()->file();
+        $fileService = Factory::getServiceBuilder(true)->getDiskScope()->file();
         $fileService->markDeleted((int)$fileItemResult->ID);
     }
 
@@ -302,7 +303,7 @@ class StorageTest extends TestCase
         self::assertStringContainsString($nameOnly, $file2->NAME);
         
         // Clean up
-        $fileService = Fabric::getServiceBuilder(true)->getDiskScope()->file();
+        $fileService = Factory::getServiceBuilder(true)->getDiskScope()->file();
         $fileService->markDeleted((int)$fileItemResult->ID);
         $fileService->markDeleted((int)$file2->ID);
     }

@@ -25,7 +25,7 @@ use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\CompanyBuilder;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\RequisiteBuilder;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -49,9 +49,10 @@ class RequisiteTest extends TestCase
 
     private int $entityTypeIdCompany;
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->sb = Fabric::getServiceBuilder();
+        $this->sb = Factory::getServiceBuilder();
         $this->requisitePresetId = current(
             array_filter(
                 $this->sb->getCRMScope()->requisitePreset()->list()->getRequisitePresets(),
@@ -66,6 +67,7 @@ class RequisiteTest extends TestCase
         )->ID;
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         foreach ($this->sb->getCRMScope()->company()->batch->delete($this->createdCompanies) as $result) {

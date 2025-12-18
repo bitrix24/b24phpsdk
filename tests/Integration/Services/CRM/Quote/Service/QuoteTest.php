@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Services\CRM\Quote\Result\QuoteItemResult;
 use Bitrix24\SDK\Services\CRM\Quote\Service\Quote;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -41,9 +41,10 @@ class QuoteTest extends TestCase
     use CustomBitrix24Assertions;
     protected Quote $quoteService;
     
+    #[\Override]
     protected function setUp(): void
     {
-        $this->quoteService = Fabric::getServiceBuilder()->getCRMScope()->quote();
+        $this->quoteService = Factory::getServiceBuilder()->getCRMScope()->quote();
     }
 
     public function testAllSystemFieldsAnnotated(): void

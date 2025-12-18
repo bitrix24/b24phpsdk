@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException;
 use Bitrix24\SDK\Services\Main\Service\Main;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -83,7 +83,7 @@ class MainTest extends TestCase
     public function testGuardValidateCurrentAuthToken(): void
     {
         // get service builder with application credentials
-        $serviceBuilder = Fabric::getServiceBuilder(true);
+        $serviceBuilder = Factory::getServiceBuilder(true);
         // call app.info on OAUTH server
         $serviceBuilder->getMainScope()->main()->guardValidateCurrentAuthToken();
         $this->assertTrue(true);
@@ -123,8 +123,9 @@ class MainTest extends TestCase
         $this->assertIsArray($this->mainService->getAvailableMethods()->getResponseData()->getResult());
     }
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->mainService = Fabric::getServiceBuilder()->getMainScope()->main();
+        $this->mainService = Factory::getServiceBuilder()->getMainScope()->main();
     }
 }

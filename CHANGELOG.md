@@ -1,9 +1,9 @@
 # b24-php-sdk change log
 
-## Upcoming 1.9.0 - 2026.01.01
+## 3.0.0 - 2026.01.01
 
 ### Added
-
+= Added support for Bitrix24 API v3
 - Added service `Services\Landing\Site\Service\Site` with support methods,
   see [landing.site.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
     - `add` adds a site
@@ -113,6 +113,11 @@
     - `getSiteList` retrieves a list of available templates for creating sites
     - `getPageList` retrieves a list of available templates for creating pages
 
+### Changed
+
+
+
+
 ## 1.9.0 - 2025.12.01
 
 ### Added
@@ -141,6 +146,18 @@
   - Enables direct access to Bitrix24 REST API documentation within Claude Code
   - Provides tools for searching methods, viewing method details, and reading articles
   - Improves developer experience when working with Bitrix24 API
+- Added specialized exceptions for OAuth token refresh errors, [see details](https://github.com/bitrix24/b24phpsdk/issues/284):
+  - `InvalidGrantException` - thrown when refresh token is invalid or expired (requires user re-authorization)
+  - `PortalDomainNotFoundException` - thrown when Bitrix24 portal domain is not found or inaccessible
+  - These exceptions allow developers to implement specific error handling logic based on the actual failure cause
+
+### Changed
+
+- Updated `darsyn/ip` dependency constraint to support version 6.x alongside versions 4.x and 5.x, [see details](https://github.com/bitrix24/b24phpsdk/issues/236)
+    - New version constraint: `^4 || ^5 || ^6`
+    - Version 6.0.0 is compatible with PHP 7.1+ (exceeds project requirement of PHP 8.2+)
+    - All existing code remains fully compatible with version 6.x
+    - API methods like `IP::factory()` continue to work without changes
 
 ### Fixed
 
@@ -153,6 +170,42 @@
         - `DATE_CREATE`, `DATE_MODIFY`, `LAST_ACTIVITY_TIME` return `CarbonImmutable`
         - `MOVED_BY_ID` correctly returns `int`
         - Null handling for empty datetime and integer fields
+- Fixed invalid type casting hints in `FlowItemResult`,
+  [see details](https://github.com/bitrix24/b24phpsdk/issues/275):
+    - Added missing `@property-read bool $active` annotation
+    - Corrected nullable type annotations to match Bitrix24 API documentation for `task.flow.Flow.get` method:
+        - `responsibleList`: changed from `array|null` to `array` (required field)
+        - `demo`: changed from `bool|null` to `bool` (required field)
+        - `responsibleCanChangeDeadline`: changed from `bool|null` to `bool` (required field)
+        - `matchWorkTime`: changed from `bool|null` to `bool` (required field)
+        - `taskControl`: changed from `bool|null` to `bool` (required field)
+        - `notifyAtHalfTime`: changed from `bool|null` to `bool` (required field)
+        - `taskCreators`: changed from `array|null` to `array` (required field)
+        - `team`: changed from `array|null` to `array` (required field)
+        - `trialFeatureEnabled`: changed from `bool|null` to `bool` (required field)
+    - Preserved correct nullable types for notification thresholds: `notifyOnQueueOverflow`, `notifyOnTasksInProgressOverflow`, `notifyWhenEfficiencyDecreases` (int|null)
+- Improved error handling during OAuth token refresh in `ApiClient::getNewAuthToken()`, [see details](https://github.com/bitrix24/b24phpsdk/issues/284):
+    - Replaced generic error messages with specific exception types based on HTTP status codes and OAuth error codes
+    - Added detailed error handling for different scenarios:
+        - HTTP 400 with `invalid_grant` → throws `InvalidGrantException` (user re-authorization required)
+        - HTTP 401 with `invalid_client` → throws `WrongClientException` (configuration issue)
+        - HTTP 404 → throws `PortalDomainNotFoundException` (portal not found)
+        - HTTP 5xx → throws `TransportException` with retry suggestion (server errors)
+    - Enhanced error messages include both OAuth error code and description for better diagnostics
+    - Developers can now distinguish between different failure causes and implement specific recovery logic
+    - Added comprehensive unit tests covering all error scenarios
+- Fixed `testFindByEmailWithVerifiedEmail` test in `ContactPersonRepositoryInterfaceTest` to properly mark email as verified,
+  [see details](https://github.com/bitrix24/b24phpsdk/issues/316):
+    - Added `markEmailAsVerified()` call for the first contact person after save and before flush
+    - Ensures the test correctly validates the `findByEmail` method with `onlyVerified=true` flag
+- Fixed `testFindByEmailWithVerifiedPhone` test in `ContactPersonRepositoryInterfaceTest` to properly mark phone as verified,
+  [see details](https://github.com/bitrix24/b24phpsdk/issues/315):
+    - Added `markMobilePhoneAsVerified()` call for the first contact person after save and before flush
+    - Ensures the test correctly validates the `findByPhone` method with `onlyVerified=true` flag
+- Fixed `testDelete` test in `ContactPersonRepositoryInterfaceTest` to call `flush()` after delete,
+  [see details](https://github.com/bitrix24/b24phpsdk/issues/314):
+    - Added `$flusher->flush()` call after `$contactPersonRepository->delete()` to persist changes
+    - Ensures the test accurately reflects actual system behavior by persisting deletion before verifying the exception
 
 ## 1.8.0 - 2025.11.10
 

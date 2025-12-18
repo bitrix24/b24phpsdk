@@ -38,6 +38,7 @@ class StatusUpdateResult extends UpdatedItemResult
      *
      * @throws BaseException
      */
+    #[\Override]
     public function isSuccess(): bool
     {
         return isset($this->getCoreResponse()->getResponseData()->getResult()['status']);

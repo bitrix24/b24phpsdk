@@ -24,6 +24,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(Bitrix24PartnerInterface::class)]
 class Bitrix24PartnerInterfaceReferenceImplementationTest extends Bitrix24PartnerInterfaceTest
 {
+    #[\Override]
     protected function createBitrix24PartnerImplementation(
         Uuid                  $uuid,
         CarbonImmutable       $createdAt,

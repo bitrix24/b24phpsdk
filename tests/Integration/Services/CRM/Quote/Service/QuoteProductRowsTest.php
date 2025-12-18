@@ -24,7 +24,7 @@ use Bitrix24\SDK\Services\CRM\Quote\Result\QuoteProductRowItemResult;
 use Bitrix24\SDK\Services\CRM\Quote\Service\Quote;
 use Bitrix24\SDK\Services\CRM\Quote\Service\QuoteProductRows;
 use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use MoneyPHP\Percentage\Percentage;
 use PHPUnit\Framework\TestCase;
 use Typhoon\Reflection\TyphoonReflector;
@@ -40,10 +40,11 @@ class QuoteProductRowsTest extends TestCase
 
     private TyphoonReflector $typhoonReflector;
     
+    #[\Override]
     protected function setUp(): void
     {
-        $this->quoteService = Fabric::getServiceBuilder()->getCRMScope()->quote();
-        $this->quoteProductRowsService = Fabric::getServiceBuilder()->getCRMScope()->quoteProductRows();
+        $this->quoteService = Factory::getServiceBuilder()->getCRMScope()->quote();
+        $this->quoteProductRowsService = Factory::getServiceBuilder()->getCRMScope()->quoteProductRows();
         $this->decimalMoneyFormatter = new DecimalMoneyFormatter(new ISOCurrencies());
         $this->typhoonReflector = TyphoonReflector::build();
     }

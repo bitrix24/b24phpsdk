@@ -25,6 +25,7 @@ class UpdatedBasketItemResult extends UpdatedItemResult
     /**
      * @return bool true if update operation was successful
      */
+    #[\Override]
     public function isSuccess(): bool
     {
         return isset($this->getCoreResponse()->getResponseData()->getResult()['basketItem']);

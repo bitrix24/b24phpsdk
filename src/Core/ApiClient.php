@@ -14,12 +14,16 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Core;
 
 use Bitrix24\SDK\Core\Contracts\ApiClientInterface;
+use Bitrix24\SDK\Core\Contracts\ApiVersion;
 use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
 use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Exceptions\InvalidGrantException;
+use Bitrix24\SDK\Core\Exceptions\PortalDomainNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Core\Exceptions\WrongClientException;
 use Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken;
 use Bitrix24\SDK\Infrastructure\HttpClient\RequestId\RequestIdGeneratorInterface;
 use Fig\Http\Message\StatusCodeInterface;
@@ -33,9 +37,9 @@ class ApiClient implements ApiClientInterface
     /**
      * @const string
      */
-    protected const SDK_VERSION = '1.8.0';
+    protected const string SDK_VERSION = '3.0.0';
 
-    protected const SDK_USER_AGENT = 'b24-php-sdk-vendor';
+    protected const string SDK_USER_AGENT = 'b24-php-sdk-vendor';
 
     /**
      * ApiClient constructor.
@@ -45,6 +49,7 @@ class ApiClient implements ApiClientInterface
         protected HttpClientInterface $client,
         protected RequestIdGeneratorInterface $requestIdGenerator,
         protected ApiLevelErrorHandler $apiLevelErrorHandler,
+        protected EndpointUrlFormatter $urlFormatter,
         protected LoggerInterface $logger
     ) {
         $this->logger->debug(
@@ -69,6 +74,7 @@ class ApiClient implements ApiClientInterface
         ];
     }
 
+    #[\Override]
     public function getCredentials(): Credentials
     {
         return $this->credentials;
@@ -78,7 +84,11 @@ class ApiClient implements ApiClientInterface
      * @throws InvalidArgumentException
      * @throws TransportExceptionInterface
      * @throws TransportException
+     * @throws InvalidGrantException
+     * @throws PortalDomainNotFoundException
+     * @throws WrongClientException
      */
+    #[\Override]
     public function getNewAuthToken(): RenewedAuthToken
     {
         $requestId = $this->requestIdGenerator->getRequestId();
@@ -123,6 +133,8 @@ class ApiClient implements ApiClientInterface
             'responseData' => $responseData,
             'requestId' => $requestId
         ]);
+
+        // Handle success case
         if ($response->getStatusCode() === StatusCodeInterface::STATUS_OK) {
             $this->apiLevelErrorHandler->handle($responseData);
 
@@ -134,16 +146,11 @@ class ApiClient implements ApiClientInterface
             return $newAuthToken;
         }
 
-        if ($response->getStatusCode() === StatusCodeInterface::STATUS_BAD_REQUEST) {
-            $this->logger->warning('getNewAuthToken.badRequest', [
-                'url' => $url
-            ]);
-            throw new TransportException(sprintf('getting new access token failure: %s', $responseData['error']));
-        }
-
-        throw new TransportException(
-            'getting new access token failure with unknown http-status code %s',
-            $response->getStatusCode()
+        // Handle error cases via ApiLevelErrorHandler
+        $this->apiLevelErrorHandler->handleOAuthError(
+            $response->getStatusCode(),
+            $responseData,
+            $url
         );
     }
 
@@ -153,7 +160,8 @@ class ApiClient implements ApiClientInterface
      * @throws TransportExceptionInterface
      * @throws InvalidArgumentException
      */
-    public function getResponse(string $apiMethod, array $parameters = []): ResponseInterface
+    #[\Override]
+    public function getResponse(string $apiMethod, array $parameters = [], ApiVersion $apiVersion = ApiVersion::v1): ResponseInterface
     {
         $requestId = $this->requestIdGenerator->getRequestId();
         $this->logger->info(
@@ -162,42 +170,12 @@ class ApiClient implements ApiClientInterface
                 'apiMethod' => $apiMethod,
                 'domainUrl' => $this->credentials->getDomainUrl(),
                 'parameters' => $parameters,
+                'apiVersion' => $apiVersion->value,
                 'requestId' => $requestId
             ]
         );
-        $caseSensitiveMethods = [
-            'tasks.flow.Flow.create',
-            'tasks.flow.Flow.update',
-            'tasks.flow.Flow.delete',
-            'tasks.flow.Flow.get',
-            'tasks.flow.Flow.isExists',
-            'tasks.flow.Flow.activate',
-            'tasks.flow.Flow.pin',
-        ];
-        if (!in_array($apiMethod, $caseSensitiveMethods, true)) {
-            $apiMethod = strtolower($apiMethod);
-        }
 
-        $method = 'POST';
-        if ($this->getCredentials()->getWebhookUrl() instanceof WebhookUrl) {
-            $url = sprintf('%s/%s/', $this->getCredentials()->getWebhookUrl()->getUrl(), $apiMethod);
-        } else {
-            // all api calls work with current portal and credentials related with this portal,
-            // portal url stored in credentials, but if we work with on-premise installation we can't trust tokens from portal placement or portal event
-            // we must make sure that the token is alive that the token corresponds to the portal,
-            // "from which" came a request, and that the token corresponds to our application.
-            // that's why we call app.info on OAUTH server
-            if (($apiMethod === 'app.info') && array_key_exists(
-                'IS_NEED_OAUTH_SECURE_CHECK',
-                $parameters
-            ) && $parameters['IS_NEED_OAUTH_SECURE_CHECK']) {
-                // call method on vendor OAUTH server
-                $url = sprintf('%s/rest/%s', $this->getCredentials()->getEndpoints()->getAuthServerUrl(), $apiMethod);
-            } else {
-                // work with portal
-                $url = sprintf('%s/rest/%s', $this->getCredentials()->getDomainUrl(), $apiMethod);
-            }
-
+        if (!$this->getCredentials()->getWebhookUrl() instanceof WebhookUrl) {
             if (!$this->getCredentials()->getAuthToken() instanceof AuthToken) {
                 throw new InvalidArgumentException('access token in credentials not found ');
             }
@@ -205,46 +183,8 @@ class ApiClient implements ApiClientInterface
             $parameters['auth'] = $this->getCredentials()->getAuthToken()->accessToken;
         }
 
-        // todo must be fixed by vendor in API v2
-        // duplicate request id in query string for current version of bitrix24 api
-        // vendor don't use request id from headers =(
-
-        // todo must be fixed by vendor in API v2
-        // part of endpoints required strict order of arguments
-        $strictApiMethods = [
-            'task.checklistitem.add',
-            'task.checklistitem.update',
-            'task.checklistitem.getlist',
-            'task.checklistitem.get',
-            'task.checklistitem.delete',
-            'task.checklistitem.moveafteritem',
-            'task.checklistitem.complete',
-            'task.checklistitem.renew',
-            'task.checklistitem.isactionallowed',
-            'task.commentitem.add',
-            'task.commentitem.get',
-            'task.commentitem.getlist',
-            'task.commentitem.update',
-            'task.commentitem.delete',
-            'task.commentitem.isactionallowed',
-            'task.elapseditem.add',
-            'task.elapseditem.update',
-            'task.elapseditem.get',
-            'task.elapseditem.getlist',
-            'task.elapseditem.delete',
-            'task.elapseditem.isactionallowed',
-            'task.elapseditem.getmanifest',
-            'task.item.userfield.add',
-            'task.item.userfield.delete',
-            'task.item.userfield.list',
-            'task.item.userfield.get',
-            'task.item.userfield.update',
-            'tasks.task.add',
-        ];
-        if (!in_array($apiMethod, $strictApiMethods, true)) {
-            $url .= '?' . $this->requestIdGenerator->getQueryStringParameterName() . '=' . $requestId;
-        }
-
+        $method = 'POST';
+        $url = $this->urlFormatter->format($apiVersion, $this->credentials, $apiMethod, $parameters, $requestId);
         $requestOptions = [
             'json' => $parameters,
             'headers' => array_merge(

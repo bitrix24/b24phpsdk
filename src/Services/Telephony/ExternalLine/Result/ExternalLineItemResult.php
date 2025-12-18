@@ -22,6 +22,7 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  */
 class ExternalLineItemResult extends AbstractItem
 {
+    #[\Override]
     public function __get($offset)
     {
         return match ($offset) {

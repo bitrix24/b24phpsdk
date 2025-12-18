@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Paysystem\Result\PaysystemItemResult;
 use Bitrix24\SDK\Services\Paysystem\Service\Paysystem;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -51,7 +51,7 @@ class PaysystemTest extends TestCase
      */
     private function getPersonTypeId(): int
     {
-        $personTypeService = Fabric::getServiceBuilder()->getSaleScope()->personType();
+        $personTypeService = Factory::getServiceBuilder()->getSaleScope()->personType();
         $personTypesResult = $personTypeService->list();
         
         return $personTypesResult->getPersonTypes()[0]->id;
@@ -66,7 +66,7 @@ class PaysystemTest extends TestCase
      */
     private function createTestOrder(int $personTypeId): int
     {
-        $orderService = Fabric::getServiceBuilder()->getSaleScope()->order();
+        $orderService = Factory::getServiceBuilder()->getSaleScope()->order();
         $orderFields = [
             'lid' => 's1',
             'personTypeId' => $personTypeId,
@@ -86,7 +86,7 @@ class PaysystemTest extends TestCase
      */
     private function createTestPayment(int $orderId, int $paySystemId): int
     {
-        $paymentService = Fabric::getServiceBuilder()->getSaleScope()->payment();
+        $paymentService = Factory::getServiceBuilder()->getSaleScope()->payment();
         $paymentFields = [
             'orderId' => $orderId,
             'paySystemId' => $paySystemId,
@@ -103,7 +103,7 @@ class PaysystemTest extends TestCase
     private function deleteTestOrder(int $id): void
     {
         try {
-            $orderService = Fabric::getServiceBuilder()->getSaleScope()->order();
+            $orderService = Factory::getServiceBuilder()->getSaleScope()->order();
             $orderService->delete($id);
         } catch (\Exception) {
             // Ignore if order doesn't exist
@@ -116,7 +116,7 @@ class PaysystemTest extends TestCase
     private function deleteTestPayment(int $id): void
     {
         try {
-            $paymentService = Fabric::getServiceBuilder()->getSaleScope()->payment();
+            $paymentService = Factory::getServiceBuilder()->getSaleScope()->payment();
             $paymentService->delete($id);
         } catch (\Exception) {
             // Ignore if payment doesn't exist
@@ -132,7 +132,7 @@ class PaysystemTest extends TestCase
      */
     private function createTestHandler(): string
     {
-        $handlerService = Fabric::getServiceBuilder()->getPaysystemScope()->handler();
+        $handlerService = Factory::getServiceBuilder()->getPaysystemScope()->handler();
         
         $handlerName = 'Test Handler ' . time();
         $handlerCode = 'test_handler_' . time();
@@ -177,7 +177,7 @@ class PaysystemTest extends TestCase
     private function deleteTestHandlerByCode(string $handlerCode): void
     {
         try {
-            $handlerService = Fabric::getServiceBuilder()->getPaysystemScope()->handler();
+            $handlerService = Factory::getServiceBuilder()->getPaysystemScope()->handler();
             // We need to get the handler ID first to delete it
             $handlers = $handlerService->list();
             foreach ($handlers->getHandlers() as $handlerItemResult) {
@@ -440,11 +440,13 @@ class PaysystemTest extends TestCase
     }
 
     
+    #[\Override]
     protected function setUp(): void
     {
-        $this->paysystemService = Fabric::getServiceBuilder()->getPaysystemScope()->paysystem();
+        $this->paysystemService = Factory::getServiceBuilder()->getPaysystemScope()->paysystem();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Additional cleanup: remove any remaining test handlers that might have been left
@@ -457,7 +459,7 @@ class PaysystemTest extends TestCase
     private function cleanupTestHandlers(): void
     {
         try {
-            $handlerService = Fabric::getServiceBuilder()->getPaysystemScope()->handler();
+            $handlerService = Factory::getServiceBuilder()->getPaysystemScope()->handler();
             $handlers = $handlerService->list();
             foreach ($handlers->getHandlers() as $handlerItemResult) {
                 if (str_contains($handlerItemResult->CODE, 'test_handler_')) {

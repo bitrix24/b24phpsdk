@@ -21,6 +21,7 @@ class NullBulkItemsReader implements BulkItemsReaderInterface
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function getTraversableList(string $apiMethod, array $order, array $filter, array $select, ?int $limit = null): Generator
     {
         yield [];

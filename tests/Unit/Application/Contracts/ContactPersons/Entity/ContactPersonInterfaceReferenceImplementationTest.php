@@ -25,6 +25,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(ContactPersonReferenceEntityImplementation::class)]
 class ContactPersonInterfaceReferenceImplementationTest extends ContactPersonInterfaceTest
 {
+    #[\Override]
     protected function createContactPersonImplementation(
         Uuid                $uuid,
         CarbonImmutable     $createdAt,
