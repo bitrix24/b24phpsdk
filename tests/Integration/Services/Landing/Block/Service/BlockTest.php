@@ -22,7 +22,7 @@ use Bitrix24\SDK\Services\Landing\Block\Service\Block;
 use Bitrix24\SDK\Services\Landing\Page\Service\Page;
 use Bitrix24\SDK\Services\Landing\Site\Service\Site;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -64,14 +64,16 @@ class BlockTest extends TestCase
 
     protected array $createdSiteIds = [];
 
+    #[\Override]
     protected function setUp(): void
     {
-        $serviceBuilder = Fabric::getServiceBuilder();
+        $serviceBuilder = Factory::getServiceBuilder();
         $this->blockService = $serviceBuilder->getLandingScope()->block();
         $this->pageService = $serviceBuilder->getLandingScope()->page();
         $this->siteService = $serviceBuilder->getLandingScope()->site();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created pages
@@ -119,7 +121,7 @@ class BlockTest extends TestCase
         $siteId = $this->createTestSite();
 
         // Get available page templates
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         $templatesResponse = $core->call('landing.demos.getPageList', ['type' => 'page']);
         $templates = $templatesResponse->getResponseData()->getResult();
 

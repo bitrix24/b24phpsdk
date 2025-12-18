@@ -20,7 +20,7 @@ use Bitrix24\SDK\Services\Landing\Demos\Result\PageTemplateItemResult;
 use Bitrix24\SDK\Services\Landing\Demos\Result\SiteTemplateItemResult;
 use Bitrix24\SDK\Services\Landing\Demos\Service\Demos;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -43,12 +43,14 @@ class DemosTest extends TestCase
 
     protected array $createdTemplateCodes = [];
 
+    #[\Override]
     protected function setUp(): void
     {
-        $serviceBuilder = Fabric::getServiceBuilder();
+        $serviceBuilder = Factory::getServiceBuilder();
         $this->demosService = $serviceBuilder->getLandingScope()->demos();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created templates

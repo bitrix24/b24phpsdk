@@ -19,7 +19,7 @@ use Bitrix24\SDK\Services\Landing\Page\Result\PageItemResult;
 use Bitrix24\SDK\Services\Landing\Page\Service\Page;
 use Bitrix24\SDK\Services\Landing\Site\Service\Site;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -69,13 +69,15 @@ class PageTest extends TestCase
 
     protected array $createdSiteIds = [];
 
+    #[\Override]
     protected function setUp(): void
     {
-        $serviceBuilder = Fabric::getServiceBuilder();
+        $serviceBuilder = Factory::getServiceBuilder();
         $this->pageService = $serviceBuilder->getLandingScope()->page();
         $this->siteService = $serviceBuilder->getLandingScope()->site();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created pages
@@ -148,7 +150,7 @@ class PageTest extends TestCase
         $siteId = $this->createTestSite();
 
         // Get available page templates from portal
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         $templatesResponse = $core->call('landing.demos.getPageList', ['type' => 'page']);
         $templates = $templatesResponse->getResponseData()->getResult();
 

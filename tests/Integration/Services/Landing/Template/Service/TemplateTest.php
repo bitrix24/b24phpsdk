@@ -19,7 +19,7 @@ use Bitrix24\SDK\Services\Landing\Template\Service\Template;
 use Bitrix24\SDK\Services\Landing\Site\Service\Site;
 use Bitrix24\SDK\Services\Landing\Page\Service\Page;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -48,14 +48,16 @@ class TemplateTest extends TestCase
 
     protected array $createdSiteIds = [];
 
+    #[\Override]
     protected function setUp(): void
     {
-        $serviceBuilder = Fabric::getServiceBuilder();
+        $serviceBuilder = Factory::getServiceBuilder();
         $this->templateService = $serviceBuilder->getLandingScope()->template();
         $this->siteService = $serviceBuilder->getLandingScope()->site();
         $this->pageService = $serviceBuilder->getLandingScope()->page();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created pages

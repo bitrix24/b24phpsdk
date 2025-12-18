@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Landing\Role\Result\RoleItemResult;
 use Bitrix24\SDK\Services\Landing\Role\Service\Role;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -40,9 +40,10 @@ class RoleTest extends TestCase
 
     protected Role $roleService;
 
+    #[\Override]
     protected function setUp(): void
     {
-        $serviceBuilder = Fabric::getServiceBuilder();
+        $serviceBuilder = Factory::getServiceBuilder();
         $this->roleService = $serviceBuilder->getLandingScope()->role();
     }
 

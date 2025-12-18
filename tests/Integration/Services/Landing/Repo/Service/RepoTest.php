@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Landing\Repo\Result\RepoItemResult;
 use Bitrix24\SDK\Services\Landing\Repo\Service\Repo;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -40,12 +40,14 @@ class RepoTest extends TestCase
 
     protected array $createdBlockCodes = [];
 
+    #[\Override]
     protected function setUp(): void
     {
-        $serviceBuilder = Fabric::getServiceBuilder();
+        $serviceBuilder = Factory::getServiceBuilder();
         $this->repoService = $serviceBuilder->getLandingScope()->repo();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created blocks

@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Landing\Site\Result\SiteItemResult;
 use Bitrix24\SDK\Services\Landing\Site\Service\Site;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -59,12 +59,14 @@ class SiteTest extends TestCase
 
     protected array $createdFolderIds = [];
 
+    #[\Override]
     protected function setUp(): void
     {
-        $serviceBuilder = Fabric::getServiceBuilder();
+        $serviceBuilder = Factory::getServiceBuilder();
         $this->siteService = $serviceBuilder->getLandingScope()->site();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created folders
