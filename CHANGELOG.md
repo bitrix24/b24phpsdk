@@ -16,8 +16,26 @@
   - Backward compatible with existing array-based filters
   - Updated `Task::list()` to accept `TaskFilter` or array via union type
   - Comprehensive unit tests with 54 test cases covering all operators and features
+- Added OpenAPI schema infrastructure ([#338](https://github.com/bitrix24/b24phpsdk/issues/338)):
+  - `Services\Main\Service\Documentation` - new service with `getSchema()` method for retrieving OpenAPI documentation from REST 3.0 `/documentation` endpoint
+  - `OpenApi\Infrastructure\Console\SchemaBuilder` - console command `b24-dev:build-schema` for fetching and saving OpenAPI schema to `docs/open-api/openapi.json`
+  - `DocumentationResult` - DTO returning raw OpenAPI payload as string
+  - Integration test: `tests/Integration/Services/Main/Service/DocumentationTest.php`
+- Added select builder infrastructure for type-safe field selection:
+  - `Core\Contracts\SelectBuilderInterface` - contract with `buildSelect()` and `withUserFields()` methods
+  - `Services\AbstractSelectBuilder` - base implementation for select builders
+  - `Services\Task\Service\TaskItemSelectBuilder` - type-safe select builder for Task entity with field methods: `title()`, `description()`, `creatorId()`, `creator()`, `created()`, `chat()`
+- Added REST 3.0 API version support:
+  - `Core\Contracts\ApiVersion` - enum for API version support (`v1`, `v3`) with helper methods `isV3()` and `isV1()`
+  - `Core\EndpointUrlFormatter` - formats API request URLs based on API version, handles V3 API prefix `/rest/api`, manages case-sensitive method handling, and request ID parameter placement for strict methods
+- Added comprehensive filter documentation:
+  - `src/Filters/docs/README.md` - unified guide covering REST 3.0 filtering principles, type-safe filter builders, all 8 operators, field type mapping, usage examples with TaskFilter, and complete migration guide from generic to type-safe approach
 
 ### Changed
+
+- Updated `Task::list()` method to accept `TaskFilter|array` via union type - backward compatible with existing array-based filters while supporting new type-safe TaskFilter instances
+- Updated Symfony dependencies to support OpenAPI schema builder infrastructure
+- Refactored integration tests: renamed `Fabric.php` to `Factory.php` for consistency
 
 
 

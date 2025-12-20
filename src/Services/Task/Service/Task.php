@@ -17,6 +17,7 @@ use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\ApiVersion;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\Contracts\ItemBuilderInterface;
 use Bitrix24\SDK\Core\Contracts\SelectBuilderInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
@@ -47,6 +48,34 @@ class Task extends AbstractService
     }
 
     /**
+     * Returns a task by the task ID.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-get.html
+     *
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'tasks.task.get',
+        'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-get.html',
+        'Returns a task by the task ID',
+        ApiVersion::v3
+    )]
+    /**
+     * @param positive-int $id Task ID.
+     * @param array<int,string>|SelectBuilderInterface $select
+     */
+    public function get(int $id, array|SelectBuilderInterface $select = []): TaskResult
+    {
+        if ($select instanceof TaskItemSelectBuilder) {
+            $select = $select->buildSelect();
+        }
+
+        return new TaskResult($this->core->call('tasks.task.get', ['id' => $id, 'select' => $select], ApiVersion::v3));
+    }
+
+    /**
      * Add new task
      *
      * @link https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-add.html
@@ -57,19 +86,26 @@ class Task extends AbstractService
     #[ApiEndpointMetadata(
         'tasks.task.add',
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-add.html',
-        'Method adds new task'
+        'Method adds new task',
+        ApiVersion::v3
     )]
-    public function add(array $fields): AddedTaskResult
+    public function add(array|ItemBuilderInterface $fields): AddedTaskResult
     {
+        if ($fields instanceof ItemBuilderInterface) {
+            $fields = $fields->build();
+        }
+
         return new AddedTaskResult(
             $this->core->call(
                 'tasks.task.add',
                 [
                     'fields' => $fields
-                ]
+                ],
+                ApiVersion::v3
             )
         );
     }
+
 
     /**
      * Deletes a task.
@@ -115,33 +151,6 @@ class Task extends AbstractService
         return new TaskFieldsResult($this->core->call('tasks.task.getFields'));
     }
 
-    /**
-     * Returns a task by the task ID.
-     *
-     * @link https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-get.html
-     *
-     *
-     * @throws BaseException
-     * @throws TransportException
-     */
-    #[ApiEndpointMetadata(
-        'tasks.task.get',
-        'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-get.html',
-        'Returns a task by the task ID',
-        ApiVersion::v3
-    )]
-    /**
-     * @param positive-int $id Task ID.
-     * @param array<int,string>|SelectBuilderInterface $select
-     */
-    public function get(int $id, array|SelectBuilderInterface $select = []): TaskResult
-    {
-        if ($select instanceof TaskItemSelectBuilder) {
-            $select = $select->buildSelect();
-        }
-
-        return new TaskResult($this->core->call('tasks.task.get', ['id' => $id, 'select' => $select], ApiVersion::v3));
-    }
 
     /**
      * Retrieve a list of tasks.
@@ -185,8 +194,13 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-list.html',
         'Retrieve a list of tasks.'
     )]
-    public function list(array $order = [], array|\Bitrix24\SDK\Filters\Task\TaskFilter $filter = [], array $select = [], $start = 0, int $limit = 50): TasksResult
-    {
+    public function list(
+        array $order = [],
+        array|\Bitrix24\SDK\Filters\Task\TaskFilter $filter = [],
+        array $select = [],
+        $start = 0,
+        int $limit = 50
+    ): TasksResult {
         // Convert filter to array if TaskFilter instance
         $filterArray = $filter instanceof \Bitrix24\SDK\Filters\Task\TaskFilter
             ? $filter->toArray()
