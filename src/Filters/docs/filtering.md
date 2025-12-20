@@ -83,13 +83,13 @@ Find all records that satisfy two conditions simultaneously:
 ```php
 $task->getList(
         new TaskFilter()
-            ->withTitle('ASAP')
-            ->withDuration(8)           
+            ->title('ASAP')
+            ->duration(8)           
 );
 $deals->getList(
         new DealFilter()
-            ->withTitle('OpenAI')
-            ->withPrice(100500)           
+            ->title('OpenAI')
+            ->price(100500)           
 );
 ```
 
@@ -98,8 +98,8 @@ $deals->getList(
 ```php
 $task->getList(
         new TaskFilter()
-            ->withTitle('ASAP')
-            ->withUserField('UF_CRM_1234567890','danger')           
+            ->title('ASAP')
+            ->userField('UF_CRM_1234567890','danger')           
 );
 ```
 
@@ -131,10 +131,13 @@ $deals->getList(
 
 ```php
 $deals->getList(
-        [
-            ["status", "=", "NEW"],
-            ["id", "in", [3,4,5]]
-        ]                     
+        new DealFilter()
+            withRaw(
+            [
+                ["status", "=", "NEW"],
+                ["id", "in", [3,4,5]]
+            ]
+        )                 
 );
 $deals->getList(
         new DealFilter()
@@ -143,5 +146,42 @@ $deals->getList(
 );
 ```
 
-6. Entity filters must be deterministic code-generated automatically from the entity metadata and update automatically when the entity metadata changes.  
+6. Entity filters must be deterministic code-generated automatically from the entity metadata and update automatically when the entity metadata changes.
+
+### Type Safety
+
+The filter system provides compile-time type safety through specialized field condition builders. Each field type returns a dedicated builder that ensures correct value types at development time.
+
+**Type-Safe Field Accessors:**
+
+- Numeric fields (id, priority, counts) → `IntFieldConditionBuilder` - accepts only `int` values
+- String fields (title, description) → `StringFieldConditionBuilder` - accepts only `string` values
+- Date fields (deadline, createdDate) → `DateFieldConditionBuilder` - accepts `DateTime|string`, auto-converts DateTime to Y-m-d format
+- Boolean fields (favorite, multitask) → `BoolFieldConditionBuilder` - accepts `bool`, auto-converts to Y/N format
+
+**Example:**
+
+```php
+use DateTime;
+
+$filter = (new TaskFilter())
+    ->id()->eq(100)                                  // ✅ int only
+    ->title()->eq('Task')                           // ✅ string only
+    ->deadline()->eq(new DateTime('2025-01-15'))    // ✅ DateTime or string, auto-converts to '2025-01-15'
+    ->favorite()->eq(true);                         // ✅ bool, auto-converts to 'Y'
+
+// Compile-time errors prevent wrong types:
+// $filter->id()->eq('not-a-number');  // ❌ TypeError
+// $filter->favorite()->eq('yes');     // ❌ TypeError - must use bool
+```
+
+**Benefits:**
+
+- **Compile-time safety**: Type errors caught during development, not at runtime
+- **IDE autocomplete**: Your IDE suggests the correct type for each field
+- **Explicit conversions**: DateTime and boolean values handled automatically
+- **Self-documenting**: Method signatures clearly show expected types
+
+For detailed information about the type-safe filter design, implementation details, and migration guide, see [Type Safety Documentation](type-safety.md).
+
 

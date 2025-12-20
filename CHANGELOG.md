@@ -4,6 +4,18 @@
 
 ### Added
 = Added support for Bitrix24 API v3
+- Added type-safe filter builder system for REST 3.0 filtering ([#338](https://github.com/bitrix24/b24phpsdk/issues/338)):
+  - `FilterBuilderInterface` - contract for all filter builders
+  - `AbstractFilterBuilder` - base implementation with AND/OR logic support
+  - `FieldConditionBuilder` - provides all 8 REST 3.0 operators: `=`, `!=`, `>`, `>=`, `<`, `<=`, `in`, `between`
+  - `TaskFilter` - type-safe filter for Task entity with 30 field accessors
+  - Fluent API with method chaining: `->title()->eq('ASAP')`
+  - OR logic support with callback pattern: `->or(function(TaskFilter $f) {...})`
+  - User field support: `->userField('UF_CRM_TASK')->eq('value')`
+  - Raw array fallback: `->raw([['field', 'operator', 'value']])`
+  - Backward compatible with existing array-based filters
+  - Updated `Task::list()` to accept `TaskFilter` or array via union type
+  - Comprehensive unit tests with 54 test cases covering all operators and features
 
 ### Changed
 

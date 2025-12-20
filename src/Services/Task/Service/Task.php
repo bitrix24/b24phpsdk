@@ -174,6 +174,7 @@ class Task extends AbstractService
      *  SORTING,
      *  MESSAGE_ID,
      *  } $order
+     * @param array|\Bitrix24\SDK\Filters\Task\TaskFilter $filter Filter conditions (use TaskFilter for type-safe filtering with IDE autocomplete)
      * @param array $select = ['ID','PARENT_ID','TITLE','DESCRIPTION','MARK','PRIORITY','STATUS','MULTITASK','NOT_VIEWED','REPLICATE','GROUP_ID','STAGE_ID','CREATED_BY','CREATED_DATE','RESPONSIBLE_ID','ACCOMPLICES','AUDITORS','CHANGED_BY','CHANGED_DATE','STATUS_CHANGED_BY','STATUS_CHANGED_DATE','CLOSED_BY','CLOSED_DATE','DATE_START','DEADLINE','START_DATE_PLAN','END_DATE_PLAN','GUID','XML_ID','COMMENTS_COUNT','NEW_COMMENTS_COUNT','TASK_CONTROL','ADD_IN_REPORT','FORKED_BY_TEMPLATE_ID','TIME_ESTIMATE','TIME_SPENT_IN_LOGS','MATCH_WORK_TIME','FORUM_TOPIC_ID','FORUM_ID','SITE_ID','SUBORDINATE','FAVORITE','VIEWED_DATE','SORTING','DURATION_PLAN','DURATION_FACT','DURATION_TYPE']
      *
      * @throws BaseException
@@ -184,11 +185,16 @@ class Task extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-list.html',
         'Retrieve a list of tasks.'
     )]
-    public function list(array $order = [], array $filter = [], array $select = [], $start = 0, int $limit = 50): TasksResult
+    public function list(array $order = [], array|\Bitrix24\SDK\Filters\Task\TaskFilter $filter = [], array $select = [], $start = 0, int $limit = 50): TasksResult
     {
-        $params = $filter;
+        // Convert filter to array if TaskFilter instance
+        $filterArray = $filter instanceof \Bitrix24\SDK\Filters\Task\TaskFilter
+            ? $filter->toArray()
+            : $filter;
+
+        $params = $filterArray;
         $params['order'] = $order;
-        $params['filter'] = $filter;
+        $params['filter'] = $filterArray;
         $params['select'] = $select;
         $params['limit'] = $limit;
         $params['start'] = $start;
