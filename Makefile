@@ -62,8 +62,10 @@ help:
 	@echo "test-integration-sale-payment-item-shipment - run PaymentItemShipment integration tests"
 	@echo "test-integration-sale-property-relation - run PropertyRelation integration tests"
 
+t:
+	docker-compose run --rm php-cli sh
+.PHONY: t
 
-.PHONY: docker-init
 docker-init:
 	@echo "remove all containers"
 	docker-compose down --remove-orphans
@@ -119,6 +121,12 @@ composer-dumpautoload:
 # make composer "install --no-dev"
 composer:
 	docker-compose run --rm php-cli composer $(filter-out $@,$(MAKECMDGOALS))
+
+# dev utilites
+
+build-oa-schema:
+	docker-compose run --rm php-cli php bin/console b24-dev:build-schema --webhook=$(BITRIX24_WEBHOOK)
+.PHONY: build-oa-schema
 
 # linters and tests
 .PHONY: lint-allowed-licenses

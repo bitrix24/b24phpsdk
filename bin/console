@@ -13,6 +13,7 @@
 use Bitrix24\SDK\Attributes\Services\AttributesParser;
 use Bitrix24\SDK\Deprecations\DeprecatedMethods;
 use Bitrix24\SDK\Infrastructure\Console\Commands\ShowFieldsDescriptionCommand;
+use Bitrix24\SDK\OpenApi\Infrastructure\Console\SchemaBuilder;
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
 use Bitrix24\SDK\Tools\Commands\CopyPropertyValues;
 use Bitrix24\SDK\Tools\Commands\GenerateContactsCommand;
@@ -55,7 +56,7 @@ if ($_SERVER['APP_DEBUG']) {
     umask(0000);
 
     if (class_exists(
-        Debug::class
+            Debug::class
     )) {
         Debug::enable();
     }
@@ -68,40 +69,41 @@ $log->pushProcessor(new MemoryUsageProcessor(true, true));
 $attributesParser = new AttributesParser(TyphoonReflector::build(), new Symfony\Component\Filesystem\Filesystem());
 
 $application = new Application();
-$application->add(new GenerateContactsCommand($log));
-$application->add(new ListCommand($log));
-$application->add(
-    new ShowFieldsDescriptionCommand(
-        new Commands\SplashScreen(),
-        $log
-    )
+$application->addCommand(new SchemaBuilder(new Symfony\Component\Filesystem\Filesystem(), new Commands\SplashScreen(), $log));
+$application->addCommand(new GenerateContactsCommand($log));
+$application->addCommand(new ListCommand($log));
+$application->addCommand(
+        new ShowFieldsDescriptionCommand(
+                new Commands\SplashScreen(),
+                $log
+        )
 );
-$application->add(new CopyPropertyValues($log));
-$application->add(
-    new Commands\Documentation\GenerateCoverageDocumentationCommand(
-        $attributesParser,
-        new ServiceBuilderFactory(new EventDispatcher(), $log),
-        new Symfony\Component\Finder\Finder(),
-        new Symfony\Component\Filesystem\Filesystem(),
-        $log
-    )
+$application->addCommand(new CopyPropertyValues($log));
+$application->addCommand(
+        new Commands\Documentation\GenerateCoverageDocumentationCommand(
+                $attributesParser,
+                new ServiceBuilderFactory(new EventDispatcher(), $log),
+                new Symfony\Component\Finder\Finder(),
+                new Symfony\Component\Filesystem\Filesystem(),
+                $log
+        )
 );
-$application->add(
-    new Commands\Documentation\GenerateExamplesForDocumentationCommand(
-        TyphoonReflector::build(),
-        $attributesParser,
-        new Symfony\Component\Filesystem\Filesystem(),
-        $log
-    )
+$application->addCommand(
+        new Commands\Documentation\GenerateExamplesForDocumentationCommand(
+                TyphoonReflector::build(),
+                $attributesParser,
+                new Symfony\Component\Filesystem\Filesystem(),
+                $log
+        )
 );
-$application->add(
-    new Commands\Documentation\ShowCoverageStatisticsCommand(
-        $attributesParser,
-        new ServiceBuilderFactory(new EventDispatcher(), $log),
-        new Symfony\Component\Finder\Finder(),
-        new Commands\SplashScreen(),
-        new DeprecatedMethods(),
-        $log
-    )
+$application->addCommand(
+        new Commands\Documentation\ShowCoverageStatisticsCommand(
+                $attributesParser,
+                new ServiceBuilderFactory(new EventDispatcher(), $log),
+                new Symfony\Component\Finder\Finder(),
+                new Commands\SplashScreen(),
+                new DeprecatedMethods(),
+                $log
+        )
 );
 $application->run($input);
