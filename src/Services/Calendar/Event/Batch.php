@@ -33,6 +33,7 @@ class Batch extends \Bitrix24\SDK\Core\Batch
      * @return Generator<int, ResponseData>|ResponseData[]
      * @throws BaseException
      */
+    #[\Override]
     public function deleteEntityItems(
         string $apiMethod,
         array $entityItemId,
@@ -101,6 +102,7 @@ class Batch extends \Bitrix24\SDK\Core\Batch
      * @return Generator<int, ResponseData>|ResponseData[]
      * @throws BaseException
      */
+    #[\Override]
     public function updateEntityItems(string $apiMethod, array $entityItems): Generator
     {
         $this->logger->debug(
@@ -163,6 +165,7 @@ class Batch extends \Bitrix24\SDK\Core\Batch
      * @return Generator<int, ResponseData>|ResponseData[]
      * @throws BaseException
      */
+    #[\Override]
     public function addEntityItems(string $apiMethod, array $entityItems): Generator
     {
         $this->logger->debug(

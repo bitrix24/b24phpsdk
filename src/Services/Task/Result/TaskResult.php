@@ -28,6 +28,6 @@ class TaskResult extends AbstractResult
      */
     public function task(): TaskItemResult
     {
-        return new TaskItemResult($this->getCoreResponse()->getResponseData()->getResult()['task']);
+        return new TaskItemResult($this->getCoreResponse()->getResponseData()->getResult()['item']);
     }
 }

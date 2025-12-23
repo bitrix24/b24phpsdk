@@ -34,6 +34,7 @@ class InMemoryBitrix24PartnerRepositoryImplementation implements Bitrix24Partner
     {
     }
 
+    #[\Override]
     public function findByBitrix24PartnerId(int $bitrix24PartnerId): ?Bitrix24PartnerInterface
     {
         $this->logger->debug('b24PartnerRepository.findByBitrix24PartnerId', [
@@ -55,6 +56,7 @@ class InMemoryBitrix24PartnerRepositoryImplementation implements Bitrix24Partner
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function findByTitle(string $title): array
     {
         $this->logger->debug('b24PartnerRepository.findByTitle', [
@@ -80,6 +82,7 @@ class InMemoryBitrix24PartnerRepositoryImplementation implements Bitrix24Partner
         return $items;
     }
 
+    #[\Override]
     public function findByExternalId(string $externalId, ?Bitrix24PartnerStatus $bitrix24PartnerStatus = null): array
     {
         $this->logger->debug('b24PartnerRepository.findByExternalId', [
@@ -109,6 +112,7 @@ class InMemoryBitrix24PartnerRepositoryImplementation implements Bitrix24Partner
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function save(Bitrix24PartnerInterface $bitrix24Partner): void
     {
         $this->logger->debug('b24PartnerRepository.save', [
@@ -130,6 +134,7 @@ class InMemoryBitrix24PartnerRepositoryImplementation implements Bitrix24Partner
         $this->items[$bitrix24Partner->getId()->toRfc4122()] = $bitrix24Partner;
     }
 
+    #[\Override]
     public function delete(Uuid $uuid): void
     {
         $this->logger->debug('b24PartnerRepository.delete', ['id' => $uuid->toRfc4122()]);
@@ -145,6 +150,7 @@ class InMemoryBitrix24PartnerRepositoryImplementation implements Bitrix24Partner
         unset($this->items[$uuid->toRfc4122()]);
     }
 
+    #[\Override]
     public function getById(Uuid $uuid): Bitrix24PartnerInterface
     {
         $this->logger->debug('b24PartnerRepository.getById', ['id' => $uuid->toRfc4122()]);

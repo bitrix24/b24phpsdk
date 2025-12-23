@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Lead\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Lead\Service\Lead;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -104,8 +104,9 @@ class BatchTest extends TestCase
         self::assertEquals(count($leads), $cnt);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->leadService = Fabric::getServiceBuilder()->getCRMScope()->lead();
+        $this->leadService = Factory::getServiceBuilder()->getCRMScope()->lead();
     }
 }

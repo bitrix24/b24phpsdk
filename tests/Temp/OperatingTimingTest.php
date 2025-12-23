@@ -15,7 +15,7 @@ namespace Bitrix24\SDK\Tests\Integration\Core;
 
 use Bitrix24\SDK\Core\Batch;
 use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -153,7 +153,7 @@ class OperatingTimingTest extends TestCase
 
     public function setUp(): void
     {
-        $this->batch = Fabric::getBatchService();
-        $this->contactService = Fabric::getServiceBuilder()->getCRMScope()->contact();
+        $this->batch = Factory::getBatchService();
+        $this->contactService = Factory::getServiceBuilder()->getCRMScope()->contact();
     }
 }

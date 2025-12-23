@@ -25,7 +25,7 @@ use Bitrix24\SDK\Tests\Builders\Services\CRM\CompanyBuilder;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\RequisiteBuilder;
 
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -61,9 +61,10 @@ class RequisiteBankdetailTest extends TestCase
 
     private array $createdCompanies = [];
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->sb = Fabric::getServiceBuilder();
+        $this->sb = Factory::getServiceBuilder();
         $this->companyService = $this->sb->getCRMScope()->company();
         $this->requisiteService = $this->sb->getCRMScope()->requisite();
         $this->bankService = $this->sb->getCRMScope()->requisiteBankdetail();
@@ -73,6 +74,7 @@ class RequisiteBankdetailTest extends TestCase
         }
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         foreach ($this->companyService->batch->delete($this->createdCompanies) as $result) {

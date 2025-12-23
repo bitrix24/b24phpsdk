@@ -63,6 +63,7 @@ class CRMServiceBuilderTest extends TestCase
         $this::assertSame($this->serviceBuilder->dealCategoryStage(), $this->serviceBuilder->dealCategoryStage());
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->serviceBuilder = (new ServiceBuilder(

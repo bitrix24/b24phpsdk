@@ -36,6 +36,7 @@ class InMemoryContactPersonRepositoryImplementation implements ContactPersonRepo
     {
     }
 
+    #[\Override]
     public function save(ContactPersonInterface $contactPerson): void
     {
         $this->logger->debug('InMemoryContactPersonRepositoryImplementation.save', ['id' => $contactPerson->getId()->toRfc4122()]);
@@ -43,6 +44,7 @@ class InMemoryContactPersonRepositoryImplementation implements ContactPersonRepo
         $this->items[$contactPerson->getId()->toRfc4122()] = $contactPerson;
     }
 
+    #[\Override]
     public function delete(Uuid $uuid): void
     {
         $this->logger->debug('InMemoryContactPersonRepositoryImplementation.delete', ['id' => $uuid->toRfc4122()]);
@@ -61,6 +63,7 @@ class InMemoryContactPersonRepositoryImplementation implements ContactPersonRepo
     /**
      * @throws ContactPersonNotFoundException
      */
+    #[\Override]
     public function getById(Uuid $uuid): ContactPersonInterface
     {
         $this->logger->debug('InMemoryContactPersonRepositoryImplementation.getById', ['id' => $uuid->toRfc4122()]);
@@ -72,6 +75,7 @@ class InMemoryContactPersonRepositoryImplementation implements ContactPersonRepo
         return $this->items[$uuid->toRfc4122()];
     }
 
+    #[\Override]
     public function findByEmail(string $email, ?ContactPersonStatus $contactPersonStatus = null, ?bool $isEmailVerified = null): array
     {
         $result = [];
@@ -94,6 +98,7 @@ class InMemoryContactPersonRepositoryImplementation implements ContactPersonRepo
         return $result;
     }
 
+    #[\Override]
     public function findByPhone(PhoneNumber $phoneNumber, ?ContactPersonStatus $contactPersonStatus = null, ?bool $isPhoneVerified = null): array
     {
         $result = [];
@@ -116,6 +121,7 @@ class InMemoryContactPersonRepositoryImplementation implements ContactPersonRepo
         return $result;
     }
 
+    #[\Override]
     public function findByExternalId(string $externalId, ?ContactPersonStatus $contactPersonStatus = null): array
     {
         $externalId = trim($externalId);

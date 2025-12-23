@@ -23,6 +23,7 @@ class UpdatedEventBatchResult extends UpdatedItemBatchResult
     /**
      * Check if operation was successful
      */
+    #[\Override]
     public function isSuccess(): bool
     {
         return (bool)$this->getResponseData()->getResult();

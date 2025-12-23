@@ -18,7 +18,7 @@ use Bitrix24\SDK\Services\CRM\Common\ContactConnection;
 use Bitrix24\SDK\Services\CRM\Quote\Service\QuoteContact;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\ContactBuilder;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -42,11 +42,13 @@ class QuoteContactTest extends TestCase
 
     private array $createdContacts = [];
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->sb = Fabric::getServiceBuilder();
+        $this->sb = Factory::getServiceBuilder();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         foreach ($this->sb->getCRMScope()->quote()->batch->delete($this->createdQuotes) as $result) {

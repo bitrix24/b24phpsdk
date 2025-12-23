@@ -1,9 +1,9 @@
 # b24-php-sdk change log
 
-## Upcoming  1.9.0 - 2026.01.01
+## 3.0.0 - 2026.01.01
 
 ### Added
-
+= Added support for Bitrix24 API v3
 - Added service `Services\SonetGroup\Service\SonetGroup` with support methods,
   see [sonet_group.* methods](https://github.com/bitrix24/b24phpsdk/issues/331):
     - `create` creates a social network group/project
@@ -16,7 +16,10 @@
     - `addUser` adds users to group without invitation process
     - `deleteUser` removes users from group
     - `setOwner` changes group owner
-    
+
+### Changed
+
+
 ## 1.9.0 - 2025.12.01
 
 ### Added

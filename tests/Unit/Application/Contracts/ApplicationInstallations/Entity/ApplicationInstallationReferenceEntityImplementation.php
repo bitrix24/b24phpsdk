@@ -54,102 +54,121 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function getId(): Uuid
     {
         return $this->id;
     }
 
+    #[\Override]
     public function getCreatedAt(): CarbonImmutable
     {
         return $this->createdAt;
     }
 
+    #[\Override]
     public function getUpdatedAt(): CarbonImmutable
     {
         return $this->updatedAt;
     }
 
+    #[\Override]
     public function getStatus(): ApplicationInstallationStatus
     {
         return $this->applicationInstallationStatus;
     }
 
+    #[\Override]
     public function getBitrix24AccountId(): Uuid
     {
         return $this->bitrix24AccountUuid;
     }
 
+    #[\Override]
     public function getApplicationStatus(): ApplicationStatus
     {
         return $this->applicationStatus;
     }
 
+    #[\Override]
     public function getPortalLicenseFamily(): PortalLicenseFamily
     {
         return $this->portalLicenseFamily;
     }
 
+    #[\Override]
     public function changePortalLicenseFamily(PortalLicenseFamily $portalLicenseFamily): void
     {
         $this->portalLicenseFamily = $portalLicenseFamily;
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function getPortalUsersCount(): ?int
     {
         return $this->portalUsersCount;
     }
 
+    #[\Override]
     public function changePortalUsersCount(int $usersCount): void
     {
         $this->portalUsersCount = $usersCount;
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function getContactPersonId(): ?Uuid
     {
         return $this->clientContactPersonUuid;
     }
 
+    #[\Override]
     public function getBitrix24PartnerContactPersonId(): ?Uuid
     {
         return $this->partnerContactPersonUuid;
     }
 
+    #[\Override]
     public function linkBitrix24PartnerContactPerson(?Uuid $uuid): void
     {
         $this->partnerContactPersonUuid = $uuid;
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function unlinkBitrix24PartnerContactPerson(): void
     {
         $this->partnerContactPersonUuid = null;
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function getBitrix24PartnerId(): ?Uuid
     {
         return $this->bitrix24PartnerUuid;
     }
 
+    #[\Override]
     public function linkBitrix24Partner(Uuid $uuid): void
     {
         $this->bitrix24PartnerUuid = $uuid;
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function unlinkBitrix24Partner(): void
     {
         $this->bitrix24PartnerUuid = null;
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function getExternalId(): ?string
     {
         return $this->externalId;
     }
 
+    #[\Override]
     public function setExternalId(?string $externalId): void
     {
         if (($externalId !== null) && trim($externalId) === '') {
@@ -163,6 +182,7 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function applicationInstalled(?string $applicationToken = null): void
     {
         if ($this->applicationInstallationStatus !== ApplicationInstallationStatus::new) {
@@ -186,6 +206,7 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function applicationUninstalled(?string $applicationToken = null): void
     {
         if ($this->applicationInstallationStatus === ApplicationInstallationStatus::new || $this->applicationInstallationStatus === ApplicationInstallationStatus::deleted) {
@@ -207,6 +228,7 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function markAsActive(?string $comment): void
     {
         if ($this->applicationInstallationStatus !== ApplicationInstallationStatus::blocked) {
@@ -224,6 +246,7 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function markAsBlocked(?string $comment): void
     {
         if ($this->applicationInstallationStatus === ApplicationInstallationStatus::blocked || $this->applicationInstallationStatus === ApplicationInstallationStatus::deleted) {
@@ -242,12 +265,14 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function changeApplicationStatus(ApplicationStatus $applicationStatus): void
     {
         $this->applicationStatus = $applicationStatus;
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function getComment(): ?string
     {
         return $this->comment;
@@ -257,6 +282,7 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
      * @param non-empty-string $applicationToken
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function setApplicationToken(string $applicationToken): void
     {
         if (trim($applicationToken) === '') {
@@ -270,6 +296,7 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     /**
      * @param non-empty-string $applicationToken
      */
+    #[\Override]
     public function isApplicationTokenValid(string $applicationToken): bool
     {
         if ($this->applicationToken === null) {
@@ -279,12 +306,14 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
         return $this->applicationToken === $applicationToken;
     }
 
+    #[\Override]
     public function linkContactPerson(Uuid $uuid): void
     {
         $this->clientContactPersonUuid = $uuid;
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function unlinkContactPerson(): void
     {
         $this->clientContactPersonUuid = null;
