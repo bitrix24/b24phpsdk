@@ -29,6 +29,7 @@ class OperatorTest extends TestCase
 
     private CoreInterface&MockObject $coreMock;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->coreMock = $this->createMock(CoreInterface::class);
