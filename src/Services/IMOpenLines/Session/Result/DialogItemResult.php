@@ -36,17 +36,4 @@ use Carbon\CarbonImmutable;
  */
 class DialogItemResult extends AbstractItem
 {
-    public function __get($offset)
-    {
-        return match ($offset) {
-            'avatar' => $this->data[$offset] !== '' ? $this->data[$offset] : null,
-            'color', 'entityData1', 'entityData2', 'entityData3', 'entityId', 'entityType', 'messageType', 'name', 'type' => (string)$this->data[$offset],
-            'dateCreate' => CarbonImmutable::createFromFormat(DATE_ATOM, $this->data['date_create']),
-            'dialogId' => $this->data['dialog_id'],
-            'extranet' => (bool)$this->data[$offset],
-            'id', 'owner' => (int)$this->data[$offset],
-            'managerList' => $this->data['manager_list'] ?? [],
-            default => $this->data[$offset] ?? null,
-        };
-    }
 }

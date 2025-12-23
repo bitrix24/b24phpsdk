@@ -25,7 +25,7 @@ use Bitrix24\SDK\Services\IMOpenLines\CRMChat\Result\ChatUserDeletedResult;
 use Bitrix24\SDK\Services\IMOpenLines\CRMChat\Service\Chat;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Services\User\Service\User as UserService;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
@@ -53,15 +53,17 @@ class ChatTest extends TestCase
 
     private array $createdDealIds = [];
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->serviceBuilder = Fabric::getServiceBuilder(true);
+        $this->serviceBuilder = Factory::getServiceBuilder(true);
         $this->chatService = $this->serviceBuilder->getIMOpenLinesScope()->crmChat();
         $this->contactService = $this->serviceBuilder->getCRMScope()->contact();
         $this->dealService = $this->serviceBuilder->getCRMScope()->deal();
         $this->userService = $this->serviceBuilder->getUserScope()->user();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created contacts

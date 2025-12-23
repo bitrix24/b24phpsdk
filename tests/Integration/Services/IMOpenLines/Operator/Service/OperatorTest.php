@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\IMOpenLines\Operator\Result\OperatorActionResult;
 use Bitrix24\SDK\Services\IMOpenLines\Operator\Service\Operator;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
@@ -37,9 +37,10 @@ class OperatorTest extends TestCase
 {
     private Operator $operatorService;
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->operatorService = Fabric::getServiceBuilder()->getIMOpenLinesScope()->operator();
+        $this->operatorService = Factory::getServiceBuilder()->getIMOpenLinesScope()->operator();
     }
 
     /**
@@ -169,7 +170,7 @@ class OperatorTest extends TestCase
     {
         // Try to get some existing open line configs to test with
         try {
-            $configService = Fabric::getServiceBuilder()->getIMOpenLinesScope()->config();
+            $configService = Factory::getServiceBuilder()->getIMOpenLinesScope()->config();
             
             // Attempt to get config list - if this fails, skip real tests
             $optionsResult = $configService->getList(['ID'], ['ID' => 'ASC'], null, ['limit' => 1]);

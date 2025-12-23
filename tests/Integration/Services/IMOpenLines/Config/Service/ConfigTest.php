@@ -19,7 +19,7 @@ use Bitrix24\SDK\Services\IMOpenLines\Config\Result\GetRevisionResult;
 use Bitrix24\SDK\Services\IMOpenLines\Config\Result\OptionItemResult;
 use Bitrix24\SDK\Services\IMOpenLines\Config\Result\PathResult;
 use Bitrix24\SDK\Services\IMOpenLines\Config\Service\Config;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -257,13 +257,13 @@ class ConfigTest extends TestCase
         self::assertTrue($deletedItemResult->isSuccess());
     }
 
-
-
+    #[\Override]
     protected function setUp(): void
     {
-        $this->configService = Fabric::getServiceBuilder(true)->getIMOpenLinesScope()->config();
+        $this->configService = Factory::getServiceBuilder(true)->getIMOpenLinesScope()->config();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up any created configs

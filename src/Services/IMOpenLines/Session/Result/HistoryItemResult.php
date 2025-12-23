@@ -36,14 +36,4 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  */
 class HistoryItemResult extends AbstractItem
 {
-    public function __get($offset)
-    {
-        return match ($offset) {
-            'chatId', 'sessionId', 'sessionVoteHead' => (int)$this->data[$offset],
-            'canJoin', 'canVoteHead', 'userId' => (string)$this->data[$offset],
-            'sessionCommentHead' => $this->data[$offset],
-            'message', 'usersMessage', 'users', 'openlines', 'userInGroup', 'woUserInGroup', 'chat', 'userBlockChat', 'userInChat', 'files' => $this->data[$offset] ?? [],
-            default => $this->data[$offset] ?? null,
-        };
-    }
 }
