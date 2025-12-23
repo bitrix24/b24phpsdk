@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -378,8 +378,8 @@ class BatchTest extends TestCase
     public function setUp(): void
     {
         $this->stopwatch = new Stopwatch(true);
-        $this->batch = Fabric::getBatchService();
-        $this->serviceBuilder = Fabric::getServiceBuilder();
+        $this->batch = Factory::getBatchService();
+        $this->serviceBuilder = Factory::getServiceBuilder();
     }
 
     public function tearDown(): void

@@ -40,7 +40,7 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
 class UserfieldItemResult extends AbstractItem
 {
     //task userfield name prefix UF_
-    private const TASK_USERFIELD_PREFIX_LENGTH = 3;
+    private const int TASK_USERFIELD_PREFIX_LENGTH = 3;
 
     /**
      * get userfield name without prefix UF_

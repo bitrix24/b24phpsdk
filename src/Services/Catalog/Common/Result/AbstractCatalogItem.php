@@ -39,6 +39,7 @@ abstract class AbstractCatalogItem extends AbstractItem
      * @return bool|CarbonImmutable|int|mixed|null
      */
 
+    #[\Override]
     public function __get($offset)
     {
         switch ($offset) {

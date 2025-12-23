@@ -20,7 +20,7 @@ use Bitrix24\SDK\Services\CRM\Userfield\Service\Userfield;
 use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -100,6 +100,6 @@ class UserfieldTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->sb = Fabric::getServiceBuilder();
+        $this->sb = Factory::getServiceBuilder();
     }
 }

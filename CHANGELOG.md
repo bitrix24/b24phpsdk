@@ -1,9 +1,9 @@
 # b24-php-sdk change log
 
-## Upcoming  1.9.0 - 2026.01.01
+## 3.0.0 - 2026.01.01
 
 ### Added
-
+= Added support for Bitrix24 API v3
 - Added service `Services\IMOpenLines\Config\Service\Config` with support methods,
   see [imopenlines.config.*](https://github.com/bitrix24/b24phpsdk/issues/327):
     - `add` adds a new open line
@@ -55,7 +55,10 @@
     - `unpinAll` unpins all sessions
     - `open` opens a session
     - `start` starts a session
-    
+
+### Changed
+
+
 ## 1.9.0 - 2025.12.01
 
 ### Added

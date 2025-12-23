@@ -26,6 +26,7 @@ class AddedCatalogProductResult extends AddedItemResult
     /**
      * Get ID of the added basket item
      */
+    #[\Override]
     public function getId(): int
     {
         return (int)$this->getCoreResponse()->getResponseData()->getResult()['basketItem']['id'];

@@ -27,6 +27,7 @@ use Bitrix24\SDK\Services\Telephony\Common\CrmEntityType;
  */
 class ExternalCallRegisteredItemResult extends AbstractItem
 {
+    #[\Override]
     public function __get($offset)
     {
         switch ($offset) {

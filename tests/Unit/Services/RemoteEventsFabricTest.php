@@ -82,6 +82,7 @@ class RemoteEventsFabricTest extends TestCase
         ];
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->eventsFabric = RemoteEventsFabric::init(new NullLogger());

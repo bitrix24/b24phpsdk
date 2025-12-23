@@ -21,7 +21,7 @@ use Bitrix24\SDK\Services\Telephony\Common\CallType;
 use Bitrix24\SDK\Services\Telephony\Common\CrmEntityType;
 use Bitrix24\SDK\Services\Telephony\Common\TelephonyCallStatusCode;
 use Bitrix24\SDK\Services\Telephony\ExternalCall\Service\ExternalCall;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use Carbon\CarbonImmutable;
 use Generator;
 use Money\Currency;
@@ -48,8 +48,8 @@ class ExternalCallTest extends TestCase
      */
     public static function callIdDataProvider(): Generator
     {
-        $externalCall = Fabric::getServiceBuilder()->getTelephonyScope()->externalCall();
-        $serviceBuilder = Fabric::getServiceBuilder();
+        $externalCall = Factory::getServiceBuilder()->getTelephonyScope()->externalCall();
+        $serviceBuilder = Factory::getServiceBuilder();
 
         $innerPhoneNumber = '123';
         // phone number to call
@@ -216,9 +216,10 @@ class ExternalCallTest extends TestCase
         $this->assertGreaterThanOrEqual(0, count($searchCrmEntitiesResult->getCrmEntities()));
     }
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->externalCall = Fabric::getServiceBuilder(true)->getTelephonyScope()->externalCall();
-        $this->serviceBuilder = Fabric::getServiceBuilder(true);
+        $this->externalCall = Factory::getServiceBuilder(true)->getTelephonyScope()->externalCall();
+        $this->serviceBuilder = Factory::getServiceBuilder(true);
     }
 }

@@ -24,7 +24,7 @@ use Bitrix24\SDK\Services\CRM\Deal\Result\DealProductRowItemResult;
 use Bitrix24\SDK\Services\CRM\Deal\Service\Deal;
 use Bitrix24\SDK\Services\CRM\Deal\Service\DealProductRows;
 use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use MoneyPHP\Percentage\Percentage;
 use PHPUnit\Framework\TestCase;
 use Typhoon\Reflection\TyphoonReflector;
@@ -130,10 +130,11 @@ class DealProductRowsTest extends TestCase
         $this->assertEquals(Percentage::zero(), $productRow->DISCOUNT_RATE);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->dealService = Fabric::getServiceBuilder()->getCRMScope()->deal();
-        $this->dealProductRowsService = Fabric::getServiceBuilder()->getCRMScope()->dealProductRows();
+        $this->dealService = Factory::getServiceBuilder()->getCRMScope()->deal();
+        $this->dealProductRowsService = Factory::getServiceBuilder()->getCRMScope()->dealProductRows();
         $this->decimalMoneyFormatter = new DecimalMoneyFormatter(new ISOCurrencies());
         $this->typhoonReflector = TyphoonReflector::build();
     }

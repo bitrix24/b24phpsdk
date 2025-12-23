@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Deal\Service\DealRecurring;
 use Bitrix24\SDK\Services\CRM\Deal\Service\Deal;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,10 +32,11 @@ class DealRecurringTest extends TestCase
 
     protected Deal $dealService;
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->dealRecurring = Fabric::getServiceBuilder()->getCRMScope()->dealRecurring();
-        $this->dealService = Fabric::getServiceBuilder()->getCRMScope()->deal();
+        $this->dealRecurring = Factory::getServiceBuilder()->getCRMScope()->dealRecurring();
+        $this->dealService = Factory::getServiceBuilder()->getCRMScope()->deal();
 
     }
 

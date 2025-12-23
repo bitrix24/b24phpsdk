@@ -36,6 +36,7 @@ class FullName implements Stringable
         return $this->name === $fullName->name && $this->surname === $fullName->surname && $this->patronymic === $fullName->patronymic;
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return sprintf('%s %s %s', $this->name, $this->surname, $this->patronymic);

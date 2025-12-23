@@ -72,6 +72,7 @@ abstract class AbstractItem implements IteratorAggregate
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getIterator(): Traversable
     {
         return new ArrayIterator($this->data);

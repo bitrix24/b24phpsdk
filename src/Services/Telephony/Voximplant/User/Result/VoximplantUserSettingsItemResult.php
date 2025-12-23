@@ -26,6 +26,7 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  */
 class VoximplantUserSettingsItemResult extends AbstractItem
 {
+    #[\Override]
     public function __get($offset)
     {
         return match ($offset) {

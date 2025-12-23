@@ -35,6 +35,7 @@ class RemoteEventsFactoryTest extends TestCase
 {
     private RemoteEventsFactory $factory;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->factory = RemoteEventsFactory::init(new NullLogger());

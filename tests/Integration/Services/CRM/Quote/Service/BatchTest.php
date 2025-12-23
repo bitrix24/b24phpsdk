@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Quote\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Quote\Service\Quote;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,9 +30,10 @@ class BatchTest extends TestCase
     protected Quote $quoteService;
     
     
+    #[\Override]
     protected function setUp(): void
     {
-        $this->quoteService = Fabric::getServiceBuilder()->getCRMScope()->quote();
+        $this->quoteService = Factory::getServiceBuilder()->getCRMScope()->quote();
     }
 
     /**

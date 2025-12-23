@@ -21,6 +21,7 @@ class JoinOpenLineResult extends AbstractResult implements AddedItemIdResultInte
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\Override]
     public function getId(): int
     {
         return (int)$this->getCoreResponse()->getResponseData()->getResult()[0];

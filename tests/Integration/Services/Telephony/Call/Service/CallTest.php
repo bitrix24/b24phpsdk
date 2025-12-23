@@ -23,7 +23,7 @@ use Bitrix24\SDK\Services\Telephony\Common\TelephonyCallStatusCode;
 use Bitrix24\SDK\Services\Telephony\Common\TranscriptMessage;
 use Bitrix24\SDK\Services\Telephony\Common\TranscriptMessageSide;
 use Bitrix24\SDK\Services\Telephony\ExternalCall\Service\ExternalCall;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use Carbon\CarbonImmutable;
 use Generator;
 use Money\Currency;
@@ -50,8 +50,8 @@ class CallTest extends TestCase
      */
     public static function callIdDataProvider(): Generator
     {
-        $externalCall = Fabric::getServiceBuilder()->getTelephonyScope()->externalCall();
-        $serviceBuilder = Fabric::getServiceBuilder();
+        $externalCall = Factory::getServiceBuilder()->getTelephonyScope()->externalCall();
+        $serviceBuilder = Factory::getServiceBuilder();
 
         $innerPhoneNumber = '123';
         // phone number to call
@@ -133,9 +133,10 @@ class CallTest extends TestCase
         $this->assertGreaterThan(0, $transcriptAttachedResult->getTranscriptAttachItem()->TRANSCRIPT_ID);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->call = Fabric::getServiceBuilder(true)->getTelephonyScope()->call();
-        $this->externalCall = Fabric::getServiceBuilder(true)->getTelephonyScope()->externalCall();
+        $this->call = Factory::getServiceBuilder(true)->getTelephonyScope()->call();
+        $this->externalCall = Factory::getServiceBuilder(true)->getTelephonyScope()->externalCall();
     }
 }
