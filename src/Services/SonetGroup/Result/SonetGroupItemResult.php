@@ -80,32 +80,4 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  */
 class SonetGroupItemResult extends AbstractItem
 {
-    /**
-     * Handle case-sensitive field mapping for different API responses
-     */
-    public function __get($offset)
-    {
-        // Handle mapping from lowercase API response fields to uppercase property names
-        $fieldMap = [
-            'ID' => ['ID', 'id'],
-            'NAME' => ['NAME', 'name'],
-            'ACTIVE' => ['ACTIVE', 'active'],
-            'DESCRIPTION' => ['DESCRIPTION', 'description'],
-        ];
-
-        if (array_key_exists($offset, $fieldMap)) {
-            foreach ($fieldMap[$offset] as $field) {
-                if (isset($this->data[$field])) {
-                    return match ($offset) {
-                        'ID' => (int)$this->data[$field],
-                        'ACTIVE' => $this->data[$field] === 'Y' || $this->data[$field] === true,
-                        default => $this->data[$field],
-                    };
-                }
-            }
-        }
-
-        // Return parent implementation for other fields
-        return parent::__get($offset);
-    }
 }

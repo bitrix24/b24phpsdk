@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\SonetGroup\Result\SonetGroupItemResult;
 use Bitrix24\SDK\Services\SonetGroup\Service\SonetGroup;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -55,7 +55,7 @@ class SonetGroupTest extends TestCase
      */
     private function getCurrentUserId(): int
     {
-        $userService = Fabric::getServiceBuilder()->getUserScope()->user();
+        $userService = Factory::getServiceBuilder()->getUserScope()->user();
         $userResult = $userService->current();
         
         return $userResult->user()->ID;
@@ -417,11 +417,13 @@ class SonetGroupTest extends TestCase
         $this->deleteTestGroup($groupId);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->sonetGroupService = Fabric::getServiceBuilder()->getSonetGroupScope()->sonetGroup();
+        $this->sonetGroupService = Factory::getServiceBuilder()->getSonetGroupScope()->sonetGroup();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Additional cleanup: remove any remaining test groups that might have been left
