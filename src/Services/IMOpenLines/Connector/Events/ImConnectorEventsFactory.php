@@ -29,6 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 readonly class ImConnectorEventsFactory implements EventsFabricInterface
 {
+    #[\Override]
     public function isSupport(string $eventCode): bool
     {
         return in_array(strtoupper($eventCode), [
@@ -45,6 +46,7 @@ readonly class ImConnectorEventsFactory implements EventsFabricInterface
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function create(Request $eventRequest): EventInterface
     {
         $eventPayload = $eventRequest->request->all();
