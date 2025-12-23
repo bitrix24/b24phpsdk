@@ -13,7 +13,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\Log\BlogPost\Service;
 
 use Bitrix24\SDK\Services\Log\BlogPost\Service\BlogPost;
 use Bitrix24\SDK\Services\ServiceBuilder;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -65,6 +65,6 @@ class BlogPostTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->serviceBuilder = Fabric::getServiceBuilder();
+        $this->serviceBuilder = Factory::getServiceBuilder();
     }
 }

@@ -41,6 +41,7 @@ class EventAuthItem extends AbstractItem
      * @throws UnknownScopeCodeException
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function __get($offset)
     {
         return match ($offset) {

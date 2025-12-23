@@ -15,10 +15,12 @@ namespace Bitrix24\SDK\Core;
 
 use Bitrix24\SDK\Core\Commands\Command;
 use Bitrix24\SDK\Core\Contracts\ApiClientInterface;
+use Bitrix24\SDK\Core\Contracts\ApiVersion;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
-use Bitrix24\SDK\Core\Exceptions\AuthForbiddenException;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\MethodConfirmWaitingException;
+use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Events\AuthTokenRenewedEvent;
@@ -32,31 +34,37 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 class Core implements CoreInterface
 {
     public function __construct(
-        protected ApiClientInterface       $apiClient,
-        protected ApiLevelErrorHandler     $apiLevelErrorHandler,
+        protected ApiClientInterface $apiClient,
+        protected ApiLevelErrorHandler $apiLevelErrorHandler,
         protected EventDispatcherInterface $eventDispatcher,
-        protected LoggerInterface          $logger)
-    {
+        protected LoggerInterface $logger
+    ) {
     }
 
     /**
+     * @param non-empty-string $apiMethod
      * @throws BaseException
+     * @throws InvalidArgumentException
+     * @throws MethodConfirmWaitingException
+     * @throws QueryLimitExceededException
      * @throws TransportException
      */
-    public function call(string $apiMethod, array $parameters = []): Response
+    #[\Override]
+    public function call(string $apiMethod, array $parameters = [], ApiVersion $apiVersion = ApiVersion::v1): Response
     {
         $this->logger->debug(
             'call.start',
             [
-                'method' => $apiMethod,
+                'apiMethod' => $apiMethod,
                 'parameters' => $parameters,
+                'apiVersion' => $apiVersion->value,
             ]
         );
 
         $response = null;
         try {
             // make async request
-            $apiCallResponse = $this->apiClient->getResponse($apiMethod, $parameters);
+            $apiCallResponse = $this->apiClient->getResponse($apiMethod, $parameters, apiVersion: $apiVersion);
             $this->logger->debug(
                 'call.responseInfo',
                 [
@@ -66,7 +74,12 @@ class Core implements CoreInterface
             switch ($apiCallResponse->getStatusCode()) {
                 case StatusCodeInterface::STATUS_OK:
                     //todo check with empty response size from server
-                    $response = new Response($apiCallResponse, new Command($apiMethod, $parameters), $this->apiLevelErrorHandler, $this->logger);
+                    $response = new Response(
+                        $apiCallResponse,
+                        new Command($apiMethod, $parameters, version: $apiVersion),
+                        $this->apiLevelErrorHandler,
+                        $this->logger
+                    );
                     break;
                 case StatusCodeInterface::STATUS_FOUND:
                     // change domain url
@@ -80,7 +93,7 @@ class Core implements CoreInterface
                     ]);
 
                     // repeat api-call to new domain url
-                    $response = $this->call($apiMethod, $parameters);
+                    $response = $this->call($apiMethod, $parameters, $apiVersion);
                     $this->logger->debug(
                         'api call repeated to new domain url',
                         [
@@ -143,7 +156,8 @@ class Core implements CoreInterface
                         case 'method_confirm_waiting':
                             throw new MethodConfirmWaitingException(
                                 $apiMethod,
-                                sprintf('api call method «%s» revoked, waiting confirm from portal administrator', $apiMethod));
+                                sprintf('api call method «%s» revoked, waiting confirm from portal administrator', $apiMethod)
+                            );
                         default:
                             throw new BaseException('UNAUTHORIZED request error');
                     }
@@ -192,7 +206,11 @@ class Core implements CoreInterface
                     'message' => $exception->getMessage(),
                 ]
             );
-            throw new TransportException(sprintf('transport error - %s, type %s', $exception->getMessage(), $exception::class), $exception->getCode(), $exception);
+            throw new TransportException(
+                sprintf('transport error - %s, type %s', $exception->getMessage(), $exception::class),
+                $exception->getCode(),
+                $exception
+            );
         } catch (BaseException $exception) {
             // rethrow known bitrix24 php sdk exception
             throw $exception;
@@ -213,6 +231,7 @@ class Core implements CoreInterface
         return $response;
     }
 
+    #[\Override]
     public function getApiClient(): ApiClientInterface
     {
         return $this->apiClient;

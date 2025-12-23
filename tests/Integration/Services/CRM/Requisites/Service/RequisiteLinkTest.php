@@ -27,7 +27,7 @@ use Bitrix24\SDK\Services\CRM\Deal\Service\Deal;
 use Bitrix24\SDK\Services\CRM\Requisites\Service\RequisiteBankdetail;
 
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -69,9 +69,10 @@ class RequisiteLinkTest extends TestCase
 
     private int $dealId = 0;
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->sb = Fabric::getServiceBuilder();
+        $this->sb = Factory::getServiceBuilder();
         $this->companyService = $this->sb->getCRMScope()->company();
         $this->requisiteService = $this->sb->getCRMScope()->requisite();
         $this->linkService = $this->sb->getCRMScope()->requisiteLink();
@@ -92,6 +93,7 @@ class RequisiteLinkTest extends TestCase
         )->getId();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->companyService->delete($this->companyId);

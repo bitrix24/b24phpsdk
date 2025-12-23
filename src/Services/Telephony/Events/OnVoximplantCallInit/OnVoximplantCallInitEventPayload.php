@@ -25,6 +25,7 @@ use Bitrix24\SDK\Services\Telephony\Common\CallType;
  */
 class OnVoximplantCallInitEventPayload extends AbstractItem
 {
+    #[\Override]
     public function __get($offset)
     {
         return match ($offset) {

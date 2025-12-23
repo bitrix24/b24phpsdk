@@ -20,7 +20,7 @@ use Bitrix24\SDK\Services\CRM\VatRates\Result\VatRateItemResult;
 use Bitrix24\SDK\Services\CRM\VatRates\Service\Vat;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use MoneyPHP\Percentage\Percentage;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -51,7 +51,7 @@ class VatTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->sb = Fabric::getServiceBuilder();
+        $this->sb = Factory::getServiceBuilder();
     }
 
     /**

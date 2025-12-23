@@ -15,7 +15,7 @@ namespace Bitrix24\SDK\Tests\Integration\Core\Credentials;
 
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\ServiceBuilder;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 class ScopeTest extends TestCase
@@ -39,6 +39,6 @@ class ScopeTest extends TestCase
 
     public function setUp(): void
     {
-        $this->sb = Fabric::getServiceBuilder();
+        $this->sb = Factory::getServiceBuilder();
     }
 }

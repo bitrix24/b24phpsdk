@@ -26,6 +26,7 @@ use Symfony\Component\Uid\Uuid;
 class
 Bitrix24AccountInterfaceReferenceImplementationTest extends Bitrix24AccountInterfaceTest
 {
+    #[\Override]
     protected function createBitrix24AccountImplementation(
         Uuid                  $uuid,
         int                   $bitrix24UserId,

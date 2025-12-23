@@ -23,6 +23,7 @@ use Carbon\CarbonImmutable;
  */
 class SipConnectorStatusItemResult extends AbstractItem
 {
+    #[\Override]
     public function __get($offset)
     {
         switch ($offset) {

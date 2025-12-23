@@ -15,7 +15,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Deal\Service;
 
 use Bitrix24\SDK\Services\CRM\Deal\Service\DealUserfield;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\Userfield\SystemUserfieldBuilder;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -100,8 +100,9 @@ class DealUserfieldTest extends TestCase
         $this->assertGreaterThanOrEqual(0, count($dealUserfieldsResult->getUserfields()));
     }
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->userfieldService = Fabric::getServiceBuilder()->getCRMScope()->dealUserfield();
+        $this->userfieldService = Factory::getServiceBuilder()->getCRMScope()->dealUserfield();
     }
 }

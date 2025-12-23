@@ -23,7 +23,7 @@ use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\WebsiteValueType;
 use Bitrix24\SDK\Services\CRM\Contact\Result\ContactItemResult;
 use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -235,7 +235,7 @@ class ContactTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->contactService = Fabric::getServiceBuilder()->getCRMScope()->contact();
+        $this->contactService = Factory::getServiceBuilder()->getCRMScope()->contact();
         $this->faker = Faker\Factory::create();
     }
 }

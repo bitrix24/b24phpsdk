@@ -20,7 +20,7 @@ use Bitrix24\SDK\Services\CRM\Contact\Result\ContactItemResult;
 use Bitrix24\SDK\Services\CRM\Automation\Result\TriggerItemResult;
 use Bitrix24\SDK\Services\CRM\Automation\Service\Trigger;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -43,7 +43,7 @@ class TriggerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->triggerService = Fabric::getServiceBuilder(true)->getCRMScope()->trigger();
+        $this->triggerService = Factory::getServiceBuilder(true)->getCRMScope()->trigger();
     }
     
     public function testAllSystemFieldsAnnotated(): void
