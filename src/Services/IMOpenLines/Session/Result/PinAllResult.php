@@ -11,19 +11,18 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\IMOpenLines\Result;
+namespace Bitrix24\SDK\Services\IMOpenLines\Session\Result;
 
-use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
-
-class AddedMessageItemResult extends AbstractResult
+class PinAllResult extends AbstractResult
 {
     /**
-     * @throws BaseException
+     * @return array<int> Array of pinned session IDs
      */
-    public function isSuccess(): bool
+    public function getPinnedSessionIds(): array
     {
-        return (bool)$this->getCoreResponse()->getResponseData()->getResult()[0];
+        $result = $this->getCoreResponse()->getResponseData()->getResult();
+        return array_map('intval', $result);
     }
 }

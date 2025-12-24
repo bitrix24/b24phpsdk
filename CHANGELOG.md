@@ -4,6 +4,57 @@
 
 ### Added
 = Added support for Bitrix24 API v3
+- Added service `Services\IMOpenLines\Config\Service\Config` with support methods,
+  see [imopenlines.config.*](https://github.com/bitrix24/b24phpsdk/issues/327):
+    - `add` adds a new open line
+    - `delete` deletes an open line
+    - `get` retrieves an open line by Id
+    - `getList` retrieves a list of open lines
+    - `getPath` gets a link to the public page of open lines in the account
+    - `update` modifies an open line
+    - `joinNetwork` connects an external open line to the account
+    - `getRevision` retrieves information about API revisions
+- Added service `Services\IMOpenLines\CRMChat\Service\Chat` with support methods,
+  see [imopenlines.crm.chat.*](https://github.com/bitrix24/b24phpsdk/issues/327):
+    - `get` retrieves chats for a CRM object
+    - `getLastId` retrieves the ID of the last chat associated with a CRM entity
+    - `addUser` adds a user to a CRM entity chat
+    - `deleteUser` removes a user from the CRM entity chat
+- Added service `Services\IMOpenLines\Message\Service\Message` with support methods,
+  see [imopenlines.crm.message.*, imopenlines.message.*](https://github.com/bitrix24/b24phpsdk/issues/327):
+    - `addCrmMessage` sends a message to the open line on behalf of an employee or bot in a chat linked to a CRM entity
+    - `quickSave` saves a message from the open line chat to the list of quick answers
+    - `sessionStart` starts a new dialogue session based on a message
+- Added service `Services\IMOpenLines\Bot\Service\Bot` with support methods,
+  see [imopenlines.bot.*](https://github.com/bitrix24/b24phpsdk/issues/327):
+    - `sendMessage` sends an automatic message via the chatbot
+    - `transferToOperator` switches the conversation to a free operator
+    - `transferToUser` transfers the conversation to a specific operator by user ID
+    - `transferToQueue` transfers the conversation to another open line queue
+    - `finishSession` ends the current session
+- Added service `Services\IMOpenLines\Operator\Service\Operator` with support methods,
+  see [imopenlines.operator.*](https://github.com/bitrix24/b24phpsdk/issues/327):
+    - `answer` takes the dialog for the current operator
+    - `finish` ends the dialogue by the current operator
+    - `anotherFinish` finishes the dialog of another operator
+    - `skip` skips the dialog for the current operator
+    - `spam` marks the conversation as "spam" by the current operator
+    - `transfer` transfers the dialogue to another operator or line
+- Added service `Services\IMOpenLines\Session\Service\Session` with support methods,
+  see [imopenlines.session.*](https://github.com/bitrix24/b24phpsdk/issues/327):
+    - `createCrmLead` creates a lead based on the dialogue
+    - `getDialog` retrieves information about the operator's dialogue (chat) in the open line
+    - `startMessageSession` starts a new dialogue session based on a message
+    - `voteHead` votes for the session head
+    - `getHistory` gets session history
+    - `intercept` intercepts the session
+    - `join` joins the session
+    - `pinAll` pins all sessions
+    - `pin` pins a specific session
+    - `setSilent` sets silent mode for session
+    - `unpinAll` unpins all sessions
+    - `open` opens a session
+    - `start` starts a session
 - Added service `Services\SonetGroup\Service\SonetGroup` with support methods,
   see [sonet_group.* methods](https://github.com/bitrix24/b24phpsdk/issues/331):
     - `create` creates a social network group/project
