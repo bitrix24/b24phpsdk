@@ -25,6 +25,7 @@ use Bitrix24\SDK\Services\Calendar\Events\CalendarEventsFactory;
 use Bitrix24\SDK\Services\CRM\Company\Events\CrmCompanyEventsFactory;
 use Bitrix24\SDK\Services\CRM\Contact\Events\CrmContactEventsFactory;
 use Bitrix24\SDK\Services\IMOpenLines\Events\IMOpenLinesEventsFactory;
+use Bitrix24\SDK\Services\SonetGroup\Events\SonetGroupEventsFactory;
 use Bitrix24\SDK\Services\Telephony\Events\TelephonyEventsFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -222,6 +223,7 @@ readonly class RemoteEventsFactory
                 new CrmCompanyEventsFactory(),
                 new CrmContactEventsFactory(),
                 new IMOpenLinesEventsFactory(),
+                new SonetGroupEventsFactory(),
                 new Sale\Events\SaleEventsFactory(),
             ],
             $logger

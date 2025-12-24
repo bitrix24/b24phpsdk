@@ -220,6 +220,9 @@
         <testsuite name="integration_tests_crm_documentgenerator_numerator">
             <directory>./tests/Integration/Services/CRM/Documentgenerator/Numerator/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_sonet_group">
+            <directory>./tests/Integration/Services/SonetGroup/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>
