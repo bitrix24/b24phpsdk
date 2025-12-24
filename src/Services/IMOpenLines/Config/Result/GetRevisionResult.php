@@ -34,10 +34,6 @@ class GetRevisionResult extends AbstractResult
     {
         $result = $this->getCoreResponse()->getResponseData()->getResult();
         
-        echo "\n\n GetRevisionResult \n";
-            print_r($this->getCoreResponse()->getResponseData()->getResult());
-        echo "\n\n";
-
         return new RevisionItemResult($result);
     }
 }
