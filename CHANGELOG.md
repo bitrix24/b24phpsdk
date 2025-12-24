@@ -4,10 +4,20 @@
 
 ### Added
 = Added support for Bitrix24 API v3
+- Added service `Services\SonetGroup\Service\SonetGroup` with support methods,
+  see [sonet_group.* methods](https://github.com/bitrix24/b24phpsdk/issues/331):
+    - `create` creates a social network group/project
+    - `update` modifies group parameters
+    - `delete` deletes a social network group
+    - `get` gets detailed information about a specific workgroup
+    - `list` gets list of workgroups with filtering
+    - `getGroups` gets list of social network groups (simpler version)
+    - `getUserGroups` gets list of current user's groups
+    - `addUser` adds users to group without invitation process
+    - `deleteUser` removes users from group
+    - `setOwner` changes group owner
 
 ### Changed
-
-
 
 
 ## 1.9.0 - 2025.12.01
