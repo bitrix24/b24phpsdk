@@ -27,7 +27,7 @@ class RepoCheckContentResult extends AbstractResult
     {
         $result = $this->getCoreResponse()->getResponseData()->getResult();
 
-        // API возвращает объект с полями content и is_bad
+        // The API returns an object with the content and is_bad fields.
         return $result['content'] ?? null;
     }
 
@@ -40,7 +40,7 @@ class RepoCheckContentResult extends AbstractResult
     {
         $result = $this->getCoreResponse()->getResponseData()->getResult();
 
-        // API возвращает boolean флаг is_bad
+        // The API returns a boolean flag is_bad
         return isset($result['is_bad']) && (bool)$result['is_bad'];
     }
 }

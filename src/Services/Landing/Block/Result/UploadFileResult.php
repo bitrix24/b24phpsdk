@@ -24,10 +24,6 @@ class UploadFileResult extends AbstractResult
      */
     public function getUploadFileData(): array
     {
-        echo "\n UploadFileResult \n";
-        print_r($this->getCoreResponse()->getResponseData()->getResult());
-        echo "\n";
-
         return $this->getCoreResponse()->getResponseData()->getResult();
     }
 
