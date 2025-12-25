@@ -22,9 +22,10 @@ use Bitrix24\SDK\Services\IMOpenLines\CRMChat\Service\Chat;
 use Bitrix24\SDK\Services\IMOpenLines\Message\Service\Message;
 use Bitrix24\SDK\Services\IMOpenLines\Operator\Service\Operator;
 use Bitrix24\SDK\Services\IMOpenLines\Service\Network;
+use Bitrix24\SDK\Services\IMOpenLines\Connector\Service\Connector;
 use Bitrix24\SDK\Services\IMOpenLines\Session\Service\Session;
-#[ApiServiceBuilderMetadata(new Scope(['imopenlines']))]
 
+#[ApiServiceBuilderMetadata(new Scope(['imopenlines']))]
 class IMOpenLinesServiceBuilder extends AbstractServiceBuilder
 {
     public function bot(): Bot
@@ -67,6 +68,15 @@ class IMOpenLinesServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Network($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function connector(): Connector
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Connector($this->core, $this->log);
         }
 
         return $this->serviceCache[__METHOD__];

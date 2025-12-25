@@ -112,6 +112,20 @@
     - `getList` retrieves a list of available partner templates for the current application
     - `getSiteList` retrieves a list of available templates for creating sites
     - `getPageList` retrieves a list of available templates for creating pages
+- Added service `Services\IMOpenLines\Connector\Service\Connector` with support methods,
+  see [imconnector.* methods](https://github.com/bitrix24/b24phpsdk/issues/320):
+    - `list` method returns a list of available connectors
+    - `register` method registers a new connector
+    - `activate` method activates or deactivates a connector
+    - `unregister` method unregisters a connector
+    - `status` method retrieves connector status information
+    - `setData` method sets connector data
+    - `sendMessages` method sends messages through the connector
+    - `updateMessages` method updates messages
+    - `deleteMessages` method deletes messages
+    - `sendStatusDelivery` method sends message delivery status
+    - `sendStatusReading` method sends message reading status
+    - `setChatName` method sets chat name
 - Added service `Services\IMOpenLines\Config\Service\Config` with support methods,
   see [imopenlines.config.*](https://github.com/bitrix24/b24phpsdk/issues/327):
     - `add` adds a new open line

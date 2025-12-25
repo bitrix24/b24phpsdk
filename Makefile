@@ -58,6 +58,7 @@ help:
 	@echo "test-integration-sale-delivery - run Delivery integration tests"
 	@echo "test-integration-sale-delivery-extra-service - run DeliveryExtraService integration tests"
 	@echo "test-integration-scope-paysystem - run Payment System integration tests"
+	@echo "test-integration-scope-im-open-lines-connector - run IMOpenLines Connector integration tests"
 	@echo "test-integration-sale-payment-item-basket - run PaymentItemBasket integration tests"
 	@echo "test-integration-sale-payment-item-shipment - run PaymentItemShipment integration tests"
 	@echo "test-integration-sale-property-relation - run PropertyRelation integration tests"
@@ -182,6 +183,10 @@ test-integration-scope-placement:
 .PHONY: test-integration-scope-paysystem
 test-integration-scope-paysystem:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_paysystem
+
+.PHONY: test-integration-scope-im-open-lines-connector
+test-integration-scope-im-open-lines-connector:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im_open_lines_connector
 
 .PHONY: test-integration-paysystem-service
 test-integration-paysystem-service:
