@@ -27,17 +27,10 @@ class StatusResult extends AbstractResult
     /**
      * Get connector status information
      *
-     * @return array{
-     *   LINE: int,
-     *   CONNECTOR: string,
-     *   ERROR: bool|string,
-     *   CONFIGURED: bool|string,
-     *   STATUS: bool|string
-     * }
+     * @return StatusItemResult
      */
-    public function getStatus(): array
+    public function getStatus(): StatusItemResult
     {
-        // Response format: [LINE], [CONNECTOR], [ERROR], [CONFIGURED], [STATUS]
-        return $this->getCoreResponse()->getResponseData()->getResult();
+        return new StatusItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }

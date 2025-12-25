@@ -114,11 +114,8 @@ class Connector extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/imopenlines/imconnector/imconnector-status.html
      *
-     * @param string    $line        Open line ID
-     * @param string    $connector   Connector ID
-     * @param bool|null $error       Filter by error status
-     * @param bool|null $configured  Filter by configured status
-     * @param bool|null $status      Filter by status
+     * @param string $line        Open line ID
+     * @param string $connector   Connector ID
      *
      * @throws BaseException
      * @throws TransportException
@@ -128,27 +125,15 @@ class Connector extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/imopenlines/imconnector/imconnector-status.html',
         'Get connector status'
     )]
-    public function status(string $line, string $connector, ?bool $error = null, ?bool $configured = null, ?bool $status = null): StatusResult
+    public function status(string $line, string $connector): StatusResult
     {
-        $params = [
-            'LINE' => $line,
-            'CONNECTOR' => $connector
-        ];
-
-        if ($error !== null) {
-            $params['ERROR'] = $error;
-        }
-
-        if ($configured !== null) {
-            $params['CONFIGURED'] = $configured;
-        }
-
-        if ($status !== null) {
-            $params['STATUS'] = $status;
-        }
-
         return new StatusResult(
-            $this->core->call('imconnector.status', $params)
+            $this->core->call('imconnector.status',
+                [
+                    'LINE' => $line,
+                    'CONNECTOR' => $connector
+                ]
+            )
         );
     }
 

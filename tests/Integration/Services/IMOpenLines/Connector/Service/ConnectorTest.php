@@ -204,7 +204,7 @@ class ConnectorTest extends TestCase
             $statusResult = $this->connectorService->status($lineId, $connectorData['ID']);
             $statusData = $statusResult->getStatus();
             
-            self::assertIsArray($statusData);
+            self::assertEquals($connectorData['ID'], $statusData->CONNECTOR);
             
         } finally {
             // Clean up
