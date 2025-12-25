@@ -30,6 +30,8 @@ return RectorConfig::configure()
         __DIR__ . '/tests/Integration/Services/IM',
         __DIR__ . '/src/Services/IMOpenLines',
         __DIR__ . '/tests/Integration/Services/IMOpenLines',
+        __DIR__ . '/src/Services/SonetGroup',
+        __DIR__ . '/tests/Integration/Services/SonetGroup',
         __DIR__ . '/src/Services/CRM/Address',
         __DIR__ . '/tests/Integration/Services/CRM/Address',
         __DIR__ . '/src/Services/Main',

@@ -67,7 +67,10 @@ help:
 	@echo "test-integration-landing-demos - run Landing Demos integration tests"
 	@echo "test-integration-landing-role - run Landing Role integration tests"
 	@echo "test-integration-scope-landing-template - run Landing Template integration tests"
-
+	@echo "test-integration-im-open-lines-config - run IMOpenLines Config integration tests"
+	@echo "test-integration-im-open-lines-crm-chat - run IMOpenLines CRMChat integration tests"
+	@echo "test-integration-im-open-lines-session - run IMOpenLines Session integration tests"
+	@echo "test-integration-im-open-lines-operator - run IMOpenLines Operator integration tests"
 
 .PHONY: docker-init
 docker-init:
@@ -192,6 +195,22 @@ test-integration-paysystem-settings:
 test-integration-scope-im-open-lines:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im_open_lines
 
+.PHONY: test-integration-im-open-lines-config
+test-integration-im-open-lines-config:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_open_lines_config
+
+.PHONY: test-integration-im-open-lines-crm-chat
+test-integration-im-open-lines-crm-chat:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_open_lines_crm_chat
+
+.PHONY: test-integration-im-open-lines-session
+test-integration-im-open-lines-session:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_open_lines_session
+
+.PHONY: test-integration-im-open-lines-operator
+test-integration-im-open-lines-operator:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_open_lines_operator
+
 .PHONY: test-integration-scope-user
 test-integration-scope-user:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_user
@@ -259,6 +278,10 @@ test-integration-landing-demos:
 .PHONY: test-integration-landing-role
 test-integration-landing-role:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_role
+
+.PHONY: test-integration-scope-sonet-group
+test-integration-scope-sonet-group:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sonet_group
 
 .PHONY: test-integration-scope-disk
 test-integration-scope-disk:

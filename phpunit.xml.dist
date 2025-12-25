@@ -25,6 +25,18 @@
         <testsuite name="integration_tests_scope_im_open_lines">
             <directory>./tests/Integration/Services/IMOpenLines/</directory>
         </testsuite>
+        <testsuite name="integration_tests_im_open_lines_config">
+            <directory>./tests/Integration/Services/IMOpenLines/Config/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_open_lines_crm_chat">
+            <directory>./tests/Integration/Services/IMOpenLines/CRMChat/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_open_lines_session">
+            <directory>./tests/Integration/Services/IMOpenLines/Session/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_open_lines_operator">
+            <directory>./tests/Integration/Services/IMOpenLines/Operator/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_placement">
             <directory>./tests/Integration/Services/Placement/</directory>
         </testsuite>
@@ -234,6 +246,9 @@
         </testsuite>
         <testsuite name="integration_tests_crm_documentgenerator_numerator">
             <directory>./tests/Integration/Services/CRM/Documentgenerator/Numerator/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_sonet_group">
+            <directory>./tests/Integration/Services/SonetGroup/</directory>
         </testsuite>
     </testsuites>
     <source>
