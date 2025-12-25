@@ -29,7 +29,7 @@ class Endpoints
          * @phpstan-param non-empty-string|null $authServerUrl
          * @todo in v2 make it required
          */
-        private ?string $authServerUrl = null
+        private readonly ?string $authServerUrl = null
     ) {
         // Normalize client URL - add https:// protocol if not present
         $this->clientUrl = $this->normalizeUrl($clientUrl);
