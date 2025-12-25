@@ -33,7 +33,7 @@ class Endpoints
         // Normalize client URL - add https:// protocol if not present
         $this->clientUrl = $this->normalizeUrl($clientUrl);
         $this->validateUrl('clientUrl', $this->clientUrl);
-
+      
         $this->validateUrl('BITRIX24_PHP_SDK_DEFAULT_AUTH_SERVER_URL', $authServerUrl);
     }
 
