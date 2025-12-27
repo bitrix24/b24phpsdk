@@ -40,7 +40,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -57,7 +57,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -66,7 +66,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $this->assertEquals($uuid, $bitrix24Partner->getId());
     }
 
@@ -79,7 +79,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -88,7 +88,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $this->assertEquals($createdAt, $bitrix24Partner->getCreatedAt());
     }
 
@@ -104,7 +104,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -113,7 +113,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $bitrix24Partner->setTitle('new title');
         $this->assertNotEquals($updatedAt, $bitrix24Partner->getUpdatedAt());
     }
@@ -127,7 +127,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -136,7 +136,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
 
         $newExternalId = Uuid::v7()->toRfc4122();
         $bitrix24Partner->setExternalId($newExternalId);
@@ -155,7 +155,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -164,7 +164,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $bitrix24Partner->setExternalId(null);
         $this->assertNull($bitrix24Partner->getExternalId());
     }
@@ -178,7 +178,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -187,7 +187,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $this->expectException(InvalidArgumentException::class);
         /** @phpstan-ignore-next-line */
         $bitrix24Partner->setExternalId('');
@@ -202,7 +202,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -211,7 +211,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $this->assertEquals($bitrix24PartnerStatus, $bitrix24Partner->getStatus());
     }
 
@@ -227,7 +227,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -236,7 +236,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
 
         $blockComment = 'block partner';
         $bitrix24Partner->markAsBlocked($blockComment);
@@ -260,7 +260,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -269,7 +269,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
 
         $blockComment = 'block partner';
         $bitrix24Partner->markAsBlocked($blockComment);
@@ -289,7 +289,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -298,7 +298,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
 
         $comment = 'delete partner';
         $bitrix24Partner->markAsDeleted($comment);
@@ -318,7 +318,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -327,7 +327,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $this->assertEquals($title, $bitrix24Partner->getTitle());
     }
 
@@ -340,7 +340,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -349,7 +349,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $newTitle = 'new title';
         $bitrix24Partner->setTitle($newTitle);
         $this->assertEquals($newTitle, $bitrix24Partner->getTitle());
@@ -369,7 +369,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -378,7 +378,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $this->assertEquals($site, $bitrix24Partner->getSite());
     }
 
@@ -394,7 +394,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -403,7 +403,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $newSite = 'https://new-partner-site.com';
         $bitrix24Partner->setSite($newSite);
         $this->assertEquals($newSite, $bitrix24Partner->getSite());
@@ -425,7 +425,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -434,7 +434,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $this->assertEquals($phoneNumber, $bitrix24Partner->getPhone());
     }
 
@@ -447,7 +447,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -456,7 +456,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $newPhone = DemoDataGenerator::getMobilePhone();
         $bitrix24Partner->setPhone($newPhone);
         $this->assertEquals($newPhone, $bitrix24Partner->getPhone());
@@ -474,7 +474,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -483,7 +483,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $this->assertEquals($email, $bitrix24Partner->getEmail());
     }
 
@@ -496,7 +496,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -505,7 +505,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
 
         $newEmail = DemoDataGenerator::getEmail();
         $bitrix24Partner->setEmail($newEmail);
@@ -528,7 +528,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -537,7 +537,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
 
         $newEmail = '@partner.com';
         $this->expectException(InvalidArgumentException::class);
@@ -546,14 +546,14 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
 
     #[Test]
     #[DataProvider('bitrix24PartnerDataProvider')]
-    #[TestDox('test getBitrix24PartnerId')]
-    final public function testGetBitrix24PartnerId(
+    #[TestDox('test getBitrix24PartnerNumber')]
+    final public function testGetBitrix24PartnerNumber(
         Uuid                  $uuid,
         CarbonImmutable       $createdAt,
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -562,8 +562,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
-        $this->assertEquals($bitrix24PartnerId, $bitrix24Partner->getBitrix24PartnerId());
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $this->assertEquals($bitrix24PartnerNumber, $bitrix24Partner->getBitrix24PartnerNumber());
     }
 
     #[Test]
@@ -575,7 +575,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -584,7 +584,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $this->assertEquals($openLineId, $bitrix24Partner->getOpenLineId());
     }
 
@@ -597,7 +597,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
-        int                   $bitrix24PartnerId,
+        int                   $bitrix24PartnerNumber,
         ?string               $site,
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
@@ -606,7 +606,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         string                $comment
     ): void
     {
-        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerId, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $newOpenLineId = Uuid::v7()->toRfc4122();
         $bitrix24Partner->setOpenLineId($newOpenLineId);
         $this->assertEquals($newOpenLineId, $bitrix24Partner->getOpenLineId());
@@ -631,7 +631,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
             CarbonImmutable::now(), // updatedAt
             Bitrix24PartnerStatus::active,
             'Bitrix24 Partner LLC', // title
-            12345, // bitrix24 partner id, optional
+            12345, // bitrix24 partner number, optional
             'https://bitrix24-partner.com', // site, optional
             DemoDataGenerator::getMobilePhone(), // phone, optional
             DemoDataGenerator::getEmail(), // email, optional
