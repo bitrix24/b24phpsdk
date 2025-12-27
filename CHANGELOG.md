@@ -81,6 +81,11 @@
     - `addUser` adds users to group without invitation process
     - `deleteUser` removes users from group
     - `setOwner` changes group owner
+- Added `isPartner(): bool` method to `ContactPersonInterface` to check if the contact person is a partner employee,
+  [see details](https://github.com/bitrix24/b24phpsdk/issues/345):
+    - Returns `true` if the contact person has a Bitrix24 partner ID set
+    - Returns `false` if no partner ID is associated with the contact person
+    - Provides a convenience method instead of checking `getBitrix24PartnerId() !== null`
 
 ### Changed
 
