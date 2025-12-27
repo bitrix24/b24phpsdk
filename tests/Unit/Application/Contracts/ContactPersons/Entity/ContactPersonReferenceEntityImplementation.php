@@ -238,6 +238,12 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
     }
 
     #[\Override]
+    public function isPartner(): bool
+    {
+        return $this->bitrix24PartnerUuid instanceof Uuid;
+    }
+
+    #[\Override]
     public function getUserAgentInfo(): UserAgentInfo
     {
         return new UserAgentInfo(
