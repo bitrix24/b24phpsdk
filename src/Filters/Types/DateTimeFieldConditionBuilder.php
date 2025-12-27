@@ -11,8 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Filters\Core;
+namespace Bitrix24\SDK\Filters\Types;
 
+use Bitrix24\SDK\Filters\AbstractFilterBuilder;
 use DateTime;
 
 /**
@@ -23,11 +24,11 @@ use DateTime;
  *
  * @package Bitrix24\SDK\Filters\Core
  */
-class DateFieldConditionBuilder
+readonly class DateTimeFieldConditionBuilder
 {
     public function __construct(
-        private readonly string $fieldName,
-        private readonly AbstractFilterBuilder $filter
+        private string $fieldName,
+        private AbstractFilterBuilder $filter
     ) {
     }
 
@@ -39,7 +40,7 @@ class DateFieldConditionBuilder
      */
     public function eq(DateTime|string $value): AbstractFilterBuilder
     {
-        $dateStr = $value instanceof DateTime ? $value->format('Y-m-d') : $value;
+        $dateStr = $value instanceof DateTime ? $value->format(DATE_ATOM) : $value;
 
         return $this->filter->addCondition($this->fieldName, '=', $dateStr);
     }
@@ -52,7 +53,7 @@ class DateFieldConditionBuilder
      */
     public function neq(DateTime|string $value): AbstractFilterBuilder
     {
-        $dateStr = $value instanceof DateTime ? $value->format('Y-m-d') : $value;
+        $dateStr = $value instanceof DateTime ? $value->format(DATE_ATOM) : $value;
 
         return $this->filter->addCondition($this->fieldName, '!=', $dateStr);
     }
@@ -65,7 +66,7 @@ class DateFieldConditionBuilder
      */
     public function gt(DateTime|string $value): AbstractFilterBuilder
     {
-        $dateStr = $value instanceof DateTime ? $value->format('Y-m-d') : $value;
+        $dateStr = $value instanceof DateTime ? $value->format(DATE_ATOM) : $value;
 
         return $this->filter->addCondition($this->fieldName, '>', $dateStr);
     }
@@ -78,7 +79,7 @@ class DateFieldConditionBuilder
      */
     public function gte(DateTime|string $value): AbstractFilterBuilder
     {
-        $dateStr = $value instanceof DateTime ? $value->format('Y-m-d') : $value;
+        $dateStr = $value instanceof DateTime ? $value->format(DATE_ATOM) : $value;
 
         return $this->filter->addCondition($this->fieldName, '>=', $dateStr);
     }
@@ -91,7 +92,7 @@ class DateFieldConditionBuilder
      */
     public function lt(DateTime|string $value): AbstractFilterBuilder
     {
-        $dateStr = $value instanceof DateTime ? $value->format('Y-m-d') : $value;
+        $dateStr = $value instanceof DateTime ? $value->format(DATE_ATOM) : $value;
 
         return $this->filter->addCondition($this->fieldName, '<', $dateStr);
     }
@@ -104,7 +105,7 @@ class DateFieldConditionBuilder
      */
     public function lte(DateTime|string $value): AbstractFilterBuilder
     {
-        $dateStr = $value instanceof DateTime ? $value->format('Y-m-d') : $value;
+        $dateStr = $value instanceof DateTime ? $value->format(DATE_ATOM) : $value;
 
         return $this->filter->addCondition($this->fieldName, '<=', $dateStr);
     }
@@ -118,8 +119,8 @@ class DateFieldConditionBuilder
      */
     public function between(DateTime|string $from, DateTime|string $to): AbstractFilterBuilder
     {
-        $fromStr = $from instanceof DateTime ? $from->format('Y-m-d') : $from;
-        $toStr = $to instanceof DateTime ? $to->format('Y-m-d') : $to;
+        $fromStr = $from instanceof DateTime ? $from->format(DATE_ATOM) : $from;
+        $toStr = $to instanceof DateTime ? $to->format(DATE_ATOM) : $to;
 
         return $this->filter->addCondition($this->fieldName, 'between', [$fromStr, $toStr]);
     }

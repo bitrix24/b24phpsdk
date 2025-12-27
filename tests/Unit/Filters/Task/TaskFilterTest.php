@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Filters\Task;
 
-use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
-use Bitrix24\SDK\Filters\Task\TaskFilter;
+use Bitrix24\SDK\Services\Task\Service\TaskFilter;
 use DateTime;
 use Generator;
 use PHPUnit\Framework\Attributes\CoversClass;

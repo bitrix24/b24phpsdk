@@ -11,7 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Filters\Core;
+namespace Bitrix24\SDK\Filters\Types;
+
+use Bitrix24\SDK\Filters\AbstractFilterBuilder;
 
 /**
  * Class StringFieldConditionBuilder
@@ -21,11 +23,11 @@ namespace Bitrix24\SDK\Filters\Core;
  *
  * @package Bitrix24\SDK\Filters\Core
  */
-class StringFieldConditionBuilder
+readonly class StringFieldConditionBuilder
 {
     public function __construct(
-        private readonly string $fieldName,
-        private readonly AbstractFilterBuilder $filter
+        private string $fieldName,
+        private AbstractFilterBuilder $filter
     ) {
     }
 

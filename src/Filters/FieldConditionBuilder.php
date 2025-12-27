@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Filters\Core;
+namespace Bitrix24\SDK\Filters;
 
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 

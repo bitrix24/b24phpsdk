@@ -205,8 +205,7 @@ public function neq(bool $value): AbstractFilterBuilder;
 ### Basic Filtering
 
 ```php
-use Bitrix24\SDK\Filters\Task\TaskFilter;
-use DateTime;
+use Bitrix24\SDK\Services\Task\Service\TaskFilter;
 
 // Simple filter with type-safe fields
 $filter = (new TaskFilter())

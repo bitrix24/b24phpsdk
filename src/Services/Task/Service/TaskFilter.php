@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Filters\Task;
+namespace Bitrix24\SDK\Services\Task\Service;
 
-use Bitrix24\SDK\Filters\Core\AbstractFilterBuilder;
-use Bitrix24\SDK\Filters\Core\BoolFieldConditionBuilder;
-use Bitrix24\SDK\Filters\Core\DateFieldConditionBuilder;
-use Bitrix24\SDK\Filters\Core\FieldConditionBuilder;
-use Bitrix24\SDK\Filters\Core\IntFieldConditionBuilder;
-use Bitrix24\SDK\Filters\Core\StringFieldConditionBuilder;
+use Bitrix24\SDK\Filters\AbstractFilterBuilder;
+use Bitrix24\SDK\Filters\FieldConditionBuilder;
+use Bitrix24\SDK\Filters\Types\BoolFieldConditionBuilder;
+use Bitrix24\SDK\Filters\Types\DateTimeFieldConditionBuilder;
+use Bitrix24\SDK\Filters\Types\IntFieldConditionBuilder;
+use Bitrix24\SDK\Filters\Types\StringFieldConditionBuilder;
 
 /**
  * Class TaskFilter
@@ -124,39 +124,39 @@ class TaskFilter extends AbstractFilterBuilder
 
     // Date fields
 
-    public function createdDate(): DateFieldConditionBuilder
+    public function createdDate(): DateTimeFieldConditionBuilder
     {
-        return new DateFieldConditionBuilder('createdDate', $this);
+        return new DateTimeFieldConditionBuilder('createdDate', $this);
     }
 
-    public function changedDate(): DateFieldConditionBuilder
+    public function changedDate(): DateTimeFieldConditionBuilder
     {
-        return new DateFieldConditionBuilder('changedDate', $this);
+        return new DateTimeFieldConditionBuilder('changedDate', $this);
     }
 
-    public function closedDate(): DateFieldConditionBuilder
+    public function closedDate(): DateTimeFieldConditionBuilder
     {
-        return new DateFieldConditionBuilder('closedDate', $this);
+        return new DateTimeFieldConditionBuilder('closedDate', $this);
     }
 
-    public function deadline(): DateFieldConditionBuilder
+    public function deadline(): DateTimeFieldConditionBuilder
     {
-        return new DateFieldConditionBuilder('deadline', $this);
+        return new DateTimeFieldConditionBuilder('deadline', $this);
     }
 
-    public function dateStart(): DateFieldConditionBuilder
+    public function dateStart(): DateTimeFieldConditionBuilder
     {
-        return new DateFieldConditionBuilder('dateStart', $this);
+        return new DateTimeFieldConditionBuilder('dateStart', $this);
     }
 
-    public function startDatePlan(): DateFieldConditionBuilder
+    public function startDatePlan(): DateTimeFieldConditionBuilder
     {
-        return new DateFieldConditionBuilder('startDatePlan', $this);
+        return new DateTimeFieldConditionBuilder('startDatePlan', $this);
     }
 
-    public function endDatePlan(): DateFieldConditionBuilder
+    public function endDatePlan(): DateTimeFieldConditionBuilder
     {
-        return new DateFieldConditionBuilder('endDatePlan', $this);
+        return new DateTimeFieldConditionBuilder('endDatePlan', $this);
     }
 
     // Boolean fields
