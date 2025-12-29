@@ -35,15 +35,15 @@ class InMemoryBitrix24PartnerRepositoryImplementation implements Bitrix24Partner
     }
 
     #[\Override]
-    public function findByBitrix24PartnerId(int $bitrix24PartnerId): ?Bitrix24PartnerInterface
+    public function findByBitrix24PartnerNumber(int $bitrix24PartnerNumber): ?Bitrix24PartnerInterface
     {
-        $this->logger->debug('b24PartnerRepository.findByBitrix24PartnerId', [
-            'bitrix24PartnerId' => $bitrix24PartnerId
+        $this->logger->debug('b24PartnerRepository.findByBitrix24PartnerNumber', [
+            'bitrix24PartnerNumber' => $bitrix24PartnerNumber
         ]);
 
         foreach ($this->items as $item) {
-            if ($item->getBitrix24PartnerId() === $bitrix24PartnerId) {
-                $this->logger->debug('b24PartnerRepository.findByBitrix24PartnerId.found', [
+            if ($item->getBitrix24PartnerNumber() === $bitrix24PartnerNumber) {
+                $this->logger->debug('b24PartnerRepository.findByBitrix24PartnerNumber.found', [
                     'id' => $item->getId()->toRfc4122()
                 ]);
                 return $item;
@@ -117,15 +117,15 @@ class InMemoryBitrix24PartnerRepositoryImplementation implements Bitrix24Partner
     {
         $this->logger->debug('b24PartnerRepository.save', [
             'id' => $bitrix24Partner->getId()->toRfc4122(),
-            'bitrix24PartnerId' => $bitrix24Partner->getBitrix24PartnerId()
+            'bitrix24PartnerNumber' => $bitrix24Partner->getBitrix24PartnerNumber()
         ]);
 
-        $existsPartner = $this->findByBitrix24PartnerId($bitrix24Partner->getBitrix24PartnerId());
+        $existsPartner = $this->findByBitrix24PartnerNumber($bitrix24Partner->getBitrix24PartnerNumber());
         if ($existsPartner instanceof Bitrix24PartnerInterface && $existsPartner->getId() !== $bitrix24Partner->getId()) {
             throw new InvalidArgumentException(sprintf(
-                'bitrix24 partner «%s» with bitrix24 partner id is «%s» already exists with id «%s» in status «%s»',
+                'bitrix24 partner «%s» with bitrix24 partner number is «%s» already exists with id «%s» in status «%s»',
                 $existsPartner->getTitle(),
-                $bitrix24Partner->getBitrix24PartnerId(),
+                $bitrix24Partner->getBitrix24PartnerNumber(),
                 $existsPartner->getId(),
                 $existsPartner->getStatus()->name
             ));

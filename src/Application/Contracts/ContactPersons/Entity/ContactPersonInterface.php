@@ -143,5 +143,10 @@ interface ContactPersonInterface
      */
     public function setBitrix24PartnerId(?Uuid $uuid): void;
 
+    /**
+     * @return bool true if contact person is a partner employee (has bitrix24 partner id set)
+     */
+    public function isPartner(): bool;
+
     public function getUserAgentInfo(): UserAgentInfo;
 }
