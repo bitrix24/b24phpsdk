@@ -16,6 +16,7 @@ class BlockTest extends TestCase
 {
     private Block $blockService;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->blockService = Factory::getServiceBuilder()->getLandingScope()->block();
@@ -35,33 +36,33 @@ class BlockTest extends TestCase
             $sites = $siteService->getList();
             $siteItems = $sites->getSites();
             
-            foreach ($siteItems as $site) {
+            foreach ($siteItems as $siteItem) {
                 // Check if it's a test site
-                if (isset($site->TITLE) && str_starts_with($site->TITLE, 'Test Site for ')) {
+                if ($siteItem->TITLE !== null && str_starts_with($siteItem->TITLE, 'Test Site for ')) {
                     try {
                         // First, delete all pages in this site
                         $pages = $pageService->getList(
                             select: ['ID'],
-                            filter: ['SITE_ID' => $site->ID]
+                            filter: ['SITE_ID' => $siteItem->ID]
                         );
                         $pageItems = $pages->getPages();
                         
-                        foreach ($pageItems as $page) {
+                        foreach ($pageItems as $pageItem) {
                             try {
-                                $pageService->delete((int)$page->ID);
-                            } catch (\Exception $e) {
+                                $pageService->delete((int)$pageItem->ID);
+                            } catch (\Exception) {
                                 // Ignore page deletion errors - continue with site deletion
                             }
                         }
                         
                         // Then delete the site
-                        $siteService->delete((int)$site->ID);
-                    } catch (\Exception $e) {
+                        $siteService->delete((int)$siteItem->ID);
+                    } catch (\Exception) {
                         // Log error but continue cleanup
                     }
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // Don't fail tests if cleanup fails
         }
     }
@@ -73,149 +74,116 @@ class BlockTest extends TestCase
     {
         $siteService = Factory::getServiceBuilder()->getLandingScope()->site();
         $pageService = Factory::getServiceBuilder()->getLandingScope()->page();
+        // Create site first
+        $timestamp = time();
+        $siteId = $siteService->add([
+            'TITLE' => 'Test Site for Block ' . $timestamp,
+            'CODE' => 'testsiteblock' . $timestamp,
+            'TYPE' => 'PAGE'
+        ])->getId();
+        // Try direct templates first with known working ones
+        $workingTemplates = ['empty', 'news-detail', 'search-result'];
+        $pageId = null;
+        $lastException = null;
+        foreach ($workingTemplates as $workingTemplate) {
+            try {
+                $result = $pageService->addByTemplate($siteId, $workingTemplate, [
+                    'TITLE' => 'Test Page with Blocks ' . $timestamp,
+                    'CODE' => 'testpage' . $timestamp
+                ]);
 
-        try {
-            // Create site first
-            $timestamp = time();
-            $siteId = $siteService->add([
-                'TITLE' => 'Test Site for Block ' . $timestamp,
-                'CODE' => 'testsiteblock' . $timestamp,
-                'TYPE' => 'PAGE'
-            ])->getId();
-
-            // Try direct templates first with known working ones
-            $workingTemplates = ['empty', 'news-detail', 'search-result'];
-            $pageId = null;
-            $lastException = null;
-
-            foreach ($workingTemplates as $templateCode) {
-                try {
-                    $result = $pageService->addByTemplate($siteId, $templateCode, [
-                        'TITLE' => 'Test Page with Blocks ' . $timestamp,
-                        'CODE' => 'testpage' . $timestamp
-                    ]);
-                    
-                    if ($result->getId()) {
-                        $pageId = $result->getId();
-                        break;
-                    }
-                } catch (\Exception $e) {
-                    $lastException = $e;
-                    continue;
+                if ($result->getId() !== 0) {
+                    $pageId = $result->getId();
+                    break;
                 }
+            } catch (\Exception $e) {
+                $lastException = $e;
+                continue;
             }
+        }
 
-            if ($pageId === null) {
-                // If all direct templates failed, try simple page creation as last resort
+        if ($pageId === null) {
+            // If all direct templates failed, try simple page creation as last resort
+            try {
+                $pageId = $pageService->add([
+                    'SITE_ID' => $siteId,
+                    'TITLE' => 'Test Page with Blocks ' . $timestamp,
+                    'CODE' => 'testpage' . $timestamp
+                ])->getId();
+            } catch (\Exception) {
+                // If page creation also failed, cleanup site
                 try {
-                    $pageId = $pageService->add([
-                        'SITE_ID' => $siteId,
-                        'TITLE' => 'Test Page with Blocks ' . $timestamp,
-                        'CODE' => 'testpage' . $timestamp
-                    ])->getId();
-                } catch (\Exception $e) {
-                    // If page creation also failed, cleanup site
+                    $siteService->delete($siteId);
+                } catch (\Exception) {
+                    // Ignore cleanup errors
+                }
+
+                return 0;
+            }
+        }
+
+        if ($pageId > 0) {
+
+            // Try to add a simple block to ensure page has blocks for testing
+            try {
+                $blockService = Factory::getServiceBuilder()->getLandingScope()->block();
+
+                // Try different sections to find available blocks
+                $sections = ['text', 'cover', 'image', 'video', 'gallery', 'separator', 'feedback', 'menu'];
+                $blockAdded = false;
+
+                foreach ($sections as $section) {
                     try {
-                        $siteService->delete($siteId);
-                    } catch (\Exception) {
-                        // Ignore cleanup errors
-                    }
-                    return null;
-                }
-            }
+                        $repository = $blockService->getRepository($section);
+                        $repositoryData = $repository->getRepository();
+                        $blocks = $repositoryData->items;
 
-            if ($pageId !== null && $pageId > 0) {
-                
-                // Try to add a simple block to ensure page has blocks for testing
-                try {
-                    $blockService = Factory::getServiceBuilder()->getLandingScope()->block();
-                    
-                    // Try different sections to find available blocks
-                    $sections = ['text', 'cover', 'image', 'video', 'gallery', 'separator', 'feedback', 'menu'];
-                    $blockAdded = false;
-                    
-                    foreach ($sections as $section) {
-                        try {
-                            $repository = $blockService->getRepository($section);
-                            $repositoryData = $repository->getRepository();
-                            $blocks = $repositoryData->items;
-                            
-                            if (!empty($blocks)) {
-                                $firstBlockKey = array_key_first($blocks);
-                                $firstBlock = $blocks[$firstBlockKey];
-                                
-                                // Add block to page using Page service
-                                $blockResult = $pageService->addBlock($pageId, [
-                                    'CODE' => $firstBlockKey,
-                                    'ACTIVE' => 'Y'
-                                ]);
-                                
-                                if ($blockResult->getId() > 0) {
-                                    $blockAdded = true;
-                                    break;
-                                }
-                            }
-                        } catch (\Exception $e) {
-                            continue;
-                        }
-                    }
-                    
-                    if (!$blockAdded) {
-                        // If repository blocks didn't work, try adding a simple hardcoded block
-                        try {
+                        if (!empty($blocks)) {
+                            $firstBlockKey = array_key_first($blocks);
+                            $firstBlock = $blocks[$firstBlockKey];
+
+                            // Add block to page using Page service
                             $blockResult = $pageService->addBlock($pageId, [
-                                'CODE' => '01.big_with_text',
+                                'CODE' => $firstBlockKey,
                                 'ACTIVE' => 'Y'
                             ]);
-                            
+
                             if ($blockResult->getId() > 0) {
                                 $blockAdded = true;
+                                break;
                             }
-                        } catch (\Exception $e) {
                         }
+                    } catch (\Exception) {
+                        continue;
                     }
-                    
-                    if (!$blockAdded) {
-                        // No blocks could be added from any source
-                    }
-                } catch (\Exception $e) {
-                    // Continue anyway - maybe the page already has blocks
                 }
-                
-                return $pageId;
+
+                if (!$blockAdded) {
+                    // If repository blocks didn't work, try adding a simple hardcoded block
+                    try {
+                        $blockResult = $pageService->addBlock($pageId, [
+                            'CODE' => '01.big_with_text',
+                            'ACTIVE' => 'Y'
+                        ]);
+
+                        if ($blockResult->getId() > 0) {
+                            $blockAdded = true;
+                        }
+                    } catch (\Exception) {
+                    }
+                }
+
+                if (!$blockAdded) {
+                    // No blocks could be added from any source
+                }
+            } catch (\Exception) {
+                // Continue anyway - maybe the page already has blocks
             }
 
-            throw new \Exception('Failed to create test page');
-        } catch (\Exception $e) {
-            throw $e;
+            return $pageId;
         }
-    }
-    
-    /**
-     * Publish and verify page exists
-     */
-    private function publishAndVerifyPage(int $pageId): bool
-    {
-        try {
-            $pageService = Factory::getServiceBuilder()->getLandingScope()->page();
-            
-            // Try to publish the page
-            $pageService->publish($pageId);
-            
-            // Verify page exists by trying to get its list
-            $pages = $pageService->getList(
-                select: ['ID', 'ACTIVE'],
-                filter: ['ID' => $pageId]
-            );
-            
-            $pageItems = $pages->getPages();
-            if (empty($pageItems)) {
-                return false;
-            }
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
+
+        throw new \Exception('Failed to create test page');
     }
 
     /**
@@ -227,14 +195,15 @@ class BlockTest extends TestCase
         $siteService = Factory::getServiceBuilder()->getLandingScope()->site();
 
         // Get page info to get site ID
-        $pages = $pageService->getList(
+        $pagesResult = $pageService->getList(
             select: ['SITE_ID'],
             filter: ['ID' => $pageId]
         );
-        $pageItems = $pages->getPages();
-        if (empty($pageItems)) {
+        $pageItems = $pagesResult->getPages();
+        if ($pageItems === []) {
             return; // Page not found, nothing to clean
         }
+
         $siteId = (int)$pageItems[0]->SITE_ID; // Convert to int
 
         // Delete page first
@@ -254,13 +223,13 @@ class BlockTest extends TestCase
             $this->assertIsArray($blocks->getBlocks());
             
             $blockList = $blocks->getBlocks();
-            if (empty($blockList)) {
+            if ($blockList === []) {
                 $this->markTestSkipped('No blocks found on page for testing');
             }
             
             $this->cleanupTestData($pageId);
-        } catch (\Exception $e) {
-            $this->markTestSkipped('Could not create test page: ' . $e->getMessage());
+        } catch (\Exception $exception) {
+            $this->markTestSkipped('Could not create test page: ' . $exception->getMessage());
         }
     }
 
@@ -270,10 +239,10 @@ class BlockTest extends TestCase
         
             $pageId = $this->createTestPageWithBlocks();
             
-            $blocks = $this->blockService->list($pageId, ['edit_mode' => 1]);
+            $blocksResult = $this->blockService->list($pageId, ['edit_mode' => 1]);
             
-            if (count($blocks->getBlocks()) > 0) {
-                $firstBlock = $blocks->getBlocks()[0];
+            if ($blocksResult->getBlocks() !== []) {
+                $firstBlock = $blocksResult->getBlocks()[0];
                 
                 // Wait a moment to ensure block is fully created
                 sleep(1);
@@ -297,7 +266,7 @@ class BlockTest extends TestCase
             $pageId = $this->createTestPageWithBlocks();
             $blocks = $this->blockService->list($pageId, ['edit_mode' => 1]);
             
-            if (count($blocks->getBlocks()) > 0) {
+            if ($blocks->getBlocks() !== []) {
                 $firstBlock = $blocks->getBlocks()[0];
                 $content = $this->blockService->getContent($pageId, (int)$firstBlock->id);
                 $this->assertNotNull($content);
@@ -306,8 +275,8 @@ class BlockTest extends TestCase
             }
             
             $this->cleanupTestData($pageId);
-        } catch (\Exception $e) {
-            $this->markTestSkipped('Could not create test page: ' . $e->getMessage());
+        } catch (\Exception $exception) {
+            $this->markTestSkipped('Could not create test page: ' . $exception->getMessage());
         }
     }
 
@@ -315,10 +284,10 @@ class BlockTest extends TestCase
     public function testGetManifest(): void
     {
         $pageId = $this->createTestPageWithBlocks();
-        $blocks = $this->blockService->list($pageId, ['edit_mode' => 1]);
+        $blocksResult = $this->blockService->list($pageId, ['edit_mode' => 1]);
         
-        if (count($blocks->getBlocks()) > 0) {
-            $firstBlock = $blocks->getBlocks()[0];
+        if ($blocksResult->getBlocks() !== []) {
+            $firstBlock = $blocksResult->getBlocks()[0];
             // Wait a moment to ensure block is fully created
             sleep(1);
             $manifest = $this->blockService->getManifest($pageId, (int)$firstBlock->id, ['edit_mode' => 1]);
@@ -331,16 +300,16 @@ class BlockTest extends TestCase
     #[TestDox('Test getRepository method can retrieve block repository')]
     public function testGetRepository(): void
     {
-        $repository = $this->blockService->getRepository('about');
+        $repositoryResult = $this->blockService->getRepository('about');
         
-        $this->assertNotNull($repository);
-        $repositoryData = $repository->getRepository();
-        $this->assertNotNull($repositoryData);
+        $this->assertNotNull($repositoryResult);
+        $repositoryItemResult = $repositoryResult->getRepository();
+        $this->assertNotNull($repositoryItemResult);
         
         // Check that repository contains expected sections
-        $this->assertNotNull($repositoryData->name);
-        $this->assertIsArray($repositoryData->items);
-        $this->assertEquals('About', $repositoryData->name);
+        $this->assertNotNull($repositoryItemResult->name);
+        $this->assertIsArray($repositoryItemResult->items);
+        $this->assertEquals('About', $repositoryItemResult->name);
     }
 
     #[TestDox('Test getManifestFile method can retrieve block manifest file')]
@@ -350,15 +319,15 @@ class BlockTest extends TestCase
             $pageId = $this->createTestPageWithBlocks();
             $blocks = $this->blockService->list($pageId, ['edit_mode' => 1]);
             
-            if (count($blocks->getBlocks()) > 0) {
+            if ($blocks->getBlocks() !== []) {
                 $firstBlock = $blocks->getBlocks()[0];
                 $manifestFile = $this->blockService->getManifestFile($firstBlock->code);
                 $this->assertNotNull($manifestFile);
             }
             
             $this->cleanupTestData($pageId);
-        } catch (\Exception $e) {
-            $this->markTestSkipped('Could not create test page: ' . $e->getMessage());
+        } catch (\Exception $exception) {
+            $this->markTestSkipped('Could not create test page: ' . $exception->getMessage());
         }
     }
 
@@ -369,8 +338,8 @@ class BlockTest extends TestCase
             // Use a known block from repository
             $content = $this->blockService->getContentFromRepository('02.three_cols_big_1');
             $this->assertNotNull($content);
-        } catch (\Exception $e) {
-            $this->markTestSkipped('Content from repository method not available: ' . $e->getMessage());
+        } catch (\Exception $exception) {
+            $this->markTestSkipped('Content from repository method not available: ' . $exception->getMessage());
         }
     }
 
@@ -381,7 +350,7 @@ class BlockTest extends TestCase
             $pageId = $this->createTestPageWithBlocks();
             $blocks = $this->blockService->list($pageId, ['edit_mode' => 1]);
             
-            if (count($blocks->getBlocks()) > 0) {
+            if ($blocks->getBlocks() !== []) {
                 $firstBlock = $blocks->getBlocks()[0];
                 
                 // Get block manifest to find available nodes
@@ -391,18 +360,13 @@ class BlockTest extends TestCase
                 
                 // Find first available node from manifest
                 $nodeSelector = null;
-                if (isset($manifestData->nodes) && is_array($manifestData->nodes) && !empty($manifestData->nodes)) {
+                if ($manifestData->nodes !== null && is_array($manifestData->nodes) && $manifestData->nodes !== []) {
                     $firstNode = reset($manifestData->nodes);
                     $nodeSelector = $firstNode->selector ?? null;
                 }
                 
                 // Use found selector or fallback to common ones
-                if ($nodeSelector) {
-                    $updateData = [$nodeSelector => 'Test content'];
-                } else {
-                    // Try common text node selectors
-                    $updateData = ['.landing-block-node-title' => 'Test title'];
-                }
+                $updateData = $nodeSelector ? [$nodeSelector => 'Test content'] : ['.landing-block-node-title' => 'Test title'];
                 
                 $result = $this->blockService->updateNodes($pageId, (int)$firstBlock->id, $updateData);
                 $this->assertNotNull($result);
@@ -411,8 +375,8 @@ class BlockTest extends TestCase
             }
             
             $this->cleanupTestData($pageId);
-        } catch (\Exception $e) {
-            $this->markTestSkipped('Could not create test page: ' . $e->getMessage());
+        } catch (\Exception $exception) {
+            $this->markTestSkipped('Could not create test page: ' . $exception->getMessage());
         }
     }
 
@@ -423,7 +387,7 @@ class BlockTest extends TestCase
             $pageId = $this->createTestPageWithBlocks();
             $blocks = $this->blockService->list($pageId, ['edit_mode' => 1]);
             
-            if (count($blocks->getBlocks()) > 0) {
+            if ($blocks->getBlocks() !== []) {
                 $firstBlock = $blocks->getBlocks()[0];
                 try {
                     $result = $this->blockService->updateAttrs($pageId, (int)$firstBlock->id, []);
@@ -436,8 +400,8 @@ class BlockTest extends TestCase
             }
             
             $this->cleanupTestData($pageId);
-        } catch (\Exception $e) {
-            $this->markTestSkipped('Could not create test page: ' . $e->getMessage());
+        } catch (\Exception $exception) {
+            $this->markTestSkipped('Could not create test page: ' . $exception->getMessage());
         }
     }
 
@@ -448,7 +412,7 @@ class BlockTest extends TestCase
             $pageId = $this->createTestPageWithBlocks();
             $blocks = $this->blockService->list($pageId, ['edit_mode' => 1]);
             
-            if (count($blocks->getBlocks()) > 0) {
+            if ($blocks->getBlocks() !== []) {
                 $firstBlock = $blocks->getBlocks()[0];
                 try {
                     $result = $this->blockService->updateStyles($pageId, (int)$firstBlock->id, []);
@@ -461,8 +425,8 @@ class BlockTest extends TestCase
             }
             
             $this->cleanupTestData($pageId);
-        } catch (\Exception $e) {
-            $this->markTestSkipped('Could not create test page: ' . $e->getMessage());
+        } catch (\Exception $exception) {
+            $this->markTestSkipped('Could not create test page: ' . $exception->getMessage());
         }
     }
 
@@ -473,7 +437,7 @@ class BlockTest extends TestCase
             $pageId = $this->createTestPageWithBlocks();
             $blocks = $this->blockService->list($pageId, ['edit_mode' => 1]);
             
-            if (count($blocks->getBlocks()) > 0) {
+            if ($blocks->getBlocks() !== []) {
                 $firstBlock = $blocks->getBlocks()[0];
                 try {
                     $result = $this->blockService->updateContent($pageId, (int)$firstBlock->id, 'Updated content');
@@ -486,8 +450,8 @@ class BlockTest extends TestCase
             }
             
             $this->cleanupTestData($pageId);
-        } catch (\Exception $e) {
-            $this->markTestSkipped('Could not create test page: ' . $e->getMessage());
+        } catch (\Exception $exception) {
+            $this->markTestSkipped('Could not create test page: ' . $exception->getMessage());
         }
     }
 
@@ -498,7 +462,7 @@ class BlockTest extends TestCase
             $pageId = $this->createTestPageWithBlocks();
             $blocks = $this->blockService->list($pageId, ['edit_mode' => 1]);
             
-            if (count($blocks->getBlocks()) > 0) {
+            if ($blocks->getBlocks() !== []) {
                 $firstBlock = $blocks->getBlocks()[0];
                 try {
                     $result = $this->blockService->updateCards($pageId, (int)$firstBlock->id, ['.landing-block-card@0' => ['title' => 'New Title']]);
@@ -511,8 +475,8 @@ class BlockTest extends TestCase
             }
             
             $this->cleanupTestData($pageId);
-        } catch (\Exception $e) {
-            $this->markTestSkipped('Could not create test page: ' . $e->getMessage());
+        } catch (\Exception $exception) {
+            $this->markTestSkipped('Could not create test page: ' . $exception->getMessage());
         }
     }
 
@@ -523,7 +487,7 @@ class BlockTest extends TestCase
             $pageId = $this->createTestPageWithBlocks();
             $blocks = $this->blockService->list($pageId, ['edit_mode' => 1]);
             
-            if (count($blocks->getBlocks()) > 0) {
+            if ($blocks->getBlocks() !== []) {
                 $firstBlock = $blocks->getBlocks()[0];
                 try {
                     $result = $this->blockService->cloneCard($pageId, (int)$firstBlock->id, '.landing-block-card@0');
@@ -536,8 +500,8 @@ class BlockTest extends TestCase
             }
             
             $this->cleanupTestData($pageId);
-        } catch (\Exception $e) {
-            $this->markTestSkipped('Could not create test page: ' . $e->getMessage());
+        } catch (\Exception $exception) {
+            $this->markTestSkipped('Could not create test page: ' . $exception->getMessage());
         }
     }
 
@@ -548,7 +512,7 @@ class BlockTest extends TestCase
             $pageId = $this->createTestPageWithBlocks();
             $blocks = $this->blockService->list($pageId, ['edit_mode' => 1]);
             
-            if (count($blocks->getBlocks()) > 0) {
+            if ($blocks->getBlocks() !== []) {
                 $firstBlock = $blocks->getBlocks()[0];
                 try {
                     $result = $this->blockService->addCard($pageId, (int)$firstBlock->id, '.landing-block-card', 'test content');
@@ -562,8 +526,8 @@ class BlockTest extends TestCase
             }
             
             $this->cleanupTestData($pageId);
-        } catch (\Exception $e) {
-            $this->markTestSkipped('Could not create test page: ' . $e->getMessage());
+        } catch (\Exception $exception) {
+            $this->markTestSkipped('Could not create test page: ' . $exception->getMessage());
         }
     }
 
@@ -574,7 +538,7 @@ class BlockTest extends TestCase
             $pageId = $this->createTestPageWithBlocks();
             $blocks = $this->blockService->list($pageId, ['edit_mode' => 1]);
             
-            if (count($blocks->getBlocks()) > 0) {
+            if ($blocks->getBlocks() !== []) {
                 $firstBlock = $blocks->getBlocks()[0];
                 try {
                     $result = $this->blockService->removeCard($pageId, (int)$firstBlock->id, '.landing-block-card@0');
@@ -587,8 +551,8 @@ class BlockTest extends TestCase
             }
             
             $this->cleanupTestData($pageId);
-        } catch (\Exception $e) {
-            $this->markTestSkipped('Could not create test page: ' . $e->getMessage());
+        } catch (\Exception $exception) {
+            $this->markTestSkipped('Could not create test page: ' . $exception->getMessage());
         }
     }
 
@@ -599,7 +563,7 @@ class BlockTest extends TestCase
             $pageId = $this->createTestPageWithBlocks();
             $blocks = $this->blockService->list($pageId, ['edit_mode' => 1]);
             
-            if (count($blocks->getBlocks()) > 0) {
+            if ($blocks->getBlocks() !== []) {
                 $firstBlock = $blocks->getBlocks()[0];
                 // Create a proper file array format for upload
                 $fileData = [
@@ -613,8 +577,8 @@ class BlockTest extends TestCase
             }
             
             $this->cleanupTestData($pageId);
-        } catch (\Exception $e) {
-            $this->markTestSkipped('Could not create test page: ' . $e->getMessage());
+        } catch (\Exception $exception) {
+            $this->markTestSkipped('Could not create test page: ' . $exception->getMessage());
         }
     }
 
@@ -625,7 +589,7 @@ class BlockTest extends TestCase
             $pageId = $this->createTestPageWithBlocks();
             $blocks = $this->blockService->list($pageId, ['edit_mode' => 1]);
             
-            if (count($blocks->getBlocks()) > 0) {
+            if ($blocks->getBlocks() !== []) {
                 $firstBlock = $blocks->getBlocks()[0];
                 try {
                     $result = $this->blockService->changeAnchor($pageId, (int)$firstBlock->id, 'new-anchor');
@@ -638,8 +602,8 @@ class BlockTest extends TestCase
             }
             
             $this->cleanupTestData($pageId);
-        } catch (\Exception $e) {
-            $this->markTestSkipped('Could not create test page: ' . $e->getMessage());
+        } catch (\Exception $exception) {
+            $this->markTestSkipped('Could not create test page: ' . $exception->getMessage());
         }
     }
 
@@ -650,7 +614,7 @@ class BlockTest extends TestCase
             $pageId = $this->createTestPageWithBlocks();
             $blocks = $this->blockService->list($pageId, ['edit_mode' => 1]);
             
-            if (count($blocks->getBlocks()) > 0) {
+            if ($blocks->getBlocks() !== []) {
                 $firstBlock = $blocks->getBlocks()[0];
                 try {
                     $result = $this->blockService->changeNodeName($pageId, (int)$firstBlock->id, ['.landing-block-node-text@0' => 'h2']);
@@ -663,8 +627,8 @@ class BlockTest extends TestCase
             }
             
             $this->cleanupTestData($pageId);
-        } catch (\Exception $e) {
-            $this->markTestSkipped('Could not create test page: ' . $e->getMessage());
+        } catch (\Exception $exception) {
+            $this->markTestSkipped('Could not create test page: ' . $exception->getMessage());
         }
     }
 }
