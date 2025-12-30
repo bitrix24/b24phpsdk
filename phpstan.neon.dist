@@ -9,6 +9,7 @@ parameters:
     - tests/Integration/Services/IM
     - tests/Integration/Services/Catalog
     - tests/Integration/Services/IMOpenLines
+    - tests/Integration/Services/SonetGroup
     - tests/Integration/Services/Main
     - tests/Integration/Services/Paysystem
     - tests/Integration/Services/Placement
