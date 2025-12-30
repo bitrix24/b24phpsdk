@@ -1,16 +1,4 @@
 {
 	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "Run integration tests for Sale scope",
-			"type": "shell",
-			"command": "make test-integration-scope-sale",
-			"args": [],
-			"isBackground": false,
-			"problemMatcher": [
-				"$gcc"
-			],
-			"group": "build"
-		}
-	]
+	"tasks": []
 }
