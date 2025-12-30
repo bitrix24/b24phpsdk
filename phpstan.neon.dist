@@ -9,6 +9,7 @@ parameters:
     - tests/Integration/Services/IM
     - tests/Integration/Services/Catalog
     - tests/Integration/Services/IMOpenLines
+    - tests/Integration/Services/SonetGroup
     - tests/Integration/Services/Main
     - tests/Integration/Services/Paysystem
     - tests/Integration/Services/Placement
@@ -30,6 +31,7 @@ parameters:
     - tests/Integration/Services/CRM/Requisites
     - tests/Integration/Services/Task
     - tests/Integration/Services/Sale
+    - tests/Integration/Services/Landing
     - tests/Integration/Services/Disk
     - tests/Integration/Services/Calendar
     - tests/Integration/Services/CRM/Documentgenerator/Numerator

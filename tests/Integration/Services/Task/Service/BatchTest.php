@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Task\Service\Task;
 use Bitrix24\SDK\Services\User\Service\User;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,11 +32,12 @@ class BatchTest extends TestCase
     
     protected int $userId = 0;
     
+    #[\Override]
     protected function setUp(): void
     {
-        $this->taskService = Fabric::getServiceBuilder()->getTaskScope()->task();
+        $this->taskService = Factory::getServiceBuilder()->getTaskScope()->task();
         if (intval($this->userId) == 0) {
-            $this->userId = Fabric::getServiceBuilder()->getUserScope()->user()->current()->user()->ID;
+            $this->userId = Factory::getServiceBuilder()->getUserScope()->user()->current()->user()->ID;
         }
     }
 

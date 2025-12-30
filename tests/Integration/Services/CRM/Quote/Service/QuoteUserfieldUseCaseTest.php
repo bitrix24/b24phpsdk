@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Quote\Service\Quote;
 use Bitrix24\SDK\Services\CRM\Quote\Service\QuoteUserfield;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Quote\Service\QuoteUserfield::class)]
@@ -35,10 +35,11 @@ class QuoteUserfieldUseCaseTest extends TestCase
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\Override]
     protected function setUp(): void
     {
-        $this->quoteService = Fabric::getServiceBuilder()->getCRMScope()->quote();
-        $this->quoteUserfieldService = Fabric::getServiceBuilder()->getCRMScope()->quoteUserfield();
+        $this->quoteService = Factory::getServiceBuilder()->getCRMScope()->quote();
+        $this->quoteUserfieldService = Factory::getServiceBuilder()->getCRMScope()->quoteUserfield();
 
         $this->quoteUserfieldId = $this->quoteUserfieldService->add(
             [
@@ -60,6 +61,7 @@ class QuoteUserfieldUseCaseTest extends TestCase
         )->getId();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->quoteUserfieldService->delete($this->quoteUserfieldId);

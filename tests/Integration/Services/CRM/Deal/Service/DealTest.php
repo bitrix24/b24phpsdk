@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Deal\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Deal\Service\Deal;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
@@ -123,8 +123,9 @@ class DealTest extends TestCase
         $this->assertEquals($before + $newDealsCount, $after);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->dealService = Fabric::getServiceBuilder()->getCRMScope()->deal();
+        $this->dealService = Factory::getServiceBuilder()->getCRMScope()->deal();
     }
 }

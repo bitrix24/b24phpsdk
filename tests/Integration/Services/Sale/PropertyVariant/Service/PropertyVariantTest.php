@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\Sale\PropertyVariant\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Sale\PropertyVariant\Service\PropertyVariant;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -48,9 +48,10 @@ class PropertyVariantTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    #[\Override]
     protected function setUp(): void
     {
-        $this->propertyVariantService = Fabric::getServiceBuilder()->getSaleScope()->propertyVariant();
+        $this->propertyVariantService = Factory::getServiceBuilder()->getSaleScope()->propertyVariant();
         $this->personTypeId = $this->getPersonTypeId();
         $this->propertyGroupId = $this->getPropertyGroupId($this->personTypeId);
         $this->enumPropertyId = $this->createEnumProperty($this->personTypeId, $this->propertyGroupId);
@@ -62,6 +63,7 @@ class PropertyVariantTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created resources in reverse order of creation
@@ -83,7 +85,7 @@ class PropertyVariantTest extends TestCase
      */
     protected function getPersonTypeId(): int
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         return (int)$core->call('sale.persontype.add', [
             'fields' => [
                 'name' => 'Test Person Type for PropertyVariant',
@@ -97,7 +99,7 @@ class PropertyVariantTest extends TestCase
      */
     protected function deletePersonType(int $id): void
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         $core->call('sale.persontype.delete', [
             'id' => $id
         ]);
@@ -108,7 +110,7 @@ class PropertyVariantTest extends TestCase
      */
     protected function getPropertyGroupId(int $personTypeId): int
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         return (int)$core->call('sale.propertygroup.add', [
             'fields' => [
                 'personTypeId' => $personTypeId,
@@ -123,7 +125,7 @@ class PropertyVariantTest extends TestCase
      */
     protected function deletePropertyGroup(int $id): void
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         $core->call('sale.propertygroup.delete', [
             'id' => $id
         ]);
@@ -134,7 +136,7 @@ class PropertyVariantTest extends TestCase
      */
     protected function createEnumProperty(int $personTypeId, int $propertyGroupId): int
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         return (int)$core->call('sale.property.add', [
             'fields' => [
                 'personTypeId' => $personTypeId,
@@ -153,7 +155,7 @@ class PropertyVariantTest extends TestCase
      */
     protected function deleteProperty(int $id): void
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         $core->call('sale.property.delete', [
             'id' => $id
         ]);

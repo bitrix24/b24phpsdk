@@ -22,7 +22,7 @@ use Bitrix24\SDK\Services\CRM\Timeline\Comment\Service\Comment;
 use Bitrix24\SDK\Services\CRM\Company\Service\Company;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\CompanyBuilder;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -52,15 +52,17 @@ class BindingsTest extends TestCase
     
     protected int $companyTwoId = 0;
     
+    #[\Override]
     protected function setUp(): void
     {
-        $this->bindingService = Fabric::getServiceBuilder()->getCRMScope()->timelineBindings();
-        $this->commentService = Fabric::getServiceBuilder()->getCRMScope()->timelineComment();
-        $this->companyService = Fabric::getServiceBuilder()->getCRMScope()->company();
+        $this->bindingService = Factory::getServiceBuilder()->getCRMScope()->timelineBindings();
+        $this->commentService = Factory::getServiceBuilder()->getCRMScope()->timelineComment();
+        $this->companyService = Factory::getServiceBuilder()->getCRMScope()->company();
         $this->companyOneId = $this->companyService->add((new CompanyBuilder())->build())->getId();
         $this->companyTwoId = $this->companyService->add((new CompanyBuilder())->build())->getId();
     }
     
+    #[\Override]
     protected function tearDown(): void
     {
         $this->companyService->delete($this->companyOneId);

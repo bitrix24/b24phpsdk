@@ -25,6 +25,7 @@ class UpdatedCatalogProductResult extends UpdatedItemResult
     /**
      * Check if catalog product update operation was successful
      */
+    #[\Override]
     public function isSuccess(): bool
     {
         return $this->getCoreResponse()->getResponseData()->getResult()['basketItem'] !== null;

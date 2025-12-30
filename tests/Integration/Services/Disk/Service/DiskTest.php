@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\Disk\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Disk\Service\Disk;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -33,9 +33,10 @@ class DiskTest extends TestCase
 {
     protected Disk $diskService;
     
+    #[\Override]
     protected function setUp(): void
     {
-        $this->diskService = Fabric::getServiceBuilder(true)->getDiskScope()->disk();
+        $this->diskService = Factory::getServiceBuilder(true)->getDiskScope()->disk();
     }
 
     /**
@@ -70,7 +71,7 @@ class DiskTest extends TestCase
         
         try {
             // Get file versions to find a version ID using SDK service
-            $fileService = Fabric::getServiceBuilder(true)->getDiskScope()->file();
+            $fileService = Factory::getServiceBuilder(true)->getDiskScope()->file();
             $versionsResult = $fileService->getVersions($fileId);
             $versions = $versionsResult->getVersions();
             
@@ -100,7 +101,7 @@ class DiskTest extends TestCase
             $fileId = $this->createTestFile();
             
             // Step 2: Create task with attached file
-            $taskService = Fabric::getServiceBuilder(true)->getTaskScope()->task();
+            $taskService = Factory::getServiceBuilder(true)->getTaskScope()->task();
             $taskResult = $taskService->add([
                 'TITLE' => 'Test Task with Attached File ' . time(),
                 'RESPONSIBLE_ID' => 1, // Assuming user ID 1 exists
@@ -129,7 +130,7 @@ class DiskTest extends TestCase
             // Clean up: delete task first, then file
             if ($taskId !== null) {
                 try {
-                    $taskService = Fabric::getServiceBuilder(true)->getTaskScope()->task();
+                    $taskService = Factory::getServiceBuilder(true)->getTaskScope()->task();
                     $taskService->delete($taskId);
                 } catch (BaseException) {
                     // Ignore cleanup errors
@@ -155,7 +156,7 @@ class DiskTest extends TestCase
             $rootFolderId = $this->getRootFolderId();
             
             // Use SDK folder service to upload file
-            $folderService = Fabric::getServiceBuilder(true)->getDiskScope()->folder();
+            $folderService = Factory::getServiceBuilder(true)->getDiskScope()->folder();
             $uploadResult = $folderService->uploadFile($rootFolderId, [
                 'NAME' => 'test_file_' . time() . '.txt'
             ], 'Test file content for version testing');
@@ -177,7 +178,7 @@ class DiskTest extends TestCase
     {
         try {
             // Use SDK file service to delete file
-            $fileService = Fabric::getServiceBuilder(true)->getDiskScope()->file();
+            $fileService = Factory::getServiceBuilder(true)->getDiskScope()->file();
             $fileService->delete($fileId);
         } catch (BaseException) {
             // Ignore cleanup errors
@@ -194,7 +195,7 @@ class DiskTest extends TestCase
     protected function getRootFolderId(): int
     {
         // Use SDK storage service to get user's personal storage
-        $storageService = Fabric::getServiceBuilder(true)->getDiskScope()->storage();
+        $storageService = Factory::getServiceBuilder(true)->getDiskScope()->storage();
         $storagesResult = $storageService->list(['ENTITY_TYPE' => 'user']);
         $storages = $storagesResult->storages();
         

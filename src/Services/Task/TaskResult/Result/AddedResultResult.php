@@ -27,6 +27,7 @@ class AddedResultResult extends AddedItemResult
     /**
      * @throws BaseException
      */
+    #[\Override]
     public function getId(): int
     {
         return (int)$this->getCoreResponse()->getResponseData()->getResult()['id'];

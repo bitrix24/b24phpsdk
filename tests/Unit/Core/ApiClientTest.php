@@ -20,6 +20,7 @@ use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\Endpoints;
 use Bitrix24\SDK\Core\Credentials\Scope;
+use Bitrix24\SDK\Core\EndpointUrlFormatter;
 use Bitrix24\SDK\Core\Exceptions\InvalidGrantException;
 use Bitrix24\SDK\Core\Exceptions\PortalDomainNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
@@ -72,6 +73,7 @@ class ApiClientTest extends TestCase
             $mockHttpClient,
             new DefaultRequestIdGenerator(),
             new ApiLevelErrorHandler(new NullLogger()),
+            new EndpointUrlFormatter(new DefaultRequestIdGenerator(), new NullLogger()),
             new NullLogger()
         );
 
@@ -225,6 +227,7 @@ class ApiClientTest extends TestCase
             $mockHttpClient,
             new DefaultRequestIdGenerator(),
             new ApiLevelErrorHandler(new NullLogger()),
+            new EndpointUrlFormatter(new DefaultRequestIdGenerator(), new NullLogger()),
             new NullLogger()
         );
 
@@ -235,6 +238,7 @@ class ApiClientTest extends TestCase
         $this->assertEquals($expiresTimestamp, $renewedAuthToken->authToken->expires);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

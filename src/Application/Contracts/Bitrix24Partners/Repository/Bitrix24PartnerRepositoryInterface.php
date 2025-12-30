@@ -44,11 +44,11 @@ interface Bitrix24PartnerRepositoryInterface
     public function getById(Uuid $uuid): Bitrix24PartnerInterface;
 
     /**
-     * Find bitrix24 partner with bitrix24 partner id
+     * Find bitrix24 partner with bitrix24 partner number
      *
-     * @param non-negative-int $bitrix24PartnerId
+     * @param non-negative-int $bitrix24PartnerNumber
      */
-    public function findByBitrix24PartnerId(int $bitrix24PartnerId): ?Bitrix24PartnerInterface;
+    public function findByBitrix24PartnerNumber(int $bitrix24PartnerNumber): ?Bitrix24PartnerInterface;
 
     /**
      * Find bitrix24 partner by title

@@ -51,16 +51,19 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
     {
     }
 
+    #[\Override]
     public function getId(): Uuid
     {
         return $this->id;
     }
 
+    #[\Override]
     public function getStatus(): ContactPersonStatus
     {
         return $this->contactPersonStatus;
     }
 
+    #[\Override]
     public function markAsActive(?string $comment): void
     {
         if (ContactPersonStatus::blocked !== $this->contactPersonStatus) {
@@ -74,6 +77,7 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function markAsDeleted(?string $comment): void
     {
         if (ContactPersonStatus::deleted === $this->contactPersonStatus) {
@@ -90,6 +94,7 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function markAsBlocked(?string $comment): void
     {
         if (ContactPersonStatus::deleted === $this->contactPersonStatus) {
@@ -101,11 +106,13 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function getFullName(): FullName
     {
         return new FullName($this->name, $this->surname, $this->patronymic);
     }
 
+    #[\Override]
     public function changeFullName(FullName $fullName): void
     {
         $this->name = $fullName->name;
@@ -114,16 +121,19 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function getCreatedAt(): CarbonImmutable
     {
         return $this->createdAt;
     }
 
+    #[\Override]
     public function getUpdatedAt(): CarbonImmutable
     {
         return $this->updatedAt;
     }
 
+    #[\Override]
     public function changeEmail(?string $email): void
     {
         $this->emailVerifiedAt = null;
@@ -131,27 +141,32 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
+    #[\Override]
     public function getEmailVerifiedAt(): ?CarbonImmutable
     {
         return $this->emailVerifiedAt;
     }
 
+    #[\Override]
     public function isEmailVerified(): bool
     {
         return $this->emailVerifiedAt instanceof \Carbon\CarbonImmutable;
     }
 
+    #[\Override]
     public function markEmailAsVerified(): void
     {
         $this->emailVerifiedAt = new CarbonImmutable();
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function changeMobilePhone(?PhoneNumber $phoneNumber): void
     {
         $this->mobilePhoneVerifiedAt = null;
@@ -159,59 +174,76 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function getMobilePhone(): ?PhoneNumber
     {
         return $this->mobilePhone;
     }
 
+    #[\Override]
     public function getMobilePhoneVerifiedAt(): ?CarbonImmutable
     {
         return $this->mobilePhoneVerifiedAt;
     }
 
+    #[\Override]
     public function isMobilePhoneVerified(): bool
     {
         return $this->mobilePhoneVerifiedAt instanceof \Carbon\CarbonImmutable;
     }
 
+    #[\Override]
     public function markMobilePhoneAsVerified(): void
     {
         $this->mobilePhoneVerifiedAt = new CarbonImmutable();
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function getComment(): ?string
     {
         return $this->comment;
     }
 
+    #[\Override]
     public function setExternalId(?string $externalId): void
     {
         $this->externalId = $externalId;
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function getExternalId(): ?string
     {
         return $this->externalId;
     }
 
+    #[\Override]
     public function getBitrix24UserId(): ?int
     {
         return $this->bitrix24UserId;
     }
 
+    #[\Override]
     public function getBitrix24PartnerId(): ?Uuid
     {
         return $this->bitrix24PartnerUuid;
     }
 
+    #[\Override]
     public function setBitrix24PartnerId(?Uuid $uuid): void
     {
         $this->bitrix24PartnerUuid = $uuid;
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
+    public function isPartner(): bool
+    {
+        return $this->bitrix24PartnerUuid instanceof Uuid;
+    }
+
+    #[\Override]
     public function getUserAgentInfo(): UserAgentInfo
     {
         return new UserAgentInfo(

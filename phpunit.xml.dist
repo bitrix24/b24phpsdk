@@ -25,6 +25,21 @@
         <testsuite name="integration_tests_scope_im_open_lines">
             <directory>./tests/Integration/Services/IMOpenLines/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_im_open_lines_connector">
+            <directory>./tests/Integration/Services/IMOpenLines/Connector/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_open_lines_config">
+            <directory>./tests/Integration/Services/IMOpenLines/Config/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_open_lines_crm_chat">
+            <directory>./tests/Integration/Services/IMOpenLines/CRMChat/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_open_lines_session">
+            <directory>./tests/Integration/Services/IMOpenLines/Session/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_open_lines_operator">
+            <directory>./tests/Integration/Services/IMOpenLines/Operator/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_placement">
             <directory>./tests/Integration/Services/Placement/</directory>
         </testsuite>
@@ -175,6 +190,24 @@
         <testsuite name="integration_tests_sale_order">
             <directory>./tests/Integration/Services/Sale/Order/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_landing">
+            <directory>./tests/Integration/Services/Landing/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_landing_site">
+            <directory>./tests/Integration/Services/Landing/Site/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_landing_page">
+            <directory>./tests/Integration/Services/Landing/Page/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_landing_syspage">
+            <directory>./tests/Integration/Services/Landing/SysPage/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_landing_repo">
+            <directory>./tests/Integration/Services/Landing/Repo/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_landing_demos">
+            <directory>./tests/Integration/Services/Landing/Demos/</directory>
+        </testsuite>
         <testsuite name="integration_tests_sale_cashbox_handler">
             <directory>./tests/Integration/Services/Sale/CashboxHandler/</directory>
         </testsuite>
@@ -205,8 +238,20 @@
         <testsuite name="integration_tests_sale_shipment_item">
             <directory>./tests/Integration/Services/Sale/ShipmentItem/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_landing_template">
+            <directory>./tests/Integration/Services/Landing/Template/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_landing_block">
+            <directory>./tests/Integration/Services/Landing/Block/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_landing_role">
+            <directory>./tests/Integration/Services/Landing/Role/</directory>
+        </testsuite>
         <testsuite name="integration_tests_crm_documentgenerator_numerator">
             <directory>./tests/Integration/Services/CRM/Documentgenerator/Numerator/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_sonet_group">
+            <directory>./tests/Integration/Services/SonetGroup/</directory>
         </testsuite>
     </testsuites>
     <source>

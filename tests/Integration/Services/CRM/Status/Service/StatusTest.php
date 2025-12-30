@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Services\CRM\Status\Result\StatusItemResult;
 use Bitrix24\SDK\Services\CRM\Status\Service\Status;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -43,7 +43,7 @@ class StatusTest extends TestCase
     
     protected function setUp(): void
     {
-        $this->statusService = Fabric::getServiceBuilder()->getCRMScope()->status();
+        $this->statusService = Factory::getServiceBuilder()->getCRMScope()->status();
     }
 
     public function testAllSystemFieldsAnnotated(): void
