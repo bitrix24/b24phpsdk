@@ -29,17 +29,14 @@ class Endpoints
          * @phpstan-param non-empty-string|null $authServerUrl
          * @todo in v2 make it required
          */
-        private ?string $authServerUrl = null
+        private readonly ?string $authServerUrl = null
     ) {
         // Normalize client URL - add https:// protocol if not present
         $this->clientUrl = $this->normalizeUrl($clientUrl);
 
         $this->validateUrl('clientUrl', $this->clientUrl);
 
-        if ($authServerUrl === null) {
-            $this->authServerUrl = DefaultOAuthServerUrl::default();
-            $this->validateUrl('BITRIX24_PHP_SDK_DEFAULT_AUTH_SERVER_URL', $authServerUrl);
-        }
+        $this->validateUrl('BITRIX24_PHP_SDK_DEFAULT_AUTH_SERVER_URL', $authServerUrl);
     }
 
     /**
