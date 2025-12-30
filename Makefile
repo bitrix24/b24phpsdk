@@ -217,6 +217,10 @@ test-integration-scope-log:
 .PHONY: test-integration-scope-sale
 test-integration-scope-sale:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sale
+	
+.PHONY: test-integration-scope-sonet-group
+test-integration-scope-sonet-group:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sonet_group
 
 .PHONY: test-integration-scope-disk
 test-integration-scope-disk:
