@@ -79,6 +79,21 @@
         <testsuite name="integration_tests_calendar_event">
             <directory>./tests/Integration/Services/Calendar/Event/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_lists">
+            <directory>./tests/Integration/Services/Lists/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_lists_service">
+            <directory>./tests/Integration/Services/Lists/Lists/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_lists_field">
+            <directory>./tests/Integration/Services/Lists/Field/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_lists_section">
+            <directory>./tests/Integration/Services/Lists/Section/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_lists_element">
+            <directory>./tests/Integration/Services/Lists/Element/</directory>
+        </testsuite>
         <testsuite name="integration_tests_calendar_resource">
             <directory>./tests/Integration/Services/Calendar/Resource/</directory>
         </testsuite>

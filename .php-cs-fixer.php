@@ -25,6 +25,7 @@ $finder = Finder::create()
     ->in(__DIR__ . '/src/Services/Sale/')
     ->in(__DIR__ . '/src/Services/Disk/')
     ->in(__DIR__ . '/src/Services/Calendar/')
+    ->in(__DIR__ . '/src/Services/Lists/')
     ->in(__DIR__ . '/src/Services/SonetGroup/')
     ->name('*.php')
     ->exclude(['vendor', 'storage', 'docker', 'docs']) // Exclude directories

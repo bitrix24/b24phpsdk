@@ -72,6 +72,11 @@ help:
 	@echo "test-integration-im-open-lines-crm-chat - run IMOpenLines CRMChat integration tests"
 	@echo "test-integration-im-open-lines-session - run IMOpenLines Session integration tests"
 	@echo "test-integration-im-open-lines-operator - run IMOpenLines Operator integration tests"
+	@echo "test-integration-scope-lists - run Lists integration tests"
+	@echo "test-integration-lists-service - run Lists Service integration tests"
+	@echo "test-integration-lists-field - run Lists Field integration tests"
+	@echo "test-integration-lists-section - run Lists Section integration tests"
+	@echo "test-integration-lists-element - run Lists Element integration tests"
 
 .PHONY: docker-init
 docker-init:
@@ -216,6 +221,26 @@ test-integration-im-open-lines-session:
 test-integration-im-open-lines-operator:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_open_lines_operator
 
+.PHONY: test-integration-scope-lists
+test-integration-scope-lists:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_lists
+
+.PHONY: test-integration-lists-service
+test-integration-lists-service:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lists_service
+
+.PHONY: test-integration-lists-field
+test-integration-lists-field:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lists_field
+
+.PHONY: test-integration-lists-section
+test-integration-lists-section:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lists_section
+
+.PHONY: test-integration-lists-element
+test-integration-lists-element:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lists_element
+
 .PHONY: test-integration-scope-user
 test-integration-scope-user:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_user
@@ -227,7 +252,7 @@ test-integration-scope-user-consent:
 .PHONY: test-integration-core
 test-integration-core:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_core
-	
+
 .PHONY: test-integration-core-list
 test-integration-core-list:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_core-list
@@ -346,7 +371,7 @@ test-integration-sale-basket-property:
 .PHONY: test-integration-sale-basket
 test-integration-sale-basket:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_basket
-	
+
 .PHONY: test-integration-sale-order
 test-integration-sale-order:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_order
@@ -358,7 +383,7 @@ test-integration-sale-cashbox-handler:
 .PHONY: test-integration-sale-cashbox
 test-integration-sale-cashbox:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_cashbox
- 
+
 .PHONY: test-integration-sale-payment-item-basket
 test-integration-sale-payment-item-basket:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_payment_item_basket
@@ -374,11 +399,11 @@ test-integration-sale-property-relation:
 .PHONY: test-integration-scope-crm
 test-integration-scope-crm:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm
-  
+
 .PHONY: integration_tests_scope_crm_address
 integration_tests_scope_crm_address:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_address
-	
+
 .PHONY: integration_tests_scope_crm_deal_details
 integration_tests_scope_crm_deal_details:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_deal_details
@@ -390,11 +415,11 @@ integration_tests_scope_crm_contact_details:
 .PHONY: integration_tests_lead_userfield
 integration_tests_lead_userfield:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_userfield
-	
+
 .PHONY: integration_tests_lead_userfield_use_case
 integration_tests_lead_userfield_use_case:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_userfield_use_case
-  
+
 .PHONY: integration_tests_scope_crm_currency
 integration_tests_scope_crm_currency:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_currency
@@ -402,7 +427,7 @@ integration_tests_scope_crm_currency:
 .PHONY: integration_tests_deal_recurring
 integration_tests_deal_recurring:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_deal_recurring
-	
+
 .PHONY: integration_tests_lead_contacts
 integration_tests_lead_contacts:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_contacts
@@ -414,7 +439,7 @@ integration_tests_lead_details:
 .PHONY: integration_tests_scope_automation
 integration_tests_scope_automation:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_automation
-	
+
 .PHONY: integration_tests_crm_item
 integration_tests_crm_item:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_item
@@ -426,15 +451,15 @@ integration_tests_lead_productrows:
 .PHONY: integration_tests_crm_quote
 integration_tests_crm_quote:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_quote
-	
+
 .PHONY: integration_tests_crm_requisite
 integration_tests_crm_requisite:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_requisite
-	
+
 .PHONY: integration_tests_crm_preset_field
 integration_tests_crm_preset_field:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_preset_field
-	
+
 .PHONY: integration_tests_crm_requisite_userfield
 integration_tests_crm_requisite_userfield:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_requisite_userfield
@@ -450,15 +475,15 @@ integration_tests_crm_timeline:
 .PHONY: integration_tests_department
 integration_tests_department:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_department
-	
+
 .PHONY: integration_tests_task
 integration_tests_task:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_task
-	
+
 .PHONY: integration_tests_sale
 integration_tests_sale:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale
-	
+
 .PHONY: integration_tests_sale_payment
 integration_tests_sale_payment:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_payment

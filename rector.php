@@ -72,6 +72,8 @@ return RectorConfig::configure()
         __DIR__ . '/tests/Integration/Services/Disk',
         __DIR__ . '/src/Services/Calendar',
         __DIR__ . '/tests/Integration/Services/Calendar',
+        __DIR__ . '/src/Services/Lists',
+        __DIR__ . '/tests/Integration/Services/Lists',
         __DIR__ . '/src/Services/CRM/Documentgenerator/Numerator',
         __DIR__ . '/tests/Integration/Services/CRM/Documentgenerator/Numerator',
         __DIR__ . '/tests/Unit/',

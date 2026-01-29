@@ -34,6 +34,7 @@ parameters:
     - tests/Integration/Services/Landing
     - tests/Integration/Services/Disk
     - tests/Integration/Services/Calendar
+    - tests/Integration/Services/Lists
     - tests/Integration/Services/CRM/Documentgenerator/Numerator
   excludePaths:
     - tests/Integration/Services/CRM/Requisites/Service/RequisiteUserfieldUseCaseTest.php

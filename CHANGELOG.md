@@ -4,6 +4,37 @@
 
 ### Added
 
+- Added service `Services\Lists\Lists\Service\Lists` with support methods,
+  see [lists.* methods](https://github.com/bitrix24/b24phpsdk/issues/360):
+    - `add` creates a universal list, with batch calls support
+    - `update` updates a universal list, with batch calls support
+    - `get` returns data of a universal list or an array of lists, with batch calls support
+    - `delete` deletes a universal list, with batch calls support
+    - `getIBlockTypeId` returns the identifier of the information block type
+- Added service `Services\Lists\Field\Service\Field` with support methods,
+  see [lists.field.* methods](https://github.com/bitrix24/b24phpsdk/issues/360):
+    - `add` creates a field for the universal list, with batch calls support
+    - `update` updates a field of the universal list, with batch calls support
+    - `get` returns data about a field or list of fields
+    - `delete` deletes a field from the universal list, with batch calls support
+    - `types` returns a list of available field types for the list
+    - `addByCode` helper method to create field by iblock code
+    - `updateByCode` helper method to update field by iblock code
+    - `getByCode` helper method to get field(s) by iblock code
+    - `deleteByCode` helper method to delete field by iblock code
+- Added service `Services\Lists\Section\Service\Section` with support methods,
+  see [lists.section.* methods](https://github.com/bitrix24/b24phpsdk/issues/360):
+    - `add` creates a section for the universal list, with batch calls support
+    - `update` updates a section of the universal list, with batch calls support
+    - `get` returns data about a section or list of sections
+    - `delete` deletes a section from the universal list, with batch calls support
+- Added service `Services\Lists\Element\Service\Element` with support methods,
+  see [lists.element.* methods](https://github.com/bitrix24/b24phpsdk/issues/360):
+    - `add` creates an element for the universal list, with batch calls support
+    - `update` updates an element of the universal list, with batch calls support
+    - `get` returns data about an element or list of elements, with batch calls support
+    - `delete` deletes an element from the universal list, with batch calls support
+    - `getFileUrl` returns file URL from element field
 - Added service `Services\Landing\Site\Service\Site` with support methods,
   see [landing.site.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
     - `add` adds a site
