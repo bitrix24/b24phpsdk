@@ -17,11 +17,23 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 use Carbon\CarbonImmutable;
 use Exception;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class DocumentationResult extends AbstractResult
 {
+    /**
+     * Get OpenApi documentation payload
+     *
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
     public function getPayload(): string
     {
-        return $this->getCoreResponse()->getResponseData()->getResult()[0];
+        return $this->getCoreResponse()->getHttpResponse()->getContent();
     }
 }

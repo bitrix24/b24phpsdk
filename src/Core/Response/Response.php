@@ -17,6 +17,7 @@ use Bitrix24\SDK\Core\ApiLevelErrorHandler;
 use Bitrix24\SDK\Core\Commands\Command;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Response\DTO;
+use Bitrix24\SDK\Core\Response\DTO\ResponseData;
 use Bitrix24\SDK\Infrastructure\HttpClient\TransportLayer\NetworkTimingsParser;
 use Bitrix24\SDK\Infrastructure\HttpClient\TransportLayer\ResponseInfoParser;
 use Psr\Log\LoggerInterface;
@@ -25,17 +26,17 @@ use Throwable;
 
 class Response
 {
-    protected ?DTO\ResponseData $responseData = null;
+    protected ?ResponseData $responseData = null;
 
     /**
      * Response constructor.
      */
     public function __construct(
-        protected ResponseInterface    $httpResponse,
-        protected Command              $apiCommand,
+        protected ResponseInterface $httpResponse,
+        protected Command $apiCommand,
         protected ApiLevelErrorHandler $apiLevelErrorHandler,
-        protected LoggerInterface      $logger)
-    {
+        protected LoggerInterface $logger
+    ) {
     }
 
     public function getHttpResponse(): ResponseInterface
@@ -51,20 +52,27 @@ class Response
     /**
      * @throws BaseException
      */
-    public function getResponseData(): DTO\ResponseData
+    public function getResponseData(): ResponseData
     {
         $this->logger->debug('getResponseData.start');
 
-        if (!$this->responseData instanceof \Bitrix24\SDK\Core\Response\DTO\ResponseData) {
+        if (!$this->responseData instanceof ResponseData) {
             try {
                 $this->logger->debug('getResponseData.parseResponse.start');
-                $responseResult = $this->httpResponse->toArray(true);
+                $responseResult = $this->httpResponse->toArray();
                 $this->logger->info('getResponseData.responseBody', [
                     'responseBody' => $responseResult,
                 ]);
 
                 // try to handle api-level errors
                 $this->apiLevelErrorHandler->handle($responseResult);
+
+                if (!array_key_exists('result', $responseResult)) {
+                    $tmp = $responseResult;
+                    unset($responseResult);
+                    $responseResult['result'] = $tmp;
+                    unset($tmp);
+                }
 
                 if (!is_array($responseResult['result'])) {
                     $responseResult['result'] = [$responseResult['result']];
@@ -80,7 +88,12 @@ class Response
                     $total = (int)$responseResult['total'];
                 }
 
-                $this->responseData = new DTO\ResponseData(
+                // fix inconsistent response format for /documentation api call for v3
+                if (!array_key_exists('time', $responseResult)) {
+                    $responseResult['time'] = [];
+                }
+
+                $this->responseData = new ResponseData(
                     $responseResult['result'],
                     DTO\Time::initFromResponse($responseResult['time']),
                     new DTO\Pagination($nextItem, $total)
