@@ -895,6 +895,44 @@ abstract class ContactPersonInterfaceTest extends TestCase
 
     #[Test]
     #[DataProvider('contactPersonDataProvider')]
+    #[TestDox('test isPartner method')]
+    final public function testIsPartner(
+        Uuid                $uuid,
+        CarbonImmutable     $createdAt,
+        CarbonImmutable     $updatedAt,
+        ContactPersonStatus $contactPersonStatus,
+        string              $name,
+        ?string             $surname,
+        ?string             $patronymic,
+        ?string             $email,
+        ?CarbonImmutable    $emailVerifiedAt,
+        ?string             $comment,
+        ?PhoneNumber        $phoneNumber,
+        ?CarbonImmutable    $mobilePhoneVerifiedAt,
+        ?string             $externalId,
+        ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
+        ?string             $userAgent,
+        ?string             $userAgentReferer,
+        ?IP                 $userAgentIp
+    ): void
+    {
+        // Test with no partner id
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, null, $userAgent, $userAgentReferer, $userAgentIp);
+        $this->assertFalse($contactPerson->isPartner());
+
+        // Test with partner id set
+        $partnerUuid = Uuid::v7();
+        $contactPerson->setBitrix24PartnerId($partnerUuid);
+        $this->assertTrue($contactPerson->isPartner());
+
+        // Test removing partner id
+        $contactPerson->setBitrix24PartnerId(null);
+        $this->assertFalse($contactPerson->isPartner());
+    }
+
+    #[Test]
+    #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test getUserAgentInfo method')]
     final public function testGetUserAgentInfo(
         Uuid                $uuid,

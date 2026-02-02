@@ -48,7 +48,7 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
         private CarbonImmutable          $updatedAt,
         private Bitrix24PartnerStatus    $bitrix24PartnerStatus,
         private string                   $title,
-        private readonly int             $bitrix24PartnerId,
+        private readonly int             $bitrix24PartnerNumber,
         private ?string                  $site,
         private ?PhoneNumber             $phoneNumber,
         private ?string                  $email,
@@ -56,8 +56,8 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
         private ?string                  $externalId
     )
     {
-        if ($bitrix24PartnerId <= 0) {
-            throw new InvalidArgumentException(sprintf('bitrix24 partner id must be positive int, now «%s»', $bitrix24PartnerId));
+        if ($bitrix24PartnerNumber <= 0) {
+            throw new InvalidArgumentException(sprintf('bitrix24 partner number must be positive int, now «%s»', $bitrix24PartnerNumber));
         }
     }
 
@@ -169,9 +169,9 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     }
 
     #[\Override]
-    public function getBitrix24PartnerId(): int
+    public function getBitrix24PartnerNumber(): int
     {
-        return $this->bitrix24PartnerId;
+        return $this->bitrix24PartnerNumber;
     }
 
     #[\Override]

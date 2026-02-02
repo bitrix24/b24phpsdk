@@ -58,9 +58,25 @@ help:
 	@echo "test-integration-sale-delivery - run Delivery integration tests"
 	@echo "test-integration-sale-delivery-extra-service - run DeliveryExtraService integration tests"
 	@echo "test-integration-scope-paysystem - run Payment System integration tests"
+	@echo "test-integration-scope-im-open-lines-connector - run IMOpenLines Connector integration tests"
 	@echo "test-integration-sale-payment-item-basket - run PaymentItemBasket integration tests"
 	@echo "test-integration-sale-payment-item-shipment - run PaymentItemShipment integration tests"
 	@echo "test-integration-sale-property-relation - run PropertyRelation integration tests"
+	@echo "test-integration-landing-page - run Landing Page integration tests"
+	@echo "test-integration-landing-syspage - run Landing SysPage integration tests"
+	@echo "test-integration-landing-repo - run Landing Repo integration tests"
+	@echo "test-integration-landing-demos - run Landing Demos integration tests"
+	@echo "test-integration-landing-role - run Landing Role integration tests"
+	@echo "test-integration-scope-landing-template - run Landing Template integration tests"
+	@echo "test-integration-im-open-lines-config - run IMOpenLines Config integration tests"
+	@echo "test-integration-im-open-lines-crm-chat - run IMOpenLines CRMChat integration tests"
+	@echo "test-integration-im-open-lines-session - run IMOpenLines Session integration tests"
+	@echo "test-integration-im-open-lines-operator - run IMOpenLines Operator integration tests"
+	@echo "test-integration-scope-lists - run Lists integration tests"
+	@echo "test-integration-lists-service - run Lists Service integration tests"
+	@echo "test-integration-lists-field - run Lists Field integration tests"
+	@echo "test-integration-lists-section - run Lists Section integration tests"
+	@echo "test-integration-lists-element - run Lists Element integration tests"
 
 t:
 	docker-compose run --rm php-cli sh
@@ -182,6 +198,10 @@ test-integration-scope-placement:
 test-integration-scope-paysystem:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_paysystem
 
+.PHONY: test-integration-scope-im-open-lines-connector
+test-integration-scope-im-open-lines-connector:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im_open_lines_connector
+
 .PHONY: test-integration-paysystem-service
 test-integration-paysystem-service:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_paysystem_service
@@ -194,6 +214,42 @@ test-integration-paysystem-settings:
 test-integration-scope-im-open-lines:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im_open_lines
 
+.PHONY: test-integration-im-open-lines-config
+test-integration-im-open-lines-config:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_open_lines_config
+
+.PHONY: test-integration-im-open-lines-crm-chat
+test-integration-im-open-lines-crm-chat:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_open_lines_crm_chat
+
+.PHONY: test-integration-im-open-lines-session
+test-integration-im-open-lines-session:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_open_lines_session
+
+.PHONY: test-integration-im-open-lines-operator
+test-integration-im-open-lines-operator:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_open_lines_operator
+
+.PHONY: test-integration-scope-lists
+test-integration-scope-lists:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_lists
+
+.PHONY: test-integration-lists-service
+test-integration-lists-service:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lists_service
+
+.PHONY: test-integration-lists-field
+test-integration-lists-field:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lists_field
+
+.PHONY: test-integration-lists-section
+test-integration-lists-section:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lists_section
+
+.PHONY: test-integration-lists-element
+test-integration-lists-element:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lists_element
+
 .PHONY: test-integration-scope-user
 test-integration-scope-user:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_user
@@ -205,7 +261,7 @@ test-integration-scope-user-consent:
 .PHONY: test-integration-core
 test-integration-core:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_core
-	
+
 .PHONY: test-integration-core-list
 test-integration-core-list:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_core-list
@@ -225,6 +281,46 @@ test-integration-scope-log:
 .PHONY: test-integration-scope-sale
 test-integration-scope-sale:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sale
+
+.PHONY: test-integration-scope-landing
+test-integration-scope-landing:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_landing
+
+.PHONY: test-integration-scope-landing-template
+test-integration-scope-landing-template:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_landing_template
+
+.PHONY: test-integration-landing-block
+test-integration-landing-block:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_block
+
+.PHONY: test-integration-landing-site
+test-integration-landing-site:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_site
+
+.PHONY: test-integration-landing-page
+test-integration-landing-page:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_page
+
+.PHONY: test-integration-landing-syspage
+test-integration-landing-syspage:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_syspage
+
+.PHONY: test-integration-landing-repo
+test-integration-landing-repo:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_repo
+
+.PHONY: test-integration-landing-demos
+test-integration-landing-demos:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_demos
+
+.PHONY: test-integration-landing-role
+test-integration-landing-role:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_role
+
+.PHONY: test-integration-scope-sonet-group
+test-integration-scope-sonet-group:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sonet_group
 
 .PHONY: test-integration-scope-disk
 test-integration-scope-disk:

@@ -22,8 +22,7 @@ Store information about Bitrix24 Partner who supports client portal and install 
 | `setPhone()`             | `void`                  | Sets partner phone                                                     |                            |
 | `getEmail()`             | `?string`               | Returns partner email                                                  |                            |
 | `setEmail()`             | `void`                  | Sets partner email                                                     | `InvalidArgumentException` |
-| `getBitrix24PartnerId()` | `?int`                  | Returns Bitrix24 partner id                                            |                            |
-| `setBitrix24PartnerId()` | `void`                  | Sets Bitrix24 partner id                                               | `InvalidArgumentException` |
+| `getBitrix24PartnerNumber()` | `int`                  | Returns Bitrix24 partner number from vendor site                       |                            |
 | `getOpenLineId()`        | `?string`               | Returns open line id                                                   |                            |
 | `setOpenLineId()`        | `void`                  | Sets open line id                                                      | `InvalidArgumentException` |
 
@@ -51,7 +50,6 @@ stateDiagram-v2
     - use case SetPhone
     - use case SetEmail
     - use case SetOpenLineId
-    - use case SetBitrix24PartnerId
     - use case Create
 - `public function delete(Uuid $uuid): void;`
     - use case Delete
@@ -64,10 +62,8 @@ stateDiagram-v2
     - use case SetSite
     - use case SetPhone
     - use case SetEmail
-    - use case SetBitrix24PartnerId
     - use case SetOpenLineId
-- `public function findByBitrix24PartnerId(int $bitrix24PartnerId): ?Bitrix24PartnerInterface;`
-    - use case SetBitrix24PartnerId
+- `public function findByBitrix24PartnerNumber(int $bitrix24PartnerNumber): ?Bitrix24PartnerInterface;`
 - `public function findByTitle(string $title): array;`
     - use case Create
     - use case SetSite
@@ -82,7 +78,6 @@ stateDiagram-v2
 - `Bitrix24PartnerEmailChangedEvent` – Event triggered when a Bitrix24 partner email was changed.
 - `Bitrix24PartnerExternalIdChangedEvent` – Event triggered when a Bitrix24 partner external id was changed.
 - `Bitrix24PartnerOpenLineIdChangedEvent` – Event triggered when a Bitrix24 partner open line id was changed.
-- `Bitrix24PartnerPartnerIdChangedEvent` – Event triggered when a Bitrix24 partner id was changed.
 - `Bitrix24PartnerPhoneChangedEvent` – Event triggered when a Bitrix24 partner phone was changed.
 - `Bitrix24PartnerSiteChangedEvent` – Event triggered when a Bitrix24 partner site was changed.
 - `Bitrix24PartnerTitleChangedEvent` – Event triggered when a Bitrix24 partner title was changed.
@@ -93,14 +88,13 @@ stateDiagram-v2
 timeline
 title Bitrix24 Partner timeline
 section Application installation period
-Create new Bitrix24 Partner item if can't find by title or Bitrix24 partner id in exists list: «Bitrix24 Partner Created Event»    
+Create new Bitrix24 Partner item if can't find by title or Bitrix24 partner number in exists list: «Bitrix24 Partner Created Event»    
 section Application active period
 Block  entity for some reason : «Bitrix24 Partner Blocked Event»
 Unblock entity for some reason  : «Bitrix24 Partner Unblocked Event»
 Change  contact email : «Bitrix24 Partner Email Changed Event»
 Change  external id : «Bitrix24 Partner ExternalId Changed Event»
 Change  open line id : «Bitrix24 Partner Open Line Id Changed Event»
-Change  Bitrix24 Partner id : «Bitrix24 Partner Partner Id Changed Event»
 Change phone : «Bitrix24 Partner Phone Changed Event»
 Change website : «Bitrix24 Partner Site Changed Event»
 Change partner title : «Bitrix24 Partner Title Changed Event»
