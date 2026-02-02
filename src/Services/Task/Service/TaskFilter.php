@@ -204,12 +204,10 @@ class TaskFilter extends AbstractFilterBuilder
     }
 
     // User fields
-
     /**
      * Access user field with UF_ prefix
      *
      * @param string $fieldName User field name (UF_ prefix is added automatically if missing)
-     * @return FieldConditionBuilder
      */
     public function userField(string $fieldName): FieldConditionBuilder
     {

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Tests\Unit\Filters\Task;
+namespace Bitrix24\SDK\Tests\Unit\Services\Task\Service;
 
 use Bitrix24\SDK\Services\Task\Service\TaskFilter;
 use DateTime;
@@ -27,26 +27,26 @@ class TaskFilterTest extends TestCase
     #[Test]
     public function testSimpleConditionEquals(): void
     {
-        $filter = (new TaskFilter())
-            ->changedDate()->eq(new DateTime('2025-01-01'))
-            ->title()->eq('ASAP');
+        $taskFilter = new TaskFilter();
+        $taskFilter->changedDate()->eq(new DateTime('2025-01-01', new \DateTimeZone('UTC')));
+        $taskFilter->title()->eq('ASAP');
 
         $this->assertEquals(
             [
-                ['changedDate', '=', '2025-01-01'],
+                ['changedDate', '=', '2025-01-01T00:00:00+00:00'],
                 ['title', '=', 'ASAP']
             ],
-            $filter->toArray()
+            $taskFilter->toArray()
         );
     }
 
     #[Test]
     public function testMultipleAndConditions(): void
     {
-        $filter = (new TaskFilter())
-            ->title()->eq('ASAP')
-            ->priority()->eq(2)
-            ->status()->eq(5);
+        $taskFilter = new TaskFilter();
+        $taskFilter->title()->eq('ASAP');
+        $taskFilter->priority()->eq(2);
+        $taskFilter->status()->eq(5);
 
         $expected = [
             ['title', '=', 'ASAP'],
@@ -54,7 +54,7 @@ class TaskFilterTest extends TestCase
             ['status', '=', 5],
         ];
 
-        $this->assertEquals($expected, $filter->toArray());
+        $this->assertEquals($expected, $taskFilter->toArray());
     }
 
     #[Test]
@@ -99,12 +99,12 @@ class TaskFilterTest extends TestCase
     #[Test]
     public function testOrLogic(): void
     {
-        $filterBuilder = (new TaskFilter())
-            ->status()->eq(2)
-            ->or(function (TaskFilter $taskFilter): void {
-                $taskFilter->id()->in([1, 2]);
-                $taskFilter->priority()->gt(5);
-            });
+        $filter = new TaskFilter();
+        $filter->status()->eq(2);
+        $filter->or(function (TaskFilter $taskFilter): void {
+            $taskFilter->id()->in([1, 2]);
+            $taskFilter->priority()->gt(5);
+        });
 
         $expected = [
             ['status', '=', 2],
@@ -117,20 +117,20 @@ class TaskFilterTest extends TestCase
             ],
         ];
 
-        $this->assertEquals($expected, $filterBuilder->toArray());
+        $this->assertEquals($expected, $filter->toArray());
     }
 
     #[Test]
     public function testMultipleOrGroups(): void
     {
-        $filterBuilder = (new TaskFilter())
-            ->status()->eq(2)
-            ->or(function (TaskFilter $taskFilter): void {
-                $taskFilter->id()->in([1, 2]);
-            })
-            ->or(function (TaskFilter $taskFilter): void {
-                $taskFilter->priority()->eq(5);
-            });
+        $filter = new TaskFilter();
+        $filter->status()->eq(2);
+        $filter->or(function (TaskFilter $taskFilter): void {
+            $taskFilter->id()->in([1, 2]);
+        });
+        $filter->or(function (TaskFilter $taskFilter): void {
+            $taskFilter->priority()->eq(5);
+        });
 
         $expected = [
             ['status', '=', 2],
@@ -148,7 +148,7 @@ class TaskFilterTest extends TestCase
             ],
         ];
 
-        $this->assertEquals($expected, $filterBuilder->toArray());
+        $this->assertEquals($expected, $filter->toArray());
     }
 
     #[Test]
@@ -219,33 +219,32 @@ class TaskFilterTest extends TestCase
     #[Test]
     public function testMixedFilterAndRaw(): void
     {
-        $filterBuilder = (new TaskFilter())
-            ->status()->eq(2)
-            ->setRaw([['STAGE_ID', '>=', '100']]);
+        $taskFilter = new TaskFilter();
+        $taskFilter->status()->eq(2);
+        $taskFilter->setRaw([['STAGE_ID', '>=', '100']]);
 
         $expected = [
             ['status', '=', 2],
             ['STAGE_ID', '>=', '100'],
         ];
 
-        $this->assertEquals($expected, $filterBuilder->toArray());
+        $this->assertEquals($expected, $taskFilter->toArray());
     }
 
     #[Test]
     public function testComplexFilterWithAllFeatures(): void
     {
-        /** @var TaskFilter $filter */
-        $filter = (new TaskFilter())
-            ->title()->eq('Important Task')
-            ->priority()->gte(2)
-            ->responsibleId()->in([1, 2, 3])
-            ->createdDate()->between('2025-01-01', '2025-12-31')
-            ->or(function (TaskFilter $taskFilter): void {
-                $taskFilter->status()->eq(5);
-                $taskFilter->closedDate()->lt('2025-01-01');
-            })
-            ->userField('UF_CRM_TASK')->eq('yes')
-            ->setRaw([['FLOW_ID', '!=', '0']]);
+        $filter = new TaskFilter();
+        $filter->title()->eq('Important Task');
+        $filter->priority()->gte(2);
+        $filter->responsibleId()->in([1, 2, 3]);
+        $filter->createdDate()->between('2025-01-01', '2025-12-31');
+        $filter->or(function (TaskFilter $taskFilter): void {
+            $taskFilter->status()->eq(5);
+            $taskFilter->closedDate()->lt('2025-01-01');
+        });
+        $filter->userField('UF_CRM_TASK')->eq('yes');
+        $filter->setRaw([['FLOW_ID', '!=', '0']]);
 
         $expected = [
             ['title', '=', 'Important Task'],
@@ -340,10 +339,10 @@ class TaskFilterTest extends TestCase
     #[Test]
     public function testIntFieldTypeEnforcement(): void
     {
-        $filter = (new TaskFilter())
-            ->id()->eq(100)
-            ->priority()->gte(2)
-            ->responsibleId()->in([1, 2, 3]);
+        $taskFilter = new TaskFilter();
+        $taskFilter->id()->eq(100);
+        $taskFilter->priority()->gte(2);
+        $taskFilter->responsibleId()->in([1, 2, 3]);
 
         $expected = [
             ['id', '=', 100],
@@ -351,7 +350,7 @@ class TaskFilterTest extends TestCase
             ['responsibleId', 'in', [1, 2, 3]],
         ];
 
-        $this->assertEquals($expected, $filter->toArray());
+        $this->assertEquals($expected, $taskFilter->toArray());
     }
 
     #[Test]
@@ -370,12 +369,12 @@ class TaskFilterTest extends TestCase
     #[Test]
     public function testDateFieldWithDateTime(): void
     {
-        $date = new DateTime('2025-01-01');
+        $date = new DateTime('2025-01-01', new \DateTimeZone('UTC'));
         $filterBuilder = (new TaskFilter())
             ->changedDate()->eq($date);
 
         $expected = [
-            ['changedDate', '=', '2025-01-01'],
+            ['changedDate', '=', '2025-01-01T00:00:00+00:00'],
         ];
 
         $this->assertEquals($expected, $filterBuilder->toArray());
@@ -399,12 +398,12 @@ class TaskFilterTest extends TestCase
     {
         $filterBuilder = (new TaskFilter())
             ->createdDate()->between(
-                new DateTime('2025-01-01'),
-                new DateTime('2025-12-31')
+                new DateTime('2025-01-01', new \DateTimeZone('UTC')),
+                new DateTime('2025-12-31', new \DateTimeZone('UTC'))
             );
 
         $expected = [
-            ['createdDate', 'between', ['2025-01-01', '2025-12-31']],
+            ['createdDate', 'between', ['2025-01-01T00:00:00+00:00', '2025-12-31T00:00:00+00:00']],
         ];
 
         $this->assertEquals($expected, $filterBuilder->toArray());
@@ -413,55 +412,55 @@ class TaskFilterTest extends TestCase
     #[Test]
     public function testDateFieldComparisonOperators(): void
     {
-        $filter = (new TaskFilter())
-            ->deadline()->gt(new DateTime('2025-01-01'))
-            ->closedDate()->lt('2025-12-31');
+        $taskFilter = new TaskFilter();
+        $taskFilter->deadline()->gt(new DateTime('2025-01-01', new \DateTimeZone('UTC')));
+        $taskFilter->closedDate()->lt('2025-12-31');
 
         $expected = [
-            ['deadline', '>', '2025-01-01'],
+            ['deadline', '>', '2025-01-01T00:00:00+00:00'],
             ['closedDate', '<', '2025-12-31'],
         ];
 
-        $this->assertEquals($expected, $filter->toArray());
+        $this->assertEquals($expected, $taskFilter->toArray());
     }
 
     #[Test]
     public function testBoolFieldConversionTrue(): void
     {
-        $filter = (new TaskFilter())
-            ->multitask()->eq(true)
-            ->favorite()->eq(true);
+        $taskFilter = new TaskFilter();
+        $taskFilter->multitask()->eq(true);
+        $taskFilter->favorite()->eq(true);
 
         $expected = [
             ['multitask', '=', 'Y'],
             ['favorite', '=', 'Y'],
         ];
 
-        $this->assertEquals($expected, $filter->toArray());
+        $this->assertEquals($expected, $taskFilter->toArray());
     }
 
     #[Test]
     public function testBoolFieldConversionFalse(): void
     {
-        $filter = (new TaskFilter())
-            ->multitask()->eq(false)
-            ->favorite()->neq(false);
+        $taskFilter = new TaskFilter();
+        $taskFilter->multitask()->eq(false);
+        $taskFilter->favorite()->neq(false);
 
         $expected = [
             ['multitask', '=', 'N'],
             ['favorite', '!=', 'N'],
         ];
 
-        $this->assertEquals($expected, $filter->toArray());
+        $this->assertEquals($expected, $taskFilter->toArray());
     }
 
     #[Test]
     public function testStringFieldOperators(): void
     {
-        $filter = (new TaskFilter())
-            ->title()->eq('Task Title')
-            ->description()->neq('Old Description')
-            ->guid()->in(['guid-1', 'guid-2', 'guid-3']);
+        $taskFilter = new TaskFilter();
+        $taskFilter->title()->eq('Task Title');
+        $taskFilter->description()->neq('Old Description');
+        $taskFilter->guid()->in(['guid-1', 'guid-2', 'guid-3']);
 
         $expected = [
             ['title', '=', 'Task Title'],
@@ -469,27 +468,27 @@ class TaskFilterTest extends TestCase
             ['guid', 'in', ['guid-1', 'guid-2', 'guid-3']],
         ];
 
-        $this->assertEquals($expected, $filter->toArray());
+        $this->assertEquals($expected, $taskFilter->toArray());
     }
 
     #[Test]
     public function testMixedTypedFields(): void
     {
-        $filter = (new TaskFilter())
-            ->id()->eq(100)
-            ->title()->eq('ASAP')
-            ->changedDate()->eq(new DateTime('2025-01-01'))
-            ->favorite()->eq(true)
-            ->priority()->between(1, 5);
+        $taskFilter = new TaskFilter();
+        $taskFilter->id()->eq(100);
+        $taskFilter->title()->eq('ASAP');
+        $taskFilter->changedDate()->eq(new DateTime('2025-01-01', new \DateTimeZone('UTC')));
+        $taskFilter->favorite()->eq(true);
+        $taskFilter->priority()->between(1, 5);
 
         $expected = [
             ['id', '=', 100],
             ['title', '=', 'ASAP'],
-            ['changedDate', '=', '2025-01-01'],
+            ['changedDate', '=', '2025-01-01T00:00:00+00:00'],
             ['favorite', '=', 'Y'],
             ['priority', 'between', [1, 5]],
         ];
 
-        $this->assertEquals($expected, $filter->toArray());
+        $this->assertEquals($expected, $taskFilter->toArray());
     }
 }
