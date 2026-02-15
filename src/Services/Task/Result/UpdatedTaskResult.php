@@ -30,6 +30,6 @@ class UpdatedTaskResult extends UpdatedItemResult
     #[\Override]
     public function isSuccess(): bool
     {
-        return (bool)$this->getCoreResponse()->getResponseData()->getResult()['task'];
+        return (bool)$this->getCoreResponse()->getResponseData()->getResult()['result'];
     }
 }
