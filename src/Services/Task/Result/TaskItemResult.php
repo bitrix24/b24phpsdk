@@ -128,6 +128,5 @@ class TaskItemResult extends AbstractItem
         $testArr = explode('_', $testStr);
 
         return  array_shift($testArr) . implode('', array_map('ucfirst', $testArr));
-        ;
     }
 }

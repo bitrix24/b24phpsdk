@@ -167,6 +167,10 @@ Mark breaking changes clearly with `**Breaking changes**` or `❗**BC**`:
     - Migration path: [clear instructions for users]
 ```
 
+## LSP Usage
+
+After completing a logical block of PHP file edits, run `get_diagnostics` on each modified PHP file to catch errors early. Group diagnostic checks and run them in parallel when multiple files were changed. Do not check after every single-line edit — check after finishing a coherent set of changes.
+
 ## Code Conventions
 
 ### Result DTOs

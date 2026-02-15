@@ -21,7 +21,7 @@ abstract class AbstractItemBuilder implements ItemBuilderInterface
 
     public function build(): array
     {
-        return array_unique($this->fields);
+        return $this->fields;
     }
 
     public function withUserField(string $userField, mixed $value): self

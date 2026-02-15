@@ -50,7 +50,7 @@ class Task extends AbstractService
     /**
      * Returns a task by the task ID.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-get.html
+     * @link https://apidocs.bitrix24.com/api-reference/rest-v3/tasks/tasks-task-get.html
      *
      *
      * @throws BaseException
@@ -58,17 +58,17 @@ class Task extends AbstractService
      */
     #[ApiEndpointMetadata(
         'tasks.task.get',
-        'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-get.html',
+        'https://apidocs.bitrix24.com/api-reference/rest-v3/tasks/tasks-task-get.html',
         'Returns a task by the task ID',
         ApiVersion::v3
     )]
     /**
      * @param positive-int $id Task ID.
-     * @param array<int,string>|SelectBuilderInterface $select
+     * @param array<int,string>|TaskItemSelectBuilder $select
      */
-    public function get(int $id, array|SelectBuilderInterface $select = []): TaskResult
+    public function get(int $id, array|TaskItemSelectBuilder $select = []): TaskResult
     {
-        if ($select instanceof TaskItemSelectBuilder) {
+        if ($select instanceof SelectBuilderInterface) {
             $select = $select->buildSelect();
         }
 
@@ -78,24 +78,24 @@ class Task extends AbstractService
     /**
      * Add new task
      *
-     * @link https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-add.html
+     * @link https://apidocs.bitrix24.com/api-reference/rest-v3/tasks/tasks-task-add.html
      *
      * @throws BaseException
      * @throws TransportException
      */
     #[ApiEndpointMetadata(
         'tasks.task.add',
-        'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-add.html',
+        'https://apidocs.bitrix24.com/api-reference/rest-v3/tasks/tasks-task-add.html',
         'Method adds new task',
         ApiVersion::v3
     )]
-    public function add(array|ItemBuilderInterface $fields): AddedTaskResult
+    public function add(array|TaskItemBuilder $fields): TaskResult
     {
-        if ($fields instanceof ItemBuilderInterface) {
+        if ($fields instanceof TaskItemBuilder) {
             $fields = $fields->build();
         }
 
-        return new AddedTaskResult(
+        return new TaskResult(
             $this->core->call(
                 'tasks.task.add',
                 [
@@ -106,11 +106,10 @@ class Task extends AbstractService
         );
     }
 
-
     /**
      * Deletes a task.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-delete.html
+     * @link https://apidocs.bitrix24.com/api-reference/rest-v3/tasks/tasks-task-delete.html
      *
      *
      * @throws BaseException
@@ -118,8 +117,9 @@ class Task extends AbstractService
      */
     #[ApiEndpointMetadata(
         'tasks.task.delete',
-        'https://apidocs.bitrix24.com/api-reference/tasks/tasks-task-delete.html',
-        'Deletes a task.'
+        'https://apidocs.bitrix24.com/api-reference/rest-v3/tasks/tasks-task-delete.html',
+        'Deletes a task.',
+        ApiVersion::v3
     )]
     public function delete(int $id): DeletedTaskResult
     {
@@ -127,8 +127,9 @@ class Task extends AbstractService
             $this->core->call(
                 'tasks.task.delete',
                 [
-                    'taskId' => $id,
-                ]
+                    'id' => $id,
+                ],
+                ApiVersion::v3
             )
         );
     }

@@ -4,7 +4,8 @@
 
 ### Added
 
-
+- Added `OpenApi\Domain\OpenApiSchemaReader` for programmatic reading and navigation of the OpenAPI specification,
+  with support for component schemas, field type extraction, `$ref` resolution, and request/response schema access
 - Added service `Services\Lists\Lists\Service\Lists` with support methods,
   see [lists.* methods](https://github.com/bitrix24/b24phpsdk/issues/360):
     - `add` creates a universal list, with batch calls support
