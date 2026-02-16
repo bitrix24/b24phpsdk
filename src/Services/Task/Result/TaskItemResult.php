@@ -37,6 +37,7 @@ use Carbon\CarbonImmutable;
  * @property-read int|null $createdBy
  * @property-read CarbonImmutable|null $createdDate
  * @property-read int|null $responsibleId
+ * @property-read int|null $creatorId
  * @property-read array|null $accomplices
  * @property-read array|null $auditors
  * @property-read int|null $changedBy
@@ -127,6 +128,6 @@ class TaskItemResult extends AbstractItem
         $testStr = strtolower($field);
         $testArr = explode('_', $testStr);
 
-        return  array_shift($testArr) . implode('', array_map('ucfirst', $testArr));
+        return array_shift($testArr) . implode('', array_map('ucfirst', $testArr));
     }
 }
