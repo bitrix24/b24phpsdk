@@ -146,6 +146,11 @@
     - `getSiteList` retrieves a list of available templates for creating sites
     - `getPageList` retrieves a list of available templates for creating pages
 - Added support for Bitrix24 API v3
+- Switched Task domain methods to Bitrix24 API v3 and documented services/methods currently using v3:
+    - `Services\Task\Service\Task`: `get` (`tasks.task.get`), `add` (`tasks.task.add`), `delete` (`tasks.task.delete`), `update` (`tasks.task.update`)
+    - `Services\Task\Service\TaskChat`: `sendMessage` (`tasks.task.chat.message.send`)
+    - `Services\Task\Service\TaskFile`: `attachExists` (`tasks.task.file.attach`)
+    - `Services\Main\Service\Documentation`: `getSchema` (`documentation`)
 - Added service `Services\IMOpenLines\Connector\Service\Connector` with support methods,
   see [imconnector.* methods](https://github.com/bitrix24/b24phpsdk/issues/320):
     - `list` method returns a list of available connectors

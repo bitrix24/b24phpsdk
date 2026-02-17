@@ -3,10 +3,20 @@
 namespace Bitrix24\SDK\Services\Task\Service;
 
 use Bitrix24\SDK\Services\AbstractItemBuilder;
+use Bitrix24\SDK\Services\Task\Result\TaskItemResult;
 use Carbon\CarbonInterface;
 
 class TaskItemBuilder extends AbstractItemBuilder
 {
+    public static function createFromTask(TaskItemResult $task): self
+    {
+        return new self(
+            $task->title,
+            $task->creatorId,
+            $task->responsibleId
+        );
+    }
+
     public function __construct(
         string $title,
         int $creatorId,
