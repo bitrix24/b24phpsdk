@@ -21,36 +21,33 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\MessageSentResult;
 use Bitrix24\SDK\Services\AbstractService;
+use Bitrix24\SDK\Services\Task\Result\AccessesResult;
 
 #[ApiServiceMetadata(new Scope(['task']))]
-class TaskChat extends AbstractService
+class TaskAccess extends AbstractService
 {
     /**
-     *Send a Message to Task Chat tasks.task.chat.message.send
+     * The method tasks.task.access.get checks the available actions a user can perform on a task.
      *
-     * @link https://apidocs.bitrix24.com/api-reference/rest-v3/tasks/tasks-task-chat-message-send.html
+     * @link https://apidocs.bitrix24.com/api-reference/rest-v3/tasks/tasks-task-access-get.html
      *
      *
      * @throws BaseException
      * @throws TransportException
      */
     #[ApiEndpointMetadata(
-        'tasks.task.chat.message.send',
-        'https://apidocs.bitrix24.com/api-reference/rest-v3/tasks/tasks-task-chat-message-send.html',
-        'Send Message to Task Chat tasks.task.chat.message.send',
+        'tasks.task.access.get',
+        'https://apidocs.bitrix24.com/api-reference/rest-v3/tasks/tasks-task-access-get.html',
+        'The method tasks.task.access.get checks the available actions a user can perform on a task.',
         ApiVersion::v3
     )]
     /**
      * @param positive-int $taskId Task ID.
-     * @param non-empty-string $message chat message.
      */
-    public function sendMessage(int $taskId, string $message): MessageSentResult
+    public function get(int $taskId): AccessesResult
     {
-        return new MessageSentResult($this->core->call('tasks.task.chat.message.send', [
-            'fields' => [
-                'taskId' => $taskId,
-                'text' => $message
-            ]
+        return new AccessesResult($this->core->call('tasks.task.access.get', [
+            'id' => $taskId,
         ], ApiVersion::v3));
     }
 }

@@ -90,10 +90,18 @@ class ApiLevelErrorHandler
      */
     private function handleError(array $responseBody, ?string $batchCommandId = null): void
     {
-        $errorCode = strtolower(trim((string)$responseBody[self::ERROR_KEY]));
-        $errorDescription = array_key_exists(self::ERROR_DESCRIPTION_KEY, $responseBody) ? strtolower(
-            trim((string)$responseBody[self::ERROR_DESCRIPTION_KEY])
-        ) : null;
+        $error = $responseBody[self::ERROR_KEY];
+        if (is_array($error)) {
+            // API v3 format: {"error": {"code": "...", "message": "..."}}
+            $errorCode = strtolower(trim((string)($error['code'] ?? '')));
+            $errorDescription = strtolower(trim((string)($error['message'] ?? '')));
+        } else {
+            // API v1 format: {"error": "ERROR_CODE", "error_description": "..."}
+            $errorCode = strtolower(trim((string)$error));
+            $errorDescription = array_key_exists(self::ERROR_DESCRIPTION_KEY, $responseBody)
+                ? strtolower(trim((string)$responseBody[self::ERROR_DESCRIPTION_KEY]))
+                : null;
+        }
 
         $this->logger->debug(
             'handle.errorInformation',
@@ -167,6 +175,8 @@ class ApiLevelErrorHandler
             case 'not_found':
             case 'error_not_found':
                 throw new ItemNotFoundException(sprintf('%s - %s', $errorCode, $errorDescription));
+            case 'bitrix_rest_v3_exception_unknowndtopropertyexception':
+                throw new InvalidArgumentException(sprintf('%s - %s %s', $errorCode, $errorDescription, $batchErrorPrefix));
             default:
                 throw new BaseException(sprintf('%s - %s %s', $errorCode, $errorDescription, $batchErrorPrefix));
         }

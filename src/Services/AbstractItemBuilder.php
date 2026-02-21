@@ -24,7 +24,7 @@ abstract class AbstractItemBuilder implements ItemBuilderInterface
         return $this->fields;
     }
 
-    public function withUserField(string $userField, mixed $value): self
+    public function withUserField(string $userField, mixed $value): static
     {
         $this->fields[$userField] = $value;
 

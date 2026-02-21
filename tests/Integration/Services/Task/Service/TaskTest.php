@@ -61,95 +61,95 @@ class TaskTest extends TestCase
     #[TestDox('Get task by id with all fields')]
     public function testGetTaskByIdWithAllFields(): void
     {
-        $curUser = $this->userService->current()->user();
-        $addedTask = $this->taskService->add(
+        $userItemResult = $this->userService->current()->user();
+        $taskResult = $this->taskService->add(
             new TaskItemBuilder(
                 sprintf('Test task %s', time()),
-                $curUser->ID,
-                $curUser->ID
+                $userItemResult->ID,
+                $userItemResult->ID
             )
         );
 
-        $res = $this->taskService->get($addedTask->task()->id);
+        $res = $this->taskService->get($taskResult->task()->id);
 
-        $this->assertEquals($addedTask->task(), $res->task());
+        $this->assertEquals($taskResult->task(), $res->task());
 
-        $this->taskService->delete($addedTask->task()->id);
+        $this->taskService->delete($taskResult->task()->id);
     }
 
     #[TestDox('Get task by id with selected fields from select builder')]
     public function testGetTaskByIdWithSelectedFields(): void
     {
-        $curUser = $this->userService->current()->user();
-        $addedTask = $this->taskService->add(
+        $userItemResult = $this->userService->current()->user();
+        $taskResult = $this->taskService->add(
             new TaskItemBuilder(
                 sprintf('Test task %s', time()),
-                $curUser->ID,
-                $curUser->ID
+                $userItemResult->ID,
+                $userItemResult->ID
             )
         );
 
-        $select = new TaskItemSelectBuilder()
+        $taskItemSelectBuilder = (new TaskItemSelectBuilder())
             ->title();
 
         $res = $this->taskService->get(
-            $addedTask->task()->id,
-            $select
+            $taskResult->task()->id,
+            $taskItemSelectBuilder
         );
 
         $this->assertEquals(
             array_keys($res->getCoreResponse()->getResponseData()->getResult()['item']),
-            $select->buildSelect()
+            $taskItemSelectBuilder->buildSelect()
         );
 
-        $this->assertEquals($addedTask->task()->id, $res->task()->id);
-        $this->taskService->delete($addedTask->task()->id);
+        $this->assertEquals($taskResult->task()->id, $res->task()->id);
+        $this->taskService->delete($taskResult->task()->id);
     }
 
     #[TestDox('Add task with default fields')]
     public function testAddTaskWithDefaultFields(): void
     {
-        $curUser = $this->userService->current()->user();
-        $addedTask = $this->taskService->add(
-            new TaskItemBuilder(
+        $userItemResult = $this->userService->current()->user();
+        $taskResult = $this->taskService->add(
+            (new TaskItemBuilder(
                 sprintf('Test task %s', time()),
-                $curUser->ID,
-                $curUser->ID
-            )
+                $userItemResult->ID,
+                $userItemResult->ID
+            ))
                 ->description(sprintf('Test task description %s', time()))
         );
 
-        $res = $this->taskService->get($addedTask->task()->id);
+        $res = $this->taskService->get($taskResult->task()->id);
 
-        $this->assertEquals($addedTask->task(), $res->task());
+        $this->assertEquals($taskResult->task(), $res->task());
 
-        $this->taskService->delete($addedTask->task()->id);
+        $this->taskService->delete($taskResult->task()->id);
     }
 
     #[TestDox('Delete task with id')]
     public function testDeleteTask(): void
     {
-        $curUser = $this->userService->current()->user();
-        $addedTask = $this->taskService->add(
+        $userItemResult = $this->userService->current()->user();
+        $taskResult = $this->taskService->add(
             new TaskItemBuilder(
                 sprintf('Test task %s', time()),
-                $curUser->ID,
-                $curUser->ID
+                $userItemResult->ID,
+                $userItemResult->ID
             )
         );
-        $this->assertTrue($this->taskService->delete($addedTask->task()->id)->isSuccess());
+        $this->assertTrue($this->taskService->delete($taskResult->task()->id)->isSuccess());
     }
 
     #[TestDox('Update task')]
     public function testUpdateTask(): void
     {
-        $curUser = $this->userService->current()->user();
-        $addedTask = $this->taskService->add(
-            new TaskItemBuilder(
+        $userItemResult = $this->userService->current()->user();
+        $taskResult = $this->taskService->add(
+            (new TaskItemBuilder(
                 sprintf('Test task %s', time()),
-                $curUser->ID,
-                $curUser->ID
-            )
+                $userItemResult->ID,
+                $userItemResult->ID
+            ))
                 ->description(sprintf('Test task description %s', time()))
         );
 
@@ -162,17 +162,17 @@ class TaskTest extends TestCase
 
         $this->assertTrue(
             $this->taskService->update(
-                $addedTask->task()->id,
-                new TaskItemBuilder(
-                    $addedTask->task()->title,
-                    $curUser->ID,
-                    $curUser->ID,
-                )
+                $taskResult->task()->id,
+                (new TaskItemBuilder(
+                    $taskResult->task()->title,
+                    $userItemResult->ID,
+                    $userItemResult->ID,
+                ))
                     ->description('updated description')
             )->isSuccess()
         );
 
-        $res = $this->taskService->get($addedTask->task()->id);
+        $res = $this->taskService->get($taskResult->task()->id);
 
         $this->assertEquals('updated description', $res->task()->description);
         // $this->taskService->delete($addedTask->task()->id);

@@ -16,6 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\Task\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Task\Service\Task;
+use Bitrix24\SDK\Services\Task\Service\TaskItemBuilder;
 use Bitrix24\SDK\Services\User\Service\User;
 use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
@@ -52,10 +53,9 @@ class BatchTest extends TestCase
         $taskIds = [];
 
         for ($i=0;$i<$taskNum;$i++) {
-            $taskIds[] = $this->taskService->add([
-                'TITLE' => 'Test #-'.$i,
-                'RESPONSIBLE_ID' => $this->userId,
-            ])->getId();
+            $taskIds[] = $this->taskService->add(
+                new TaskItemBuilder('Test #-'.$i, $this->userId, $this->userId)
+            )->task()->id;
         }
 
         $cnt = 0;

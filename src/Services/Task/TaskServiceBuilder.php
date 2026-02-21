@@ -38,6 +38,18 @@ class TaskServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    public function taskAccess(): Service\TaskAccess
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Service\TaskAccess(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function taskChat(): Service\TaskChat
     {
         if (!isset($this->serviceCache[__METHOD__])) {

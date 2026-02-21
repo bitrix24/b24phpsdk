@@ -108,7 +108,7 @@ class DiskTest extends TestCase
                 'UF_TASK_WEBDAV_FILES' => ['n' . $fileId] // Add 'n' prefix as per documentation
             ]);
             
-            $taskId = $taskResult->getId();
+            $taskId = $taskResult->task()->id;
             
             // Step 3: Get task with file attachments to find attached object ID
             $task = $taskService->get($taskId, ['*', 'UF_TASK_WEBDAV_FILES']);

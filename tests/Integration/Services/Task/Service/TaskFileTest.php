@@ -32,6 +32,7 @@ class TaskFileTest extends TestCase
     use CustomBitrix24Assertions;
 
     protected Task $taskService;
+
     protected TaskFile $taskFileService;
 
     protected ServiceBuilder $serviceBuilder;
@@ -54,18 +55,18 @@ class TaskFileTest extends TestCase
     #[TestDox('Upload existing file to task')]
     public function uploadExistingFileToTask(): void
     {
-        $curUser = $this->serviceBuilder->getUserScope()->user()->current()->user();
-        $addedTask = $this->taskService->add(
+        $userItemResult = $this->serviceBuilder->getUserScope()->user()->current()->user();
+        $taskResult = $this->taskService->add(
             new TaskItemBuilder(
                 sprintf('Test task %s', time()),
-                $curUser->ID,
-                $curUser->ID
+                $userItemResult->ID,
+                $userItemResult->ID
             )
         );
 
         $rootStorageId = (int)$this->serviceBuilder->getDiskScope()->storage()->list(
             [
-                'ID' => $curUser->ID,
+                'ID' => $userItemResult->ID,
                 'ENTITY_TYPE' => 'user'
             ]
         )->storages()[0]->ID;
@@ -82,7 +83,7 @@ class TaskFileTest extends TestCase
             true
         );
 
-        $this->assertTrue($this->taskFileService->attachExists($addedTask->task()->id, [$uploadedFileResult->getId()])->isSuccess());
-        $this->taskService->delete($addedTask->task()->id);
+        $this->assertTrue($this->taskFileService->attachExists($taskResult->task()->id, [$uploadedFileResult->getId()])->isSuccess());
+        $this->taskService->delete($taskResult->task()->id);
     }
 }

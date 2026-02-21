@@ -47,6 +47,7 @@ class TaskChatTest extends TestCase
     use CustomBitrix24Assertions;
 
     protected Task $taskService;
+
     protected TaskChat $taskChatService;
 
     protected ServiceBuilder $serviceBuilder;
@@ -62,16 +63,16 @@ class TaskChatTest extends TestCase
     #[TestDox('Send message to task chat')]
     public function testGetTaskByIdWithAllFields(): void
     {
-        $curUser = $this->serviceBuilder->getUserScope()->user()->current()->user();
-        $addedTask = $this->taskService->add(
+        $userItemResult = $this->serviceBuilder->getUserScope()->user()->current()->user();
+        $taskResult = $this->taskService->add(
             new TaskItemBuilder(
                 sprintf('Test task %s', time()),
-                $curUser->ID,
-                $curUser->ID
+                $userItemResult->ID,
+                $userItemResult->ID
             )
         );
 
-        $this->assertTrue($this->taskChatService->sendMessage($addedTask->task()->id, 'Hello world')->isSuccess());
-        $this->taskService->delete($addedTask->task()->id);
+        $this->assertTrue($this->taskChatService->sendMessage($taskResult->task()->id, 'Hello world')->isSuccess());
+        $this->taskService->delete($taskResult->task()->id);
     }
 }

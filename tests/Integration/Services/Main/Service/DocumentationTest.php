@@ -35,9 +35,9 @@ class DocumentationTest extends TestCase
      */
     public function testGetSchema(): void
     {
-        $schema = $this->documentation->getSchema();
+        $documentationResult = $this->documentation->getSchema();
 
-        $this->assertTrue(json_validate($schema->getPayload()));
+        $this->assertTrue(json_validate($documentationResult->getPayload()));
     }
 
     #[\Override]

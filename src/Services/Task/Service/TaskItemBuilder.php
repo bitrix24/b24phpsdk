@@ -8,12 +8,12 @@ use Carbon\CarbonInterface;
 
 class TaskItemBuilder extends AbstractItemBuilder
 {
-    public static function createFromTask(TaskItemResult $task): self
+    public static function createFromTask(TaskItemResult $taskItemResult): self
     {
         return new self(
-            $task->title,
-            $task->creatorId,
-            $task->responsibleId
+            $taskItemResult->title,
+            $taskItemResult->creatorId,
+            $taskItemResult->responsibleId
         );
     }
 
@@ -21,7 +21,6 @@ class TaskItemBuilder extends AbstractItemBuilder
         string $title,
         int $creatorId,
         int $responsibleId
-
     ) {
         $this->fields['title'] = $title;
         $this->fields['creatorId'] = $creatorId;
