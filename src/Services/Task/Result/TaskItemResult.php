@@ -127,7 +127,6 @@ class TaskItemResult extends AbstractItem
         $testStr = strtolower($field);
         $testArr = explode('_', $testStr);
 
-        return  array_shift($testArr) . implode('', array_map('ucfirst', $testArr));
-        ;
+        return array_shift($testArr) . implode('', array_map('ucfirst', $testArr));
     }
 }

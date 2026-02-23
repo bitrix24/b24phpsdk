@@ -21,11 +21,10 @@ readonly class Base64Encoder
     private array $allowedRecordFileExtensions;
 
     public function __construct(
-        private Filesystem                                    $filesystem,
+        private Filesystem $filesystem,
         private \Symfony\Component\Mime\Encoder\Base64Encoder $base64Encoder,
-        private LoggerInterface                               $log
-    )
-    {
+        private LoggerInterface $log
+    ) {
         $this->allowedRecordFileExtensions = ['wav', 'mp3'];
     }
 
@@ -42,8 +41,13 @@ readonly class Base64Encoder
 
         $fileExt = pathinfo($filename, PATHINFO_EXTENSION);
         if (!in_array($fileExt, $this->allowedRecordFileExtensions, true)) {
-            throw new InvalidArgumentException(sprintf('wrong record file extension %s, allowed types %s',
-                $fileExt, implode(',', $this->allowedRecordFileExtensions)));
+            throw new InvalidArgumentException(
+                sprintf(
+                    'wrong record file extension %s, allowed types %s',
+                    $fileExt,
+                    implode(',', $this->allowedRecordFileExtensions)
+                )
+            );
         }
 
         $fileBody = file_get_contents($filename);
@@ -77,5 +81,10 @@ readonly class Base64Encoder
 
         $this->log->debug('encodeFile.finish');
         return $fileBody;
+    }
+
+    public function encodeString(string $payload): string
+    {
+        return $this->base64Encoder->encodeString($payload);
     }
 }

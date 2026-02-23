@@ -219,8 +219,8 @@ class RemoteEventsFactoryTest extends TestCase
         $request = $this->createRequest($rawRequest);
         $event = $this->factory->create($request);
 
-        // Create mock account that validates the token as correct
-        $accountMock = $this->createMock(Bitrix24AccountInterface::class);
+        // Create stub account that validates the token as correct
+        $accountMock = $this->createStub(Bitrix24AccountInterface::class);
         $accountMock->method('isApplicationTokenValid')
             ->with($applicationToken)
             ->willReturn(true);
@@ -259,8 +259,8 @@ class RemoteEventsFactoryTest extends TestCase
         $request = $this->createRequest($rawRequest);
         $event = $this->factory->create($request);
 
-        // Create mock account that validates the token as incorrect
-        $accountMock = $this->createMock(Bitrix24AccountInterface::class);
+        // Create stub account that validates the token as incorrect
+        $accountMock = $this->createStub(Bitrix24AccountInterface::class);
         $accountMock->method('isApplicationTokenValid')
             ->with($eventToken)
             ->willReturn(false);
@@ -338,8 +338,8 @@ class RemoteEventsFactoryTest extends TestCase
         $request = $this->createRequest($rawRequest);
         $event = $this->factory->create($request);
 
-        // Create mock account that validates the token as correct
-        $accountMock = $this->createMock(Bitrix24AccountInterface::class);
+        // Create stub account that validates the token as correct
+        $accountMock = $this->createStub(Bitrix24AccountInterface::class);
         $accountMock->method('isApplicationTokenValid')
             ->with($applicationToken)
             ->willReturn(true);

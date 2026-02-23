@@ -1,7 +1,9 @@
 services:
   php-cli:
+    image: ghcr.io/bitrix24/b24phpsdk:php-cli
     build:
       context: ./docker/php-cli
+    user: "${UID:-10001}:${GID:-10001}"
     volumes:
       - .:/var/www/html
     working_dir: /var/www/html

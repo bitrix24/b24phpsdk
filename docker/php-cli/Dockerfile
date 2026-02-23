@@ -24,16 +24,9 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 COPY --from=php-extension-installer /usr/bin/install-php-extensions /usr/bin/install-php-extensions
 
 # Link to the source repository for this image (OCI standard label)
-LABEL "org.opencontainers.image.source"="https://github.com/bitrix24/b24sdk-cli"
+LABEL "org.opencontainers.image.source"="https://github.com/bitrix24/b24phpsdk"
 
-ARG UID=10001
-ARG GID=10001
-
-RUN <<EOF
-  groupmod --gid=${GID} www-data
-  usermod --uid=${UID} --gid=${GID} www-data
-EOF
-
+# ── expensive layers first (always cached) ────────────────────────────────────
 RUN <<EOF
   apt-get update
   apt-get install --no-install-recommends --no-install-suggests -q -y \
@@ -46,8 +39,14 @@ RUN install-php-extensions bcmath excimer intl pcntl opcache yaml zip
 
 WORKDIR /var/www/html
 
+ENV COMPOSER_CACHE_DIR=/tmp/composer/cache
+
+# ── cheap UID/GID layers last (only these rebuild on UID change) ──────────────
+ARG UID=10001
+ARG GID=10001
+
+RUN groupmod --gid=${GID} www-data && usermod --uid=${UID} --gid=${GID} www-data
+
 RUN chown www-data:www-data /var/www/html
 
 USER www-data
-
-ENV COMPOSER_CACHE_DIR=/tmp/composer/cache

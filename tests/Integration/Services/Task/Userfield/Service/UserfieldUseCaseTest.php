@@ -16,8 +16,9 @@ namespace Bitrix24\SDK\Tests\Integration\Services\Task\Userfield\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Task\Service\Task;
-use Bitrix24\SDK\Services\User\Service\User;
+use Bitrix24\SDK\Services\Task\Service\TaskItemBuilder;
 use Bitrix24\SDK\Services\Task\Userfield\Service\Userfield;
+use Bitrix24\SDK\Services\User\Service\User;
 use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
@@ -86,12 +87,9 @@ class UserfieldUseCaseTest extends TestCase
         $fieldNameValue = 'test field value';
         $userId = $this->userService->current()->user()->ID;
         $newTaskId = $this->taskService->add(
-            [
-                'TITLE' => 'Test userfields',
-                'RESPONSIBLE_ID' => $userId,
-                $ufFieldName => $fieldNameValue,
-            ]
-        )->getId();
+            (new TaskItemBuilder('Test userfields', $userId, $userId))
+                ->withUserField($ufFieldName, $fieldNameValue)
+        )->task()->id;
         $task = $this->taskService->get($newTaskId, ['*', $ufFieldName])->task();
         $taskId = intval($task->id);
         $this->assertEquals($fieldNameValue, $task->getUserfieldByFieldName($ufOriginalFieldName));

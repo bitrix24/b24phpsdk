@@ -39,7 +39,7 @@ class OperatorTest extends TestCase
     public function testAnswerCallsCorrectApiMethod(): void
     {
         $chatId = 12345;
-        $responseMock = $this->createMock(Response::class);
+        $responseMock = $this->createStub(Response::class);
 
         $this->coreMock
             ->expects($this->once())
@@ -55,7 +55,7 @@ class OperatorTest extends TestCase
     public function testFinishCallsCorrectApiMethod(): void
     {
         $chatId = 12345;
-        $responseMock = $this->createMock(Response::class);
+        $responseMock = $this->createStub(Response::class);
 
         $this->coreMock
             ->expects($this->once())
@@ -71,7 +71,7 @@ class OperatorTest extends TestCase
     public function testAnotherFinishCallsCorrectApiMethod(): void
     {
         $chatId = 12345;
-        $responseMock = $this->createMock(Response::class);
+        $responseMock = $this->createStub(Response::class);
 
         $this->coreMock
             ->expects($this->once())
@@ -87,7 +87,7 @@ class OperatorTest extends TestCase
     public function testSkipCallsCorrectApiMethod(): void
     {
         $chatId = 12345;
-        $responseMock = $this->createMock(Response::class);
+        $responseMock = $this->createStub(Response::class);
 
         $this->coreMock
             ->expects($this->once())
@@ -103,7 +103,7 @@ class OperatorTest extends TestCase
     public function testSpamCallsCorrectApiMethod(): void
     {
         $chatId = 12345;
-        $responseMock = $this->createMock(Response::class);
+        $responseMock = $this->createStub(Response::class);
 
         $this->coreMock
             ->expects($this->once())
@@ -120,7 +120,7 @@ class OperatorTest extends TestCase
     {
         $chatId = 12345;
         $operatorId = 67890;
-        $responseMock = $this->createMock(Response::class);
+        $responseMock = $this->createStub(Response::class);
 
         $this->coreMock
             ->expects($this->once())
@@ -140,7 +140,7 @@ class OperatorTest extends TestCase
     {
         $chatId = 12345;
         $queueCode = 'queue#123#';
-        $responseMock = $this->createMock(Response::class);
+        $responseMock = $this->createStub(Response::class);
 
         $this->coreMock
             ->expects($this->once())

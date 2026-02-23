@@ -17,6 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Services\Task\Commentitem\Service\Commentitem;
+use Bitrix24\SDK\Services\Task\Service\TaskItemBuilder;
 use Bitrix24\SDK\Services\Task\TaskResult\Service\Result;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 use Bitrix24\SDK\Tests\Integration\Factory;
@@ -138,11 +139,8 @@ class ResultTest extends TestCase
         }
         
         $taskId = Factory::getServiceBuilder()->getTaskScope()->task()->add(
-            [
-                'TITLE' => $title,
-                'RESPONSIBLE_ID' => $this->userId,
-            ]
-        )->getId();
+            new TaskItemBuilder($title, $this->userId, $this->userId)
+        )->task()->id;
         
         return $taskId;
     }

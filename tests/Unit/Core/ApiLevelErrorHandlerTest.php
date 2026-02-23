@@ -17,8 +17,11 @@ use Bitrix24\SDK\Core\ApiLevelErrorHandler;
 use Bitrix24\SDK\Core\CoreBuilder;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
+use Bitrix24\SDK\Core\Exceptions\AuthForbiddenException;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Exceptions\ItemNotFoundException;
+use Bitrix24\SDK\Core\Exceptions\MethodNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\OperationTimeLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\PaymentRequiredException;
 use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
@@ -99,6 +102,53 @@ class ApiLevelErrorHandlerTest extends TestCase
                 ],
             ],
             new OperationTimeLimitExceededException()
+        ];
+
+        // API v1 format: error is a plain string
+        yield 'v1 - access denied' => [
+            ['error' => 'ACCESS_DENIED', 'error_description' => 'Access denied!'],
+            new AuthForbiddenException(),
+        ];
+
+        yield 'v1 - query limit exceeded' => [
+            ['error' => 'QUERY_LIMIT_EXCEEDED', 'error_description' => 'Too many requests'],
+            new QueryLimitExceededException(),
+        ];
+
+        yield 'v1 - method not found' => [
+            ['error' => 'ERROR_METHOD_NOT_FOUND', 'error_description' => 'Unknown method called'],
+            new MethodNotFoundException(),
+        ];
+
+        yield 'v1 - item not found' => [
+            ['error' => 'NOT_FOUND', 'error_description' => 'Item not found'],
+            new ItemNotFoundException(),
+        ];
+
+        // API v3 format: error is an array {"code": "...", "message": "..."}
+        yield 'v3 - unknown dto property' => [
+            ['error' => ['code' => 'BITRIX_REST_V3_EXCEPTION_UNKNOWNDTOPROPERTYEXCEPTION', 'message' => 'Unknown property TITLE']],
+            new InvalidArgumentException(),
+        ];
+
+        yield 'v3 - access denied' => [
+            ['error' => ['code' => 'ACCESS_DENIED', 'message' => 'Access denied!']],
+            new AuthForbiddenException(),
+        ];
+
+        yield 'v3 - query limit exceeded' => [
+            ['error' => ['code' => 'QUERY_LIMIT_EXCEEDED', 'message' => 'Too many requests']],
+            new QueryLimitExceededException(),
+        ];
+
+        yield 'v3 - item not found' => [
+            ['error' => ['code' => 'NOT_FOUND', 'message' => 'Item not found']],
+            new ItemNotFoundException(),
+        ];
+
+        yield 'v3 - success response without error key' => [
+            ['result' => ['id' => 42], 'time' => []],
+            null,
         ];
     }
 

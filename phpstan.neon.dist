@@ -37,9 +37,21 @@ parameters:
     - tests/Integration/Services/Lists
     - tests/Integration/Services/CRM/Documentgenerator/Numerator
   excludePaths:
+    # TODO: Fix type errors in RequisiteUserfieldUseCaseTest and remove this exclusion
+    # Tracking: https://github.com/bitrix24/b24phpsdk/issues
     - tests/Integration/Services/CRM/Requisites/Service/RequisiteUserfieldUseCaseTest.php
+
+    # TODO: CRM Status integration tests have unresolved PHPStan errors (level 5)
+    # These tests use dynamic field access patterns not yet annotated in result items.
+    # Tracking: https://github.com/bitrix24/b24phpsdk/issues
     - tests/Integration/Services/CRM/Status
+
+    # TODO: CRM Timeline integration tests have unresolved PHPStan errors (level 5)
+    # Tracking: https://github.com/bitrix24/b24phpsdk/issues
     - tests/Integration/Services/CRM/Timeline
+
+    # TODO: Entity/Section integration tests have unresolved PHPStan errors (level 5)
+    # Tracking: https://github.com/bitrix24/b24phpsdk/issues
     - tests/Integration/Services/Entity/Section
   bootstrapFiles:
     - tests/bootstrap.php

@@ -1,10 +1,22 @@
 # b24-php-sdk change log
 
+## Unreleased
+
+### Added
+
+- Added `src/Legacy/` namespace with `LegacyServiceBuilder` and `LegacyTaskServiceBuilder`,
+  accessible via `$serviceBuilder->getLegacyServiceBuilder()->getTaskScope()->task()`.
+  Preserves access to all Bitrix24 REST API v1 task methods (`list`, `fields`, `delegate`,
+  `start`, `pause`, `defer`, `complete`, etc.) for users migrating to the v3 SDK.
+  All classes under `Bitrix24\SDK\Legacy\` are marked `@deprecated` and will be removed
+  once v3 reaches feature parity with v1.
+
 ## 3.0.0 - 2026.01.01
 
 ### Added
 
-
+- Added `OpenApi\Domain\OpenApiSchemaReader` for programmatic reading and navigation of the OpenAPI specification,
+  with support for component schemas, field type extraction, `$ref` resolution, and request/response schema access
 - Added service `Services\Lists\Lists\Service\Lists` with support methods,
   see [lists.* methods](https://github.com/bitrix24/b24phpsdk/issues/360):
     - `add` creates a universal list, with batch calls support
@@ -145,6 +157,11 @@
     - `getSiteList` retrieves a list of available templates for creating sites
     - `getPageList` retrieves a list of available templates for creating pages
 - Added support for Bitrix24 API v3
+- Switched Task domain methods to Bitrix24 API v3 and documented services/methods currently using v3:
+    - `Services\Task\Service\Task`: `get` (`tasks.task.get`), `add` (`tasks.task.add`), `delete` (`tasks.task.delete`), `update` (`tasks.task.update`)
+    - `Services\Task\Service\TaskChat`: `sendMessage` (`tasks.task.chat.message.send`)
+    - `Services\Task\Service\TaskFile`: `attachExists` (`tasks.task.file.attach`)
+    - `Services\Main\Service\Documentation`: `getSchema` (`documentation`)
 - Added service `Services\IMOpenLines\Connector\Service\Connector` with support methods,
   see [imconnector.* methods](https://github.com/bitrix24/b24phpsdk/issues/320):
     - `list` method returns a list of available connectors
