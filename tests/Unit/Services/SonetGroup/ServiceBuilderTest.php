@@ -33,10 +33,10 @@ class ServiceBuilderTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $core = $this->createMock(CoreInterface::class);
-        $batch = $this->createMock(BatchOperationsInterface::class);
-        $bulkItemsReader = $this->createMock(BulkItemsReaderInterface::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $core = $this->createStub(CoreInterface::class);
+        $batch = $this->createStub(BatchOperationsInterface::class);
+        $bulkItemsReader = $this->createStub(BulkItemsReaderInterface::class);
+        $logger = $this->createStub(LoggerInterface::class);
 
         $this->serviceBuilder = new ServiceBuilder($core, $batch, $bulkItemsReader, $logger);
     }

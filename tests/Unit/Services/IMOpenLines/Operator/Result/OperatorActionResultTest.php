@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Services\IMOpenLines\Operator\Result;
 
-use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Core\Response\DTO\ResponseData;
 use Bitrix24\SDK\Services\IMOpenLines\Operator\Result\OperatorActionResult;
@@ -25,14 +24,12 @@ class OperatorActionResultTest extends TestCase
 {
     public function testIsSuccessWithBooleanTrue(): void
     {
-        $responseData = $this->createMock(ResponseData::class);
+        $responseData = $this->createStub(ResponseData::class);
         $responseData->method('getResult')->willReturn([true]);
-        
-        $response = $this->createMock(Response::class);
+
+        $response = $this->createStub(Response::class);
         $response->method('getResponseData')->willReturn($responseData);
-        
-        $this->createMock(CoreInterface::class);
-        
+
         $operatorActionResult = new OperatorActionResult($response);
         
         self::assertTrue($operatorActionResult->isSuccess());
@@ -40,10 +37,10 @@ class OperatorActionResultTest extends TestCase
 
     public function testIsSuccessWithBooleanFalse(): void
     {
-        $responseData = $this->createMock(ResponseData::class);
+        $responseData = $this->createStub(ResponseData::class);
         $responseData->method('getResult')->willReturn([false]);
         
-        $response = $this->createMock(Response::class);
+        $response = $this->createStub(Response::class);
         $response->method('getResponseData')->willReturn($responseData);
         
         $operatorActionResult = new OperatorActionResult($response);
@@ -53,10 +50,10 @@ class OperatorActionResultTest extends TestCase
 
     public function testIsSuccessWithArrayTrue(): void
     {
-        $responseData = $this->createMock(ResponseData::class);
+        $responseData = $this->createStub(ResponseData::class);
         $responseData->method('getResult')->willReturn([true]);
         
-        $response = $this->createMock(Response::class);
+        $response = $this->createStub(Response::class);
         $response->method('getResponseData')->willReturn($responseData);
         
         $operatorActionResult = new OperatorActionResult($response);
@@ -66,10 +63,10 @@ class OperatorActionResultTest extends TestCase
 
     public function testIsSuccessWithArrayFalse(): void
     {
-        $responseData = $this->createMock(ResponseData::class);
+        $responseData = $this->createStub(ResponseData::class);
         $responseData->method('getResult')->willReturn([false]);
         
-        $response = $this->createMock(Response::class);
+        $response = $this->createStub(Response::class);
         $response->method('getResponseData')->willReturn($responseData);
         
         $operatorActionResult = new OperatorActionResult($response);
@@ -79,10 +76,10 @@ class OperatorActionResultTest extends TestCase
 
     public function testIsSuccessWithNumericOne(): void
     {
-        $responseData = $this->createMock(ResponseData::class);
+        $responseData = $this->createStub(ResponseData::class);
         $responseData->method('getResult')->willReturn([1]);
         
-        $response = $this->createMock(Response::class);
+        $response = $this->createStub(Response::class);
         $response->method('getResponseData')->willReturn($responseData);
         
         $operatorActionResult = new OperatorActionResult($response);
@@ -92,10 +89,10 @@ class OperatorActionResultTest extends TestCase
 
     public function testIsSuccessWithNumericZero(): void
     {
-        $responseData = $this->createMock(ResponseData::class);
+        $responseData = $this->createStub(ResponseData::class);
         $responseData->method('getResult')->willReturn([0]);
         
-        $response = $this->createMock(Response::class);
+        $response = $this->createStub(Response::class);
         $response->method('getResponseData')->willReturn($responseData);
         
         $operatorActionResult = new OperatorActionResult($response);
@@ -105,10 +102,10 @@ class OperatorActionResultTest extends TestCase
 
     public function testIsSuccessWithStringTrue(): void
     {
-        $responseData = $this->createMock(ResponseData::class);
+        $responseData = $this->createStub(ResponseData::class);
         $responseData->method('getResult')->willReturn(['1']);
         
-        $response = $this->createMock(Response::class);
+        $response = $this->createStub(Response::class);
         $response->method('getResponseData')->willReturn($responseData);
         
         $operatorActionResult = new OperatorActionResult($response);
@@ -118,10 +115,10 @@ class OperatorActionResultTest extends TestCase
 
     public function testIsSuccessWithEmptyString(): void
     {
-        $responseData = $this->createMock(ResponseData::class);
+        $responseData = $this->createStub(ResponseData::class);
         $responseData->method('getResult')->willReturn(['']);
         
-        $response = $this->createMock(Response::class);
+        $response = $this->createStub(Response::class);
         $response->method('getResponseData')->willReturn($responseData);
         
         $operatorActionResult = new OperatorActionResult($response);
@@ -131,10 +128,10 @@ class OperatorActionResultTest extends TestCase
 
     public function testIsSuccessWithNull(): void
     {
-        $responseData = $this->createMock(ResponseData::class);
+        $responseData = $this->createStub(ResponseData::class);
         $responseData->method('getResult')->willReturn([null]);
         
-        $response = $this->createMock(Response::class);
+        $response = $this->createStub(Response::class);
         $response->method('getResponseData')->willReturn($responseData);
         
         $operatorActionResult = new OperatorActionResult($response);

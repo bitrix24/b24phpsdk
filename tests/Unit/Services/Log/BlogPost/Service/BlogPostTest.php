@@ -26,7 +26,7 @@ class BlogPostTest extends TestCase
     #[TestDox('Test BlogPost service can be instantiated')]
     public function testCanBeInstantiated(): void
     {
-        $core = $this->createMock(CoreInterface::class);
+        $core = $this->createStub(CoreInterface::class);
         $nullLogger = new NullLogger();
         
         $blogPost = new BlogPost($core, $nullLogger);
@@ -38,7 +38,7 @@ class BlogPostTest extends TestCase
     public function testAddBuildsCorrectParameters(): void
     {
         $core = $this->createMock(CoreInterface::class);
-        $response = $this->createMock(Response::class);
+        $response = $this->createStub(Response::class);
         $nullLogger = new NullLogger();
         
         $core->expects($this->once())
