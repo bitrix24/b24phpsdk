@@ -12,7 +12,7 @@ class TaskItemBuilder extends AbstractItemBuilder
     {
         return new self(
             $taskItemResult->title,
-            $taskItemResult->creatorId,
+            (int)$taskItemResult->createdBy,
             $taskItemResult->responsibleId
         );
     }
