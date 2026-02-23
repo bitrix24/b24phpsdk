@@ -3,44 +3,23 @@ on:
   push:
   pull_request:
 
-env:
-  COMPOSER_FLAGS: "--ansi --no-interaction --no-progress --prefer-dist"
-
 jobs:
   tests:
     name: "PHPUnit tests"
-
-    runs-on: ${{ matrix.operating-system }}
-
-    strategy:
-      fail-fast: false
-      matrix:
-        php-version:
-          - "8.4"
-        dependencies: [ highest ]
-        operating-system: [ ubuntu-latest, windows-2022]
+    runs-on: ubuntu-latest
 
     steps:
-      - name: "Set git config for NTFS (Windows only)"
-        if: runner.os == 'Windows'
-        run: git config --global core.protectNTFS false
-
       - name: "Checkout"
         uses: "actions/checkout@v4"
 
-      - name: "Install PHP"
-        uses: "shivammathur/setup-php@v2"
-        with:
-          coverage: "none"
-          php-version: "${{ matrix.php-version }}"
-          extensions: json, bcmath, curl, intl, mbstring
+      - name: "Build Docker image"
+        run: docker-compose build
 
       - name: "Install dependencies"
-        run: |
-          composer update ${{ env.COMPOSER_FLAGS }}
+        run: make composer-install
 
       - name: "run unit tests"
-        run: "composer phpunit-run-unit-tests"
+        run: make test-unit
 
       - name: "is unit tests tests succeeded"
         if: ${{ success() }}
