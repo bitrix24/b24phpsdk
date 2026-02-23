@@ -1,11 +1,11 @@
-name: "PhpCsFixer lint checks"
+name: "Deptrac architecture checks"
 on:
   push:
   pull_request:
 
 jobs:
   static-analysis:
-    name: "PhpCsFixer"
+    name: "Deptrac"
     runs-on: ubuntu-latest
 
     steps:
@@ -18,15 +18,13 @@ jobs:
       - name: "Install dependencies"
         run: make composer-install
 
-      - name: "PhpCsFixer"
-        run: make lint-cs-fixer
+      - name: "Run Deptrac"
+        run: make lint-deptrac
 
-      - name: "is PhpCsFixer check succeeded"
+      - name: "is Deptrac check succeeded"
         if: ${{ success() }}
-        run: |
-          echo '✅ PhpCsFixer check pass, congratulations!'
+        run: echo '✅ Deptrac check pass, congratulations!'
 
-      - name: "is PhpCsFixer check failed"
+      - name: "is Deptrac check failed"
         if: ${{ failure() }}
-        run: |
-          echo '::error:: ❗️ PhpCsFixer check failed (╯°益°)╯彡┻━┻'
+        run: echo '::error:: ❗️ Deptrac check failed (╯°益°)╯彡┻━┻'
