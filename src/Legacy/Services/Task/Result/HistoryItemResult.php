@@ -11,17 +11,20 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\Task\Result;
+namespace Bitrix24\SDK\Legacy\Services\Task\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractItem;
+use Carbon\CarbonImmutable;
 
 /**
- * Class CounterItemResult
+ * Class HistoryItemResult
  *
- * @property-read string $key
- * @property-read int|null $counter
- * @property-read int|null $code
+ * @property-read int $id
+ * @property-read CarbonImmutable|null $createdDate
+ * @property-read string|null $field
+ * @property-read array $value
+ * @property-read array $user
  */
-class CounterItemResult extends AbstractItem
+class HistoryItemResult extends AbstractItem
 {
 }

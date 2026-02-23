@@ -37,7 +37,6 @@ use Carbon\CarbonImmutable;
  * @property-read int|null $createdBy
  * @property-read CarbonImmutable|null $createdDate
  * @property-read int|null $responsibleId
- * @property-read int|null $creatorId
  * @property-read array|null $accomplices
  * @property-read array|null $auditors
  * @property-read int|null $changedBy

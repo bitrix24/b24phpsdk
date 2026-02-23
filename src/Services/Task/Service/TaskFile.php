@@ -16,26 +16,11 @@ namespace Bitrix24\SDK\Services\Task\Service;
 use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\ApiVersion;
-use Bitrix24\SDK\Core\Contracts\CoreInterface;
-use Bitrix24\SDK\Core\Contracts\ItemBuilderInterface;
-use Bitrix24\SDK\Core\Contracts\SelectBuilderInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
-use Bitrix24\SDK\Services\Task\Result\AccessesResult;
-use Bitrix24\SDK\Services\Task\Result\AddedTaskResult;
-use Bitrix24\SDK\Services\Task\Result\CountersResult;
-use Bitrix24\SDK\Services\Task\Result\DeletedTaskResult;
-use Bitrix24\SDK\Services\Task\Result\DependenceResult;
 use Bitrix24\SDK\Services\Task\Result\FileAttachedToTaskResult;
-use Bitrix24\SDK\Services\Task\Result\HistoriesResult;
-use Bitrix24\SDK\Services\Task\Result\TaskFieldsResult;
-use Bitrix24\SDK\Services\Task\Result\TaskResult;
-use Bitrix24\SDK\Services\Task\Result\TasksResult;
-use Bitrix24\SDK\Services\Task\Result\UpdatedTaskResult;
-use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['task']))]
 class TaskFile extends AbstractService

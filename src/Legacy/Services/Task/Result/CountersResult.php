@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\Task\Result;
+namespace Bitrix24\SDK\Legacy\Services\Task\Result;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
@@ -20,7 +20,7 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 /**
  * Class CountersResult
  *
- * @package Bitrix24\SDK\Services\Task\Result
+ * @package Bitrix24\SDK\Legacy\Services\Task\Result
  */
 class CountersResult extends AbstractResult
 {

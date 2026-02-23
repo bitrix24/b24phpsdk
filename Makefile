@@ -488,7 +488,11 @@ integration_tests_department:
 .PHONY: integration_tests_task
 integration_tests_task:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_task
-	
+
+.PHONY: test-integration-legacy-task
+test-integration-legacy-task:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_legacy_task
+
 .PHONY: integration_tests_sale
 integration_tests_sale:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale

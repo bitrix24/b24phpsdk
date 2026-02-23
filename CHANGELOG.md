@@ -1,5 +1,16 @@
 # b24-php-sdk change log
 
+## Unreleased
+
+### Added
+
+- Added `src/Legacy/` namespace with `LegacyServiceBuilder` and `LegacyTaskServiceBuilder`,
+  accessible via `$serviceBuilder->getLegacyServiceBuilder()->getTaskScope()->task()`.
+  Preserves access to all Bitrix24 REST API v1 task methods (`list`, `fields`, `delegate`,
+  `start`, `pause`, `defer`, `complete`, etc.) for users migrating to the v3 SDK.
+  All classes under `Bitrix24\SDK\Legacy\` are marked `@deprecated` and will be removed
+  once v3 reaches feature parity with v1.
+
 ## 3.0.0 - 2026.01.01
 
 ### Added

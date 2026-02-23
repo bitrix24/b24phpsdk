@@ -12,15 +12,15 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\Task\Result;
+namespace Bitrix24\SDK\Legacy\Services\Task\Result;
 
 use Bitrix24\SDK\Core\Result\FieldsResult;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 
 /**
- * Class TaskResult
+ * Class TaskFieldsResult
  *
- * @package Bitrix24\SDK\Services\Task\Result
+ * @package Bitrix24\SDK\Legacy\Services\Task\Result
  */
 class TaskFieldsResult extends FieldsResult
 {
