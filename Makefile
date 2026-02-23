@@ -27,7 +27,7 @@ help:
 	@echo "docker-up                 - run docker"
 	@echo "docker-down               - stop docker"
 	@echo "docker-down-clear         - stop docker and remove orphaned containers"
-	@echo "docker-pull               - download images and ignore pull failures"
+	@echo "docker-pull               - pull Docker image from registry"
 	@echo "docker-restart            - restart containers"
 	@echo ""
 	@echo "composer-install          - install dependencies from composer"
@@ -86,12 +86,10 @@ t:
 docker-init:
 	@echo "remove all containers"
 	docker compose down --remove-orphans
-	@echo "build containers"
-	docker compose build
+	@echo "pull Docker image from registry…"
+	docker compose pull
 	@echo "install dependencies"
 	docker compose run --rm php-cli composer install
-	@echo "change owner of var folder for access from container"
-    docker compose run --rm php-cli chown -R www-data:www-data /var/www/html/var/
 	@echo "run application…"
 	docker compose up -d
 
@@ -112,7 +110,8 @@ docker-down-clear:
 
 .PHONY: docker-pull
 docker-pull:
-	docker compose pull --ignore-pull-failures
+	@echo "pull Docker image from registry…"
+	docker compose pull
 
 .PHONY: docker-restart
 docker-restart: down up
