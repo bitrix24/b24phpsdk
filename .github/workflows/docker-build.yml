@@ -1,5 +1,8 @@
 name: "Build Docker image"
 on:
+  push:
+    paths:
+      - "docker/php-cli/Dockerfile"
   workflow_dispatch: ~
 
 concurrency:
