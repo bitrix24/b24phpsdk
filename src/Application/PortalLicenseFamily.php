@@ -21,6 +21,7 @@ enum PortalLicenseFamily: string
 {
     case free = 'free';
     case basic = 'basic';
+    case demo = 'demo';
     case std = 'std';
     case pro = 'pro';
     case project = 'project';

@@ -26,6 +26,7 @@ class Scope
         'baas',
         'biconnector',
         'bizproc',
+        'booking',
         'calendar',
         'calendarmobile',
         'call',
@@ -40,7 +41,6 @@ class Scope
         'disk',
         'documentgenerator',
         'entity',
-        'faceid',
         'forum',
         'humanresources.hcmlink',
         'iblock',
@@ -55,6 +55,7 @@ class Scope
         'lists',
         'log',
         'mailservice',
+        'main',
         'messageservice',
         'mobile',
         'notifications',
@@ -63,6 +64,7 @@ class Scope
         'pull',
         'pull_channel',
         'rating',
+        'rest',
         'rpa',
         'sale',
         'salescenter',
@@ -82,6 +84,7 @@ class Scope
         'user_brief',
         'userconsent',
         'userfieldconfig',
+        'vote',
     ];
 
     protected array $currentScope = [];
