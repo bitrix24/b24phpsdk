@@ -283,8 +283,9 @@
 - Updated Symfony dependencies to support OpenAPI schema builder infrastructure
 - Refactored integration tests: renamed `Fabric.php` to `Factory.php` for consistency
 
+### Fixed
 
-
+- Fixed handling of `scope` and `licence_family` fields.
 
 ## 1.9.0 - 2025.12.01
 
