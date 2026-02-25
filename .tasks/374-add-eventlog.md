@@ -35,21 +35,59 @@ access the nested key explicitly.
 
 ### 1. Result: Item
 `src/Services/Main/Result/EventLogItemResult.php`
+
+Extends `AbstractItem` and **overrides `__get()`** with typed casting (following the
+`AbstractCrmItem` pattern — not just PHPDoc annotations, but real PHP type conversion).
+
+#### Field → PHP type mapping
+
+| Field | API type | PHP type | Casting rule |
+|-------|----------|----------|--------------|
+| `id` | integer | `int` | `(int)$this->data[$offset]` |
+| `timestampX` | datetime (ISO 8601 / DATE_ATOM) | `CarbonImmutable` | `CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset])` |
+| `severity` | string | `string\|null` | raw (e.g. `"SECURITY"`, `"INFO"`, `"WARNING"`, `"ERROR"`) |
+| `auditTypeId` | string | `string\|null` | raw (e.g. `"USER_AUTHORIZE"`) |
+| `moduleId` | string | `string\|null` | raw |
+| `itemId` | string | `string\|null` | raw |
+| `remoteAddr` | string | `string\|null` | raw |
+| `userAgent` | string | `string\|null` | raw |
+| `requestUri` | string | `string\|null` | raw |
+| `siteId` | string | `string\|null` | raw |
+| `userId` | integer | `int\|null` | `(int)` only when not empty/null |
+| `guestId` | integer | `int\|null` | `(int)` only when not empty/null |
+| `description` | string (JSON) | `string\|null` | raw |
+
+#### `__get()` implementation pattern (from `AbstractCrmItem`):
+```php
+public function __get($offset)
+{
+    return match ($offset) {
+        'id'     => (int)$this->data[$offset],
+        'userId', 'guestId' => ($this->data[$offset] !== null && $this->data[$offset] !== '')
+                               ? (int)$this->data[$offset] : null,
+        'timestampX' => ($this->data[$offset] !== '' && $this->data[$offset] !== null)
+                        ? CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]) : null,
+        default  => $this->data[$offset] ?? null,
+    };
+}
+```
+
+#### PHPDoc annotations:
 ```php
 /**
- * @property-read int    $id
- * @property-read string $timestampX
- * @property-read string $severity
- * @property-read string $auditTypeId
- * @property-read string $moduleId
- * @property-read string $itemId
- * @property-read string $remoteAddr
- * @property-read string $userAgent
- * @property-read string $requestUri
- * @property-read string $siteId
- * @property-read int    $userId
- * @property-read int    $guestId
- * @property-read string $description
+ * @property-read int                  $id
+ * @property-read CarbonImmutable|null $timestampX
+ * @property-read string|null          $severity
+ * @property-read string|null          $auditTypeId
+ * @property-read string|null          $moduleId
+ * @property-read string|null          $itemId
+ * @property-read string|null          $remoteAddr
+ * @property-read string|null          $userAgent
+ * @property-read string|null          $requestUri
+ * @property-read string|null          $siteId
+ * @property-read int|null             $userId
+ * @property-read int|null             $guestId
+ * @property-read string|null          $description
  */
 class EventLogItemResult extends AbstractItem {}
 ```
@@ -74,26 +112,66 @@ class EventLogItemResult extends AbstractItem {}
 
 Methods:
 ```php
-#[ApiEndpointMetadata('main.eventlog.get', 'https://apidocs.bitrix24.com/...', '...')]
+/**
+ * Returns a single event log entry by identifier.
+ *
+ * @see https://apidocs.bitrix24.com/api-reference/rest-v3/main/main-eventlog-get.html
+ *
+ * @param positive-int $id     Event log entry identifier
+ * @param string[]     $select Fields to return (id, timestampX, severity, auditTypeId,
+ *                             moduleId, itemId, remoteAddr, userAgent, requestUri,
+ *                             siteId, userId, guestId, description)
+ * @throws BaseException
+ * @throws TransportException
+ */
+#[ApiEndpointMetadata(
+    'main.eventlog.get',
+    'https://apidocs.bitrix24.com/api-reference/rest-v3/main/main-eventlog-get.html',
+    'Returns a single event log entry by identifier.'
+)]
 public function get(int $id, array $select = []): EventLogResult
 
-#[ApiEndpointMetadata('main.eventlog.list', 'https://apidocs.bitrix24.com/...', '...')]
+/**
+ * Returns a list of event log entries by filter conditions.
+ *
+ * @see https://apidocs.bitrix24.com/api-reference/rest-v3/main/main-eventlog-list.html
+ *
+ * @param string[] $select     Fields to return
+ * @param array    $filter     Filter conditions: ["field", "operator", value] or ["field", value]
+ * @param array    $order      Sort order: ["field" => "ASC"|"DESC"]
+ * @param array    $pagination Pagination: ["page" => int, "limit" => int, "offset" => int]
+ * @throws BaseException
+ * @throws TransportException
+ */
+#[ApiEndpointMetadata(
+    'main.eventlog.list',
+    'https://apidocs.bitrix24.com/api-reference/rest-v3/main/main-eventlog-list.html',
+    'Returns a list of event log entries by filter conditions.'
+)]
 public function list(array $select = [], array $filter = [], array $order = [], array $pagination = []): EventLogsResult
 
-#[ApiEndpointMetadata('main.eventlog.tail', 'https://apidocs.bitrix24.com/...', '...')]
+/**
+ * Returns new event log entries after a reference cursor point.
+ *
+ * @see https://apidocs.bitrix24.com/api-reference/rest-v3/main/main-eventlog-tail.html
+ *
+ * @param string[] $select Fields to return (required)
+ * @param array    $filter Filter conditions (required, pass [] for no filter)
+ * @param array    $cursor Cursor: ["field" => "id", "value" => int, "order" => "ASC"|"DESC", "limit" => int]
+ * @throws BaseException
+ * @throws TransportException
+ */
+#[ApiEndpointMetadata(
+    'main.eventlog.tail',
+    'https://apidocs.bitrix24.com/api-reference/rest-v3/main/main-eventlog-tail.html',
+    'Returns new event log entries after a reference cursor point.'
+)]
 public function tail(array $select, array $filter, array $cursor): EventLogsResult
 ```
 
 Guard: `get()` must call `$this->guardPositiveId($id)` before making API call.
 
-### 5. Unit Test
-`tests/Unit/Services/Main/Service/EventLogTest.php`
-- `#[CoversClass(EventLog::class)]`
-- Extends `TestCase`
-- Uses `NullCore` (no HTTP calls)
-- Tests: service instantiation, that methods return correct result types
-
-### 6. Integration Test
+### 5. Integration Test
 `tests/Integration/Services/Main/Service/EventLogTest.php`
 - Uses `Factory::getServiceBuilder()->getMainScope()->eventLog()`
 - Tests: `get()` with a real ID, `list()` with a filter, `tail()` with a cursor
@@ -138,13 +216,14 @@ test-integration-main-eventlog:
 | File | Purpose |
 |------|---------|
 | `src/Services/Main/Service/Event.php` | Pattern to follow (no Batch, simple service) |
-| `src/Services/Main/Result/EventHandlerItemResult.php` | Item result pattern |
+| `src/Services/CRM/Common/Result/AbstractCrmItem.php` | **Type casting pattern** — override `__get()` with `match`/`switch` |
+| `src/Services/Main/Result/EventHandlerItemResult.php` | Item result pattern (no casting — do NOT follow this for EventLog) |
 | `src/Services/Main/Result/EventHandlersResult.php` | List result pattern |
 | `src/Services/Main/MainServiceBuilder.php` | Where to add `eventLog()` method |
 | `src/Core/Result/AbstractResult.php` | Base class for result objects |
 | `src/Core/Result/AbstractItem.php` | Base class for item objects |
 | `src/Services/AbstractService.php` | Base service class (`guardPositiveId`) |
-| `tests/Unit/Services/Main/MainServiceBuilderTest.php` | Test pattern for builder |
+| `tests/Integration/Services/Main/Service/MainTest.php` | Integration test pattern for Main scope |
 
 ---
 
@@ -171,10 +250,7 @@ foreach ($data['items'] as $item) {
 ## Verification
 
 ```bash
-# 1. Unit tests pass
-make test-unit
-
-# 2. Static analysis clean
+# 1. Static analysis clean
 make lint-phpstan
 
 # 3. Code style clean
