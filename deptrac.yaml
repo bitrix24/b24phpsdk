@@ -1,4 +1,5 @@
 deptrac:
+  cache_file: var/deptrac/.deptrac.cache
   paths:
     - src
 
