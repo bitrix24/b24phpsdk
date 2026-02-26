@@ -160,9 +160,9 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
     }
 
     #[\Override]
-    public function markEmailAsVerified(): void
+    public function markEmailAsVerified(?CarbonImmutable $verifiedAt = null): void
     {
-        $this->emailVerifiedAt = new CarbonImmutable();
+        $this->emailVerifiedAt = $verifiedAt ?? new CarbonImmutable();
         $this->updatedAt = new CarbonImmutable();
     }
 
