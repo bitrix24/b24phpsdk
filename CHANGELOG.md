@@ -289,7 +289,13 @@ Supported in bitrix24-php-sdk methods count: 697
 Coverage percentage: 59.83% 🚀
 Supported in bitrix24-php-sdk methods with batch wrapper count: 91
 ```
-## 1.10.1 - 2026.02.25    
+## 1.11.0 - upcoming
+
+### Changed
+
+- Added PHP 8.5 to supported versions in `composer.json` (`php` requirement updated to `8.2.* || 8.3.* || 8.4.* || 8.5.*`)
+
+## 1.10.1 - 2026.02.25
 ### Fixed
 
 - Fixed handling of `scope` and `licence_family` fields.
