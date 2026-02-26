@@ -49,6 +49,7 @@
     "symfony/uid": "^7||^8"
   },
   "require-dev": {
+    "deptrac/deptrac": "^3.0",
     "ergebnis/composer-normalize": "^2",
     "fakerphp/faker": "^1",
     "friendsofphp/php-cs-fixer": "^3",
@@ -60,12 +61,12 @@
     "phpunit/phpunit": "^10 || ^11|| ^12",
     "rector/rector": "^1",
     "roave/security-advisories": "dev-master",
+    "sentry/sentry": "^4",
     "symfony/debug-bundle": "^7||^8",
     "symfony/process": "^7||^8",
     "symfony/stopwatch": "^7||^8",
     "symfony/var-dumper": "^7||^8",
-    "typhoon/reflection": "^0.4",
-    "sentry/sentry": "^4"
+    "typhoon/reflection": "^0.4"
   },
   "autoload": {
     "psr-4": {

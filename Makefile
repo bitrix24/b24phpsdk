@@ -497,6 +497,10 @@ integration_tests_task:
 test-integration-legacy-task:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_legacy_task
 
+.PHONY: test-integration-main-eventlog
+test-integration-main-eventlog:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_main_eventlog
+
 .PHONY: integration_tests_sale
 integration_tests_sale:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale

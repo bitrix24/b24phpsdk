@@ -78,6 +78,7 @@ make test-integration-sale-payment-item-basket
 make test-integration-sale-payment-item-shipment
 make test-integration-sale-property-relation
 make test-integration-legacy-task
+make test-integration-main-eventlog
 ```
 
 ### Run a single test class
@@ -112,6 +113,62 @@ Individual linters:
 | `make lint-phpstan` | PHPStan | Static analysis |
 | `make lint-rector` | Rector | Check upgrade rules |
 | `make lint-rector-fix` | Rector | Auto-apply upgrade rules |
+| `make lint-deptrac` | Deptrac | Enforce architectural layer boundaries |
+
+---
+
+## Architectural layer enforcement (Deptrac)
+
+[Deptrac](https://github.com/deptrac/deptrac) statically analyses PHP `use` imports and enforces
+that classes only depend on layers they are allowed to.
+
+### Layer rules
+
+| Layer | May depend on |
+|---|---|
+| `Core` | — (nothing inside the SDK) |
+| `Application` | `Core`, `Services` |
+| `Infrastructure` | `Core`, `Services` |
+| `Services` | `Core`, `Application`, `Legacy` |
+| `Legacy` | `Core`, `Application`, `Services` |
+
+### Configuration
+
+Rules live in `deptrac.yaml` at the project root.
+The `skip_violations` section records **pre-existing** violations that have not been fixed yet.
+Each entry carries a `TODO` comment describing the required refactoring.
+
+**Rule**: never add a new entry to `skip_violations` to silence a freshly introduced violation —
+fix the import instead.
+
+### Running
+
+```bash
+make lint-deptrac          # check only
+```
+
+Deptrac is also included in `make lint-all`, so it runs as part of the full quality gate.
+
+### Reading the output
+
+| Field | Meaning |
+|---|---|
+| Violations | Imports that break a layer rule and are not skipped — must be zero |
+| Skipped violations | Known pre-existing violations declared in `skip_violations` |
+| Uncovered | Classes not assigned to any layer (vendor code, tests) — expected to be high |
+| Allowed | Imports that satisfy the ruleset — informational |
+
+### Adding a new `skip_violation`
+
+Only allowed for violations that existed **before** your change.
+Add an entry to `deptrac.yaml` → `skip_violations` with a `TODO` comment:
+
+```yaml
+skip_violations:
+  Bitrix24\SDK\Core\MyClass:
+    # TODO: move FooInterface to Core so Core does not depend on Infrastructure
+    - Bitrix24\SDK\Infrastructure\FooInterface
+```
 
 ---
 
@@ -147,6 +204,7 @@ Individual linters:
 | `make lint-phpstan` | Static analysis |
 | `make lint-rector` | Check refactoring rules |
 | `make lint-rector-fix` | Apply refactoring rules |
+| `make lint-deptrac` | Check architectural layer boundaries |
 
 ### Tests — unit
 
@@ -216,6 +274,12 @@ Individual linters:
 | Target | Suite |
 |---|---|
 | `make test-integration-legacy-task` | Legacy task API (v1) |
+
+### Tests — integration (Main)
+
+| Target | Suite |
+|---|---|
+| `make test-integration-main-eventlog` | Event log (`main.eventlog.*`) |
 
 ---
 
@@ -385,3 +449,15 @@ Your webhook has expired or was revoked. Generate a new incoming webhook in Bitr
 **Integration tests fail with "scope not available"**
 
 The webhook user does not have the required scope enabled. Edit the webhook in Bitrix24 and enable the missing scope (e.g., `crm`, `lists`, `imopenlines`).
+
+**`lint-deptrac` reports new violations after adding a class**
+
+A new class depends on a layer it is not allowed to use. Fix the import — do not add it to `skip_violations`.
+Check `deptrac.yaml` → `ruleset` for what each layer is allowed to import.
+
+**`lint-deptrac` fails with `vendor/bin/deptrac: not found`**
+
+Deptrac is not installed. Run:
+```bash
+make composer-install
+```

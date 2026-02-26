@@ -4,6 +4,41 @@
 
 ### Added
 
+- Added `deptrac/deptrac` (`^3.0`) as a dev dependency — architectural layer enforcement tool.
+  Rules are declared in `deptrac.yaml`; run via `make lint-deptrac` (also part of `make lint-all`).
+  Layer boundaries: `Core` → nothing; `Application` → `Core`, `Services`; `Infrastructure` → `Core`, `Services`;
+  `Services` → `Core`, `Application`, `Legacy`; `Legacy` → `Core`, `Application`, `Services`.
+  22 pre-existing violations are recorded in `skip_violations` with `TODO` comments tracking required refactoring.
+
+- Typed `EventLogItemResult::$remoteAddr` as `Darsyn\IP\Version\Multi|null` instead of `string|null`.
+  `darsyn/ip` was already a dependency but unused in result items.
+  `Multi::factory()` auto-detects IPv4/IPv6 and returns a value object supporting CIDR range checks,
+  protocol-appropriate string representation, and strict typing.
+  Applies the same null/empty-string guard used by `$timestampX` to handle absent API fields safely.
+
+- Added `Services\AbstractSelectBuilder::allSystemFields()` — convenience method that uses reflection
+  to discover and call all public zero-parameter field methods declared in the concrete subclass,
+  collecting all available system fields in a single call. Supports chaining with `withUserFields()`.
+  Works automatically for any existing or future `AbstractSelectBuilder` descendant without any changes to them.
+
+- Added `Core\Contracts\SortOrder` enum (`Ascending = 'ASC'`, `Descending = 'DESC'`) —
+  type-safe sort direction for use across all REST v3 API calls.
+
+- Added service `Services\Main\Service\EventLog` with REST v3 event log methods
+  (scope: `main`, requires administrator access),
+  see [main.eventlog.* methods](https://github.com/bitrix24/b24phpsdk/issues/374):
+    - `get(int $id, array|EventLogSelectBuilder $select)` — returns a single event log entry by ID
+      ([main.eventlog.get](https://apidocs.bitrix24.com/api-reference/rest-v3/main/main-eventlog-get.html))
+    - `list(array|EventLogSelectBuilder $select, array|EventLogFilter $filter, array $order, array $pagination)` — returns a list of entries with filtering and pagination
+      ([main.eventlog.list](https://apidocs.bitrix24.com/api-reference/rest-v3/main/main-eventlog-list.html))
+    - `tail(array|EventLogSelectBuilder $select, array|EventLogFilter $filter, EventLogTailCursor $cursor)` — returns new entries after a cursor point for polling/sync scenarios
+      ([main.eventlog.tail](https://apidocs.bitrix24.com/api-reference/rest-v3/main/main-eventlog-tail.html))
+- Added `Services\Main\Service\EventLogSelectBuilder` — fluent select builder for event log fields
+- Added `Services\Main\Service\EventLogFilter` — type-safe filter builder with typed condition builders
+  per field (`IntFieldConditionBuilder`, `DateTimeFieldConditionBuilder`, `StringFieldConditionBuilder`)
+- Added `Services\Main\Service\EventLogTailCursor` — immutable value object for the tail cursor
+  (`field`, `order: SortOrder`, `value`, `limit`), serialized via `toArray()`
+
 - Added `src/Legacy/` namespace with `LegacyServiceBuilder` and `LegacyTaskServiceBuilder`,
   accessible via `$serviceBuilder->getLegacyServiceBuilder()->getTaskScope()->task()`.
   Preserves access to all Bitrix24 REST API v1 task methods (`list`, `fields`, `delegate`,
