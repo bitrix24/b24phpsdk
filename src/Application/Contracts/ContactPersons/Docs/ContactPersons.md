@@ -15,7 +15,7 @@ Store information about person who installed application
 | `getUpdatedAt()`              | `CarbonImmutable`     | Returns date and time contact person was last updated                       | -                          |
 | `getEmail()`                  | `?string`             | Returns contact person email (if any)                                       | -                          |
 | `changeEmail()`               | `void`                | Changes contact person email                                                | -                          |
-| `markEmailAsVerified()`       | `void`                | Marks contact person email as verified                                      | -                          |
+| `markEmailAsVerified(?CarbonImmutable $verifiedAt = null)` | `void` | Marks contact person email as verified; uses current time if no date supplied | -            |
 | `getEmailVerifiedAt()`        | `?CarbonImmutable`    | Returns date and time email was verified (if verified)                      | -                          |
 | `changeMobilePhone()`         | `void`                | Changes mobile phone for contact person                                     | -                          |
 | `getMobilePhone()`            | `?PhoneNumber`        | Returns contact person mobile phone (if any)                                | -                          |

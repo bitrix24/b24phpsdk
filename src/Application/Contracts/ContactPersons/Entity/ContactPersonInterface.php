@@ -77,9 +77,10 @@ interface ContactPersonInterface
     public function changeEmail(?string $email): void;
 
     /**
-     * @return void mark contact person email as verified (send check main)
+     * Mark contact person email as verified.
+     * If $verifiedAt is null, the current timestamp is used.
      */
-    public function markEmailAsVerified(): void;
+    public function markEmailAsVerified(?CarbonImmutable $verifiedAt = null): void;
 
     /**
      * @return bool is email verified with send code or magic link

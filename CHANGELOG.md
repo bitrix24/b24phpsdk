@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Changed
+
+- `ContactPersonInterface::markEmailAsVerified()` now accepts an optional
+  `?CarbonImmutable $verifiedAt = null` parameter.
+  When `null` (default), the current timestamp is used — fully backward-compatible.
+  Callers may supply an explicit date when restoring state from persistence or syncing external data.
+  Updated: `ContactPersonInterface`, `ContactPersonReferenceEntityImplementation`,
+  `ContactPersons.md` documentation, added `testMarkEmailAsVerifiedWithSpecificDate` unit test.
+
 ### Added
 
 - Added `deptrac/deptrac` (`^3.0`) as a dev dependency — architectural layer enforcement tool.
