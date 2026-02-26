@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Services\Main\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractItem;
 use Carbon\CarbonImmutable;
+use Darsyn\IP\Version\Multi;
 
 /**
  * @property-read int                  $id
@@ -23,7 +24,7 @@ use Carbon\CarbonImmutable;
  * @property-read string|null          $auditTypeId
  * @property-read string|null          $moduleId
  * @property-read string|null          $itemId
- * @property-read string|null          $remoteAddr
+ * @property-read Multi|null            $remoteAddr
  * @property-read string|null          $userAgent
  * @property-read string|null          $requestUri
  * @property-read string|null          $siteId
@@ -48,6 +49,9 @@ class EventLogItemResult extends AbstractItem
                 : null,
             'timestampX' => ($this->data[$offset] !== '' && $this->data[$offset] !== null)
                 ? CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset])
+                : null,
+            'remoteAddr' => ($this->data[$offset] !== '' && $this->data[$offset] !== null)
+                ? Multi::factory($this->data[$offset])
                 : null,
             default => $this->data[$offset] ?? null,
         };

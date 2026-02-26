@@ -4,6 +4,23 @@
 
 ### Added
 
+- Added `deptrac/deptrac` (`^3.0`) as a dev dependency — architectural layer enforcement tool.
+  Rules are declared in `deptrac.yaml`; run via `make lint-deptrac` (also part of `make lint-all`).
+  Layer boundaries: `Core` → nothing; `Application` → `Core`, `Services`; `Infrastructure` → `Core`, `Services`;
+  `Services` → `Core`, `Application`, `Legacy`; `Legacy` → `Core`, `Application`, `Services`.
+  22 pre-existing violations are recorded in `skip_violations` with `TODO` comments tracking required refactoring.
+
+- Typed `EventLogItemResult::$remoteAddr` as `Darsyn\IP\Version\Multi|null` instead of `string|null`.
+  `darsyn/ip` was already a dependency but unused in result items.
+  `Multi::factory()` auto-detects IPv4/IPv6 and returns a value object supporting CIDR range checks,
+  protocol-appropriate string representation, and strict typing.
+  Applies the same null/empty-string guard used by `$timestampX` to handle absent API fields safely.
+
+- Added `Services\AbstractSelectBuilder::allSystemFields()` — convenience method that uses reflection
+  to discover and call all public zero-parameter field methods declared in the concrete subclass,
+  collecting all available system fields in a single call. Supports chaining with `withUserFields()`.
+  Works automatically for any existing or future `AbstractSelectBuilder` descendant without any changes to them.
+
 - Added `Core\Contracts\SortOrder` enum (`Ascending = 'ASC'`, `Descending = 'DESC'`) —
   type-safe sort direction for use across all REST v3 API calls.
 

@@ -22,6 +22,7 @@ use Bitrix24\SDK\Services\Main\Service\EventLogSelectBuilder;
 use Bitrix24\SDK\Services\Main\Service\EventLogTailCursor;
 use Bitrix24\SDK\Tests\Integration\Factory;
 use Carbon\CarbonImmutable;
+use Darsyn\IP\Version\Multi;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -123,7 +124,8 @@ class EventLogTest extends TestCase
     {
         // fetch one item first to get a valid ID
         $items = $this->eventLog->list(
-            (new EventLogSelectBuilder())->timestampX()->severity(),
+            (new EventLogSelectBuilder())
+                ->allSystemFields(),
             new EventLogFilter(),
             [],
             ['limit' => 1]
@@ -143,12 +145,16 @@ class EventLogTest extends TestCase
                 ->auditTypeId()
                 ->moduleId()
                 ->userId()
+                ->remoteAddr()
                 ->description()
         )->eventLogItem();
 
         $this->assertSame($id, $eventLogItemResult->id);
         $this->assertInstanceOf(CarbonImmutable::class, $eventLogItemResult->timestampX);
         $this->assertIsString($eventLogItemResult->severity);
+        if ($eventLogItemResult->remoteAddr !== null) {
+            $this->assertInstanceOf(Multi::class, $eventLogItemResult->remoteAddr);
+        }
     }
 
     #[\Override]
