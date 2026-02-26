@@ -271,6 +271,9 @@
         <testsuite name="integration_tests_scope_sonet_group">
             <directory>./tests/Integration/Services/SonetGroup/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_main_eventlog">
+            <file>./tests/Integration/Services/Main/Service/EventLogTest.php</file>
+        </testsuite>
     </testsuites>
     <source>
         <include>

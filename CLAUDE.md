@@ -6,3 +6,4 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 @docs/testing.md
 @docs/architecture.md
+@docs/necessary-knowledge.md
