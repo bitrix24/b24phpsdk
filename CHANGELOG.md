@@ -4,6 +4,10 @@
 
 ### Changed
 
+- `ContactPersonInterface::markMobilePhoneAsVerified()` now accepts an optional `?CarbonImmutable $verifiedAt = null`
+  parameter. When omitted, the behaviour is identical to before (defaults to the current timestamp).
+  Allows callers to supply a specific verification time (e.g. historical imports).
+
 - `ContactPersonInterface::markEmailAsVerified()` now accepts an optional
   `?CarbonImmutable $verifiedAt = null` parameter.
   When `null` (default), the current timestamp is used — fully backward-compatible.
