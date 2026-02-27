@@ -2,67 +2,85 @@
 
 ## Unreleased
 
-### Changed
+### Added
 
-- `ContactPersonInterface::markMobilePhoneAsVerified()` now accepts an optional `?CarbonImmutable $verifiedAt = null`
-  parameter. When omitted, the behaviour is identical to before (defaults to the current timestamp).
-  Allows callers to supply a specific verification time (e.g. historical imports).
-
-- `ContactPersonInterface::markEmailAsVerified()` now accepts an optional
-  `?CarbonImmutable $verifiedAt = null` parameter.
-  When `null` (default), the current timestamp is used — fully backward-compatible.
-  Callers may supply an explicit date when restoring state from persistence or syncing external data.
-  Updated: `ContactPersonInterface`, `ContactPersonReferenceEntityImplementation`,
-  `ContactPersons.md` documentation, added `testMarkEmailAsVerifiedWithSpecificDate` unit test.
+## 3.0.0 - 2026.01.01
 
 ### Added
 
-- Added `deptrac/deptrac` (`^3.0`) as a dev dependency — architectural layer enforcement tool.
-  Rules are declared in `deptrac.yaml`; run via `make lint-deptrac` (also part of `make lint-all`).
-  Layer boundaries: `Core` → nothing; `Application` → `Core`, `Services`; `Infrastructure` → `Core`, `Services`;
-  `Services` → `Core`, `Application`, `Legacy`; `Legacy` → `Core`, `Application`, `Services`.
-  22 pre-existing violations are recorded in `skip_violations` with `TODO` comments tracking required refactoring.
+#### API v3 support: Tasks & EventLog
 
+- Added support for Bitrix24 API v3
+- Added REST 3.0 API version support:
+  - `Core\Contracts\ApiVersion` - enum for API version support (`v1`, `v3`) with helper methods `isV3()` and `isV1()`
+  - `Core\EndpointUrlFormatter` - formats API request URLs based on API version, handles V3 API prefix `/rest/api`, manages case-sensitive method handling, and request ID parameter placement for strict methods
+- Switched Task domain methods to Bitrix24 API v3 and documented services/methods currently using v3:
+    - `Services\Task\Service\Task`: `get` (`tasks.task.get`), `add` (`tasks.task.add`), `delete` (`tasks.task.delete`), `update` (`tasks.task.update`)
+    - `Services\Task\Service\TaskChat`: `sendMessage` (`tasks.task.chat.message.send`)
+    - `Services\Task\Service\TaskFile`: `attachExists` (`tasks.task.file.attach`)
+    - `Services\Main\Service\Documentation`: `getSchema` (`documentation`)
+- Added type-safe filter builder system for REST 3.0 filtering ([#338](https://github.com/bitrix24/b24phpsdk/issues/338)):
+  - `FilterBuilderInterface` - contract for all filter builders
+  - `AbstractFilterBuilder` - base implementation with AND/OR logic support
+  - `FieldConditionBuilder` - provides all 8 REST 3.0 operators: `=`, `!=`, `>`, `>=`, `<`, `<=`, `in`, `between`
+  - `TaskFilter` - type-safe filter for Task entity with 30 field accessors
+  - Fluent API with method chaining: `->title()->eq('ASAP')`
+  - OR logic support with callback pattern: `->or(function(TaskFilter $f) {...})`
+  - User field support: `->userField('UF_CRM_TASK')->eq('value')`
+  - Raw array fallback: `->raw([['field', 'operator', 'value']])`
+  - Backward compatible with existing array-based filters
+  - Updated `Task::list()` to accept `TaskFilter` or array via union type
+  - Comprehensive unit tests with 54 test cases covering all operators and features
+- Added select builder infrastructure for type-safe field selection:
+  - `Core\Contracts\SelectBuilderInterface` - contract with `buildSelect()` and `withUserFields()` methods
+  - `Services\AbstractSelectBuilder` - base implementation for select builders
+  - `Services\Task\Service\TaskItemSelectBuilder` - type-safe select builder for Task entity with field methods: `title()`, `description()`, `creatorId()`, `creator()`, `created()`, `chat()`
+- Added comprehensive filter documentation:
+  - `src/Filters/docs/README.md` - unified guide covering REST 3.0 filtering principles, type-safe filter builders, all 8 operators, field type mapping, usage examples with TaskFilter, and complete migration guide from generic to type-safe approach
+- Added OpenAPI schema infrastructure ([#338](https://github.com/bitrix24/b24phpsdk/issues/338)):
+  - `Services\Main\Service\Documentation` - new service with `getSchema()` method for retrieving OpenAPI documentation from REST 3.0 `/documentation` endpoint
+  - `OpenApi\Infrastructure\Console\SchemaBuilder` - console command `b24-dev:build-schema` for fetching and saving OpenAPI schema to `docs/open-api/openapi.json`
+  - `DocumentationResult` - DTO returning raw OpenAPI payload as string
+  - Integration test: `tests/Integration/Services/Main/Service/DocumentationTest.php`
+- Added `Core\Contracts\SortOrder` enum (`Ascending = 'ASC'`, `Descending = 'DESC'`) —
+  type-safe sort direction for use across all REST v3 API calls.
+- Added service `Services\Main\Service\EventLog` with REST v3 event log methods
+  (scope: `main`, requires administrator access),
+  see [main.eventlog.* methods](https://github.com/bitrix24/b24phpsdk/issues/374):
+  - `get(int $id, array|EventLogSelectBuilder $select)` — returns a single event log entry by ID
+    ([main.eventlog.get](https://apidocs.bitrix24.com/api-reference/rest-v3/main/main-eventlog-get.html))
+  - `list(array|EventLogSelectBuilder $select, array|EventLogFilter $filter, array $order, array $pagination)` — returns a list of entries with filtering and pagination
+    ([main.eventlog.list](https://apidocs.bitrix24.com/api-reference/rest-v3/main/main-eventlog-list.html))
+  - `tail(array|EventLogSelectBuilder $select, array|EventLogFilter $filter, EventLogTailCursor $cursor)` — returns new entries after a cursor point for polling/sync scenarios
+    ([main.eventlog.tail](https://apidocs.bitrix24.com/api-reference/rest-v3/main/main-eventlog-tail.html))
+- Added `Services\Main\Service\EventLogSelectBuilder` — fluent select builder for event log fields
+- Added `Services\Main\Service\EventLogFilter` — type-safe filter builder with typed condition builders
+  per field (`IntFieldConditionBuilder`, `DateTimeFieldConditionBuilder`, `StringFieldConditionBuilder`)
+- Added `Services\Main\Service\EventLogTailCursor` — immutable value object for the tail cursor
+  (`field`, `order: SortOrder`, `value`, `limit`), serialized via `toArray()`
 - Typed `EventLogItemResult::$remoteAddr` as `Darsyn\IP\Version\Multi|null` instead of `string|null`.
   `darsyn/ip` was already a dependency but unused in result items.
   `Multi::factory()` auto-detects IPv4/IPv6 and returns a value object supporting CIDR range checks,
   protocol-appropriate string representation, and strict typing.
   Applies the same null/empty-string guard used by `$timestampX` to handle absent API fields safely.
 
+#### Everything else
+
+- Added `deptrac/deptrac` (`^3.0`) as a dev dependency — architectural layer enforcement tool.
+  Rules are declared in `deptrac.yaml`; run via `make lint-deptrac` (also part of `make lint-all`).
+  Layer boundaries: `Core` → nothing; `Application` → `Core`, `Services`; `Infrastructure` → `Core`, `Services`;
+  `Services` → `Core`, `Application`, `Legacy`; `Legacy` → `Core`, `Application`, `Services`.
+  22 pre-existing violations are recorded in `skip_violations` with `TODO` comments tracking required refactoring.
 - Added `Services\AbstractSelectBuilder::allSystemFields()` — convenience method that uses reflection
   to discover and call all public zero-parameter field methods declared in the concrete subclass,
   collecting all available system fields in a single call. Supports chaining with `withUserFields()`.
   Works automatically for any existing or future `AbstractSelectBuilder` descendant without any changes to them.
-
-- Added `Core\Contracts\SortOrder` enum (`Ascending = 'ASC'`, `Descending = 'DESC'`) —
-  type-safe sort direction for use across all REST v3 API calls.
-
-- Added service `Services\Main\Service\EventLog` with REST v3 event log methods
-  (scope: `main`, requires administrator access),
-  see [main.eventlog.* methods](https://github.com/bitrix24/b24phpsdk/issues/374):
-    - `get(int $id, array|EventLogSelectBuilder $select)` — returns a single event log entry by ID
-      ([main.eventlog.get](https://apidocs.bitrix24.com/api-reference/rest-v3/main/main-eventlog-get.html))
-    - `list(array|EventLogSelectBuilder $select, array|EventLogFilter $filter, array $order, array $pagination)` — returns a list of entries with filtering and pagination
-      ([main.eventlog.list](https://apidocs.bitrix24.com/api-reference/rest-v3/main/main-eventlog-list.html))
-    - `tail(array|EventLogSelectBuilder $select, array|EventLogFilter $filter, EventLogTailCursor $cursor)` — returns new entries after a cursor point for polling/sync scenarios
-      ([main.eventlog.tail](https://apidocs.bitrix24.com/api-reference/rest-v3/main/main-eventlog-tail.html))
-- Added `Services\Main\Service\EventLogSelectBuilder` — fluent select builder for event log fields
-- Added `Services\Main\Service\EventLogFilter` — type-safe filter builder with typed condition builders
-  per field (`IntFieldConditionBuilder`, `DateTimeFieldConditionBuilder`, `StringFieldConditionBuilder`)
-- Added `Services\Main\Service\EventLogTailCursor` — immutable value object for the tail cursor
-  (`field`, `order: SortOrder`, `value`, `limit`), serialized via `toArray()`
-
 - Added `src/Legacy/` namespace with `LegacyServiceBuilder` and `LegacyTaskServiceBuilder`,
   accessible via `$serviceBuilder->getLegacyServiceBuilder()->getTaskScope()->task()`.
   Preserves access to all Bitrix24 REST API v1 task methods (`list`, `fields`, `delegate`,
   `start`, `pause`, `defer`, `complete`, etc.) for users migrating to the v3 SDK.
   All classes under `Bitrix24\SDK\Legacy\` are marked `@deprecated` and will be removed
   once v3 reaches feature parity with v1.
-
-## 3.0.0 - 2026.01.01
-
-### Added
-
 - Added `OpenApi\Domain\OpenApiSchemaReader` for programmatic reading and navigation of the OpenAPI specification,
   with support for component schemas, field type extraction, `$ref` resolution, and request/response schema access
 - Added service `Services\Lists\Lists\Service\Lists` with support methods,
@@ -154,7 +172,7 @@
     - `removeEntities` removes entities from the page
     - `addBlock` adds a block to the page
     - `copyBlock` copies a block within the page
-    - `deleteBlock` deletes a block from the page
+    - `deleteBlock` deletes a block by its identifier
     - `moveBlockDown` moves a block down on the page
     - `moveBlockUp` moves a block up on the page
     - `moveBlock` moves a block to a specific position
@@ -204,12 +222,6 @@
     - `getList` retrieves a list of available partner templates for the current application
     - `getSiteList` retrieves a list of available templates for creating sites
     - `getPageList` retrieves a list of available templates for creating pages
-- Added support for Bitrix24 API v3
-- Switched Task domain methods to Bitrix24 API v3 and documented services/methods currently using v3:
-    - `Services\Task\Service\Task`: `get` (`tasks.task.get`), `add` (`tasks.task.add`), `delete` (`tasks.task.delete`), `update` (`tasks.task.update`)
-    - `Services\Task\Service\TaskChat`: `sendMessage` (`tasks.task.chat.message.send`)
-    - `Services\Task\Service\TaskFile`: `attachExists` (`tasks.task.file.attach`)
-    - `Services\Main\Service\Documentation`: `getSchema` (`documentation`)
 - Added service `Services\IMOpenLines\Connector\Service\Connector` with support methods,
   see [imconnector.* methods](https://github.com/bitrix24/b24phpsdk/issues/320):
     - `list` method returns a list of available connectors
@@ -292,33 +304,6 @@
     - Returns `true` if the contact person has a Bitrix24 partner ID set
     - Returns `false` if no partner ID is associated with the contact person
     - Provides a convenience method instead of checking `getBitrix24PartnerId() !== null`
-= Added support for Bitrix24 API v3
-- Added type-safe filter builder system for REST 3.0 filtering ([#338](https://github.com/bitrix24/b24phpsdk/issues/338)):
-  - `FilterBuilderInterface` - contract for all filter builders
-  - `AbstractFilterBuilder` - base implementation with AND/OR logic support
-  - `FieldConditionBuilder` - provides all 8 REST 3.0 operators: `=`, `!=`, `>`, `>=`, `<`, `<=`, `in`, `between`
-  - `TaskFilter` - type-safe filter for Task entity with 30 field accessors
-  - Fluent API with method chaining: `->title()->eq('ASAP')`
-  - OR logic support with callback pattern: `->or(function(TaskFilter $f) {...})`
-  - User field support: `->userField('UF_CRM_TASK')->eq('value')`
-  - Raw array fallback: `->raw([['field', 'operator', 'value']])`
-  - Backward compatible with existing array-based filters
-  - Updated `Task::list()` to accept `TaskFilter` or array via union type
-  - Comprehensive unit tests with 54 test cases covering all operators and features
-- Added OpenAPI schema infrastructure ([#338](https://github.com/bitrix24/b24phpsdk/issues/338)):
-  - `Services\Main\Service\Documentation` - new service with `getSchema()` method for retrieving OpenAPI documentation from REST 3.0 `/documentation` endpoint
-  - `OpenApi\Infrastructure\Console\SchemaBuilder` - console command `b24-dev:build-schema` for fetching and saving OpenAPI schema to `docs/open-api/openapi.json`
-  - `DocumentationResult` - DTO returning raw OpenAPI payload as string
-  - Integration test: `tests/Integration/Services/Main/Service/DocumentationTest.php`
-- Added select builder infrastructure for type-safe field selection:
-  - `Core\Contracts\SelectBuilderInterface` - contract with `buildSelect()` and `withUserFields()` methods
-  - `Services\AbstractSelectBuilder` - base implementation for select builders
-  - `Services\Task\Service\TaskItemSelectBuilder` - type-safe select builder for Task entity with field methods: `title()`, `description()`, `creatorId()`, `creator()`, `created()`, `chat()`
-- Added REST 3.0 API version support:
-  - `Core\Contracts\ApiVersion` - enum for API version support (`v1`, `v3`) with helper methods `isV3()` and `isV1()`
-  - `Core\EndpointUrlFormatter` - formats API request URLs based on API version, handles V3 API prefix `/rest/api`, manages case-sensitive method handling, and request ID parameter placement for strict methods
-- Added comprehensive filter documentation:
-  - `src/Filters/docs/README.md` - unified guide covering REST 3.0 filtering principles, type-safe filter builders, all 8 operators, field type mapping, usage examples with TaskFilter, and complete migration guide from generic to type-safe approach
 
 ### Changed
 
@@ -330,6 +315,17 @@
 - Updated `Task::list()` method to accept `TaskFilter|array` via union type - backward compatible with existing array-based filters while supporting new type-safe TaskFilter instances
 - Updated Symfony dependencies to support OpenAPI schema builder infrastructure
 - Refactored integration tests: renamed `Fabric.php` to `Factory.php` for consistency
+- `ContactPersonInterface::markMobilePhoneAsVerified()` now accepts an optional `?CarbonImmutable $verifiedAt = null`
+  parameter. When omitted, the behaviour is identical to before (defaults to the current timestamp).
+  Allows callers to supply a specific verification time (e.g. historical imports).
+
+- `ContactPersonInterface::markEmailAsVerified()` now accepts an optional
+  `?CarbonImmutable $verifiedAt = null` parameter.
+  When `null` (default), the current timestamp is used — fully backward-compatible.
+  Callers may supply an explicit date when restoring state from persistence or syncing external data.
+  Updated: `ContactPersonInterface`, `ContactPersonReferenceEntityImplementation`,
+  `ContactPersons.md` documentation, added `testMarkEmailAsVerifiedWithSpecificDate` unit test.
+
 
 ### Fixed
 
