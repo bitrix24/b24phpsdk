@@ -22,7 +22,7 @@ use Bitrix24\SDK\Services\Telephony\Voximplant\InfoCall\Service\InfoCall;
 use Bitrix24\SDK\Services\Telephony\Voximplant\Line\Service\Line;
 use Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Service\Sip;
 use Bitrix24\SDK\Services\Telephony\Voximplant\User\Service\User;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -78,9 +78,10 @@ class LineTest extends TestCase
        $this->assertTrue($this->line->outgoingSet('1')->isSuccess());
     }
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->line = Fabric::getServiceBuilder(false)->getTelephonyScope()->getVoximplantServiceBuilder()->line();
-        $this->sip = Fabric::getServiceBuilder(false)->getTelephonyScope()->getVoximplantServiceBuilder()->sip();
+        $this->line = Factory::getServiceBuilder(false)->getTelephonyScope()->getVoximplantServiceBuilder()->line();
+        $this->sip = Factory::getServiceBuilder(false)->getTelephonyScope()->getVoximplantServiceBuilder()->sip();
     }
 }

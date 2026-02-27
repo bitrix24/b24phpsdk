@@ -20,6 +20,7 @@ class DeliveryAddResult extends AbstractResult implements AddedItemIdResultInter
     /**
      * @throws BaseException
      */
+    #[\Override]
     public function getId(): int
     {
         return (int)$this->getCoreResponse()->getResponseData()->getResult()['parent']['ID'];

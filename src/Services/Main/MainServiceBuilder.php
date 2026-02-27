@@ -16,6 +16,8 @@ namespace Bitrix24\SDK\Services\Main;
 use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
+use Bitrix24\SDK\Services\Main\Service\Documentation;
+use Bitrix24\SDK\Services\Main\Service\EventLog;
 use Bitrix24\SDK\Services\Main\Service\EventManager;
 use Bitrix24\SDK\Services\Main\Service\Main;
 use Bitrix24\SDK\Services\Main\Service\Event;
@@ -33,10 +35,28 @@ class MainServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    public function documentation(): Documentation
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Documentation($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function event(): Event
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Event($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function eventLog(): EventLog
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new EventLog($this->core, $this->log);
         }
 
         return $this->serviceCache[__METHOD__];
@@ -47,7 +67,8 @@ class MainServiceBuilder extends AbstractServiceBuilder
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new EventManager(
                 new Event($this->core, $this->log),
-                $this->log);
+                $this->log
+            );
         }
 
         return $this->serviceCache[__METHOD__];

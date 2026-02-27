@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\UserConsent\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\UserConsent\Service\UserConsentAgreement;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
@@ -60,8 +60,9 @@ class UserConsentAgreementTest extends TestCase
         $this->assertNotNull($userConsentAgreementTextItemResult->LABEL);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->userConsentAgreementService = Fabric::getServiceBuilder()->getUserConsentScope()->UserConsentAgreement();
+        $this->userConsentAgreementService = Factory::getServiceBuilder()->getUserConsentScope()->UserConsentAgreement();
     }
 }

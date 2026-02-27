@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Sale\StatusLang\Result\StatusLangItemResult;
 use Bitrix24\SDK\Services\Sale\StatusLang\Service\StatusLang;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
@@ -45,15 +45,17 @@ class StatusLangTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    #[\Override]
     protected function setUp(): void
     {
-        $this->statusLangService = Fabric::getServiceBuilder()->getSaleScope()->statusLang();
+        $this->statusLangService = Factory::getServiceBuilder()->getSaleScope()->statusLang();
     }
 
     /**
      * @throws BaseException
      * @throws TransportException
      */
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up any test status langs created during tests
@@ -70,7 +72,7 @@ class StatusLangTest extends TestCase
         }
 
         // Clean up any test statuses created during tests
-        $statusService = Fabric::getServiceBuilder()->getSaleScope()->status();
+        $statusService = Factory::getServiceBuilder()->getSaleScope()->status();
         foreach ($this->createdStatusIds as $createdRectorPrefix202411StatusId) {
             try {
                 $statusService->delete($createdRectorPrefix202411StatusId);
@@ -93,7 +95,7 @@ class StatusLangTest extends TestCase
         $statusId = 'T' . chr(random_int(65, 90)); // Random letter A-Z with prefix T
         $statusName = 'Test Status ' . time();
 
-        $statusService = Fabric::getServiceBuilder()->getSaleScope()->status();
+        $statusService = Factory::getServiceBuilder()->getSaleScope()->status();
         $statusService->add([
             'id' => $statusId,
             'type' => 'O', // Order status

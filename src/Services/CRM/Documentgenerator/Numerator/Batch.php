@@ -32,6 +32,7 @@ class Batch extends \Bitrix24\SDK\Core\Batch
      * @return Generator<int, ResponseData>|ResponseData[]
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\Override]
     public function deleteEntityItems(
         string $apiMethod,
         array $entityItemId,

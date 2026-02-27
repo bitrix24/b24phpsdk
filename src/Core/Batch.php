@@ -81,6 +81,7 @@ class Batch implements BatchOperationsInterface
      * @return Generator<int, ResponseData>|ResponseData[]
      * @throws BaseException
      */
+    #[\Override]
     public function addEntityItems(string $apiMethod, array $entityItems): Generator
     {
         $this->logger->debug(
@@ -122,6 +123,7 @@ class Batch implements BatchOperationsInterface
      * @return Generator<int, ResponseData>|ResponseData[]
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\Override]
     public function deleteEntityItems(
         string $apiMethod,
         array $entityItemId,
@@ -202,6 +204,7 @@ class Batch implements BatchOperationsInterface
      * @return Generator<int, ResponseData>|ResponseData[]
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\Override]
     public function updateEntityItems(string $apiMethod, array $entityItems): Generator
     {
         $this->logger->debug(
@@ -408,6 +411,7 @@ class Batch implements BatchOperationsInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
+    #[\Override]
     public function getTraversableList(
         string $apiMethod,
         ?array $order = [],
@@ -663,6 +667,7 @@ class Batch implements BatchOperationsInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      * @throws \Exception
      */
+    #[\Override]
     public function getTraversableListWithCount(
         string $apiMethod,
         array $order,

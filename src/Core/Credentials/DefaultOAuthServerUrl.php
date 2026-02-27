@@ -15,7 +15,7 @@ namespace Bitrix24\SDK\Core\Credentials;
 
 class DefaultOAuthServerUrl
 {
-    private const BITRIX24_PHP_SDK_DEFAULT_AUTH_SERVER_URL = 'BITRIX24_PHP_SDK_DEFAULT_AUTH_SERVER_URL';
+    private const string BITRIX24_PHP_SDK_DEFAULT_AUTH_SERVER_URL = 'BITRIX24_PHP_SDK_DEFAULT_AUTH_SERVER_URL';
 
     /**
      * Return default OAUTH server for east region

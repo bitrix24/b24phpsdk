@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Services\Task\Flow\Service\Flow;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -44,10 +44,11 @@ class FlowTest extends TestCase
     
     protected int $userId = 0;
     
+    #[\Override]
     protected function setUp(): void
     {
-        $this->flowService = Fabric::getServiceBuilder()->getTaskScope()->flow();
-        $this->userId = Fabric::getServiceBuilder()->getUserScope()->user()->current()->user()->ID;
+        $this->flowService = Factory::getServiceBuilder()->getTaskScope()->flow();
+        $this->userId = Factory::getServiceBuilder()->getUserScope()->user()->current()->user()->ID;
     }
 
     /**
@@ -179,7 +180,7 @@ class FlowTest extends TestCase
     }
     
     protected function deleteGroupByName($name): void {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         $res = $core->call(
             'sonet_group.get',
             [

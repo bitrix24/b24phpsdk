@@ -27,6 +27,7 @@ class NullBatch implements BatchOperationsInterface
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function getTraversableList(
         string $apiMethod,
         array $order,
@@ -41,6 +42,7 @@ class NullBatch implements BatchOperationsInterface
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function getTraversableListWithCount(
         string $apiMethod,
         array $order,
@@ -55,6 +57,7 @@ class NullBatch implements BatchOperationsInterface
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function addEntityItems(string $apiMethod, array $entityItems): Generator
     {
         yield new ResponseData([],
@@ -65,6 +68,7 @@ class NullBatch implements BatchOperationsInterface
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function deleteEntityItems(
         string $apiMethod,
         array $entityItemId,
@@ -78,6 +82,7 @@ class NullBatch implements BatchOperationsInterface
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function updateEntityItems(string $apiMethod, array $entityItems): Generator
     {
         yield new ResponseData([],

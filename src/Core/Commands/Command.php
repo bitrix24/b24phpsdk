@@ -13,18 +13,25 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\Commands;
 
+use Bitrix24\SDK\Core\Contracts\ApiVersion;
 use Symfony\Component\Uid\Uuid;
 
 class Command
 {
     public function __construct(
         private readonly string $apiMethod,
-        private readonly array  $parameters,
-        private ?string         $id = null)
-    {
+        private readonly array $parameters,
+        private ?string $id = null,
+        private readonly ApiVersion $version = ApiVersion::v1
+    ) {
         if ($id === null) {
             $this->id = (Uuid::v7())->toRfc4122();
         }
+    }
+
+    public function getVersion(): ApiVersion
+    {
+        return $this->version;
     }
 
     public function getApiMethod(): string

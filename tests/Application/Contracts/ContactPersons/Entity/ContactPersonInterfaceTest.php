@@ -483,6 +483,38 @@ abstract class ContactPersonInterfaceTest extends TestCase
 
     #[Test]
     #[DataProvider('contactPersonDataProvider')]
+    #[TestDox('test markEmailAsVerified method with specific date')]
+    final public function testMarkEmailAsVerifiedWithSpecificDate(
+        Uuid                $uuid,
+        CarbonImmutable     $createdAt,
+        CarbonImmutable     $updatedAt,
+        ContactPersonStatus $contactPersonStatus,
+        string              $name,
+        ?string             $surname,
+        ?string             $patronymic,
+        ?string             $email,
+        ?CarbonImmutable    $emailVerifiedAt,
+        ?string             $comment,
+        ?PhoneNumber        $phoneNumber,
+        ?CarbonImmutable    $mobilePhoneVerifiedAt,
+        ?string             $externalId,
+        ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
+        ?string             $userAgent,
+        ?string             $userAgentReferer,
+        ?IP                 $userAgentIp
+    ): void {
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
+
+        $specificDate = CarbonImmutable::parse('2024-06-15 12:00:00');
+        $contactPerson->changeEmail(DemoDataGenerator::getEmail());
+        $contactPerson->markEmailAsVerified($specificDate);
+
+        $this->assertTrue($specificDate->equalTo($contactPerson->getEmailVerifiedAt()));
+    }
+
+    #[Test]
+    #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test getMobilePhone method')]
     final public function testGetMobilePhone(
         Uuid                $uuid,
@@ -607,6 +639,11 @@ abstract class ContactPersonInterfaceTest extends TestCase
         $this->assertNull($contactPerson->getMobilePhoneVerifiedAt());
         $contactPerson->markMobilePhoneAsVerified();
         $this->assertNotNull($contactPerson->getMobilePhoneVerifiedAt());
+
+        $specificTime = CarbonImmutable::parse('2020-01-15 12:00:00');
+        $contactPerson->changeMobilePhone(DemoDataGenerator::getMobilePhone());
+        $contactPerson->markMobilePhoneAsVerified($specificTime);
+        $this->assertEquals($specificTime, $contactPerson->getMobilePhoneVerifiedAt());
     }
 
     #[Test]
@@ -891,6 +928,44 @@ abstract class ContactPersonInterfaceTest extends TestCase
         // Mark as verified
         $contactPerson->markMobilePhoneAsVerified();
         $this->assertTrue($contactPerson->isMobilePhoneVerified());
+    }
+
+    #[Test]
+    #[DataProvider('contactPersonDataProvider')]
+    #[TestDox('test isPartner method')]
+    final public function testIsPartner(
+        Uuid                $uuid,
+        CarbonImmutable     $createdAt,
+        CarbonImmutable     $updatedAt,
+        ContactPersonStatus $contactPersonStatus,
+        string              $name,
+        ?string             $surname,
+        ?string             $patronymic,
+        ?string             $email,
+        ?CarbonImmutable    $emailVerifiedAt,
+        ?string             $comment,
+        ?PhoneNumber        $phoneNumber,
+        ?CarbonImmutable    $mobilePhoneVerifiedAt,
+        ?string             $externalId,
+        ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
+        ?string             $userAgent,
+        ?string             $userAgentReferer,
+        ?IP                 $userAgentIp
+    ): void
+    {
+        // Test with no partner id
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, null, $userAgent, $userAgentReferer, $userAgentIp);
+        $this->assertFalse($contactPerson->isPartner());
+
+        // Test with partner id set
+        $partnerUuid = Uuid::v7();
+        $contactPerson->setBitrix24PartnerId($partnerUuid);
+        $this->assertTrue($contactPerson->isPartner());
+
+        // Test removing partner id
+        $contactPerson->setBitrix24PartnerId(null);
+        $this->assertFalse($contactPerson->isPartner());
     }
 
     #[Test]

@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\Telephony\ExternalLine\Service
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Telephony\ExternalLine\Service\ExternalLine;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -72,8 +72,9 @@ class ExternalLineTest extends TestCase
         $this->assertNotContains($lineNumber, array_column($this->externalLine->get()->getExternalLines(), 'NUMBER'));
     }
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->externalLine = Fabric::getServiceBuilder(true)->getTelephonyScope()->externalLine();
+        $this->externalLine = Factory::getServiceBuilder(true)->getTelephonyScope()->externalLine();
     }
 }

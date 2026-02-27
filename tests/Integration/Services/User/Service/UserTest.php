@@ -19,7 +19,7 @@ use Bitrix24\SDK\Services\User\Result\UserItemResult;
 use Bitrix24\SDK\Services\User\Service\User;
 use Bitrix24\SDK\Services\UserConsent\Service\UserConsent;
 use Bitrix24\SDK\Services\UserConsent\Service\UserConsentAgreement;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -146,8 +146,9 @@ class UserTest extends TestCase
         $this->assertIsArray($this->userService->fields()->getFieldsDescription());
     }
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->userService = Fabric::getServiceBuilder()->getUserScope()->user();
+        $this->userService = Factory::getServiceBuilder()->getUserScope()->user();
     }
 }

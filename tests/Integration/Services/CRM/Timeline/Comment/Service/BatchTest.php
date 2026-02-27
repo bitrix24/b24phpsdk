@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Timeline\Comment\Service\Comment;
 use Bitrix24\SDK\Services\CRM\Company\Service\Company;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\CompanyBuilder;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -35,13 +35,15 @@ class BatchTest extends TestCase
     
     protected int $companyId = 0;
     
+    #[\Override]
     protected function setUp(): void
     {
-        $this->commentService = Fabric::getServiceBuilder()->getCRMScope()->timelineComment();
-        $this->companyService = Fabric::getServiceBuilder()->getCRMScope()->company();
+        $this->commentService = Factory::getServiceBuilder()->getCRMScope()->timelineComment();
+        $this->companyService = Factory::getServiceBuilder()->getCRMScope()->company();
         $this->companyId = $this->companyService->add((new CompanyBuilder())->build())->getId();
     }
     
+    #[\Override]
     protected function tearDown(): void
     {
         $this->companyService->delete($this->companyId);

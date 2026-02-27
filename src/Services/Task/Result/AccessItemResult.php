@@ -14,40 +14,56 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\Task\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractItem;
-use Carbon\CarbonImmutable;
 
 /**
  * Class AccessItemResult
  *
  * @property-read int $userId
- * @property-read bool|null $ACCEPT
- * @property-read bool|null $DECLINE
- * @property-read bool|null $COMPLETE
- * @property-read bool|null $APPROVE
- * @property-read bool|null $DISAPPROVE
- * @property-read bool|null $START
- * @property-read bool|null $PAUSE
- * @property-read bool|null $DELEGATE
- * @property-read bool|null $REMOVE
- * @property-read bool|null $EDIT
- * @property-read bool|null $DEFER
- * @property-read bool|null $RENEW
- * @property-read bool|null $CREATE
- * @property-read bool|null $CREATE
- * @property-read bool|null $CHANGE_DEADLINE
- * @property-read bool|null $CHECKLIST_ADD_ITEMS
- * @property-read bool|null $ADD_FAVORITE
- * @property-read bool|null $DELETE_FAVORITE
- * @property-read bool|null $RATE
- * @property-read bool|null $TAKE
- * @property-read bool|null $EDIT_ORIGINATOR
- * @property-read bool|null $CHECKLIST_REORDER
- * @property-read bool|null $ELAPSEDTIME_ADD
- * @property-read bool|null $DAYPLAN_TIMER_TOGGLE
- * @property-read bool|null $EDIT_PLAN
- * @property-read bool|null $CHECKLIST_ADD
- * @property-read bool|null $FAVORITE_ADD
- * @property-read bool|null $FAVORITE_DELETE
+ * @property-read bool|null $read
+ * @property-read bool|null $watch
+ * @property-read bool|null $mute
+ * @property-read bool|null $createResult
+ * @property-read bool|null $edit
+ * @property-read bool|null $remove
+ * @property-read bool|null $complete
+ * @property-read bool|null $approve
+ * @property-read bool|null $disapprove
+ * @property-read bool|null $start
+ * @property-read bool|null $take
+ * @property-read bool|null $delegate
+ * @property-read bool|null $defer
+ * @property-read bool|null $renew
+ * @property-read bool|null $deadline
+ * @property-read bool|null $datePlan
+ * @property-read bool|null $changeDirector
+ * @property-read bool|null $changeResponsible
+ * @property-read bool|null $changeAccomplices
+ * @property-read bool|null $pause
+ * @property-read bool|null $timeTracking
+ * @property-read bool|null $mark
+ * @property-read bool|null $changeStatus
+ * @property-read bool|null $reminder
+ * @property-read bool|null $addAuditors
+ * @property-read bool|null $elapsedTime
+ * @property-read bool|null $favorite
+ * @property-read bool|null $checklistAdd
+ * @property-read bool|null $checklistEdit
+ * @property-read bool|null $checklistSave
+ * @property-read bool|null $checklistToggle
+ * @property-read bool|null $automate
+ * @property-read bool|null $resultEdit
+ * @property-read bool|null $completeResult
+ * @property-read bool|null $removeResult
+ * @property-read bool|null $resultRead
+ * @property-read bool|null $admin
+ * @property-read bool|null $createSubtask
+ * @property-read bool|null $copy
+ * @property-read bool|null $saveAsTemplate
+ * @property-read bool|null $attachFile
+ * @property-read bool|null $detachFile
+ * @property-read bool|null $detachParent
+ * @property-read bool|null $createGanttDependence
+ * @property-read bool|null $sort
  */
 class AccessItemResult extends AbstractItem
 {

@@ -21,6 +21,7 @@ class UpdatedShipmentItemResult extends UpdatedItemResult
     /**
      * @throws BaseException
      */
+    #[\Override]
     public function isSuccess(): bool
     {
         return (bool)$this->getCoreResponse()->getResponseData()->getResult()['shipmentItem'];

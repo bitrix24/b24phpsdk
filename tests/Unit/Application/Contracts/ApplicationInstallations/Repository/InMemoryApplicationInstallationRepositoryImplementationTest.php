@@ -21,7 +21,6 @@ use Bitrix24\SDK\Application\PortalLicenseFamily;
 use Bitrix24\SDK\Tests\Application\Contracts\ApplicationInstallations\Repository\ApplicationInstallationRepositoryInterfaceTest;
 use Bitrix24\SDK\Tests\Application\Contracts\NullableFlusher;
 use Bitrix24\SDK\Tests\Application\Contracts\TestRepositoryFlusherInterface;
-use Bitrix24\SDK\Tests\Integration\Fabric;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationReferenceEntityImplementation;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\Bitrix24Accounts\Repository\InMemoryBitrix24AccountRepositoryImplementation;
 use Carbon\CarbonImmutable;
@@ -32,6 +31,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(ApplicationInstallationRepositoryInterface::class)]
 class InMemoryApplicationInstallationRepositoryImplementationTest extends ApplicationInstallationRepositoryInterfaceTest
 {
+    #[\Override]
     protected function createApplicationInstallationImplementation(
         Uuid $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,
@@ -58,11 +58,13 @@ class InMemoryApplicationInstallationRepositoryImplementationTest extends Applic
         );
     }
 
+    #[\Override]
     protected function createRepositoryFlusherImplementation(): TestRepositoryFlusherInterface
     {
         return new NullableFlusher();
     }
 
+    #[\Override]
     protected function createApplicationInstallationRepositoryImplementation(): ApplicationInstallationRepositoryInterface
     {
         return new InMemoryApplicationInstallationRepositoryImplementation(

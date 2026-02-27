@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Calendar\Resource\Service\Resource;
 use Bitrix24\SDK\Services\Calendar\Resource\Result\ResourceItemResult;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -48,9 +48,10 @@ class ResourceTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    #[\Override]
     protected function setUp(): void
     {
-        $this->serviceBuilder = Fabric::getServiceBuilder();
+        $this->serviceBuilder = Factory::getServiceBuilder();
         $this->resourceService = $this->serviceBuilder->getCalendarScope()->resource();
     }
 
@@ -58,6 +59,7 @@ class ResourceTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created resources

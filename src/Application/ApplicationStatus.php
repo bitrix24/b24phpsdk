@@ -18,17 +18,17 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ApplicationStatus
 {
-    private const STATUS_SHORT_FREE = 'F';
+    private const string STATUS_SHORT_FREE = 'F';
 
-    private const STATUS_SHORT_DEMO = 'D';
+    private const string STATUS_SHORT_DEMO = 'D';
 
-    private const STATUS_SHORT_TRIAL = 'T';
+    private const string STATUS_SHORT_TRIAL = 'T';
 
-    private const STATUS_SHORT_PAID = 'P';
+    private const string STATUS_SHORT_PAID = 'P';
 
-    private const STATUS_SHORT_LOCAL = 'L';
+    private const string STATUS_SHORT_LOCAL = 'L';
 
-    private const STATUS_SHORT_SUBSCRIPTION = 'S';
+    private const string STATUS_SHORT_SUBSCRIPTION = 'S';
 
     private readonly string $statusCode;
 

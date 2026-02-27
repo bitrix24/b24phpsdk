@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Item\Productrow\Service\Productrow;
 use Bitrix24\SDK\Services\CRM\Lead\Service\Lead;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -34,14 +34,16 @@ class BatchTest extends TestCase
     
     protected int $leadId = 0;
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->productrowService = Fabric::getServiceBuilder()->getCRMScope()->itemProductrow();
-        $this->leadService = Fabric::getServiceBuilder()->getCRMScope()->lead();
+        $this->productrowService = Factory::getServiceBuilder()->getCRMScope()->itemProductrow();
+        $this->leadService = Factory::getServiceBuilder()->getCRMScope()->lead();
         
         $this->leadId = $this->leadService->add(['TITLE' => 'test lead for productRows'])->getId();
     }
     
+    #[\Override]
     protected function tearDown(): void
     {
         $this->leadService->delete($this->leadId);

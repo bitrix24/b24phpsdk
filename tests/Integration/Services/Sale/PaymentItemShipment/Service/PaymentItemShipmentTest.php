@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Services\Sale\PaymentItemShipment\Result\PaymentItemShipmentItemResult;
 use Bitrix24\SDK\Services\Sale\PaymentItemShipment\Service\PaymentItemShipment;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -53,9 +53,10 @@ class PaymentItemShipmentTest extends TestCase
 
     protected int $deliveryId = 0;
 
+    #[\Override]
     protected function setUp(): void
     {
-        $serviceBuilder = Fabric::getServiceBuilder();
+        $serviceBuilder = Factory::getServiceBuilder();
         $this->paymentItemShipmentService = $serviceBuilder->getSaleScope()->paymentItemShipment();
         $this->personTypeId = $this->getPersonTypeId();
         $this->paySystemId = $this->getPaySystemId();
@@ -65,6 +66,7 @@ class PaymentItemShipmentTest extends TestCase
         $this->shipmentId = $this->createTestShipment();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Clean up created resources in reverse order
@@ -96,7 +98,7 @@ class PaymentItemShipmentTest extends TestCase
      */
     protected function getPersonTypeId(): int
     {
-        $personTypeService = Fabric::getServiceBuilder()->getSaleScope()->personType();
+        $personTypeService = Factory::getServiceBuilder()->getSaleScope()->personType();
         return $personTypeService->add([
             'name' => 'Test Person Type for PaymentItemShipment',
             'sort' => 100,
@@ -108,7 +110,7 @@ class PaymentItemShipmentTest extends TestCase
      */
     protected function deletePersonType(int $id): void
     {
-        $personTypeService = Fabric::getServiceBuilder()->getSaleScope()->personType();
+        $personTypeService = Factory::getServiceBuilder()->getSaleScope()->personType();
         $personTypeService->delete($id);
     }
 
@@ -118,7 +120,7 @@ class PaymentItemShipmentTest extends TestCase
      */
     protected function getPaySystemId(): int
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         $response = $core->call('sale.paysystem.list', [
             'select' => ['id'],
             'filter' => ['active' => 'Y'],
@@ -137,7 +139,7 @@ class PaymentItemShipmentTest extends TestCase
      */
     protected function getDeliveryId(): int
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         $response = $core->call('sale.delivery.getlist', [
             'SELECT' => ['ID'],
             'FILTER' => ['ACTIVE' => 'Y'],
@@ -159,7 +161,7 @@ class PaymentItemShipmentTest extends TestCase
      */
     protected function createTestOrder(): int
     {
-        $orderService = Fabric::getServiceBuilder()->getSaleScope()->order();
+        $orderService = Factory::getServiceBuilder()->getSaleScope()->order();
         $orderFields = [
             'lid' => 's1',
             'personTypeId' => $this->personTypeId,
@@ -175,7 +177,7 @@ class PaymentItemShipmentTest extends TestCase
      */
     protected function deleteTestOrder(int $id): void
     {
-        $orderService = Fabric::getServiceBuilder()->getSaleScope()->order();
+        $orderService = Factory::getServiceBuilder()->getSaleScope()->order();
         try {
             $orderService->delete($id);
         } catch (\Exception) {
@@ -188,7 +190,7 @@ class PaymentItemShipmentTest extends TestCase
      */
     protected function createTestPayment(): int
     {
-        $paymentService = Fabric::getServiceBuilder()->getSaleScope()->payment();
+        $paymentService = Factory::getServiceBuilder()->getSaleScope()->payment();
         $paymentFields = [
             'orderId' => $this->orderId,
             'paySystemId' => $this->paySystemId,
@@ -204,7 +206,7 @@ class PaymentItemShipmentTest extends TestCase
      */
     protected function deleteTestPayment(int $id): void
     {
-        $paymentService = Fabric::getServiceBuilder()->getSaleScope()->payment();
+        $paymentService = Factory::getServiceBuilder()->getSaleScope()->payment();
         try {
             $paymentService->delete($id);
         } catch (\Exception) {
@@ -217,7 +219,7 @@ class PaymentItemShipmentTest extends TestCase
      */
     protected function createTestShipment(): int
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         $response = $core->call('sale.shipment.add', [
             'fields' => [
                 'orderId' => $this->orderId,
@@ -238,7 +240,7 @@ class PaymentItemShipmentTest extends TestCase
      */
     protected function deleteTestShipment(int $id): void
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         try {
             $core->call('sale.shipment.delete', ['id' => $id]);
         } catch (\Exception) {

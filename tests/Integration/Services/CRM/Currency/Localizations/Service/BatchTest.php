@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Currency\Localizations\Ser
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\ServiceBuilder;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use Bitrix24\SDK\Services\CRM\Currency\Service\Currency;
 use Bitrix24\SDK\Services\CRM\Currency\Localizations\Service\Localizations;
 use PHPUnit\Framework\TestCase;
@@ -41,9 +41,10 @@ class BatchTest extends TestCase
 
     protected Localizations $localizationsService;
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->sb = Fabric::getServiceBuilder();
+        $this->sb = Factory::getServiceBuilder();
         $this->currencyService = $this->sb->getCRMScope()->currency();
         $this->localizationsService = $this->sb->getCRMScope()->localizations();
         foreach (self::TEST_LETTERS as $letter) {
@@ -52,6 +53,7 @@ class BatchTest extends TestCase
         }
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         foreach (self::TEST_LETTERS as $letter) {

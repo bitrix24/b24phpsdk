@@ -48,7 +48,7 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
         private CarbonImmutable          $updatedAt,
         private Bitrix24PartnerStatus    $bitrix24PartnerStatus,
         private string                   $title,
-        private readonly int             $bitrix24PartnerId,
+        private readonly int             $bitrix24PartnerNumber,
         private ?string                  $site,
         private ?PhoneNumber             $phoneNumber,
         private ?string                  $email,
@@ -56,11 +56,12 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
         private ?string                  $externalId
     )
     {
-        if ($bitrix24PartnerId <= 0) {
-            throw new InvalidArgumentException(sprintf('bitrix24 partner id must be positive int, now «%s»', $bitrix24PartnerId));
+        if ($bitrix24PartnerNumber <= 0) {
+            throw new InvalidArgumentException(sprintf('bitrix24 partner number must be positive int, now «%s»', $bitrix24PartnerNumber));
         }
     }
 
+    #[\Override]
     public function emitEvents(): array
     {
         $events = $this->events;
@@ -68,16 +69,19 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
         return $events;
     }
 
+    #[\Override]
     public function getId(): Uuid
     {
         return $this->id;
     }
 
+    #[\Override]
     public function getExternalId(): ?string
     {
         return $this->externalId;
     }
 
+    #[\Override]
     public function setExternalId(?string $externalId): void
     {
         if ($externalId !== null && trim($externalId) === '') {
@@ -96,11 +100,13 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
         );
     }
 
+    #[\Override]
     public function getTitle(): string
     {
         return $this->title;
     }
 
+    #[\Override]
     public function setTitle(string $title): void
     {
         if (trim($title) === '') {
@@ -111,11 +117,13 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function getSite(): ?string
     {
         return $this->site;
     }
 
+    #[\Override]
     public function setSite(?string $site): void
     {
         if ($site !== null && trim($site) === '') {
@@ -126,22 +134,26 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function getPhone(): ?PhoneNumber
     {
         return $this->phoneNumber;
     }
 
+    #[\Override]
     public function setPhone(?PhoneNumber $phoneNumber): void
     {
         $this->phoneNumber = $phoneNumber;
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
+    #[\Override]
     public function setEmail(?string $email): void
     {
         if ($email !== null && trim($email) === '') {
@@ -156,16 +168,19 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
         $this->updatedAt = new CarbonImmutable();
     }
 
-    public function getBitrix24PartnerId(): int
+    #[\Override]
+    public function getBitrix24PartnerNumber(): int
     {
-        return $this->bitrix24PartnerId;
+        return $this->bitrix24PartnerNumber;
     }
 
+    #[\Override]
     public function getOpenLineId(): ?string
     {
         return $this->openLineId;
     }
 
+    #[\Override]
     public function setOpenLineId(?string $openLineId): void
     {
         if ($openLineId !== null && trim($openLineId) === '') {
@@ -176,16 +191,19 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function getStatus(): Bitrix24PartnerStatus
     {
         return $this->bitrix24PartnerStatus;
     }
 
+    #[\Override]
     public function getCreatedAt(): CarbonImmutable
     {
         return $this->createdAt;
     }
 
+    #[\Override]
     public function getUpdatedAt(): CarbonImmutable
     {
         return $this->updatedAt;
@@ -194,6 +212,7 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function markAsActive(?string $comment): void
     {
         if (Bitrix24PartnerStatus::blocked !== $this->bitrix24PartnerStatus) {
@@ -210,6 +229,7 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function markAsBlocked(?string $comment): void
     {
         if (Bitrix24PartnerStatus::deleted === $this->bitrix24PartnerStatus || Bitrix24PartnerStatus::blocked === $this->bitrix24PartnerStatus) {
@@ -224,6 +244,7 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function markAsDeleted(?string $comment): void
     {
         if (Bitrix24PartnerStatus::deleted === $this->bitrix24PartnerStatus) {
@@ -237,6 +258,7 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function getComment(): ?string
     {
         return $this->comment;

@@ -26,6 +26,7 @@ class AddedItemResult extends AbstractResult implements AddedItemIdResultInterfa
     /**
      * @throws BaseException
      */
+    #[\Override]
     public function getId(): int
     {
         return (int)$this->getCoreResponse()->getResponseData()->getResult()[0];

@@ -22,6 +22,7 @@ use Bitrix24\SDK\Core\Result\UpdatedItemBatchResult;
  */
 class UpdatedNumeratorBatchResult extends UpdatedItemBatchResult
 {
+    #[\Override]
     public function isSuccess(): bool
     {
         return (bool)$this->getResponseData()->getResult();

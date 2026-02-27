@@ -143,11 +143,11 @@ interface Bitrix24PartnerInterface
     public function setEmail(?string $email): void;
 
     /**
-     * Get bitrix24 partner id
+     * Get bitrix24 partner number
      *
-     * @return positive-int bitrix24 partner id from vendor site
+     * @return positive-int bitrix24 partner number from vendor site
      */
-    public function getBitrix24PartnerId(): int;
+    public function getBitrix24PartnerNumber(): int;
 
     /**
      * Get open line id

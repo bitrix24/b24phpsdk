@@ -31,6 +31,7 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  */
 class UserProfileItemResult extends AbstractItem
 {
+    #[\Override]
     public function __get($offset)
     {
         switch ($offset) {

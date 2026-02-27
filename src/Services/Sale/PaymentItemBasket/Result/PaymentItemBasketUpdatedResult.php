@@ -25,6 +25,7 @@ class PaymentItemBasketUpdatedResult extends UpdatedItemResult
     /**
      * @throws BaseException
      */
+    #[\Override]
     public function isSuccess(): bool
     {
         $result = $this->getCoreResponse()->getResponseData()->getResult();

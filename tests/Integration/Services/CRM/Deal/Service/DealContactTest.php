@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
 use Bitrix24\SDK\Services\CRM\Deal\Service\Deal;
 use Bitrix24\SDK\Services\CRM\Deal\Service\DealContact;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -186,10 +186,11 @@ class DealContactTest extends TestCase
         $this::assertCount(1, $this->dealContactService->itemsGet($dealId)->getDealContacts());
     }
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->dealService = Fabric::getServiceBuilder()->getCRMScope()->deal();
-        $this->dealContactService = Fabric::getServiceBuilder()->getCRMScope()->dealContact();
-        $this->contactService = Fabric::getServiceBuilder()->getCRMScope()->contact();
+        $this->dealService = Factory::getServiceBuilder()->getCRMScope()->deal();
+        $this->dealContactService = Factory::getServiceBuilder()->getCRMScope()->dealContact();
+        $this->contactService = Factory::getServiceBuilder()->getCRMScope()->contact();
     }
 }

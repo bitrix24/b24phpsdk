@@ -84,10 +84,11 @@ use Carbon\CarbonImmutable;
  * @property-read array|null $ufCrmTask
  * @property-read array|null $ufTaskWebdavFiles
  * @property-read int|null $ufMailMessage
+ * @property-read int $chatId
  */
 class TaskItemResult extends AbstractItem
 {
-    private const TASK_USERFIELD_PREFIX = 'UF_';
+    private const string TASK_USERFIELD_PREFIX = 'UF_';
 
     /**
      *
@@ -126,7 +127,6 @@ class TaskItemResult extends AbstractItem
         $testStr = strtolower($field);
         $testArr = explode('_', $testStr);
 
-        return  array_shift($testArr) . implode('', array_map('ucfirst', $testArr));
-        ;
+        return array_shift($testArr) . implode('', array_map('ucfirst', $testArr));
     }
 }

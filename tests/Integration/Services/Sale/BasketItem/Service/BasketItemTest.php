@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Services\Sale\BasketItem\Result\BasketItemItemResult;
 use Bitrix24\SDK\Services\Sale\BasketItem\Service\BasketItem;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Services\Catalog\Product\Service\Product;
 use Bitrix24\SDK\Services\Catalog\Catalog\Service\Catalog;
@@ -55,9 +55,10 @@ class BasketItemTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    #[\Override]
     protected function setUp(): void
     {
-        $serviceBuilder = Fabric::getServiceBuilder();
+        $serviceBuilder = Factory::getServiceBuilder();
         $this->basketItemService = $serviceBuilder->getSaleScope()->basketItem();
 
         // Create person type
@@ -85,9 +86,10 @@ class BasketItemTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    #[\Override]
     protected function tearDown(): void
     {
-        $serviceBuilder = Fabric::getServiceBuilder();
+        $serviceBuilder = Factory::getServiceBuilder();
 
         // Delete test order
         $serviceBuilder->getSaleScope()->order()->delete($this->orderId);
@@ -368,7 +370,7 @@ class BasketItemTest extends TestCase
         $iblockId = 0;
         $productId = 0;
         // Get list of catalogs
-        $catalogs = Fabric::getServiceBuilder()->getCatalogScope()->catalog()->list([], [], ['id', 'iblockId','productIblockId'], 0)->getCatalogs();
+        $catalogs = Factory::getServiceBuilder()->getCatalogScope()->catalog()->list([], [], ['id', 'iblockId','productIblockId'], 0)->getCatalogs();
         if ($catalogs === []) {
             throw new \RuntimeException('No product catalogs found');
         }
@@ -394,10 +396,10 @@ class BasketItemTest extends TestCase
             'type' => 1,
             'quantity' => 1000,
         ];
-        $productResult = Fabric::getServiceBuilder()->getCatalogScope()->product()->add($productFields);
+        $productResult = Factory::getServiceBuilder()->getCatalogScope()->product()->add($productFields);
         $productId = (int)$productResult->product()->id;
 
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         // Get price types
         $priceTypeId = (int)$core->call('catalog.priceType.list', [])->getResponseData()->getResult()['priceTypes'][0]['id'];
         // Create product price
@@ -415,7 +417,7 @@ class BasketItemTest extends TestCase
 
     protected function deleteProduct(int $id) {
         // Delete test product
-        Fabric::getServiceBuilder()->getCatalogScope()->product()->delete($id);
+        Factory::getServiceBuilder()->getCatalogScope()->product()->delete($id);
     }
 
 }

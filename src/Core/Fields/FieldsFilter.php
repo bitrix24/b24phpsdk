@@ -15,11 +15,11 @@ namespace Bitrix24\SDK\Core\Fields;
 
 class FieldsFilter
 {
-    private const CRM_USER_FIELD_PREFIX = 'UF_CRM_';
+    private const string CRM_USER_FIELD_PREFIX = 'UF_CRM_';
 
-    private const SMART_PROCESS_FIELD_PREFIX = 'PARENT_ID_';
+    private const string SMART_PROCESS_FIELD_PREFIX = 'PARENT_ID_';
 
-    private const PRODUCT_USER_FIELD_PREFIX = 'PROPERTY_';
+    private const string PRODUCT_USER_FIELD_PREFIX = 'PROPERTY_';
 
     /**
      * @param array<int, non-empty-string> $fieldCodes

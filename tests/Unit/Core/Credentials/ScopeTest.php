@@ -45,7 +45,6 @@ class ScopeTest extends TestCase
             'disk',
             'documentgenerator',
             'entity',
-            'faceid',
             'forum',
             'im',
             'imbot',

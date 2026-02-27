@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Deal\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Deal\Service\DealCategory;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -157,8 +157,9 @@ class DealCategoryTest extends TestCase
         $this::assertEquals('updated', $this->dealCategory->get($newCategoryId)->getDealCategoryFields()->NAME);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->dealCategory = Fabric::getServiceBuilder()->getCRMScope()->dealCategory();
+        $this->dealCategory = Factory::getServiceBuilder()->getCRMScope()->dealCategory();
     }
 }

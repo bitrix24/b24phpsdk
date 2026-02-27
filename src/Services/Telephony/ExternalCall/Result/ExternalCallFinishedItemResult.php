@@ -44,6 +44,7 @@ use Money\Money;
  */
 class ExternalCallFinishedItemResult extends AbstractItem
 {
+    #[\Override]
     public function __get($offset)
     {
         switch ($offset) {

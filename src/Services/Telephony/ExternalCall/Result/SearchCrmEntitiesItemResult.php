@@ -25,6 +25,7 @@ use Bitrix24\SDK\Services\Telephony\Common\CrmEntityType;
  */
 class SearchCrmEntitiesItemResult extends AbstractItem
 {
+    #[\Override]
     public function __get($offset)
     {
         return match ($offset) {

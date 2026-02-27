@@ -27,6 +27,7 @@ class DeletedFlowResult extends DeletedItemResult
     /**
      * @throws BaseException
      */
+    #[\Override]
     public function isSuccess(): bool
     {
         return (bool)$this->getCoreResponse()->getResponseData()->getResult()['deleted'];

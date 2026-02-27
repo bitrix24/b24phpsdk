@@ -48,16 +48,19 @@ abstract class AbstractEventRequest extends AbstractRequest implements EventInte
         return $this->timestamp;
     }
 
+    #[\Override]
     public function getEventCode(): string
     {
         return $this->eventCode;
     }
 
+    #[\Override]
     public function getEventPayload(): array
     {
         return $this->eventPayload;
     }
 
+    #[\Override]
     public function getAuth(): EventAuthItem
     {
         return new EventAuthItem($this->eventPayload['auth']);

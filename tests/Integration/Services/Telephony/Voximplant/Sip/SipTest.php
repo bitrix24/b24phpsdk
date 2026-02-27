@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Telephony\Common\PbxType;
 use Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Service\Sip;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -166,6 +166,7 @@ class SipTest extends TestCase
      * @throws TransportException
      * @throws BaseException
      */
+    #[\Override]
     protected function tearDown(): void
     {
         //delete all cloud pbx
@@ -175,8 +176,9 @@ class SipTest extends TestCase
         }
     }
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->sip = Fabric::getServiceBuilder()->getTelephonyScope()->getVoximplantServiceBuilder()->sip();
+        $this->sip = Factory::getServiceBuilder()->getTelephonyScope()->getVoximplantServiceBuilder()->sip();
     }
 }
