@@ -222,7 +222,6 @@ class RemoteEventsFactoryTest extends TestCase
         // Create stub account that validates the token as correct
         $accountMock = $this->createStub(Bitrix24AccountInterface::class);
         $accountMock->method('isApplicationTokenValid')
-            ->with($applicationToken)
             ->willReturn(true);
 
         // Should not throw any exception
@@ -262,7 +261,6 @@ class RemoteEventsFactoryTest extends TestCase
         // Create stub account that validates the token as incorrect
         $accountMock = $this->createStub(Bitrix24AccountInterface::class);
         $accountMock->method('isApplicationTokenValid')
-            ->with($eventToken)
             ->willReturn(false);
 
         $this->expectException(WrongSecuritySignatureException::class);
@@ -341,7 +339,6 @@ class RemoteEventsFactoryTest extends TestCase
         // Create stub account that validates the token as correct
         $accountMock = $this->createStub(Bitrix24AccountInterface::class);
         $accountMock->method('isApplicationTokenValid')
-            ->with($applicationToken)
             ->willReturn(true);
 
         // Should not throw exception
