@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Services\Main;
 
-use Bitrix24\SDK\Services\RemoteEventsFabric;
 use Bitrix24\SDK\Services\Main\MainServiceBuilder;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBatch;
