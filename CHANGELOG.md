@@ -4,7 +4,7 @@
 
 ### Added
 
-## 3.0.0 - 2026.01.01
+## 3.0.0 - 2026.02.27
 
 ### Added
 
@@ -307,6 +307,12 @@
 
 ### Changed
 
+- Removed deprecated `RemoteEventsFabric` test file (`tests/Unit/Services/RemoteEventsFabricTest.php`);
+  `RemoteEventsFactoryTest` already provides full coverage of the replacement class
+- Removed unused `use Bitrix24\SDK\Services\RemoteEventsFabric` imports from
+  `CRMServiceBuilderTest`, `IMServiceBuilderTest`, and `MainServiceBuilderTest`
+- Fixed PHPUnit 12 deprecations in `RemoteEventsFactoryTest`: replaced `createStub()` + `->with()`
+  (no-op combination) with `createStub()` + `->willReturn()` only
 - **Breaking changes** in `Bitrix24PartnerInterface` and `Bitrix24PartnerRepositoryInterface`,
   [see details](https://github.com/bitrix24/b24phpsdk/issues/346):
     - Renamed `getBitrix24PartnerId(): int` to `getBitrix24PartnerNumber(): int` in `Bitrix24PartnerInterface` to clarify that this method returns the partner's external vendor site number (visible on bitrix24.com/partners/), not an internal database ID
