@@ -110,9 +110,9 @@ interface ContactPersonInterface
     public function getMobilePhoneVerifiedAt(): ?CarbonImmutable;
 
     /**
-     * @return void mark contact person mobile phone as verified (send check main)
+     * @param CarbonImmutable|null $verifiedAt verification timestamp; defaults to now when null
      */
-    public function markMobilePhoneAsVerified(): void;
+    public function markMobilePhoneAsVerified(?CarbonImmutable $verifiedAt = null): void;
 
     /**
      * @return non-empty-string|null get comment for this contact person

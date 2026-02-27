@@ -639,6 +639,11 @@ abstract class ContactPersonInterfaceTest extends TestCase
         $this->assertNull($contactPerson->getMobilePhoneVerifiedAt());
         $contactPerson->markMobilePhoneAsVerified();
         $this->assertNotNull($contactPerson->getMobilePhoneVerifiedAt());
+
+        $specificTime = CarbonImmutable::parse('2020-01-15 12:00:00');
+        $contactPerson->changeMobilePhone(DemoDataGenerator::getMobilePhone());
+        $contactPerson->markMobilePhoneAsVerified($specificTime);
+        $this->assertEquals($specificTime, $contactPerson->getMobilePhoneVerifiedAt());
     }
 
     #[Test]

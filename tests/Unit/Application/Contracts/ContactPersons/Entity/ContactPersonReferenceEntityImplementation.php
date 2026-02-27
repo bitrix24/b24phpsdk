@@ -193,9 +193,9 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
     }
 
     #[\Override]
-    public function markMobilePhoneAsVerified(): void
+    public function markMobilePhoneAsVerified(?CarbonImmutable $verifiedAt = null): void
     {
-        $this->mobilePhoneVerifiedAt = new CarbonImmutable();
+        $this->mobilePhoneVerifiedAt = $verifiedAt ?? new CarbonImmutable();
         $this->updatedAt = new CarbonImmutable();
     }
 
