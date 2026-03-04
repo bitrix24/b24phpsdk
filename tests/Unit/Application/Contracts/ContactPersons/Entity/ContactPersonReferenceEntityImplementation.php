@@ -33,6 +33,7 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
         private readonly CarbonImmutable $createdAt,
         private CarbonImmutable          $updatedAt,
         private ContactPersonStatus      $contactPersonStatus,
+        private readonly int             $bitrix24UserId,
         private string                   $name,
         private ?string                  $surname,
         private ?string                  $patronymic,
@@ -42,7 +43,6 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
         private ?PhoneNumber             $mobilePhone,
         private ?CarbonImmutable         $mobilePhoneVerifiedAt,
         private ?string                  $externalId,
-        private readonly ?int            $bitrix24UserId,
         private ?Uuid                    $bitrix24PartnerUuid,
         private readonly ?string         $userAgent,
         private readonly ?string         $userAgentReferer,
@@ -219,7 +219,7 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
     }
 
     #[\Override]
-    public function getBitrix24UserId(): ?int
+    public function getBitrix24UserId(): int
     {
         return $this->bitrix24UserId;
     }
