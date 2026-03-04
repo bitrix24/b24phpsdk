@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+
+- `ContactPersonInterface::getBitrix24UserId()` now returns `int` instead of `?int` — a ContactPerson is always linked to a Bitrix24 user ([#365](https://github.com/bitrix24/b24phpsdk/issues/365))
+
 ### Added
 
 ## 3.0.0 - 2026.02.27

@@ -130,9 +130,9 @@ interface ContactPersonInterface
     public function getExternalId(): ?string;
 
     /**
-     * @return int|null get bitrix24 user id if contact person mapped on bitrix24 user
+     * @return int get bitrix24 user id
      */
-    public function getBitrix24UserId(): ?int;
+    public function getBitrix24UserId(): int;
 
     /**
      * @return Uuid|null get bitrix24 partner uuid if contact person is partner employee
