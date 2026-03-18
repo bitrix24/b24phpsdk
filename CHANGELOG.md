@@ -1,6 +1,6 @@
 # b24-php-sdk change log
 
-## Unreleased
+## 3.1.0 Unreleased
 
 ### Changed
 
