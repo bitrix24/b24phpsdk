@@ -39,6 +39,8 @@ help:
 	@echo "php-dev-server-down       - stop php dev-server"
 	@echo "php-cli-bash              - run container php-cli and open shell with arguments"
 	@echo "oa-schema-build           - build current OpenAPI schema into docs/open-api/openapi.json"
+	@echo "show-sdk-coverage-statistics - show SDK API coverage statistics in console"
+	@echo "build-documentation       - build SDK API coverage documentation markdown"
 	@echo "ngrok-up                  - start ngrok"
 	@echo "ngrok-down                - stop ngrok"
 	@echo ""
