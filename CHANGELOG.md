@@ -2,6 +2,10 @@
 
 ## 3.1.0 Unreleased
 
+### Fixed
+
+- Fixed `InMemoryApplicationInstallationRepositoryImplementation::findByBitrix24AccountMemberId()` to resolve installations for non-deleted master accounts in pending install flows, including `new` accounts, while still excluding deleted installations ([#387](https://github.com/bitrix24/b24phpsdk/issues/387))
+
 ### Changed
 
 - `ContactPersonInterface::getBitrix24UserId()` now returns `int` instead of `?int` — a ContactPerson is always linked to a Bitrix24 user ([#365](https://github.com/bitrix24/b24phpsdk/issues/365))
