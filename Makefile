@@ -38,6 +38,7 @@ help:
 	@echo "php-dev-server-up         - start php dev-server"
 	@echo "php-dev-server-down       - stop php dev-server"
 	@echo "php-cli-bash              - run container php-cli and open shell with arguments"
+	@echo "oa-schema-build           - build current OpenAPI schema into docs/open-api/openapi.json"
 	@echo "ngrok-up                  - start ngrok"
 	@echo "ngrok-down                - stop ngrok"
 	@echo ""
@@ -140,9 +141,9 @@ composer:
 
 # dev utilites
 
-build-oa-schema:
+oa-schema-build:
 	docker compose run --rm php-cli php bin/console b24-dev:build-schema --webhook=$(BITRIX24_WEBHOOK)
-.PHONY: build-oa-schema
+.PHONY: oa-schema-build
 
 # linters and tests
 .PHONY: lint-allowed-licenses
