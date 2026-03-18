@@ -119,25 +119,24 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
             throw new InvalidArgumentException('memberId id cannot be empty string');
         }
 
-        $b24Accounts = $this->bitrix24AccountRepository->findByMemberId(
-            $memberId,
-            Bitrix24AccountStatus::active,
-            null,
-            null,
-            true
-        );
-        $b24Account = null;
-        if ($b24Accounts !== []) {
-            $b24Account = $b24Accounts[0];
-        }
+        foreach ([Bitrix24AccountStatus::active, Bitrix24AccountStatus::new, Bitrix24AccountStatus::blocked] as $accountStatus) {
+            $b24Accounts = $this->bitrix24AccountRepository->findByMemberId(
+                $memberId,
+                $accountStatus,
+                null,
+                null,
+                true
+            );
 
-        if ($b24Account === null) {
-            return null;
-        }
-
-        foreach ($this->items as $item) {
-            if ($item->getBitrix24AccountId()->equals($b24Account->getId())) {
-                return $item;
+            foreach ($b24Accounts as $b24Account) {
+                foreach ($this->items as $item) {
+                    if (
+                        $item->getBitrix24AccountId()->equals($b24Account->getId())
+                        && ApplicationInstallationStatus::deleted !== $item->getStatus()
+                    ) {
+                        return $item;
+                    }
+                }
             }
         }
 

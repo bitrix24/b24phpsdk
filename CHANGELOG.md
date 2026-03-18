@@ -1,6 +1,10 @@
 # b24-php-sdk change log
 
-## Unreleased
+## 3.1.0 Unreleased
+
+### Fixed
+
+- Fixed `InMemoryApplicationInstallationRepositoryImplementation::findByBitrix24AccountMemberId()` to resolve installations for non-deleted master accounts in pending install flows, including `new` accounts, while still excluding deleted installations ([#387](https://github.com/bitrix24/b24phpsdk/issues/387))
 
 ### Changed
 
