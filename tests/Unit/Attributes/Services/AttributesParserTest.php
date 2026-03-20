@@ -17,6 +17,7 @@ use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Attributes\Services\AttributesParser;
 use Bitrix24\SDK\Attributes\Services\SupportedInSdkApiMethod;
+use Bitrix24\SDK\Core\Contracts\ApiVersion;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -45,6 +46,7 @@ class AttributesParserTest extends TestCase
         $supportedInSdkApiMethod = $this->getMethodByName($methods, 'test.named.class');
         $this->assertSame('main', $supportedInSdkApiMethod->sdkScope);
         $this->assertSame('namedClassResult', $supportedInSdkApiMethod->sdkMethodName);
+        $this->assertSame(ApiVersion::v1, $supportedInSdkApiMethod->apiVersion);
         $this->assertSame(
             AttributesParserReturnTypesFixture::class,
             $supportedInSdkApiMethod->sdkClassName
@@ -107,7 +109,7 @@ final class AttributesParserReturnTypesFixture
         return 1;
     }
 
-    #[ApiEndpointMetadata('test.union.result', 'https://example.com/test.union.result')]
+    #[ApiEndpointMetadata('test.union.result', 'https://example.com/test.union.result', apiVersion: ApiVersion::v3)]
     public function unionResult(int $id): int|string
     {
         return $id;

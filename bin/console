@@ -13,6 +13,9 @@
 use Bitrix24\SDK\Attributes\Services\AttributesParser;
 use Bitrix24\SDK\Deprecations\DeprecatedMethods;
 use Bitrix24\SDK\Infrastructure\Console\Commands\ShowFieldsDescriptionCommand;
+use Bitrix24\SDK\OpenApi\Domain\OaSchemaMethodReader;
+use Bitrix24\SDK\OpenApi\Domain\OaSdkCoverageCalculator;
+use Bitrix24\SDK\OpenApi\Domain\OaToSdkMethodNormalizationPolicy;
 use Bitrix24\SDK\OpenApi\Infrastructure\Console\SchemaBuilder;
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
 use Bitrix24\SDK\Tools\Commands\CopyPropertyValues;
@@ -103,6 +106,19 @@ $application->addCommand(
                 new Symfony\Component\Finder\Finder(),
                 new Commands\SplashScreen(),
                 new DeprecatedMethods(),
+                $log
+        )
+);
+$application->addCommand(
+        new Commands\Documentation\ShowOaSdkCoverageCommand(
+                $attributesParser,
+                new OaSchemaMethodReader(
+                        new Symfony\Component\Filesystem\Filesystem(),
+                        new OaToSdkMethodNormalizationPolicy()
+                ),
+                new OaSdkCoverageCalculator(new OaToSdkMethodNormalizationPolicy()),
+                new OaToSdkMethodNormalizationPolicy(),
+                new Symfony\Component\Finder\Finder(),
                 $log
         )
 );

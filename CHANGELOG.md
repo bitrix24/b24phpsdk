@@ -14,6 +14,8 @@
 
 ### Added
 
+- Added OpenAPI snapshot coverage tooling for SDK v3 with console command `b24-dev:show-oa-sdk-coverage`, Make targets `make sdk-coverage-v3-show` and `make sdk-coverage-v3-show-uncovered`, normalization of OpenAPI aliases/scopes, and uncovered-method output with documentation links built from the Bitrix24 REST v3 docs URL pattern ([#391](https://github.com/bitrix24/b24phpsdk/issues/391))
+
 ## 3.0.0 - 2026.02.27
 
 ### Added

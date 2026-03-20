@@ -13,3 +13,8 @@
 ## OpenAPI Schema
 - Before implementing any task, refresh the local OpenAPI schema snapshot with `make oa-schema-build`.
 - Treat `docs/open-api/openapi.json` as the repository baseline for current REST API research, implementation, and release-time verification.
+
+## Coverage Tooling
+- Inspect method coverage through the project CLI utilities exposed in `Makefile`, not by ad hoc manual counting.
+- For SDK/live API coverage use the `make` targets that wrap the console commands.
+- For OA-schema-based coverage use the dedicated `make` target once it is available in the repository.

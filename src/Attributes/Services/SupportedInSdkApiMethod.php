@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Attributes\Services;
 
+use Bitrix24\SDK\Core\Contracts\ApiVersion;
+
 readonly class SupportedInSdkApiMethod
 {
     public function __construct(
@@ -27,6 +29,7 @@ readonly class SupportedInSdkApiMethod
         public int $sdkMethodFileStartLine,
         public int $sdkMethodFileEndLine,
         public string $sdkClassName,
+        public ApiVersion $apiVersion,
         public ?string $sdkReturnTypeClass,
         public ?string $sdkReturnTypeFileName,
         public ?string $sdkReturnTypeDeclaration,

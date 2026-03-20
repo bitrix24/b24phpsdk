@@ -96,6 +96,7 @@ readonly class AttributesParser
                         sdkMethodFileStartLine: $method->getStartLine(),
                         sdkMethodFileEndLine: $method->getEndLine(),
                         sdkClassName: $className,
+                        apiVersion: $instance->apiVersion,
                         sdkReturnTypeClass: $returnTypeMetadata['sdkReturnTypeClass'],
                         sdkReturnTypeFileName: $returnTypeMetadata['sdkReturnTypeFileName'],
                         sdkReturnTypeDeclaration: $returnTypeMetadata['sdkReturnTypeDeclaration'],

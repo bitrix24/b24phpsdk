@@ -134,7 +134,7 @@ class Task extends AbstractService
      * @throws TransportException
      */
     #[ApiEndpointMetadata(
-        'tasks.task.add',
+        'tasks.task.update',
         'https://apidocs.bitrix24.com/api-reference/rest-v3/tasks/tasks-task-update.html',
         'Method update task',
         ApiVersion::v3
