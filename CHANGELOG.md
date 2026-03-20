@@ -8,6 +8,27 @@
 
 ### Added
 
+- Added service `Services\CRM\Documentgenerator\Document` with support methods,
+  see [crm.documentgenerator.document.* methods](https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/index.html):
+    - `add` creates a new document based on a template and CRM entity, with batch calls support
+    - `list` gets the list of documents, with batch calls support
+    - `update` updates an existing document, with batch calls support
+    - `delete` deletes a document, with batch calls support
+    - `get` gets information about the document by its identifier
+    - `getFields` returns the description of document fields
+    - `enablePublicUrl` enables public URL for a document
+    - `disablePublicUrl` disables public URL for a document
+    - `count` count documents
+- Added service `Services\CRM\Documentgenerator\Template` with support methods,
+  see [crm.documentgenerator.template.* methods](https://apidocs.bitrix24.com/api-reference/crm/document-generator/templates/index.html):
+    - `add` adds a new template, with batch calls support
+    - `list` gets the list of templates, with batch calls support
+    - `update` updates an existing template, with batch calls support
+    - `delete` deletes a template, with batch calls support
+    - `get` gets information about the template by its identifier
+    - `getFields` returns the description of template fields
+    - `count` count templates
+
 ## 3.0.0 - 2026.02.27
 
 ### Added

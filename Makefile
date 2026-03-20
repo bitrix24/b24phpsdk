@@ -528,6 +528,14 @@ integration_tests_sale_payment_item_basket:
 integration_tests_crm_documentgenerator_numerator:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_documentgenerator_numerator
 
+.PHONY: integration_tests_crm_documentgenerator_document
+integration_tests_crm_documentgenerator_document:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_documentgenerator_document
+
+.PHONY: integration_tests_crm_documentgenerator_template
+integration_tests_crm_documentgenerator_template:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_documentgenerator_template
+
 # work dev environment
 .PHONY: php-dev-server-up
 php-dev-server-up:
