@@ -16,6 +16,7 @@ namespace Bitrix24\SDK\Tests\Unit\Attributes\Services;
 use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Attributes\Services\AttributesParser;
+use Bitrix24\SDK\Attributes\Services\SupportedInSdkApiMethod;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -28,32 +29,115 @@ use Typhoon\Reflection\TyphoonReflector;
 class AttributesParserTest extends TestCase
 {
     #[Test]
-    #[TestDox('getSupportedInSdkApiMethods() supports service methods with union return types')]
-    public function testGetSupportedInSdkApiMethodsSupportsUnionReturnTypes(): void
+    #[TestDox('getSupportedInSdkApiMethods() returns readonly VO metadata and supports compound return types')]
+    public function testGetSupportedInSdkApiMethodsReturnsSupportedInSdkApiMethodVo(): void
     {
-        $parser = new AttributesParser(TyphoonReflector::build(), new Filesystem());
+        $attributesParser = new AttributesParser(TyphoonReflector::build(), new Filesystem());
 
-        $methods = $parser->getSupportedInSdkApiMethods(
-            [AttributesParserUnionReturnTypeFixture::class],
-            dirname(__DIR__, 4) . DIRECTORY_SEPARATOR
+        $methods = $attributesParser->getSupportedInSdkApiMethods(
+            [AttributesParserReturnTypesFixture::class],
+            dirname(__DIR__, 4).DIRECTORY_SEPARATOR
         );
 
-        $this->assertArrayHasKey('test.union.result', $methods);
-        $this->assertSame('main', $methods['test.union.result']['sdk_scope']);
-        $this->assertSame('unionResult', $methods['test.union.result']['sdk_method_name']);
+        $this->assertCount(5, $methods);
+        $this->assertContainsOnlyInstancesOf(SupportedInSdkApiMethod::class, $methods);
+
+        $supportedInSdkApiMethod = $this->getMethodByName($methods, 'test.named.class');
+        $this->assertSame('main', $supportedInSdkApiMethod->sdkScope);
+        $this->assertSame('namedClassResult', $supportedInSdkApiMethod->sdkMethodName);
         $this->assertSame(
-            AttributesParserUnionReturnTypeFixture::class,
-            $methods['test.union.result']['sdk_class_name']
+            AttributesParserReturnTypesFixture::class,
+            $supportedInSdkApiMethod->sdkClassName
         );
+        $this->assertSame(AttributesParserResultFixture::class, $supportedInSdkApiMethod->sdkReturnTypeClass);
+        $this->assertSame(AttributesParserResultFixture::class, $supportedInSdkApiMethod->sdkReturnTypeDeclaration);
+        $this->assertStringEndsWith('tests/Unit/Attributes/Services/AttributesParserTest.ph', $supportedInSdkApiMethod->sdkReturnTypeFileName);
+
+        $scalarMethod = $this->getMethodByName($methods, 'test.scalar.result');
+        $this->assertSame('int', $scalarMethod->sdkReturnTypeDeclaration);
+        $this->assertNull($scalarMethod->sdkReturnTypeClass);
+        $this->assertNull($scalarMethod->sdkReturnTypeFileName);
+
+        $unionMethod = $this->getMethodByName($methods, 'test.union.result');
+        $this->assertSame('int|string', $unionMethod->sdkReturnTypeDeclaration);
+        $this->assertNull($unionMethod->sdkReturnTypeClass);
+        $this->assertNull($unionMethod->sdkReturnTypeFileName);
+
+        $nullableMethod = $this->getMethodByName($methods, 'test.nullable.result');
+        $this->assertSame(AttributesParserResultFixture::class . '|null', $nullableMethod->sdkReturnTypeDeclaration);
+        $this->assertSame(AttributesParserResultFixture::class, $nullableMethod->sdkReturnTypeClass);
+        $this->assertStringEndsWith('tests/Unit/Attributes/Services/AttributesParserTest.ph', $nullableMethod->sdkReturnTypeFileName);
+
+        $intersectionMethod = $this->getMethodByName($methods, 'test.intersection.result');
+        $this->assertSame(
+            AttributesParserIntersectionLeftFixture::class . '&' . AttributesParserIntersectionRightFixture::class,
+            $intersectionMethod->sdkReturnTypeDeclaration
+        );
+        $this->assertNull($intersectionMethod->sdkReturnTypeClass);
+        $this->assertNull($intersectionMethod->sdkReturnTypeFileName);
+    }
+
+    /**
+     * @param list<SupportedInSdkApiMethod> $methods
+     */
+    private function getMethodByName(array $methods, string $methodName): SupportedInSdkApiMethod
+    {
+        foreach ($methods as $method) {
+            if ($method->name === $methodName) {
+                return $method;
+            }
+        }
+
+        self::fail(sprintf('Method "%s" not found in parser output', $methodName));
     }
 }
 
 #[ApiServiceMetadata(new Scope(['main']))]
-final class AttributesParserUnionReturnTypeFixture
+final class AttributesParserReturnTypesFixture
 {
+    #[ApiEndpointMetadata('test.named.class', 'https://example.com/test.named.class')]
+    public function namedClassResult(): AttributesParserResultFixture
+    {
+        return new AttributesParserResultFixture();
+    }
+
+    #[ApiEndpointMetadata('test.scalar.result', 'https://example.com/test.scalar.result')]
+    public function scalarResult(): int
+    {
+        return 1;
+    }
+
     #[ApiEndpointMetadata('test.union.result', 'https://example.com/test.union.result')]
     public function unionResult(int $id): int|string
     {
         return $id;
     }
+
+    #[ApiEndpointMetadata('test.nullable.result', 'https://example.com/test.nullable.result')]
+    public function nullableResult(): ?AttributesParserResultFixture
+    {
+        return new AttributesParserResultFixture();
+    }
+
+    #[ApiEndpointMetadata('test.intersection.result', 'https://example.com/test.intersection.result')]
+    public function intersectionResult(): AttributesParserIntersectionLeftFixture&AttributesParserIntersectionRightFixture
+    {
+        return new AttributesParserIntersectionResultFixture();
+    }
+}
+
+final class AttributesParserResultFixture
+{
+}
+
+interface AttributesParserIntersectionLeftFixture
+{
+}
+
+interface AttributesParserIntersectionRightFixture
+{
+}
+
+final class AttributesParserIntersectionResultFixture implements AttributesParserIntersectionLeftFixture, AttributesParserIntersectionRightFixture
+{
 }

@@ -93,9 +93,9 @@
   - `make show-sdk-coverage-statistics`
 - Re-run the coverage documentation generator at least to the point where metadata extraction succeeds:
   - `make build-documentation`
-- Run the examples generator far enough to validate the migrated consumer path that reads parser metadata:
-  - `make composer "exec -- php bin/console b24-dev:generate-examples --help"`
-  - if practical in local env, run a narrow real invocation that reaches metadata loading without requiring OpenAI execution
+- Run the examples generator through a real execution path that reaches parser metadata loading, not just `--help`:
+  - use a narrow invocation of `b24-dev:generate-examples` with local fixture/template arguments sufficient to initialize the command and execute the branch that reads `getSupportedInSdkApiMethods()`
+  - if that path is too environment-dependent for reliable local execution, add or run a focused automated test covering the migrated parser-consumer integration in `GenerateExamplesForDocumentationCommand`
 
 ## Files To Change
 - `src/Attributes/Services/AttributesParser.php`

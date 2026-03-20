@@ -5,6 +5,7 @@
 ### Fixed
 
 - Fixed `InMemoryApplicationInstallationRepositoryImplementation::findByBitrix24AccountMemberId()` to resolve installations for non-deleted master accounts in pending install flows, including `new` accounts, while still excluding deleted installations ([#387](https://github.com/bitrix24/b24phpsdk/issues/387))
+- Fixed `AttributesParser` metadata extraction for SDK methods with compound return types and migrated coverage tooling to a typed `SupportedInSdkApiMethod` contract so documentation and statistics commands no longer crash on union returns ([#391](https://github.com/bitrix24/b24phpsdk/issues/391))
 
 ### Changed
 
