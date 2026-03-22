@@ -18,3 +18,12 @@
 - Inspect method coverage through the project CLI utilities exposed in `Makefile`, not by ad hoc manual counting.
 - For SDK/live API coverage use the `make` targets that wrap the console commands.
 - For OA-schema-based coverage use the dedicated `make` target once it is available in the repository.
+
+## Testing Conventions
+- If a service exposes entity-returning `get` and/or `list` methods, add a separate integration test file dedicated to result-item phpdoc annotation validation.
+- That dedicated test file must verify both contracts against live field metadata:
+  - annotation completeness: all system fields returned by `fields()->getFieldsDescription()` are present in the result-item annotations
+  - annotation type validity: annotated field types match Bitrix24 field types using the shared custom assertions
+- Prefer one dedicated annotation test file per result-item class, separate from CRUD/use-case tests.
+- Naming convention for these files/classes: suffix them with `AnnotationsTest`, for example `TaskItemResultAnnotationsTest.php`.
+- Naming convention for test methods inside those files: keep the explicit prefixes `testAllSystemFieldsAnnotated` and `testAllSystemFieldsHasValidTypeAnnotation`.
