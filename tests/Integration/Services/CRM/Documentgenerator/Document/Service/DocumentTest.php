@@ -36,7 +36,6 @@ use Faker;
 #[CoversMethod(Document::class, 'update')]
 #[CoversMethod(Document::class, 'getFields')]
 #[CoversMethod(Document::class, 'enablePublicUrl')]
-#[CoversMethod(Document::class, 'disablePublicUrl')]
 #[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Documentgenerator\Document\Service\Document::class)]
 class DocumentTest extends TestCase
 {
@@ -234,26 +233,4 @@ class DocumentTest extends TestCase
         $this->documentService->delete($id);
         Factory::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
     }
-
-    /**
-     * @throws BaseException
-     * @throws TransportException
-     */
-    public function testDisablePublicUrl(): void
-    {
-        $templateId = $this->getFirstTemplateId();
-        $dealId = $this->createDeal();
-
-        $id = $this->documentService->add($templateId, 2, $dealId)->getId();
-
-        // First enable, then disable
-        $this->documentService->enablePublicUrl($id);
-        $result = $this->documentService->disablePublicUrl($id);
-        self::assertTrue($result->isSuccess());
-
-        // Cleanup
-        $this->documentService->delete($id);
-        Factory::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
-    }
 }
-

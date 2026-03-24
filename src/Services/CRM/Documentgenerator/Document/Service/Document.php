@@ -59,8 +59,13 @@ class Document extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/crm-document-generator-document-add.html',
         'Creates a new document based on a template and CRM entity'
     )]
-    public function add(int $templateId, int $entityTypeId, int $entityId, array $values = [], ?int $stampsEnabled = null): AddedDocumentResult
-    {
+    public function add(
+        int $templateId,
+        int $entityTypeId,
+        int $entityId,
+        array $values = [],
+        ?int $stampsEnabled = null
+    ): AddedDocumentResult {
         $params = [
             'templateId' => $templateId,
             'entityTypeId' => $entityTypeId,
@@ -247,29 +252,6 @@ class Document extends AbstractService
         return new PublicUrlResult(
             $this->core->call(
                 'crm.documentgenerator.document.enablepublicurl',
-                ['id' => $id]
-            )
-        );
-    }
-
-    /**
-     * Disables public URL for a document
-     *
-     * @link https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/crm-document-generator-document-disable-public-url.html
-     *
-     * @throws BaseException
-     * @throws TransportException
-     */
-    #[ApiEndpointMetadata(
-        'crm.documentgenerator.document.disablepublicurl',
-        'https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/crm-document-generator-document-disable-public-url.html',
-        'Disables public URL for a document'
-    )]
-    public function disablePublicUrl(int $id): PublicUrlResult
-    {
-        return new PublicUrlResult(
-            $this->core->call(
-                'crm.documentgenerator.document.disablepublicurl',
                 ['id' => $id]
             )
         );
