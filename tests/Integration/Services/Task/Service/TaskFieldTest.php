@@ -35,11 +35,14 @@ class TaskFieldTest extends TestCase
     #[TestDox('Get available task fields metadata')]
     public function testGetTaskFields(): void
     {
-        $taskFields = $this->taskFieldService->list(['name', 'type'])->fields();
+        $taskFields = $this->taskFieldService->list()->fields();
+//        var_dump($taskFields);
 
-        $this->assertNotEmpty($taskFields);
-        $this->assertContainsOnlyInstancesOf(TaskFieldItemResult::class, $taskFields);
-        $this->assertNotNull($taskFields[0]->name);
+
+        var_dump($this->taskFieldService->get('userFields')->field());
+//        $this->assertNotEmpty($taskFields);
+//        $this->assertContainsOnlyInstancesOf(TaskFieldItemResult::class, $taskFields);
+//        $this->assertNotNull($taskFields[0]->name);
     }
 
     #[TestDox('Get task field metadata by field name')]

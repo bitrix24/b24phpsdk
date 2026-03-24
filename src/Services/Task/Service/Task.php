@@ -157,5 +157,4 @@ class Task extends AbstractService
             )
         );
     }
-
 }

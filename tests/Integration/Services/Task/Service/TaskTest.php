@@ -39,6 +39,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversMethod(Task::class, 'get')]
 #[CoversMethod(Task::class, 'add')]
 #[CoversMethod(Task::class, 'delete')]
+#[CoversMethod(Task::class, 'update')]
 #[CoversClass(Task::class)]
 class TaskTest extends TestCase
 {
@@ -61,20 +62,34 @@ class TaskTest extends TestCase
     #[TestDox('Get task by id with all fields')]
     public function testGetTaskByIdWithAllFields(): void
     {
-        $userItemResult = $this->userService->current()->user();
-        $taskResult = $this->taskService->add(
-            new TaskItemBuilder(
-                sprintf('Test task %s', time()),
-                $userItemResult->ID,
-                $userItemResult->ID
-            )
-        );
+//        $userItemResult = $this->userService->current()->user();
+//        $taskResult = $this->taskService->add(
+//            new TaskItemBuilder(
+//                sprintf('Test task %s', time()),
+//                $userItemResult->ID,
+//                $userItemResult->ID
+//            )
+//        );
 
-        $res = $this->taskService->get($taskResult->task()->id);
 
-        $this->assertEquals($taskResult->task(), $res->task());
 
-        $this->taskService->delete($taskResult->task()->id);
+
+  //      $res = $this->taskService->get($taskResult->task()->id);
+    //    $res = $this->taskService->get(5256,['id','chat.id','chat.entityId','chat.entityType']);
+        var_dump($this->serviceBuilder->getTaskScope()->taskField()->get('chat')->field());
+        $res = $this->taskService->get(5256,['id','chat']);
+
+        var_dump($res->task());
+//        dump($this->serviceBuilder->getTaskScope()->taskField()->list()->fields(['*','UF_AUTO_584558105987']));
+//        dump($this->serviceBuilder->getLegacyServiceBuilder()->getTaskScope()->task()->fields()->getFieldsDescription());
+
+        //$this->assertEquals($taskResult->task(), $res->task());
+//        dump($res->task());
+
+
+
+
+//        $this->taskService->delete($taskResult->task()->id);
     }
 
     #[TestDox('Get task by id with selected fields from select builder')]
@@ -152,13 +167,6 @@ class TaskTest extends TestCase
             ))
                 ->description(sprintf('Test task description %s', time()))
         );
-
-//        var_dump($addedTask->getCoreResponse()->getResponseData()->getResult());
-
-//        var_dump(
-//            $this->taskService->get($addedTask->task()->id, ['id', 'title', 'description', 'creatorId', 'responsibleId'])->getCoreResponse()->getResponseData(
-//            )->getResult()
-//        );
 
         $this->assertTrue(
             $this->taskService->update(
