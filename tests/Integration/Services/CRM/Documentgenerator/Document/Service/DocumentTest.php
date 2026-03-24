@@ -37,6 +37,7 @@ use Faker;
 #[CoversMethod(Document::class, 'getFields')]
 #[CoversMethod(Document::class, 'enablePublicUrl')]
 #[CoversMethod(Document::class, 'upload')]
+#[CoversMethod(Document::class, 'count')]
 #[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Documentgenerator\Document\Service\Document::class)]
 class DocumentTest extends TestCase
 {

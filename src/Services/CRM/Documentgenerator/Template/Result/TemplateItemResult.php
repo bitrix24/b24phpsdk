@@ -39,4 +39,3 @@ use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
 class TemplateItemResult extends AbstractCrmItem
 {
 }
-

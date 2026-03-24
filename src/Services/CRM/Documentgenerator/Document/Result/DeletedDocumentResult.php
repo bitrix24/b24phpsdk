@@ -32,4 +32,3 @@ class DeletedDocumentResult extends DeletedItemResult
         return (bool)$this->getCoreResponse()->getResponseData()->getResult();
     }
 }
-

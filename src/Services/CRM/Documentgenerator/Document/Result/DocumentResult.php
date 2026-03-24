@@ -37,4 +37,3 @@ class DocumentResult extends AbstractResult
         return new DocumentItemResult($result);
     }
 }
-

@@ -31,4 +31,3 @@ class TemplateFieldsResult extends AbstractResult
         return $this->getCoreResponse()->getResponseData()->getResult();
     }
 }
-

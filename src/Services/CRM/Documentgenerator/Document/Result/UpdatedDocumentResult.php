@@ -32,4 +32,3 @@ class UpdatedDocumentResult extends UpdatedItemResult
         return (bool)$this->getCoreResponse()->getResponseData()->getResult();
     }
 }
-

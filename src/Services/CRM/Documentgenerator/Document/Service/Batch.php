@@ -104,10 +104,11 @@ class Batch
      *
      * Update elements in array with structure
      * id => [  // Document id
-     *     'values' => [] // Document values to update
+     *     'values' => [],         // Document values to update
+     *     'stampsEnabled' => int  // Optional: whether to apply stamps (1 = yes, 0 = no)
      * ]
      *
-     * @param array<int, array> $entityItems
+     * @param array<int, array{values: array, stampsEnabled?: int}> $entityItems
      *
      * @return Generator<int, UpdatedDocumentBatchResult>
      * @throws BaseException
@@ -154,4 +155,3 @@ class Batch
         }
     }
 }
-

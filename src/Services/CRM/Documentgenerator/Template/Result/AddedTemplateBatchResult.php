@@ -28,4 +28,3 @@ class AddedTemplateBatchResult extends AddedItemBatchResult
         return (int)$this->getResponseData()->getResult()['template']['id'];
     }
 }
-

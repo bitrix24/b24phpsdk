@@ -100,6 +100,90 @@ class BatchTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch add documents')]
+    public function testBatchAdd(): void
+    {
+        $templateId = $this->getFirstTemplateId();
+        $dealIds = [];
+        $items = [];
+
+        for ($i = 1; $i <= 3; $i++) {
+            $dealId = $this->createDeal();
+            $dealIds[] = $dealId;
+            $items[] = [
+                'templateId' => $templateId,
+                'entityTypeId' => 2,
+                'entityId' => $dealId,
+            ];
+        }
+
+        $ids = [];
+        $cnt = 0;
+        foreach ($this->documentService->batch->add($items) as $added) {
+            $cnt++;
+            $ids[] = $added->getId();
+        }
+
+        self::assertEquals(count($items), $cnt);
+
+        // Cleanup
+        $delCnt = 0;
+        foreach ($this->documentService->batch->delete($ids) as $deleted) {
+            $delCnt++;
+        }
+
+        self::assertEquals(count($items), $delCnt);
+
+        $dealService = Factory::getServiceBuilder()->getCRMScope()->deal();
+        foreach ($dealIds as $dealId) {
+            $dealService->delete($dealId);
+        }
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[\PHPUnit\Framework\Attributes\TestDox('Batch update documents')]
+    public function testBatchUpdate(): void
+    {
+        $templateId = $this->getFirstTemplateId();
+        $dealIds = [];
+        $docIds = [];
+
+        for ($i = 1; $i <= 3; $i++) {
+            $dealId = $this->createDeal();
+            $dealIds[] = $dealId;
+            $docIds[] = $this->documentService->add($templateId, 2, $dealId)->getId();
+        }
+
+        $updatePayload = [];
+        foreach ($docIds as $docId) {
+            $updatePayload[$docId] = [
+                'values' => [],
+                'stampsEnabled' => 1,
+            ];
+        }
+
+        foreach ($this->documentService->batch->update($updatePayload) as $updated) {
+            $this->assertTrue($updated->isSuccess());
+        }
+
+        // Cleanup
+        foreach ($this->documentService->batch->delete($docIds) as $deleted) {
+            // consume generator to execute batch deletion
+        }
+
+        $dealService = Factory::getServiceBuilder()->getCRMScope()->deal();
+        foreach ($dealIds as $dealId) {
+            $dealService->delete($dealId);
+        }
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
     #[\PHPUnit\Framework\Attributes\TestDox('Batch delete documents')]
     public function testBatchDelete(): void
     {
@@ -127,4 +211,3 @@ class BatchTest extends TestCase
         }
     }
 }
-

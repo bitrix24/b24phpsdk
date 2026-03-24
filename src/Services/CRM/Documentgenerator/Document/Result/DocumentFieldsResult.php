@@ -31,4 +31,3 @@ class DocumentFieldsResult extends AbstractResult
         return $this->getCoreResponse()->getResponseData()->getResult();
     }
 }
-

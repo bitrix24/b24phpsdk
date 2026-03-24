@@ -45,4 +45,3 @@ use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
 class DocumentItemResult extends AbstractCrmItem
 {
 }
-

@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Documentgenerator\Document\Result;
@@ -33,4 +32,3 @@ class AddedDocumentResult extends AddedItemResult
         return (int)$this->getCoreResponse()->getResponseData()->getResult()['document']['id'];
     }
 }
-

@@ -32,4 +32,3 @@ class DeletedTemplateResult extends DeletedItemResult
         return (bool)$this->getCoreResponse()->getResponseData()->getResult();
     }
 }
-

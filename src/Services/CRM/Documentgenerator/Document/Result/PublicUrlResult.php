@@ -45,4 +45,3 @@ class PublicUrlResult extends AbstractResult
         return (bool)$this->getCoreResponse()->getResponseData()->getResult();
     }
 }
-
