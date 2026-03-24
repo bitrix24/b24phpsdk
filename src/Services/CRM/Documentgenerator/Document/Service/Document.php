@@ -258,6 +258,37 @@ class Document extends AbstractService
     }
 
     /**
+     * Uploads a file for a document
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/crm-document-generator-document-upload.html
+     *
+     * @param int $id Document identifier
+     * @param string $fileContent File content in Base64 format
+     * @param string $fileName File name with extension
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'crm.documentgenerator.document.upload',
+        'https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/crm-document-generator-document-upload.html',
+        'Uploads a file for a document'
+    )]
+    public function upload(int $id, string $fileContent, string $fileName): DocumentResult
+    {
+        return new DocumentResult(
+            $this->core->call(
+                'crm.documentgenerator.document.upload',
+                [
+                    'id' => $id,
+                    'fileContent' => $fileContent,
+                    'fileName' => $fileName,
+                ]
+            )
+        );
+    }
+
+    /**
      * Count documents
      *
      * @throws BaseException
@@ -268,4 +299,3 @@ class Document extends AbstractService
         return $this->list()->getCoreResponse()->getResponseData()->getPagination()->getTotal();
     }
 }
-

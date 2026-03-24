@@ -17,6 +17,7 @@
     - `get` gets information about the document by its identifier
     - `getFields` returns the description of document fields
     - `enablePublicUrl` enables public URL for a document
+    - `upload` uploads a file for a document
     - `count` count documents
 - Added service `Services\CRM\Documentgenerator\Template` with support methods,
   see [crm.documentgenerator.template.* methods](https://apidocs.bitrix24.com/api-reference/crm/document-generator/templates/index.html):

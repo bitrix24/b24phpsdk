@@ -36,6 +36,7 @@ use Faker;
 #[CoversMethod(Document::class, 'update')]
 #[CoversMethod(Document::class, 'getFields')]
 #[CoversMethod(Document::class, 'enablePublicUrl')]
+#[CoversMethod(Document::class, 'upload')]
 #[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\Documentgenerator\Document\Service\Document::class)]
 class DocumentTest extends TestCase
 {
@@ -228,6 +229,30 @@ class DocumentTest extends TestCase
 
         $result = $this->documentService->enablePublicUrl($id);
         self::assertTrue($result->isSuccess());
+
+        // Cleanup
+        $this->documentService->delete($id);
+        Factory::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testUpload(): void
+    {
+        $templateId = $this->getFirstTemplateId();
+        $dealId = $this->createDeal();
+
+        $id = $this->documentService->add($templateId, 2, $dealId)->getId();
+
+        // Create a minimal content for upload (base64 encoded)
+        $fileContent = base64_encode('Test document content');
+        $fileName = 'test-upload-' . $this->faker->uuid() . '.pdf';
+
+        $result = $this->documentService->upload($id, $fileContent, $fileName);
+        $document = $result->document();
+        self::assertEquals($id, $document->id);
 
         // Cleanup
         $this->documentService->delete($id);
