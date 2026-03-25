@@ -6,7 +6,7 @@ description: |
   or referencing an issue in commits, branches, or CHANGELOG.
   IMPORTANT: this skill MUST be invoked before doing any issue-related work.
 user-invocable: true
-allowed-tools: mcp__github__get_issue, mcp__github__list_issues, mcp__github__create_issue, mcp__github__add_issue_comment, mcp__github__search_issues
+allowed-tools: mcp__github__get_issue, mcp__github__list_issues, mcp__github__create_issue, mcp__github__add_issue_comment, mcp__github__search_issues, mcp__bitrix24__bitrix-search, mcp__bitrix24__bitrix-method-details, mcp__bitrix24__bitrix-article-details, mcp__bitrix24__bitrix-event-details, mcp__bitrix24__bitrix-app-development-doc-details
 ---
 
 # b24phpsdk Maintainer
@@ -258,11 +258,172 @@ Update the plan file if scope changes during implementation.
 
 ---
 
-## Loading issue details at the start of work
+## Closing an issue: start-of-work protocol
 
-If the user mentions an issue number without explicitly calling `/b24phpsdk-maintainer`, still execute these steps:
+When the user asks to implement (close) an issue and provides a link or number,
+execute the following steps **in strict order** before writing any code.
 
-1. Load the issue via `mcp__github__get_issue`
-2. Output a short summary: what needs to be done
-3. Create `.tasks/<issue-number>/` and write `plan.md`
-4. Propose the plan for review before starting implementation
+### Step 1 — Load the issue
+
+Fetch the issue via `mcp__github__get_issue` and read the full title, body, and labels.
+
+#### Step 1.5 — Expand context from Bitrix24 official documentation
+
+Use the **bitrix24 MCP server** to fetch up-to-date API documentation for every REST method
+mentioned in the issue or required for the implementation.
+
+Available tools:
+
+| Tool | When to use |
+|---|---|
+| `mcp__bitrix24__bitrix-search` | find methods, articles, or events by keyword when the exact name is unknown |
+| `mcp__bitrix24__bitrix-method-details` | fetch full description of a specific REST method (parameters, response shape, errors) |
+| `mcp__bitrix24__bitrix-article-details` | fetch a documentation article (overview pages, concept guides) |
+| `mcp__bitrix24__bitrix-event-details` | fetch details of a specific Bitrix24 event |
+| `mcp__bitrix24__bitrix-app-development-doc-details` | fetch application development documentation |
+
+For each REST method involved in the issue:
+1. Call `mcp__bitrix24__bitrix-method-details` to get the exact parameter names, types, and response structure
+2. Note the real response key names (e.g. `result.item` vs `result.items`) — they must match the `AbstractResult` implementation
+3. Note which API version the method belongs to (v1 or v3) — this determines the base branch
+
+Record findings in the **Context** section of `plan.md` so the plan is grounded in actual API behaviour, not assumptions.
+
+### Step 2 — Determine the type
+
+Classify the issue:
+
+| Type | Signals |
+|---|---|
+| `feature` | labels `enhancement`; title starts with `Add` |
+| `bugfix` | label `bug`; title starts with `Fix` |
+
+Use `feature` if the type is ambiguous.
+
+### Step 3 — Ask which API version
+
+Ask the user explicitly before creating the branch using the `AskUserQuestion` tool
+with the following question and options (do NOT ask via plain text):
+
+```
+question: "Which API version does this issue target?"
+header: "API version"
+options:
+  - label: "v3"
+    description: "REST API v3 — base branch: v3-dev"
+  - label: "v1"
+    description: "REST API v1 — base branch: dev"
+```
+
+Branch off from the corresponding base branch:
+
+| API version | Base branch |
+|---|---|
+| v1 | `dev` |
+| v3 | `v3-dev` |
+
+Do not assume — always wait for the user's answer.
+
+### Step 4 — Create the branch
+
+Name the branch according to the issue type and number:
+
+```
+feature/<issue-number>-<short-slug>   # for features
+bugfix/<issue-number>-<short-slug>    # for bug fixes
+```
+
+Example: `feature/397-add-task-chat-fields` branched from `v3-dev`.
+
+Create it with:
+
+```bash
+git checkout <base-branch>
+git pull
+git checkout -b <branch-name>
+```
+
+### Step 5 — Create the task folder
+
+```
+.tasks/<issue-number>/
+```
+
+### Step 6 — Write the plan and wait for approval
+
+Create `.tasks/<issue-number>/plan.md` using the structure defined in the
+**«Task folder and implementation plan»** section above.
+
+Present the plan to the user and **wait for explicit approval** before writing any production code.
+
+### Step 7 — Review the plan before approval
+
+Before presenting the plan to the user, self-review it against three criteria:
+
+**1. Unambiguity** — every instruction has exactly one possible interpretation.
+Check each step: could a developer unfamiliar with the codebase read it differently?
+If yes — rewrite it to be explicit (add file paths, method names, exact values).
+
+**2. Non-contradiction** — no two instructions conflict with each other.
+Check: do the files to create match what the files to modify expect?
+Do the namespace, class names, and method names stay consistent throughout the plan?
+Do the test skeletons reference the same class names as the source skeletons?
+
+**3. No gaps** — the plan covers the full path from empty branch to passing linters and tests.
+Walk through the acceptance criteria from the issue and verify each one is addressed by at least one step in the plan.
+Check that the Verification section lists all relevant make targets for the changed scope.
+If a step depends on another that is not in the plan — add the missing step.
+
+Only after all three criteria are satisfied, present the plan to the user.
+
+**Required**: before presenting the plan, explicitly report the review results in this format:
+
+```
+Plan review:
+✓ Unambiguity — <one sentence: what was checked and result>
+✓ Non-contradiction — <one sentence: what was checked and result>
+✓ No gaps — <one sentence: what was checked and result>
+```
+
+If any criterion fails, fix the plan first, then re-run the check and report again.
+
+---
+
+## Post-implementation quality gate
+
+After all files from the plan are written and the plan is marked complete,
+run checks in two phases. **Do not start phase 2 until phase 1 is fully green.**
+
+### Phase 1 — Light checks (linters + unit tests)
+
+Run in this order:
+
+```bash
+make lint-phpstan
+make lint-deptrac
+make test-unit
+```
+
+Rules for phase 1:
+- If any command fails, fix the errors and re-run **that command** until it passes before continuing to the next.
+- Do not add entries to `deptrac.yaml` → `skip_violations` to silence a new violation — fix the import instead.
+- Only proceed to phase 2 when all three commands pass without errors.
+
+### Phase 2 — Heavy checks (integration tests)
+
+Run only after phase 1 is fully green:
+
+```bash
+make test-integration-<scope>   # the suite added for this issue
+```
+
+Rules for phase 2:
+- If the suite fails, fix the root cause and re-run until it passes.
+- Do not skip or comment out failing tests — fix the root cause.
+
+### Final report
+
+Report the status to the user:
+- Which commands passed on the first run.
+- Which required fixes, and a one-line summary of what was fixed.
+- Confirmation that both phases are green.

@@ -74,6 +74,18 @@ class TaskServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    public function taskFileField(): FileField\Service\FileField
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new FileField\Service\FileField(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function taskFile(): Service\TaskFile
     {
         if (!isset($this->serviceCache[__METHOD__])) {
