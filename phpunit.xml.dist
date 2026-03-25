@@ -195,6 +195,10 @@
             <file>./tests/Integration/Services/Task/FileField/Service/FileFieldTest.php</file>
             <file>./tests/Integration/Services/Task/FileField/Result/FileFieldItemResultTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_task_access_field">
+            <file>./tests/Integration/Services/Task/AccessField/Service/AccessFieldTest.php</file>
+            <file>./tests/Integration/Services/Task/AccessField/Result/AccessFieldItemResultTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_legacy_task">
             <directory>./tests/Integration/Legacy/Services/Task/</directory>
         </testsuite>
