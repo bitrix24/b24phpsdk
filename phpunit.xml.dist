@@ -191,6 +191,10 @@
             <file>./tests/Integration/Services/Task/ChatMessageField/Service/ChatMessageFieldTest.php</file>
             <file>./tests/Integration/Services/Task/ChatMessageField/Result/ChatMessageFieldItemResultTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_task_file_field">
+            <file>./tests/Integration/Services/Task/FileField/Service/FileFieldTest.php</file>
+            <file>./tests/Integration/Services/Task/FileField/Result/FileFieldItemResultTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_legacy_task">
             <directory>./tests/Integration/Legacy/Services/Task/</directory>
         </testsuite>
