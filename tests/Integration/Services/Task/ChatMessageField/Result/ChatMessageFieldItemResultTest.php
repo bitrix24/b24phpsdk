@@ -49,7 +49,7 @@ class ChatMessageFieldItemResultTest extends TestCase
     #[TestDox('all fields in ChatMessageFieldItemResult have valid type casting in magic getters')]
     public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
     {
-        $field = $this->chatMessageFieldService->get('taskId')->chatMessageField();
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($field, ChatMessageFieldItemResult::class);
+        $chatMessageFieldItemResult = $this->chatMessageFieldService->get('taskId')->chatMessageField();
+        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($chatMessageFieldItemResult, ChatMessageFieldItemResult::class);
     }
 }

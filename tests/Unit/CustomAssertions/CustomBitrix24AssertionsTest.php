@@ -39,18 +39,18 @@ class CustomBitrix24AssertionsTest extends TestCase
     #[Test]
     public function testPassesWhenAllTypesMatchAnnotations(): void
     {
-        $item = new AllTypesStubItem(self::VALID_DATA);
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($item, AllTypesStubItem::class);
+        $allTypesStubItem = new AllTypesStubItem(self::VALID_DATA);
+        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($allTypesStubItem, AllTypesStubItem::class);
     }
 
     #[Test]
     public function testPassesWhenNullableFieldsHaveValues(): void
     {
-        $item = new AllTypesStubItem(array_merge(self::VALID_DATA, [
+        $allTypesStubItem = new AllTypesStubItem(array_merge(self::VALID_DATA, [
             'nullableString' => 'world',
             'nullableArray'  => [1, 2, 3],
         ]));
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($item, AllTypesStubItem::class);
+        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($allTypesStubItem, AllTypesStubItem::class);
     }
 
     #[Test]
@@ -58,8 +58,8 @@ class CustomBitrix24AssertionsTest extends TestCase
     public function testFailsWhenFieldHasWrongType(array $data): void
     {
         $this->expectException(AssertionFailedError::class);
-        $item = new AllTypesStubItem($data);
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($item, AllTypesStubItem::class);
+        $allTypesStubItem = new AllTypesStubItem($data);
+        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($allTypesStubItem, AllTypesStubItem::class);
     }
 
     public static function wrongTypesDataProvider(): Generator

@@ -45,10 +45,10 @@ class ChatMessageFieldTest extends TestCase
     #[Test]
     public function testGet(): void
     {
-        $field = $this->service->get('taskId')->chatMessageField();
-        $this->assertNotEmpty($field->name);
-        $this->assertNotEmpty($field->type);
-        $this->assertNotEmpty($field->title);
+        $chatMessageFieldItemResult = $this->service->get('taskId')->chatMessageField();
+        $this->assertNotEmpty($chatMessageFieldItemResult->name);
+        $this->assertNotEmpty($chatMessageFieldItemResult->type);
+        $this->assertNotEmpty($chatMessageFieldItemResult->title);
     }
 
     #[Test]
