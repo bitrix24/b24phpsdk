@@ -493,6 +493,10 @@ integration_tests_department:
 integration_tests_task:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_task
 
+.PHONY: test-integration-task-chat-message-field
+test-integration-task-chat-message-field:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_task_chat_message_field
+
 .PHONY: test-integration-legacy-task
 test-integration-legacy-task:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_legacy_task

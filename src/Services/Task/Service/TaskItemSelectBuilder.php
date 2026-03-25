@@ -43,7 +43,7 @@ class TaskItemSelectBuilder extends AbstractSelectBuilder
 
     public function chat(): self
     {
-        $this->select = array_merge($this->select, ['chat.id', 'chat.entityId']);
+        $this->select = array_merge($this->select, ['chat.id', 'chat.entityId', 'chat.entityType']);
         return $this;
     }
 }
