@@ -13,6 +13,7 @@
 ### Added
 
 - Added project-level GitHub MCP server configuration (`.mcp.json`) for AI-assisted development with Claude Code
+- Added Claude Code skill `.claude/skills/b24phpsdk-maintainer/SKILL.md` for repository maintainers — enforces conventions when working with GitHub issues
 - Added support for `tasks.task.chat.message.field.*` methods ([#397](https://github.com/bitrix24/b24phpsdk/issues/397)):
   - `TaskServiceBuilder::taskChatMessageField()` — new scope accessor
   - `ChatMessageField::get(string $name, array $select = [])` → `ChatMessageFieldResult` — get a single field descriptor by code (`tasks.task.chat.message.field.get`, API v3)
