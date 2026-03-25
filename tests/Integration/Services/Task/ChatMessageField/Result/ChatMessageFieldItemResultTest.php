@@ -39,7 +39,17 @@ class ChatMessageFieldItemResultTest extends TestCase
     #[TestDox('all fields in ChatMessageFieldItemResult are annotated in phpdoc and match with raw api response')]
     public function testAllFieldsAreAnnotated(): void
     {
-        $allFields = $this->chatMessageFieldService->get('taskId')->getCoreResponse()->getResponseData()->getResult()['item'];
+        // get first entity field from documentation
+        $fieldNameForTest = 'taskId';
+        $allFields = $this->chatMessageFieldService->get($fieldNameForTest)->getCoreResponse()->getResponseData()->getResult()['item'];
         $this->assertBitrix24AllResultItemFieldsAnnotated(array_keys($allFields), ChatMessageFieldItemResult::class);
+    }
+
+    #[Test]
+    #[TestDox('all fields in ChatMessageFieldItemResult have valid type casting in magic getters')]
+    public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
+    {
+        $field = $this->chatMessageFieldService->get('taskId')->chatMessageField();
+        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($field, ChatMessageFieldItemResult::class);
     }
 }

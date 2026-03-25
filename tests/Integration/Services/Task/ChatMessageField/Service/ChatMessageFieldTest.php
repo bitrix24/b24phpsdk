@@ -59,4 +59,5 @@ class ChatMessageFieldTest extends TestCase
         $fieldCodesFromApi = array_keys($rawItems[0]);
         $this->assertBitrix24AllResultItemFieldsAnnotated($fieldCodesFromApi, ChatMessageFieldItemResult::class);
     }
+
 }

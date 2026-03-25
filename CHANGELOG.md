@@ -18,6 +18,11 @@
   - `ChatMessageField::get(string $name, array $select = [])` → `ChatMessageFieldResult` — get a single field descriptor by code (`tasks.task.chat.message.field.get`, API v3)
   - `ChatMessageField::list(array $select = [])` → `ChatMessageFieldsResult` — list all available field descriptors (`tasks.task.chat.message.field.list`, API v3)
   - `ChatMessageFieldItemResult` — field descriptor item with properties: `name`, `type`, `title`, `description`, `validationRules`, `requiredGroups`, `filterable`, `sortable`, `editable`, `multiple`, `elementType`
+- Added `CustomBitrix24Assertions::assertBitrix24ResultItemFieldsTypeCastMatchAnnotations(AbstractItem $item, string $resultItemClassName)` — generic assertion that reads all `@property-read` PHPDoc annotations via Typhoon Reflection and verifies each magic-getter value matches its declared PHP type (supports `string`, `bool`, `int`, `float`, `array`, nullable variants, and class types via `assertInstanceOf`)
+- Added unit tests for `assertBitrix24ResultItemFieldsTypeCastMatchAnnotations` in `tests/Unit/CustomAssertions/CustomBitrix24AssertionsTest.php` covering happy paths (all types match, nullable fields as null) and 9 failure cases via `DataProvider`
+- Added integration tests for `ChatMessageFieldItemResult` in `tests/Integration/Services/Task/ChatMessageField/Result/ChatMessageFieldItemResultTest.php`:
+  - `testAllFieldsAreAnnotated` — verifies every field from raw API response is covered by a `@property-read` annotation
+  - `testAllFieldsHasValidTypeCastingInMagicGetters` — verifies magic getters return values matching their PHPDoc-declared types
 
 ## 3.0.0 - 2026.02.27
 
