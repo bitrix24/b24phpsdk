@@ -64,10 +64,10 @@ class TemplateTest extends TestCase
         // For testing purposes we use a small base64-encoded .docx template.
         // This is a minimal valid docx file that Bitrix24 can accept.
         $tmpFile = tempnam(sys_get_temp_dir(), 'docx_');
-        $zip = new \ZipArchive();
-        $zip->open($tmpFile, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        $zipArchive = new \ZipArchive();
+        $zipArchive->open($tmpFile, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
 
-        $zip->addFromString(
+        $zipArchive->addFromString(
             '[Content_Types].xml',
             '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
@@ -77,7 +77,7 @@ class TemplateTest extends TestCase
 </Types>'
         );
 
-        $zip->addFromString(
+        $zipArchive->addFromString(
             '_rels/.rels',
             '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
@@ -85,7 +85,7 @@ class TemplateTest extends TestCase
 </Relationships>'
         );
 
-        $zip->addFromString(
+        $zipArchive->addFromString(
             'word/document.xml',
             '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
@@ -99,7 +99,7 @@ class TemplateTest extends TestCase
 </w:document>'
         );
 
-        $zip->close();
+        $zipArchive->close();
 
         $content = file_get_contents($tmpFile);
         unlink($tmpFile);
@@ -139,7 +139,7 @@ class TemplateTest extends TestCase
     public function testGet(): void
     {
         $templates = $this->templateService->list()->getTemplates();
-        if (count($templates) === 0) {
+        if ($templates === []) {
             self::markTestSkipped('No templates available for testing get()');
         }
 

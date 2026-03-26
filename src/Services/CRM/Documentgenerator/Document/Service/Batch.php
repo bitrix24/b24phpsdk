@@ -89,12 +89,7 @@ class Batch
     )]
     public function add(array $documents): Generator
     {
-        $items = [];
-        foreach ($documents as $item) {
-            $items[] = $item;
-        }
-
-        foreach ($this->batch->addEntityItems('crm.documentgenerator.document.add', $items) as $key => $item) {
+        foreach ($this->batch->addEntityItems('crm.documentgenerator.document.add', $documents) as $key => $item) {
             yield $key => new AddedDocumentBatchResult($item);
         }
     }

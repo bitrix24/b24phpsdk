@@ -228,8 +228,8 @@ class DocumentTest extends TestCase
 
         $id = $this->documentService->add($templateId, 2, $dealId)->getId();
 
-        $result = $this->documentService->enablePublicUrl($id);
-        self::assertTrue($result->isSuccess());
+        $publicUrlResult = $this->documentService->enablePublicUrl($id);
+        self::assertTrue($publicUrlResult->isSuccess());
 
         // Cleanup
         $this->documentService->delete($id);
@@ -251,8 +251,8 @@ class DocumentTest extends TestCase
         $fileContent = base64_encode('Test document content');
         $fileName = 'test-upload-' . $this->faker->uuid() . '.pdf';
 
-        $result = $this->documentService->upload($id, $fileContent, $fileName);
-        $document = $result->document();
+        $documentResult = $this->documentService->upload($id, $fileContent, $fileName);
+        $document = $documentResult->document();
         self::assertEquals($id, $document->id);
 
         // Cleanup
