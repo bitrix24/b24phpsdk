@@ -10,6 +10,7 @@
 
 - `ContactPersonInterface::getBitrix24UserId()` now returns `int` instead of `?int` — a ContactPerson is always linked to a Bitrix24 user ([#365](https://github.com/bitrix24/b24phpsdk/issues/365))
 - Updated `.claude/skills/b24phpsdk-maintainer/SKILL.md`: added `make lint-rector` to Phase 1 quality gate and PR test plan checklist to prevent missed Rector violations in CI
+- Updated `.claude/skills/b24phpsdk-maintainer/SKILL.md`: PR body must now be built from `.github/PULL_REQUEST_TEMPLATE.md` instead of a hardcoded template
 
 ### Added
 
