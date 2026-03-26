@@ -45,10 +45,10 @@ class EventLogFieldTest extends TestCase
     #[Test]
     public function testGet(): void
     {
-        $field = $this->service->get('timestampX')->eventLogField();
-        $this->assertNotEmpty($field->name);
-        $this->assertNotEmpty($field->type);
-        $this->assertNotEmpty($field->title);
+        $eventLogFieldItemResult = $this->service->get('timestampX')->eventLogField();
+        $this->assertNotEmpty($eventLogFieldItemResult->name);
+        $this->assertNotEmpty($eventLogFieldItemResult->type);
+        $this->assertNotEmpty($eventLogFieldItemResult->title);
     }
 
     #[Test]
