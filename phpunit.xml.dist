@@ -285,6 +285,8 @@
         </testsuite>
         <testsuite name="integration_tests_scope_main_eventlog">
             <file>./tests/Integration/Services/Main/Service/EventLogTest.php</file>
+            <file>./tests/Integration/Services/Main/EventLogField/Service/EventLogFieldTest.php</file>
+            <file>./tests/Integration/Services/Main/EventLogField/Result/EventLogFieldItemResultTest.php</file>
         </testsuite>
     </testsuites>
     <source>

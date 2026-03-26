@@ -14,6 +14,7 @@
 
 - Added project-level GitHub MCP server configuration (`.mcp.json`) for AI-assisted development with Claude Code
 - Added Claude Code skill `.claude/skills/b24phpsdk-maintainer/SKILL.md` for repository maintainers — enforces conventions when working with GitHub issues
+- Added `EventLogField` service for `main.eventlog.field.get` and `main.eventlog.field.list` support ([#394](https://github.com/bitrix24/b24phpsdk/issues/394))
 - Added support for `tasks.task.access.field.get` and `tasks.task.access.field.list` via `AccessField` service ([#396](https://github.com/bitrix24/b24phpsdk/issues/396))
 - Added support for `tasks.task.file.field.get` and `tasks.task.file.field.list` via `FileField` service ([#398](https://github.com/bitrix24/b24phpsdk/issues/398))
 - Added support for `tasks.task.chat.message.field.*` methods ([#397](https://github.com/bitrix24/b24phpsdk/issues/397)):
