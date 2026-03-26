@@ -14,13 +14,15 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Application\Local\Entity;
 
 use Bitrix24\SDK\Core\Credentials\AuthToken;
+use Bitrix24\SDK\Core\Credentials\DefaultOAuthServerUrl;
 
 final class LocalAppAuth
 {
     public function __construct(
-        private AuthToken       $authToken,
-        private readonly string $domainUrl,
-        private readonly ?string         $applicationToken)
+        private AuthToken        $authToken,
+        private readonly string  $domainUrl,
+        private readonly ?string $applicationToken,
+        private readonly string  $oauthServerUrl)
     {
     }
 
@@ -44,12 +46,18 @@ final class LocalAppAuth
         return $this->applicationToken;
     }
 
+    public function getOAuthServerUrl(): string
+    {
+        return $this->oauthServerUrl;
+    }
+
     public static function initFromArray(array $localAppAuthPayload): self
     {
         return new self(
             AuthToken::initFromArray($localAppAuthPayload['auth_token']),
             $localAppAuthPayload['domain_url'],
-            $localAppAuthPayload['application_token']);
+            $localAppAuthPayload['application_token'],
+            $localAppAuthPayload['oauth_server_url'] ?? DefaultOAuthServerUrl::default());
     }
 
     public function toArray(): array
@@ -62,6 +70,7 @@ final class LocalAppAuth
             ],
             'domain_url' => $this->domainUrl,
             'application_token' => $this->applicationToken,
+            'oauth_server_url' => $this->oauthServerUrl,
         ];
     }
 }

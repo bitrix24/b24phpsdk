@@ -14,6 +14,7 @@
 
 ### Added
 
+- Added `oauthServerUrl` field to `LocalAppAuth`: stored in `toArray()` as `oauth_server_url`, restored in `initFromArray()` with fallback to `DefaultOAuthServerUrl::default()` for backward compatibility ([#385](https://github.com/bitrix24/b24phpsdk/issues/385))
 - Added `TaskField` service for `tasks.task.field.get` and `tasks.task.field.list` support ([#395](https://github.com/bitrix24/b24phpsdk/issues/395))
 - Added project-level GitHub MCP server configuration (`.mcp.json`) for AI-assisted development with Claude Code
 - Added Claude Code skill `.claude/skills/b24phpsdk-maintainer/SKILL.md` for repository maintainers — enforces conventions when working with GitHub issues
