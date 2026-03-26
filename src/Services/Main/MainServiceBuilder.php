@@ -16,6 +16,7 @@ namespace Bitrix24\SDK\Services\Main;
 use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
+use Bitrix24\SDK\Services\Main\EventLogField\Service\EventLogField;
 use Bitrix24\SDK\Services\Main\Service\Documentation;
 use Bitrix24\SDK\Services\Main\Service\EventLog;
 use Bitrix24\SDK\Services\Main\Service\EventManager;
@@ -57,6 +58,15 @@ class MainServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new EventLog($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function eventLogField(): EventLogField
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new EventLogField($this->core, $this->log);
         }
 
         return $this->serviceCache[__METHOD__];

@@ -268,6 +268,7 @@ into the existing SDK structure, any constraints or decisions made upfront>
 
 \`\`\`bash
 make lint-cs-fixer
+make lint-rector
 make lint-phpstan
 make lint-deptrac
 make test-unit
@@ -423,6 +424,7 @@ Run in this order:
 
 ```bash
 make lint-cs-fixer
+make lint-rector
 make lint-phpstan
 make lint-deptrac
 make test-unit
@@ -431,7 +433,7 @@ make test-unit
 Rules for phase 1:
 - If any command fails, fix the errors and re-run **that command** until it passes before continuing to the next.
 - Do not add entries to `deptrac.yaml` → `skip_violations` to silence a new violation — fix the import instead.
-- Only proceed to phase 2 when all four commands pass without errors.
+- Only proceed to phase 2 when all five commands pass without errors.
 
 ### Phase 2 — Heavy checks (integration tests)
 
@@ -514,7 +516,38 @@ If no matching milestone exists, omit the `milestone` field.
 
 ### Step 4 — Create the Pull Request
 
-Use `mcp__github__create_pull_request` with the following parameters:
+**Before composing the PR body**, read the template fresh from disk:
+
+```bash
+cat .github/PULL_REQUEST_TEMPLATE.md
+```
+
+Use its exact structure as the PR body. Fill in every placeholder and replace every
+comment block with real content derived from the implementation and the issue.
+Do NOT use a memorised or hardcoded body structure — always re-read the file.
+
+After filling in the template, append the quality gate results and the issue closing keyword:
+
+```
+## Test plan
+
+- [x] `make lint-cs-fixer` — passed
+- [x] `make lint-rector` — passed
+- [x] `make lint-phpstan` — passed
+- [x] `make lint-deptrac` — passed
+- [x] `make test-unit` — passed
+- [x] `make test-integration-<scope>` — passed
+
+Closes #<issue-number>
+
+🤖 Generated with [Claude Code](https://claude.ai/claude-code)
+```
+
+**Why `Closes #NNN` outside the table**: GitHub only activates automatic issue linking and
+the "Linked issues" sidebar when the closing keyword appears as plain text in the body —
+not inside Markdown tables, code blocks, or HTML comments.
+
+Use `mcp__github__create_pull_request` (preferred) or `gh pr create` with the following parameters:
 
 ```
 owner:     bitrix24
@@ -522,33 +555,9 @@ repo:      b24phpsdk
 title:     <issue title, max 72 characters>
 head:      <branch-name>
 base:      <base-branch>   # v3-dev or dev — same as when the branch was created
-body:      <see template below>
+body:      <filled-in template + quality gate results + Closes #NNN>
 assignees: [<author login from step 2>]
 milestone: <milestone number from step 3>
-```
-
-#### PR body template
-
-```markdown
-## Summary
-
-- Closes #<issue-number>
-- <one-line description of what was added/fixed>
-
-## Changes
-
-- <bullet: file or component changed and why>
-- <bullet: ...>
-
-## Test plan
-
-- [x] `make lint-cs-fixer` — passed
-- [x] `make lint-phpstan` — passed
-- [x] `make lint-deptrac` — passed
-- [x] `make test-unit` — passed
-- [x] `make test-integration-<scope>` — passed
-
-🤖 Generated with [Claude Code](https://claude.ai/claude-code)
 ```
 
 ### Step 5 — Return the PR URL

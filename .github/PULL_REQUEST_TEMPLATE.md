@@ -4,7 +4,7 @@
 | New feature?  | yes/no <!-- please update CHANGELOG.md file -->                                                                           |
 | Deprecations? | yes/no <!-- please update CHANGELOG.md file -->                                                                           |
 | Issues        | Fix #... <!-- prefix each issue number with "Fix #", no need to create an issue if none exists, explain below instead --> |
-| License       | **MIT**                                                                                                                       |
+| License       | **MIT**                                                                                                                   |
 
 <!--
 Replace this notice by a description of your feature/bugfix.
@@ -14,3 +14,5 @@ Additionally:
  - Always add tests and ensure they pass.
  - For new features, provide some code snippets to help understand usage.
 -->
+
+Closes #...
