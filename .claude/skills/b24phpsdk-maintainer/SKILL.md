@@ -526,7 +526,7 @@ Use its exact structure as the PR body. Fill in every placeholder and replace ev
 comment block with real content derived from the implementation and the issue.
 Do NOT use a memorised or hardcoded body structure — always re-read the file.
 
-After filling in the template, append the quality gate results:
+After filling in the template, append the quality gate results and the issue closing keyword:
 
 ```
 ## Test plan
@@ -538,8 +538,14 @@ After filling in the template, append the quality gate results:
 - [x] `make test-unit` — passed
 - [x] `make test-integration-<scope>` — passed
 
+Closes #<issue-number>
+
 🤖 Generated with [Claude Code](https://claude.ai/claude-code)
 ```
+
+**Why `Closes #NNN` outside the table**: GitHub only activates automatic issue linking and
+the "Linked issues" sidebar when the closing keyword appears as plain text in the body —
+not inside Markdown tables, code blocks, or HTML comments.
 
 Use `mcp__github__create_pull_request` (preferred) or `gh pr create` with the following parameters:
 
@@ -549,7 +555,7 @@ repo:      b24phpsdk
 title:     <issue title, max 72 characters>
 head:      <branch-name>
 base:      <base-branch>   # v3-dev or dev — same as when the branch was created
-body:      <filled-in template + quality gate results>
+body:      <filled-in template + quality gate results + Closes #NNN>
 assignees: [<author login from step 2>]
 milestone: <milestone number from step 3>
 ```
