@@ -20,6 +20,7 @@ use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\MethodConfirmWaitingException;
+use Bitrix24\SDK\Core\Exceptions\PortalUnavailableException;
 use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Response\Response;
@@ -86,6 +87,20 @@ class Core implements CoreInterface
                     $portalOldDomainUrlHost = $this->apiClient->getCredentials()->getDomainUrl();
                     $newDomain = parse_url($apiCallResponse->getHeaders(false)['location'][0]);
                     $portalNewDomainUrlHost = sprintf('%s://%s', $newDomain['scheme'], $newDomain['host']);
+
+                    // Guard against infinite recursion: if the redirect stays on the same domain,
+                    // this is NOT a domain-migration — e.g. an expired-license redirect to
+                    // /bitrix/coupon_activation.php. Recursing would loop forever.
+                    if ($portalNewDomainUrlHost === $portalOldDomainUrlHost) {
+                        throw new PortalUnavailableException(
+                            sprintf(
+                                'portal redirect loop detected: domain did not change (%s), redirect location: %s',
+                                $portalOldDomainUrlHost,
+                                $apiCallResponse->getHeaders(false)['location'][0]
+                            )
+                        );
+                    }
+
                     $this->apiClient->getCredentials()->changeDomainUrl($portalNewDomainUrlHost);
                     $this->logger->debug('domain url changed', [
                         'oldDomainUrl' => $portalOldDomainUrlHost,
