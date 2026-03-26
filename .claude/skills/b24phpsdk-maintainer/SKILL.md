@@ -268,6 +268,7 @@ into the existing SDK structure, any constraints or decisions made upfront>
 
 \`\`\`bash
 make lint-cs-fixer
+make lint-rector
 make lint-phpstan
 make lint-deptrac
 make test-unit
@@ -423,6 +424,7 @@ Run in this order:
 
 ```bash
 make lint-cs-fixer
+make lint-rector
 make lint-phpstan
 make lint-deptrac
 make test-unit
@@ -431,7 +433,7 @@ make test-unit
 Rules for phase 1:
 - If any command fails, fix the errors and re-run **that command** until it passes before continuing to the next.
 - Do not add entries to `deptrac.yaml` → `skip_violations` to silence a new violation — fix the import instead.
-- Only proceed to phase 2 when all four commands pass without errors.
+- Only proceed to phase 2 when all five commands pass without errors.
 
 ### Phase 2 — Heavy checks (integration tests)
 
@@ -543,6 +545,7 @@ milestone: <milestone number from step 3>
 ## Test plan
 
 - [x] `make lint-cs-fixer` — passed
+- [x] `make lint-rector` — passed
 - [x] `make lint-phpstan` — passed
 - [x] `make lint-deptrac` — passed
 - [x] `make test-unit` — passed
