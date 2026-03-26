@@ -516,43 +516,17 @@ If no matching milestone exists, omit the `milestone` field.
 
 ### Step 4 — Create the Pull Request
 
-**Before composing the PR body**, read the project's PR template:
+**Before composing the PR body**, read the template fresh from disk:
 
 ```bash
 cat .github/PULL_REQUEST_TEMPLATE.md
 ```
 
-Fill in every field of that template with actual values from the implementation.
-Do NOT invent your own body structure — always use the template as the base.
+Use its exact structure as the PR body. Fill in every placeholder and replace every
+comment block with real content derived from the implementation and the issue.
+Do NOT use a memorised or hardcoded body structure — always re-read the file.
 
-Use `mcp__github__create_pull_request` (preferred) or `gh pr create` with the following parameters:
-
-```
-owner:     bitrix24
-repo:      b24phpsdk
-title:     <issue title, max 72 characters>
-head:      <branch-name>
-base:      <base-branch>   # v3-dev or dev — same as when the branch was created
-body:      <filled-in PULL_REQUEST_TEMPLATE.md — see instructions below>
-assignees: [<author login from step 2>]
-milestone: <milestone number from step 3>
-```
-
-#### How to fill in PULL_REQUEST_TEMPLATE.md
-
-The template contains a table and a comment block. Fill them as follows:
-
-| Field | How to fill |
-|---|---|
-| `Bug fix?` | `yes` if issue label is `bug`, otherwise `no` |
-| `New feature?` | `yes` if issue label is `enhancement`, otherwise `no` |
-| `Deprecations?` | `yes` if any public API was deprecated, otherwise `no` |
-| `Issues` | `Fix #<issue-number>` |
-| `License` | keep `**MIT**` as-is |
-
-Replace the comment block (`<!-- Replace this notice ... -->`) with:
-- A short description of what was added or fixed
-- The Phase 1 + Phase 2 quality gate results in this format:
+After filling in the template, append the quality gate results:
 
 ```
 ## Test plan
@@ -565,6 +539,19 @@ Replace the comment block (`<!-- Replace this notice ... -->`) with:
 - [x] `make test-integration-<scope>` — passed
 
 🤖 Generated with [Claude Code](https://claude.ai/claude-code)
+```
+
+Use `mcp__github__create_pull_request` (preferred) or `gh pr create` with the following parameters:
+
+```
+owner:     bitrix24
+repo:      b24phpsdk
+title:     <issue title, max 72 characters>
+head:      <branch-name>
+base:      <base-branch>   # v3-dev or dev — same as when the branch was created
+body:      <filled-in template + quality gate results>
+assignees: [<author login from step 2>]
+milestone: <milestone number from step 3>
 ```
 
 ### Step 5 — Return the PR URL
