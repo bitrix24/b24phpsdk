@@ -265,6 +265,11 @@ class Document extends AbstractService
      * @param int $id Document identifier
      * @param string $fileContent File content in Base64 format
      * @param string $fileName File name with extension
+     * @param int $entityTypeId CRM entity type identifier
+     * @param int $entityId CRM entity identifier
+     * @param string $title Document title
+     * @param string $number Document number
+     * @param string $region Region code (e.g. 'uk', 'us', 'de')
      *
      * @throws BaseException
      * @throws TransportException
@@ -274,15 +279,30 @@ class Document extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/crm-document-generator-document-upload.html',
         'Uploads a file for a document'
     )]
-    public function upload(int $id, string $fileContent, string $fileName): DocumentResult
-    {
+    public function upload(
+        int $id,
+        string $fileContent,
+        string $fileName,
+        int $entityTypeId,
+        int $entityId,
+        string $title,
+        string $number,
+        string $region = 'uk'
+    ): DocumentResult {
         return new DocumentResult(
             $this->core->call(
                 'crm.documentgenerator.document.upload',
                 [
                     'id' => $id,
-                    'fileContent' => $fileContent,
-                    'fileName' => $fileName,
+                    'fields' => [
+                        'fileContent' => $fileContent,
+                        'fileName' => $fileName,
+                        'entityTypeId' => $entityTypeId,
+                        'entityId' => $entityId,
+                        'title' => $title,
+                        'number' => $number,
+                        'region' => $region,
+                    ],
                 ]
             )
         );
