@@ -1,9 +1,4 @@
 {
-  "enabledPlugins": {
-    "context7@claude-plugins-official": true,
-    "learning-output-style@claude-plugins-official": true
-  },
-  "enabledMcpjsonServers": ["github"],
   "permissions": {
     "allow": [
       "mcp__github__get_issue",
@@ -21,5 +16,11 @@
       "mcp__github__search_repositories",
       "mcp__github__search_users"
     ]
+  },
+  "enabledMcpjsonServers": [
+    "github"
+  ],
+  "enabledPlugins": {
+    "context7@claude-plugins-official": true
   }
 }
