@@ -113,8 +113,16 @@ class TemplateTest extends TestCase
      */
     public function testGetFields(): void
     {
-        $fieldsResult = $this->templateService->getFields();
-        $fields = $fieldsResult->getFieldsDescription();
+        $templates = $this->templateService->list()->getTemplates();
+        if ($templates === []) {
+            self::markTestSkipped('No templates available for testing getFields()');
+        }
+
+        $firstTemplate = $templates[0];
+
+        // entityTypeId = 2 is Deal in Bitrix24
+        $templateFieldsResult = $this->templateService->getFields($firstTemplate->id, 2);
+        $fields = $templateFieldsResult->getFieldsDescription();
 
         self::assertIsArray($fields);
         self::assertNotEmpty($fields);

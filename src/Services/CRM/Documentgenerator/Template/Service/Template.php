@@ -19,8 +19,8 @@ use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Core\Result\FieldsResult;
 use Bitrix24\SDK\Services\AbstractService;
+use Bitrix24\SDK\Services\CRM\Documentgenerator\Template\Result\TemplateFieldsResult;
 use Bitrix24\SDK\Services\CRM\Documentgenerator\Template\Result\AddedTemplateResult;
 use Bitrix24\SDK\Services\CRM\Documentgenerator\Template\Result\DeletedTemplateResult;
 use Bitrix24\SDK\Services\CRM\Documentgenerator\Template\Result\TemplateResult;
@@ -128,6 +128,7 @@ class Template extends AbstractService
      *
      * @param array $filter Filter parameters
      * @param array $order Order parameters
+     * @param array $select Fields to select
      * @param int $start Offset for pagination
      *
      * @throws BaseException
@@ -138,7 +139,7 @@ class Template extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/document-generator/templates/crm-document-generator-template-list.html',
         'Returns a list of templates'
     )]
-    public function list(array $filter = [], array $order = [], int $start = 0): TemplatesResult
+    public function list(array $filter = [], array $order = [], array $select = [], int $start = 0): TemplatesResult
     {
         $params = [
             'start' => $start,
@@ -150,6 +151,10 @@ class Template extends AbstractService
 
         if ($order !== []) {
             $params['order'] = $order;
+        }
+
+        if ($select !== []) {
+            $params['select'] = $select;
         }
 
         return new TemplatesResult(
@@ -206,6 +211,11 @@ class Template extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/document-generator/templates/crm-document-generator-template-get-fields.html
      *
+     * @param int $id Template identifier
+     * @param int $entityTypeId CRM entity type identifier
+     * @param int|null $entityId CRM entity identifier (optional)
+     * @param array $values Optional field values
+     *
      * @throws BaseException
      * @throws TransportException
      */
@@ -214,12 +224,25 @@ class Template extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/document-generator/templates/crm-document-generator-template-get-fields.html',
         'Returns the description of template fields'
     )]
-    public function getFields(): FieldsResult
+    public function getFields(int $id, int $entityTypeId, ?int $entityId = null, array $values = []): TemplateFieldsResult
     {
-        return new FieldsResult(
+        $params = [
+            'id' => $id,
+            'entityTypeId' => $entityTypeId,
+        ];
+
+        if ($entityId !== null) {
+            $params['entityId'] = $entityId;
+        }
+
+        if ($values !== []) {
+            $params['values'] = $values;
+        }
+
+        return new TemplateFieldsResult(
             $this->core->call(
                 'crm.documentgenerator.template.getfields',
-                []
+                $params
             )
         );
     }

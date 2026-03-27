@@ -93,11 +93,20 @@ class DocumentTest extends TestCase
      */
     public function testGetFields(): void
     {
-        $fieldsResult = $this->documentService->getFields();
-        $fields = $fieldsResult->getFieldsDescription();
+        $templateId = $this->getFirstTemplateId();
+        $dealId = $this->createDeal();
+
+        $id = $this->documentService->add($templateId, 2, $dealId)->getId();
+
+        $documentFieldsResult = $this->documentService->getFields($id);
+        $fields = $documentFieldsResult->getFieldsDescription();
 
         self::assertIsArray($fields);
         self::assertNotEmpty($fields);
+
+        // Cleanup
+        $this->documentService->delete($id);
+        Factory::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
     }
 
     /**
@@ -242,35 +251,28 @@ class DocumentTest extends TestCase
      */
     public function testUpload(): void
     {
-        $templateId = $this->getFirstTemplateId();
         $dealId = $this->createDeal();
-
-        $id = $this->documentService->add($templateId, 2, $dealId)->getId();
 
         // Create a minimal content for upload (base64 encoded)
         $fileContent = base64_encode('Test document content');
         $fileName = 'test-upload-' . $this->faker->uuid() . '.pdf';
 
-        $documentResult = $this->documentService->upload(
-            $id,
-            $fileContent,
-            $fileName,
-            2,         // entityTypeId = Deal
-            $dealId,
-            'Test Upload Document',
-            'UP-' . $this->faker->randomNumber(5),
-            'uk'
-        );
+        $documentResult = $this->documentService->upload([
+            'fileContent' => $fileContent,
+            'fileName' => $fileName,
+            'entityTypeId' => 2,         // entityTypeId = Deal
+            'entityId' => $dealId,
+            'title' => 'Test Upload Document',
+            'number' => 'UP-' . $this->faker->randomNumber(5),
+            'region' => 'uk',
+        ]);
         $document = $documentResult->document();
-        // upload may create a new document, so just verify a valid document is returned
+        // upload creates a new document, verify a valid document is returned
         self::assertGreaterThanOrEqual(1, $document->id);
         self::assertInstanceOf(DocumentItemResult::class, $document);
 
-        // Cleanup: delete the uploaded document (may have a different ID)
-        if ($document->id !== $id) {
-            $this->documentService->delete($document->id);
-        }
-        $this->documentService->delete($id);
+        // Cleanup
+        $this->documentService->delete($document->id);
         Factory::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
     }
 }

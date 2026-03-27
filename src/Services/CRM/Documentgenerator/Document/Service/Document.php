@@ -19,8 +19,8 @@ use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Core\Result\FieldsResult;
 use Bitrix24\SDK\Services\AbstractService;
+use Bitrix24\SDK\Services\CRM\Documentgenerator\Document\Result\DocumentFieldsResult;
 use Bitrix24\SDK\Services\CRM\Documentgenerator\Document\Result\AddedDocumentResult;
 use Bitrix24\SDK\Services\CRM\Documentgenerator\Document\Result\DeletedDocumentResult;
 use Bitrix24\SDK\Services\CRM\Documentgenerator\Document\Result\DocumentResult;
@@ -140,6 +140,7 @@ class Document extends AbstractService
      *
      * @param array $filter Filter parameters
      * @param array $order Order parameters
+     * @param array $select Fields to select
      * @param int $start Offset for pagination
      *
      * @throws BaseException
@@ -150,7 +151,7 @@ class Document extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/crm-document-generator-document-list.html',
         'Returns a list of documents'
     )]
-    public function list(array $filter = [], array $order = [], int $start = 0): DocumentsResult
+    public function list(array $filter = [], array $order = [], array $select = [], int $start = 0): DocumentsResult
     {
         $params = [
             'start' => $start,
@@ -162,6 +163,10 @@ class Document extends AbstractService
 
         if ($order !== []) {
             $params['order'] = $order;
+        }
+
+        if ($select !== []) {
+            $params['select'] = $select;
         }
 
         return new DocumentsResult(
@@ -216,6 +221,9 @@ class Document extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/crm-document-generator-document-get-fields.html
      *
+     * @param int $id Document identifier
+     * @param array $values Optional field values
+     *
      * @throws BaseException
      * @throws TransportException
      */
@@ -224,20 +232,31 @@ class Document extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/crm-document-generator-document-get-fields.html',
         'Returns the description of document fields'
     )]
-    public function getFields(): FieldsResult
+    public function getFields(int $id, array $values = []): DocumentFieldsResult
     {
-        return new FieldsResult(
+        $params = [
+            'id' => $id,
+        ];
+
+        if ($values !== []) {
+            $params['values'] = $values;
+        }
+
+        return new DocumentFieldsResult(
             $this->core->call(
                 'crm.documentgenerator.document.getfields',
-                []
+                $params
             )
         );
     }
 
     /**
-     * Enables public URL for a document
+     * Enables or disables public URL for a document
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/crm-document-generator-document-enable-public-url.html
+     *
+     * @param int $id Document identifier
+     * @param int $status 1 to enable public URL, 0 to disable (default: 1)
      *
      * @throws BaseException
      * @throws TransportException
@@ -245,31 +264,37 @@ class Document extends AbstractService
     #[ApiEndpointMetadata(
         'crm.documentgenerator.document.enablepublicurl',
         'https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/crm-document-generator-document-enable-public-url.html',
-        'Enables public URL for a document'
+        'Enables or disables public URL for a document'
     )]
-    public function enablePublicUrl(int $id): PublicUrlResult
+    public function enablePublicUrl(int $id, int $status = 1): PublicUrlResult
     {
         return new PublicUrlResult(
             $this->core->call(
                 'crm.documentgenerator.document.enablepublicurl',
-                ['id' => $id]
+                [
+                    'id' => $id,
+                    'status' => $status,
+                ]
             )
         );
     }
 
     /**
-     * Uploads a file for a document
+     * Uploads a document from file content
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/crm-document-generator-document-upload.html
      *
-     * @param int $id Document identifier
-     * @param string $fileContent File content in Base64 format
-     * @param string $fileName File name with extension
-     * @param int $entityTypeId CRM entity type identifier
-     * @param int $entityId CRM entity identifier
-     * @param string $title Document title
-     * @param string $number Document number
-     * @param string $region Region code (e.g. 'uk', 'us', 'de')
+     * @param array{
+     *   fileContent: string,
+     *   fileName: string,
+     *   entityTypeId: int,
+     *   entityId: int,
+     *   title: string,
+     *   number: string,
+     *   region: string,
+     *   pdfContent?: string,
+     *   imageContent?: string
+     * } $fields Document fields (fileContent, fileName, entityTypeId, entityId, title, number, region are required; pdfContent, imageContent are optional)
      *
      * @throws BaseException
      * @throws TransportException
@@ -277,32 +302,15 @@ class Document extends AbstractService
     #[ApiEndpointMetadata(
         'crm.documentgenerator.document.upload',
         'https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/crm-document-generator-document-upload.html',
-        'Uploads a file for a document'
+        'Uploads a document from file content'
     )]
-    public function upload(
-        int $id,
-        string $fileContent,
-        string $fileName,
-        int $entityTypeId,
-        int $entityId,
-        string $title,
-        string $number,
-        string $region = 'uk'
-    ): DocumentResult {
+    public function upload(array $fields): DocumentResult
+    {
         return new DocumentResult(
             $this->core->call(
                 'crm.documentgenerator.document.upload',
                 [
-                    'id' => $id,
-                    'fields' => [
-                        'fileContent' => $fileContent,
-                        'fileName' => $fileName,
-                        'entityTypeId' => $entityTypeId,
-                        'entityId' => $entityId,
-                        'title' => $title,
-                        'number' => $number,
-                        'region' => $region,
-                    ],
+                    'fields' => $fields,
                 ]
             )
         );
