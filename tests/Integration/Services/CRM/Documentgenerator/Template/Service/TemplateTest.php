@@ -169,7 +169,9 @@ class TemplateTest extends TestCase
         $id = $this->templateService->add([
             'name' => $name,
             'file' => $fileContent,
-            'numeratorId' => 0,
+            'numeratorId' => 1,
+            'region' => 'uk',
+            'entityTypeId' => 2,
         ])->getId();
 
         self::assertGreaterThanOrEqual(1, $id);
@@ -190,6 +192,9 @@ class TemplateTest extends TestCase
         $id = $this->templateService->add([
             'name' => $name,
             'file' => $fileContent,
+            'numeratorId' => 1,
+            'region' => 'uk',
+            'entityTypeId' => 2,
         ])->getId();
 
         $newName = $name . '-updated';
@@ -216,6 +221,9 @@ class TemplateTest extends TestCase
         $id = $this->templateService->add([
             'name' => 'tpl-' . $this->faker->uuid(),
             'file' => $fileContent,
+            'numeratorId' => 1,
+            'region' => 'uk',
+            'entityTypeId' => 2,
         ])->getId();
 
         self::assertTrue($this->templateService->delete($id)->isSuccess());
@@ -233,6 +241,9 @@ class TemplateTest extends TestCase
         $id = $this->templateService->add([
             'name' => 'tpl-' . $this->faker->uuid(),
             'file' => $fileContent,
+            'numeratorId' => 1,
+            'region' => 'uk',
+            'entityTypeId' => 2,
         ])->getId();
 
         $countAfter = $this->templateService->count();

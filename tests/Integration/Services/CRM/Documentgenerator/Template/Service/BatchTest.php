@@ -121,6 +121,9 @@ class BatchTest extends TestCase
             $items[] = [
                 'name' => 'tpl-' . $this->faker->uuid(),
                 'file' => $fileContent,
+                'numeratorId' => 1,
+                'region' => 'uk',
+                'entityTypeId' => 2,
             ];
         }
 
@@ -154,6 +157,9 @@ class BatchTest extends TestCase
             $items[] = [
                 'name' => 'tpl-' . $this->faker->uuid(),
                 'file' => $fileContent,
+                'numeratorId' => 1,
+                'region' => 'uk',
+                'entityTypeId' => 2,
             ];
         }
 
@@ -183,6 +189,9 @@ class BatchTest extends TestCase
             $items[] = [
                 'name' => 'tpl-' . $this->faker->uuid(),
                 'file' => $fileContent,
+                'numeratorId' => 1,
+                'region' => 'uk',
+                'entityTypeId' => 2,
             ];
         }
 

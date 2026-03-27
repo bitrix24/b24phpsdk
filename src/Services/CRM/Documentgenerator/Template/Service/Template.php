@@ -47,8 +47,9 @@ class Template extends AbstractService
      * @param array{
      *   name: string,
      *   file: string,
-     *   numeratorId?: int,
-     *   region?: string,
+     *   numeratorId: int,
+     *   region: string,
+     *   entityTypeId: int,
      *   users?: array,
      *   providers?: array,
      *   active?: string,
