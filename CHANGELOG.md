@@ -2,6 +2,10 @@
 
 ## 3.1.0 Unreleased
 
+### Added
+
+- Added `RestServiceBuilder` with `Scope` service for `rest.scope.list` support ([#408](https://github.com/bitrix24/b24phpsdk/issues/408))
+
 ### Fixed
 
 - Fixed `Response::getResponseData()` crashing when API response lacks a `time` node (e.g. documentation endpoint): added `Time::initWithZeroValues()` factory that fills numeric fields with `0.0` and date fields with `CarbonImmutable::now()` ([#343](https://github.com/bitrix24/b24phpsdk/issues/343))
