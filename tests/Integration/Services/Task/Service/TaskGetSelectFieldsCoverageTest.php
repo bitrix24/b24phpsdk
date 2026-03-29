@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Integration\Services\Task\Service;
 
 use Bitrix24\SDK\Services\Task\Service\Task;
-use Bitrix24\SDK\Services\Task\Service\TaskField;
+use Bitrix24\SDK\Services\Task\TaskField\Service\TaskField;
 use Bitrix24\SDK\Services\Task\Service\TaskItemBuilder;
 use Bitrix24\SDK\Services\User\Service\User;
 use Bitrix24\SDK\Tests\Integration\Factory;
@@ -56,7 +56,7 @@ class TaskGetSelectFieldsCoverageTest extends TestCase
         )->task()->id;
 
         try {
-            $taskFields = $this->taskFieldService->list(['name'])->fields();
+            $taskFields = $this->taskFieldService->list(['name'])->getTaskFields();
             $errors = [];
 
             foreach ($taskFields as $taskField) {

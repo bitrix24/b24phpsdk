@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Integration\Services\Task\Result;
 
 use Bitrix24\SDK\Core\Fields\FieldsFilter;
-use Bitrix24\SDK\Services\Task\Result\TaskFieldItemResult;
 use Bitrix24\SDK\Services\Task\Result\TaskItemResult;
-use Bitrix24\SDK\Services\Task\Service\TaskField;
+use Bitrix24\SDK\Services\Task\TaskField\Result\TaskFieldItemResult;
+use Bitrix24\SDK\Services\Task\TaskField\Service\TaskField;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -99,7 +99,7 @@ class TaskItemResultAnnotationsTest extends TestCase
     {
         $result = [];
 
-        foreach ($this->taskFieldService->list(['name', 'type'])->fields() as $field) {
+        foreach ($this->taskFieldService->list(['name', 'type'])->getTaskFields() as $field) {
             if (!$field instanceof TaskFieldItemResult || $field->name === null || $field->type === null) {
                 continue;
             }
