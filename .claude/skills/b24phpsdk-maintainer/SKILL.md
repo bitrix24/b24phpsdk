@@ -210,6 +210,8 @@ Example: `.tasks/397/`
 Create `.tasks/<issue-number>/plan.md` **before starting implementation**.
 Think through the full scope of the issue and write the plan first — only start coding once the plan is agreed upon.
 
+**Language rule**: all `plan.md` files MUST be written in **English**, regardless of the language used in conversation.
+
 #### Plan file structure
 
 ```markdown
