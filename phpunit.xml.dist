@@ -292,6 +292,13 @@
             <file>./tests/Integration/Services/Main/EventLogField/Service/EventLogFieldTest.php</file>
             <file>./tests/Integration/Services/Main/EventLogField/Result/EventLogFieldItemResultTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_scope_rest">
+            <directory>./tests/Integration/Services/Rest/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_rest_scope_service">
+            <file>./tests/Integration/Services/Rest/Service/ScopeTest.php</file>
+            <file>./tests/Integration/Services/Rest/Result/ScopeMethodItemResultTest.php</file>
+        </testsuite>
     </testsuites>
     <source>
         <include>
