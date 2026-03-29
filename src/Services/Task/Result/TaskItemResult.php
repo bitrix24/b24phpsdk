@@ -112,7 +112,15 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  * @property-read array|null $source
  * @property-read array|null $dependsOn
  * @property-read array|null $scenarios
+ * @property-read int|null $createdBy
+ * @property-read array|null $ufTaskWebdavFiles
  */
 class TaskItemResult extends AbstractItem
 {
+    private const string USERFIELD_PREFIX = 'UF_';
+
+    public function getUserfieldByFieldName(string $fieldName): mixed
+    {
+        return $this->data[self::USERFIELD_PREFIX . $fieldName] ?? null;
+    }
 }

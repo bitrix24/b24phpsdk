@@ -13,29 +13,17 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Services\Task\Service;
 
-use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Core;
-use Bitrix24\SDK\Services\ServiceBuilder;
-use Bitrix24\SDK\Services\Task\Result\TaskItemResult;
 use Bitrix24\SDK\Services\Task\Service\Task;
 use Bitrix24\SDK\Services\Task\Service\TaskItemBuilder;
 use Bitrix24\SDK\Services\Task\Service\TaskItemSelectBuilder;
 use Bitrix24\SDK\Services\User\Service\User;
-use Bitrix24\SDK\Tests\Builders\Services\Task\TaskBuilder;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class TaskTest
- *
- * @package Bitrix24\SDK\Tests\Integration\Services\Task\Service
- */
 #[CoversMethod(Task::class, 'get')]
 #[CoversMethod(Task::class, 'add')]
 #[CoversMethod(Task::class, 'delete')]
@@ -49,47 +37,29 @@ class TaskTest extends TestCase
 
     protected User $userService;
 
-    protected ServiceBuilder $serviceBuilder;
-
     #[\Override]
     protected function setUp(): void
     {
         $this->taskService = Factory::getServiceBuilder(false)->getTaskScope()->task();
         $this->userService = Factory::getServiceBuilder()->getUserScope()->user();
-        $this->serviceBuilder = Factory::getServiceBuilder();
     }
 
     #[TestDox('Get task by id with all fields')]
     public function testGetTaskByIdWithAllFields(): void
     {
-//        $userItemResult = $this->userService->current()->user();
-//        $taskResult = $this->taskService->add(
-//            new TaskItemBuilder(
-//                sprintf('Test task %s', time()),
-//                $userItemResult->ID,
-//                $userItemResult->ID
-//            )
-//        );
+        $userItemResult = $this->userService->current()->user();
+        $taskResult = $this->taskService->add(
+            new TaskItemBuilder(
+                sprintf('Test task %s', time()),
+                $userItemResult->ID,
+                $userItemResult->ID
+            )
+        );
 
+        $res = $this->taskService->get($taskResult->task()->id);
 
-
-
-  //      $res = $this->taskService->get($taskResult->task()->id);
-    //    $res = $this->taskService->get(5256,['id','chat.id','chat.entityId','chat.entityType']);
-        var_dump($this->serviceBuilder->getTaskScope()->taskField()->get('chat')->field());
-        $res = $this->taskService->get(5256,['id','chat']);
-
-        var_dump($res->task());
-//        dump($this->serviceBuilder->getTaskScope()->taskField()->list()->fields(['*','UF_AUTO_584558105987']));
-//        dump($this->serviceBuilder->getLegacyServiceBuilder()->getTaskScope()->task()->fields()->getFieldsDescription());
-
-        //$this->assertEquals($taskResult->task(), $res->task());
-//        dump($res->task());
-
-
-
-
-//        $this->taskService->delete($taskResult->task()->id);
+        $this->assertEquals($taskResult->task()->id, $res->task()->id);
+        $this->taskService->delete($taskResult->task()->id);
     }
 
     #[TestDox('Get task by id with selected fields from select builder')]
@@ -183,6 +153,6 @@ class TaskTest extends TestCase
         $res = $this->taskService->get($taskResult->task()->id);
 
         $this->assertEquals('updated description', $res->task()->description);
-        // $this->taskService->delete($addedTask->task()->id);
+        $this->taskService->delete($taskResult->task()->id);
     }
 }

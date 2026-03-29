@@ -25,6 +25,7 @@ class DevWebhookResolverTest extends TestCase
      */
     private array $originalEnvironment = [];
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -36,6 +37,7 @@ class DevWebhookResolverTest extends TestCase
         }
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         foreach ($this->originalEnvironment as $envName => $value) {

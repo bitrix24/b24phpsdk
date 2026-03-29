@@ -23,14 +23,14 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class OaFieldListMethodResolverTest extends TestCase
 {
-    private const SCHEMA_FIXTURE = __DIR__ . '/fixtures/openapi-field-list-methods.json';
+    private const string SCHEMA_FIXTURE = __DIR__ . '/fixtures/openapi-field-list-methods.json';
 
     #[Test]
     public function itExtractsEntityKeysFromFieldListMethodsOnly(): void
     {
-        $resolver = $this->createResolver();
+        $oaFieldListMethodResolver = $this->createResolver();
 
-        $entityKeys = $resolver->getEntityKeys(self::SCHEMA_FIXTURE);
+        $entityKeys = $oaFieldListMethodResolver->getEntityKeys(self::SCHEMA_FIXTURE);
 
         $this->assertSame([
             'main.eventlog',
@@ -43,9 +43,9 @@ class OaFieldListMethodResolverTest extends TestCase
     #[Test]
     public function itResolvesExactEntityKeyToExactMethodName(): void
     {
-        $resolver = $this->createResolver();
+        $oaFieldListMethodResolver = $this->createResolver();
 
-        $methodName = $resolver->resolveFieldListMethodName(self::SCHEMA_FIXTURE, 'tasks.task.access');
+        $methodName = $oaFieldListMethodResolver->resolveFieldListMethodName(self::SCHEMA_FIXTURE, 'tasks.task.access');
 
         $this->assertSame('tasks.task.access.field.list', $methodName);
     }
@@ -53,12 +53,12 @@ class OaFieldListMethodResolverTest extends TestCase
     #[Test]
     public function itRejectsPartialOrUnknownEntityKeys(): void
     {
-        $resolver = $this->createResolver();
+        $oaFieldListMethodResolver = $this->createResolver();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Unknown v3 field metadata entity "tasks.task.a"');
 
-        $resolver->resolveFieldListMethodName(self::SCHEMA_FIXTURE, 'tasks.task.a');
+        $oaFieldListMethodResolver->resolveFieldListMethodName(self::SCHEMA_FIXTURE, 'tasks.task.a');
     }
 
     private function createResolver(): OaFieldListMethodResolver

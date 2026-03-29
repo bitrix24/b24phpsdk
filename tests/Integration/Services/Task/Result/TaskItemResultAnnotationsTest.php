@@ -99,13 +99,21 @@ class TaskItemResultAnnotationsTest extends TestCase
     {
         $result = [];
 
-        foreach ($this->taskFieldService->list(['name', 'type'])->getTaskFields() as $field) {
-            if (!$field instanceof TaskFieldItemResult || $field->name === null || $field->type === null) {
+        foreach ($this->taskFieldService->list(['name', 'type'])->getTaskFields() as $taskFieldItemResult) {
+            if (!$taskFieldItemResult instanceof TaskFieldItemResult) {
                 continue;
             }
 
-            $result[$field->name] = [
-                'type' => $this->normalizeFieldType((string)$field->name, (string)$field->type),
+            if ($taskFieldItemResult->name === null) {
+                continue;
+            }
+
+            if ($taskFieldItemResult->type === null) {
+                continue;
+            }
+
+            $result[$taskFieldItemResult->name] = [
+                'type' => $this->normalizeFieldType((string)$taskFieldItemResult->name, (string)$taskFieldItemResult->type),
             ];
         }
 

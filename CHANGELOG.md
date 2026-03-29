@@ -16,6 +16,7 @@
 - Updated `.claude/skills/b24phpsdk-maintainer/SKILL.md`: PR body must now be built from `.github/PULL_REQUEST_TEMPLATE.md` instead of a hardcoded template
 - Updated `.claude/skills/b24phpsdk-maintainer/SKILL.md`: added workflow for discovering unsupported Bitrix24 REST API methods and filing GitHub tracking issues automatically
 - Updated `.claude/skills/b24phpsdk-maintainer/SKILL.md`: skill now requires `make oa-schema-build` as the mandatory first step on every invocation to keep the OpenAPI schema snapshot up to date
+- Updated `.claude/skills/b24phpsdk-maintainer/SKILL.md`: added reference section on webhook URL format for direct curl requests, covering v1/v3 response envelope differences and OAuth token usage
 - The repository now stores the OpenAPI schema snapshot current at release build time in `docs/open-api/openapi.json`; refresh it before implementation and release verification with `make oa-schema-build` ([#391](https://github.com/bitrix24/b24phpsdk/issues/391))
 
 ### Added

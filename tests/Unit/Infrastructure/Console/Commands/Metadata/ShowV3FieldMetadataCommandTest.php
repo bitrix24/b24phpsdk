@@ -33,6 +33,7 @@ use Symfony\Component\Filesystem\Filesystem;
 class SpyBitrix24V3FieldMetadataFetcher extends Bitrix24V3FieldMetadataFetcher
 {
     public ?string $lastWebhook = null;
+
     public ?string $lastMethodName = null;
 
     /**
@@ -44,6 +45,7 @@ class SpyBitrix24V3FieldMetadataFetcher extends Bitrix24V3FieldMetadataFetcher
         parent::__construct(new NullLogger());
     }
 
+    #[\Override]
     public function fetch(string $webhook, string $methodName): array
     {
         $this->lastWebhook = $webhook;
@@ -55,13 +57,14 @@ class SpyBitrix24V3FieldMetadataFetcher extends Bitrix24V3FieldMetadataFetcher
 
 class ShowV3FieldMetadataCommandTest extends TestCase
 {
-    private const SCHEMA_FIXTURE = __DIR__ . '/../../../../OpenApi/Domain/fixtures/openapi-field-list-methods.json';
+    private const string SCHEMA_FIXTURE = __DIR__ . '/../../../../OpenApi/Domain/fixtures/openapi-field-list-methods.json';
 
     /**
      * @var array<string, string|null>
      */
     private array $originalEnvironment = [];
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -73,6 +76,7 @@ class ShowV3FieldMetadataCommandTest extends TestCase
         }
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         foreach ($this->originalEnvironment as $envName => $value) {
@@ -86,13 +90,13 @@ class ShowV3FieldMetadataCommandTest extends TestCase
     public function itBuildsInteractiveEntityChoicesFromTheOpenApiSnapshot(): void
     {
         $this->writeEnv('BITRIX24_WEBHOOK', 'https://fallback.example/rest/1/token/');
-        $fetcher = new SpyBitrix24V3FieldMetadataFetcher([
+        $spyBitrix24V3FieldMetadataFetcher = new SpyBitrix24V3FieldMetadataFetcher([
             'ID' => ['title' => 'Task ID', 'type' => 'integer'],
         ]);
-        $tester = new CommandTester($this->createCommand($fetcher));
-        $tester->setInputs(['1']);
+        $commandTester = new CommandTester($this->createCommand($spyBitrix24V3FieldMetadataFetcher));
+        $commandTester->setInputs(['1']);
 
-        $status = $tester->execute([
+        $status = $commandTester->execute([
             '--schema-file' => self::SCHEMA_FIXTURE,
         ], [
             'interactive' => true,
@@ -100,20 +104,20 @@ class ShowV3FieldMetadataCommandTest extends TestCase
         ]);
 
         $this->assertSame(Command::SUCCESS, $status);
-        $this->assertSame('tasks.task.field.list', $fetcher->lastMethodName);
-        $this->assertStringContainsString('main.eventlog', $tester->getDisplay());
-        $this->assertStringContainsString('tasks.task.access', $tester->getDisplay());
+        $this->assertSame('tasks.task.field.list', $spyBitrix24V3FieldMetadataFetcher->lastMethodName);
+        $this->assertStringContainsString('main.eventlog', $commandTester->getDisplay());
+        $this->assertStringContainsString('tasks.task.access', $commandTester->getDisplay());
     }
 
     #[Test]
     public function itResolvesExactEntityKeyToTheExpectedMethod(): void
     {
-        $fetcher = new SpyBitrix24V3FieldMetadataFetcher([
+        $spyBitrix24V3FieldMetadataFetcher = new SpyBitrix24V3FieldMetadataFetcher([
             'ID' => ['title' => 'Task ID', 'type' => 'integer'],
         ]);
-        $tester = new CommandTester($this->createCommand($fetcher));
+        $commandTester = new CommandTester($this->createCommand($spyBitrix24V3FieldMetadataFetcher));
 
-        $status = $tester->execute([
+        $status = $commandTester->execute([
             'entity' => 'tasks.task',
             '--schema-file' => self::SCHEMA_FIXTURE,
             '--webhook' => 'https://cli.example/rest/1/token/',
@@ -122,20 +126,20 @@ class ShowV3FieldMetadataCommandTest extends TestCase
         ]);
 
         $this->assertSame(Command::SUCCESS, $status);
-        $this->assertSame('tasks.task.field.list', $fetcher->lastMethodName);
-        $this->assertSame('https://cli.example/rest/1/token/', $fetcher->lastWebhook);
+        $this->assertSame('tasks.task.field.list', $spyBitrix24V3FieldMetadataFetcher->lastMethodName);
+        $this->assertSame('https://cli.example/rest/1/token/', $spyBitrix24V3FieldMetadataFetcher->lastWebhook);
     }
 
     #[Test]
     public function itPrintsJsonOutputWithCompleteMetadataPayload(): void
     {
-        $fetcher = new SpyBitrix24V3FieldMetadataFetcher([
+        $spyBitrix24V3FieldMetadataFetcher = new SpyBitrix24V3FieldMetadataFetcher([
             'ID' => ['title' => 'Task ID', 'type' => 'integer', 'isImmutable' => true],
             'XML_ID' => ['TYPE' => 'string'],
         ]);
-        $tester = new CommandTester($this->createCommand($fetcher));
+        $commandTester = new CommandTester($this->createCommand($spyBitrix24V3FieldMetadataFetcher));
 
-        $status = $tester->execute([
+        $status = $commandTester->execute([
             'entity' => 'tasks.task',
             '--schema-file' => self::SCHEMA_FIXTURE,
             '--webhook' => 'https://cli.example/rest/1/token/',
@@ -143,7 +147,7 @@ class ShowV3FieldMetadataCommandTest extends TestCase
             'decorated' => false,
         ]);
 
-        $display = $tester->getDisplay();
+        $display = $commandTester->getDisplay();
 
         $this->assertSame(Command::SUCCESS, $status);
         $this->assertStringContainsString('"code": "ID"', $display);
@@ -155,7 +159,7 @@ class ShowV3FieldMetadataCommandTest extends TestCase
     #[Test]
     public function itUnwrapsSingleMetadataCollectionForJsonOutput(): void
     {
-        $fetcher = new SpyBitrix24V3FieldMetadataFetcher([
+        $spyBitrix24V3FieldMetadataFetcher = new SpyBitrix24V3FieldMetadataFetcher([
             'items' => [
                 [
                     'name' => 'id',
@@ -173,9 +177,9 @@ class ShowV3FieldMetadataCommandTest extends TestCase
                 ],
             ],
         ]);
-        $tester = new CommandTester($this->createCommand($fetcher));
+        $commandTester = new CommandTester($this->createCommand($spyBitrix24V3FieldMetadataFetcher));
 
-        $status = $tester->execute([
+        $status = $commandTester->execute([
             'entity' => 'tasks.task',
             '--schema-file' => self::SCHEMA_FIXTURE,
             '--webhook' => 'https://cli.example/rest/1/token/',
@@ -183,7 +187,7 @@ class ShowV3FieldMetadataCommandTest extends TestCase
             'decorated' => false,
         ]);
 
-        $display = $tester->getDisplay();
+        $display = $commandTester->getDisplay();
 
         $this->assertSame(Command::SUCCESS, $status);
         $this->assertStringStartsWith("[\n", $display);
@@ -196,12 +200,12 @@ class ShowV3FieldMetadataCommandTest extends TestCase
     #[Test]
     public function itRendersTableOutputWithAgreedColumns(): void
     {
-        $fetcher = new SpyBitrix24V3FieldMetadataFetcher([
+        $spyBitrix24V3FieldMetadataFetcher = new SpyBitrix24V3FieldMetadataFetcher([
             'ID' => ['title' => 'Task ID', 'type' => 'integer', 'isImmutable' => true],
         ]);
-        $tester = new CommandTester($this->createCommand($fetcher));
+        $commandTester = new CommandTester($this->createCommand($spyBitrix24V3FieldMetadataFetcher));
 
-        $status = $tester->execute([
+        $status = $commandTester->execute([
             'entity' => 'tasks.task',
             '--schema-file' => self::SCHEMA_FIXTURE,
             '--webhook' => 'https://cli.example/rest/1/token/',
@@ -210,7 +214,7 @@ class ShowV3FieldMetadataCommandTest extends TestCase
             'decorated' => false,
         ]);
 
-        $display = $tester->getDisplay();
+        $display = $commandTester->getDisplay();
 
         $this->assertSame(Command::SUCCESS, $status);
         $this->assertStringContainsString('code', $display);
@@ -222,7 +226,7 @@ class ShowV3FieldMetadataCommandTest extends TestCase
     #[Test]
     public function itRendersUnwrappedMetadataCollectionAsDirectTableRows(): void
     {
-        $fetcher = new SpyBitrix24V3FieldMetadataFetcher([
+        $spyBitrix24V3FieldMetadataFetcher = new SpyBitrix24V3FieldMetadataFetcher([
             'items' => [
                 [
                     'name' => 'id',
@@ -240,9 +244,9 @@ class ShowV3FieldMetadataCommandTest extends TestCase
                 ],
             ],
         ]);
-        $tester = new CommandTester($this->createCommand($fetcher));
+        $commandTester = new CommandTester($this->createCommand($spyBitrix24V3FieldMetadataFetcher));
 
-        $status = $tester->execute([
+        $status = $commandTester->execute([
             'entity' => 'tasks.task',
             '--schema-file' => self::SCHEMA_FIXTURE,
             '--webhook' => 'https://cli.example/rest/1/token/',
@@ -251,7 +255,7 @@ class ShowV3FieldMetadataCommandTest extends TestCase
             'decorated' => false,
         ]);
 
-        $display = $tester->getDisplay();
+        $display = $commandTester->getDisplay();
 
         $this->assertSame(Command::SUCCESS, $status);
         $this->assertStringContainsString('name', $display);
@@ -267,10 +271,10 @@ class ShowV3FieldMetadataCommandTest extends TestCase
     #[Test]
     public function itPrintsClearErrorWhenWebhookIsMissing(): void
     {
-        $fetcher = new SpyBitrix24V3FieldMetadataFetcher([]);
-        $tester = new CommandTester($this->createCommand($fetcher));
+        $spyBitrix24V3FieldMetadataFetcher = new SpyBitrix24V3FieldMetadataFetcher([]);
+        $commandTester = new CommandTester($this->createCommand($spyBitrix24V3FieldMetadataFetcher));
 
-        $status = $tester->execute([
+        $status = $commandTester->execute([
             'entity' => 'tasks.task',
             '--schema-file' => self::SCHEMA_FIXTURE,
         ], [
@@ -281,11 +285,11 @@ class ShowV3FieldMetadataCommandTest extends TestCase
         $this->assertSame(Command::INVALID, $status);
         $this->assertStringContainsString(
             'Webhook is not configured. Pass --webhook or set BITRIX24_WEBHOOK',
-            $tester->getDisplay()
+            $commandTester->getDisplay()
         );
         $this->assertStringContainsString(
             'tests/.env.local',
-            $tester->getDisplay()
+            $commandTester->getDisplay()
         );
     }
 
@@ -296,34 +300,34 @@ class ShowV3FieldMetadataCommandTest extends TestCase
         $application->setAutoExit(false);
         $application->addCommand(new ShowFieldsDescriptionCommand(new SplashScreen(), new NullLogger()));
 
-        $tester = new ApplicationTester($application);
-        $status = $tester->run([
+        $applicationTester = new ApplicationTester($application);
+        $status = $applicationTester->run([
             'command' => 'b24-dev:show-fields-description',
             '--help' => true,
         ], [
             'decorated' => false,
         ]);
 
-        $display = $tester->getDisplay();
+        $display = $applicationTester->getDisplay();
 
         $this->assertSame(Command::SUCCESS, $status);
         $this->assertStringContainsString('legacy', strtolower($display));
         $this->assertStringContainsString('b24-dev:show-v3-field-metadata', $display);
     }
 
-    private function createCommand(SpyBitrix24V3FieldMetadataFetcher $fetcher): ShowV3FieldMetadataCommand
+    private function createCommand(SpyBitrix24V3FieldMetadataFetcher $spyBitrix24V3FieldMetadataFetcher): ShowV3FieldMetadataCommand
     {
-        $command = new ShowV3FieldMetadataCommand(
+        $showV3FieldMetadataCommand = new ShowV3FieldMetadataCommand(
             new OaFieldListMethodResolver(
                 new OaSchemaMethodReader(new Filesystem(), new OaToSdkMethodNormalizationPolicy())
             ),
             new DevWebhookResolver(),
-            $fetcher
+            $spyBitrix24V3FieldMetadataFetcher
         );
 
         $application = new Application();
         $application->setAutoExit(false);
-        $application->addCommand($command);
+        $application->addCommand($showV3FieldMetadataCommand);
 
         /** @var ShowV3FieldMetadataCommand $registeredCommand */
         $registeredCommand = $application->find('b24-dev:show-v3-field-metadata');

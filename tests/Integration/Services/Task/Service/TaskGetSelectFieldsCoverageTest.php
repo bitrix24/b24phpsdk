@@ -30,7 +30,9 @@ use Throwable;
 class TaskGetSelectFieldsCoverageTest extends TestCase
 {
     private Task $taskService;
+
     private TaskField $taskFieldService;
+
     private User $userService;
 
     #[\Override]

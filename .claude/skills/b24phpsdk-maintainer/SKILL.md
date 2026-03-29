@@ -29,6 +29,58 @@ Do not proceed with any workflow until the command completes successfully.
 
 ---
 
+## Webhook URL format for direct curl requests
+
+When making direct `curl` calls to inspect raw API responses (e.g., during integration test
+development or API discovery), use the following URL structures.
+
+### Via incoming webhook (no OAuth required)
+
+```
+https://<portal>/rest/<userId>/<webhookToken>/<method.name>
+```
+
+The webhook base URL is stored in `tests/.env.local`:
+
+```dotenv
+BITRIX24_WEBHOOK=https://your-domain.bitrix24.com/rest/1/<webhookToken>/
+```
+
+To call a method, append the method name to the base URL:
+
+```bash
+# read base URL from env, call any method
+curl -s -X POST "${BITRIX24_WEBHOOK}crm.deal.list" \
+  -H "Content-Type: application/json" \
+  -d '{"filter": {}, "select": ["ID", "TITLE"]}'
+```
+
+### v1 vs v3: same URL pattern, different response shape
+
+Both API versions use the **same URL structure** — the version affects method naming and
+response envelope, not the base path:
+
+| | v1 | v3 |
+|---|---|---|
+| URL | `.../rest/1/<token>/tasks.task.list` | `.../rest/1/<token>/tasks.task.file.attach` |
+| Single-item response | `result` contains the value directly | `result.item` |
+| List response | `result` is a flat array | `result.items` |
+| Parameters | flat key-value pairs | may use nested objects (`fields`, `data`) |
+
+Knowing the response envelope is critical: the `AbstractResult` subclass must reference
+the correct key (`result`, `result.item`, or `result.items`).
+
+### Via OAuth token (no webhook)
+
+```bash
+curl -s -X POST \
+  https://your-domain.bitrix24.com/rest/crm.deal.list \
+  -H "Content-Type: application/json" \
+  -d '{"auth": "<oauth_token>", "filter": {}, "select": ["ID"]}'
+```
+
+---
+
 ## Working with an existing issue
 
 When given an issue number, always load it first via `mcp__github__get_issue`:
