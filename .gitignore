@@ -20,3 +20,4 @@ docs/api/var
 /.php-cs-fixer.cache
 log.txt
 .DS_Store
+.worktrees/

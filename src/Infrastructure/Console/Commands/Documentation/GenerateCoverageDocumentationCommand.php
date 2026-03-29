@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Infrastructure\Console\Commands\Documentation;
 
 use Bitrix24\SDK\Attributes\Services\AttributesParser;
+use Bitrix24\SDK\Attributes\Services\SupportedInSdkApiMethod;
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
@@ -128,10 +129,10 @@ EOT;
         $table = $tableHeader;
         foreach ($supportedInSdkMethods as $apiMethod) {
             $batchMethodsHint = '';
-            if (array_key_exists($apiMethod['name'], $supportedInSdkBatchMethods)) {
+            if (array_key_exists($apiMethod->name, $supportedInSdkBatchMethods)) {
                 $batchMethodsHint = "<br/><br/>⚡️Batch methods: <br/>";
                 $batchMethodsHint .= "<ul>";
-                foreach ($supportedInSdkBatchMethods[$apiMethod['name']] as $method) {
+                foreach ($supportedInSdkBatchMethods[$apiMethod->name] as $method) {
                     $batchMethodsHint .= sprintf(
                         "<li>`%s`<br/>",
                         $method['sdk_class_name'] . '::' . $method['sdk_method_name']
@@ -145,27 +146,35 @@ EOT;
                 '%s/%s/%s#L%s-L%s',
                 $publicRepoUrl,
                 $publicRepoBranch,
-                $apiMethod['sdk_method_file_name'],
-                $apiMethod['sdk_method_file_start_line'],
-                $apiMethod['sdk_method_file_end_line'],
+                $apiMethod->sdkMethodFileName,
+                $apiMethod->sdkMethodFileStartLine,
+                $apiMethod->sdkMethodFileEndLine,
             );
-            $sdkMethodReturnTypePublicUrl = sprintf(
-                '%s/%s/%s',
-                $publicRepoUrl,
-                $publicRepoBranch,
-                $apiMethod['sdk_return_type_file_name']
-            );
+            $sdkMethodReturnType = $apiMethod->sdkReturnTypeDeclaration ?? 'mixed';
+            $sdkMethodReturnTypeHtml = sprintf('`%s`', $sdkMethodReturnType);
+            if ($apiMethod->sdkReturnTypeClass !== null && $apiMethod->sdkReturnTypeFileName !== null) {
+                $sdkMethodReturnTypePublicUrl = sprintf(
+                    '%s/%s/%s',
+                    $publicRepoUrl,
+                    $publicRepoBranch,
+                    $apiMethod->sdkReturnTypeFileName
+                );
+                $sdkMethodReturnTypeHtml = sprintf(
+                    '[`%s`](%s)',
+                    $sdkMethodReturnType,
+                    $sdkMethodReturnTypePublicUrl
+                );
+            }
 
             $table .= sprintf(
-                "\n|`%s`|[%s](%s)|%s|[`%s`](%s)<br/>Return type<br/>[`%s`](%s)%s|",
-                $apiMethod['sdk_scope'] === '' ? '–' : $apiMethod['sdk_scope'],
-                $apiMethod['name'],
-                $apiMethod['documentation_url'],
-                $apiMethod['description'],
-                $apiMethod['sdk_class_name'] . '::' . $apiMethod['sdk_method_name'],
+                "\n|`%s`|[%s](%s)|%s|[`%s`](%s)<br/>Return type<br/>%s%s|",
+                $apiMethod->sdkScope === '' ? '–' : $apiMethod->sdkScope,
+                $apiMethod->name,
+                $apiMethod->documentationUrl,
+                $apiMethod->description,
+                $apiMethod->sdkClassName . '::' . $apiMethod->sdkMethodName,
                 $sdkMethodPublicUrl,
-                $apiMethod['sdk_return_type_class'],
-                $sdkMethodReturnTypePublicUrl,
+                $sdkMethodReturnTypeHtml,
                 $batchMethodsHint
             );
         }

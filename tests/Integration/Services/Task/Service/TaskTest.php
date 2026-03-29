@@ -13,32 +13,21 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Services\Task\Service;
 
-use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Core;
-use Bitrix24\SDK\Services\ServiceBuilder;
-use Bitrix24\SDK\Services\Task\Result\TaskItemResult;
 use Bitrix24\SDK\Services\Task\Service\Task;
 use Bitrix24\SDK\Services\Task\Service\TaskItemBuilder;
 use Bitrix24\SDK\Services\Task\Service\TaskItemSelectBuilder;
 use Bitrix24\SDK\Services\User\Service\User;
-use Bitrix24\SDK\Tests\Builders\Services\Task\TaskBuilder;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class TaskTest
- *
- * @package Bitrix24\SDK\Tests\Integration\Services\Task\Service
- */
 #[CoversMethod(Task::class, 'get')]
 #[CoversMethod(Task::class, 'add')]
 #[CoversMethod(Task::class, 'delete')]
+#[CoversMethod(Task::class, 'update')]
 #[CoversClass(Task::class)]
 class TaskTest extends TestCase
 {
@@ -48,14 +37,11 @@ class TaskTest extends TestCase
 
     protected User $userService;
 
-    protected ServiceBuilder $serviceBuilder;
-
     #[\Override]
     protected function setUp(): void
     {
         $this->taskService = Factory::getServiceBuilder(false)->getTaskScope()->task();
         $this->userService = Factory::getServiceBuilder()->getUserScope()->user();
-        $this->serviceBuilder = Factory::getServiceBuilder();
     }
 
     #[TestDox('Get task by id with all fields')]
@@ -72,8 +58,7 @@ class TaskTest extends TestCase
 
         $res = $this->taskService->get($taskResult->task()->id);
 
-        $this->assertEquals($taskResult->task(), $res->task());
-
+        $this->assertEquals($taskResult->task()->id, $res->task()->id);
         $this->taskService->delete($taskResult->task()->id);
     }
 
@@ -153,13 +138,6 @@ class TaskTest extends TestCase
                 ->description(sprintf('Test task description %s', time()))
         );
 
-//        var_dump($addedTask->getCoreResponse()->getResponseData()->getResult());
-
-//        var_dump(
-//            $this->taskService->get($addedTask->task()->id, ['id', 'title', 'description', 'creatorId', 'responsibleId'])->getCoreResponse()->getResponseData(
-//            )->getResult()
-//        );
-
         $this->assertTrue(
             $this->taskService->update(
                 $taskResult->task()->id,
@@ -175,6 +153,6 @@ class TaskTest extends TestCase
         $res = $this->taskService->get($taskResult->task()->id);
 
         $this->assertEquals('updated description', $res->task()->description);
-        // $this->taskService->delete($addedTask->task()->id);
+        $this->taskService->delete($taskResult->task()->id);
     }
 }

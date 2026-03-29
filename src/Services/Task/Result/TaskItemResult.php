@@ -14,119 +14,113 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\Task\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractItem;
-use Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException;
-use Carbon\CarbonImmutable;
 
 /**
  * Class TaskItemResult
  *
  * @property-read int $id
- * @property-read int|null $parentId
  * @property-read string $title
  * @property-read string|null $description
- * @property-read string|null $mark
- * @property-read int|null $priority
- * @property-read int|null $status
- * @property-read bool|null $multitask
- * @property-read bool|null $notViewed
- * @property-read bool|null $replicate
- * @property-read int|null $groupId
- * @property-read int|null $stageId
- * @property-read int|null $sprintId
- * @property-read int|null $backlogId
- * @property-read int|null $createdBy
- * @property-read CarbonImmutable|null $createdDate
+ * @property-read int|null $creatorId
+ * @property-read array|null $creator
+ * @property-read string|null $created
  * @property-read int|null $responsibleId
+ * @property-read array|null $responsible
+ * @property-read string|null $deadline
+ * @property-read bool|null $needsControl
+ * @property-read string|null $startPlan
+ * @property-read string|null $endPlan
+ * @property-read array|null $fileIds
+ * @property-read array|null $checklist
+ * @property-read int|null $groupId
+ * @property-read array|null $group
+ * @property-read int|null $stageId
+ * @property-read array|null $stage
+ * @property-read int|null $epicId
+ * @property-read int|null $storyPoints
+ * @property-read int|null $flowId
+ * @property-read array|null $flow
+ * @property-read string|null $priority
+ * @property-read string|null $status
+ * @property-read string|null $statusChanged
  * @property-read array|null $accomplices
  * @property-read array|null $auditors
- * @property-read int|null $changedBy
- * @property-read CarbonImmutable|null $changedDate
- * @property-read int|null $statusChangedBy
- * @property-read CarbonImmutable|null $statusChangedDate
- * @property-read int|null $closedBy
- * @property-read CarbonImmutable|null $closedDate
- * @property-read CarbonImmutable|null $activityDate
- * @property-read CarbonImmutable|null $dateStart
- * @property-read CarbonImmutable|null $deadline
- * @property-read CarbonImmutable|null $startDatePlan
- * @property-read CarbonImmutable|null $endDatePlan
+ * @property-read int|null $parentId
+ * @property-read array|null $parent
+ * @property-read bool|null $containsChecklist
+ * @property-read bool|null $containsSubTasks
+ * @property-read bool|null $containsRelatedTasks
+ * @property-read bool|null $containsGanttLinks
+ * @property-read bool|null $containsPlacements
+ * @property-read bool|null $containsResults
+ * @property-read int|null $numberOfReminders
+ * @property-read int|null $chatId
+ * @property-read array|null $chat
+ * @property-read int|null $plannedDuration
+ * @property-read int|null $actualDuration
+ * @property-read string|null $durationType
+ * @property-read string|null $started
+ * @property-read int|null $estimatedTime
+ * @property-read bool|null $replicate
+ * @property-read string|null $changed
+ * @property-read int|null $changedById
+ * @property-read array|null $changedBy
+ * @property-read int|null $statusChangedById
+ * @property-read array|null $statusChangedBy
+ * @property-read int|null $closedById
+ * @property-read array|null $closedBy
+ * @property-read string|null $closed
+ * @property-read string|null $activity
  * @property-read string|null $guid
  * @property-read string|null $xmlId
- * @property-read int|null $commentsCount
- * @property-read int|null $serviceCommentsCount
- * @property-read int|null $newCommentsCount
- * @property-read bool|null $allowChangeDeadline
- * @property-read bool|null $allowTimeTracking
- * @property-read bool|null $taskControl
- * @property-read bool|null $addInReport
- * @property-read bool|null $forkedByTemplateId
- * @property-read int|null $timeEstimate
- * @property-read int|null $timeSpentInLogs
- * @property-read int|null $matchWorkTime
- * @property-read int|null $forumTopicId
- * @property-read int|null $forumId
- * @property-read string|null $siteId
- * @property-read bool|null $subordinate
- * @property-read bool|null $favorite
- * @property-read CarbonImmutable|null $exchangeModified
- * @property-read int|null $exchangeId
+ * @property-read string|null $exchangeId
+ * @property-read string|null $exchangeModified
  * @property-read int|null $outlookVersion
- * @property-read CarbonImmutable|null $viewedDate
- * @property-read string|null $sorting
- * @property-read int|null $durationPlan
- * @property-read int|null $durationFact
- * @property-read array|null $checklist
- * @property-read string|null $durationType
- * @property-read bool|null $isMuted
- * @property-read bool|null $isPinned
- * @property-read bool|null $isPinnedInGroup
- * @property-read int|null $flowId
- * @property-read array|null $ufCrmTask
+ * @property-read string|null $mark
+ * @property-read bool|null $allowsChangeDeadline
+ * @property-read bool|null $allowsTimeTracking
+ * @property-read bool|null $matchesWorkTime
+ * @property-read bool|null $addInReport
+ * @property-read bool|null $isMultitask
+ * @property-read string|null $siteId
+ * @property-read int|null $forkedByTemplateId
+ * @property-read array|null $forkedByTemplate
+ * @property-read int|null $deadlineCount
+ * @property-read string|null $declineReason
+ * @property-read int|null $forumTopicId
+ * @property-read array|null $tags
+ * @property-read string|null $link
+ * @property-read array|null $userFields
+ * @property-read array|null $rights
+ * @property-read string|null $archiveLink
+ * @property-read array|null $crmItemIds
+ * @property-read array|null $reminders
+ * @property-read array|null $elapsedTime
+ * @property-read bool|null $requireResult
+ * @property-read bool|null $matchesSubTasksTime
+ * @property-read bool|null $autocompleteSubTasks
+ * @property-read bool|null $allowsChangeDatePlan
+ * @property-read int|null $emailId
+ * @property-read array|null $email
+ * @property-read string|null $maxDeadlineChangeDate
+ * @property-read int|null $maxDeadlineChanges
+ * @property-read bool|null $requireDeadlineChangeReason
+ * @property-read array|null $inFavorite
+ * @property-read array|null $inPin
+ * @property-read array|null $inGroupPin
+ * @property-read array|null $inMute
+ * @property-read array|null $source
+ * @property-read array|null $dependsOn
+ * @property-read array|null $scenarios
+ * @property-read int|null $createdBy
  * @property-read array|null $ufTaskWebdavFiles
- * @property-read int|null $ufMailMessage
- * @property-read int $chatId
  */
 class TaskItemResult extends AbstractItem
 {
-    private const string TASK_USERFIELD_PREFIX = 'UF_';
+    private const string USERFIELD_PREFIX = 'UF_';
 
-    /**
-     *
-     * @return mixed|null
-     * @throws \Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException
-     */
-    public function getUserfieldByFieldName(string $userfieldName): mixed
+    public function getUserfieldByFieldName(string $fieldName): mixed
     {
-        return $this->getKeyWithUserfieldByFieldName($userfieldName);
-    }
-
-    /**
-     * get userfield by field name
-     *
-     * @param string $fieldName field name with uppercase letters
-     *
-     * @return mixed|null
-     * @throws \Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException
-     */
-    protected function getKeyWithUserfieldByFieldName(string $fieldName): mixed
-    {
-        if (!str_starts_with($fieldName, self::TASK_USERFIELD_PREFIX)) {
-            $fieldName = self::TASK_USERFIELD_PREFIX . $fieldName;
-        }
-
-        $fieldName = $this->normalizeFieldKey($fieldName);
-        if (!$this->isKeyExists($fieldName)) {
-            throw new UserfieldNotFoundException(sprintf('Task userfield not found by field name %s', $fieldName));
-        }
-
-        return $this->$fieldName;
-    }
-
-    protected function normalizeFieldKey(string $field): string
-    {
-        $testStr = strtolower($field);
-        $testArr = explode('_', $testStr);
-
-        return array_shift($testArr) . implode('', array_map('ucfirst', $testArr));
+        return $this->data[self::USERFIELD_PREFIX . $fieldName] ?? null;
     }
 }

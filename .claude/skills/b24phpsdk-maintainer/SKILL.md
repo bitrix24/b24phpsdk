@@ -3,15 +3,81 @@ name: b24phpsdk-maintainer
 description: |
   Use this skill whenever working with GitHub issues in the bitrix24/b24phpsdk repository:
   creating new issues, reading existing ones, planning implementation from an issue,
-  or referencing an issue in commits, branches, or CHANGELOG.
+  referencing an issue in commits, branches, or CHANGELOG,
+  or discovering unsupported Bitrix24 REST API methods and filing tracking issues.
   IMPORTANT: this skill MUST be invoked before doing any issue-related work.
 user-invocable: true
-allowed-tools: mcp__github__get_issue, mcp__github__list_issues, mcp__github__create_issue, mcp__github__add_issue_comment, mcp__github__search_issues, mcp__github__create_pull_request, mcp__github__get_pull_request, mcp__github__list_commits, mcp__bitrix24__bitrix-search, mcp__bitrix24__bitrix-method-details, mcp__bitrix24__bitrix-article-details, mcp__bitrix24__bitrix-event-details, mcp__bitrix24__bitrix-app-development-doc-details
+allowed-tools: Bash, mcp__github__get_issue, mcp__github__list_issues, mcp__github__create_issue, mcp__github__add_issue_comment, mcp__github__search_issues, mcp__github__create_pull_request, mcp__github__get_pull_request, mcp__github__list_commits, mcp__bitrix24__bitrix-search, mcp__bitrix24__bitrix-method-details, mcp__bitrix24__bitrix-article-details, mcp__bitrix24__bitrix-event-details, mcp__bitrix24__bitrix-app-development-doc-details
 ---
 
 # b24phpsdk Maintainer
 
 Repository: **bitrix24/b24phpsdk** (`owner: bitrix24`, `repo: b24phpsdk`)
+
+---
+
+## On skill invocation: refresh the OpenAPI schema
+
+**Required**: before doing anything else, run:
+
+```bash
+make oa-schema-build
+```
+
+This updates `docs/open-api/openapi.json` with the current Bitrix24 REST API snapshot.
+Do not proceed with any workflow until the command completes successfully.
+
+---
+
+## Webhook URL format for direct curl requests
+
+When making direct `curl` calls to inspect raw API responses (e.g., during integration test
+development or API discovery), use the following URL structures.
+
+### Via incoming webhook (no OAuth required)
+
+```
+https://<portal>/rest/<userId>/<webhookToken>/<method.name>
+```
+
+The webhook base URL is stored in `tests/.env.local`:
+
+```dotenv
+BITRIX24_WEBHOOK=https://your-domain.bitrix24.com/rest/1/<webhookToken>/
+```
+
+To call a method, append the method name to the base URL:
+
+```bash
+# read base URL from env, call any method
+curl -s -X POST "${BITRIX24_WEBHOOK}crm.deal.list" \
+  -H "Content-Type: application/json" \
+  -d '{"filter": {}, "select": ["ID", "TITLE"]}'
+```
+
+### v1 vs v3: same URL pattern, different response shape
+
+Both API versions use the **same URL structure** — the version affects method naming and
+response envelope, not the base path:
+
+| | v1 | v3 |
+|---|---|---|
+| URL | `.../rest/1/<token>/tasks.task.list` | `.../rest/1/<token>/tasks.task.file.attach` |
+| Single-item response | `result` contains the value directly | `result.item` |
+| List response | `result` is a flat array | `result.items` |
+| Parameters | flat key-value pairs | may use nested objects (`fields`, `data`) |
+
+Knowing the response envelope is critical: the `AbstractResult` subclass must reference
+the correct key (`result`, `result.item`, or `result.items`).
+
+### Via OAuth token (no webhook)
+
+```bash
+curl -s -X POST \
+  https://your-domain.bitrix24.com/rest/crm.deal.list \
+  -H "Content-Type: application/json" \
+  -d '{"auth": "<oauth_token>", "filter": {}, "select": ["ID"]}'
+```
 
 ---
 
@@ -29,9 +95,31 @@ Read the title, body, and labels — they define the scope and context of the wo
 
 ---
 
+## GitHub CLI fallback
+
+When `mcp__github__*` tools return authentication errors or are unavailable, use the `gh` CLI via `Bash` as a fallback:
+
+```bash
+# Search issues (fallback for mcp__github__search_issues)
+gh search issues "<query>" --repo bitrix24/b24phpsdk --state open
+
+# List labels (use before creating issues to find exact label names)
+gh label list --repo bitrix24/b24phpsdk
+
+# Create issue
+gh issue create --repo bitrix24/b24phpsdk --title "..." --label "..." --body "..."
+
+# Create PR
+gh pr create --repo bitrix24/b24phpsdk --title "..." --body "..." --base <branch>
+```
+
+---
+
 ## Creating a new issue
 
-Before creating, search via `mcp__github__search_issues` to make sure a similar issue does not already exist.
+Before creating, search via `mcp__github__search_issues` (or `gh search issues` fallback) to make sure a similar issue does not already exist.
+
+Before applying a label, run `gh label list --repo bitrix24/b24phpsdk` to verify the exact label name exists in the repository.
 
 ### Issue body structure
 
@@ -66,6 +154,151 @@ Before creating, search via `mcp__github__search_issues` to make sure a similar 
 | `bug` | bug fix |
 | `documentation` | documentation only |
 | `refactoring` | internal changes without API changes |
+
+---
+
+## Discovering unsupported API methods and filing issues
+
+Use this workflow when the user wants to find Bitrix24 REST API methods that are not yet
+supported by the SDK and create tracking issues for them.
+
+### Step 1 — Choose the API version
+
+Use `AskUserQuestion` to ask which API version to audit:
+
+```
+question: "Which API version do you want to audit for unsupported methods?"
+header: "API version to audit"
+options:
+  - label: "v3"
+    description: "REST API v3 — modern endpoints (tasks.task.*, catalog.*, etc.)"
+  - label: "v1"
+    description: "REST API v1 — legacy endpoints"
+```
+
+### Step 2 — Optionally narrow by scope or method pattern
+
+Use `AskUserQuestion` to ask whether to filter:
+
+```
+question: "Do you want to limit the search to a specific scope or method pattern?"
+header: "Scope filter"
+options:
+  - label: "All scopes"
+    description: "Analyse all available methods for the chosen API version"
+  - label: "Specific scope"
+    description: "Filter by scope name, e.g. tasks, crm, calendar"
+  - label: "Specific methods"
+    description: "Filter by method pattern, e.g. tasks.task.file.*"
+```
+
+If **Specific scope** or **Specific methods** is chosen, ask for the exact value(s) via a follow-up `AskUserQuestion`.
+
+### Step 3 — Discover methods from Bitrix24 documentation
+
+Use `mcp__bitrix24__bitrix-search` to find all REST methods matching the scope or pattern.
+
+For each method found, call `mcp__bitrix24__bitrix-method-details` to verify:
+- exact method name
+- API version (v1 or v3)
+- whether it is deprecated (skip deprecated methods)
+
+Collect the confirmed list as **«API methods from docs»**.
+
+### Step 4 — Find what the SDK already supports
+
+Use Grep to scan `src/Services/` for `ApiEndpointMetadata` attributes:
+
+```
+pattern: ApiEndpointMetadata
+path: src/Services/
+glob: *.php
+```
+
+Extract the first string argument from each `#[ApiEndpointMetadata('method.name', ...)]` — that is the REST method name.
+Collect as **«SDK-supported methods»**.
+
+### Step 5 — Compute and present the gap
+
+```
+Unsupported = «API methods from docs» − «SDK-supported methods»
+```
+
+Present the numbered list to the user before doing anything else:
+
+```
+Found N unsupported methods:
+1. scope.entity.action
+2. scope.entity.otheraction
+...
+```
+
+### Step 6 — User confirmation
+
+Use `AskUserQuestion`:
+
+```
+question: "Which methods should I create issues for?"
+header: "Issue creation scope"
+options:
+  - label: "All N unsupported methods"
+    description: "Create one issue per method"
+  - label: "Let me choose"
+    description: "I will list the method names I want"
+```
+
+If **Let me choose**, ask the user for the list explicitly before proceeding.
+
+### Step 7 — Check for existing issues
+
+For each confirmed method, call `mcp__github__search_issues` to avoid duplicates:
+
+```
+q: "<method.name> in:title repo:bitrix24/b24phpsdk is:open"
+```
+
+If `mcp__github__search_issues` is unavailable, use the Bash fallback:
+
+```bash
+gh search issues "<method.name>" --repo bitrix24/b24phpsdk --state open
+```
+
+Skip methods that already have an open issue. Report skipped ones to the user.
+
+### Step 8 — Create issues
+
+For each method without an existing issue, create via `mcp__github__create_issue`:
+
+```
+owner:  bitrix24
+repo:   b24phpsdk
+labels: ["enhancement"]
+title:  Add support for <method.name>
+body: (see template below)
+```
+
+Issue body template:
+
+```markdown
+## Problem
+
+The Bitrix24 REST API method `<method.name>` is not yet supported by the SDK.
+
+## Proposed solution
+
+Add a service method that wraps `<method.name>` following the existing patterns
+in `src/Services/<Scope>/Service/`.
+
+## Acceptance criteria
+
+- [ ] Service class implements `<method.name>` with correct parameter mapping
+- [ ] Result item `@property-read` annotations cover all response fields
+- [ ] Unit test passes (`make test-unit`)
+- [ ] Integration test passes, including annotation and type-cast checks
+- [ ] `CHANGELOG.md` is updated with an issue link
+```
+
+After all issues are created, report the list of created issue URLs to the user.
 
 ---
 

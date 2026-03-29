@@ -20,6 +20,10 @@ use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException;
 use ReflectionClass;
+use ReflectionIntersectionType;
+use ReflectionNamedType;
+use ReflectionType;
+use ReflectionUnionType;
 use Symfony\Component\Filesystem\Filesystem;
 use Typhoon\Reflection\TyphoonReflector;
 
@@ -36,21 +40,7 @@ readonly class AttributesParser
     /**
      * @param class-string[] $sdkClassNames
      * @param non-empty-string $sdkBaseDir
-     * @return array<string, array{
-     *    sdk_scope: string,
-     *    name: string,
-     *    documentation_url: string|null,
-     *    description: string|null,
-     *    is_deprecated: bool,
-     *    deprecation_message: string|null,
-     *    sdk_method_name: string,
-     *    sdk_method_file_name: string,
-     *    sdk_method_file_start_line: int,
-     *    sdk_method_file_end_line: int,
-     *    sdk_class_name: class-string,
-     *    sdk_return_type_class: string|null,
-     *    sdk_return_type_file_name: string|null
-     * }>
+     * @return list<SupportedInSdkApiMethod>
      *
      * @throws UnknownScopeCodeException
      */
@@ -63,6 +53,7 @@ readonly class AttributesParser
             if ($apiServiceAttribute === []) {
                 continue;
             }
+            $typhoonClassMeta = $this->typhoonReflector->reflectClass($className);
             $apiServiceAttribute = $apiServiceAttribute[0];
             /**
              * @var ApiServiceMetadata $apiServiceAttrInstance
@@ -77,62 +68,176 @@ readonly class AttributesParser
                      * @var ApiEndpointMetadata $instance
                      */
                     $instance = $attribute->newInstance();
-
-                    // find return type file name
-                    $returnTypeFileName = null;
+                    $sdkReturnTypeDeclaration = null;
                     if ($method->getReturnType() !== null) {
-                        /** @var @phpstan-ignore-next-line */
-                        $returnTypeName = $method->getReturnType()->getName();
-                        if (class_exists($returnTypeName)) {
-                            $reflectionReturnType = new ReflectionClass($returnTypeName);
-                            $returnTypeFileName = substr(
-                                $this->filesystem->makePathRelative($reflectionReturnType->getFileName(), $sdkBaseDir),
-                                0,
-                                -1
-                            );
-                        }
+                        $sdkReturnTypeDeclaration = stringify(
+                            $typhoonClassMeta->methods()[$method->getName()]->returnType()
+                        );
                     }
+                    $returnTypeMetadata = $this->normalizeSdkReturnTypeMetadata(
+                        $method->getReturnType(),
+                        $sdkBaseDir,
+                        $sdkReturnTypeDeclaration
+                    );
 
-                    $supportedInSdkMethods[$instance->name] = [
-                        'sdk_scope' => $apiServiceAttrInstance->scope->getScopeCodes(
-                        ) === [] ? '' : $apiServiceAttrInstance->scope->getScopeCodes()[0],
-                        'name' => $instance->name,
-                        'documentation_url' => $instance->documentationUrl,
-                        'description' => $instance->description,
-                        'is_deprecated' => $instance->isDeprecated,
-                        'deprecation_message' => $instance->deprecationMessage,
-                        'sdk_method_name' => $method->getName(),
-                        'sdk_method_file_name' => substr(
+                    $supportedInSdkMethods[] = new SupportedInSdkApiMethod(
+                        sdkScope: $apiServiceAttrInstance->scope->getScopeCodes() === [] ? '' : $apiServiceAttrInstance->scope->getScopeCodes()[0],
+                        name: $instance->name,
+                        documentationUrl: $instance->documentationUrl,
+                        description: $instance->description,
+                        isDeprecated: $instance->isDeprecated,
+                        deprecationMessage: $instance->deprecationMessage,
+                        sdkMethodName: $method->getName(),
+                        sdkMethodFileName: substr(
                             $this->filesystem->makePathRelative($method->getFileName(), $sdkBaseDir),
                             0,
                             -1
                         ),
-                        'sdk_method_file_start_line' => $method->getStartLine(),
-                        'sdk_method_file_end_line' => $method->getEndLine(),
-                        'sdk_class_name' => $className,
-                        /** @var @phpstan-ignore-next-line */
-                        'sdk_return_type_class' => $method->getReturnType()?->getName(),
-                        'sdk_return_type_file_name' => $returnTypeFileName
-                    ];
+                        sdkMethodFileStartLine: $method->getStartLine(),
+                        sdkMethodFileEndLine: $method->getEndLine(),
+                        sdkClassName: $className,
+                        apiVersion: $instance->apiVersion,
+                        sdkReturnTypeClass: $returnTypeMetadata['sdkReturnTypeClass'],
+                        sdkReturnTypeFileName: $returnTypeMetadata['sdkReturnTypeFileName'],
+                        sdkReturnTypeDeclaration: $returnTypeMetadata['sdkReturnTypeDeclaration'],
+                    );
                 }
             }
         }
 
         if ($scope instanceof Scope) {
-            $allMethods = $supportedInSdkMethods;
-            $supportedInSdkMethods = [];
-            foreach ($allMethods as $method) {
-                // skip methods without scope
-                if ($method['sdk_scope'] === '') {
-                    continue;
+            $supportedInSdkMethods = array_values(array_filter(
+                $supportedInSdkMethods,
+                static function (SupportedInSdkApiMethod $supportedInSdkApiMethod) use ($scope): bool {
+                    if ($supportedInSdkApiMethod->sdkScope === '') {
+                        return false;
+                    }
+
+                    return $scope->contains($supportedInSdkApiMethod->sdkScope);
                 }
-                if ($scope->contains($method['sdk_scope'])) {
-                    $supportedInSdkMethods[] = $method;
-                }
-            }
+            ));
         }
 
         return $supportedInSdkMethods;
+    }
+
+    /**
+     * @return array{
+     *     sdkReturnTypeClass: ?string,
+     *     sdkReturnTypeFileName: ?string,
+     *     sdkReturnTypeDeclaration: ?string
+     * }
+     */
+    private function normalizeSdkReturnTypeMetadata(
+        ?ReflectionType $reflectionType,
+        string $sdkBaseDir,
+        ?string $sdkReturnTypeDeclaration = null
+    ): array
+    {
+        if (!$reflectionType instanceof ReflectionType) {
+            return [
+                'sdkReturnTypeClass' => null,
+                'sdkReturnTypeFileName' => null,
+                'sdkReturnTypeDeclaration' => null,
+            ];
+        }
+
+        $sdkReturnTypeDeclaration ??= $this->stringifyReflectionType($reflectionType);
+        $sdkReturnTypeDeclaration = $this->normalizeTypeDeclarationString($sdkReturnTypeDeclaration);
+        $sdkReturnTypeClass = $this->resolveSdkReturnTypeClass($reflectionType);
+
+        if ($sdkReturnTypeClass === null) {
+            return [
+                'sdkReturnTypeClass' => null,
+                'sdkReturnTypeFileName' => null,
+                'sdkReturnTypeDeclaration' => $sdkReturnTypeDeclaration,
+            ];
+        }
+
+        $reflectionReturnType = new ReflectionClass($sdkReturnTypeClass);
+        $sdkReturnTypeFileName = null;
+        if (is_string($reflectionReturnType->getFileName())) {
+            $sdkReturnTypeFileName = substr(
+                $this->filesystem->makePathRelative($reflectionReturnType->getFileName(), $sdkBaseDir),
+                0,
+                -1
+            );
+        }
+
+        return [
+            'sdkReturnTypeClass' => $sdkReturnTypeClass,
+            'sdkReturnTypeFileName' => $sdkReturnTypeFileName,
+            'sdkReturnTypeDeclaration' => $sdkReturnTypeDeclaration,
+        ];
+    }
+
+    private function stringifyReflectionType(ReflectionType $reflectionType): string
+    {
+        if ($reflectionType instanceof ReflectionNamedType) {
+            $typeName = $reflectionType->getName();
+
+            if ($reflectionType->allowsNull() && $typeName !== 'mixed' && $typeName !== 'null') {
+                return $typeName . '|null';
+            }
+
+            return $typeName;
+        }
+
+        if ($reflectionType instanceof ReflectionUnionType) {
+            return implode('|', array_map(
+                $this->stringifyReflectionType(...),
+                $reflectionType->getTypes()
+            ));
+        }
+
+        if ($reflectionType instanceof ReflectionIntersectionType) {
+            return implode('&', array_map(
+                $this->stringifyReflectionType(...),
+                $reflectionType->getTypes()
+            ));
+        }
+
+        return (string)$reflectionType;
+    }
+
+    private function resolveSdkReturnTypeClass(ReflectionType $reflectionType): ?string
+    {
+        if (!$reflectionType instanceof ReflectionNamedType) {
+            return null;
+        }
+
+        $typeName = $reflectionType->getName();
+
+        if (!$this->isExistingPhpType($typeName)) {
+            return null;
+        }
+
+        return $typeName;
+    }
+
+    private function isExistingPhpType(string $typeName): bool
+    {
+        return class_exists($typeName) || interface_exists($typeName) || enum_exists($typeName);
+    }
+
+    private function normalizeTypeDeclarationString(string $sdkReturnTypeDeclaration): string
+    {
+        if (!str_contains($sdkReturnTypeDeclaration, '|')) {
+            return $sdkReturnTypeDeclaration;
+        }
+
+        $types = explode('|', $sdkReturnTypeDeclaration);
+        if (!in_array('null', $types, true) || count($types) < 2) {
+            return $sdkReturnTypeDeclaration;
+        }
+
+        $types = array_values(array_filter(
+            $types,
+            static fn (string $type): bool => $type !== 'null'
+        ));
+        $types[] = 'null';
+
+        return implode('|', $types);
     }
 
     /**

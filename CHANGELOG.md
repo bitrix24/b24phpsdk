@@ -11,12 +11,17 @@
 - Fixed `Response::getResponseData()` crashing when API response lacks a `time` node (e.g. documentation endpoint): added `Time::initWithZeroValues()` factory that fills numeric fields with `0.0` and date fields with `CarbonImmutable::now()` ([#343](https://github.com/bitrix24/b24phpsdk/issues/343))
 - Fixed infinite recursion in `Core::call()` when portal returns a `302` redirect to the same domain (e.g. expired-license redirect to `/bitrix/coupon_activation.php`); now throws `PortalUnavailableException` ([#372](https://github.com/bitrix24/b24phpsdk/issues/372))
 - Fixed `InMemoryApplicationInstallationRepositoryImplementation::findByBitrix24AccountMemberId()` to resolve installations for non-deleted master accounts in pending install flows, including `new` accounts, while still excluding deleted installations ([#387](https://github.com/bitrix24/b24phpsdk/issues/387))
+- Fixed `AttributesParser` metadata extraction for SDK methods with compound return types and migrated coverage tooling to a typed `SupportedInSdkApiMethod` contract so documentation and statistics commands no longer crash on union returns ([#391](https://github.com/bitrix24/b24phpsdk/issues/391))
 
 ### Changed
 
 - `ContactPersonInterface::getBitrix24UserId()` now returns `int` instead of `?int` — a ContactPerson is always linked to a Bitrix24 user ([#365](https://github.com/bitrix24/b24phpsdk/issues/365))
 - Updated `.claude/skills/b24phpsdk-maintainer/SKILL.md`: added `make lint-rector` to Phase 1 quality gate and PR test plan checklist to prevent missed Rector violations in CI
 - Updated `.claude/skills/b24phpsdk-maintainer/SKILL.md`: PR body must now be built from `.github/PULL_REQUEST_TEMPLATE.md` instead of a hardcoded template
+- Updated `.claude/skills/b24phpsdk-maintainer/SKILL.md`: added workflow for discovering unsupported Bitrix24 REST API methods and filing GitHub tracking issues automatically
+- Updated `.claude/skills/b24phpsdk-maintainer/SKILL.md`: skill now requires `make oa-schema-build` as the mandatory first step on every invocation to keep the OpenAPI schema snapshot up to date
+- Updated `.claude/skills/b24phpsdk-maintainer/SKILL.md`: added reference section on webhook URL format for direct curl requests, covering v1/v3 response envelope differences and OAuth token usage
+- The repository now stores the OpenAPI schema snapshot current at release build time in `docs/open-api/openapi.json`; refresh it before implementation and release verification with `make oa-schema-build` ([#391](https://github.com/bitrix24/b24phpsdk/issues/391))
 
 ### Added
 
@@ -37,6 +42,9 @@
 - Added integration tests for `ChatMessageFieldItemResult` in `tests/Integration/Services/Task/ChatMessageField/Result/ChatMessageFieldItemResultTest.php`:
   - `testAllFieldsAreAnnotated` — verifies every field from raw API response is covered by a `@property-read` annotation
   - `testAllFieldsHasValidTypeCastingInMagicGetters` — verifies magic getters return values matching their PHPDoc-declared types
+
+- Added OpenAPI snapshot coverage tooling for SDK v3 with console command `b24-dev:show-oa-sdk-coverage`, Make targets `make sdk-coverage-v3-show` and `make sdk-coverage-v3-show-uncovered`, normalization of OpenAPI aliases/scopes, and uncovered-method output with documentation links built from the Bitrix24 REST v3 docs URL pattern ([#391](https://github.com/bitrix24/b24phpsdk/issues/391))
+- Added service `Services\Task\Service\TaskField` for v3 methods `tasks.task.field.get` and `tasks.task.field.list`, including `TaskServiceBuilder::taskField()` and typed `TaskFieldItemResult`, `TaskFieldResult`, and `TaskFieldsResult` wrappers for task field metadata responses ([#395](https://github.com/bitrix24/b24phpsdk/issues/395))
 
 ## 3.0.0 - 2026.02.27
 
