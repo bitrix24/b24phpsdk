@@ -28,6 +28,13 @@ class DocumentFieldsResult extends AbstractResult
      */
     public function getFieldsDescription(): array
     {
-        return $this->getCoreResponse()->getResponseData()->getResult();
+        $result = $this->getCoreResponse()->getResponseData()->getResult();
+
+        // API returns fields nested under documentFields key
+        if (!empty($result['documentFields']) && is_array($result['documentFields'])) {
+            return $result['documentFields'];
+        }
+
+        return $result;
     }
 }

@@ -26,9 +26,8 @@ use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
  * @property-read string|null $moduleId
  * @property-read string|null $active
  * @property-read int|null $numeratorId
- * @property-read int|null $withStamps
- * @property-read int|null $isDeleted
- * @property-read array|null $providers
+ * @property-read string|null $withStamps
+ * @property-read string|null $isDeleted
  * @property-read array|null $users
  * @property-read string|null $sort
  * @property-read string|null $createTime

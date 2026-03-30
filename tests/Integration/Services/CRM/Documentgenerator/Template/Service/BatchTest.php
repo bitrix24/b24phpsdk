@@ -123,7 +123,7 @@ class BatchTest extends TestCase
                 'file' => $fileContent,
                 'numeratorId' => 1,
                 'region' => 'uk',
-                'entityTypeId' => 2,
+                'entityTypeId' => [2],
             ];
         }
 
@@ -159,7 +159,7 @@ class BatchTest extends TestCase
                 'file' => $fileContent,
                 'numeratorId' => 1,
                 'region' => 'uk',
-                'entityTypeId' => 2,
+                'entityTypeId' => [2],
             ];
         }
 
@@ -191,7 +191,7 @@ class BatchTest extends TestCase
                 'file' => $fileContent,
                 'numeratorId' => 1,
                 'region' => 'uk',
-                'entityTypeId' => 2,
+                'entityTypeId' => [2],
             ];
         }
 

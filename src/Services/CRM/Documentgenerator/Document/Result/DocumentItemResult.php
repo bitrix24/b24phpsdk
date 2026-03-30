@@ -41,6 +41,7 @@ use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
  * @property-read int|null $numeratorId
  * @property-read int|null $stampsEnabled
  * @property-read string|null $fileUrl
+ * @property-read bool|null $isTransformationError
  */
 class DocumentItemResult extends AbstractCrmItem
 {

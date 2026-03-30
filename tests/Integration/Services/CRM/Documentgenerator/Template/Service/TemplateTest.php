@@ -171,7 +171,7 @@ class TemplateTest extends TestCase
             'file' => $fileContent,
             'numeratorId' => 1,
             'region' => 'uk',
-            'entityTypeId' => 2,
+            'entityTypeId' => [2],
         ])->getId();
 
         self::assertGreaterThanOrEqual(1, $id);
@@ -194,7 +194,7 @@ class TemplateTest extends TestCase
             'file' => $fileContent,
             'numeratorId' => 1,
             'region' => 'uk',
-            'entityTypeId' => 2,
+            'entityTypeId' => [2],
         ])->getId();
 
         $newName = $name . '-updated';
@@ -223,7 +223,7 @@ class TemplateTest extends TestCase
             'file' => $fileContent,
             'numeratorId' => 1,
             'region' => 'uk',
-            'entityTypeId' => 2,
+            'entityTypeId' => [2],
         ])->getId();
 
         self::assertTrue($this->templateService->delete($id)->isSuccess());
@@ -243,7 +243,7 @@ class TemplateTest extends TestCase
             'file' => $fileContent,
             'numeratorId' => 1,
             'region' => 'uk',
-            'entityTypeId' => 2,
+            'entityTypeId' => [2],
         ])->getId();
 
         $countAfter = $this->templateService->count();

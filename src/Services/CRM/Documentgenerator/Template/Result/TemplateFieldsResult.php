@@ -28,6 +28,13 @@ class TemplateFieldsResult extends AbstractResult
      */
     public function getFieldsDescription(): array
     {
-        return $this->getCoreResponse()->getResponseData()->getResult();
+        $result = $this->getCoreResponse()->getResponseData()->getResult();
+
+        // API returns fields nested under templateFields key
+        if (!empty($result['templateFields']) && is_array($result['templateFields'])) {
+            return $result['templateFields'];
+        }
+
+        return $result;
     }
 }

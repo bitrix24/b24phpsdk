@@ -76,11 +76,10 @@ class Batch
      *     file: string,
      *     numeratorId: int,
      *     region: string,
-     *     entityTypeId: int,
+     *     entityTypeId: string|int[],
      *     users?: array,
-     *     providers?: array,
      *     active?: string,
-     *     withStamps?: int,
+     *     withStamps?: string,
      *     sort?: int
      *   }> $templates
      *
