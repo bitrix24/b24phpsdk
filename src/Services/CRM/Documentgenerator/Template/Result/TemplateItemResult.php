@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\CRM\Documentgenerator\Template\Result;
 
 use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
+use Carbon\CarbonImmutable;
 
 /**
  * Class TemplateItemResult
@@ -29,12 +30,39 @@ use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
  * @property-read string|null $withStamps
  * @property-read string|null $isDeleted
  * @property-read array|null $users
- * @property-read string|null $sort
- * @property-read string|null $createTime
- * @property-read string|null $updateTime
+ * @property-read int|null $sort
+ * @property-read CarbonImmutable|null $createTime
+ * @property-read CarbonImmutable|null $updateTime
  * @property-read int|null $createdBy
  * @property-read int|null $updatedBy
  */
 class TemplateItemResult extends AbstractCrmItem
 {
+    /**
+     * @param int|string $offset
+     *
+     * @return CarbonImmutable|int|mixed|null
+     */
+    #[\Override]
+    public function __get($offset)
+    {
+        switch ($offset) {
+            case 'createTime':
+            case 'updateTime':
+                if (isset($this->data[$offset]) && $this->data[$offset] !== '') {
+                    return CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
+                }
+
+                return null;
+            case 'numeratorId':
+            case 'sort':
+                if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
+                    return (int)$this->data[$offset];
+                }
+
+                return null;
+            default:
+                return parent::__get($offset);
+        }
+    }
 }

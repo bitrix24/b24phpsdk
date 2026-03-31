@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\CRM\Documentgenerator\Document\Result;
 
 use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
+use Carbon\CarbonImmutable;
 
 /**
  * Class DocumentItemResult
@@ -24,8 +25,8 @@ use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
  * @property-read int $templateId
  * @property-read int $entityTypeId
  * @property-read int $entityId
- * @property-read string|null $createTime
- * @property-read string|null $updateTime
+ * @property-read CarbonImmutable|null $createTime
+ * @property-read CarbonImmutable|null $updateTime
  * @property-read int|null $createdBy
  * @property-read int|null $updatedBy
  * @property-read string|null $value
@@ -45,4 +46,40 @@ use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
  */
 class DocumentItemResult extends AbstractCrmItem
 {
+    /**
+     * @param int|string $offset
+     *
+     * @return bool|CarbonImmutable|int|mixed|null
+     */
+    #[\Override]
+    public function __get($offset)
+    {
+        switch ($offset) {
+            case 'createTime':
+            case 'updateTime':
+                if (isset($this->data[$offset]) && $this->data[$offset] !== '') {
+                    return CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
+                }
+
+                return null;
+            case 'templateId':
+            case 'entityTypeId':
+            case 'entityId':
+            case 'numeratorId':
+            case 'stampsEnabled':
+                if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
+                    return (int)$this->data[$offset];
+                }
+
+                return null;
+            case 'isTransformationError':
+                if ($this->data[$offset] !== null) {
+                    return (bool)$this->data[$offset];
+                }
+
+                return null;
+            default:
+                return parent::__get($offset);
+        }
+    }
 }
