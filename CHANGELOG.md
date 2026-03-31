@@ -8,6 +8,13 @@
 
 ### Added
 
+- Added support for events:
+  - `onCrmDocumentGeneratorDocumentAdd` — fires when a document is created,
+    see [event documentation](https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/events/on-crm-document-generator-document-add.html)
+  - `onCrmDocumentGeneratorDocumentUpdate` — fires when a document is updated,
+    see [event documentation](https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/events/on-crm-document-generator-document-update.html)
+  - `onCrmDocumentGeneratorDocumentDelete` — fires when a document is deleted,
+    see [event documentation](https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/events/on-crm-document-generator-document-delete.html)
 - Added service `Services\CRM\Documentgenerator\Document` with support methods,
   see [crm.documentgenerator.document.* methods](https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/index.html):
     - `add` creates a new document based on a template and CRM entity, with batch calls support
