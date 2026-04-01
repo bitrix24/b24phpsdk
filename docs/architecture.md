@@ -189,7 +189,7 @@ Two custom PHP 8 attributes drive the SDK coverage documentation system:
 | `#[ApiServiceMetadata(new Scope([...]))]` | Service class | Declares which Bitrix24 scope this service needs |
 | `#[ApiEndpointMetadata('method.name', 'docs-url', 'description')]` | Service method | Documents each REST method call |
 
-These feed `make show-sdk-coverage-statistics` and `make build-documentation`.
+These feed `make sdk-coverage-v1-show` and `make build-documentation`.
 
 ---
 

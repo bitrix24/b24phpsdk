@@ -33,7 +33,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'b24-dev:show-fields-description',
-    description: 'show entity fields description with table or phpDoc output format',
+    description: 'legacy utility for *.fields field inspection and phpDoc scaffolding',
     hidden: false
 )]
 class ShowFieldsDescriptionCommand extends Command
@@ -60,8 +60,10 @@ class ShowFieldsDescriptionCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('show entity fields description with table or phpDoc output format')
-            ->setHelp('get list of *.fields methods and show fields description for selected entity')
+            ->setDescription('legacy utility for *.fields field inspection and phpDoc scaffolding')
+            ->setHelp(
+                'Legacy utility for *.fields field-inspection workflows. For REST v3 field metadata use b24-dev:show-v3-field-metadata.'
+            )
             ->addOption(
                 self::WEBHOOK_URL,
                 null,

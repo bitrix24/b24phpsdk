@@ -53,4 +53,23 @@ readonly class Time
             $response['operating_reset_at'] ?? null
         );
     }
+
+    /**
+     * Create a Time instance with zero numeric values and current timestamp for date fields.
+     * Used as a fallback when the API response omits the time node (e.g. documentation endpoint).
+     */
+    public static function initWithZeroValues(): self
+    {
+        $now = CarbonImmutable::now();
+        return new self(
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            $now,
+            $now,
+            null
+        );
+    }
 }

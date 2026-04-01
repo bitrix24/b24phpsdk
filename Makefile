@@ -38,6 +38,11 @@ help:
 	@echo "php-dev-server-up         - start php dev-server"
 	@echo "php-dev-server-down       - stop php dev-server"
 	@echo "php-cli-bash              - run container php-cli and open shell with arguments"
+	@echo "oa-schema-build           - build current OpenAPI schema into docs/open-api/openapi.json"
+	@echo "sdk-coverage-v1-show     - show SDK API coverage statistics in console"
+	@echo "sdk-coverage-v3-show     - show OA schema snapshot vs SDK v3 coverage"
+	@echo "sdk-coverage-v3-show-uncovered - show OA methods not covered by SDK v3"
+	@echo "build-documentation       - build SDK API coverage documentation markdown"
 	@echo "ngrok-up                  - start ngrok"
 	@echo "ngrok-down                - stop ngrok"
 	@echo ""
@@ -140,9 +145,9 @@ composer:
 
 # dev utilites
 
-build-oa-schema:
+oa-schema-build:
 	docker compose run --rm php-cli php bin/console b24-dev:build-schema --webhook=$(BITRIX24_WEBHOOK)
-.PHONY: build-oa-schema
+.PHONY: oa-schema-build
 
 # linters and tests
 .PHONY: lint-allowed-licenses
@@ -493,6 +498,22 @@ integration_tests_department:
 integration_tests_task:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_task
 
+.PHONY: test-integration-task-chat-message-field
+test-integration-task-chat-message-field:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_task_chat_message_field
+
+.PHONY: test-integration-task-file-field
+test-integration-task-file-field:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_task_file_field
+
+.PHONY: test-integration-task-access-field
+test-integration-task-access-field:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_task_access_field
+
+.PHONY: test-integration-task-field
+test-integration-task-field:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_task_field
+
 .PHONY: test-integration-legacy-task
 test-integration-legacy-task:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_legacy_task
@@ -500,6 +521,10 @@ test-integration-legacy-task:
 .PHONY: test-integration-main-eventlog
 test-integration-main-eventlog:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_main_eventlog
+
+.PHONY: test-integration-rest-scope
+test-integration-rest-scope:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_rest_scope_service
 
 .PHONY: integration_tests_sale
 integration_tests_sale:
@@ -576,9 +601,19 @@ build-documentation:
 	--repository-branch=$(DOCUMENTATION_DEFAULT_TARGET_BRANCH) \
 	--file=docs/EN/Services/bitrix24-php-sdk-methods.md
 
-show-sdk-coverage-statistics:
+sdk-coverage-v1-show:
 	docker compose run --rm php-cli php bin/console b24-dev:show-sdk-coverage-statistics \
 	--webhook=$(BITRIX24_WEBHOOK)
+
+sdk-coverage-v3-show:
+	docker compose run --rm php-cli php bin/console b24-dev:show-oa-sdk-coverage \
+	--schema-file=docs/open-api/openapi.json \
+	$(ARGS)
+
+sdk-coverage-v3-show-uncovered:
+	docker compose run --rm php-cli php bin/console b24-dev:show-oa-sdk-coverage \
+	--schema-file=docs/open-api/openapi.json \
+	--show-uncovered
 
 dev-show-fields-description:
 	php bin/console b24-dev:show-fields-description --webhook=$(BITRIX24_WEBHOOK)

@@ -15,12 +15,9 @@ namespace Bitrix24\SDK\Tests\Integration\Legacy\Services\Task\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Legacy\Services\Task\Result\AccessesResult;
 use Bitrix24\SDK\Legacy\Services\Task\Service\Task;
-use Bitrix24\SDK\Services\Task\Result\TaskItemResult;
 use Bitrix24\SDK\Services\User\Service\User;
-use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -57,8 +54,6 @@ use PHPUnit\Framework\TestCase;
 #[\PHPUnit\Framework\Attributes\CoversClass(Task::class)]
 class TaskTest extends TestCase
 {
-    use CustomBitrix24Assertions;
-
     protected Task $taskService;
 
     protected User $userService;
@@ -67,25 +62,6 @@ class TaskTest extends TestCase
     {
         $this->taskService = Factory::getServiceBuilder()->getLegacyServiceBuilder()->getTaskScope()->task();
         $this->userService = Factory::getServiceBuilder()->getUserScope()->user();
-    }
-
-    public function testAllSystemFieldsAnnotated(): void
-    {
-        $fields = $this->normalizeFieldKeys($this->taskService->fields()->getFieldsDescription());
-        $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($fields));
-        $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, TaskItemResult::class);
-    }
-
-    public function testAllSystemFieldsHasValidTypeAnnotation(): void
-    {
-        $allFields = $this->normalizeFieldKeys($this->taskService->fields()->getFieldsDescription());
-        $systemFieldsCodes = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($allFields));
-        $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
-
-        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
-            $systemFields,
-            TaskItemResult::class
-        );
     }
 
     /**
@@ -313,22 +289,5 @@ class TaskTest extends TestCase
         }
 
         return $userId;
-    }
-
-    protected function normalizeFieldKeys(array $fields): array
-    {
-        $result = [];
-        foreach ($fields as $key => $value) {
-            if (str_starts_with($key, 'UF_') && !in_array($key, ['UF_CRM_TASK', 'UF_TASK_WEBDAV_FILES', 'UF_MAIL_MESSAGE'])) {
-                continue;
-            }
-
-            $testStr = strtolower($key);
-            $testArr = explode('_', $testStr);
-            $testStr = array_shift($testArr) . implode('', array_map('ucfirst', $testArr));
-            $result[$testStr] = $value;
-        }
-
-        return $result;
     }
 }

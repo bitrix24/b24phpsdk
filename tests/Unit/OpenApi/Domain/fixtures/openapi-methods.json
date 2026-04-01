@@ -1,0 +1,23 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/main.eventlog.list": {
+      "post": {
+        "summary": "Event log list"
+      }
+    },
+    "/rest.documentation.openapi": {
+      "post": {
+        "summary": "OpenAPI schema"
+      },
+      "get": {
+        "summary": "OpenAPI schema"
+      }
+    },
+    "/tasks.task.get": {
+      "post": {
+        "summary": "Task get"
+      }
+    }
+  }
+}

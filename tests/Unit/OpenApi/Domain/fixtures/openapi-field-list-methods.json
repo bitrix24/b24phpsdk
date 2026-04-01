@@ -1,0 +1,11 @@
+{
+  "paths": {
+    "/tasks.task.field.list": {},
+    "/tasks.task.access.field.list": {},
+    "/tasks.task.chat.message.field.list": {},
+    "/tasks.task.get": {},
+    "/main.eventlog.field.list": {},
+    "/main.eventlog.list": {},
+    "/rest.documentation.openapi": {}
+  }
+}
