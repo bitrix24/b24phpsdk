@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Documentgenerator\Template\Result\TemplateItemResult;
 use Bitrix24\SDK\Services\CRM\Documentgenerator\Template\Service\Template;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 use Faker;
@@ -51,7 +51,7 @@ class TemplateTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->templateService = Factory::getServiceBuilder()->getCRMScope()->documentgeneratorTemplate();
+        $this->templateService = Fabric::getServiceBuilder()->getCRMScope()->documentgeneratorTemplate();
         $this->faker = Faker\Factory::create();
     }
 

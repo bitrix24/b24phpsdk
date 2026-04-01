@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Documentgenerator\Document\Result\DocumentItemResult;
 use Bitrix24\SDK\Services\CRM\Documentgenerator\Document\Service\Document;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 use Faker;
@@ -53,7 +53,7 @@ class DocumentTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->documentService = Factory::getServiceBuilder()->getCRMScope()->documentgeneratorDocument();
+        $this->documentService = Fabric::getServiceBuilder()->getCRMScope()->documentgeneratorDocument();
         $this->faker = Faker\Factory::create();
     }
 
@@ -66,7 +66,7 @@ class DocumentTest extends TestCase
      */
     private function getFirstTemplateId(): int
     {
-        $templateService = Factory::getServiceBuilder()->getCRMScope()->documentgeneratorTemplate();
+        $templateService = Fabric::getServiceBuilder()->getCRMScope()->documentgeneratorTemplate();
         $templates = $templateService->list()->getTemplates();
         self::assertNotEmpty($templates, 'At least one template must exist to create a document');
 
@@ -81,7 +81,7 @@ class DocumentTest extends TestCase
      */
     private function createDeal(): int
     {
-        $dealService = Factory::getServiceBuilder()->getCRMScope()->deal();
+        $dealService = Fabric::getServiceBuilder()->getCRMScope()->deal();
         return $dealService->add([
             'TITLE' => 'doc-test-' . $this->faker->uuid(),
         ])->getId();
@@ -106,7 +106,7 @@ class DocumentTest extends TestCase
 
         // Cleanup
         $this->documentService->delete($id);
-        Factory::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
+        Fabric::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
     }
 
     /**
@@ -125,7 +125,7 @@ class DocumentTest extends TestCase
 
         // Cleanup
         $this->documentService->delete($id);
-        Factory::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
+        Fabric::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
     }
 
     /**
@@ -145,7 +145,7 @@ class DocumentTest extends TestCase
 
         // Cleanup
         $this->documentService->delete($id);
-        Factory::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
+        Fabric::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
     }
 
     /**
@@ -165,7 +165,7 @@ class DocumentTest extends TestCase
 
         // Cleanup
         $this->documentService->delete($id);
-        Factory::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
+        Fabric::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
     }
 
     /**
@@ -185,7 +185,7 @@ class DocumentTest extends TestCase
 
         // Cleanup
         $this->documentService->delete($id);
-        Factory::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
+        Fabric::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
     }
 
     /**
@@ -202,7 +202,7 @@ class DocumentTest extends TestCase
         self::assertTrue($this->documentService->delete($id)->isSuccess());
 
         // Cleanup
-        Factory::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
+        Fabric::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
     }
 
     /**
@@ -223,7 +223,7 @@ class DocumentTest extends TestCase
 
         // Cleanup
         $this->documentService->delete($id);
-        Factory::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
+        Fabric::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
     }
 
     /**
@@ -242,7 +242,7 @@ class DocumentTest extends TestCase
 
         // Cleanup
         $this->documentService->delete($id);
-        Factory::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
+        Fabric::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
     }
 
     /**
@@ -273,6 +273,6 @@ class DocumentTest extends TestCase
 
         // Cleanup
         $this->documentService->delete($document->id);
-        Factory::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
+        Fabric::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
     }
 }

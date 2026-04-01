@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Documentgenerator\Document\Service\Document;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
 use Faker;
 
@@ -39,7 +39,7 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->documentService = Factory::getServiceBuilder()->getCRMScope()->documentgeneratorDocument();
+        $this->documentService = Fabric::getServiceBuilder()->getCRMScope()->documentgeneratorDocument();
         $this->faker = Faker\Factory::create();
     }
 
@@ -51,7 +51,7 @@ class BatchTest extends TestCase
      */
     private function getFirstTemplateId(): int
     {
-        $templateService = Factory::getServiceBuilder()->getCRMScope()->documentgeneratorTemplate();
+        $templateService = Fabric::getServiceBuilder()->getCRMScope()->documentgeneratorTemplate();
         $templates = $templateService->list()->getTemplates();
         self::assertNotEmpty($templates, 'At least one template must exist to create a document');
 
@@ -66,7 +66,7 @@ class BatchTest extends TestCase
      */
     private function createDeal(): int
     {
-        $dealService = Factory::getServiceBuilder()->getCRMScope()->deal();
+        $dealService = Fabric::getServiceBuilder()->getCRMScope()->deal();
         return $dealService->add([
             'TITLE' => 'doc-batch-test-' . $this->faker->uuid(),
         ])->getId();
@@ -93,7 +93,7 @@ class BatchTest extends TestCase
 
         // Cleanup
         $this->documentService->delete($id);
-        Factory::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
+        Fabric::getServiceBuilder()->getCRMScope()->deal()->delete($dealId);
     }
 
     /**
@@ -134,7 +134,7 @@ class BatchTest extends TestCase
 
         self::assertEquals(count($items), $delCnt);
 
-        $dealService = Factory::getServiceBuilder()->getCRMScope()->deal();
+        $dealService = Fabric::getServiceBuilder()->getCRMScope()->deal();
         foreach ($dealIds as $dealId) {
             $dealService->delete($dealId);
         }
@@ -174,7 +174,7 @@ class BatchTest extends TestCase
             // consume generator to execute batch deletion
         }
 
-        $dealService = Factory::getServiceBuilder()->getCRMScope()->deal();
+        $dealService = Fabric::getServiceBuilder()->getCRMScope()->deal();
         foreach ($dealIds as $dealId) {
             $dealService->delete($dealId);
         }
@@ -205,7 +205,7 @@ class BatchTest extends TestCase
         self::assertEquals(count($ids), $delCnt);
 
         // Cleanup deals
-        $dealService = Factory::getServiceBuilder()->getCRMScope()->deal();
+        $dealService = Fabric::getServiceBuilder()->getCRMScope()->deal();
         foreach ($dealIds as $dealId) {
             $dealService->delete($dealId);
         }

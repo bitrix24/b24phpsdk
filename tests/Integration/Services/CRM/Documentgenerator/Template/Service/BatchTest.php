@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Documentgenerator\Template\Service\Template;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
 use Faker;
 
@@ -39,7 +39,7 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->templateService = Factory::getServiceBuilder()->getCRMScope()->documentgeneratorTemplate();
+        $this->templateService = Fabric::getServiceBuilder()->getCRMScope()->documentgeneratorTemplate();
         $this->faker = Faker\Factory::create();
     }
 
