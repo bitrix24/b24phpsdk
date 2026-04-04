@@ -672,6 +672,42 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    public function documentgeneratorDocument(): Documentgenerator\Document\Service\Document
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            // Use specialized Batch for Document to ensure correct REST parameter mapping (e.g., 'id')
+            $documentBatch = new Documentgenerator\Document\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Documentgenerator\Document\Service\Document(
+                new Documentgenerator\Document\Service\Batch($documentBatch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function documentgeneratorTemplate(): Documentgenerator\Template\Service\Template
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            // Use specialized Batch for Template to ensure correct REST parameter mapping (e.g., 'id')
+            $templateBatch = new Documentgenerator\Template\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Documentgenerator\Template\Service\Template(
+                new Documentgenerator\Template\Service\Batch($templateBatch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function type(): Type\Service\Type
     {
         if (!isset($this->serviceCache[__METHOD__])) {

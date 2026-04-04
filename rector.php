@@ -76,6 +76,10 @@ return RectorConfig::configure()
         __DIR__ . '/tests/Integration/Services/Lists',
         __DIR__ . '/src/Services/CRM/Documentgenerator/Numerator',
         __DIR__ . '/tests/Integration/Services/CRM/Documentgenerator/Numerator',
+        __DIR__ . '/src/Services/CRM/Documentgenerator/Document',
+        __DIR__ . '/tests/Integration/Services/CRM/Documentgenerator/Document',
+        __DIR__ . '/src/Services/CRM/Documentgenerator/Template',
+        __DIR__ . '/tests/Integration/Services/CRM/Documentgenerator/Template',
         __DIR__ . '/tests/Unit/',
     ])
     ->withCache(cacheDirectory: __DIR__ . '/var/.cache/rector')
