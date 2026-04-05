@@ -4,6 +4,8 @@
 
 ### Added
 
+- Added `b24-dev:generate-select-builder` console command — reads the checked-in OpenAPI snapshot and generates a deterministic `*SelectBuilder` PHP class for any v3 entity; `$ref` properties are expanded one level deep using dot-notation, methods are sorted alphabetically ([#340](https://github.com/bitrix24/b24phpsdk/issues/340))
+- Added `#[OaEntity]` PHP 8 attribute that links a `*ItemResult` class to its OpenAPI entity key (`entityKey`), optional `*SelectBuilder` class (`selectBuilder`), and optional `*ItemBuilder` class (`itemBuilder`); applied to `TaskItemResult` and `EventLogItemResult` ([#340](https://github.com/bitrix24/b24phpsdk/issues/340))
 - Added support for events:
     - `onCrmDocumentGeneratorDocumentAdd` — fires when a document is created,
       see [event documentation](https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/events/on-crm-document-generator-document-add.html)

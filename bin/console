@@ -12,14 +12,17 @@
 
 use Bitrix24\SDK\Attributes\Services\AttributesParser;
 use Bitrix24\SDK\Deprecations\DeprecatedMethods;
+use Bitrix24\SDK\Infrastructure\Console\Commands\Generator\GenerateSelectBuilderCommand;
 use Bitrix24\SDK\Infrastructure\Console\Commands\Metadata\Bitrix24V3FieldMetadataFetcher;
 use Bitrix24\SDK\Infrastructure\Console\Commands\Metadata\DevWebhookResolver;
 use Bitrix24\SDK\Infrastructure\Console\Commands\Metadata\ShowV3FieldMetadataCommand;
 use Bitrix24\SDK\Infrastructure\Console\Commands\ShowFieldsDescriptionCommand;
 use Bitrix24\SDK\OpenApi\Domain\OaFieldListMethodResolver;
+use Bitrix24\SDK\OpenApi\Domain\OaSchemaEntityReader;
 use Bitrix24\SDK\OpenApi\Domain\OaSchemaMethodReader;
 use Bitrix24\SDK\OpenApi\Domain\OaSdkCoverageCalculator;
 use Bitrix24\SDK\OpenApi\Domain\OaToSdkMethodNormalizationPolicy;
+use Bitrix24\SDK\CodeGenerator\SelectBuilderCodeGenerator;
 use Bitrix24\SDK\OpenApi\Infrastructure\Console\SchemaBuilder;
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
 use Bitrix24\SDK\Tools\Commands\CopyPropertyValues;
@@ -95,6 +98,13 @@ $application->addCommand(
         ),
         new DevWebhookResolver(),
         new Bitrix24V3FieldMetadataFetcher($log)
+    )
+);
+$application->addCommand(
+    new GenerateSelectBuilderCommand(
+        new OaSchemaEntityReader(new Symfony\Component\Filesystem\Filesystem()),
+        new SelectBuilderCodeGenerator(),
+        new Symfony\Component\Filesystem\Filesystem()
     )
 );
 $application->addCommand(new CopyPropertyValues($log));

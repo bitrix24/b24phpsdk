@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Task\Result;
 
+use Bitrix24\SDK\Attributes\OaEntity;
 use Bitrix24\SDK\Core\Result\AbstractItem;
+use Bitrix24\SDK\Services\Task\Service\TaskItemBuilder;
+use Bitrix24\SDK\Services\Task\Service\TaskItemSelectBuilder;
 
 /**
  * Class TaskItemResult
@@ -115,6 +118,11 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  * @property-read int|null $createdBy
  * @property-read array|null $ufTaskWebdavFiles
  */
+#[OaEntity(
+    entityKey:     'bitrix.tasks.taskdto',
+    selectBuilder: TaskItemSelectBuilder::class,
+    itemBuilder:   TaskItemBuilder::class,
+)]
 class TaskItemResult extends AbstractItem
 {
     private const string USERFIELD_PREFIX = 'UF_';
