@@ -13,20 +13,20 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Attributes;
 
-use Bitrix24\SDK\Attributes\OaEntity;
+use Bitrix24\SDK\Attributes\OpenApiEntity;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(OaEntity::class)]
-class OaEntityAttributeTest extends TestCase
+#[CoversClass(OpenApiEntity::class)]
+class OpenApiEntityAttributeTest extends TestCase
 {
     #[Test]
     #[TestDox('attribute can be created with entityKey only')]
     public function testCreateWithEntityKeyOnly(): void
     {
-        $oaEntity = new OaEntity('bitrix.tasks.taskdto');
+        $oaEntity = new OpenApiEntity('bitrix.tasks.taskdto');
 
         $this->assertSame('bitrix.tasks.taskdto', $oaEntity->entityKey);
         $this->assertNull($oaEntity->selectBuilder);
@@ -37,7 +37,7 @@ class OaEntityAttributeTest extends TestCase
     #[TestDox('attribute stores all provided class references')]
     public function testCreateWithAllParameters(): void
     {
-        $oaEntity = new OaEntity(
+        $oaEntity = new OpenApiEntity(
             entityKey:     'bitrix.tasks.taskdto',
             selectBuilder: \stdClass::class,
             itemBuilder:   \stdClass::class,
@@ -53,14 +53,14 @@ class OaEntityAttributeTest extends TestCase
     public function testReadableViaReflection(): void
     {
         $target = new
-        #[OaEntity('bitrix.tasks.taskdto')]
+        #[OpenApiEntity('bitrix.tasks.taskdto')]
         class {};
 
-        $attrs = (new \ReflectionClass($target))->getAttributes(OaEntity::class);
+        $attrs = (new \ReflectionClass($target))->getAttributes(OpenApiEntity::class);
 
         $this->assertCount(1, $attrs);
 
-        /** @var OaEntity $oaEntity */
+        /** @var OpenApiEntity $oaEntity */
         $oaEntity = $attrs[0]->newInstance();
         $this->assertSame('bitrix.tasks.taskdto', $oaEntity->entityKey);
     }

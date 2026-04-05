@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Task\Result;
 
-use Bitrix24\SDK\Attributes\OaEntity;
+use Bitrix24\SDK\Attributes\OpenApiEntity;
 use Bitrix24\SDK\Core\Result\AbstractItem;
 use Bitrix24\SDK\Services\Task\Service\TaskItemBuilder;
 use Bitrix24\SDK\Services\Task\Service\TaskItemSelectBuilder;
@@ -118,7 +118,7 @@ use Bitrix24\SDK\Services\Task\Service\TaskItemSelectBuilder;
  * @property-read int|null $createdBy
  * @property-read array|null $ufTaskWebdavFiles
  */
-#[OaEntity(
+#[OpenApiEntity(
     entityKey:     'bitrix.tasks.taskdto',
     selectBuilder: TaskItemSelectBuilder::class,
     itemBuilder:   TaskItemBuilder::class,

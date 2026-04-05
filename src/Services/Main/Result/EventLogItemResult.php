@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Main\Result;
 
-use Bitrix24\SDK\Attributes\OaEntity;
+use Bitrix24\SDK\Attributes\OpenApiEntity;
 use Bitrix24\SDK\Core\Result\AbstractItem;
 use Bitrix24\SDK\Services\Main\Service\EventLogSelectBuilder;
 use Carbon\CarbonImmutable;
@@ -34,7 +34,7 @@ use Darsyn\IP\Version\Multi;
  * @property-read int|null             $guestId
  * @property-read string|null          $description
  */
-#[OaEntity(
+#[OpenApiEntity(
     entityKey:     'bitrix.main.eventlogdto',
     selectBuilder: EventLogSelectBuilder::class,
 )]

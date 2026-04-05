@@ -20,7 +20,7 @@ use Attribute;
  *
  * Usage:
  *
- *   #[OaEntity(
+ *   #[OpenApiEntity(
  *       entityKey:     'bitrix.tasks.taskdto',
  *       selectBuilder: TaskItemSelectBuilder::class,
  *       itemBuilder:   TaskItemBuilder::class,
@@ -32,7 +32,7 @@ use Attribute;
  * - itemBuilder:   class that builds the fields[] array for add/update calls (nullable until created)
  */
 #[Attribute(Attribute::TARGET_CLASS)]
-readonly class OaEntity
+readonly class OpenApiEntity
 {
     public function __construct(
         public string  $entityKey,

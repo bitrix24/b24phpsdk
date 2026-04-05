@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Services;
 
-use Bitrix24\SDK\Attributes\OaEntity;
+use Bitrix24\SDK\Attributes\OpenApiEntity;
 use Bitrix24\SDK\OpenApi\Domain\OaSchemaEntityReader;
 use Bitrix24\SDK\Services\AbstractSelectBuilder;
 use PHPUnit\Framework\Attributes\Test;
@@ -28,14 +28,14 @@ use Symfony\Component\Filesystem\Filesystem;
  * run `php bin/console b24-dev:generate-select-builder` to regenerate.
  *
  * Usage: implement getItemResultClass() returning the FQN of the *ItemResult class
- * that carries the #[OaEntity] attribute. The entity key is read from that attribute.
+ * that carries the #[OpenApiEntity] attribute. The entity key is read from that attribute.
  */
 trait SelectBuilderOaSchemaCoverageTrait
 {
     private const string SCHEMA_FILE = 'docs/open-api/openapi.json';
 
     /**
-     * Fully-qualified class name of the *ItemResult that carries #[OaEntity].
+     * Fully-qualified class name of the *ItemResult that carries #[OpenApiEntity].
      *
      * @return class-string
      */
@@ -46,13 +46,13 @@ trait SelectBuilderOaSchemaCoverageTrait
     private function resolveEntityKey(): string
     {
         $resultClass = $this->getItemResultClass();
-        $attrs = (new \ReflectionClass($resultClass))->getAttributes(OaEntity::class);
+        $attrs = (new \ReflectionClass($resultClass))->getAttributes(OpenApiEntity::class);
         $this->assertNotEmpty(
             $attrs,
-            sprintf('Class %s has no #[OaEntity] attribute', $resultClass)
+            sprintf('Class %s has no #[OpenApiEntity] attribute', $resultClass)
         );
 
-        /** @var OaEntity $oaEntity */
+        /** @var OpenApiEntity $oaEntity */
         $oaEntity = $attrs[0]->newInstance();
 
         return $oaEntity->entityKey;
