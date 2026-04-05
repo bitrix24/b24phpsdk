@@ -13,27 +13,24 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Services\Main\Service;
 
-use Bitrix24\SDK\Services\AbstractSelectBuilder;
 use Bitrix24\SDK\Services\Main\Result\EventLogItemResult;
 use Bitrix24\SDK\Services\Main\Service\EventLogSelectBuilder;
-use Bitrix24\SDK\Tests\Unit\Services\SelectBuilderOaSchemaCoverageTrait;
+use Bitrix24\SDK\Tests\CustomAssertions\SelectBuilderAssertions;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(EventLogSelectBuilder::class)]
 class EventLogSelectBuilderTest extends TestCase
 {
-    use SelectBuilderOaSchemaCoverageTrait;
-
-    #[\Override]
-    protected function getItemResultClass(): string
+    #[Test]
+    #[TestDox('EventLogSelectBuilder covers all fields from OpenAPI schema for bitrix.main.eventlogdto')]
+    public function testCoversAllOpenApiSchemaFields(): void
     {
-        return EventLogItemResult::class;
-    }
-
-    #[\Override]
-    protected function getSelectBuilder(): AbstractSelectBuilder
-    {
-        return new EventLogSelectBuilder();
+        SelectBuilderAssertions::assertCoversOpenApiSchema(
+            new EventLogSelectBuilder(),
+            EventLogItemResult::class
+        );
     }
 }

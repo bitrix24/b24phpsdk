@@ -13,27 +13,24 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Services\Task\Service;
 
-use Bitrix24\SDK\Services\AbstractSelectBuilder;
 use Bitrix24\SDK\Services\Task\Result\TaskItemResult;
 use Bitrix24\SDK\Services\Task\Service\TaskItemSelectBuilder;
-use Bitrix24\SDK\Tests\Unit\Services\SelectBuilderOaSchemaCoverageTrait;
+use Bitrix24\SDK\Tests\CustomAssertions\SelectBuilderAssertions;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(TaskItemSelectBuilder::class)]
 class TaskItemSelectBuilderTest extends TestCase
 {
-    use SelectBuilderOaSchemaCoverageTrait;
-
-    #[\Override]
-    protected function getItemResultClass(): string
+    #[Test]
+    #[TestDox('TaskItemSelectBuilder covers all fields from OpenAPI schema for bitrix.tasks.taskdto')]
+    public function testCoversAllOpenApiSchemaFields(): void
     {
-        return TaskItemResult::class;
-    }
-
-    #[\Override]
-    protected function getSelectBuilder(): AbstractSelectBuilder
-    {
-        return new TaskItemSelectBuilder();
+        SelectBuilderAssertions::assertCoversOpenApiSchema(
+            new TaskItemSelectBuilder(),
+            TaskItemResult::class
+        );
     }
 }

@@ -26,26 +26,26 @@ class OpenApiEntityAttributeTest extends TestCase
     #[TestDox('attribute can be created with entityKey only')]
     public function testCreateWithEntityKeyOnly(): void
     {
-        $oaEntity = new OpenApiEntity('bitrix.tasks.taskdto');
+        $openApiEntity = new OpenApiEntity('bitrix.tasks.taskdto');
 
-        $this->assertSame('bitrix.tasks.taskdto', $oaEntity->entityKey);
-        $this->assertNull($oaEntity->selectBuilder);
-        $this->assertNull($oaEntity->itemBuilder);
+        $this->assertSame('bitrix.tasks.taskdto', $openApiEntity->entityKey);
+        $this->assertNull($openApiEntity->selectBuilder);
+        $this->assertNull($openApiEntity->itemBuilder);
     }
 
     #[Test]
     #[TestDox('attribute stores all provided class references')]
     public function testCreateWithAllParameters(): void
     {
-        $oaEntity = new OpenApiEntity(
+        $openApiEntity = new OpenApiEntity(
             entityKey:     'bitrix.tasks.taskdto',
             selectBuilder: \stdClass::class,
             itemBuilder:   \stdClass::class,
         );
 
-        $this->assertSame('bitrix.tasks.taskdto', $oaEntity->entityKey);
-        $this->assertSame(\stdClass::class, $oaEntity->selectBuilder);
-        $this->assertSame(\stdClass::class, $oaEntity->itemBuilder);
+        $this->assertSame('bitrix.tasks.taskdto', $openApiEntity->entityKey);
+        $this->assertSame(\stdClass::class, $openApiEntity->selectBuilder);
+        $this->assertSame(\stdClass::class, $openApiEntity->itemBuilder);
     }
 
     #[Test]
@@ -60,8 +60,8 @@ class OpenApiEntityAttributeTest extends TestCase
 
         $this->assertCount(1, $attrs);
 
-        /** @var OpenApiEntity $oaEntity */
-        $oaEntity = $attrs[0]->newInstance();
-        $this->assertSame('bitrix.tasks.taskdto', $oaEntity->entityKey);
+        /** @var OpenApiEntity $openApiEntity */
+        $openApiEntity = $attrs[0]->newInstance();
+        $this->assertSame('bitrix.tasks.taskdto', $openApiEntity->entityKey);
     }
 }
