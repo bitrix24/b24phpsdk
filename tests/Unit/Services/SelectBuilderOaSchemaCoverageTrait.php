@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Unit\Services;
 
 use Bitrix24\SDK\Attributes\OpenApiEntity;
-use Bitrix24\SDK\OpenApi\Domain\OaSchemaEntityReader;
+use Bitrix24\SDK\OpenApi\Domain\OpenApiSchemaEntityReader;
 use Bitrix24\SDK\Services\AbstractSelectBuilder;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -64,7 +64,7 @@ trait SelectBuilderOaSchemaCoverageTrait
     {
         $entityKey = $this->resolveEntityKey();
 
-        $schemaFields = (new OaSchemaEntityReader(new Filesystem()))
+        $schemaFields = (new OpenApiSchemaEntityReader(new Filesystem()))
             ->getSelectableFields(self::SCHEMA_FILE, $entityKey);
 
         $selected = $this->getSelectBuilder()->allSystemFields()->buildSelect();

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Infrastructure\Console\Commands\Generator;
 
 use Bitrix24\SDK\CodeGenerator\SelectBuilderCodeGenerator;
-use Bitrix24\SDK\OpenApi\Domain\OaSchemaEntityReader;
+use Bitrix24\SDK\OpenApi\Domain\OpenApiSchemaEntityReader;
 use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -42,7 +42,7 @@ class GenerateSelectBuilderCommand extends Command
     private const SCHEMA_FILE = 'schema-file';
 
     public function __construct(
-        private readonly OaSchemaEntityReader $entityReader,
+        private readonly OpenApiSchemaEntityReader $entityReader,
         private readonly SelectBuilderCodeGenerator $codeGenerator,
         private readonly Filesystem $filesystem,
     ) {

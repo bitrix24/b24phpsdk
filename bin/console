@@ -18,7 +18,7 @@ use Bitrix24\SDK\Infrastructure\Console\Commands\Metadata\DevWebhookResolver;
 use Bitrix24\SDK\Infrastructure\Console\Commands\Metadata\ShowV3FieldMetadataCommand;
 use Bitrix24\SDK\Infrastructure\Console\Commands\ShowFieldsDescriptionCommand;
 use Bitrix24\SDK\OpenApi\Domain\OaFieldListMethodResolver;
-use Bitrix24\SDK\OpenApi\Domain\OaSchemaEntityReader;
+use Bitrix24\SDK\OpenApi\Domain\OpenApiSchemaEntityReader;
 use Bitrix24\SDK\OpenApi\Domain\OaSchemaMethodReader;
 use Bitrix24\SDK\OpenApi\Domain\OaSdkCoverageCalculator;
 use Bitrix24\SDK\OpenApi\Domain\OaToSdkMethodNormalizationPolicy;
@@ -102,7 +102,7 @@ $application->addCommand(
 );
 $application->addCommand(
     new GenerateSelectBuilderCommand(
-        new OaSchemaEntityReader(new Symfony\Component\Filesystem\Filesystem()),
+        new OpenApiSchemaEntityReader(new Symfony\Component\Filesystem\Filesystem()),
         new SelectBuilderCodeGenerator(),
         new Symfony\Component\Filesystem\Filesystem()
     )

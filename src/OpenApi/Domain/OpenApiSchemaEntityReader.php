@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\OpenApi\Domain;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 
-readonly class OaSchemaEntityReader
+readonly class OpenApiSchemaEntityReader
 {
     public function __construct(private Filesystem $filesystem)
     {

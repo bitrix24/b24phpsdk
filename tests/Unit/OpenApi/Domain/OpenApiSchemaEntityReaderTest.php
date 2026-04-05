@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\OpenApi\Domain;
 
-use Bitrix24\SDK\OpenApi\Domain\OaSchemaEntityReader;
+use Bitrix24\SDK\OpenApi\Domain\OpenApiSchemaEntityReader;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -21,17 +21,17 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 
-#[CoversClass(OaSchemaEntityReader::class)]
-class OaSchemaEntityReaderTest extends TestCase
+#[CoversClass(OpenApiSchemaEntityReader::class)]
+class OpenApiSchemaEntityReaderTest extends TestCase
 {
     private const string FIXTURE = __DIR__ . '/fixtures/openapi-entity-schemas.json';
 
-    private OaSchemaEntityReader $reader;
+    private OpenApiSchemaEntityReader $reader;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->reader = new OaSchemaEntityReader(new Filesystem());
+        $this->reader = new OpenApiSchemaEntityReader(new Filesystem());
     }
 
     #[Test]
