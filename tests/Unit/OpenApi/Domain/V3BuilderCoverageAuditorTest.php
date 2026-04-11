@@ -37,14 +37,17 @@ use Symfony\Component\Filesystem\Filesystem;
 class V3BuilderCoverageAuditorTest extends TestCase
 {
     private V3BuilderCoverageAuditor $auditor;
+
     private string $schemaFile;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->auditor = new V3BuilderCoverageAuditor(new OpenApiSchemaEntityReader(new Filesystem()));
         $this->schemaFile = sys_get_temp_dir() . '/test_openapi_' . uniqid() . '.json';
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         @unlink($this->schemaFile);
@@ -65,8 +68,9 @@ class V3BuilderCoverageAuditorTest extends TestCase
         } else {
             $this->writeSchema($entityKeys);
         }
-        $report = $this->auditor->audit($this->schemaFile, $sdkClassNames);
-        $assertions($report);
+
+        $v3BuilderCoverageReport = $this->auditor->audit($this->schemaFile, $sdkClassNames);
+        $assertions($v3BuilderCoverageReport);
     }
 
     public static function auditScenariosProvider(): Generator
@@ -74,103 +78,103 @@ class V3BuilderCoverageAuditorTest extends TestCase
         yield 'all entities mapped and valid — zero issues' => [
             ['test.fixture.fulldto'],
             [FullCoverageResult::class],
-            static function (V3BuilderCoverageReport $r): void {
-                self::assertSame(1, $r->totalOpenApiEntities);
-                self::assertSame(1, $r->mappedEntities);
-                self::assertSame([], $r->unmappedEntities);
-                self::assertSame([], $r->missingSelectBuilders);
-                self::assertSame([], $r->missingItemBuilders);
-                self::assertSame([], $r->invalidBuilderReferences);
-                self::assertSame([], $r->selectCoverageMismatches);
-                self::assertSame([], $r->sdkOnlyMappings);
-                self::assertSame([], $r->duplicateEntityKeyMappings);
+            static function (V3BuilderCoverageReport $v3BuilderCoverageReport): void {
+                self::assertSame(1, $v3BuilderCoverageReport->totalOpenApiEntities);
+                self::assertSame(1, $v3BuilderCoverageReport->mappedEntities);
+                self::assertSame([], $v3BuilderCoverageReport->unmappedEntities);
+                self::assertSame([], $v3BuilderCoverageReport->missingSelectBuilders);
+                self::assertSame([], $v3BuilderCoverageReport->missingItemBuilders);
+                self::assertSame([], $v3BuilderCoverageReport->invalidBuilderReferences);
+                self::assertSame([], $v3BuilderCoverageReport->selectCoverageMismatches);
+                self::assertSame([], $v3BuilderCoverageReport->sdkOnlyMappings);
+                self::assertSame([], $v3BuilderCoverageReport->duplicateEntityKeyMappings);
             },
         ];
 
         yield 'DTO in snapshot without SDK mapping — appears in unmappedEntities' => [
             ['test.fixture.unmappeddto'],
             [],
-            static function (V3BuilderCoverageReport $r): void {
-                self::assertSame(['test.fixture.unmappeddto'], $r->unmappedEntities);
-                self::assertSame(0, $r->mappedEntities);
+            static function (V3BuilderCoverageReport $v3BuilderCoverageReport): void {
+                self::assertSame(['test.fixture.unmappeddto'], $v3BuilderCoverageReport->unmappedEntities);
+                self::assertSame(0, $v3BuilderCoverageReport->mappedEntities);
             },
         ];
 
         yield 'mapping present, selectBuilder is null — appears in missingSelectBuilders' => [
             ['test.fixture.missingselectdto'],
             [MissingSelectBuilderResult::class],
-            static function (V3BuilderCoverageReport $r): void {
-                self::assertContains('test.fixture.missingselectdto', $r->missingSelectBuilders);
-                self::assertSame([], $r->invalidBuilderReferences);
+            static function (V3BuilderCoverageReport $v3BuilderCoverageReport): void {
+                self::assertContains('test.fixture.missingselectdto', $v3BuilderCoverageReport->missingSelectBuilders);
+                self::assertSame([], $v3BuilderCoverageReport->invalidBuilderReferences);
             },
         ];
 
         yield 'mapping present, itemBuilder is null — appears in missingItemBuilders' => [
             ['test.fixture.missingitemdto'],
             [MissingItemBuilderResult::class],
-            static function (V3BuilderCoverageReport $r): void {
-                self::assertContains('test.fixture.missingitemdto', $r->missingItemBuilders);
-                self::assertSame([], $r->invalidBuilderReferences);
+            static function (V3BuilderCoverageReport $v3BuilderCoverageReport): void {
+                self::assertContains('test.fixture.missingitemdto', $v3BuilderCoverageReport->missingItemBuilders);
+                self::assertSame([], $v3BuilderCoverageReport->invalidBuilderReferences);
             },
         ];
 
         yield 'selectBuilder class does not exist — appears in invalidBuilderReferences' => [
             ['test.fixture.nonexistentselectdto'],
             [NonExistentSelectBuilderResult::class],
-            static function (V3BuilderCoverageReport $r): void {
-                self::assertCount(1, $r->invalidBuilderReferences);
-                self::assertSame('test.fixture.nonexistentselectdto', $r->invalidBuilderReferences[0]['entityKey']);
-                self::assertSame('class does not exist', $r->invalidBuilderReferences[0]['reason']);
+            static function (V3BuilderCoverageReport $v3BuilderCoverageReport): void {
+                self::assertCount(1, $v3BuilderCoverageReport->invalidBuilderReferences);
+                self::assertSame('test.fixture.nonexistentselectdto', $v3BuilderCoverageReport->invalidBuilderReferences[0]['entityKey']);
+                self::assertSame('class does not exist', $v3BuilderCoverageReport->invalidBuilderReferences[0]['reason']);
             },
         ];
 
         yield 'itemBuilder class does not exist — appears in invalidBuilderReferences' => [
             ['test.fixture.nonexistentitemdto'],
             [NonExistentItemBuilderResult::class],
-            static function (V3BuilderCoverageReport $r): void {
-                self::assertCount(1, $r->invalidBuilderReferences);
-                self::assertSame('test.fixture.nonexistentitemdto', $r->invalidBuilderReferences[0]['entityKey']);
-                self::assertSame('class does not exist', $r->invalidBuilderReferences[0]['reason']);
+            static function (V3BuilderCoverageReport $v3BuilderCoverageReport): void {
+                self::assertCount(1, $v3BuilderCoverageReport->invalidBuilderReferences);
+                self::assertSame('test.fixture.nonexistentitemdto', $v3BuilderCoverageReport->invalidBuilderReferences[0]['entityKey']);
+                self::assertSame('class does not exist', $v3BuilderCoverageReport->invalidBuilderReferences[0]['reason']);
             },
         ];
 
         yield 'selectBuilder does not extend AbstractSelectBuilder — appears in invalidBuilderReferences' => [
             ['test.fixture.wrongselecttypedto'],
             [WrongSelectBuilderTypeResult::class],
-            static function (V3BuilderCoverageReport $r): void {
-                self::assertCount(1, $r->invalidBuilderReferences);
-                self::assertSame('test.fixture.wrongselecttypedto', $r->invalidBuilderReferences[0]['entityKey']);
-                self::assertStringContainsString('does not extend', $r->invalidBuilderReferences[0]['reason']);
+            static function (V3BuilderCoverageReport $v3BuilderCoverageReport): void {
+                self::assertCount(1, $v3BuilderCoverageReport->invalidBuilderReferences);
+                self::assertSame('test.fixture.wrongselecttypedto', $v3BuilderCoverageReport->invalidBuilderReferences[0]['entityKey']);
+                self::assertStringContainsString('does not extend', $v3BuilderCoverageReport->invalidBuilderReferences[0]['reason']);
             },
         ];
 
         yield 'selectBuilder missing OpenAPI fields — appears in selectCoverageMismatches' => [
             ['test.fixture.partialcoveragedto'],
             [PartialCoverageResult::class],
-            static function (V3BuilderCoverageReport $r): void {
-                self::assertCount(1, $r->selectCoverageMismatches);
-                self::assertSame('test.fixture.partialcoveragedto', $r->selectCoverageMismatches[0]['entityKey']);
-                self::assertContains('title', $r->selectCoverageMismatches[0]['missingFields']);
+            static function (V3BuilderCoverageReport $v3BuilderCoverageReport): void {
+                self::assertCount(1, $v3BuilderCoverageReport->selectCoverageMismatches);
+                self::assertSame('test.fixture.partialcoveragedto', $v3BuilderCoverageReport->selectCoverageMismatches[0]['entityKey']);
+                self::assertContains('title', $v3BuilderCoverageReport->selectCoverageMismatches[0]['missingFields']);
             },
         ];
 
         yield '#[OpenApiEntity] points to unknown entityKey — appears in sdkOnlyMappings' => [
             [],
             [UnknownEntityKeyResult::class],
-            static function (V3BuilderCoverageReport $r): void {
-                self::assertCount(1, $r->sdkOnlyMappings);
-                self::assertSame('unknown.entity.thisdoesnotexist', $r->sdkOnlyMappings[0]['entityKey']);
+            static function (V3BuilderCoverageReport $v3BuilderCoverageReport): void {
+                self::assertCount(1, $v3BuilderCoverageReport->sdkOnlyMappings);
+                self::assertSame('unknown.entity.thisdoesnotexist', $v3BuilderCoverageReport->sdkOnlyMappings[0]['entityKey']);
             },
         ];
 
         yield 'sub-entity referenced via $ref is excluded from unmapped' => [
             [],  // unused when customSchema is provided
             [FullCoverageResult::class],
-            static function (V3BuilderCoverageReport $r): void {
+            static function (V3BuilderCoverageReport $v3BuilderCoverageReport): void {
                 // 'test.fixture.subdto' is a $ref target inside 'test.fixture.fulldto',
                 // so it must NOT appear in unmappedEntities (it is a nested sub-type)
-                self::assertNotContains('test.fixture.subdto', $r->unmappedEntities);
-                self::assertSame(1, $r->totalOpenApiEntities, 'only root entity counts');
+                self::assertNotContains('test.fixture.subdto', $v3BuilderCoverageReport->unmappedEntities);
+                self::assertSame(1, $v3BuilderCoverageReport->totalOpenApiEntities, 'only root entity counts');
             },
             [
                 'components' => [
@@ -198,22 +202,22 @@ class V3BuilderCoverageAuditorTest extends TestCase
         yield 'entity from different module prefix not included in unmapped' => [
             ['test.fixture.fulldto', 'other.module.unrelatedto'],
             [FullCoverageResult::class],
-            static function (V3BuilderCoverageReport $r): void {
+            static function (V3BuilderCoverageReport $v3BuilderCoverageReport): void {
                 // 'other.module.unrelatedto' must NOT appear — it is outside prefix 'test.fixture'
-                self::assertNotContains('other.module.unrelatedto', $r->unmappedEntities);
+                self::assertNotContains('other.module.unrelatedto', $v3BuilderCoverageReport->unmappedEntities);
                 // totalOpenApiEntities must reflect only the filtered set
-                self::assertSame(1, $r->totalOpenApiEntities);
+                self::assertSame(1, $v3BuilderCoverageReport->totalOpenApiEntities);
             },
         ];
 
         yield 'orphaned DTO not referenced in any API path — excluded from totalOpenApiEntities' => [
             [],  // unused when customSchema is provided
             [],
-            static function (V3BuilderCoverageReport $r): void {
+            static function (V3BuilderCoverageReport $v3BuilderCoverageReport): void {
                 // 'test.fixture.orphandto' is defined in schema but never referenced in any
                 // API path ($ref), so it is excluded — not counted, not unmapped
-                self::assertNotContains('test.fixture.orphandto', $r->unmappedEntities);
-                self::assertSame(0, $r->totalOpenApiEntities);
+                self::assertNotContains('test.fixture.orphandto', $v3BuilderCoverageReport->unmappedEntities);
+                self::assertSame(0, $v3BuilderCoverageReport->totalOpenApiEntities);
             },
             [
                 'paths' => [],
@@ -234,11 +238,11 @@ class V3BuilderCoverageAuditorTest extends TestCase
         yield 'two result classes with same entityKey — appears in duplicateEntityKeyMappings' => [
             ['test.fixture.duplicatedto'],
             [DuplicateEntityKeyResult1::class, DuplicateEntityKeyResult2::class],
-            static function (V3BuilderCoverageReport $r): void {
-                self::assertCount(1, $r->duplicateEntityKeyMappings);
-                self::assertSame('test.fixture.duplicatedto', $r->duplicateEntityKeyMappings[0]['entityKey']);
-                self::assertCount(2, $r->duplicateEntityKeyMappings[0]['resultClasses']);
-                self::assertSame([], $r->invalidBuilderReferences);
+            static function (V3BuilderCoverageReport $v3BuilderCoverageReport): void {
+                self::assertCount(1, $v3BuilderCoverageReport->duplicateEntityKeyMappings);
+                self::assertSame('test.fixture.duplicatedto', $v3BuilderCoverageReport->duplicateEntityKeyMappings[0]['entityKey']);
+                self::assertCount(2, $v3BuilderCoverageReport->duplicateEntityKeyMappings[0]['resultClasses']);
+                self::assertSame([], $v3BuilderCoverageReport->invalidBuilderReferences);
             },
         ];
     }
@@ -254,21 +258,21 @@ class V3BuilderCoverageAuditorTest extends TestCase
     {
         $schemas = [];
         $paths = [];
-        foreach ($entityKeys as $key) {
-            $schemas[$key] = [
+        foreach ($entityKeys as $entityKey) {
+            $schemas[$entityKey] = [
                 'type' => 'object',
                 'properties' => [
                     'id' => ['type' => 'integer'],
                     'title' => ['type' => 'string'],
                 ],
             ];
-            $paths['/fake/' . str_replace('.', '-', $key)] = [
+            $paths['/fake/' . str_replace('.', '-', $entityKey)] = [
                 'get' => [
                     'responses' => [
                         '200' => [
                             'content' => [
                                 'application/json' => [
-                                    'schema' => ['$ref' => '#/components/schemas/' . $key],
+                                    'schema' => ['$ref' => '#/components/schemas/' . $entityKey],
                                 ],
                             ],
                         ],

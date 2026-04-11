@@ -28,8 +28,10 @@ use Symfony\Component\Finder\Finder;
 class ShowV3BuilderCoverageCommandTest extends TestCase
 {
     private V3BuilderCoverageReport $cleanReport;
+
     private V3BuilderCoverageReport $reportWithIssues;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->cleanReport = new V3BuilderCoverageReport(
@@ -61,10 +63,10 @@ class ShowV3BuilderCoverageCommandTest extends TestCase
         );
     }
 
-    private function buildCommand(V3BuilderCoverageReport $report): ShowV3BuilderCoverageCommand
+    private function buildCommand(V3BuilderCoverageReport $v3BuilderCoverageReport): ShowV3BuilderCoverageCommand
     {
         $auditor = $this->createStub(V3BuilderCoverageAuditor::class);
-        $auditor->method('audit')->willReturn($report);
+        $auditor->method('audit')->willReturn($v3BuilderCoverageReport);
 
         return new ShowV3BuilderCoverageCommand($auditor, new Finder(), new NullLogger());
     }
@@ -72,22 +74,22 @@ class ShowV3BuilderCoverageCommandTest extends TestCase
     #[Test]
     public function testSummaryCountersAppearInDefaultOutput(): void
     {
-        $tester = new CommandTester($this->buildCommand($this->cleanReport));
-        $tester->execute(['scope' => 'task']);
+        $commandTester = new CommandTester($this->buildCommand($this->cleanReport));
+        $commandTester->execute(['scope' => 'task']);
 
-        self::assertSame(Command::SUCCESS, $tester->getStatusCode());
-        self::assertStringContainsString('OpenAPI DTO count:', $tester->getDisplay());
-        self::assertStringContainsString('Mapped SDK entities:', $tester->getDisplay());
+        self::assertSame(Command::SUCCESS, $commandTester->getStatusCode());
+        self::assertStringContainsString('OpenAPI DTO count:', $commandTester->getDisplay());
+        self::assertStringContainsString('Mapped SDK entities:', $commandTester->getDisplay());
     }
 
     #[Test]
     public function testFormatJsonOutputsValidJson(): void
     {
-        $tester = new CommandTester($this->buildCommand($this->cleanReport));
-        $tester->execute(['scope' => 'task', '--format' => 'json']);
+        $commandTester = new CommandTester($this->buildCommand($this->cleanReport));
+        $commandTester->execute(['scope' => 'task', '--format' => 'json']);
 
-        self::assertSame(Command::SUCCESS, $tester->getStatusCode());
-        $decoded = json_decode($tester->getDisplay(), true);
+        self::assertSame(Command::SUCCESS, $commandTester->getStatusCode());
+        $decoded = json_decode($commandTester->getDisplay(), true);
         self::assertIsArray($decoded);
         self::assertArrayHasKey('totalOpenApiEntities', $decoded);
         self::assertArrayHasKey('duplicateEntityKeyMappings', $decoded);
@@ -96,58 +98,58 @@ class ShowV3BuilderCoverageCommandTest extends TestCase
     #[Test]
     public function testShowUnmappedPrintsTable(): void
     {
-        $tester = new CommandTester($this->buildCommand($this->reportWithIssues));
-        $tester->execute(['scope' => 'task', '--show-unmapped' => true]);
+        $commandTester = new CommandTester($this->buildCommand($this->reportWithIssues));
+        $commandTester->execute(['scope' => 'task', '--show-unmapped' => true]);
 
-        self::assertStringContainsString('some.unmapped.dto', $tester->getDisplay());
+        self::assertStringContainsString('some.unmapped.dto', $commandTester->getDisplay());
     }
 
     #[Test]
     public function testShowMissingSelectPrintsTable(): void
     {
-        $tester = new CommandTester($this->buildCommand($this->reportWithIssues));
-        $tester->execute(['scope' => 'task', '--show-missing-select' => true]);
+        $commandTester = new CommandTester($this->buildCommand($this->reportWithIssues));
+        $commandTester->execute(['scope' => 'task', '--show-missing-select' => true]);
 
-        self::assertStringContainsString('some.missing.select', $tester->getDisplay());
+        self::assertStringContainsString('some.missing.select', $commandTester->getDisplay());
     }
 
     #[Test]
     public function testShowMissingItemPrintsTable(): void
     {
-        $tester = new CommandTester($this->buildCommand($this->reportWithIssues));
-        $tester->execute(['scope' => 'task', '--show-missing-item' => true]);
+        $commandTester = new CommandTester($this->buildCommand($this->reportWithIssues));
+        $commandTester->execute(['scope' => 'task', '--show-missing-item' => true]);
 
-        self::assertStringContainsString('some.missing.item', $tester->getDisplay());
+        self::assertStringContainsString('some.missing.item', $commandTester->getDisplay());
     }
 
     #[Test]
     public function testShowInvalidPrintsTable(): void
     {
-        $tester = new CommandTester($this->buildCommand($this->reportWithIssues));
-        $tester->execute(['scope' => 'task', '--show-invalid' => true]);
+        $commandTester = new CommandTester($this->buildCommand($this->reportWithIssues));
+        $commandTester->execute(['scope' => 'task', '--show-invalid' => true]);
 
-        self::assertStringContainsString('BadClass', $tester->getDisplay());
-        self::assertStringContainsString('class does not exist', $tester->getDisplay());
+        self::assertStringContainsString('BadClass', $commandTester->getDisplay());
+        self::assertStringContainsString('class does not exist', $commandTester->getDisplay());
     }
 
     #[Test]
     public function testShowSelectMismatchesPrintsTable(): void
     {
-        $tester = new CommandTester($this->buildCommand($this->reportWithIssues));
-        $tester->execute(['scope' => 'task', '--show-select-mismatches' => true]);
+        $commandTester = new CommandTester($this->buildCommand($this->reportWithIssues));
+        $commandTester->execute(['scope' => 'task', '--show-select-mismatches' => true]);
 
-        self::assertStringContainsString('partial.entity', $tester->getDisplay());
-        self::assertStringContainsString('title', $tester->getDisplay());
+        self::assertStringContainsString('partial.entity', $commandTester->getDisplay());
+        self::assertStringContainsString('title', $commandTester->getDisplay());
     }
 
     #[Test]
     public function testShowDuplicatesPrintsTable(): void
     {
-        $tester = new CommandTester($this->buildCommand($this->reportWithIssues));
-        $tester->execute(['scope' => 'task', '--show-duplicates' => true]);
+        $commandTester = new CommandTester($this->buildCommand($this->reportWithIssues));
+        $commandTester->execute(['scope' => 'task', '--show-duplicates' => true]);
 
-        self::assertStringContainsString('dup.entity', $tester->getDisplay());
-        self::assertStringContainsString('ResultA', $tester->getDisplay());
+        self::assertStringContainsString('dup.entity', $commandTester->getDisplay());
+        self::assertStringContainsString('ResultA', $commandTester->getDisplay());
     }
 
     #[Test]
@@ -158,28 +160,28 @@ class ShowV3BuilderCoverageCommandTest extends TestCase
             ->method('audit')
             ->willReturn($this->cleanReport);
 
-        $command = new ShowV3BuilderCoverageCommand($auditor, new Finder(), new NullLogger());
-        $tester = new CommandTester($command);
-        $tester->execute(['scope' => 'task']);
+        $showV3BuilderCoverageCommand = new ShowV3BuilderCoverageCommand($auditor, new Finder(), new NullLogger());
+        $commandTester = new CommandTester($showV3BuilderCoverageCommand);
+        $commandTester->execute(['scope' => 'task']);
 
-        self::assertSame(Command::SUCCESS, $tester->getStatusCode());
+        self::assertSame(Command::SUCCESS, $commandTester->getStatusCode());
     }
 
     #[Test]
     public function testNonExistentScopeReturnsInvalid(): void
     {
-        $tester = new CommandTester($this->buildCommand($this->cleanReport));
-        $tester->execute(['scope' => 'nonexistentscope99']);
+        $commandTester = new CommandTester($this->buildCommand($this->cleanReport));
+        $commandTester->execute(['scope' => 'nonexistentscope99']);
 
-        self::assertSame(Command::INVALID, $tester->getStatusCode());
+        self::assertSame(Command::INVALID, $commandTester->getStatusCode());
     }
 
     #[Test]
     public function testInvalidFormatReturnsInvalid(): void
     {
-        $tester = new CommandTester($this->buildCommand($this->cleanReport));
-        $tester->execute(['scope' => 'task', '--format' => 'xml']);
+        $commandTester = new CommandTester($this->buildCommand($this->cleanReport));
+        $commandTester->execute(['scope' => 'task', '--format' => 'xml']);
 
-        self::assertSame(Command::INVALID, $tester->getStatusCode());
+        self::assertSame(Command::INVALID, $commandTester->getStatusCode());
     }
 }
