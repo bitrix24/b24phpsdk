@@ -24,7 +24,7 @@ use Symfony\Component\Filesystem\Filesystem;
 #[CoversClass(OpenApiSchemaEntityReader::class)]
 class OpenApiSchemaEntityReaderTest extends TestCase
 {
-    private const string FIXTURE = __DIR__ . '/fixtures/openapi-entity-schemas.json';
+    private const string FIXTURE = __DIR__ . '/Fixtures/openapi-entity-schemas.json';
 
     private OpenApiSchemaEntityReader $reader;
 

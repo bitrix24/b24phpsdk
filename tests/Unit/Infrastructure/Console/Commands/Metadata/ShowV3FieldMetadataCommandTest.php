@@ -57,7 +57,7 @@ class SpyBitrix24V3FieldMetadataFetcher extends Bitrix24V3FieldMetadataFetcher
 
 class ShowV3FieldMetadataCommandTest extends TestCase
 {
-    private const string SCHEMA_FIXTURE = __DIR__ . '/../../../../OpenApi/Domain/fixtures/openapi-field-list-methods.json';
+    private const string SCHEMA_FIXTURE = __DIR__ . '/../../../../OpenApi/Domain/Fixtures/openapi-field-list-methods.json';
 
     /**
      * @var array<string, string|null>

@@ -26,7 +26,7 @@ class OaSchemaMethodReaderTest extends TestCase
     {
         $oaSchemaMethodReader = new OaSchemaMethodReader(new Filesystem(), new OaToSdkMethodNormalizationPolicy());
 
-        $methods = $oaSchemaMethodReader->readMethodNames(__DIR__ . '/fixtures/openapi-methods.json');
+        $methods = $oaSchemaMethodReader->readMethodNames(__DIR__ . '/Fixtures/openapi-methods.json');
 
         $this->assertSame([
             'documentation',
