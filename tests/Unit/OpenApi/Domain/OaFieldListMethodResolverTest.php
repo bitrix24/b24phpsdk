@@ -23,7 +23,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class OaFieldListMethodResolverTest extends TestCase
 {
-    private const string SCHEMA_FIXTURE = __DIR__ . '/fixtures/openapi-field-list-methods.json';
+    private const string SCHEMA_FIXTURE = __DIR__ . '/Fixtures/openapi-field-list-methods.json';
 
     #[Test]
     public function itExtractsEntityKeysFromFieldListMethodsOnly(): void

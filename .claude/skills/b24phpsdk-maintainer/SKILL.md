@@ -609,12 +609,20 @@ git checkout -b <branch-name>
 .tasks/<issue-number>/
 ```
 
-### Step 7 — Write the plan draft
+### Step 7 — Brainstorm before writing the plan
+
+**Required**: invoke `superpowers:brainstorming` before writing the plan.
+
+Use the issue body, API documentation gathered in Step 2, and existing SDK patterns as input.
+The brainstorming output informs the Context and design decisions in `plan.md`.
+Do not start writing the plan until brainstorming is complete.
+
+### Step 8 — Write the plan draft
 
 Create `.tasks/<issue-number>/plan.md` using the structure defined in the
 **«Task folder and implementation plan»** section above.
 
-### Step 8 — Self-review the plan, then present for approval
+### Step 9 — Self-review the plan, then present for approval
 
 Before showing the plan to the user, check it against three criteria:
 
@@ -646,6 +654,17 @@ Plan review:
 
 Then present the plan and **wait for explicit approval** before writing any production code.
 
+### Step 10 — Apply TDD during implementation
+
+**Required**: invoke `superpowers:test-driven-development` after plan approval, before writing any production code.
+
+Follow the RED-GREEN-REFACTOR cycle for each service method in the plan:
+- RED: write failing unit test first
+- GREEN: write minimal production code to pass it
+- REFACTOR: clean up while keeping tests green
+
+Do not write production code before having a failing test. This applies to every method in the plan, not just the first one.
+
 ---
 
 ## Post-implementation quality gate
@@ -666,7 +685,7 @@ make test-unit
 ```
 
 Rules for phase 1:
-- If any command fails, fix the errors and re-run **that command** until it passes before continuing to the next.
+- If any command fails, invoke `superpowers:systematic-debugging` before attempting a fix — diagnose root cause first, then fix.
 - Do not add entries to `deptrac.yaml` → `skip_violations` to silence a new violation — fix the import instead.
 - Only proceed to phase 2 when all five commands pass without errors.
 
@@ -679,7 +698,7 @@ make test-integration-<scope>   # the suite added for this issue
 ```
 
 Rules for phase 2:
-- If the suite fails, fix the root cause and re-run until it passes.
+- If the suite fails, invoke `superpowers:systematic-debugging` before attempting a fix.
 - Do not skip or comment out failing tests — fix the root cause.
 
 ### Phase 3 — Update CHANGELOG.md
@@ -709,6 +728,10 @@ Report the status to the user:
 ## Creating a Pull Request after a green quality gate
 
 Run this step **only after both phases of the quality gate are fully green and CHANGELOG is updated**.
+
+**Required before starting:**
+1. Invoke `superpowers:verification-before-completion` — run all quality gate commands again, capture actual output, confirm every command passes. Do not create the PR based on remembered results.
+2. Read the PR template from disk: `cat .github/PULL_REQUEST_TEMPLATE.md` — the PR body MUST follow this template. Do not use a memorised or hardcoded structure.
 
 ### Step 1 — Push the branch
 
