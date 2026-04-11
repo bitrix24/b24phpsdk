@@ -16,9 +16,12 @@ namespace Bitrix24\SDK\OpenApi\Domain;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 
-readonly class OpenApiSchemaEntityReader
+class OpenApiSchemaEntityReader
 {
-    public function __construct(private Filesystem $filesystem)
+    /** @var array<string, array<string, mixed>> */
+    private array $schemaCache = [];
+
+    public function __construct(private readonly Filesystem $filesystem)
     {
     }
 
@@ -30,7 +33,9 @@ readonly class OpenApiSchemaEntityReader
     public function getEntityKeys(string $schemaFile): array
     {
         $schema = $this->loadSchema($schemaFile);
-        $keys = array_keys($schema['components']['schemas'] ?? []);
+        /** @var array<string, mixed> $schemas */
+        $schemas = $schema['components']['schemas'] ?? [];
+        $keys = array_keys($schemas);
         sort($keys);
 
         return array_values($keys);
@@ -80,10 +85,60 @@ readonly class OpenApiSchemaEntityReader
     }
 
     /**
+     * Returns entity keys that appear as $ref targets anywhere inside the paths section.
+     * These are the entity keys actually connected to an API method (request / response).
+     * Sub-types referenced only inside components/schemas and orphaned DTOs with no path
+     * reference are NOT included.
+     *
+     * @return list<string>
+     */
+    public function getEntityKeysUsedInApiPaths(string $schemaFile): array
+    {
+        $schema = $this->loadSchema($schemaFile);
+        $paths = $schema['paths'] ?? [];
+
+        $found = [];
+        $this->collectRefs($paths, $found);
+
+        return array_keys($found);
+    }
+
+    /**
+     * Recursively collects all $ref values from a nested array node.
+     *
+     * @param mixed              $node
+     * @param array<string,bool> $found
+     */
+    private function collectRefs(mixed $node, array &$found): void
+    {
+        if (!is_array($node)) {
+            return;
+        }
+
+        if (isset($node['$ref']) && is_string($node['$ref'])) {
+            $found[$this->extractKeyFromRef($node['$ref'])] = true;
+        }
+
+        foreach ($node as $value) {
+            $this->collectRefs($value, $found);
+        }
+    }
+
+    private function extractKeyFromRef(string $ref): string
+    {
+        // $ref format: #/components/schemas/<key>
+        return ltrim(str_replace('/components/schemas/', '', $ref), '#/');
+    }
+
+    /**
      * @return array<string, mixed>
      */
     private function loadSchema(string $schemaFile): array
     {
+        if (array_key_exists($schemaFile, $this->schemaCache)) {
+            return $this->schemaCache[$schemaFile];
+        }
+
         if (!$this->filesystem->exists($schemaFile)) {
             throw new RuntimeException(sprintf('OpenAPI schema file "%s" not found', $schemaFile));
         }
@@ -93,8 +148,11 @@ readonly class OpenApiSchemaEntityReader
             throw new RuntimeException(sprintf('Unable to read OpenAPI schema file "%s"', $schemaFile));
         }
 
-        /** @var array<string, mixed> */
-        return json_decode($payload, true, 512, JSON_THROW_ON_ERROR);
+        /** @var array<string, mixed> $decoded */
+        $decoded = json_decode($payload, true, 512, JSON_THROW_ON_ERROR);
+        $this->schemaCache[$schemaFile] = $decoded;
+
+        return $this->schemaCache[$schemaFile];
     }
 
     /**
@@ -117,8 +175,7 @@ readonly class OpenApiSchemaEntityReader
      */
     private function resolveRef(array $schema, string $ref): array
     {
-        // $ref format: #/components/schemas/<key>
-        $key = ltrim(str_replace('/components/schemas/', '', $ref), '#/');
+        $key = $this->extractKeyFromRef($ref);
         $schemas = $schema['components']['schemas'] ?? [];
 
         return $schemas[$key]['properties'] ?? [];

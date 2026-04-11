@@ -148,4 +148,13 @@ $application->addCommand(
         $log
     )
 );
+$application->addCommand(
+    new Commands\Documentation\ShowV3BuilderCoverageCommand(
+        new \Bitrix24\SDK\OpenApi\Domain\V3BuilderCoverageAuditor(
+            new OpenApiSchemaEntityReader(new Symfony\Component\Filesystem\Filesystem())
+        ),
+        new Symfony\Component\Finder\Finder(),
+        $log
+    )
+);
 $application->run($input);

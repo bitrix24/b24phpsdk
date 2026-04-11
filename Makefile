@@ -42,6 +42,7 @@ help:
 	@echo "sdk-coverage-v1-show     - show SDK API coverage statistics in console"
 	@echo "sdk-coverage-v3-show     - show OA schema snapshot vs SDK v3 coverage"
 	@echo "sdk-coverage-v3-show-uncovered - show OA methods not covered by SDK v3"
+	@echo "sdk-builder-coverage-v3-show  - audit SelectBuilder/ItemBuilder coverage for task scope"
 	@echo "build-documentation       - build SDK API coverage documentation markdown"
 	@echo "ngrok-up                  - start ngrok"
 	@echo "ngrok-down                - stop ngrok"
@@ -614,6 +615,11 @@ sdk-coverage-v3-show-uncovered:
 	docker compose run --rm php-cli php bin/console b24-dev:show-oa-sdk-coverage \
 	--schema-file=docs/open-api/openapi.json \
 	--show-uncovered
+
+sdk-builder-coverage-v3-show:
+	docker compose run --rm php-cli php bin/console b24-dev:show-v3-builder-coverage task \
+	--show-unmapped --show-missing-select --show-missing-item \
+	--show-invalid --show-select-mismatches --show-duplicates
 
 dev-show-fields-description:
 	php bin/console b24-dev:show-fields-description --webhook=$(BITRIX24_WEBHOOK)

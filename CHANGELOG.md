@@ -4,6 +4,7 @@
 
 ### Added
 
+- Added `b24-dev:show-v3-builder-coverage` CLI command: audits SelectBuilder / ItemBuilder coverage for all OpenAPI v3 entities in a given scope and reports unmapped, missing, invalid, field-coverage-mismatch, and duplicate entity key cases (`make sdk-builder-coverage-v3-show`) ([#340](https://github.com/bitrix24/b24phpsdk/issues/340))
 - Added `b24-dev:generate-select-builder` console command — reads the checked-in OpenAPI snapshot and generates a deterministic `*SelectBuilder` PHP class for any v3 entity; `$ref` properties are expanded one level deep using dot-notation, methods are sorted alphabetically ([#340](https://github.com/bitrix24/b24phpsdk/issues/340))
 - Added `#[OaEntity]` PHP 8 attribute that links a `*ItemResult` class to its OpenAPI entity key (`entityKey`), optional `*SelectBuilder` class (`selectBuilder`), and optional `*ItemBuilder` class (`itemBuilder`); applied to `TaskItemResult` and `EventLogItemResult` ([#340](https://github.com/bitrix24/b24phpsdk/issues/340))
 - Added support for events:
