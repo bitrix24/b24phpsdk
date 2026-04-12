@@ -109,8 +109,12 @@ gh label list --repo bitrix24/b24phpsdk
 # Create issue
 gh issue create --repo bitrix24/b24phpsdk --title "..." --label "..." --body "..."
 
-# Create PR
-gh pr create --repo bitrix24/b24phpsdk --title "..." --body "..." --base <branch>
+# Create PR — body MUST follow .github/PULL_REQUEST_TEMPLATE.md (read it first!)
+# cat .github/PULL_REQUEST_TEMPLATE.md
+gh pr create --repo bitrix24/b24phpsdk --title "..." --body "$(cat <<'EOF'
+<filled-in template content>
+EOF
+)" --base <branch>
 ```
 
 ---
