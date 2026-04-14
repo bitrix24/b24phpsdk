@@ -75,8 +75,10 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
     {
         $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $b24PartnerRepository = $this->createBitrix24PartnerRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $b24PartnerRepository->save($b24Partner);
+        $flusher->flush();
 
         $res = $b24PartnerRepository->getById($b24Partner->getId());
         $this->assertEquals($b24Partner, $res);
@@ -106,8 +108,10 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
     {
         $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $b24PartnerRepository = $this->createBitrix24PartnerRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $b24PartnerRepository->save($b24Partner);
+        $flusher->flush();
 
         $res = $b24PartnerRepository->getById($b24Partner->getId());
         $this->assertEquals($b24Partner, $res);
@@ -141,11 +145,14 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
     {
         $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $b24PartnerRepository = $this->createBitrix24PartnerRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $b24Partner->markAsDeleted('delete partner');
         $b24PartnerRepository->save($b24Partner);
+        $flusher->flush();
 
         $b24PartnerRepository->delete($b24Partner->getId());
+        $flusher->flush();
 
         $this->assertNull($b24PartnerRepository->findByBitrix24PartnerNumber($bitrix24PartnerNumber));
     }
@@ -174,8 +181,10 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
     {
         $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $b24PartnerRepository = $this->createBitrix24PartnerRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $b24PartnerRepository->save($b24Partner);
+        $flusher->flush();
 
         $res = $b24PartnerRepository->getById($b24Partner->getId());
         $this->assertEquals($b24Partner, $res);
@@ -207,12 +216,13 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
     {
         $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $b24PartnerRepository = $this->createBitrix24PartnerRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $b24PartnerRepository->save($b24Partner);
+        $flusher->flush();
 
         $res = $b24PartnerRepository->findByBitrix24PartnerNumber($b24Partner->getBitrix24PartnerNumber());
         $this->assertEquals($b24Partner, $res);
-
 
         $this->assertNull($b24PartnerRepository->findByBitrix24PartnerNumber(0));
     }
@@ -237,8 +247,10 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
     {
         $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $b24PartnerRepository = $this->createBitrix24PartnerRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $b24PartnerRepository->save($b24Partner);
+        $flusher->flush();
 
         $res = $b24PartnerRepository->findByTitle($b24Partner->getTitle());
         $this->assertEquals($b24Partner, $res[0]);
@@ -266,8 +278,10 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
     {
         $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $b24PartnerRepository = $this->createBitrix24PartnerRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
 
         $b24PartnerRepository->save($b24Partner);
+        $flusher->flush();
 
         $res = $b24PartnerRepository->findByExternalId($b24Partner->getExternalId());
         $this->assertEquals($b24Partner, $res[0]);
