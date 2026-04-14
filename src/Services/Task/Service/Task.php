@@ -17,6 +17,7 @@ use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\ApiVersion;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\Contracts\ItemBuilderInterface;
 use Bitrix24\SDK\Core\Contracts\SelectBuilderInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
@@ -82,7 +83,7 @@ class Task extends AbstractService
     )]
     public function add(array|TaskItemBuilder $fields): TaskResult
     {
-        if ($fields instanceof TaskItemBuilder) {
+        if ($fields instanceof ItemBuilderInterface) {
             $fields = $fields->build();
         }
 
@@ -134,14 +135,14 @@ class Task extends AbstractService
      * @throws TransportException
      */
     #[ApiEndpointMetadata(
-        'tasks.task.add',
+        'tasks.task.update',
         'https://apidocs.bitrix24.com/api-reference/rest-v3/tasks/tasks-task-update.html',
         'Method update task',
         ApiVersion::v3
     )]
     public function update(int $id, array|TaskItemBuilder $fields): UpdatedTaskResult
     {
-        if ($fields instanceof TaskItemBuilder) {
+        if ($fields instanceof ItemBuilderInterface) {
             $fields = $fields->build();
             unset($fields['creatorId']);
         }
@@ -157,5 +158,4 @@ class Task extends AbstractService
             )
         );
     }
-
 }

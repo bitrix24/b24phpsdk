@@ -187,6 +187,22 @@
         <testsuite name="integration_tests_task">
             <directory>./tests/Integration/Services/Task/</directory>
         </testsuite>
+        <testsuite name="integration_tests_task_chat_message_field">
+            <file>./tests/Integration/Services/Task/ChatMessageField/Service/ChatMessageFieldTest.php</file>
+            <file>./tests/Integration/Services/Task/ChatMessageField/Result/ChatMessageFieldItemResultTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_task_file_field">
+            <file>./tests/Integration/Services/Task/FileField/Service/FileFieldTest.php</file>
+            <file>./tests/Integration/Services/Task/FileField/Result/FileFieldItemResultTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_task_access_field">
+            <file>./tests/Integration/Services/Task/AccessField/Service/AccessFieldTest.php</file>
+            <file>./tests/Integration/Services/Task/AccessField/Result/AccessFieldItemResultTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_task_field">
+            <file>./tests/Integration/Services/Task/TaskField/Service/TaskFieldTest.php</file>
+            <file>./tests/Integration/Services/Task/TaskField/Result/TaskFieldItemResultTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_legacy_task">
             <directory>./tests/Integration/Legacy/Services/Task/</directory>
         </testsuite>
@@ -268,11 +284,26 @@
         <testsuite name="integration_tests_crm_documentgenerator_numerator">
             <directory>./tests/Integration/Services/CRM/Documentgenerator/Numerator/</directory>
         </testsuite>
+        <testsuite name="integration_tests_crm_documentgenerator_document">
+            <directory>./tests/Integration/Services/CRM/Documentgenerator/Document/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_crm_documentgenerator_template">
+            <directory>./tests/Integration/Services/CRM/Documentgenerator/Template/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_sonet_group">
             <directory>./tests/Integration/Services/SonetGroup/</directory>
         </testsuite>
         <testsuite name="integration_tests_scope_main_eventlog">
             <file>./tests/Integration/Services/Main/Service/EventLogTest.php</file>
+            <file>./tests/Integration/Services/Main/EventLogField/Service/EventLogFieldTest.php</file>
+            <file>./tests/Integration/Services/Main/EventLogField/Result/EventLogFieldItemResultTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_scope_rest">
+            <directory>./tests/Integration/Services/Rest/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_rest_scope_service">
+            <file>./tests/Integration/Services/Rest/Service/ScopeTest.php</file>
+            <file>./tests/Integration/Services/Rest/Result/ScopeMethodItemResultTest.php</file>
         </testsuite>
     </testsuites>
     <source>

@@ -95,6 +95,27 @@ docker-compose run --rm php-cli vendor/bin/phpunit tests/Integration/Services/CR
 
 ---
 
+## Result-item annotation tests
+
+If a service returns an entity from `get` and/or `list`, add a **separate integration test file** dedicated to result-item phpdoc annotation validation.
+
+These tests must validate both:
+
+- completeness: all system fields returned by `fields()->getFieldsDescription()` are present in the result-item annotations
+- type mapping: annotated field types match the Bitrix24 field types through the shared custom assertions in `tests/CustomAssertions/CustomBitrix24Assertions.php`
+
+Use one dedicated annotation test file per result-item class. Keep it separate from CRUD and use-case tests so annotation regressions stay isolated and easy to spot.
+
+Recommended naming convention:
+
+- file/class suffix: `AnnotationsTest`
+- examples: `TaskItemResultAnnotationsTest.php`, `DealItemResultAnnotationsTest.php`
+- test method names: `testAllSystemFieldsAnnotated`, `testAllSystemFieldsHasValidTypeAnnotation`
+
+When the remote API returns field codes in a naming style different from the SDK result-item properties, normalize the field keys in the test before calling the shared assertions.
+
+---
+
 ## Code quality
 
 Run all linters in sequence:

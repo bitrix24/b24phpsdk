@@ -88,14 +88,14 @@ class Response
                     $total = (int)$responseResult['total'];
                 }
 
-                // fix inconsistent response format for /documentation api call for v3
-                if (!array_key_exists('time', $responseResult)) {
-                    $responseResult['time'] = [];
-                }
+                // Some API endpoints (e.g. documentation/v3) omit the time node entirely.
+                $time = (array_key_exists('time', $responseResult) && $responseResult['time'] !== [])
+                    ? DTO\Time::initFromResponse($responseResult['time'])
+                    : DTO\Time::initWithZeroValues();
 
                 $this->responseData = new ResponseData(
                     $responseResult['result'],
-                    DTO\Time::initFromResponse($responseResult['time']),
+                    $time,
                     new DTO\Pagination($nextItem, $total)
                 );
                 $this->logger->debug('getResponseData.parseResponse.finish');

@@ -24,7 +24,7 @@ Store information about person who installed application
 | `getComment()`                | `?string`             | Returns comment for this contact person (if any)                            | -                          |
 | `setExternalId()`             | `void`                | Sets external id for contact person from external system                    | -                          |
 | `getExternalId()`             | `?string`             | Returns external id for contact person (if any)                             | -                          |
-| `getBitrix24UserId()`         | `?int`                | Returns bitrix24 user id if contact person mapped on bitrix24 user (if any) | -                          |
+| `getBitrix24UserId()`         | `int`                 | Returns bitrix24 user id                                                    | -                          |
 | `getBitrix24PartnerId()`      | `?Uuid`               | Returns bitrix24 partner id if contact person is bitrix24 partner employee  | -                          |
 | `setBitrix24PartnerId()`      | `void`                | Change bitrix24 partner id if contact person is bitrix24 partner employee   | -                          |
 | `getUserAgent()`              | `?string`             | Returns user agent for contact person                                       | -                          |

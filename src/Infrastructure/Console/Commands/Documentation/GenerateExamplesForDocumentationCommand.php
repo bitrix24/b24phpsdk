@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Infrastructure\Console\Commands\Documentation;
 
 use Bitrix24\SDK\Attributes\Services\AttributesParser;
+use Bitrix24\SDK\Attributes\Services\SupportedInSdkApiMethod;
 use Bitrix24\SDK\Core\Exceptions\FileNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Infrastructure\Console\Commands\SplashScreen;
@@ -210,7 +211,12 @@ class GenerateExamplesForDocumentationCommand extends Command
                         $output->writeln([' < info>Generate prompts for each supported in SDK method...</info > ', '']);
                         $progressBar = new ProgressBar($output, count($supportedInSdkMethods));
                         $promptTemplate = $this->loadContentsFromFile($promptTemplateFile);
-                        foreach ($supportedInSdkMethods as $apiMethod => $sdkMethod) {
+                        foreach ($supportedInSdkMethods as $sdkMethod) {
+                            if (!$sdkMethod instanceof SupportedInSdkApiMethod) {
+                                continue;
+                            }
+
+                            $apiMethod = $sdkMethod->name;
                             $promptFileName = sprintf(
                                 '%s/prompts/%s/%s.md',
                                 $targetFolder,
@@ -219,8 +225,8 @@ class GenerateExamplesForDocumentationCommand extends Command
                             );
                             $data = $this->prepareDataForPromptByServiceMethod(
                                 CRMServiceBuilder::class,
-                                $sdkMethod['sdk_class_name'],
-                                $sdkMethod['sdk_method_name']
+                                $sdkMethod->sdkClassName,
+                                $sdkMethod->sdkMethodName
                             );
                             $prompt = $this->fillDataToTemplate(
                                 $promptTemplate,
