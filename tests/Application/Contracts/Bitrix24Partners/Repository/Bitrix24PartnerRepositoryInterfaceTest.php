@@ -18,6 +18,7 @@ use Bitrix24\SDK\Application\Contracts\Bitrix24Partners\Entity\Bitrix24PartnerSt
 use Bitrix24\SDK\Application\Contracts\Bitrix24Partners\Exceptions\Bitrix24PartnerNotFoundException;
 use Bitrix24\SDK\Application\Contracts\Bitrix24Partners\Repository\Bitrix24PartnerRepositoryInterface;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Tests\Application\Contracts\TestRepositoryFlusherInterface;
 use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
 use Carbon\CarbonImmutable;
 use Generator;
@@ -47,6 +48,8 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
         ?string               $externalId): Bitrix24PartnerInterface;
 
     abstract protected function createBitrix24PartnerRepositoryImplementation(): Bitrix24PartnerRepositoryInterface;
+
+    abstract protected function createRepositoryFlusherImplementation(): TestRepositoryFlusherInterface;
 
     /**
      * @throws InvalidArgumentException
