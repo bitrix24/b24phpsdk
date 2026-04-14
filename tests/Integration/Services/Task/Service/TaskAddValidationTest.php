@@ -64,12 +64,13 @@ class TaskAddValidationTest extends TestCase
             $this->assertNotEmpty($validationError->message, 'ValidationError.message must not be empty');
         }
 
+        // The REST API v3 uses dot-notation field paths (e.g. "task.responsible.id"), not camelCase
         $fieldNames = array_map(static fn(ValidationError $validationError): string => $validationError->field, $validationErrors);
         $this->assertContains(
-            'responsibleId',
+            'task.responsible.id',
             $fieldNames,
             sprintf(
-                'Expected validation error for field "responsibleId", got: [%s]',
+                'Expected validation error for field "task.responsible.id", got: [%s]',
                 implode(', ', $fieldNames)
             )
         );
