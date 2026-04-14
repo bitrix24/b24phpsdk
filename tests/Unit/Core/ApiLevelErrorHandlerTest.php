@@ -208,8 +208,8 @@ class ApiLevelErrorHandlerTest extends TestCase
         try {
             $this->apiLevelErrorHandler->handle($responseBody);
             $this->fail('Expected ValidationException was not thrown');
-        } catch (ValidationException $e) {
-            $errors = $e->getValidationErrors();
+        } catch (ValidationException $validationException) {
+            $errors = $validationException->getValidationErrors();
             $this->assertCount(2, $errors);
             $this->assertSame('title', $errors[0]->field);
             $this->assertSame('Required field', $errors[0]->message);

@@ -126,7 +126,7 @@ class ApiLevelErrorHandler
         }
 
         // v3: throw ValidationException when validation errors are present
-        if ($unsuccessfulResponseError !== null && $unsuccessfulResponseError->validation !== []) {
+        if ($unsuccessfulResponseError instanceof \Bitrix24\SDK\Core\Response\DTO\UnsuccessfulResponseError && $unsuccessfulResponseError->validation !== []) {
             throw new ValidationException(
                 sprintf('%s - %s%s', $errorCode, $errorDescription, $batchErrorPrefix),
                 $unsuccessfulResponseError->validation
