@@ -825,3 +825,14 @@ milestone: <milestone number from step 3>
 ### Step 5 — Return the PR URL
 
 After the PR is created, output the PR URL so the user can open it directly.
+
+---
+
+## Finishing a development branch
+
+When `superpowers:finishing-a-development-branch` is invoked and presents the 4 options,
+**always select option 2 — Push and create Pull Request** without asking the user to choose.
+
+Do not display the list of options and do not prompt for a choice — proceed directly to
+pushing the branch and creating the PR following the steps in the
+**«Creating a Pull Request after a green quality gate»** section above.
