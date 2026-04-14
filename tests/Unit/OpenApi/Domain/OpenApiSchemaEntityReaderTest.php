@@ -96,4 +96,53 @@ class OpenApiSchemaEntityReaderTest extends TestCase
 
         $this->reader->getSelectableFields(self::FIXTURE, 'bitrix.test.unknowndto');
     }
+
+    // ---- getWritableFields tests ----
+
+    private const string WRITABLE_FIXTURE = __DIR__ . '/Fixtures/openapi-writable-fields.json';
+
+    #[Test]
+    #[TestDox('getWritableFields returns field names mapped to OpenAPI types, sorted alphabetically')]
+    public function testGetWritableFieldsReturnsSortedMap(): void
+    {
+        $fields = $this->reader->getWritableFields(self::WRITABLE_FIXTURE, '/tasks.task.add');
+
+        $this->assertSame([
+            'creatorId'     => 'integer',
+            'deadline'      => 'string',
+            'needsControl'  => 'boolean',
+            'parentTask'    => 'object',
+            'responsibleId' => 'integer',
+            'tags'          => 'array',
+            'title'         => 'string',
+        ], $fields);
+    }
+
+    #[Test]
+    #[TestDox('getWritableFields maps $ref entries to type "object"')]
+    public function testGetWritableFieldsMapsRefToObject(): void
+    {
+        $fields = $this->reader->getWritableFields(self::WRITABLE_FIXTURE, '/tasks.task.add');
+
+        $this->assertArrayHasKey('parentTask', $fields);
+        $this->assertSame('object', $fields['parentTask']);
+    }
+
+    #[Test]
+    #[TestDox('getWritableFields throws RuntimeException when operation path is absent from schema')]
+    public function testGetWritableFieldsThrowsOnUnknownPath(): void
+    {
+        $this->expectException(RuntimeException::class);
+
+        $this->reader->getWritableFields(self::WRITABLE_FIXTURE, '/tasks.task.unknown');
+    }
+
+    #[Test]
+    #[TestDox('getWritableFields throws RuntimeException when schema file does not exist')]
+    public function testGetWritableFieldsThrowsOnMissingSchemaFile(): void
+    {
+        $this->expectException(RuntimeException::class);
+
+        $this->reader->getWritableFields('/nonexistent/schema.json', '/tasks.task.add');
+    }
 }

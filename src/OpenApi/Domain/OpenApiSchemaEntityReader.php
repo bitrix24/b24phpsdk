@@ -85,6 +85,45 @@ class OpenApiSchemaEntityReader
     }
 
     /**
+     * Returns writable field names and their OpenAPI types for a given operation path.
+     *
+     * Reads from: paths/{operationPath}/post/requestBody/content/application/json/schema/properties/fields/properties
+     *
+     * Entries with '$ref' are mapped to the type 'object'.
+     * Returns an alphabetically sorted map of fieldName → openApiType.
+     *
+     * @return array<string, string>
+     * @throws RuntimeException when the operation path does not exist in the schema
+     */
+    public function getWritableFields(string $schemaFile, string $operationPath): array
+    {
+        $schema = $this->loadSchema($schemaFile);
+
+        $node = $schema['paths'][$operationPath]['post']['requestBody']['content']['application/json']['schema']['properties']['fields']['properties'] ?? null;
+
+        if ($node === null) {
+            throw new RuntimeException(sprintf(
+                'Operation path "%s" not found or has no writable fields in the schema',
+                $operationPath
+            ));
+        }
+
+        $result = [];
+        foreach ($node as $fieldName => $definition) {
+            if (isset($definition['$ref'])) {
+                $result[$fieldName] = 'object';
+                continue;
+            }
+
+            $result[$fieldName] = (string) ($definition['type'] ?? 'string');
+        }
+
+        ksort($result);
+
+        return $result;
+    }
+
+    /**
      * Returns entity keys that appear as $ref targets anywhere inside the paths section.
      * These are the entity keys actually connected to an API method (request / response).
      * Sub-types referenced only inside components/schemas and orphaned DTOs with no path

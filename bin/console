@@ -12,6 +12,8 @@
 
 use Bitrix24\SDK\Attributes\Services\AttributesParser;
 use Bitrix24\SDK\Deprecations\DeprecatedMethods;
+use Bitrix24\SDK\CodeGenerator\ItemBuilderCodeGenerator;
+use Bitrix24\SDK\Infrastructure\Console\Commands\Generator\GenerateItemBuilderCommand;
 use Bitrix24\SDK\Infrastructure\Console\Commands\Generator\GenerateSelectBuilderCommand;
 use Bitrix24\SDK\Infrastructure\Console\Commands\Metadata\Bitrix24V3FieldMetadataFetcher;
 use Bitrix24\SDK\Infrastructure\Console\Commands\Metadata\DevWebhookResolver;
@@ -104,6 +106,13 @@ $application->addCommand(
     new GenerateSelectBuilderCommand(
         new OpenApiSchemaEntityReader(new Symfony\Component\Filesystem\Filesystem()),
         new SelectBuilderCodeGenerator(),
+        new Symfony\Component\Filesystem\Filesystem()
+    )
+);
+$application->addCommand(
+    new GenerateItemBuilderCommand(
+        new OpenApiSchemaEntityReader(new Symfony\Component\Filesystem\Filesystem()),
+        new ItemBuilderCodeGenerator(),
         new Symfony\Component\Filesystem\Filesystem()
     )
 );
