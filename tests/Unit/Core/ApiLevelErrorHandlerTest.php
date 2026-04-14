@@ -179,9 +179,9 @@ class ApiLevelErrorHandlerTest extends TestCase
             new ValidationException(),
         ];
 
-        yield 'v3 - error without validation field uses existing routing' => [
-            ['error' => ['code' => 'ACCESS_DENIED', 'message' => 'Access denied!']],
-            new AuthForbiddenException(),
+        yield 'v3 - error without validation field routes through switch as before' => [
+            ['error' => ['code' => 'QUERY_LIMIT_EXCEEDED', 'message' => 'Too many requests']],
+            new QueryLimitExceededException(),
         ];
 
         yield 'v3 - unknown error code without validation falls back to BaseException' => [

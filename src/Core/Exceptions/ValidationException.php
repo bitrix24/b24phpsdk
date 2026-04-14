@@ -24,9 +24,9 @@ class ValidationException extends BaseException
         string $message = '',
         private readonly array $validationErrors = [],
         int $code = 0,
-        ?\Throwable $previous = null,
+        ?\Throwable $throwable = null,
     ) {
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message, $code, $throwable);
     }
 
     /**
