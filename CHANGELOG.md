@@ -2,6 +2,10 @@
 
 ## 3.1.0 Unreleased
 
+### Changed
+
+- Remove unused `cebe/php-openapi` dependency from `require` ([#418](https://github.com/bitrix24/b24phpsdk/issues/418))
+
 ### Added
 
 - Added `b24-dev:show-v3-builder-coverage` CLI command: audits SelectBuilder / ItemBuilder coverage for all OpenAPI v3 entities in a given scope and reports unmapped, missing, invalid, field-coverage-mismatch, and duplicate entity key cases (`make sdk-builder-coverage-v3-show`) ([#340](https://github.com/bitrix24/b24phpsdk/issues/340))
