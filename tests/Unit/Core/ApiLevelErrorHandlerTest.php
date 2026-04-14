@@ -28,8 +28,6 @@ use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException;
 use Bitrix24\SDK\Core\Exceptions\ValidationException;
 use Bitrix24\SDK\Core\Exceptions\WrongClientException;
-use Bitrix24\SDK\Core\Response\DTO\ValidationError;
-use Bitrix24\SDK\Core\Response\DTO\UnsuccessfulResponseError;
 use Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -166,6 +164,58 @@ class ApiLevelErrorHandlerTest extends TestCase
             ],
             new ValidationException(),
         ];
+
+        yield 'v3 - validation error with multiple fields' => [
+            [
+                'error' => [
+                    'code' => 'VALIDATION_ERROR',
+                    'message' => 'Invalid input',
+                    'validation' => [
+                        ['field' => 'title', 'message' => 'Required field'],
+                        ['field' => 'status', 'message' => 'Invalid value'],
+                    ],
+                ],
+            ],
+            new ValidationException(),
+        ];
+
+        yield 'v3 - error without validation field uses existing routing' => [
+            ['error' => ['code' => 'ACCESS_DENIED', 'message' => 'Access denied!']],
+            new AuthForbiddenException(),
+        ];
+
+        yield 'v3 - unknown error code without validation falls back to BaseException' => [
+            ['error' => ['code' => 'SOME_UNKNOWN_CODE', 'message' => 'Something happened']],
+            new BaseException(),
+        ];
+    }
+
+    #[Test]
+    #[TestDox('ValidationException carries field-level validation errors from v3 response')]
+    public function testValidationExceptionCarriesValidationErrors(): void
+    {
+        $responseBody = [
+            'error' => [
+                'code' => 'VALIDATION_ERROR',
+                'message' => 'Invalid input',
+                'validation' => [
+                    ['field' => 'title', 'message' => 'Required field'],
+                    ['field' => 'status', 'message' => 'Invalid value'],
+                ],
+            ],
+        ];
+
+        try {
+            $this->apiLevelErrorHandler->handle($responseBody);
+            $this->fail('Expected ValidationException was not thrown');
+        } catch (ValidationException $e) {
+            $errors = $e->getValidationErrors();
+            $this->assertCount(2, $errors);
+            $this->assertSame('title', $errors[0]->field);
+            $this->assertSame('Required field', $errors[0]->message);
+            $this->assertSame('status', $errors[1]->field);
+            $this->assertSame('Invalid value', $errors[1]->message);
+        }
     }
 
     #[\Override]
