@@ -26,7 +26,10 @@ use Bitrix24\SDK\Core\Exceptions\OperationTimeLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\PaymentRequiredException;
 use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException;
+use Bitrix24\SDK\Core\Exceptions\ValidationException;
 use Bitrix24\SDK\Core\Exceptions\WrongClientException;
+use Bitrix24\SDK\Core\Response\DTO\ValidationError;
+use Bitrix24\SDK\Core\Response\DTO\UnsuccessfulResponseError;
 use Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -149,6 +152,19 @@ class ApiLevelErrorHandlerTest extends TestCase
         yield 'v3 - success response without error key' => [
             ['result' => ['id' => 42], 'time' => []],
             null,
+        ];
+
+        yield 'v3 - validation error with single field' => [
+            [
+                'error' => [
+                    'code' => 'VALIDATION_ERROR',
+                    'message' => 'Invalid input',
+                    'validation' => [
+                        ['field' => 'title', 'message' => 'Required field'],
+                    ],
+                ],
+            ],
+            new ValidationException(),
         ];
     }
 

@@ -25,8 +25,10 @@ use Bitrix24\SDK\Core\Exceptions\PortalDomainNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Exceptions\UserNotFoundOrIsNotActiveException;
+use Bitrix24\SDK\Core\Exceptions\ValidationException;
 use Bitrix24\SDK\Core\Exceptions\WrongAuthTypeException;
 use Bitrix24\SDK\Core\Exceptions\WrongClientException;
+use Bitrix24\SDK\Core\Response\DTO\UnsuccessfulResponseError;
 use Bitrix24\SDK\Services\Workflows\Exceptions\ActivityOrRobotAlreadyInstalledException;
 use Bitrix24\SDK\Services\Workflows\Exceptions\ActivityOrRobotValidationFailureException;
 use Bitrix24\SDK\Services\Workflows\Exceptions\WorkflowTaskAlreadyCompletedException;
@@ -61,13 +63,18 @@ class ApiLevelErrorHandler
      */
     public function handle(array $responseBody): void
     {
-        // single query error response
+        // v3 unified error response: {"error": {"code": "...", "message": "...", "validation": [...]}}
+        if (array_key_exists(self::ERROR_KEY, $responseBody) && is_array($responseBody[self::ERROR_KEY])) {
+            $this->handleError($responseBody);
+        }
+
+        // v1 single query error response: {"error": "CODE", "error_description": "..."}
         if (array_key_exists(self::ERROR_KEY, $responseBody) && array_key_exists(self::ERROR_DESCRIPTION_KEY, $responseBody)) {
             $this->handleError($responseBody);
         }
 
-        // error in refresh token request
-        if (array_key_exists(self::ERROR_KEY, $responseBody) && !array_key_exists(self::RESULT_KEY, $responseBody)) {
+        // v1 error in refresh token request: {"error": "code"} without result key
+        if (array_key_exists(self::ERROR_KEY, $responseBody) && !is_array($responseBody[self::ERROR_KEY]) && !array_key_exists(self::RESULT_KEY, $responseBody)) {
             $this->handleError($responseBody);
         }
 
@@ -91,10 +98,12 @@ class ApiLevelErrorHandler
     private function handleError(array $responseBody, ?string $batchCommandId = null): void
     {
         $error = $responseBody[self::ERROR_KEY];
+        $unsuccessfulResponseError = null;
         if (is_array($error)) {
-            // API v3 format: {"error": {"code": "...", "message": "..."}}
-            $errorCode = strtolower(trim((string)($error['code'] ?? '')));
-            $errorDescription = strtolower(trim((string)($error['message'] ?? '')));
+            // API v3 format: {"error": {"code": "...", "message": "...", "validation": [...]}}
+            $unsuccessfulResponseError = UnsuccessfulResponseError::fromArray($error);
+            $errorCode = strtolower(trim($unsuccessfulResponseError->code));
+            $errorDescription = strtolower(trim($unsuccessfulResponseError->message));
         } else {
             // API v1 format: {"error": "ERROR_CODE", "error_description": "..."}
             $errorCode = strtolower(trim((string)$error));
@@ -114,6 +123,14 @@ class ApiLevelErrorHandler
         $batchErrorPrefix = '';
         if ($batchCommandId !== null) {
             $batchErrorPrefix = sprintf(' batch command id: %s', $batchCommandId);
+        }
+
+        // v3: throw ValidationException when validation errors are present
+        if ($unsuccessfulResponseError !== null && $unsuccessfulResponseError->validation !== []) {
+            throw new ValidationException(
+                sprintf('%s - %s%s', $errorCode, $errorDescription, $batchErrorPrefix),
+                $unsuccessfulResponseError->validation
+            );
         }
 
         // todo send issues to bitrix24
