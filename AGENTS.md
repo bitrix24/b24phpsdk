@@ -21,6 +21,12 @@ This applies to:
 
 Do not skip this step even for small edits.
 
+## Issue language
+
+- Every GitHub issue in `bitrix24/b24phpsdk` — title, body, and checklists — MUST be written in **English only**, regardless of the language used in conversation.
+- Applies to creating new issues, updating existing issue bodies or titles, and posting issue comments.
+- Translate content to English before writing to GitHub; do not mix languages inside a single issue. Proper nouns (method names, file paths, URLs) stay as-is.
+
 ## OpenAPI Schema
 - Before implementing any task, refresh the local OpenAPI schema snapshot with `make oa-schema-build`.
 - Treat `docs/open-api/openapi.json` as the repository baseline for current REST API research, implementation, and release-time verification.

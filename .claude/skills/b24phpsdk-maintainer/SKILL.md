@@ -81,6 +81,22 @@ curl -s -X POST \
 
 ---
 
+## Issue language
+
+**Rule**: every GitHub issue in `bitrix24/b24phpsdk` — title, body, and checklists — MUST be
+written in **English only**, regardless of the language used in conversation with the user.
+
+This applies to:
+- creating a new issue (`mcp__github__create_issue`, `gh issue create`)
+- updating an existing issue body or title (`mcp__github__update_issue`)
+- adding issue comments (`mcp__github__add_issue_comment`)
+
+If the conversation is in another language, translate the content to English before writing
+it to GitHub. Do not mix languages inside a single issue. Proper nouns (method names, file
+paths, URLs) stay as-is.
+
+---
+
 ## Working with an existing issue
 
 When given an issue number, always load it first via `mcp__github__get_issue`:
@@ -433,6 +449,8 @@ class <Name>ItemResultTest extends TestCase
 ## Task folder and implementation plan
 
 **Rule**: before writing any code, create a dedicated folder and a plan file for the issue.
+
+> **Never** create plan files under `docs/plans/`. All plan files MUST be placed inside the task folder at `.tasks/<issue-number>/plan.md`.
 
 ### 1. Create the task folder
 

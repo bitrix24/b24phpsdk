@@ -1,4 +1,9 @@
 # b24-php-sdk change log
+## 3.2.0 – UNRELEASED§
+
+### Changed
+
+- Updated `b24phpsdk-maintainer` skill and `AGENTS.md`: all GitHub issues (title, body, checklists, comments) must be written in English only ([#422](https://github.com/bitrix24/b24phpsdk/issues/422))
 
 ## 3.1.0
 
