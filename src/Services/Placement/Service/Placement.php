@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\AbstractService;
-use Bitrix24\SDK\Services\IM\Placements\PlacementOptionsInterface;
+use Bitrix24\SDK\Services\Placement\PlacementOptionsInterface;
 use Bitrix24\SDK\Services\Placement\Result\PlacementBindResult;
 use Bitrix24\SDK\Services\Placement\Result\PlacementLocationCodesResult;
 use Bitrix24\SDK\Services\Placement\Result\PlacementsLocationInformationResult;

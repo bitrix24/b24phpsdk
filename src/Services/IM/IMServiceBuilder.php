@@ -17,8 +17,9 @@ use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\IM\Notify\Service\Notify;
-#[ApiServiceBuilderMetadata(new Scope(['im']))]
+use Bitrix24\SDK\Services\IM\Placements\PlacementLocationCodes;
 
+#[ApiServiceBuilderMetadata(new Scope(['im']))]
 class IMServiceBuilder extends AbstractServiceBuilder
 {
     public function notify(): Notify
@@ -28,5 +29,10 @@ class IMServiceBuilder extends AbstractServiceBuilder
         }
 
         return $this->serviceCache[__METHOD__];
+    }
+
+    public function placementLocationCodes(): PlacementLocationCodes
+    {
+        return new PlacementLocationCodes();
     }
 }

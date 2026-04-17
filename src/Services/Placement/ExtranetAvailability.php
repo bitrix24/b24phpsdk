@@ -11,13 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\IM\Placements;
+namespace Bitrix24\SDK\Services\Placement;
 
 /**
- * User role for which an IM widget is available.
+ * Whether an IM widget is available to extranet users.
  */
-enum Role: string
+enum ExtranetAvailability: string
 {
-    case User = 'USER';
-    case Admin = 'ADMIN';
+    case Allowed = 'Y';
+    case Denied = 'N';
 }

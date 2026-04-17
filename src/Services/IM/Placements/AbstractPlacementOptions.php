@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\IM\Placements;
 
+use Bitrix24\SDK\Services\Placement\ExtranetAvailability;
+use Bitrix24\SDK\Services\Placement\PlacementOptionsInterface;
+use Bitrix24\SDK\Services\Placement\Role;
+
 abstract class AbstractPlacementOptions implements PlacementOptionsInterface
 {
     /** @var array<string, scalar> */
@@ -21,7 +25,7 @@ abstract class AbstractPlacementOptions implements PlacementOptionsInterface
     public function context(ChatContext ...$chatContext): static
     {
         $this->fields['context'] = implode(';', array_map(
-            static fn(ChatContext $chatContext): string => $chatContext->value,
+            static fn (ChatContext $chatContext): string => $chatContext->value,
             $chatContext,
         ));
 

@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Unit\Services\IM\Placements;
 
 use Bitrix24\SDK\Services\IM\Placements\ChatContext;
-use Bitrix24\SDK\Services\IM\Placements\ExtranetAvailability;
+use Bitrix24\SDK\Services\Placement\ExtranetAvailability;
 use Bitrix24\SDK\Services\IM\Placements\PlacementColor;
-use Bitrix24\SDK\Services\IM\Placements\Role;
+use Bitrix24\SDK\Services\Placement\Role;
 use Bitrix24\SDK\Services\IM\Placements\SidebarPlacementOptions;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -40,7 +40,7 @@ class SidebarPlacementOptionsTest extends TestCase
     public function testFullPayload(): void
     {
         $sidebarPlacementOptions = (new SidebarPlacementOptions('fa-bug'))
-            ->context(ChatContext::User, ChatContext::Lines)
+            ->context(ChatContext::USER, ChatContext::LINES)
             ->role(Role::Admin)
             ->color(PlacementColor::Aqua)
             ->extranet(ExtranetAvailability::Denied);
@@ -63,7 +63,7 @@ class SidebarPlacementOptionsTest extends TestCase
     {
         $sidebarPlacementOptions = new SidebarPlacementOptions('fa-bug');
 
-        $this->assertSame($sidebarPlacementOptions, $sidebarPlacementOptions->context(ChatContext::Crm));
+        $this->assertSame($sidebarPlacementOptions, $sidebarPlacementOptions->context(ChatContext::CRM));
         $this->assertSame($sidebarPlacementOptions, $sidebarPlacementOptions->role(Role::User));
         $this->assertSame($sidebarPlacementOptions, $sidebarPlacementOptions->extranet(ExtranetAvailability::Allowed));
         $this->assertSame($sidebarPlacementOptions, $sidebarPlacementOptions->color(PlacementColor::Pink));

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\IM\Placements;
+namespace Bitrix24\SDK\Services\Placement;
 
 /**
  * Marker contract for IM widget placement option builders.

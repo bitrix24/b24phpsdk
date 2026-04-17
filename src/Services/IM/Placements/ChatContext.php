@@ -23,9 +23,9 @@ namespace Bitrix24\SDK\Services\IM\Placements;
  */
 enum ChatContext: string
 {
-    case User = 'USER';
-    case Chat = 'CHAT';
-    case Lines = 'LINES';
-    case Crm = 'CRM';
-    case All = 'ALL';
+    case USER = 'USER';
+    case CHAT = 'CHAT';
+    case LINES = 'LINES';
+    case CRM = 'CRM';
+    case ALL = 'ALL';
 }

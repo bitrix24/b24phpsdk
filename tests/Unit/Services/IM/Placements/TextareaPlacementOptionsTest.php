@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Unit\Services\IM\Placements;
 
 use Bitrix24\SDK\Services\IM\Placements\ChatContext;
-use Bitrix24\SDK\Services\IM\Placements\ExtranetAvailability;
+use Bitrix24\SDK\Services\Placement\ExtranetAvailability;
 use Bitrix24\SDK\Services\IM\Placements\PlacementColor;
-use Bitrix24\SDK\Services\IM\Placements\Role;
+use Bitrix24\SDK\Services\Placement\Role;
 use Bitrix24\SDK\Services\IM\Placements\TextareaPlacementOptions;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -40,7 +40,7 @@ class TextareaPlacementOptionsTest extends TestCase
     public function testFullPayload(): void
     {
         $textareaPlacementOptions = (new TextareaPlacementOptions('fa-bars'))
-            ->context(ChatContext::User, ChatContext::Chat)
+            ->context(ChatContext::USER, ChatContext::CHAT)
             ->role(Role::User)
             ->color(PlacementColor::Graphite)
             ->width(200)
@@ -65,7 +65,7 @@ class TextareaPlacementOptionsTest extends TestCase
     #[TestDox('context() with single case produces a value without separators')]
     public function testContextSingleCase(): void
     {
-        $textareaPlacementOptions = (new TextareaPlacementOptions('fa-bars'))->context(ChatContext::All);
+        $textareaPlacementOptions = (new TextareaPlacementOptions('fa-bars'))->context(ChatContext::ALL);
 
         $this->assertSame('ALL', $textareaPlacementOptions->build()['context']);
     }
@@ -76,7 +76,7 @@ class TextareaPlacementOptionsTest extends TestCase
     {
         $textareaPlacementOptions = new TextareaPlacementOptions('fa-bars');
 
-        $this->assertSame($textareaPlacementOptions, $textareaPlacementOptions->context(ChatContext::All));
+        $this->assertSame($textareaPlacementOptions, $textareaPlacementOptions->context(ChatContext::ALL));
         $this->assertSame($textareaPlacementOptions, $textareaPlacementOptions->role(Role::Admin));
         $this->assertSame($textareaPlacementOptions, $textareaPlacementOptions->extranet(ExtranetAvailability::Allowed));
         $this->assertSame($textareaPlacementOptions, $textareaPlacementOptions->color(PlacementColor::Aqua));
