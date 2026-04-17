@@ -1,163 +1,305 @@
-# Plan: Add IM placement codes to PlacementLocationCodes (issue #437)
+# Plan: Add IM placement codes and fluent options builders (issue #437)
 
 ## Context
 
-Issue [#437](https://github.com/bitrix24/b24phpsdk/issues/437) asks to expose the four
-IM widget placement codes so that consumers registering handlers via `placement.bind`
-no longer hard-code the placement strings.
+Issue [#437](https://github.com/bitrix24/b24phpsdk/issues/437) initially asked to expose
+the four IM widget placement codes for `placement.bind`. Scope was extended in the same
+PR (#438) to also provide:
 
-The four placements (scope `im`) and their documentation URLs:
+- A new namespace `Bitrix24\SDK\Services\IM\Placements` housing all IM-placement
+  related code.
+- A `PlacementOptionsInterface` contract so IM widget placements can be configured
+  via type-safe fluent builders instead of raw associative arrays.
+- Three concrete option builders (`TextareaPlacementOptions`,
+  `SidebarPlacementOptions`, `ContextMenuPlacementOptions`).
+- Four supporting string-backed enums (`ChatContext`, `Role`, `ExtranetAvailability`,
+  `PlacementColor`).
+- A backwards-compatible widening of `Placement::bind()` to accept both `array` and
+  `PlacementOptionsInterface`.
+
+### IM placement codes (constants)
+
+Scope `im`:
 
 | Code | Purpose | Docs |
 |---|---|---|
 | `IM_TEXTAREA` | Widget panel above the chat message input field | https://apidocs.bitrix24.com/api-reference/widgets/im/textarea.html |
 | `IM_SIDEBAR` | Chat sidebar widget | https://apidocs.bitrix24.com/api-reference/widgets/im/sidebar.html |
 | `IM_CONTEXT_MENU` | Context-menu item on a chat message | https://apidocs.bitrix24.com/api-reference/widgets/im/context-menu.html |
-| `IM_SMILES_SELECTOR` | Smiles / Giphy selector — **no longer works since `im 25.1600.0`** | https://apidocs.bitrix24.com/api-reference/widgets/im/smile-selector.html |
+| `IM_SMILES_SELECTOR` | Smiles / Giphy selector — **no longer works since `im 25.1600.0`** (`@deprecated`) | https://apidocs.bitrix24.com/api-reference/widgets/im/smile-selector.html |
 
-Key findings from the Bitrix24 MCP article lookups (`bitrix24-article-details`):
+`IM_NAVIGATION` exists in the docs but is not in the issue scope and is not added.
 
-- All four placements belong to scope `im`.
-- `IM_SMILES_SELECTOR` was removed starting with module `im 25.1600.0` — smiles were
-  replaced by stickers. It stays in the SDK as a constant for backward compatibility
-  with older portals, but must be marked `@deprecated`.
-- A fifth IM placement exists (`IM_NAVIGATION`, left chat menu) but is out of scope
-  for this issue — it is not listed in the acceptance criteria. Not added here.
+### Options structure (per `bitrix24-article-details` docs)
 
-### Design decision: separate constants holder under the IM service folder
+| Parameter | TEXTAREA | SIDEBAR | CONTEXT_MENU | Type / values |
+|---|---|---|---|---|
+| `iconName` | required | required | — | string (Font Awesome class, e.g. `fa-cloud`) |
+| `context`  | optional | optional | optional | enum-set: `USER`, `CHAT`, `LINES`, `CRM`, `ALL`; multi-value joined by `;`; default `ALL` |
+| `role`     | optional | optional | optional | enum: `USER`, `ADMIN`; default `USER` |
+| `color`    | optional | optional | — | enum (18 values): `RED`, `GREEN`, `MINT`, `LIGHT_BLUE`, `DARK_BLUE`, `PURPLE`, `AQUA`, `PINK`, `LIME`, `BROWN`, `AZURE`, `KHAKI`, `SAND`, `ORANGE`, `MARENGO`, `GRAY`, `GRAPHITE` |
+| `width`    | optional | — | — | int (default `100`) |
+| `height`   | optional | — | — | int (default `100`) |
+| `extranet` | optional | optional | optional | enum: `Y` (allowed), `N` (denied); default `N` |
 
-The issue body suggests adding the constants to the existing
-`Bitrix24\SDK\Services\Placement\Service\PlacementLocationCode`. During
-brainstorming the maintainer decided to introduce a **separate, IM-specific
-constants holder** under the IM service folder instead. Rationale:
+Common across all three: `context`, `role`, `extranet` (handled by `AbstractPlacementOptions`).
+Common to TEXTAREA + SIDEBAR: `+iconName`, `+color`.
+Unique to TEXTAREA: `+width`, `+height`.
 
-- Keeps IM placement codes grouped with other IM-specific code
-  (`src/Services/IM/IMServiceBuilder.php`, `src/Services/IM/Notify/`).
-- Leaves the legacy `Placement\Service\PlacementLocationCode` untouched — no
-  churn for existing consumers.
-- Lives at the root of the IM service folder (next to `IMServiceBuilder.php`),
-  not inside a `Service/` subfolder, because it is a constants holder, not a
-  service that calls the REST API.
+### Design decisions
 
-Target file: `src/Services/IM/PlacementLocationCodes.php`
-FQCN: `Bitrix24\SDK\Services\IM\PlacementLocationCodes`
-
-The class name is **plural** (`PlacementLocationCodes`) — it is a holder of
-multiple codes, not a single value object.
-
-The issue body will **not** be rewritten on GitHub; the divergence is documented
-here and the PR closes #437 with `Closes #437`.
-
-### Design decision: class with `public const`, not enum
-
-Considered making this a string-backed enum (modern PHP 8.1+ idiom, used elsewhere
-in the project: `SysPageType`, `DealSemanticStage`, `Bitrix24AccountStatus`).
-Rejected in favour of a plain `class` with `public const`:
-
-- Consistency with the existing `Placement\Service\PlacementLocationCode` in the
-  same domain — mixing two models for placement codes would be inconsistent.
-- `Placement::bind(string $placementCode, ...)` already accepts a `string`;
-  constants give zero call-site friction (`bind(PlacementLocationCodes::IM_TEXTAREA, ...)`),
-  whereas an enum would require `->value` everywhere.
-- Placement codes are an open set — the existing legacy class already exposes
-  factory methods (`getForCrmDynamicListMenu(int $entityId): string`) for
-  dynamic codes; enums cannot host factories that return new cases.
-- `@deprecated` on a `public const` is standard and machine-readable by PHPStan
-  and IDEs; per-case `@deprecated` on enum cases is not first-class in PHP.
+- **Class with `public const`, not enum, for `PlacementLocationCodes`** — consistent with
+  legacy `Placement\Service\PlacementLocationCode`; placement codes are an open set;
+  `bind(string $placementCode)` accepts strings directly without `->value`.
+- **String-backed enums for `ChatContext`, `Role`, `ExtranetAvailability`, `PlacementColor`** —
+  closed sets, modern PHP 8.1+ idiom already used in v3 SDK (`SysPageType`, `DealSemanticStage`).
+- **Abstract base class `AbstractPlacementOptions`** holds the three common fluent setters
+  (`context(...)`, `role(...)`, `extranet(...)`) plus the `$fields` array and `build()`.
+- **Interface method `build(): array`** matches existing `ItemBuilderInterface` convention
+  in the SDK.
+- **Flat layout** under `Placements/` — 10 files, no `Enum/` subfolder. Mirrors how
+  `src/Services/CRM/Deal/` keeps enums next to other classes.
+- **`Placement::bind()` widening** is backwards-compatible — existing array call sites keep
+  working untouched. When `PlacementOptionsInterface` is passed, `build()` is called once
+  to produce the array before sending to the REST API.
+- **Class name `IconName` is plain string**, no value object. Font Awesome class names are
+  an open set; validation would be brittle. Pass through as-is.
+- **Multi-value `context`** — fluent setter accepts variadic enum cases:
+  `->context(ChatContext::User, ChatContext::Chat)`; values joined with `;` in `build()`.
+- **Width/height** — no validation. Docs only mention default `100`; SDK passes the
+  number through.
 
 ### Out of scope
 
-- No changes to `Placement\Service\Placement` service.
-- No changes to `IMServiceBuilder` or any service registration — the new class is
-  a plain constants holder.
-- No new tests — the existing `Placement\Service\PlacementLocationCode` has no
-  dedicated tests and constants do not need them.
+- Integration tests for the new fluent path. The existing
+  `tests/Integration/Services/Placement/Service/PlacementTest.php` already covers
+  `bind()` end-to-end with array options; widening the type does not change runtime
+  behaviour for arrays. Unit tests cover the new `build()` output.
+- `IM_NAVIGATION` / `IM_SMILES_SELECTOR` option builders. The first is out of issue
+  scope; the second is deprecated.
+- Changes to `Placement::unbind()` / `list()` / `get()` — they don't take options.
+- Service registration changes in `IMServiceBuilder` — the new classes are
+  data-only (interface, abstract, enums, builders).
 
 ---
 
 ## Files to Create
 
-### 1. `src/Services/IM/PlacementLocationCodes.php`
+### 1. `src/Services/IM/Placements/PlacementOptionsInterface.php`
 
 ```php
 <?php
 
-/**
- * This file is part of the bitrix24-php-sdk package.
- *
- * © Maksim Mesilov <mesilov.maxim@gmail.com>
- *
- * For the full copyright and license information, please view the MIT-LICENSE.txt
- * file that was distributed with this source code.
- */
-
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\IM;
+namespace Bitrix24\SDK\Services\IM\Placements;
 
-/**
- * IM widget placement codes (scope `im`).
- *
- * @link https://apidocs.bitrix24.com/api-reference/widgets/im/index.html
- */
-class PlacementLocationCodes
+interface PlacementOptionsInterface
 {
-    // Widget panel above the chat message input field.
-    // See https://apidocs.bitrix24.com/api-reference/widgets/im/textarea.html
-    public const IM_TEXTAREA = 'IM_TEXTAREA';
-
-    // Chat sidebar widget.
-    // See https://apidocs.bitrix24.com/api-reference/widgets/im/sidebar.html
-    public const IM_SIDEBAR = 'IM_SIDEBAR';
-
-    // Context-menu item on a chat message ("Create content based on").
-    // See https://apidocs.bitrix24.com/api-reference/widgets/im/context-menu.html
-    public const IM_CONTEXT_MENU = 'IM_CONTEXT_MENU';
-
     /**
-     * Smiles / Giphy selector pop-up.
-     *
-     * @deprecated No longer works since module `im 25.1600.0` — smiles were
-     *             replaced by stickers. See
-     *             https://apidocs.bitrix24.com/api-reference/widgets/im/smile-selector.html
+     * @return array<string, mixed>
      */
-    public const IM_SMILES_SELECTOR = 'IM_SMILES_SELECTOR';
+    public function build(): array;
 }
 ```
 
-Notes:
-- Short inline comments for the three active placements (satisfies issue AC
-  "short inline comment describing each placement").
-- `IM_SMILES_SELECTOR` uses a full PHPDoc block so the `@deprecated` tag is
-  machine-readable by PHPStan / IDEs and references the `im 25.1600.0` removal
-  note (satisfies issue AC).
-- No base class / no interface — matches the existing
-  `Placement\Service\PlacementLocationCode` style.
-- Class is **non-`final`** to keep parity with the existing
-  `Placement\Service\PlacementLocationCode`, which is a plain `class`.
+### 2. `src/Services/IM/Placements/AbstractPlacementOptions.php`
+
+Abstract class implementing `PlacementOptionsInterface`. Holds the `$fields` array,
+provides `build()`, and exposes the three common fluent setters: `context(...)`,
+`role(...)`, `extranet(...)`. Concrete subclasses extend this.
+
+```php
+abstract class AbstractPlacementOptions implements PlacementOptionsInterface
+{
+    /** @var array<string, mixed> */
+    protected array $fields = [];
+
+    public function context(ChatContext ...$contexts): static
+    {
+        $this->fields['context'] = implode(';', array_map(static fn(ChatContext $c) => $c->value, $contexts));
+        return $this;
+    }
+
+    public function role(Role $role): static
+    {
+        $this->fields['role'] = $role->value;
+        return $this;
+    }
+
+    public function extranet(ExtranetAvailability $availability): static
+    {
+        $this->fields['extranet'] = $availability->value;
+        return $this;
+    }
+
+    public function build(): array
+    {
+        return $this->fields;
+    }
+}
+```
+
+### 3. `src/Services/IM/Placements/ChatContext.php`
+
+```php
+enum ChatContext: string
+{
+    case User = 'USER';
+    case Chat = 'CHAT';
+    case Lines = 'LINES';
+    case Crm = 'CRM';
+    case All = 'ALL';
+}
+```
+
+### 4. `src/Services/IM/Placements/Role.php`
+
+```php
+enum Role: string
+{
+    case User = 'USER';
+    case Admin = 'ADMIN';
+}
+```
+
+### 5. `src/Services/IM/Placements/ExtranetAvailability.php`
+
+```php
+enum ExtranetAvailability: string
+{
+    case Allowed = 'Y';
+    case Denied = 'N';
+}
+```
+
+### 6. `src/Services/IM/Placements/PlacementColor.php`
+
+Eighteen cases corresponding to the documented color palette
+(`RED`, `GREEN`, `MINT`, `LIGHT_BLUE`, `DARK_BLUE`, `PURPLE`, `AQUA`, `PINK`,
+`LIME`, `BROWN`, `AZURE`, `KHAKI`, `SAND`, `ORANGE`, `MARENGO`, `GRAY`, `GRAPHITE`).
+
+### 7. `src/Services/IM/Placements/TextareaPlacementOptions.php`
+
+```php
+final class TextareaPlacementOptions extends AbstractPlacementOptions
+{
+    public function __construct(string $iconName)
+    {
+        $this->fields['iconName'] = $iconName;
+    }
+
+    public function color(PlacementColor $color): self
+    {
+        $this->fields['color'] = $color->value;
+        return $this;
+    }
+
+    public function width(int $width): self
+    {
+        $this->fields['width'] = $width;
+        return $this;
+    }
+
+    public function height(int $height): self
+    {
+        $this->fields['height'] = $height;
+        return $this;
+    }
+}
+```
+
+`iconName` is required → constructor parameter. Other setters are fluent.
+
+### 8. `src/Services/IM/Placements/SidebarPlacementOptions.php`
+
+Same pattern as TEXTAREA but without `width()` / `height()`. Constructor takes
+required `iconName`. Adds fluent `color()`.
+
+### 9. `src/Services/IM/Placements/ContextMenuPlacementOptions.php`
+
+```php
+final class ContextMenuPlacementOptions extends AbstractPlacementOptions
+{
+}
+```
+
+No additional fields — exists only to provide a typed marker for context-menu
+placements. All setters come from the abstract base.
+
+### 10. Tests under `tests/Unit/Services/IM/Placements/`
+
+- `TextareaPlacementOptionsTest.php`
+- `SidebarPlacementOptionsTest.php`
+- `ContextMenuPlacementOptionsTest.php`
+
+Each test verifies:
+- Default `build()` after constructor returns the expected minimal array.
+- Each fluent setter mutates `build()` output correctly.
+- Multi-value `context()` joins with `;` in deterministic order.
+- Returned values match the underlying enum `->value` strings.
+
+---
+
+## Files to Move
+
+### 1. `src/Services/IM/PlacementLocationCodes.php` → `src/Services/IM/Placements/PlacementLocationCodes.php`
+
+Update namespace from `Bitrix24\SDK\Services\IM` to `Bitrix24\SDK\Services\IM\Placements`.
 
 ---
 
 ## Files to Modify
 
-### 1. `CHANGELOG.md`
+### 1. `src/Services/Placement/Service/Placement.php`
 
-Add one line under `## 3.2.0 – UNRELEASED` → `### Added` section
-(the section does not yet exist on this branch — create it below the existing
-`### Changed` block):
+Widen the `$options` parameter on `bind()` from `array` to
+`PlacementOptionsInterface|array`. Inside the body, normalise to array before
+passing to the API:
+
+```php
+public function bind(
+    string $placementCode,
+    string $handlerUrl,
+    array $lang,
+    PlacementOptionsInterface|array $options = [],
+    ?int $b24UserId = null,
+): PlacementBindResult {
+    if ($options instanceof PlacementOptionsInterface) {
+        $options = $options->build();
+    }
+    // … unchanged body
+}
+```
+
+This is **backwards compatible**: every existing `bind(..., array $options)` call
+keeps working (PHPStan will not flag it because `array` is one of the accepted
+types).
+
+### 2. `CHANGELOG.md`
+
+Replace the existing #437 line under `### Added` with two lines covering the
+extended scope:
 
 ```markdown
 ### Added
 
-- Added `Bitrix24\SDK\Services\IM\PlacementLocationCodes` with constants `IM_TEXTAREA`, `IM_SIDEBAR`, `IM_CONTEXT_MENU`, and `IM_SMILES_SELECTOR` (deprecated since `im 25.1600.0`) for IM widget placement codes ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
+- Added `Bitrix24\SDK\Services\IM\Placements` namespace with `PlacementLocationCodes` (constants `IM_TEXTAREA`, `IM_SIDEBAR`, `IM_CONTEXT_MENU`, deprecated `IM_SMILES_SELECTOR`), `PlacementOptionsInterface`, `AbstractPlacementOptions`, fluent options builders `TextareaPlacementOptions`, `SidebarPlacementOptions`, `ContextMenuPlacementOptions`, and supporting enums `ChatContext`, `Role`, `ExtranetAvailability`, `PlacementColor` ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
+
+### Changed
+
+- `Placement::bind()` `$options` parameter widened from `array` to `PlacementOptionsInterface|array` for type-safe fluent IM placement configuration; existing array call sites are unaffected ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
 ```
 
 ---
 
 ## Deptrac compliance
 
-New class lives in the `Services` layer and imports nothing outside that layer
-(it has no `use` statements at all). No new violations are introduced.
+All new code lives in `src/Services/IM/Placements/`, which Deptrac classifies as
+the `Services` layer. The interface, abstract, enums, builders, and constants
+class import only PHP built-ins (no SDK cross-layer imports). The only
+cross-package import is `Placement\Service\Placement` referencing
+`PlacementOptionsInterface` — both are inside `Services`, so no new violations.
 
 ---
 
@@ -171,8 +313,7 @@ make lint-deptrac
 make test-unit
 ```
 
-No integration suite needs to run for this change — the new class is a plain
-constants holder with no runtime behaviour and no REST API calls.
+No integration suite required — see Out of scope above.
 
 ---
 
@@ -180,7 +321,7 @@ constants holder with no runtime behaviour and no REST API calls.
 
 | Issue criterion | Addressed by |
 |---|---|
-| `PlacementLocationCode` exposes the four constants with a short inline comment describing each placement | New class `Bitrix24\SDK\Services\IM\PlacementLocationCodes` with 4 `public const` entries, each with an inline or PHPDoc comment |
-| `IM_SMILES_SELECTOR` marked with `@deprecated` pointing at the `im 25.1600.0` removal note | PHPDoc block on the constant with `@deprecated No longer works since module im 25.1600.0…` |
-| `CHANGELOG.md` entry under `## 3.2.0 – UNRELEASED` → `### Added` with a link to #437 | One new line added |
-| `make lint-all` passes | Verified in the Verification section above (we run the four linters + unit tests that make up the light gate; `make lint-all` is a superset) |
+| `PlacementLocationCode` exposes the four constants with a short inline comment describing each placement | `Placements\PlacementLocationCodes` with 4 `public const` entries, each commented |
+| `IM_SMILES_SELECTOR` marked `@deprecated` pointing at the `im 25.1600.0` removal note | PHPDoc block on the constant referencing `im 25.1600.0` |
+| `CHANGELOG.md` entry under `## 3.2.0 – UNRELEASED` → `### Added` with link to #437 | One line under `### Added`, plus a `### Changed` line for the bind() signature widening |
+| `make lint-all` passes | Verified by the Verification section (cs-fixer, rector, phpstan, deptrac, test-unit are the components of `lint-all`) |

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\IM;
+namespace Bitrix24\SDK\Services\IM\Placements;
 
 /**
  * IM widget placement codes (scope `im`).
