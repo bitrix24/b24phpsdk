@@ -13,7 +13,11 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Services\IM\Placements;
 
+use Bitrix24\SDK\Services\IM\Placements\ContextMenuPlacementOptions;
+use Bitrix24\SDK\Services\IM\Placements\PlacementColor;
 use Bitrix24\SDK\Services\IM\Placements\PlacementLocationCodes;
+use Bitrix24\SDK\Services\IM\Placements\SidebarPlacementOptions;
+use Bitrix24\SDK\Services\IM\Placements\TextareaPlacementOptions;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;

@@ -1,0 +1,205 @@
+<?php
+
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace Bitrix24\SDK\Core\Contracts;
+
+/**
+ * ISO 639-1 language codes in lowercase form.
+ */
+enum LangCodes: string
+{
+    case AA = 'aa';
+    case AB = 'ab';
+    case AE = 'ae';
+    case AF = 'af';
+    case AK = 'ak';
+    case AM = 'am';
+    case AN = 'an';
+    case AR = 'ar';
+    case AS = 'as';
+    case AV = 'av';
+    case AY = 'ay';
+    case AZ = 'az';
+    case BA = 'ba';
+    case BE = 'be';
+    case BG = 'bg';
+    case BH = 'bh';
+    case BI = 'bi';
+    case BM = 'bm';
+    case BN = 'bn';
+    case BO = 'bo';
+    case BR = 'br';
+    case BS = 'bs';
+    case CA = 'ca';
+    case CE = 'ce';
+    case CH = 'ch';
+    case CO = 'co';
+    case CR = 'cr';
+    case CS = 'cs';
+    case CU = 'cu';
+    case CV = 'cv';
+    case CY = 'cy';
+    case DA = 'da';
+    case DE = 'de';
+    case DV = 'dv';
+    case DZ = 'dz';
+    case EE = 'ee';
+    case EL = 'el';
+    case EN = 'en';
+    case EO = 'eo';
+    case ES = 'es';
+    case ET = 'et';
+    case EU = 'eu';
+    case FA = 'fa';
+    case FF = 'ff';
+    case FI = 'fi';
+    case FJ = 'fj';
+    case FO = 'fo';
+    case FR = 'fr';
+    case FY = 'fy';
+    case GA = 'ga';
+    case GD = 'gd';
+    case GL = 'gl';
+    case GN = 'gn';
+    case GU = 'gu';
+    case GV = 'gv';
+    case HA = 'ha';
+    case HE = 'he';
+    case HI = 'hi';
+    case HO = 'ho';
+    case HR = 'hr';
+    case HT = 'ht';
+    case HU = 'hu';
+    case HY = 'hy';
+    case HZ = 'hz';
+    case IA = 'ia';
+    case ID = 'id';
+    case IE = 'ie';
+    case IG = 'ig';
+    case II = 'ii';
+    case IK = 'ik';
+    case IO = 'io';
+    case IS = 'is';
+    case IT = 'it';
+    case IU = 'iu';
+    case JA = 'ja';
+    case JV = 'jv';
+    case KA = 'ka';
+    case KG = 'kg';
+    case KI = 'ki';
+    case KJ = 'kj';
+    case KK = 'kk';
+    case KL = 'kl';
+    case KM = 'km';
+    case KN = 'kn';
+    case KO = 'ko';
+    case KR = 'kr';
+    case KS = 'ks';
+    case KU = 'ku';
+    case KV = 'kv';
+    case KW = 'kw';
+    case KY = 'ky';
+    case LA = 'la';
+    case LB = 'lb';
+    case LG = 'lg';
+    case LI = 'li';
+    case LN = 'ln';
+    case LO = 'lo';
+    case LT = 'lt';
+    case LU = 'lu';
+    case LV = 'lv';
+    case MG = 'mg';
+    case MH = 'mh';
+    case MI = 'mi';
+    case MK = 'mk';
+    case ML = 'ml';
+    case MN = 'mn';
+    case MR = 'mr';
+    case MS = 'ms';
+    case MT = 'mt';
+    case MY = 'my';
+    case NA = 'na';
+    case NB = 'nb';
+    case ND = 'nd';
+    case NE = 'ne';
+    case NG = 'ng';
+    case NL = 'nl';
+    case NN = 'nn';
+    case NO = 'no';
+    case NR = 'nr';
+    case NV = 'nv';
+    case NY = 'ny';
+    case OC = 'oc';
+    case OJ = 'oj';
+    case OM = 'om';
+    case OR = 'or';
+    case OS = 'os';
+    case PA = 'pa';
+    case PI = 'pi';
+    case PL = 'pl';
+    case PS = 'ps';
+    case PT = 'pt';
+    case QU = 'qu';
+    case RM = 'rm';
+    case RN = 'rn';
+    case RO = 'ro';
+    case RU = 'ru';
+    case RW = 'rw';
+    case SA = 'sa';
+    case SC = 'sc';
+    case SD = 'sd';
+    case SE = 'se';
+    case SG = 'sg';
+    case SI = 'si';
+    case SK = 'sk';
+    case SL = 'sl';
+    case SM = 'sm';
+    case SN = 'sn';
+    case SO = 'so';
+    case SQ = 'sq';
+    case SR = 'sr';
+    case SS = 'ss';
+    case ST = 'st';
+    case SU = 'su';
+    case SV = 'sv';
+    case SW = 'sw';
+    case TA = 'ta';
+    case TE = 'te';
+    case TG = 'tg';
+    case TH = 'th';
+    case TI = 'ti';
+    case TK = 'tk';
+    case TL = 'tl';
+    case TN = 'tn';
+    case TO = 'to';
+    case TR = 'tr';
+    case TS = 'ts';
+    case TT = 'tt';
+    case TW = 'tw';
+    case TY = 'ty';
+    case UG = 'ug';
+    case UK = 'uk';
+    case UR = 'ur';
+    case UZ = 'uz';
+    case VE = 've';
+    case VI = 'vi';
+    case VO = 'vo';
+    case WA = 'wa';
+    case WO = 'wo';
+    case XH = 'xh';
+    case YI = 'yi';
+    case YO = 'yo';
+    case ZA = 'za';
+    case ZH = 'zh';
+    case ZU = 'zu';
+}

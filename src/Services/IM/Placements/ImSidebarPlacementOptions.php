@@ -18,7 +18,7 @@ namespace Bitrix24\SDK\Services\IM\Placements;
  *
  * @link https://apidocs.bitrix24.com/api-reference/widgets/im/sidebar.html
  */
-final class SidebarPlacementOptions extends AbstractPlacementOptions
+class ImSidebarPlacementOptions extends AbstractPlacementOptions
 {
     public function __construct(string $iconName)
     {
