@@ -19,6 +19,8 @@ use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\IM\Message\Service\Message;
 use Bitrix24\SDK\Services\IM\Notify\Service\Notify;
 use Bitrix24\SDK\Services\IM\Placements\PlacementLocationCodes;
+use Bitrix24\SDK\Services\IM\Placements\Placements;
+use Bitrix24\SDK\Services\Placement\Service\Placement;
 
 #[ApiServiceBuilderMetadata(new Scope(['im']))]
 class IMServiceBuilder extends AbstractServiceBuilder
@@ -44,5 +46,14 @@ class IMServiceBuilder extends AbstractServiceBuilder
     public function placementLocationCodes(): PlacementLocationCodes
     {
         return new PlacementLocationCodes();
+    }
+
+    public function placements(): Placements
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Placements(new Placement($this->core, $this->log));
+        }
+
+        return $this->serviceCache[__METHOD__];
     }
 }
