@@ -32,6 +32,10 @@ class PlacementLocationCodes
     // See https://apidocs.bitrix24.com/api-reference/widgets/im/context-menu.html
     public const string IM_CONTEXT_MENU = 'IM_CONTEXT_MENU';
 
+    // Main navigation panel item in messenger.
+    // See https://apidocs.bitrix24.com/api-reference/widgets/im/index.html
+    public const string IM_NAVIGATION = 'IM_NAVIGATION';
+
     /**
      * Smiles / Giphy selector pop-up.
      *

@@ -31,7 +31,8 @@ class Placement extends AbstractService
     /**
      * Installs the embedding location handler
      *
-     *
+     * @param non-empty-string $placementCode,
+     * @param non-empty-string $handlerUrl,
      * @throws BaseException
      * @throws TransportException
      * @link https://apidocs.bitrix24.com/api-reference/widgets/placement-bind.html
