@@ -446,6 +446,159 @@ class <Name>ItemResultTest extends TestCase
 
 ---
 
+## Implementing placements for a scope
+
+Use this section when the user asks to add support for Bitrix24 **widget placement codes**
+(see `placement.list`) and their `OPTIONS` payload builders within a scope (e.g. IM, CRM,
+Tasks, Calendar, Sonet).
+
+### Directory layout
+
+| Artefact | Location |
+|---|---|
+| Placement codes class for the scope | `src/Services/<Scope>/Placements/<Scope>PlacementLocationCodes.php` |
+| Option builders (one per placement location) | `src/Services/<Scope>/Placements/<Location>PlacementOptions.php` |
+| Scope-specific enums (values used only by this scope) | `src/Services/<Scope>/Placements/<EnumName>.php` |
+| Shared contracts and enums (reused by ≥ 2 scopes) | `src/Services/Placement/` |
+
+### Placement codes: always a plain `class`, NOT an `enum`
+
+```php
+class <Scope>PlacementLocationCodes
+{
+    // <short description>
+    // See https://apidocs.bitrix24.com/...
+    public const string <CODE> = '<CODE>';
+
+    /**
+     * @deprecated <when/why> — see https://apidocs.bitrix24.com/...
+     */
+    public const string <DEPRECATED_CODE> = '<DEPRECATED_CODE>';
+}
+```
+
+**Why not an enum**: individual placements get deprecated independently (e.g. IM's
+`IM_SMILES_SELECTOR` stopped working in `im 25.1600.0`, others remain active). A
+`public const` carries a `@deprecated` PHPDoc tag cleanly; an enum `case` does not.
+
+### Option builders: fluent interface extending `AbstractPlacementOptions`
+
+- One class per placement location (e.g. `TextareaPlacementOptions`, `SidebarPlacementOptions`)
+- `final class <Location>PlacementOptions extends AbstractPlacementOptions`
+- **Required** option fields → constructor parameters
+- **Optional** option fields → fluent setters returning `self`
+- `AbstractPlacementOptions` already provides shared setters `context()`, `role()`,
+  `extranet()` and the `build(): array` implementation — do NOT duplicate them.
+
+### Splitting enums: shared vs scope-specific
+
+| Criterion | Location |
+|---|---|
+| Value appears in a single scope (e.g. IM `ChatContext`, IM `PlacementColor`) | `src/Services/<Scope>/Placements/` |
+| Value is reused across scopes (e.g. `Role`, `ExtranetAvailability`, `PlacementOptionsInterface`) | `src/Services/Placement/` |
+
+If a scope-specific enum is likely to be reused by another scope later, place it in
+`src/Services/Placement/` from the start instead of moving it later.
+
+### `Placement::bind()` is already compatible
+
+The service signature already accepts `PlacementOptionsInterface|array`:
+
+```php
+public function bind(
+    string $placementCode,
+    string $handlerUrl,
+    array $lang,
+    PlacementOptionsInterface|array $options = [],
+    ?int $b24UserId = null,
+): PlacementBindResult
+```
+
+Do **not** modify this signature when adding a new scope — just implement
+`PlacementOptionsInterface` (directly or via `AbstractPlacementOptions`) in the new
+builders.
+
+### Mandatory reflection-based integration test
+
+**Rule**: every `<Scope>PlacementLocationCodes` class MUST have a corresponding integration
+test at `tests/Integration/Services/<Scope>/Placements/<Scope>PlacementLocationCodesTest.php`.
+
+**Purpose**: detect drift between Bitrix24 API and the SDK. When Bitrix24 ships a new
+placement in the scope, the test fails and the missing code is immediately visible.
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Bitrix24\SDK\Tests\Integration\Services\<Scope>\Placements;
+
+use Bitrix24\SDK\Services\<Scope>\Placements\<Scope>PlacementLocationCodes;
+use Bitrix24\SDK\Services\ServiceBuilder;
+use Bitrix24\SDK\Tests\Integration\Factory;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+
+#[CoversClass(<Scope>PlacementLocationCodes::class)]
+class <Scope>PlacementLocationCodesTest extends TestCase
+{
+    private ServiceBuilder $sb;
+
+    #[Test]
+    #[TestDox('<Scope>PlacementLocationCodes declares every <SCOPE_PREFIX>_ placement returned by placement.list')]
+    public function testAllApi<Scope>PlacementsAreDeclared(): void
+    {
+        $remoteCodes = $this->sb->getPlacementScope()->placement()->list()->getLocationCodes();
+
+        $scopeCodes = array_values(array_filter(
+            $remoteCodes,
+            static fn (string $code): bool => str_starts_with($code, '<SCOPE_PREFIX>_'),
+        ));
+
+        $reflectionClass = new ReflectionClass(<Scope>PlacementLocationCodes::class);
+        $declared = array_values($reflectionClass->getConstants());
+
+        $missing = array_values(array_diff($scopeCodes, $declared));
+
+        $this->assertSame([], $missing, sprintf(
+            '<Scope>PlacementLocationCodes is missing constants for placements returned by placement.list: %s',
+            implode(', ', $missing),
+        ));
+    }
+
+    #[\Override]
+    protected function setUp(): void
+    {
+        $this->sb = Factory::getServiceBuilder(true);
+    }
+}
+```
+
+**Template notes:**
+- `<SCOPE_PREFIX>` is the common prefix of the scope's placement codes (e.g. `IM`, `CRM`,
+  `TASK`, `SONET_GROUP`). Always verify the actual prefix against the raw `placement.list`
+  response before writing the filter.
+- `Factory::getServiceBuilder(true)` requires application credentials — an incoming
+  webhook is not sufficient for `placement.list`.
+
+**Live example**: `tests/Integration/Services/IM/Placements/PlacementLocationCodesTest.php`
+
+### Unit tests for option builders
+
+For every `<Location>PlacementOptions` class, add three test methods:
+
+1. `build()` with the minimal payload (only constructor-required fields present)
+2. `build()` with the full payload (every fluent setter invoked once) — assert the exact
+   associative array shape the API expects
+3. Every fluent setter returns `$this` (chainable)
+
+**Live example**: `tests/Unit/Services/IM/Placements/TextareaPlacementOptionsTest.php`
+
+---
+
 ## Task folder and implementation plan
 
 **Rule**: before writing any code, create a dedicated folder and a plan file for the issue.
