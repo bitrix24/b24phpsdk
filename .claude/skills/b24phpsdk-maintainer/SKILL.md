@@ -904,6 +904,19 @@ Report the status to the user:
 
 Run this step **only after both phases of the quality gate are fully green and CHANGELOG is updated**.
 
+### Core rules (non-negotiable)
+
+- **Auto-create the PR yourself** via `mcp__github__create_pull_request` (or `gh pr create` as fallback). **Never** respond with a "click this URL to create the PR" message — the agent opens the PR, not the user. The URL returned by `git push` (`.../pull/new/<branch>`) is informational; do not forward it as a manual-action prompt.
+- **Base branch is fixed by API version:**
+
+    | API version | PR base branch |
+    |---|---|
+    | v3 | `v3-dev` |
+    | v1 | `dev` |
+
+    Never open a PR against `main`. The base must match the base branch chosen in Step 4 of the start-of-work protocol.
+- **PR body comes from the repo template.** Always read `.github/PULL_REQUEST_TEMPLATE.md` fresh from disk with `cat` immediately before composing the body. Do not reuse a memorised layout; the template evolves.
+
 **Required before starting:**
 1. Invoke `superpowers:verification-before-completion` — run all quality gate commands again, capture actual output, confirm every command passes. Do not create the PR based on remembered results.
 2. Read the PR template from disk: `cat .github/PULL_REQUEST_TEMPLATE.md` — the PR body MUST follow this template. Do not use a memorised or hardcoded structure.
