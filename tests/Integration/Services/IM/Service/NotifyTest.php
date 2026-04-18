@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Tests\Integration\Services\IM\Notify\Service;
+namespace Bitrix24\SDK\Tests\Integration\Services\IM\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
