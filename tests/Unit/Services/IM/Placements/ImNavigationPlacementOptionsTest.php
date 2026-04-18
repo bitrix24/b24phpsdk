@@ -30,16 +30,16 @@ class ImNavigationPlacementOptionsTest extends TestCase
     #[TestDox('build() after constructor only contains the required iconName')]
     public function testBuildWithIconNameOnly(): void
     {
-        $navigationPlacementOptions = new ImNavigationPlacementOptions('fa-compass');
+        $imNavigationPlacementOptions = new ImNavigationPlacementOptions('fa-compass');
 
-        $this->assertSame(['iconName' => 'fa-compass'], $navigationPlacementOptions->build());
+        $this->assertSame(['iconName' => 'fa-compass'], $imNavigationPlacementOptions->build());
     }
 
     #[Test]
     #[TestDox('all fluent setters mutate build() output to expected payload')]
     public function testFullPayload(): void
     {
-        $navigationPlacementOptions = (new ImNavigationPlacementOptions('fa-compass'))
+        $imTextareaPlacementOptions = (new ImNavigationPlacementOptions('fa-compass'))
             ->context(ChatContext::USER, ChatContext::CHAT)
             ->role(Role::Admin)
             ->color(PlacementColor::Aqua)
@@ -57,7 +57,7 @@ class ImNavigationPlacementOptionsTest extends TestCase
                 'height'   => 160,
                 'extranet' => 'N',
             ],
-            $navigationPlacementOptions->build(),
+            $imTextareaPlacementOptions->build(),
         );
     }
 }

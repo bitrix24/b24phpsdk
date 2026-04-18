@@ -33,24 +33,28 @@ class PlacementsTest extends TestCase
     #[Test]
     public function testTypedBindAndUnbindMethods(): void
     {
-        $service = $this->sb->getIMScope()->placements();
+        $placements = $this->sb->getIMScope()->placements();
 
-        $service->unbindSidebar();
-        $service->unbindNavigation();
-        $service->unbindContextMenu();
-        $service->unbindTextarea();
-        $service->unbindSmilesSelector();
+        $placements->unbindSidebar();
+        $placements->unbindNavigation();
+        $placements->unbindContextMenu();
+        $placements->unbindTextarea();
+        $placements->unbindSmilesSelector();
 
         self::assertTrue(
-            $service->bindSidebar(
+            $placements->bindSidebar(
                 'https://bitrix24test.com/im-sidebar',
-                ['en' => ['TITLE' => 'Sidebar']],
-                (new ImSidebarPlacementOptions('fa-bug'))->color(PlacementColor::Green),
+                [
+                    'en' => ['TITLE' => 'Sidebar'],
+                    'ru' => ['TITLE' => 'v']
+                ],
+                (new ImSidebarPlacementOptions('fa-bug'))
+                    ->color(PlacementColor::Green),
             )->isSuccess()
         );
 
         self::assertTrue(
-            $service->bindNavigation(
+            $placements->bindNavigation(
                 'https://bitrix24test.com/im-navigation',
                 ['en' => ['TITLE' => 'Navigation']],
                 new ImNavigationPlacementOptions('fa-compass'),
@@ -58,7 +62,7 @@ class PlacementsTest extends TestCase
         );
 
         self::assertTrue(
-            $service->bindContextMenu(
+            $placements->bindContextMenu(
                 'https://bitrix24test.com/im-context-menu',
                 ['en' => ['TITLE' => 'Context menu']],
                 new ImContextMenuPlacementOptions(),
@@ -66,26 +70,29 @@ class PlacementsTest extends TestCase
         );
 
         self::assertTrue(
-            $service->bindTextarea(
+            $placements->bindTextarea(
                 'https://bitrix24test.com/im-textarea',
                 ['en' => ['TITLE' => 'Textarea']],
-                (new ImTextareaPlacementOptions('fa-comment'))->width(400)->height(160)->color(PlacementColor::Brown),
+                (new ImTextareaPlacementOptions('fa-comment'))
+                    ->width(400)
+                    ->height(160)
+                    ->color(PlacementColor::Brown),
             )->isSuccess()
         );
 
         self::assertTrue(
-            $service->bindSmilesSelector(
+            $placements->bindSmilesSelector(
                 'https://bitrix24test.com/im-smiles-selector',
                 ['en' => ['TITLE' => 'Smiles selector']],
                 ['name' => 'fa-face-smile'],
             )->isSuccess()
         );
 
-        self::assertGreaterThanOrEqual(0, $service->unbindSidebar()->getDeletedPlacementHandlersCount());
-        self::assertGreaterThanOrEqual(0, $service->unbindNavigation()->getDeletedPlacementHandlersCount());
-        self::assertGreaterThanOrEqual(0, $service->unbindContextMenu()->getDeletedPlacementHandlersCount());
-        self::assertGreaterThanOrEqual(0, $service->unbindTextarea()->getDeletedPlacementHandlersCount());
-        self::assertGreaterThanOrEqual(0, $service->unbindSmilesSelector()->getDeletedPlacementHandlersCount());
+        self::assertGreaterThanOrEqual(0, $placements->unbindSidebar()->getDeletedPlacementHandlersCount());
+        self::assertGreaterThanOrEqual(0, $placements->unbindNavigation()->getDeletedPlacementHandlersCount());
+        self::assertGreaterThanOrEqual(0, $placements->unbindContextMenu()->getDeletedPlacementHandlersCount());
+        self::assertGreaterThanOrEqual(0, $placements->unbindTextarea()->getDeletedPlacementHandlersCount());
+        self::assertGreaterThanOrEqual(0, $placements->unbindSmilesSelector()->getDeletedPlacementHandlersCount());
     }
 
     #[\Override]

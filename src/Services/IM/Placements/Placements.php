@@ -22,9 +22,9 @@ use Bitrix24\SDK\Services\Placement\Service\Placement;
 /**
  * Typed placement registration helpers for IM widgets.
  */
-final class Placements
+final readonly class Placements
 {
-    public function __construct(private readonly Placement $placementService)
+    public function __construct(private Placement $placementService)
     {
     }
 
@@ -35,14 +35,14 @@ final class Placements
     public function bindSidebar(
         string $handlerUrl,
         array $lang,
-        ImSidebarPlacementOptions $options,
+        ImSidebarPlacementOptions $imSidebarPlacementOptions,
         ?int $b24UserId = null,
     ): PlacementBindResult {
         return $this->placementService->bind(
             PlacementLocationCodes::IM_SIDEBAR,
             $handlerUrl,
             $lang,
-            $options,
+            $imSidebarPlacementOptions,
             $b24UserId,
         );
     }
@@ -54,14 +54,14 @@ final class Placements
     public function bindNavigation(
         string $handlerUrl,
         array $lang,
-        ImNavigationPlacementOptions $options,
+        ImNavigationPlacementOptions $imNavigationPlacementOptions,
         ?int $b24UserId = null,
     ): PlacementBindResult {
         return $this->placementService->bind(
             PlacementLocationCodes::IM_NAVIGATION,
             $handlerUrl,
             $lang,
-            $options,
+            $imNavigationPlacementOptions,
             $b24UserId,
         );
     }
@@ -73,14 +73,14 @@ final class Placements
     public function bindContextMenu(
         string $handlerUrl,
         array $lang,
-        ImContextMenuPlacementOptions $options,
+        ImContextMenuPlacementOptions $imContextMenuPlacementOptions,
         ?int $b24UserId = null,
     ): PlacementBindResult {
         return $this->placementService->bind(
             PlacementLocationCodes::IM_CONTEXT_MENU,
             $handlerUrl,
             $lang,
-            $options,
+            $imContextMenuPlacementOptions,
             $b24UserId,
         );
     }
@@ -92,20 +92,19 @@ final class Placements
     public function bindTextarea(
         string $handlerUrl,
         array $lang,
-        ImTextareaPlacementOptions $options,
+        ImTextareaPlacementOptions $imTextareaPlacementOptions,
         ?int $b24UserId = null,
     ): PlacementBindResult {
         return $this->placementService->bind(
             PlacementLocationCodes::IM_TEXTAREA,
             $handlerUrl,
             $lang,
-            $options,
+            $imTextareaPlacementOptions,
             $b24UserId,
         );
     }
 
     /**
-     * @deprecated
      * @throws BaseException
      * @throws TransportException
      * @deprecated
@@ -113,14 +112,14 @@ final class Placements
     public function bindSmilesSelector(
         string $handlerUrl,
         array $lang,
-        array $options = [],
+        array $imSmilesSelectorPlacementOptions = [],
         ?int $b24UserId = null,
     ): PlacementBindResult {
         return $this->placementService->bind(
             PlacementLocationCodes::IM_SMILES_SELECTOR,
             $handlerUrl,
             $lang,
-            $options,
+            $imSmilesSelectorPlacementOptions,
             $b24UserId,
         );
     }
