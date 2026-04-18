@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Unit\Services\IM;
 
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
+use Bitrix24\SDK\Services\IM\Placements\Placements;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBatch;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBulkItemsReader;
@@ -35,6 +36,12 @@ class IMServiceBuilderTest extends TestCase
     public function testGetChatService(): void
     {
         $this::assertSame($this->serviceBuilder->chat(), $this->serviceBuilder->chat());
+    }
+    
+    public function testGetPlacementsService(): void
+    {
+        $this->assertInstanceOf(Placements::class, $this->serviceBuilder->placements());
+        $this->assertSame($this->serviceBuilder->placements(), $this->serviceBuilder->placements());
     }
 
     #[\Override]

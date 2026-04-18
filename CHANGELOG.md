@@ -15,6 +15,8 @@
 - Updated `AGENTS.md`: limit mandatory `b24phpsdk-maintainer` usage to issue, changelog, and release-related work
 - Updated `b24phpsdk-maintainer` skill: added "Implementing placements for a scope" section with directory layout, plain-class-over-enum rationale, option-builder template, shared-vs-scope-specific enum placement, and mandatory reflection-based integration test template ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
 - Updated `b24phpsdk-maintainer` skill and `AGENTS.md`: require polling PR CI status via `mcp__github__get_pull_request_status` (fallback `gh pr checks --watch`) after every push to a PR branch, with ~60s cadence, until the status reaches a terminal state ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
+- Updated `b24phpsdk-maintainer` skill: generalized the placements workflow to cover `PlacementLocationCodes`, typed `Placements` facades, `PlacementLangMap`/`PlacementLangItem`, `LangCodes` placement, service-builder registration, docs links, and the full unit/integration test matrix
+- Updated `b24phpsdk-maintainer` skill: moved the detailed placements workflow into a dedicated adjacent guide to keep `SKILL.md` compact while preserving the full placement implementation playbook
 
 ## 3.1.0
 
