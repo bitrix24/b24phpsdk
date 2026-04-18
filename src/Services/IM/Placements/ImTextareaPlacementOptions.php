@@ -19,7 +19,7 @@ namespace Bitrix24\SDK\Services\IM\Placements;
  *
  * @link https://apidocs.bitrix24.com/api-reference/widgets/im/textarea.html
  */
-final class TextareaPlacementOptions extends AbstractPlacementOptions
+class ImTextareaPlacementOptions extends AbstractPlacementOptions
 {
     public function __construct(string $iconName)
     {

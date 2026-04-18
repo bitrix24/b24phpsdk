@@ -19,6 +19,6 @@ namespace Bitrix24\SDK\Services\IM\Placements;
  *
  * @link https://apidocs.bitrix24.com/api-reference/widgets/im/context-menu.html
  */
-final class ContextMenuPlacementOptions extends AbstractPlacementOptions
+class ImContextMenuPlacementOptions extends AbstractPlacementOptions
 {
 }
