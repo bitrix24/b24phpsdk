@@ -397,7 +397,9 @@ class MessageTest extends TestCase
 
 ### 1. `src/Services/IM/IMServiceBuilder.php`
 
-Add a new accessor mirroring `notify()`:
+Add a new accessor mirroring `notify()`. After merging `v3-dev` the builder also
+exposes `placementLocationCodes()`; place `message()` between `notify()` and
+`placementLocationCodes()`:
 
 ```php
 use Bitrix24\SDK\Services\IM\Message\Service\Message;
@@ -446,14 +448,10 @@ test-integration-im-message:
 
 ### 5. `CHANGELOG.md`
 
-Insert a new top section above `## 3.1.0` (the commented `## Unreleased`
-template at line 1432 stays as is):
+The `## 3.2.0 – UNRELEASED` section already exists (created by #437). Append a
+new bullet under its existing `### Added` list:
 
 ```markdown
-## 3.2.0 – UNRELEASED
-
-### Added
-
 - Added `Services\IM\Message\Service\Message` service for `im.message.*`
   support ([#426](https://github.com/bitrix24/b24phpsdk/issues/426)):
   - `add` — send a message (`im.message.add`)
