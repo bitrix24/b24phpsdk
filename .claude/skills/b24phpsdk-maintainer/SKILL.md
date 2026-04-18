@@ -997,6 +997,62 @@ milestone: <milestone number from step 3>
 
 After the PR is created, output the PR URL so the user can open it directly.
 
+### Step 6 — Poll the PR status until CI completes
+
+Right after the PR is created (or after any subsequent `git push` to an existing PR
+branch), poll the PR status via MCP until all required checks finish. Do **not** declare
+the PR "pushed" or "updated" until CI has reported back — a green local quality gate does
+not guarantee green CI.
+
+Call `mcp__github__get_pull_request_status`:
+
+```
+owner: bitrix24
+repo:  b24phpsdk
+pullNumber: <PR number>
+```
+
+Interpret the response:
+
+| `state` | Meaning | Action |
+|---|---|---|
+| `pending` | One or more checks still running | Wait, then poll again |
+| `success` | All required checks passed | Report success to the user |
+| `failure` / `error` | At least one required check failed | Fetch the failing run's logs, diagnose, fix, push again, and restart polling |
+
+**Polling cadence**: wait ~60 seconds between polls. Do not spam the API.
+
+**If MCP is unavailable**, use the `gh` fallback:
+
+```bash
+gh pr checks <PR number> --repo bitrix24/b24phpsdk --watch
+```
+
+### Step 7 — Report the final CI state to the user
+
+Once polling terminates, report one of:
+
+- ✅ All checks green — include the PR URL and the list of passed checks.
+- ❌ Failing checks — include the PR URL, the names of the failed jobs, and a one-line
+  summary of what the failure indicates. Do not auto-merge or mark the work "done" in
+  this state.
+
+---
+
+## Pushing to an existing PR branch
+
+Any `git push` to a branch that already has an open PR MUST be followed by a PR status
+poll, using the same procedure as **Step 6** of the PR creation workflow above.
+
+**Rule**: after `git push origin <branch>`:
+
+1. Resolve the PR number for the branch (e.g. via `gh pr view <branch> --json number` or
+   `mcp__github__list_pull_requests` filtered by `head`).
+2. Call `mcp__github__get_pull_request_status` with that PR number.
+3. Poll until `state` is no longer `pending`.
+4. Report the final state to the user — do not consider the push "done" until CI has
+   reported back.
+
 ---
 
 ## Finishing a development branch
