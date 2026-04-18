@@ -21,6 +21,18 @@ This applies to:
 
 Do not skip this step even for small edits.
 
+## Required first skill
+
+- For issue-related work in this repository, invoke `.claude/skills/b24phpsdk-maintainer/SKILL.md` first.
+- This includes creating, reading, or updating GitHub issues, planning from an issue, referencing an issue in branches or commits, and any work touching changelog or release context.
+- If other skills also apply to that work, use `b24phpsdk-maintainer` before them and then continue with the rest of the workflow.
+
+## Issue language
+
+- Every GitHub issue in `bitrix24/b24phpsdk` — title, body, and checklists — MUST be written in **English only**, regardless of the language used in conversation.
+- Applies to creating new issues, updating existing issue bodies or titles, and posting issue comments.
+- Translate content to English before writing to GitHub; do not mix languages inside a single issue. Proper nouns (method names, file paths, URLs) stay as-is.
+
 ## OpenAPI Schema
 - Before implementing any task, refresh the local OpenAPI schema snapshot with `make oa-schema-build`.
 - Treat `docs/open-api/openapi.json` as the repository baseline for current REST API research, implementation, and release-time verification.

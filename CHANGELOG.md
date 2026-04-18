@@ -1,4 +1,18 @@
 # b24-php-sdk change log
+## 3.2.0 – UNRELEASED§
+
+### Added
+
+- Added `Bitrix24\SDK\Services\IM\Placements\PlacementLocationCodes` with constants `IM_TEXTAREA`, `IM_SIDEBAR`, `IM_CONTEXT_MENU`, `IM_NAVIGATION`, and `IM_SMILES_SELECTOR` (deprecated since `im 25.1600.0`) for IM widget placement codes ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
+- Added `PlacementOptionsInterface` and fluent option builders `TextareaPlacementOptions`, `SidebarPlacementOptions`, `ContextMenuPlacementOptions` under `Bitrix24\SDK\Services\IM\Placements` namespace, backed by `ChatContext`, `PlacementColor` (IM-specific) and shared `Role`, `ExtranetAvailability` string-backed enums under `Bitrix24\SDK\Services\Placement` ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
+- Added integration test `PlacementLocationCodesTest` that asserts (via reflection) every `IM_`-prefixed code returned by `placement.list` is declared as a constant in `PlacementLocationCodes` ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
+
+### Changed
+
+- Widened `Placement::bind()` `$options` parameter type to `PlacementOptionsInterface|array` — existing array callers remain fully compatible ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
+- Updated `b24phpsdk-maintainer` skill and `AGENTS.md`: all GitHub issues (title, body, checklists, comments) must be written in English only ([#422](https://github.com/bitrix24/b24phpsdk/issues/422))
+- Updated `AGENTS.md`: limit mandatory `b24phpsdk-maintainer` usage to issue, changelog, and release-related work
+- Updated `b24phpsdk-maintainer` skill: added "Implementing placements for a scope" section with directory layout, plain-class-over-enum rationale, option-builder template, shared-vs-scope-specific enum placement, and mandatory reflection-based integration test template ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
 
 ## 3.1.0
 
