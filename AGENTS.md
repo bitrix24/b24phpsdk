@@ -42,6 +42,13 @@ Do not skip this step even for small edits.
 - For SDK/live API coverage use the `make` targets that wrap the console commands.
 - For OA-schema-based coverage use the dedicated `make` target once it is available in the repository.
 
+## Post-push PR status
+
+- After **every** `git push` to a branch that has an open Pull Request (including the initial push that creates the PR and every subsequent push to the same branch), poll the PR CI status until it reaches a terminal state.
+- Use `mcp__github__get_pull_request_status` (fallback: `gh pr checks <number> --watch`). Recommended cadence: ~60 seconds between polls.
+- Report the final CI state (success or failure, with the list of failed checks) back to the user. Do not consider the push done until CI is green or the failures have been surfaced.
+- Full workflow lives in `.claude/skills/b24phpsdk-maintainer/SKILL.md` → section "Pushing to an existing PR branch" and steps 6–7 of "Creating a Pull Request after a green quality gate".
+
 ## Testing Conventions
 - If a service exposes entity-returning `get` and/or `list` methods, add a separate integration test file dedicated to result-item phpdoc annotation validation.
 - That dedicated test file must verify both contracts against live field metadata:
