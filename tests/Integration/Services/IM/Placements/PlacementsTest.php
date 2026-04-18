@@ -13,11 +13,14 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Services\IM\Placements;
 
+use Bitrix24\SDK\Core\Contracts\LangCodes;
 use Bitrix24\SDK\Services\IM\Placements\ImContextMenuPlacementOptions;
 use Bitrix24\SDK\Services\IM\Placements\ImNavigationPlacementOptions;
 use Bitrix24\SDK\Services\IM\Placements\ImSidebarPlacementOptions;
 use Bitrix24\SDK\Services\IM\Placements\ImTextareaPlacementOptions;
 use Bitrix24\SDK\Services\IM\Placements\PlacementColor;
+use Bitrix24\SDK\Services\IM\Placements\PlacementLangItem;
+use Bitrix24\SDK\Services\IM\Placements\PlacementLangMap;
 use Bitrix24\SDK\Services\IM\Placements\Placements;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Integration\Factory;
@@ -41,13 +44,14 @@ class PlacementsTest extends TestCase
         $placements->unbindTextarea();
         $placements->unbindSmilesSelector();
 
+        $placementLangMap = PlacementLangMap::empty()
+            ->with(LangCodes::EN, new PlacementLangItem('Sidebar'))
+            ->with(LangCodes::RU, new PlacementLangItem('Сайдбар'));
+
         self::assertTrue(
             $placements->bindSidebar(
                 'https://bitrix24test.com/im-sidebar',
-                [
-                    'en' => ['TITLE' => 'Sidebar'],
-                    'ru' => ['TITLE' => 'v']
-                ],
+                $placementLangMap,
                 (new ImSidebarPlacementOptions('fa-bug'))
                     ->color(PlacementColor::Green),
             )->isSuccess()
@@ -56,7 +60,8 @@ class PlacementsTest extends TestCase
         self::assertTrue(
             $placements->bindNavigation(
                 'https://bitrix24test.com/im-navigation',
-                ['en' => ['TITLE' => 'Navigation']],
+                PlacementLangMap::empty()
+                    ->with(LangCodes::EN, new PlacementLangItem('Navigation')),
                 new ImNavigationPlacementOptions('fa-compass'),
             )->isSuccess()
         );
@@ -64,7 +69,8 @@ class PlacementsTest extends TestCase
         self::assertTrue(
             $placements->bindContextMenu(
                 'https://bitrix24test.com/im-context-menu',
-                ['en' => ['TITLE' => 'Context menu']],
+                PlacementLangMap::empty()
+                    ->with(LangCodes::EN, new PlacementLangItem('Context menu')),
                 new ImContextMenuPlacementOptions(),
             )->isSuccess()
         );
@@ -72,7 +78,8 @@ class PlacementsTest extends TestCase
         self::assertTrue(
             $placements->bindTextarea(
                 'https://bitrix24test.com/im-textarea',
-                ['en' => ['TITLE' => 'Textarea']],
+                PlacementLangMap::empty()
+                    ->with(LangCodes::EN, new PlacementLangItem('Textarea')),
                 (new ImTextareaPlacementOptions('fa-comment'))
                     ->width(400)
                     ->height(160)
@@ -83,7 +90,8 @@ class PlacementsTest extends TestCase
         self::assertTrue(
             $placements->bindSmilesSelector(
                 'https://bitrix24test.com/im-smiles-selector',
-                ['en' => ['TITLE' => 'Smiles selector']],
+                PlacementLangMap::empty()
+                    ->with(LangCodes::EN, new PlacementLangItem('Smiles selector')),
                 ['name' => 'fa-face-smile'],
             )->isSuccess()
         );

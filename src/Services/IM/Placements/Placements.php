@@ -34,14 +34,14 @@ final readonly class Placements
      */
     public function bindSidebar(
         string $handlerUrl,
-        array $lang,
+        PlacementLangMap $placementLangMap,
         ImSidebarPlacementOptions $imSidebarPlacementOptions,
         ?int $b24UserId = null,
     ): PlacementBindResult {
         return $this->placementService->bind(
             PlacementLocationCodes::IM_SIDEBAR,
             $handlerUrl,
-            $lang,
+            $placementLangMap->toArray(),
             $imSidebarPlacementOptions,
             $b24UserId,
         );
@@ -53,14 +53,14 @@ final readonly class Placements
      */
     public function bindNavigation(
         string $handlerUrl,
-        array $lang,
+        PlacementLangMap $placementLangMap,
         ImNavigationPlacementOptions $imNavigationPlacementOptions,
         ?int $b24UserId = null,
     ): PlacementBindResult {
         return $this->placementService->bind(
             PlacementLocationCodes::IM_NAVIGATION,
             $handlerUrl,
-            $lang,
+            $placementLangMap->toArray(),
             $imNavigationPlacementOptions,
             $b24UserId,
         );
@@ -72,14 +72,14 @@ final readonly class Placements
      */
     public function bindContextMenu(
         string $handlerUrl,
-        array $lang,
+        PlacementLangMap $placementLangMap,
         ImContextMenuPlacementOptions $imContextMenuPlacementOptions,
         ?int $b24UserId = null,
     ): PlacementBindResult {
         return $this->placementService->bind(
             PlacementLocationCodes::IM_CONTEXT_MENU,
             $handlerUrl,
-            $lang,
+            $placementLangMap->toArray(),
             $imContextMenuPlacementOptions,
             $b24UserId,
         );
@@ -91,14 +91,14 @@ final readonly class Placements
      */
     public function bindTextarea(
         string $handlerUrl,
-        array $lang,
+        PlacementLangMap $placementLangMap,
         ImTextareaPlacementOptions $imTextareaPlacementOptions,
         ?int $b24UserId = null,
     ): PlacementBindResult {
         return $this->placementService->bind(
             PlacementLocationCodes::IM_TEXTAREA,
             $handlerUrl,
-            $lang,
+            $placementLangMap->toArray(),
             $imTextareaPlacementOptions,
             $b24UserId,
         );
@@ -111,14 +111,14 @@ final readonly class Placements
      */
     public function bindSmilesSelector(
         string $handlerUrl,
-        array $lang,
+        PlacementLangMap $placementLangMap,
         array $imSmilesSelectorPlacementOptions = [],
         ?int $b24UserId = null,
     ): PlacementBindResult {
         return $this->placementService->bind(
             PlacementLocationCodes::IM_SMILES_SELECTOR,
             $handlerUrl,
-            $lang,
+            $placementLangMap->toArray(),
             $imSmilesSelectorPlacementOptions,
             $b24UserId,
         );
