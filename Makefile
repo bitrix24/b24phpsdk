@@ -79,6 +79,7 @@ help:
 	@echo "test-integration-im-open-lines-crm-chat - run IMOpenLines CRMChat integration tests"
 	@echo "test-integration-im-open-lines-session - run IMOpenLines Session integration tests"
 	@echo "test-integration-im-open-lines-operator - run IMOpenLines Operator integration tests"
+	@echo "test-integration-im-chat - run IM Chat integration tests"
 	@echo "test-integration-scope-lists - run Lists integration tests"
 	@echo "test-integration-lists-service - run Lists Service integration tests"
 	@echo "test-integration-lists-field - run Lists Field integration tests"
@@ -199,6 +200,10 @@ test-integration-scope-workflows:
 .PHONY: test-integration-scope-im
 test-integration-scope-im:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im
+
+.PHONY: test-integration-im-chat
+test-integration-im-chat:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_chat
 
 .PHONY: test-integration-scope-placement
 test-integration-scope-placement:
