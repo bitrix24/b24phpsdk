@@ -105,6 +105,7 @@ final class Placements
     }
 
     /**
+     * @deprecated
      * @throws BaseException
      * @throws TransportException
      * @deprecated
@@ -161,6 +162,7 @@ final class Placements
     }
 
     /**
+     * @deprecated
      * @throws BaseException
      * @throws TransportException
      */
