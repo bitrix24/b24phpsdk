@@ -21,6 +21,8 @@ use Bitrix24\SDK\Services\Placement\Service\Placement;
 
 /**
  * Typed placement registration helpers for IM widgets.
+ *
+ * @link https://apidocs.bitrix24.com/api-reference/widgets/im/index.html
  */
 final readonly class Placements
 {
@@ -29,8 +31,11 @@ final readonly class Placements
     }
 
     /**
+     * Register the `IM_SIDEBAR` placement handler.
+     *
      * @throws BaseException
      * @throws TransportException
+     * @link https://apidocs.bitrix24.com/api-reference/widgets/im/sidebar.html
      */
     public function bindSidebar(
         string $handlerUrl,
@@ -48,8 +53,11 @@ final readonly class Placements
     }
 
     /**
+     * Register the `IM_NAVIGATION` placement handler.
+     *
      * @throws BaseException
      * @throws TransportException
+     * @link https://apidocs.bitrix24.com/api-reference/widgets/im/index.html
      */
     public function bindNavigation(
         string $handlerUrl,
@@ -67,8 +75,11 @@ final readonly class Placements
     }
 
     /**
+     * Register the `IM_CONTEXT_MENU` placement handler.
+     *
      * @throws BaseException
      * @throws TransportException
+     * @link https://apidocs.bitrix24.com/api-reference/widgets/im/context-menu.html
      */
     public function bindContextMenu(
         string $handlerUrl,
@@ -86,8 +97,11 @@ final readonly class Placements
     }
 
     /**
+     * Register the `IM_TEXTAREA` placement handler.
+     *
      * @throws BaseException
      * @throws TransportException
+     * @link https://apidocs.bitrix24.com/api-reference/widgets/im/textarea.html
      */
     public function bindTextarea(
         string $handlerUrl,
@@ -105,9 +119,12 @@ final readonly class Placements
     }
 
     /**
+     * Register the deprecated `IM_SMILES_SELECTOR` placement handler.
+     *
      * @throws BaseException
      * @throws TransportException
      * @deprecated
+     * @link https://apidocs.bitrix24.com/api-reference/widgets/im/smile-selector.html
      */
     public function bindSmilesSelector(
         string $handlerUrl,
@@ -125,8 +142,11 @@ final readonly class Placements
     }
 
     /**
+     * Unregister the `IM_SIDEBAR` placement handler.
+     *
      * @throws BaseException
      * @throws TransportException
+     * @link https://apidocs.bitrix24.com/api-reference/widgets/im/sidebar.html
      */
     public function unbindSidebar(?string $handlerUrl = null): PlacementUnbindResult
     {
@@ -134,8 +154,11 @@ final readonly class Placements
     }
 
     /**
+     * Unregister the `IM_NAVIGATION` placement handler.
+     *
      * @throws BaseException
      * @throws TransportException
+     * @link https://apidocs.bitrix24.com/api-reference/widgets/im/index.html
      */
     public function unbindNavigation(?string $handlerUrl = null): PlacementUnbindResult
     {
@@ -143,8 +166,11 @@ final readonly class Placements
     }
 
     /**
+     * Unregister the `IM_CONTEXT_MENU` placement handler.
+     *
      * @throws BaseException
      * @throws TransportException
+     * @link https://apidocs.bitrix24.com/api-reference/widgets/im/context-menu.html
      */
     public function unbindContextMenu(?string $handlerUrl = null): PlacementUnbindResult
     {
@@ -152,8 +178,11 @@ final readonly class Placements
     }
 
     /**
+     * Unregister the `IM_TEXTAREA` placement handler.
+     *
      * @throws BaseException
      * @throws TransportException
+     * @link https://apidocs.bitrix24.com/api-reference/widgets/im/textarea.html
      */
     public function unbindTextarea(?string $handlerUrl = null): PlacementUnbindResult
     {
@@ -161,9 +190,12 @@ final readonly class Placements
     }
 
     /**
+     * Unregister the deprecated `IM_SMILES_SELECTOR` placement handler.
+     *
      * @deprecated
      * @throws BaseException
      * @throws TransportException
+     * @link https://apidocs.bitrix24.com/api-reference/widgets/im/smile-selector.html
      */
     public function unbindSmilesSelector(?string $handlerUrl = null): PlacementUnbindResult
     {
