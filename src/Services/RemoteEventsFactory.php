@@ -20,6 +20,7 @@ use Bitrix24\SDK\Core\Contracts\Events\EventInterface;
 use Bitrix24\SDK\Core\Contracts\Events\EventsFabricInterface;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\WrongSecuritySignatureException;
+use Bitrix24\SDK\Core\Requests\Events\EventRequestPayload;
 use Bitrix24\SDK\Core\Requests\Events\UnsupportedRemoteEvent;
 use Bitrix24\SDK\Services\Calendar\Events\CalendarEventsFactory;
 use Bitrix24\SDK\Services\CRM\Company\Events\CrmCompanyEventsFactory;
@@ -60,8 +61,7 @@ readonly class RemoteEventsFactory
      */
     public static function isCanProcess(Request $request): bool
     {
-        $payload = [];
-        parse_str($request->getContent(), $payload);
+        $payload = EventRequestPayload::extract($request);
 
         return array_key_exists('event', $payload);
     }
@@ -74,8 +74,7 @@ readonly class RemoteEventsFactory
      */
     public function create(Request $request): EventInterface
     {
-        $payload = [];
-        parse_str($request->getContent(), $payload);
+        $payload = EventRequestPayload::extract($request);
 
         if (!self::isCanProcess($request)) {
             throw new InvalidArgumentException('event request is not valid');
@@ -148,8 +147,7 @@ readonly class RemoteEventsFactory
      */
     public function createEvent(Request $request, ?string $applicationToken): EventInterface
     {
-        $payload = [];
-        parse_str($request->getContent(), $payload);
+        $payload = EventRequestPayload::extract($request);
 
         if (!array_key_exists('event', $payload)) {
             $this->logger->warning('createEvent.invalidRequestPayload', [
