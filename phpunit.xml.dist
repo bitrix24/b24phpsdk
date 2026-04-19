@@ -22,6 +22,9 @@
         <testsuite name="integration_tests_scope_im">
             <directory>./tests/Integration/Services/IM/</directory>
         </testsuite>
+        <testsuite name="integration_tests_im_disk">
+            <directory>./tests/Integration/Services/IM/Disk/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_im_open_lines">
             <directory>./tests/Integration/Services/IMOpenLines/</directory>
         </testsuite>
