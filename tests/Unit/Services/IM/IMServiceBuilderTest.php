@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Services\IM;
 
+use Bitrix24\SDK\Services\IM\Disk\Service\Disk;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
 use Bitrix24\SDK\Services\IM\Placements\Placements;
 use Bitrix24\SDK\Services\ServiceBuilder;
@@ -31,6 +32,12 @@ class IMServiceBuilderTest extends TestCase
     public function testGetIMService(): void
     {
         $this::assertSame($this->serviceBuilder->notify(), $this->serviceBuilder->notify());
+    }
+
+    public function testGetDiskService(): void
+    {
+        $this->assertInstanceOf(Disk::class, $this->serviceBuilder->disk());
+        $this->assertSame($this->serviceBuilder->disk(), $this->serviceBuilder->disk());
     }
 
     public function testGetPlacementsService(): void
