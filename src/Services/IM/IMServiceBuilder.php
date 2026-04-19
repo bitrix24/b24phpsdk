@@ -16,6 +16,7 @@ namespace Bitrix24\SDK\Services\IM;
 use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
+use Bitrix24\SDK\Services\IM\Disk\Service\Disk;
 use Bitrix24\SDK\Services\IM\Notify\Service\Notify;
 use Bitrix24\SDK\Services\IM\Placements\PlacementLocationCodes;
 use Bitrix24\SDK\Services\IM\Placements\Placements;
@@ -24,6 +25,15 @@ use Bitrix24\SDK\Services\Placement\Service\Placement;
 #[ApiServiceBuilderMetadata(new Scope(['im']))]
 class IMServiceBuilder extends AbstractServiceBuilder
 {
+    public function disk(): Disk
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Disk($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function notify(): Notify
     {
         if (!isset($this->serviceCache[__METHOD__])) {
