@@ -26,9 +26,14 @@ Out of scope:
 
 Create `Bitrix24\SDK\Services\IM\Disk\Service\Disk` as a regular `AbstractService` subclass with:
 - `#[ApiServiceMetadata(new Scope(['im']))]`
-- one method `folderGet(): IntResult`
+- one method `getFolderId(?int $chatId = null, ?string $dialogId = null): FolderIdResult`
 
-The method calls `im.disk.folder.get` without parameters and returns `Bitrix24\SDK\Core\Result\IntResult`.
+The method calls `im.disk.folder.get` and maps optional request parameters to `CHAT_ID` / `DIALOG_ID`.
+Bitrix24 requires at least one of these parameters, but the SDK method can forward them as nullable values and leave cross-field validation to the API, matching existing service patterns.
+
+Because the response shape is `result.ID`, add a dedicated result wrapper instead of relying on a non-existent generic integer result class:
+- `src/Services/IM/Disk/Result/FolderIdResult.php`
+- `FolderIdResult::getId(): int`
 
 This keeps the implementation aligned with the existing service pattern in the SDK while avoiding speculative expansion for future `im.disk.*` methods.
 
@@ -44,11 +49,14 @@ The accessor should follow the same caching behavior already used by `notify()` 
 
 Unit coverage:
 - extend `tests/Unit/Services/IM/IMServiceBuilderTest.php` with an assertion that `disk()` returns the new service and is cached
-- add `tests/Unit/Services/IM/Disk/Service/DiskTest.php` to verify the REST method name and empty parameter mapping for `folderGet()`
+- add `tests/Unit/Services/IM/Disk/Service/DiskTest.php` to verify:
+  - the REST method name `im.disk.folder.get`
+  - `CHAT_ID` / `DIALOG_ID` parameter mapping
+  - the service returns `FolderIdResult`
 
 Integration coverage:
 - add `tests/Integration/Services/IM/Disk/Service/DiskTest.php`
-- verify `Factory::getServiceBuilder()->getIMScope()->disk()->folderGet()` returns a positive folder id
+- verify `Factory::getServiceBuilder()->getIMScope()->disk()->getFolderId(dialogId: 'chat...')` returns a positive folder id
 
 Test execution wiring:
 - add a dedicated suite to `phpunit.xml.dist` for the new integration test path
@@ -67,5 +75,5 @@ Minimum verification for the implementation phase:
 
 ## Risks
 
-- The REST response shape must match `IntResult` expectations. If the endpoint returns a different envelope than other integer-returning methods, the integration test should surface it immediately.
+- The REST response shape is `result.ID`, so the new custom `FolderIdResult` must read the nested key correctly.
 - The new PHPUnit suite name and Make target must follow existing repository conventions to avoid drift in local developer workflows.
