@@ -24,18 +24,18 @@ use PHPUnit\Framework\TestCase;
 abstract class MessageChatTestCase extends TestCase
 {
     protected const DOCS_IMAGE_URL = 'https://apidocs.bitrix24.ru/api-reference/chat-bots/chat-bots-v2/imbot.v2/messages/attachments/_images/attach1.png';
+
     protected const DOCS_LINK_URL = 'https://apidocs.bitrix24.ru';
+
     protected const DOCS_FILE_URL = 'https://apidocs.bitrix24.ru/api-reference/chat-bots/chat-bots-v2/imbot.v2/messages/attachments/_images/attach1.png';
 
     protected Message $messageService;
-    protected Chat $chatService;
-    protected int $currentUserId;
-    protected string $currentUserPhotoUrl = '';
 
-    /**
-     * @var list<int>
-     */
-    private array $createdChats = [];
+    protected Chat $chatService;
+
+    protected int $currentUserId;
+
+    protected string $currentUserPhotoUrl = '';
 
     /**
      * @throws BaseException
@@ -44,9 +44,9 @@ abstract class MessageChatTestCase extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $serviceBuilder = Factory::getServiceBuilder()->getIMScope();
-        $this->messageService = $serviceBuilder->message();
-        $this->chatService = $serviceBuilder->chat();
+        $imServiceBuilder = Factory::getServiceBuilder()->getIMScope();
+        $this->messageService = $imServiceBuilder->message();
+        $this->chatService = $imServiceBuilder->chat();
         $profile = $this->messageService->core->call('PROFILE')
             ->getResponseData()->getResult();
         $this->currentUserId = (int)$profile['ID'];
@@ -61,15 +61,13 @@ abstract class MessageChatTestCase extends TestCase
     {
         // Cleanup is intentionally disabled so message/chat payloads remain visible in the portal
         // for manual inspection after the integration test run.
-        // foreach ($this->createdChats as $chatId) {
+        // foreach ($createdChats as $chatId) {
         //     try {
         //         $this->chatService->leave($chatId);
         //     } catch (BaseException) {
         //         // Chat may already be left by the portal or another cleanup path.
         //     }
         // }
-
-        $this->createdChats = [];
     }
 
     /**
@@ -145,15 +143,11 @@ abstract class MessageChatTestCase extends TestCase
      */
     protected function createChat(): int
     {
-        $chatId = $this->chatService->add(
+        return $this->chatService->add(
             users: [$this->currentUserId],
             chatType: ChatType::Closed,
             title: sprintf('Message payload %s', uniqid('', true)),
         )->getId();
-
-        $this->createdChats[] = $chatId;
-
-        return $chatId;
     }
 
     protected function getDialogId(int $chatId): string
