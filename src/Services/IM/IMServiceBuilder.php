@@ -16,6 +16,7 @@ namespace Bitrix24\SDK\Services\IM;
 use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
+use Bitrix24\SDK\Services\IM\Chat\Service\Chat;
 use Bitrix24\SDK\Services\IM\Message\Service\Message;
 use Bitrix24\SDK\Services\IM\Notify\Service\Notify;
 use Bitrix24\SDK\Services\IM\Placements\PlacementLocationCodes;
@@ -29,6 +30,15 @@ class IMServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Notify($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function chat(): Chat
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Chat($this->core, $this->log);
         }
 
         return $this->serviceCache[__METHOD__];

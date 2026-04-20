@@ -33,6 +33,11 @@ class IMServiceBuilderTest extends TestCase
         $this::assertSame($this->serviceBuilder->notify(), $this->serviceBuilder->notify());
     }
 
+    public function testGetChatService(): void
+    {
+        $this::assertSame($this->serviceBuilder->chat(), $this->serviceBuilder->chat());
+    }
+
     public function testGetMessageService(): void
     {
         $this::assertSame($this->serviceBuilder->message(), $this->serviceBuilder->message());

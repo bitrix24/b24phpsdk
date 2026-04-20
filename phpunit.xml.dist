@@ -22,6 +22,9 @@
         <testsuite name="integration_tests_scope_im">
             <directory>./tests/Integration/Services/IM/</directory>
         </testsuite>
+        <testsuite name="integration_tests_im_chat">
+            <directory>./tests/Integration/Services/IM/Chat/</directory>
+        </testsuite>
         <testsuite name="integration_tests_im_message">
             <directory>./tests/Integration/Services/IM/Message/</directory>
         </testsuite>
