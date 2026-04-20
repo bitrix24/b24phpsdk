@@ -1,5 +1,5 @@
 # b24-php-sdk change log
-## 3.2.0 – UNRELEASED§
+## 3.2.0 – UNRELEASED
 
 ### Added
 
