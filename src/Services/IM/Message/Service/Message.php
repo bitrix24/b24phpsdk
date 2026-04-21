@@ -28,6 +28,10 @@ use Bitrix24\SDK\Services\AbstractService;
 class Message extends AbstractService
 {
     /**
+     * @param array<array-key, mixed>|string|AttachPayloadInterface|null $attach
+     *        Raw JSON string payloads are deprecated; prefer AttachPayloadInterface for typed construction
+     *        or array payloads for backward-compatible raw structures.
+     *
      * @throws BaseException
      * @throws TransportException
      */
@@ -62,6 +66,10 @@ class Message extends AbstractService
     }
 
     /**
+     * @param array<array-key, mixed>|string|AttachPayloadInterface|null $attach
+     *        Raw JSON string payloads are deprecated; prefer AttachPayloadInterface for typed construction
+     *        or array payloads for backward-compatible raw structures.
+     *
      * @throws BaseException
      * @throws TransportException
      */
@@ -94,9 +102,10 @@ class Message extends AbstractService
     }
 
     /**
-     * @param array<string, mixed>|string|AttachPayloadInterface|null $attach
+     * @param array<array-key, mixed>|string|AttachPayloadInterface|null $attach
+     *        Raw JSON string payloads are deprecated and remain supported only for backward compatibility.
      *
-     * @return array<string, mixed>|string|null
+     * @return array<array-key, mixed>|string|null
      */
     private function normalizeAttach(array|string|AttachPayloadInterface|null $attach): array|string|null
     {

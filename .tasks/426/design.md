@@ -478,8 +478,32 @@ if ($attach instanceof AttachPayloadInterface) {
 Backward compatibility remains intact:
 
 - existing raw arrays still work
-- existing JSON strings still work
+- existing JSON strings still work, but are deprecated
 - new object API becomes an opt-in improvement
+
+### Escape hatch for vendor extensions
+
+Add a dedicated `RawAttach implements AttachPayloadInterface` wrapper for unsupported or newly introduced
+vendor payload shapes.
+
+This keeps the main `Attach` class focused on typed fluent construction for supported blocks while still
+allowing callers to stay inside the object contract when they need to pass through raw arrays unchanged.
+
+Examples:
+
+```php
+$attach = RawAttach::fromArray([
+    ['MESSAGE' => 'Known block'],
+    ['VENDOR_NEW_BLOCK' => ['FLAG' => 'Y']],
+]);
+```
+
+`AttachPayloadInterface` remains intentionally minimal:
+
+- `build(): array`
+
+It does not gain `fromArray()` because reverse-construction is not a natural responsibility for every
+typed payload implementation.
 
 ## DX Principles
 
@@ -488,6 +512,7 @@ The design optimizes for:
 - autocomplete-first API discovery
 - minimal boilerplate for common payloads
 - explicit typed objects for complex nested structures
+- explicit raw escape hatch for unsupported vendor extensions
 - readable test code
 - low migration cost from existing arrays
 
