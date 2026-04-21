@@ -1,501 +1,951 @@
-# Plan: Add IM\Message service for im.message.* support (issue #426)
+# IM Message Attach Object API Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Add a typed, fluent PHP object API for `ATTACH` payloads in `im.message.add` and `im.message.update` while preserving backward compatibility for raw array and JSON-string payloads.
+
+**Architecture:** Introduce a dedicated `Services\IM\Message\Attach` package with a root `Attach` payload object, typed block and item objects, and small string-backed enums for documented constrained values. Keep the wire format conversion localized to `build()` methods and widen the `Message` service boundary to accept either legacy raw payloads or the new `AttachPayloadInterface`.
+
+**Tech Stack:** PHP 8.4, existing SDK service/builder conventions, PHPUnit 12, phpstan, php-cs-fixer, rector, deptrac, docker-compose based test commands.
+
+---
 
 ## Context
 
-Issue #426 requests a new service wrapping six `im.message.*` REST API methods
-under the `im` scope. Part of milestone 3.2.0 (API v3 track, based off `v3-dev`).
+Issue `#426` already added `Services\IM\Message\Service\Message` for the `im.message.*` REST methods and integration coverage for raw `ATTACH`, `MENU`, and `KEYBOARD` payloads. The current gap is DX: `ATTACH` still has to be assembled as nested associative arrays or JSON strings, which is error-prone and hard to discover in IDE autocomplete.
 
-### Method signatures from Bitrix24 docs
+The approved design is stored in `.tasks/426/design.md`. The first iteration is intentionally limited to `ATTACH` only and covers these documented block types already exercised in integration tests:
 
-| REST method | Inputs | `result` shape |
-|---|---|---|
-| `im.message.add` | `DIALOG_ID` (string, required), `MESSAGE` (string, required if no `ATTACH`), `ATTACH` (object/string), `KEYBOARD` (object/string), `MENU` (object/string), `SYSTEM` (`Y`/`N`), `URL_PREVIEW` (`Y`/`N`), `REPLY_ID` (int) | `integer` — ID of the created message |
-| `im.message.update` | `MESSAGE_ID` (int, required), `MESSAGE`, `ATTACH`, `KEYBOARD`, `MENU` (all accept `N` / empty to remove), `URL_PREVIEW`, `IS_EDITED` | `boolean` |
-| `im.message.delete` | `MESSAGE_ID` (int, required) | `boolean` |
-| `im.message.like` | `MESSAGE_ID` (int, required), `ACTION` (`auto` / `plus` / `minus`, default `auto`) | `boolean` |
-| `im.message.share` | `MESSAGE_ID` (int, required), `DIALOG_ID` (string, required), `TYPE` (`CHAT` / `TASK` / `POST` / `CALEND`, required) | `boolean` |
-| `im.message.command` | `MESSAGE_ID` (int, required), `BOT_ID` (int, required), `COMMAND` (string, required), `COMMAND_PARAMS` (string) | `boolean` |
+- `MESSAGE`
+- `LINK`
+- `USER`
+- `IMAGE`
+- `FILE`
+- `DELIMITER`
+- `GRID`
 
-### Architectural placement
+Key constraints from the design:
 
-- Scope: `im` — `src/Services/IM/`
-- Existing `IMServiceBuilder` has one service (`notify()`); a new `message()`
-  accessor will sit alongside it following the exact Notify pattern.
-- `src/Services/ServiceBuilder::getIMScope()` already exists — no change needed.
-- Reuses existing core result wrappers:
-  - `AddedItemResult` — reads `getResult()[0]` as int; matches `im.message.add`
-    response envelope where raw `result` is an integer.
-  - `UpdatedItemResult` / `DeletedItemResult` — read `getResult()[0]` as bool;
-    match the five methods returning `true`/`false`.
-- Two small backed string enums typed next to the service:
-  - `LikeAction` — cases `auto`, `plus`, `minus`
-  - `ShareType` — cases `CHAT`, `TASK`, `POST`, `CALEND`
+- Keep `MENU` and `KEYBOARD` out of scope.
+- Keep BB-code content as plain strings.
+- Auto-select short vs full attach form inside the root `Attach` object.
+- Preserve backward compatibility at `Message::add()` and `Message::update()`.
 
-No new `*ItemResult` class is needed because no method returns a structured
-entity — only a scalar `result`. Consequently no annotation-test file is
-required (the skill's annotation-test rule applies only to result items with
-`@property-read` declarations).
+The local OpenAPI snapshot was refreshed before writing this plan with:
+
+```bash
+make oa-schema-build
+```
 
 ---
 
 ## Files to Create
 
-### 1. `src/Services/IM/Message/Service/LikeAction.php`
+### 1. Contracts
+
+- `src/Services/IM/Message/Attach/Contracts/AttachPayloadInterface.php`
+- `src/Services/IM/Message/Attach/Contracts/AttachBlockInterface.php`
+- `src/Services/IM/Message/Attach/Contracts/AttachItemInterface.php`
+
+Skeleton:
 
 ```php
 <?php
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\IM\Message\Service;
+namespace Bitrix24\SDK\Services\IM\Message\Attach\Contracts;
 
-enum LikeAction: string
+interface AttachPayloadInterface
 {
-    case auto = 'auto';
-    case plus = 'plus';
-    case minus = 'minus';
+    public function build(): array;
 }
 ```
 
-### 2. `src/Services/IM/Message/Service/ShareType.php`
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Bitrix24\SDK\Services\IM\Message\Attach\Contracts;
+
+interface AttachBlockInterface
+{
+    public function build(): array;
+}
+```
 
 ```php
 <?php
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\IM\Message\Service;
+namespace Bitrix24\SDK\Services\IM\Message\Attach\Contracts;
 
-enum ShareType: string
+interface AttachItemInterface
 {
+    public function build(): array;
+}
+```
+
+### 2. Enums
+
+- `src/Services/IM/Message/Attach/Enums/AttachColorToken.php`
+- `src/Services/IM/Message/Attach/Enums/AttachAvatarType.php`
+- `src/Services/IM/Message/Attach/Enums/GridDisplay.php`
+
+Skeleton:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Bitrix24\SDK\Services\IM\Message\Attach\Enums;
+
+enum AttachAvatarType: string
+{
+    case user = 'USER';
     case chat = 'CHAT';
-    case task = 'TASK';
-    case post = 'POST';
-    case calendarEvent = 'CALEND';
+    case bot = 'BOT';
 }
 ```
 
-### 3. `src/Services/IM/Message/Service/Message.php`
+### 3. Root payload object
+
+- `src/Services/IM/Message/Attach/Attach.php`
+
+Skeleton:
 
 ```php
 <?php
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\IM\Message\Service;
+namespace Bitrix24\SDK\Services\IM\Message\Attach;
 
-use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
-use Bitrix24\SDK\Attributes\ApiServiceMetadata;
-use Bitrix24\SDK\Core\Credentials\Scope;
-use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Core\Result\AddedItemResult;
-use Bitrix24\SDK\Core\Result\DeletedItemResult;
-use Bitrix24\SDK\Core\Result\UpdatedItemResult;
-use Bitrix24\SDK\Services\AbstractService;
+use Bitrix24\SDK\Services\IM\Message\Attach\Blocks\DelimiterBlock;
+use Bitrix24\SDK\Services\IM\Message\Attach\Blocks\MessageBlock;
+use Bitrix24\SDK\Services\IM\Message\Attach\Contracts\AttachBlockInterface;
+use Bitrix24\SDK\Services\IM\Message\Attach\Contracts\AttachPayloadInterface;
+use Bitrix24\SDK\Services\IM\Message\Attach\Enums\AttachColorToken;
 
-#[ApiServiceMetadata(new Scope(['im']))]
-class Message extends AbstractService
+final class Attach implements AttachPayloadInterface
 {
-    #[ApiEndpointMetadata(
-        'im.message.add',
-        'https://apidocs.bitrix24.com/api-reference/chats/messages/im-message-add.html',
-        'Send a message to a chat'
-    )]
-    public function add(
-        string $dialogId,
-        ?string $message = null,
-        array|string|null $attach = null,
-        array|string|null $keyboard = null,
-        array|string|null $menu = null,
-        bool $isSystem = false,
-        bool $urlPreview = true,
-        ?int $replyId = null,
-    ): AddedItemResult {
-        return new AddedItemResult($this->core->call(
-            'im.message.add',
-            [
-                'DIALOG_ID' => $dialogId,
-                'MESSAGE' => $message,
-                'ATTACH' => $attach,
-                'KEYBOARD' => $keyboard,
-                'MENU' => $menu,
-                'SYSTEM' => $isSystem ? 'Y' : 'N',
-                'URL_PREVIEW' => $urlPreview ? 'Y' : 'N',
-                'REPLY_ID' => $replyId,
-            ]
-        ));
-    }
+    /** @var list<AttachBlockInterface> */
+    private array $blocks = [];
 
-    #[ApiEndpointMetadata(
-        'im.message.update',
-        'https://apidocs.bitrix24.com/api-reference/chats/messages/im-message-update.html',
-        'Update text and parameters of a sent message'
-    )]
-    public function update(
-        int $messageId,
-        ?string $message = null,
-        array|string|null $attach = null,
-        array|string|null $keyboard = null,
-        array|string|null $menu = null,
-        ?bool $urlPreview = null,
-        ?bool $isEdited = null,
-    ): UpdatedItemResult {
-        return new UpdatedItemResult($this->core->call(
-            'im.message.update',
-            [
-                'MESSAGE_ID' => $messageId,
-                'MESSAGE' => $message,
-                'ATTACH' => $attach,
-                'KEYBOARD' => $keyboard,
-                'MENU' => $menu,
-                'URL_PREVIEW' => $urlPreview === null ? null : ($urlPreview ? 'Y' : 'N'),
-                'IS_EDITED' => $isEdited === null ? null : ($isEdited ? 'Y' : 'N'),
-            ]
-        ));
-    }
+    private ?int $id = null;
+    private ?AttachColorToken $colorToken = null;
+    private ?string $color = null;
 
-    #[ApiEndpointMetadata(
-        'im.message.delete',
-        'https://apidocs.bitrix24.com/api-reference/chats/messages/im-message-delete.html',
-        'Delete a message'
-    )]
-    public function delete(int $messageId): DeletedItemResult
+    public static function create(): self
     {
-        return new DeletedItemResult($this->core->call(
-            'im.message.delete',
-            ['MESSAGE_ID' => $messageId]
-        ));
+        return new self();
     }
 
-    #[ApiEndpointMetadata(
-        'im.message.like',
-        'https://apidocs.bitrix24.com/api-reference/chats/messages/im-message-like.html',
-        'Toggle the "Like" mark on a message'
-    )]
-    public function like(int $messageId, LikeAction $action = LikeAction::auto): UpdatedItemResult
+    public function id(int $id): self
     {
-        return new UpdatedItemResult($this->core->call(
-            'im.message.like',
-            [
-                'MESSAGE_ID' => $messageId,
-                'ACTION' => $action->value,
-            ]
-        ));
+        $this->id = $id;
+
+        return $this;
     }
 
-    #[ApiEndpointMetadata(
-        'im.message.share',
-        'https://apidocs.bitrix24.com/api-reference/chats/messages/im-message-share.html',
-        'Create an object (chat/task/post/calendar event) based on a message'
-    )]
-    public function share(int $messageId, string $dialogId, ShareType $type): UpdatedItemResult
+    public function colorToken(AttachColorToken $token): self
     {
-        return new UpdatedItemResult($this->core->call(
-            'im.message.share',
-            [
-                'MESSAGE_ID' => $messageId,
-                'DIALOG_ID' => $dialogId,
-                'TYPE' => $type->value,
-            ]
-        ));
+        $this->colorToken = $token;
+
+        return $this;
     }
 
-    #[ApiEndpointMetadata(
-        'im.message.command',
-        'https://apidocs.bitrix24.com/api-reference/chats/messages/im-message-command.html',
-        'Invoke a chat-bot command in the context of a message'
-    )]
-    public function command(
-        int $messageId,
-        int $botId,
-        string $command,
-        ?string $commandParams = null,
-    ): UpdatedItemResult {
-        return new UpdatedItemResult($this->core->call(
-            'im.message.command',
+    public function color(string $hexColor): self
+    {
+        $this->color = $hexColor;
+
+        return $this;
+    }
+
+    public function add(AttachBlockInterface $block): self
+    {
+        $this->blocks[] = $block;
+
+        return $this;
+    }
+
+    public function message(string $text): self
+    {
+        return $this->add(MessageBlock::text($text));
+    }
+
+    public function delimiter(?int $size = null, ?string $color = null): self
+    {
+        $block = DelimiterBlock::create();
+
+        if ($size !== null) {
+            $block->size($size);
+        }
+
+        if ($color !== null) {
+            $block->color($color);
+        }
+
+        return $this->add($block);
+    }
+
+    public function build(): array
+    {
+        $blocks = array_map(
+            static fn(AttachBlockInterface $block): array => $block->build(),
+            $this->blocks
+        );
+
+        if ($this->id === null && $this->colorToken === null && $this->color === null) {
+            return $blocks;
+        }
+
+        return array_filter(
             [
-                'MESSAGE_ID' => $messageId,
-                'BOT_ID' => $botId,
-                'COMMAND' => $command,
-                'COMMAND_PARAMS' => $commandParams,
-            ]
-        ));
+                'ID' => $this->id,
+                'COLOR_TOKEN' => $this->colorToken?->value,
+                'COLOR' => $this->color,
+                'BLOCKS' => $blocks,
+            ],
+            static fn(mixed $value): bool => $value !== null
+        );
     }
 }
 ```
 
-### 4. `tests/Unit/Services/IM/Message/Service/MessageTest.php`
+### 4. Block classes
 
-Minimal unit test that instantiates the service against `NullCore` / `NullBatch`
-and exercises each method's parameter mapping does not throw on a null response.
+- `src/Services/IM/Message/Attach/Blocks/MessageBlock.php`
+- `src/Services/IM/Message/Attach/Blocks/LinkBlock.php`
+- `src/Services/IM/Message/Attach/Blocks/UserBlock.php`
+- `src/Services/IM/Message/Attach/Blocks/ImageBlock.php`
+- `src/Services/IM/Message/Attach/Blocks/FileBlock.php`
+- `src/Services/IM/Message/Attach/Blocks/DelimiterBlock.php`
+- `src/Services/IM/Message/Attach/Blocks/GridBlock.php`
+
+Representative skeleton:
 
 ```php
 <?php
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Tests\Unit\Services\IM\Message\Service;
+namespace Bitrix24\SDK\Services\IM\Message\Attach\Blocks;
 
-use Bitrix24\SDK\Services\IM\Message\Service\LikeAction;
-use Bitrix24\SDK\Services\IM\Message\Service\Message;
-use Bitrix24\SDK\Services\IM\Message\Service\ShareType;
-use Bitrix24\SDK\Tests\Unit\Stubs\NullCore;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
+use Bitrix24\SDK\Services\IM\Message\Attach\Contracts\AttachBlockInterface;
 
-#[CoversClass(Message::class)]
-class MessageTest extends TestCase
+final class MessageBlock implements AttachBlockInterface
 {
-    private Message $service;
-
-    #[\Override]
-    protected function setUp(): void
+    private function __construct(private string $text)
     {
-        $this->service = new Message(new NullCore(), new NullLogger());
     }
 
-    #[Test]
-    public function testLikeActionEnumCases(): void
+    public static function text(string $text): self
     {
-        $this->assertSame('auto', LikeAction::auto->value);
-        $this->assertSame('plus', LikeAction::plus->value);
-        $this->assertSame('minus', LikeAction::minus->value);
+        return new self($text);
     }
 
-    #[Test]
-    public function testShareTypeEnumCases(): void
+    public function build(): array
     {
-        $this->assertSame('CHAT', ShareType::chat->value);
-        $this->assertSame('TASK', ShareType::task->value);
-        $this->assertSame('POST', ShareType::post->value);
-        $this->assertSame('CALEND', ShareType::calendarEvent->value);
+        return ['MESSAGE' => $this->text];
     }
 }
 ```
 
-> Note: heavier behavioural assertions are covered in the integration test.
-> The unit test exists primarily to guarantee the classes autoload and the
-> enum mapping cannot drift silently.
-
-### 5. `tests/Integration/Services/IM/Message/Service/MessageTest.php`
+Representative collection skeleton:
 
 ```php
 <?php
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Tests\Integration\Services\IM\Message\Service;
+namespace Bitrix24\SDK\Services\IM\Message\Attach\Blocks;
 
-use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Services\IM\Message\Service\LikeAction;
-use Bitrix24\SDK\Services\IM\Message\Service\Message;
-use Bitrix24\SDK\Tests\Integration\Factory;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
+use Bitrix24\SDK\Services\IM\Message\Attach\Contracts\AttachBlockInterface;
+use Bitrix24\SDK\Services\IM\Message\Attach\Enums\GridDisplay;
+use Bitrix24\SDK\Services\IM\Message\Attach\Items\GridItem;
 
-#[CoversClass(Message::class)]
-class MessageTest extends TestCase
+final class GridBlock implements AttachBlockInterface
 {
-    private Message $service;
+    /** @var list<GridItem> */
+    private array $items = [];
 
-    private int $currentUserId;
-
-    #[\Override]
-    protected function setUp(): void
+    private function __construct(private GridDisplay $display)
     {
-        $this->service = Factory::getServiceBuilder()->getIMScope()->message();
-        $this->currentUserId = (int)$this->service->core->call('PROFILE')
-            ->getResponseData()->getResult()['ID'];
     }
 
-    #[Test]
-    #[TestDox('add sends a personal message and returns its ID')]
-    public function testAdd(): void
+    public static function display(GridDisplay $display): self
     {
-        $result = $this->service->add(
-            dialogId: (string)$this->currentUserId,
-            message: sprintf('Test add at %s', time()),
-        );
-        $this->assertGreaterThan(0, $result->getId());
+        return new self($display);
     }
 
-    #[Test]
-    #[TestDox('update edits a previously sent message')]
-    public function testUpdate(): void
+    public function item(GridItem $item): self
     {
-        $messageId = $this->service->add(
-            (string)$this->currentUserId,
-            sprintf('Before update at %s', time()),
-        )->getId();
-        $this->assertTrue(
-            $this->service->update($messageId, 'Updated text')->isSuccess()
-        );
+        $this->items[] = $item;
+
+        return $this;
     }
 
-    #[Test]
-    #[TestDox('delete removes a previously sent message')]
-    public function testDelete(): void
+    public function build(): array
     {
-        $messageId = $this->service->add(
-            (string)$this->currentUserId,
-            sprintf('To delete at %s', time()),
-        )->getId();
-        $this->assertTrue($this->service->delete($messageId)->isSuccess());
-    }
+        if ($this->items === []) {
+            throw new \InvalidArgumentException('GRID block must contain at least one item');
+        }
 
-    #[Test]
-    #[TestDox('like toggles the Like mark on a message')]
-    public function testLike(): void
-    {
-        $messageId = $this->service->add(
-            (string)$this->currentUserId,
-            sprintf('To like at %s', time()),
-        )->getId();
-        $this->assertTrue(
-            $this->service->like($messageId, LikeAction::plus)->isSuccess()
-        );
-    }
-
-    #[Test]
-    #[TestDox('command executes a chat-bot command')]
-    public function testCommand(): void
-    {
-        $this->markTestSkipped(
-            'im.message.command requires a registered chat bot with a command; '
-            . 'skipped in standard integration suite. '
-            . 'Re-enable when a bot fixture is available.'
-        );
-    }
-
-    #[Test]
-    #[TestDox('share creates an object based on a message')]
-    public function testShare(): void
-    {
-        $this->markTestSkipped(
-            'im.message.share requires a chat ID (not personal dialog); '
-            . 'skipped in standard integration suite. '
-            . 'Re-enable when a chat fixture is available.'
-        );
+        return [
+            'GRID' => array_map(
+                fn(GridItem $item): array => $this->buildItem($item),
+                $this->items
+            ),
+        ];
     }
 }
 ```
 
-> `testCommand` and `testShare` are scaffolded as `markTestSkipped` because
-> both methods require fixtures (a registered chat bot / a real chat ID) that
-> the default integration webhook does not guarantee. Leaving them as skipped
-> preserves coverage intent and makes it trivial to activate later.
+### 5. Nested item classes
+
+- `src/Services/IM/Message/Attach/Items/ImageItem.php`
+- `src/Services/IM/Message/Attach/Items/FileItem.php`
+- `src/Services/IM/Message/Attach/Items/GridItem.php`
+
+Skeleton:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Bitrix24\SDK\Services\IM\Message\Attach\Items;
+
+use Bitrix24\SDK\Services\IM\Message\Attach\Contracts\AttachItemInterface;
+
+final class ImageItem implements AttachItemInterface
+{
+    private function __construct(private string $link)
+    {
+    }
+
+    public static function link(string $link): self
+    {
+        return new self($link);
+    }
+
+    public function build(): array
+    {
+        return ['LINK' => $this->link];
+    }
+}
+```
+
+### 6. Unit tests for serialization and validation
+
+- `tests/Unit/Services/IM/Message/Attach/AttachTest.php`
+- `tests/Unit/Services/IM/Message/Attach/Blocks/SimpleBlocksTest.php`
+- `tests/Unit/Services/IM/Message/Attach/Blocks/CollectionBlocksTest.php`
+
+Representative test skeleton:
+
+```php
+#[Test]
+public function buildReturnsShortAttachFormWhenNoMetaFieldsPresent(): void
+{
+    $attach = Attach::create()->message('Hello');
+
+    self::assertSame(
+        [
+            ['MESSAGE' => 'Hello'],
+        ],
+        $attach->build()
+    );
+}
+```
+
+### 7. Integration smoke coverage for object API
+
+- `tests/Integration/Services/IM/Message/Service/MessageAttachObjectApiTest.php`
+
+Skeleton:
+
+```php
+#[Test]
+public function addAcceptsAttachObjectShortForm(): void
+{
+    $messageId = $this->sendMessage(
+        message: 'Attach object short form',
+        attach: Attach::create()->message('Short object payload'),
+    );
+
+    self::assertGreaterThan(0, $messageId);
+}
+```
 
 ---
 
 ## Files to Modify
 
-### 1. `src/Services/IM/IMServiceBuilder.php`
+### 1. `src/Services/IM/Message/Service/Message.php`
 
-Add a new accessor mirroring `notify()`. After merging `v3-dev` the builder also
-exposes `placementLocationCodes()`; place `message()` between `notify()` and
-`placementLocationCodes()`:
+Change both `add()` and `update()` signatures from:
 
 ```php
-use Bitrix24\SDK\Services\IM\Message\Service\Message;
+array|string|null $attach = null
+```
 
-public function message(): Message
-{
-    if (!isset($this->serviceCache[__METHOD__])) {
-        $this->serviceCache[__METHOD__] = new Message($this->core, $this->log);
-    }
+to:
 
-    return $this->serviceCache[__METHOD__];
+```php
+array|string|AttachPayloadInterface|null $attach = null
+```
+
+and normalize before `core->call()`:
+
+```php
+if ($attach instanceof AttachPayloadInterface) {
+    $attach = $attach->build();
 }
 ```
 
-### 2. `tests/Unit/Services/IM/IMServiceBuilderTest.php`
+### 2. `tests/Unit/Services/IM/Message/Service/MessageTest.php`
 
-Extend the existing cache test so it also covers `message()`:
+Add service-level unit coverage proving the new object payload is serialized before transport:
 
 ```php
-public function testGetMessageService(): void
+#[Test]
+public function addAcceptsAttachPayloadInterface(): void
 {
-    $this::assertSame($this->serviceBuilder->message(), $this->serviceBuilder->message());
+    $result = $this->service->add(
+        'chat1',
+        'Message',
+        Attach::create()->message('payload')
+    );
+
+    self::assertInstanceOf(AddedItemResult::class, $result);
 }
 ```
 
-### 3. `phpunit.xml.dist`
+### 3. `CHANGELOG.md`
 
-Add a dedicated suite next to `integration_tests_scope_im`:
-
-```xml
-<testsuite name="integration_tests_im_message">
-    <directory>./tests/Integration/Services/IM/Message/</directory>
-</testsuite>
-```
-
-### 4. `Makefile`
-
-Add the target in the IM area (next to `test-integration-scope-im-open-lines`)
-and document it in the `help` target's listing:
-
-```make
-.PHONY: test-integration-im-message
-test-integration-im-message:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_message
-```
-
-### 5. `CHANGELOG.md`
-
-The `## 3.2.0 – UNRELEASED` section already exists (created by #437). Append a
-new bullet under its existing `### Added` list:
+Add under `## 3.2.0 – UNRELEASED` → `### Added`:
 
 ```markdown
-- Added `Services\IM\Message\Service\Message` service for `im.message.*`
-  support ([#426](https://github.com/bitrix24/b24phpsdk/issues/426)):
-  - `add` — send a message (`im.message.add`)
-  - `update` — edit text and parameters (`im.message.update`)
-  - `delete` — delete a message (`im.message.delete`)
-  - `like` — toggle the Like mark (`im.message.like`), with typed `LikeAction` enum
-  - `share` — create an object from a message (`im.message.share`), with typed `ShareType` enum
-  - `command` — invoke a chat-bot command (`im.message.command`)
-- Added `IMServiceBuilder::message()` accessor.
+- Added typed fluent `Services\IM\Message\Attach` payload builders for `ATTACH` blocks in `im.message.add` and `im.message.update`, with backward-compatible support for raw arrays and JSON strings preserved ([#426](https://github.com/bitrix24/b24phpsdk/issues/426))
+```
+
+### 4. `.tasks/426/design.md`
+
+If implementation reveals any mismatch between real code constraints and the approved design, update the design doc in the same task folder before or alongside the code change. Do not leave the design stale.
+
+---
+
+## Deptrac Compliance
+
+- New `Attach` classes live under `src/Services/IM/Message/Attach`, which keeps them inside the Services layer next to the existing IM message service.
+- The new contracts and enums remain inside the same subtree, so no new forbidden cross-layer dependencies should be introduced.
+- `Message.php` may import `AttachPayloadInterface` from `Services\IM\Message\Attach\Contracts`; this is a same-layer dependency and should be allowed.
+- Tests must not introduce production-only dependencies back into `src/`.
+
+Expected deptrac-safe dependency direction:
+
+- `Service\Message` -> `Attach\Contracts`
+- `Attach\Attach` -> `Attach\Blocks`, `Attach\Enums`, `Attach\Contracts`
+- `Attach\Blocks\*` -> `Attach\Items`, `Attach\Enums`, `Attach\Contracts`
+- `Attach\Items\*` -> `Attach\Enums`, `Attach\Contracts`
+
+---
+
+## Tasks
+
+### Task 1: Root attach contracts, enums, and short/full form serialization
+
+**Files:**
+- Create: `src/Services/IM/Message/Attach/Contracts/AttachPayloadInterface.php`
+- Create: `src/Services/IM/Message/Attach/Contracts/AttachBlockInterface.php`
+- Create: `src/Services/IM/Message/Attach/Contracts/AttachItemInterface.php`
+- Create: `src/Services/IM/Message/Attach/Enums/AttachColorToken.php`
+- Create: `src/Services/IM/Message/Attach/Enums/AttachAvatarType.php`
+- Create: `src/Services/IM/Message/Attach/Enums/GridDisplay.php`
+- Create: `src/Services/IM/Message/Attach/Attach.php`
+- Test: `tests/Unit/Services/IM/Message/Attach/AttachTest.php`
+
+- [ ] **Step 1: Write the failing root serialization test**
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Bitrix24\SDK\Tests\Unit\Services\IM\Message\Attach;
+
+use Bitrix24\SDK\Services\IM\Message\Attach\Attach;
+use Bitrix24\SDK\Services\IM\Message\Attach\Enums\AttachColorToken;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
+
+final class AttachTest extends TestCase
+{
+    #[Test]
+    public function buildReturnsShortAttachFormWhenNoMetaFieldsPresent(): void
+    {
+        $attach = Attach::create()->message('Hello');
+
+        self::assertSame(
+            [
+                ['MESSAGE' => 'Hello'],
+            ],
+            $attach->build()
+        );
+    }
+
+    #[Test]
+    public function buildReturnsFullAttachFormWhenMetaFieldsPresent(): void
+    {
+        $attach = Attach::create()
+            ->id(1)
+            ->colorToken(AttachColorToken::primary)
+            ->message('Hello');
+
+        self::assertSame(
+            [
+                'ID' => 1,
+                'COLOR_TOKEN' => 'primary',
+                'BLOCKS' => [
+                    ['MESSAGE' => 'Hello'],
+                ],
+            ],
+            $attach->build()
+        );
+    }
+}
+```
+
+- [ ] **Step 2: Run the root unit test to verify it fails**
+
+Run:
+
+```bash
+docker compose run --rm php-cli vendor/bin/phpunit tests/Unit/Services/IM/Message/Attach/AttachTest.php
+```
+
+Expected: FAIL because `Attach` and related contracts/enums do not exist yet.
+
+- [ ] **Step 3: Implement contracts, enums, and the root `Attach` object**
+
+```php
+public function build(): array
+{
+    $blocks = array_map(
+        static fn(AttachBlockInterface $block): array => $block->build(),
+        $this->blocks
+    );
+
+    if ($this->id === null && $this->colorToken === null && $this->color === null) {
+        return $blocks;
+    }
+
+    $payload = [
+        'ID' => $this->id,
+        'COLOR_TOKEN' => $this->colorToken?->value,
+        'COLOR' => $this->color,
+        'BLOCKS' => $blocks,
+    ];
+
+    return array_filter(
+        $payload,
+        static fn(mixed $value): bool => $value !== null
+    );
+}
+```
+
+- [ ] **Step 4: Run the root unit test to verify it passes**
+
+Run:
+
+```bash
+docker compose run --rm php-cli vendor/bin/phpunit tests/Unit/Services/IM/Message/Attach/AttachTest.php
+```
+
+Expected: PASS.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add src/Services/IM/Message/Attach tests/Unit/Services/IM/Message/Attach/AttachTest.php
+git commit -m "feat: add root attach payload builder"
+```
+
+### Task 2: Simple scalar blocks for message, link, user, and delimiter
+
+**Files:**
+- Create: `src/Services/IM/Message/Attach/Blocks/MessageBlock.php`
+- Create: `src/Services/IM/Message/Attach/Blocks/LinkBlock.php`
+- Create: `src/Services/IM/Message/Attach/Blocks/UserBlock.php`
+- Create: `src/Services/IM/Message/Attach/Blocks/DelimiterBlock.php`
+- Test: `tests/Unit/Services/IM/Message/Attach/Blocks/SimpleBlocksTest.php`
+
+- [ ] **Step 1: Write failing tests for scalar blocks**
+
+```php
+#[Test]
+public function linkBlockSerializesOptionalFields(): void
+{
+    $block = LinkBlock::url('https://apidocs.bitrix24.ru')
+        ->name('Docs')
+        ->description('Open docs');
+
+    self::assertSame(
+        [
+            'LINK' => [
+                'LINK' => 'https://apidocs.bitrix24.ru',
+                'NAME' => 'Docs',
+                'DESC' => 'Open docs',
+            ],
+        ],
+        $block->build()
+    );
+}
+
+#[Test]
+public function delimiterBlockSerializesEmptyPayloadWhenNoFieldsSet(): void
+{
+    self::assertSame(
+        ['DELIMITER' => []],
+        DelimiterBlock::create()->build()
+    );
+}
+```
+
+- [ ] **Step 2: Run the scalar block test to verify it fails**
+
+Run:
+
+```bash
+docker compose run --rm php-cli vendor/bin/phpunit tests/Unit/Services/IM/Message/Attach/Blocks/SimpleBlocksTest.php
+```
+
+Expected: FAIL because the block classes do not exist yet.
+
+- [ ] **Step 3: Implement scalar block classes with small local validation**
+
+```php
+public static function url(string $link): self
+{
+    if ($link === '') {
+        throw new \InvalidArgumentException('LINK must not be empty');
+    }
+
+    return new self($link);
+}
+
+public function build(): array
+{
+    return [
+        'LINK' => array_filter(
+            [
+                'LINK' => $this->link,
+                'NAME' => $this->name,
+                'DESC' => $this->description,
+                'HTML' => $this->html,
+                'PREVIEW' => $this->preview,
+                'WIDTH' => $this->width,
+                'HEIGHT' => $this->height,
+            ],
+            static fn(mixed $value): bool => $value !== null
+        ),
+    ];
+}
+```
+
+- [ ] **Step 4: Run the scalar block tests to verify they pass**
+
+Run:
+
+```bash
+docker compose run --rm php-cli vendor/bin/phpunit tests/Unit/Services/IM/Message/Attach/Blocks/SimpleBlocksTest.php
+```
+
+Expected: PASS.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add src/Services/IM/Message/Attach/Blocks tests/Unit/Services/IM/Message/Attach/Blocks/SimpleBlocksTest.php
+git commit -m "feat: add scalar attach block builders"
+```
+
+### Task 3: Collection blocks and nested items for image, file, and grid
+
+**Files:**
+- Create: `src/Services/IM/Message/Attach/Items/ImageItem.php`
+- Create: `src/Services/IM/Message/Attach/Items/FileItem.php`
+- Create: `src/Services/IM/Message/Attach/Items/GridItem.php`
+- Create: `src/Services/IM/Message/Attach/Blocks/ImageBlock.php`
+- Create: `src/Services/IM/Message/Attach/Blocks/FileBlock.php`
+- Create: `src/Services/IM/Message/Attach/Blocks/GridBlock.php`
+- Test: `tests/Unit/Services/IM/Message/Attach/Blocks/CollectionBlocksTest.php`
+
+- [ ] **Step 1: Write failing tests for collection blocks**
+
+```php
+#[Test]
+public function imageBlockSerializesMultipleItems(): void
+{
+    $block = ImageBlock::create()
+        ->item(ImageItem::link('https://example.com/1.png')->name('One'))
+        ->item(ImageItem::link('https://example.com/2.png')->name('Two'));
+
+    self::assertSame(
+        [
+            'IMAGE' => [
+                ['LINK' => 'https://example.com/1.png', 'NAME' => 'One'],
+                ['LINK' => 'https://example.com/2.png', 'NAME' => 'Two'],
+            ],
+        ],
+        $block->build()
+    );
+}
+
+#[Test]
+public function gridBlockRequiresAtLeastOneItem(): void
+{
+    $this->expectException(\InvalidArgumentException::class);
+
+    GridBlock::display(GridDisplay::row)->build();
+}
+```
+
+- [ ] **Step 2: Run the collection block test to verify it fails**
+
+Run:
+
+```bash
+docker compose run --rm php-cli vendor/bin/phpunit tests/Unit/Services/IM/Message/Attach/Blocks/CollectionBlocksTest.php
+```
+
+Expected: FAIL because collection blocks and items do not exist yet.
+
+- [ ] **Step 3: Implement nested items and collection block builders**
+
+```php
+public function build(): array
+{
+    if ($this->items === []) {
+        throw new \InvalidArgumentException('GRID block must contain at least one item');
+    }
+
+    return [
+        'GRID' => array_map(
+            fn(GridItem $item): array => $this->buildItem($item),
+            $this->items
+        ),
+    ];
+}
+```
+
+`GridBlock::width()`, `colorToken()`, and `color()` should behave as defaults inherited by rows that do not define those values themselves. `DISPLAY` is serialized per row, matching the existing raw integration payloads already accepted by the live API.
+
+- [ ] **Step 4: Run the collection block tests to verify they pass**
+
+Run:
+
+```bash
+docker compose run --rm php-cli vendor/bin/phpunit tests/Unit/Services/IM/Message/Attach/Blocks/CollectionBlocksTest.php
+```
+
+Expected: PASS.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add src/Services/IM/Message/Attach/Items src/Services/IM/Message/Attach/Blocks tests/Unit/Services/IM/Message/Attach/Blocks/CollectionBlocksTest.php
+git commit -m "feat: add collection attach blocks and items"
+```
+
+### Task 4: Integrate attach objects into the IM message service boundary
+
+**Files:**
+- Modify: `src/Services/IM/Message/Service/Message.php`
+- Modify: `tests/Unit/Services/IM/Message/Service/MessageTest.php`
+
+- [ ] **Step 1: Add a failing service-level test for object payload support**
+
+```php
+#[Test]
+public function addAcceptsAttachPayloadObject(): void
+{
+    $result = $this->service->add(
+        dialogId: 'chat1',
+        message: 'Message',
+        attach: Attach::create()->message('payload')
+    );
+
+    self::assertInstanceOf(AddedItemResult::class, $result);
+}
+```
+
+- [ ] **Step 2: Run the message service unit test to verify it fails**
+
+Run:
+
+```bash
+docker compose run --rm php-cli vendor/bin/phpunit tests/Unit/Services/IM/Message/Service/MessageTest.php
+```
+
+Expected: FAIL on a type error because `Message::add()` and `Message::update()` do not yet accept `AttachPayloadInterface`.
+
+- [ ] **Step 3: Widen the service boundary and normalize object payloads**
+
+```php
+public function add(
+    string $dialogId,
+    ?string $message = null,
+    array|string|AttachPayloadInterface|null $attach = null,
+    array|string|null $keyboard = null,
+    array|string|null $menu = null,
+    bool $isSystem = false,
+    bool $urlPreview = true,
+    ?int $replyId = null,
+): AddedItemResult {
+    if ($attach instanceof AttachPayloadInterface) {
+        $attach = $attach->build();
+    }
+
+    return new AddedItemResult($this->core->call(
+        'im.message.add',
+        [
+            'DIALOG_ID' => $dialogId,
+            'MESSAGE' => $message,
+            'ATTACH' => $attach,
+            'KEYBOARD' => $keyboard,
+            'MENU' => $menu,
+            'SYSTEM' => $isSystem ? 'Y' : 'N',
+            'URL_PREVIEW' => $urlPreview ? 'Y' : 'N',
+            'REPLY_ID' => $replyId,
+        ]
+    ));
+}
+```
+
+Mirror the same normalization in `update()`.
+
+- [ ] **Step 4: Run the message service unit test to verify it passes**
+
+Run:
+
+```bash
+docker compose run --rm php-cli vendor/bin/phpunit tests/Unit/Services/IM/Message/Service/MessageTest.php
+```
+
+Expected: PASS.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add src/Services/IM/Message/Service/Message.php tests/Unit/Services/IM/Message/Service/MessageTest.php
+git commit -m "feat: support attach payload objects in message service"
+```
+
+### Task 5: Integration smoke tests, changelog, and final verification
+
+**Files:**
+- Create: `tests/Integration/Services/IM/Message/Service/MessageAttachObjectApiTest.php`
+- Modify: `CHANGELOG.md`
+- Modify: `.tasks/426/design.md` if implementation details changed
+
+- [ ] **Step 1: Add failing integration smoke tests for the object API**
+
+```php
+#[Test]
+public function addAcceptsAttachObjectShortForm(): void
+{
+    $messageId = $this->sendMessage(
+        message: 'Attach object short form',
+        attach: Attach::create()->message('Short object payload')
+    );
+
+    self::assertGreaterThan(0, $messageId);
+}
+
+#[Test]
+public function addAcceptsAttachObjectFullForm(): void
+{
+    $messageId = $this->sendMessage(
+        message: 'Attach object full form',
+        attach: Attach::create()
+            ->id(1)
+            ->colorToken(AttachColorToken::primary)
+            ->message('Full object payload')
+    );
+
+    self::assertGreaterThan(0, $messageId);
+}
+```
+
+- [ ] **Step 2: Run the integration smoke test to verify it fails before wiring is complete**
+
+Run:
+
+```bash
+docker compose run --rm php-cli vendor/bin/phpunit tests/Integration/Services/IM/Message/Service/MessageAttachObjectApiTest.php
+```
+
+Expected: FAIL until `Message::add()` accepts object payloads.
+
+- [ ] **Step 3: Add changelog entry and keep the design doc synchronized**
+
+```markdown
+- Added typed fluent `Services\IM\Message\Attach` payload builders for `ATTACH` blocks in `im.message.add` and `im.message.update`, with backward-compatible support for raw arrays and JSON strings preserved ([#426](https://github.com/bitrix24/b24phpsdk/issues/426))
+```
+
+If any implementation detail deviates from `.tasks/426/design.md`, update the design doc in the same commit.
+
+- [ ] **Step 4: Run the focused and full verification suite**
+
+Run:
+
+```bash
+docker compose run --rm php-cli vendor/bin/phpunit tests/Unit/Services/IM/Message/Attach
+docker compose run --rm php-cli vendor/bin/phpunit tests/Unit/Services/IM/Message/Service/MessageTest.php
+docker compose run --rm php-cli vendor/bin/phpunit tests/Integration/Services/IM/Message/Service/MessageAttachObjectApiTest.php
+docker compose run --rm php-cli vendor/bin/phpunit tests/Integration/Services/IM/Message/Service
+make lint-all
+```
+
+Expected:
+
+- all new unit tests PASS
+- object API integration smoke tests PASS
+- the full IM message integration directory remains green except for the existing documented skips
+- `make lint-all` returns success
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add CHANGELOG.md .tasks/426/design.md tests/Integration/Services/IM/Message/Service/MessageAttachObjectApiTest.php
+git commit -m "test: add attach object API coverage"
 ```
 
 ---
 
-## Deptrac compliance
+## Self-Review
 
-All new classes live under `Bitrix24\SDK\Services\IM\Message\*`, which belongs
-to the `Services` layer. Imports used:
+Spec coverage check:
 
-- `Bitrix24\SDK\Attributes\*` — Services layer
-- `Bitrix24\SDK\Core\*` — allowed (Services may depend on Core)
-- `Bitrix24\SDK\Services\AbstractService` — same layer
-- PHPUnit/Psr in test files — uncovered by deptrac ruleset
+- Root payload object and short/full form handling: covered by Task 1.
+- Typed block and item classes: covered by Tasks 2 and 3.
+- Service integration and backward compatibility: covered by Task 4.
+- Unit and integration verification plus changelog: covered by Task 5.
 
-No cross-scope imports (e.g. from `CRM`, `Sale`, `Task`) are introduced, so no
-new `skip_violations` entry is required.
+Placeholder scan:
 
----
+- No `TODO`, `TBD`, or “similar to previous task” markers remain.
 
-## Verification
+Type consistency:
 
-Phase 1 — light checks:
+- The plan consistently uses `AttachPayloadInterface` at the service boundary.
+- The root payload exposes `build(): array`.
+- Block and item classes serialize to arrays only.
 
-```bash
-make lint-cs-fixer
-make lint-rector
-make lint-phpstan
-make lint-deptrac
-make test-unit
-```
-
-Phase 2 — heavy check (new suite):
-
-```bash
-make test-integration-im-message
-```
-
-Phase 3 — update `CHANGELOG.md` (already in Files to Modify §5) and commit.
+This plan matches the approved design in `.tasks/426/design.md` and is scoped to a single implementation stream.

@@ -17,6 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\IM\Chat\ChatType;
 use Bitrix24\SDK\Services\IM\Chat\Service\Chat;
+use Bitrix24\SDK\Services\IM\Message\Attach\Contracts\AttachPayloadInterface;
 use Bitrix24\SDK\Services\IM\Message\Service\Message;
 use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
@@ -76,7 +77,7 @@ abstract class MessageChatTestCase extends TestCase
      */
     protected function sendMessage(
         ?string $message = null,
-        array|string|null $attach = null,
+        array|string|AttachPayloadInterface|null $attach = null,
         array|string|null $keyboard = null,
         array|string|null $menu = null,
     ): int {
@@ -93,7 +94,7 @@ abstract class MessageChatTestCase extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
-    protected function sendAttach(array|string $attach, ?string $message = null): int
+    protected function sendAttach(array|string|AttachPayloadInterface $attach, ?string $message = null): int
     {
         return $this->sendMessage(
             message: $message,

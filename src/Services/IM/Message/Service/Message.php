@@ -21,6 +21,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\AddedItemResult;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
+use Bitrix24\SDK\Services\IM\Message\Attach\Contracts\AttachPayloadInterface;
 use Bitrix24\SDK\Services\AbstractService;
 
 #[ApiServiceMetadata(new Scope(['im']))]
@@ -38,7 +39,7 @@ class Message extends AbstractService
     public function add(
         string $dialogId,
         ?string $message = null,
-        array|string|null $attach = null,
+        array|string|AttachPayloadInterface|null $attach = null,
         array|string|null $keyboard = null,
         array|string|null $menu = null,
         bool $isSystem = false,
@@ -50,7 +51,7 @@ class Message extends AbstractService
             [
                 'DIALOG_ID' => $dialogId,
                 'MESSAGE' => $message,
-                'ATTACH' => $attach,
+                'ATTACH' => $this->normalizeAttach($attach),
                 'KEYBOARD' => $keyboard,
                 'MENU' => $menu,
                 'SYSTEM' => $isSystem ? 'Y' : 'N',
@@ -72,7 +73,7 @@ class Message extends AbstractService
     public function update(
         int $messageId,
         ?string $message = null,
-        array|string|null $attach = null,
+        array|string|AttachPayloadInterface|null $attach = null,
         array|string|null $keyboard = null,
         array|string|null $menu = null,
         ?bool $urlPreview = null,
@@ -83,13 +84,27 @@ class Message extends AbstractService
             [
                 'MESSAGE_ID' => $messageId,
                 'MESSAGE' => $message,
-                'ATTACH' => $attach,
+                'ATTACH' => $this->normalizeAttach($attach),
                 'KEYBOARD' => $keyboard,
                 'MENU' => $menu,
                 'URL_PREVIEW' => $urlPreview === null ? null : ($urlPreview ? 'Y' : 'N'),
                 'IS_EDITED' => $isEdited === null ? null : ($isEdited ? 'Y' : 'N'),
             ]
         ));
+    }
+
+    /**
+     * @param array<string, mixed>|string|AttachPayloadInterface|null $attach
+     *
+     * @return array<string, mixed>|string|null
+     */
+    private function normalizeAttach(array|string|AttachPayloadInterface|null $attach): array|string|null
+    {
+        if ($attach instanceof AttachPayloadInterface) {
+            return $attach->build();
+        }
+
+        return $attach;
     }
 
     /**
