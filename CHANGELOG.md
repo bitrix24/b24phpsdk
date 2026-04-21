@@ -3,18 +3,31 @@
 
 ### Added
 
+- Added typed fluent `Services\IM\Message\Attach` payload builders for `ATTACH` blocks in `im.message.add` and `im.message.update`, plus `RawAttach::fromArray()` as an object-based escape hatch for unsupported or vendor-extended payload shapes ([#426](https://github.com/bitrix24/b24phpsdk/issues/426))
 - Added `Bitrix24\SDK\Services\IM\Placements\PlacementLocationCodes` with constants `IM_TEXTAREA`, `IM_SIDEBAR`, `IM_CONTEXT_MENU`, `IM_NAVIGATION`, and `IM_SMILES_SELECTOR` (deprecated since `im 25.1600.0`) for IM widget placement codes ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
 - Added `PlacementOptionsInterface` and fluent option builders `TextareaPlacementOptions`, `SidebarPlacementOptions`, `ContextMenuPlacementOptions` under `Bitrix24\SDK\Services\IM\Placements` namespace, backed by `ChatContext`, `PlacementColor` (IM-specific) and shared `Role`, `ExtranetAvailability` string-backed enums under `Bitrix24\SDK\Services\Placement` ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
 - Added integration test `PlacementLocationCodesTest` that asserts (via reflection) every `IM_`-prefixed code returned by `placement.list` is declared as a constant in `PlacementLocationCodes` ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
 - Added `Bitrix24\SDK\Services\IM\Chat\Service\Chat` service wrapping `im.chat.add`, `im.chat.get`, `im.chat.leave`, `im.chat.mute`, `im.chat.setOwner`, `im.chat.updateAvatar`, `im.chat.updateColor`, `im.chat.updateTitle`, with enums `ChatType`, `ChatColor`, `ChatEntityType`, result types `ChatItemResult`/`ChatResult`, and `IMServiceBuilder::chat()` accessor ([#423](https://github.com/bitrix24/b24phpsdk/issues/423))
+- Added `Services\IM\Message\Service\Message` service for `im.message.*` support ([#426](https://github.com/bitrix24/b24phpsdk/issues/426)):
+    - `add` — send a message (`im.message.add`)
+    - `update` — edit text and parameters (`im.message.update`)
+    - `delete` — delete a message (`im.message.delete`)
+    - `like` — toggle the Like mark (`im.message.like`), with typed `LikeAction` enum (`auto`/`plus`/`minus`)
+    - `share` — create an object from a message (`im.message.share`), with typed `ShareType` enum (`CHAT`/`TASK`/`POST`/`CALEND`)
+    - `command` — invoke a chat-bot command (`im.message.command`)
+- Added `IMServiceBuilder::message()` accessor and cached service instance ([#426](https://github.com/bitrix24/b24phpsdk/issues/426))
+
+
 
 ### Changed
 
+- Deprecated passing `ATTACH` as raw JSON `string` to `im.message.add` and `im.message.update`; prefer `AttachPayloadInterface` for typed object payloads or raw `array` payloads for backward-compatible structures ([#426](https://github.com/bitrix24/b24phpsdk/issues/426))
 - Widened `Placement::bind()` `$options` parameter type to `PlacementOptionsInterface|array` — existing array callers remain fully compatible ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
 - Updated `b24phpsdk-maintainer` skill and `AGENTS.md`: all GitHub issues (title, body, checklists, comments) must be written in English only ([#422](https://github.com/bitrix24/b24phpsdk/issues/422))
 - Updated `AGENTS.md`: limit mandatory `b24phpsdk-maintainer` usage to issue, changelog, and release-related work
 - Updated `b24phpsdk-maintainer` skill: added "Implementing placements for a scope" section with directory layout, plain-class-over-enum rationale, option-builder template, shared-vs-scope-specific enum placement, and mandatory reflection-based integration test template ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
 - Updated `b24phpsdk-maintainer` skill and `AGENTS.md`: require polling PR CI status via `mcp__github__get_pull_request_status` (fallback `gh pr checks --watch`) after every push to a PR branch, with ~60s cadence, until the status reaches a terminal state ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
+- Updated `b24phpsdk-maintainer` skill: hardened PR creation rules — agent must auto-create the PR via `mcp__github__create_pull_request` (never forward the `pull/new/<branch>` URL as a manual-action prompt), PR base branch is strictly `v3-dev` for v3 and `dev` for v1 (never `main`), and the PR body is always composed from `.github/PULL_REQUEST_TEMPLATE.md` read fresh from disk
 - Updated `b24phpsdk-maintainer` skill: generalized the placements workflow to cover `PlacementLocationCodes`, typed `Placements` facades, `PlacementLangMap`/`PlacementLangItem`, `LangCodes` placement, service-builder registration, docs links, and the full unit/integration test matrix
 - Updated `b24phpsdk-maintainer` skill: moved the detailed placements workflow into a dedicated adjacent guide to keep `SKILL.md` compact while preserving the full placement implementation playbook
 
