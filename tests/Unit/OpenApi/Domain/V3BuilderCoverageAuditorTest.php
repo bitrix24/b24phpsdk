@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\OpenApi\Domain;
 
-use Bitrix24\SDK\OpenApi\Domain\OpenApiSchemaEntityReader;
-use Bitrix24\SDK\OpenApi\Domain\V3BuilderCoverageAuditor;
-use Bitrix24\SDK\OpenApi\Domain\V3BuilderCoverageReport;
+use Bitrix24\SDK\OpenApi\Domain\Schema\OpenApiSchemaEntityReader;
+use Bitrix24\SDK\OpenApi\Domain\Coverage\V3BuilderCoverageAuditor;
+use Bitrix24\SDK\OpenApi\Domain\Coverage\V3BuilderCoverageReport;
 use Bitrix24\SDK\Tests\Unit\OpenApi\Domain\Fixtures\DuplicateEntityKeyResult1;
 use Bitrix24\SDK\Tests\Unit\OpenApi\Domain\Fixtures\DuplicateEntityKeyResult2;
 use Bitrix24\SDK\Tests\Unit\OpenApi\Domain\Fixtures\FullCoverageResult;

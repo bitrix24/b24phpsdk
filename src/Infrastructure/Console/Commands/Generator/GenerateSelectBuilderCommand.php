@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Infrastructure\Console\Commands\Generator;
 
 use Bitrix24\SDK\CodeGenerator\SelectBuilderCodeGenerator;
-use Bitrix24\SDK\OpenApi\Domain\OpenApiSchemaEntityReader;
+use Bitrix24\SDK\OpenApi\Domain\Schema\OpenApiSchemaEntityReader;
 use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;

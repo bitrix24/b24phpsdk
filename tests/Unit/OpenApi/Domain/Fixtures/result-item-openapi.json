@@ -1,0 +1,63 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Fixture",
+    "version": "1.0.0"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "bitrix.example.profiledto": {
+        "type": "object",
+        "properties": {
+          "nickname": {
+            "type": "string",
+            "title": "Nickname"
+          }
+        }
+      },
+      "bitrix.example.dialogdto": {
+        "type": "object",
+        "required": [
+          "id",
+          "date_create",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "title": "Identifier"
+          },
+          "date_create": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created at"
+          },
+          "birthday": {
+            "type": "string",
+            "format": "date",
+            "title": "Birthday"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "background_id": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true,
+            "title": "Background ID"
+          },
+          "permissions": {
+            "type": "object",
+            "title": "Permissions"
+          },
+          "profile": {
+            "$ref": "#/components/schemas/bitrix.example.profiledto"
+          }
+        }
+      }
+    }
+  }
+}

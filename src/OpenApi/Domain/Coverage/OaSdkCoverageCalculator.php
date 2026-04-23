@@ -11,10 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\OpenApi\Domain;
+namespace Bitrix24\SDK\OpenApi\Domain\Coverage;
 
 use Bitrix24\SDK\Attributes\Services\SupportedInSdkApiMethod;
 use Bitrix24\SDK\Core\Contracts\ApiVersion;
+use Bitrix24\SDK\OpenApi\Domain\Schema\OaToSdkMethodNormalizationPolicy;
 
 readonly class OaSdkCoverageCalculator
 {

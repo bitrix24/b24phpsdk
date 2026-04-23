@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\OpenApi\Domain;
 
-use Bitrix24\SDK\OpenApi\Domain\OaFieldListMethodResolver;
-use Bitrix24\SDK\OpenApi\Domain\OaSchemaMethodReader;
-use Bitrix24\SDK\OpenApi\Domain\OaToSdkMethodNormalizationPolicy;
+use Bitrix24\SDK\OpenApi\Domain\Schema\OaFieldListMethodResolver;
+use Bitrix24\SDK\OpenApi\Domain\Schema\OaSchemaMethodReader;
+use Bitrix24\SDK\OpenApi\Domain\Schema\OaToSdkMethodNormalizationPolicy;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;

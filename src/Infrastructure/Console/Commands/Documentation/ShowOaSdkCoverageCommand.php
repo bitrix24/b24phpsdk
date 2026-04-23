@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Infrastructure\Console\Commands\Documentation;
 
 use Bitrix24\SDK\Attributes\Services\AttributesParser;
-use Bitrix24\SDK\OpenApi\Domain\OaSchemaMethodReader;
-use Bitrix24\SDK\OpenApi\Domain\OaSdkCoverageCalculator;
-use Bitrix24\SDK\OpenApi\Domain\OaToSdkMethodNormalizationPolicy;
+use Bitrix24\SDK\OpenApi\Domain\Schema\OaSchemaMethodReader;
+use Bitrix24\SDK\OpenApi\Domain\Coverage\OaSdkCoverageCalculator;
+use Bitrix24\SDK\OpenApi\Domain\Schema\OaToSdkMethodNormalizationPolicy;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;

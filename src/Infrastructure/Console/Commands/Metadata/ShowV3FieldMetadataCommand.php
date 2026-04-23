@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Infrastructure\Console\Commands\Metadata;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\OpenApi\Domain\OaFieldListMethodResolver;
+use Bitrix24\SDK\OpenApi\Domain\Schema\OaFieldListMethodResolver;
 use InvalidArgumentException;
 use JsonException;
 use RuntimeException;

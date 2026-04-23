@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Infrastructure\Console\Commands\Documentation;
 
-use Bitrix24\SDK\OpenApi\Domain\V3BuilderCoverageAuditor;
-use Bitrix24\SDK\OpenApi\Domain\V3BuilderCoverageReport;
+use Bitrix24\SDK\OpenApi\Domain\Coverage\V3BuilderCoverageAuditor;
+use Bitrix24\SDK\OpenApi\Domain\Coverage\V3BuilderCoverageReport;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

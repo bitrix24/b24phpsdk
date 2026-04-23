@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Unit\Infrastructure\Console\Commands\Documentation;
 
 use Bitrix24\SDK\Infrastructure\Console\Commands\Documentation\ShowV3BuilderCoverageCommand;
-use Bitrix24\SDK\OpenApi\Domain\V3BuilderCoverageAuditor;
-use Bitrix24\SDK\OpenApi\Domain\V3BuilderCoverageReport;
+use Bitrix24\SDK\OpenApi\Domain\Coverage\V3BuilderCoverageAuditor;
+use Bitrix24\SDK\OpenApi\Domain\Coverage\V3BuilderCoverageReport;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
