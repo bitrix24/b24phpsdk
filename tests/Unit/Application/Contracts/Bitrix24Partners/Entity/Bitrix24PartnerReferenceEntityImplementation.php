@@ -53,7 +53,8 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
         private ?PhoneNumber             $phoneNumber,
         private ?string                  $email,
         private ?string                  $openLineId,
-        private ?string                  $externalId
+        private ?string                  $externalId,
+        private ?string                  $logoUrl = null
     )
     {
         if ($bitrix24PartnerNumber <= 0) {
@@ -262,5 +263,22 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     public function getComment(): ?string
     {
         return $this->comment;
+    }
+
+    #[\Override]
+    public function getLogoUrl(): ?string
+    {
+        return $this->logoUrl;
+    }
+
+    #[\Override]
+    public function changeLogoUrl(?string $logoUrl): void
+    {
+        if ($logoUrl !== null && trim($logoUrl) === '') {
+            throw new InvalidArgumentException('logoUrl cannot be an empty string');
+        }
+
+        $this->logoUrl = $logoUrl;
+        $this->updatedAt = new CarbonImmutable();
     }
 }

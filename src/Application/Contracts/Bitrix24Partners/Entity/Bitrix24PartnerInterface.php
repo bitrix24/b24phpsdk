@@ -160,4 +160,17 @@ interface Bitrix24PartnerInterface
      * @throws InvalidArgumentException
      */
     public function setOpenLineId(?string $openLineId): void;
+
+    /**
+     * Get partner logo URL
+     */
+    public function getLogoUrl(): ?string;
+
+    /**
+     * Change partner logo URL
+     *
+     * @param non-empty-string|null $logoUrl
+     * @throws InvalidArgumentException
+     */
+    public function changeLogoUrl(?string $logoUrl): void;
 }
