@@ -43,13 +43,13 @@ interface Bitrix24PartnerInterface
     public function getExternalId(): ?string;
 
     /**
-     * Get external id for bitrix24 partner
+     * Change external id for bitrix24 partner
      *
-     * Set external id for application installation related entity in crm or erp - company or smart process
+     * Change external id for application installation related entity in crm or erp - company or smart process
      * @param non-empty-string|null $externalId
      * @throws InvalidArgumentException
      */
-    public function setExternalId(?string $externalId): void;
+    public function changeExternalId(?string $externalId): void;
 
     /**
      * Get application installation status
@@ -99,12 +99,12 @@ interface Bitrix24PartnerInterface
     public function getTitle(): string;
 
     /**
-     * Set partner title
+     * Change partner title
      *
      * @param non-empty-string $title
      * @throws InvalidArgumentException
      */
-    public function setTitle(string $title): void;
+    public function changeTitle(string $title): void;
 
     /**
      * Get partner site
@@ -112,12 +112,12 @@ interface Bitrix24PartnerInterface
     public function getSite(): ?string;
 
     /**
-     * Set partner site
+     * Change partner site
      *
      * @param non-empty-string|null $site
      * @throws InvalidArgumentException
      */
-    public function setSite(?string $site): void;
+    public function changeSite(?string $site): void;
 
     /**
      * Get partner phone
@@ -125,9 +125,9 @@ interface Bitrix24PartnerInterface
     public function getPhone(): ?PhoneNumber;
 
     /**
-     * Set partner phone
+     * Change partner phone
      */
-    public function setPhone(?PhoneNumber $phoneNumber): void;
+    public function changePhone(?PhoneNumber $phoneNumber): void;
 
     /**
      * Get partner email
@@ -135,12 +135,12 @@ interface Bitrix24PartnerInterface
     public function getEmail(): ?string;
 
     /**
-     * Set partner email
+     * Change partner email
      *
      * @param non-empty-string|null $email
      * @throws InvalidArgumentException
      */
-    public function setEmail(?string $email): void;
+    public function changeEmail(?string $email): void;
 
     /**
      * Get bitrix24 partner number
@@ -155,9 +155,9 @@ interface Bitrix24PartnerInterface
     public function getOpenLineId(): ?string;
 
     /**
-     * Set open line id
+     * Change open line id
      * @param non-empty-string|null $openLineId support open line identifier
      * @throws InvalidArgumentException
      */
-    public function setOpenLineId(?string $openLineId): void;
+    public function changeOpenLineId(?string $openLineId): void;
 }

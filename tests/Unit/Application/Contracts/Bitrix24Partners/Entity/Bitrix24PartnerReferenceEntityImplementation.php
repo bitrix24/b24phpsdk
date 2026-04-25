@@ -82,7 +82,7 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     }
 
     #[\Override]
-    public function setExternalId(?string $externalId): void
+    public function changeExternalId(?string $externalId): void
     {
         if ($externalId !== null && trim($externalId) === '') {
             throw new InvalidArgumentException('externalId cannot be an empty string');
@@ -107,7 +107,7 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     }
 
     #[\Override]
-    public function setTitle(string $title): void
+    public function changeTitle(string $title): void
     {
         if (trim($title) === '') {
             throw new InvalidArgumentException('partner title cannot be an empty string');
@@ -124,7 +124,7 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     }
 
     #[\Override]
-    public function setSite(?string $site): void
+    public function changeSite(?string $site): void
     {
         if ($site !== null && trim($site) === '') {
             throw new InvalidArgumentException('site cannot be an empty string');
@@ -141,7 +141,7 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     }
 
     #[\Override]
-    public function setPhone(?PhoneNumber $phoneNumber): void
+    public function changePhone(?PhoneNumber $phoneNumber): void
     {
         $this->phoneNumber = $phoneNumber;
         $this->updatedAt = new CarbonImmutable();
@@ -154,7 +154,7 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     }
 
     #[\Override]
-    public function setEmail(?string $email): void
+    public function changeEmail(?string $email): void
     {
         if ($email !== null && trim($email) === '') {
             throw new InvalidArgumentException('email cannot be an empty string');
@@ -181,7 +181,7 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     }
 
     #[\Override]
-    public function setOpenLineId(?string $openLineId): void
+    public function changeOpenLineId(?string $openLineId): void
     {
         if ($openLineId !== null && trim($openLineId) === '') {
             throw new InvalidArgumentException('openLineId cannot be an empty string');
