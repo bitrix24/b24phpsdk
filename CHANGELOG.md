@@ -4,6 +4,34 @@
 
 ### Added
 
+- Added support for events:
+    - `onCrmDocumentGeneratorDocumentAdd` — fires when a document is created,
+      see [event documentation](https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/events/on-crm-document-generator-document-add.html)
+    - `onCrmDocumentGeneratorDocumentUpdate` — fires when a document is updated,
+      see [event documentation](https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/events/on-crm-document-generator-document-update.html)
+    - `onCrmDocumentGeneratorDocumentDelete` — fires when a document is deleted,
+      see [event documentation](https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/events/on-crm-document-generator-document-delete.html)
+- Added service `Services\CRM\Documentgenerator\Document` with support methods,
+  see [crm.documentgenerator.document.* methods](https://apidocs.bitrix24.com/api-reference/crm/document-generator/documents/index.html):
+    - `add` creates a new document based on a template and CRM entity, with batch calls support
+    - `list` gets the list of documents, with batch calls support
+    - `update` updates an existing document, with batch calls support
+    - `delete` deletes a document, with batch calls support
+    - `get` gets information about the document by its identifier
+    - `getFields` returns the description of document fields
+    - `enablePublicUrl` enables public URL for a document
+    - `upload` uploads a file for a document
+    - `count` count documents
+- Added service `Services\CRM\Documentgenerator\Template` with support methods,
+  see [crm.documentgenerator.template.* methods](https://apidocs.bitrix24.com/api-reference/crm/document-generator/templates/index.html):
+    - `add` adds a new template, with batch calls support
+    - `list` gets the list of templates, with batch calls support
+    - `update` updates an existing template, with batch calls support
+    - `delete` deletes a template, with batch calls support
+    - `get` gets information about the template by its identifier
+    - `getFields` returns the description of template fields
+    - `count` count templates
+
 - Added `src/Legacy/` namespace with `LegacyServiceBuilder` and `LegacyTaskServiceBuilder`,
   accessible via `$serviceBuilder->getLegacyServiceBuilder()->getTaskScope()->task()`.
   Preserves access to all Bitrix24 REST API v1 task methods (`list`, `fields`, `delegate`,
