@@ -8,23 +8,23 @@ Store information about Bitrix24 Partner who supports client portal and install 
 | `getCreatedAt()`         | `CarbonImmutable`       | Returns date and time Bitrix24 partner was created                     |                            |
 | `getUpdatedAt()`         | `CarbonImmutable`       | Returns date and time of last Bitrix24 partner change                  |                            |
 | `getExternalId()`        | `?string`               | Returns external id for Bitrix24 partner                               |                            |
-| `setExternalId()`        | `void`                  | Sets external id for Bitrix24 partner                                  | `InvalidArgumentException` |
+| `changeExternalId()`     | `void`                  | Changes external id for Bitrix24 partner                               | `InvalidArgumentException` |
 | `getStatus()`            | `Bitrix24PartnerStatus` | Returns Bitrix24 partner status                                        |                            |
 | `markAsActive()`         | `void`                  | Changes status to active for blocked Bitrix24 partner accounts         | `InvalidArgumentException` |
 | `markAsBlocked()`        | `void`                  | Changes status to blocked for Bitrix24 partner account in active state | `InvalidArgumentException` |
 | `markAsDeleted()`        | `void`                  | Changes status to deleted for Bitrix24 partner account (soft delete)   | `InvalidArgumentException` |
 | `getComment()`           | `?string`               | Returns comment                                                        |                            |
 | `getTitle()`             | `string`                | Returns partner title                                                  |                            |
-| `setTitle()`             | `void`                  | Sets partner title                                                     | `InvalidArgumentException` |
+| `changeTitle()`          | `void`                  | Changes partner title                                                  | `InvalidArgumentException` |
 | `getSite()`              | `?string`               | Returns partner site                                                   |                            |
-| `setSite()`              | `void`                  | Sets partner site                                                      | `InvalidArgumentException` |
+| `changeSite()`           | `void`                  | Changes partner site                                                   | `InvalidArgumentException` |
 | `getPhone()`             | `?PhoneNumber`          | Returns partner phone                                                  |                            |
-| `setPhone()`             | `void`                  | Sets partner phone                                                     |                            |
+| `changePhone()`          | `void`                  | Changes partner phone                                                  |                            |
 | `getEmail()`             | `?string`               | Returns partner email                                                  |                            |
-| `setEmail()`             | `void`                  | Sets partner email                                                     | `InvalidArgumentException` |
+| `changeEmail()`          | `void`                  | Changes partner email                                                  | `InvalidArgumentException` |
 | `getBitrix24PartnerNumber()` | `int`                  | Returns Bitrix24 partner number from vendor site                       |                            |
 | `getOpenLineId()`        | `?string`               | Returns open line id                                                   |                            |
-| `setOpenLineId()`        | `void`                  | Sets open line id                                                      | `InvalidArgumentException` |
+| `changeOpenLineId()`     | `void`                  | Changes open line id                                                   | `InvalidArgumentException` |
 
 ## Bitrix24 partner state diagram
 
@@ -44,12 +44,12 @@ stateDiagram-v2
     - use case Activate
     - use case Block
     - use case Delete
-    - use case SetExternalId
-    - use case SetTitle
-    - use case SetSite
-    - use case SetPhone
-    - use case SetEmail
-    - use case SetOpenLineId
+    - use case ChangeExternalId
+    - use case ChangeTitle
+    - use case ChangeSite
+    - use case ChangePhone
+    - use case ChangeEmail
+    - use case ChangeOpenLineId
     - use case Create
 - `public function delete(Uuid $uuid): void;`
     - use case Delete
@@ -57,18 +57,18 @@ stateDiagram-v2
     - use case Activate
     - use case Block
     - use case Delete
-    - use case SetExternalId
-    - use case SetTitle
-    - use case SetSite
-    - use case SetPhone
-    - use case SetEmail
-    - use case SetOpenLineId
+    - use case ChangeExternalId
+    - use case ChangeTitle
+    - use case ChangeSite
+    - use case ChangePhone
+    - use case ChangeEmail
+    - use case ChangeOpenLineId
 - `public function findByBitrix24PartnerNumber(int $bitrix24PartnerNumber): ?Bitrix24PartnerInterface;`
 - `public function findByTitle(string $title): array;`
     - use case Create
-    - use case SetSite
+    - use case ChangeSite
 - `public function findByExternalId(string $externalId, ?Bitrix24PartnerStatus $bitrix24PartnerStatus = null): array;`
-    - use case SetExternalId
+    - use case ChangeExternalId
 
 ## Events
 
