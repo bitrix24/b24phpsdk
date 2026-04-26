@@ -118,14 +118,14 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId, $logoUrl);
-        $bitrix24Partner->setTitle('new title');
+        $bitrix24Partner->changeTitle('new title');
         $this->assertNotEquals($updatedAt, $bitrix24Partner->getUpdatedAt());
     }
 
     #[Test]
     #[DataProvider('bitrix24PartnerDataProvider')]
-    #[TestDox('test setExternalId method with empty string')]
-    final public function testSetExternalId(
+    #[TestDox('test changeExternalId method with empty string')]
+    final public function testChangeExternalId(
         Uuid                  $uuid,
         CarbonImmutable       $createdAt,
         CarbonImmutable       $updatedAt,
@@ -144,7 +144,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId, $logoUrl);
 
         $newExternalId = Uuid::v7()->toRfc4122();
-        $bitrix24Partner->setExternalId($newExternalId);
+        $bitrix24Partner->changeExternalId($newExternalId);
         $this->assertEquals($newExternalId, $bitrix24Partner->getExternalId());
     }
 
@@ -153,8 +153,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
      */
     #[Test]
     #[DataProvider('bitrix24PartnerDataProvider')]
-    #[TestDox('test setExternalId method with null')]
-    final public function testSetExternalIdWithNull(
+    #[TestDox('test changeExternalId method with null')]
+    final public function testChangeExternalIdWithNull(
         Uuid                  $uuid,
         CarbonImmutable       $createdAt,
         CarbonImmutable       $updatedAt,
@@ -171,14 +171,14 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
     ): void
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId, $logoUrl);
-        $bitrix24Partner->setExternalId(null);
+        $bitrix24Partner->changeExternalId(null);
         $this->assertNull($bitrix24Partner->getExternalId());
     }
 
     #[Test]
     #[DataProvider('bitrix24PartnerDataProvider')]
-    #[TestDox('test setExternalId method')]
-    final public function testSetExternalIdWithEmptyString(
+    #[TestDox('test changeExternalId method')]
+    final public function testChangeExternalIdWithEmptyString(
         Uuid                  $uuid,
         CarbonImmutable       $createdAt,
         CarbonImmutable       $updatedAt,
@@ -197,7 +197,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId, $logoUrl);
         $this->expectException(InvalidArgumentException::class);
         /** @phpstan-ignore-next-line */
-        $bitrix24Partner->setExternalId('');
+        $bitrix24Partner->changeExternalId('');
     }
 
     #[Test]
@@ -345,8 +345,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
 
     #[Test]
     #[DataProvider('bitrix24PartnerDataProvider')]
-    #[TestDox('test setTitle method')]
-    final public function testSetTitle(
+    #[TestDox('test changeTitle method')]
+    final public function testChangeTitle(
         Uuid                  $uuid,
         CarbonImmutable       $createdAt,
         CarbonImmutable       $updatedAt,
@@ -364,13 +364,13 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId, $logoUrl);
         $newTitle = 'new title';
-        $bitrix24Partner->setTitle($newTitle);
+        $bitrix24Partner->changeTitle($newTitle);
         $this->assertEquals($newTitle, $bitrix24Partner->getTitle());
 
         $newTitle = '';
         $this->expectException(InvalidArgumentException::class);
         /** @phpstan-ignore-next-line */
-        $bitrix24Partner->setTitle($newTitle);
+        $bitrix24Partner->changeTitle($newTitle);
     }
 
     #[Test]
@@ -401,8 +401,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
      */
     #[Test]
     #[DataProvider('bitrix24PartnerDataProvider')]
-    #[TestDox('test setSite method')]
-    final public function testSetSite(
+    #[TestDox('test changeSite method')]
+    final public function testChangeSite(
         Uuid                  $uuid,
         CarbonImmutable       $createdAt,
         CarbonImmutable       $updatedAt,
@@ -420,15 +420,15 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId, $logoUrl);
         $newSite = 'https://new-partner-site.com';
-        $bitrix24Partner->setSite($newSite);
+        $bitrix24Partner->changeSite($newSite);
         $this->assertEquals($newSite, $bitrix24Partner->getSite());
 
-        $bitrix24Partner->setSite(null);
+        $bitrix24Partner->changeSite(null);
         $this->assertNull($bitrix24Partner->getSite());
 
         $this->expectException(InvalidArgumentException::class);
         /** @phpstan-ignore-next-line */
-        $bitrix24Partner->setSite('');
+        $bitrix24Partner->changeSite('');
     }
 
     #[Test]
@@ -456,8 +456,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
 
     #[Test]
     #[DataProvider('bitrix24PartnerDataProvider')]
-    #[TestDox('test setPhone method')]
-    final public function testSetPhone(
+    #[TestDox('test changePhone method')]
+    final public function testChangePhone(
         Uuid                  $uuid,
         CarbonImmutable       $createdAt,
         CarbonImmutable       $updatedAt,
@@ -475,10 +475,10 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId, $logoUrl);
         $newPhone = DemoDataGenerator::getMobilePhone();
-        $bitrix24Partner->setPhone($newPhone);
+        $bitrix24Partner->changePhone($newPhone);
         $this->assertEquals($newPhone, $bitrix24Partner->getPhone());
 
-        $bitrix24Partner->setPhone(null);
+        $bitrix24Partner->changePhone(null);
         $this->assertNull($bitrix24Partner->getPhone());
     }
 
@@ -507,8 +507,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
 
     #[Test]
     #[DataProvider('bitrix24PartnerDataProvider')]
-    #[TestDox('test setEmail method')]
-    final public function testSetEmail(
+    #[TestDox('test changeEmail method')]
+    final public function testChangeEmail(
         Uuid                  $uuid,
         CarbonImmutable       $createdAt,
         CarbonImmutable       $updatedAt,
@@ -527,21 +527,21 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId, $logoUrl);
 
         $newEmail = DemoDataGenerator::getEmail();
-        $bitrix24Partner->setEmail($newEmail);
+        $bitrix24Partner->changeEmail($newEmail);
         $this->assertEquals($newEmail, $bitrix24Partner->getEmail());
 
-        $bitrix24Partner->setEmail(null);
+        $bitrix24Partner->changeEmail(null);
         $this->assertNull($bitrix24Partner->getEmail());
 
         $this->expectException(InvalidArgumentException::class);
         /** @phpstan-ignore-next-line */
-        $bitrix24Partner->setEmail('');
+        $bitrix24Partner->changeEmail('');
     }
 
     #[Test]
     #[DataProvider('bitrix24PartnerDataProvider')]
-    #[TestDox('test setEmail method with invalid email')]
-    final public function testSetEmailWithInvalidEmail(
+    #[TestDox('test changeEmail method with invalid email')]
+    final public function testChangeEmailWithInvalidEmail(
         Uuid                  $uuid,
         CarbonImmutable       $createdAt,
         CarbonImmutable       $updatedAt,
@@ -561,7 +561,7 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
 
         $newEmail = '@partner.com';
         $this->expectException(InvalidArgumentException::class);
-        $bitrix24Partner->setEmail($newEmail);
+        $bitrix24Partner->changeEmail($newEmail);
     }
 
     #[Test]
@@ -612,8 +612,8 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
 
     #[Test]
     #[DataProvider('bitrix24PartnerDataProvider')]
-    #[TestDox('test setOpenLineId')]
-    final public function testSetOpenLineId(
+    #[TestDox('test changeOpenLineId')]
+    final public function testChangeOpenLineId(
         Uuid                  $uuid,
         CarbonImmutable       $createdAt,
         CarbonImmutable       $updatedAt,
@@ -631,15 +631,15 @@ abstract class Bitrix24PartnerInterfaceTest extends TestCase
     {
         $bitrix24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId, $logoUrl);
         $newOpenLineId = Uuid::v7()->toRfc4122();
-        $bitrix24Partner->setOpenLineId($newOpenLineId);
+        $bitrix24Partner->changeOpenLineId($newOpenLineId);
         $this->assertEquals($newOpenLineId, $bitrix24Partner->getOpenLineId());
 
-        $bitrix24Partner->setOpenLineId(null);
+        $bitrix24Partner->changeOpenLineId(null);
         $this->assertNull($bitrix24Partner->getOpenLineId());
 
         $this->expectException(InvalidArgumentException::class);
         /** @phpstan-ignore-next-line */
-        $bitrix24Partner->setOpenLineId('');
+        $bitrix24Partner->changeOpenLineId('');
     }
 
     #[Test]
