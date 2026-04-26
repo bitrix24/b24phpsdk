@@ -36,7 +36,8 @@ class Bitrix24PartnerInterfaceReferenceImplementationTest extends Bitrix24Partne
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId): Bitrix24PartnerInterface
+        ?string               $externalId,
+        ?string               $logoUrl = null): Bitrix24PartnerInterface
     {
         return new Bitrix24PartnerReferenceEntityImplementation(
             $uuid,
@@ -49,7 +50,8 @@ class Bitrix24PartnerInterfaceReferenceImplementationTest extends Bitrix24Partne
             $phoneNumber,
             $email,
             $openLineId,
-            $externalId
+            $externalId,
+            $logoUrl
         );
     }
 }
