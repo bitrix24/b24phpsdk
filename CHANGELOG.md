@@ -33,9 +33,12 @@
 - Updated `b24phpsdk-maintainer` skill: hardened PR creation rules — agent must auto-create the PR via `mcp__github__create_pull_request` (never forward the `pull/new/<branch>` URL as a manual-action prompt), PR base branch is strictly `v3-dev` for v3 and `dev` for v1 (never `main`), and the PR body is always composed from `.github/PULL_REQUEST_TEMPLATE.md` read fresh from disk
 - Updated `b24phpsdk-maintainer` skill: generalized the placements workflow to cover `PlacementLocationCodes`, typed `Placements` facades, `PlacementLangMap`/`PlacementLangItem`, `LangCodes` placement, service-builder registration, docs links, and the full unit/integration test matrix
 - Updated `b24phpsdk-maintainer` skill: moved the detailed placements workflow into a dedicated adjacent guide to keep `SKILL.md` compact while preserving the full placement implementation playbook
+- Updated `b24phpsdk-maintainer` skill: require `CarbonImmutable` for public service method arguments that represent date or date-time values
+- Updated `b24phpsdk-maintainer` skill: require `ApiEndpointMetadata` documentation links to use the English `https://apidocs.bitrix24.com/` site
 
 ### Fixed
 
+- Fixed `Core::call()` handling of REST API v3 HTTP 401 error responses: array-shaped `error` payloads are now routed through `ApiLevelErrorHandler` instead of triggering `Array to string conversion`, and Bitrix24 v3 access-denied errors map to `AuthForbiddenException`.
 - Fixed `User\Service\Batch::get()` yielding `DealItemResult` instead of `UserItemResult` ([#447](https://github.com/bitrix24/b24phpsdk/issues/447))
 - Fixed abstract `Bitrix24PartnerInterfaceTest` and `Bitrix24PartnerRepositoryInterfaceTest` contracts: dropped `createdAt` / `updatedAt` from the factory method signature and data provider so implementations that initialise both timestamps internally (e.g. `new CarbonImmutable()` in the constructor) no longer fail with microsecond mismatches ([#457](https://github.com/bitrix24/b24phpsdk/issues/457))
 

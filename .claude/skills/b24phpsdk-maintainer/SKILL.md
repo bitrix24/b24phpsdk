@@ -593,6 +593,20 @@ For each REST method involved in the issue:
 
 Record findings in the **Context** section of `plan.md` so the plan is grounded in actual API behaviour, not assumptions.
 
+### Service method date/time arguments
+
+When adding or changing service methods, any argument that represents a date or date-time
+value must be typed as `CarbonImmutable` in the public SDK method signature. Convert it to
+the Bitrix24 REST payload format at the service boundary, following existing service
+patterns. Do not expose raw date/time strings in service method arguments when the SDK can
+accept a typed immutable date value instead.
+
+### ApiEndpointMetadata documentation links
+
+When adding or changing `ApiEndpointMetadata` attributes, documentation links must point to
+the English Bitrix24 API documentation site under `https://apidocs.bitrix24.com/`. Do not
+use localized documentation hosts for these attribute links.
+
 ### Step 3 — Determine the type
 
 Classify the issue:
