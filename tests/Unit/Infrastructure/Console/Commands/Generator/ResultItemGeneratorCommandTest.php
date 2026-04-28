@@ -148,6 +148,33 @@ JSON);
 || **background_id**
 `integer` | Identifier of the chat background. If not specified, the value is `null` ||
 |#
+
+#### Object message {#message}
+
+#|
+|| **Name**
+`Type` | Description ||
+|| **id**
+`integer` | Message identifier ||
+|| **chat_id**
+`integer` | Chat identifier ||
+|| **author_id**
+`integer` | Author identifier ||
+|| **date**
+`datetime` | Message date ||
+|| **text**
+`string` | Message text ||
+|| **unread**
+`boolean` | Unread flag ||
+|| **uuid**
+`string` | Unique message identifier, `null` for system messages ||
+|| **replaces**
+`array` | Message text replacements ||
+|| **params**
+`object` | Message parameters ||
+|| **disappearing_date**
+`datetime` | Message disappearing date, `null` if not set ||
+|#
 MARKDOWN);
     }
 
@@ -346,6 +373,64 @@ MARKDOWN);
     }
 
     #[Test]
+    public function stageAllForDialogMessagesGetBuildsMessagePayloadAndGeneratesMessageItemResult(): void
+    {
+        $this->resultFetcher = new FakeBitrix24MethodResultFetcher([
+            'chat_id' => 42,
+            'messages' => [[
+                'id' => 100,
+                'chat_id' => 42,
+                'author_id' => 1,
+                'date' => '2026-03-04T09:43:26+02:00',
+                'text' => 'hello',
+                'unread' => false,
+                'uuid' => null,
+                'replaces' => [],
+                'params' => ['LIKE' => [1]],
+                'disappearing_date' => null,
+            ]],
+        ]);
+
+        $originalWorkingDirectory = getcwd();
+        self::assertIsString($originalWorkingDirectory);
+        chdir($this->tempDirectory);
+
+        try {
+            $commandTester = new CommandTester($this->createCommand(
+                $this->createWorkflow(useDefaultGenerationTargetResolver: true),
+            ));
+
+            $status = $commandTester->execute([
+                'method-name' => 'im.dialog.messages.get',
+                '--stage' => 'all',
+            ], ['decorated' => false]);
+        } finally {
+            chdir($originalWorkingDirectory);
+        }
+
+        self::assertSame(Command::SUCCESS, $status, $commandTester->getDisplay());
+
+        $payloadPath = $this->tempDirectory . '/.tasks/' . self::ISSUE_ID . '/im.dialog.messages.get/result-item.payload.yaml';
+        $generatedPath = $this->tempDirectory . '/src/Services/IM/Dialog/Result/MessageItemResult.php';
+        $resultItemPayload = (new ResultItemPayloadSerializer())->decode((string) file_get_contents($payloadPath));
+
+        self::assertSame('message', $resultItemPayload->object);
+        self::assertSame(\Carbon\CarbonImmutable::class, $this->findField($resultItemPayload->fields, 'date')?->phpdocType);
+        self::assertTrue($this->findField($resultItemPayload->fields, 'uuid')?->nullable ?? false);
+        self::assertFileExists($generatedPath);
+
+        $generatedCode = (string) file_get_contents($generatedPath);
+        self::assertStringContainsString('class MessageItemResult extends AbstractAnnotatedItem', $generatedCode);
+        self::assertStringContainsString('@property-read CarbonImmutable $date', $generatedCode);
+        self::assertStringContainsString('@property-read array $params', $generatedCode);
+        self::assertSame([[
+            'webhook' => 'https://unit.test/rest/1/token/',
+            'methodName' => 'im.dialog.messages.get',
+            'params' => ['DIALOG_ID' => self::UNIT_SAMPLE_DIALOG_ID, 'LIMIT' => 10],
+        ]], $this->resultFetcher->calls);
+    }
+
+    #[Test]
     public function itReturnsFailureWhenCurrentBranchResolutionFails(): void
     {
         $commandTester = new CommandTester(new class(
@@ -396,6 +481,7 @@ MARKDOWN);
     private function createWorkflow(
         ?\Closure $documentationMarkdownPathResolver = null,
         ?\Closure $generationTargetResolver = null,
+        bool $useDefaultGenerationTargetResolver = false,
     ): object
     {
         return new DefaultResultItemGeneratorWorkflow(
@@ -414,12 +500,15 @@ MARKDOWN);
             new DevWebhookResolver(),
             $this->filesystem,
             $this->schemaFixturePath(),
-            $documentationMarkdownPathResolver ?? fn(string $methodName): ?string => self::METHOD_NAME === $methodName ? $this->markdownFixturePath() : null,
-            $generationTargetResolver ?? fn(string $methodName): array => [
+            $documentationMarkdownPathResolver ?? fn(string $methodName): ?string => in_array($methodName, [
+                self::METHOD_NAME,
+                'im.dialog.messages.get',
+            ], true) ? $this->markdownFixturePath() : null,
+            $useDefaultGenerationTargetResolver ? null : ($generationTargetResolver ?? fn(string $methodName): array => [
                 'namespace' => 'Bitrix24\\SDK\\Services\\IM\\Dialog\\Result',
                 'className' => 'DialogItemResult',
                 'path' => $this->generatedPath(),
-            ],
+            ]),
         );
     }
 

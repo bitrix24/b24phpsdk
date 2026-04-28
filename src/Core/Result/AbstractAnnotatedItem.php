@@ -85,6 +85,10 @@ abstract class AbstractAnnotatedItem extends AbstractItem
             return CarbonImmutable::parse($value);
         }
 
+        if (str_contains($type, 'array')) {
+            return $this->castArrayValue($value, $type);
+        }
+
         if (str_contains($type, 'bool')) {
             return match ($value) {
                 true, 'Y', 'y', '1', 1 => true,
@@ -105,10 +109,24 @@ abstract class AbstractAnnotatedItem extends AbstractItem
             return (string)$value;
         }
 
-        if (str_contains($type, 'array')) {
-            return (array)$value;
+        return $value;
+    }
+
+    private function castArrayValue(mixed $value, string $type): array
+    {
+        $items = (array)$value;
+        if (preg_match('/array<(?<itemClass>[^,>]+)>/', $type, $matches) !== 1) {
+            return $items;
         }
 
-        return $value;
+        $itemClass = $matches['itemClass'];
+        if (!class_exists($itemClass) || !is_a($itemClass, AbstractItem::class, true)) {
+            return $items;
+        }
+
+        return array_map(
+            static fn(mixed $item): mixed => is_array($item) ? new $itemClass($item) : $item,
+            $items
+        );
     }
 }
