@@ -30,8 +30,7 @@ class InMemoryBitrix24PartnerRepositoryImplementation implements Bitrix24Partner
 
     public function __construct(
         private readonly LoggerInterface $logger
-    )
-    {
+    ) {
     }
 
     #[\Override]
@@ -141,7 +140,8 @@ class InMemoryBitrix24PartnerRepositoryImplementation implements Bitrix24Partner
 
         $bitrix24Partner = $this->getById($uuid);
         if (Bitrix24PartnerStatus::deleted !== $bitrix24Partner->getStatus()) {
-            throw new InvalidArgumentException(sprintf('you cannot delete bitrix24 partner item «%s», they must be in status deleted, current status «%s»',
+            throw new InvalidArgumentException(sprintf(
+                'you cannot delete bitrix24 partner item «%s», they must be in status deleted, current status «%s»',
                 $bitrix24Partner->getId()->toRfc4122(),
                 $bitrix24Partner->getStatus()->name
             ));
