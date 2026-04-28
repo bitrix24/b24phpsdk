@@ -15,7 +15,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\IM\Dialog\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractItem;
+use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
 use Carbon\CarbonImmutable;
 
 /**
@@ -58,6 +58,6 @@ use Carbon\CarbonImmutable;
  * @property-read array $last_message_views
  * @property-read string $dialog_id
  */
-class DialogItemResult extends AbstractItem
+class DialogItemResult extends AbstractAnnotatedItem
 {
 }
