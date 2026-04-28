@@ -10,6 +10,7 @@
 - Added integration test `PlacementLocationCodesTest` that asserts (via reflection) every `IM_`-prefixed code returned by `placement.list` is declared as a constant in `PlacementLocationCodes` ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
 - Added `Bitrix24\SDK\Services\IM\Chat\Service\Chat` service wrapping `im.chat.add`, `im.chat.get`, `im.chat.leave`, `im.chat.mute`, `im.chat.setOwner`, `im.chat.updateAvatar`, `im.chat.updateColor`, `im.chat.updateTitle`, with enums `ChatType`, `ChatColor`, `ChatEntityType`, result types `ChatItemResult`/`ChatResult`, and `IMServiceBuilder::chat()` accessor ([#423](https://github.com/bitrix24/b24phpsdk/issues/423))
 - Added `Bitrix24\SDK\Services\IM\Dialog\Service\Dialog` service for `im.dialog.*` support, with typed result wrappers, `IMServiceBuilder::dialog()`, and dedicated unit/integration/annotation coverage ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
+- Added `b24-dev:result-item-generator` developer command for staged ResultItem payload build, verification, apply, and generation workflows backed by OpenAPI, REST documentation, and live API metadata ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
 - Added `Services\IM\Message\Service\Message` service for `im.message.*` support ([#426](https://github.com/bitrix24/b24phpsdk/issues/426)):
     - `add` — send a message (`im.message.add`)
     - `update` — edit text and parameters (`im.message.update`)
@@ -26,6 +27,8 @@
 - Replaced `set*` prefix with `change*` in `Bitrix24PartnerInterface` mutator methods (`changeTitle`, `changeSite`, `changePhone`, `changeEmail`, `changeOpenLineId`, `changeExternalId`) to better express domain-level change operations ([#453](https://github.com/bitrix24/b24phpsdk/issues/453))
 - Deprecated passing `ATTACH` as raw JSON `string` to `im.message.add` and `im.message.update`; prefer `AttachPayloadInterface` for typed object payloads or raw `array` payloads for backward-compatible structures ([#426](https://github.com/bitrix24/b24phpsdk/issues/426))
 - Widened `Placement::bind()` `$options` parameter type to `PlacementOptionsInterface|array` — existing array callers remain fully compatible ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
+- Regenerated `DialogItemResult` from the ResultItem generator payload, including imported `CarbonImmutable` PHPDoc types and live-verified nullable fields ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
+- Reorganized OpenAPI ResultItem generator internals into purpose-specific `Field`, `Payload`, `Provider`, `Verification`, `PhpDoc`, and `Path` namespaces ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
 - Updated `b24phpsdk-maintainer` skill and `AGENTS.md`: all GitHub issues (title, body, checklists, comments) must be written in English only ([#422](https://github.com/bitrix24/b24phpsdk/issues/422))
 - Updated `AGENTS.md`: limit mandatory `b24phpsdk-maintainer` usage to issue, changelog, and release-related work
 - Updated `b24phpsdk-maintainer` skill: added "Implementing placements for a scope" section with directory layout, plain-class-over-enum rationale, option-builder template, shared-vs-scope-specific enum placement, and mandatory reflection-based integration test template ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
