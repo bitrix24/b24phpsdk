@@ -15,10 +15,16 @@ namespace Bitrix24\SDK\Tests\Integration\Services\IM\Dialog\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Services\IM\Chat\ChatType;
+use Bitrix24\SDK\Services\IM\Chat\Service\Chat;
 use Bitrix24\SDK\Services\IM\Dialog\Service\Dialog;
+use Bitrix24\SDK\Services\IM\Message\Service\Message;
+use Bitrix24\SDK\Tests\Integration\Factory;
+use Carbon\CarbonImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Dialog::class)]
 final class DialogTest extends DialogChatTestCase
@@ -56,6 +62,7 @@ final class DialogTest extends DialogChatTestCase
         ]);
 
         $dialogMessagesResult = $this->dialogService->messagesGet($dialogId, null, null, 10);
+
         $messageIdsFromResponse = array_map(
             static fn(object $message): int => $message->id,
             $dialogMessagesResult->messages()
@@ -89,10 +96,12 @@ final class DialogTest extends DialogChatTestCase
         );
 
         $this->assertNotEmpty($texts);
-        $this->assertTrue(array_any(
-            $texts,
-            static fn(string $text): bool => str_contains($text, $needle)
-        ));
+        $this->assertTrue(
+            array_any(
+                $texts,
+                static fn(string $text): bool => str_contains($text, $needle)
+            )
+        );
     }
 
     /**
