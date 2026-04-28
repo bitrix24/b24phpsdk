@@ -11,9 +11,8 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\OpenApi\Domain\Schema;
+namespace Bitrix24\SDK\OpenApi\Domain;
 
-use Bitrix24\SDK\OpenApi\Domain\ResultItem\ResultFieldDescriptor;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -83,36 +82,6 @@ class OpenApiSchemaEntityReader
         sort($fields);
 
         return array_values(array_merge(['id'], $fields));
-    }
-
-    /**
-     * @return list<ResultFieldDescriptor>
-     */
-    public function getResultFields(string $schemaFile, string $entityKey): array
-    {
-        $schema = $this->loadSchema($schemaFile);
-        $properties = $this->getEntityProperties($schema, $entityKey);
-        $requiredFields = $this->getEntityRequiredFields($schema, $entityKey);
-
-        $fields = [];
-        foreach ($properties as $name => $definition) {
-            $type = (string) ($definition['type'] ?? 'string');
-            if ($this->isRef($definition)) {
-                $type = 'object';
-            }
-
-            $fields[] = new ResultFieldDescriptor(
-                name: (string) $name,
-                type: $type,
-                format: isset($definition['format']) ? (string) $definition['format'] : null,
-                nullable: (bool) ($definition['nullable'] ?? false),
-                description: $this->extractFieldDescription($definition),
-                source: 'openapi',
-                required: in_array((string) $name, $requiredFields, true),
-            );
-        }
-
-        return $fields;
     }
 
     /**
@@ -231,39 +200,12 @@ class OpenApiSchemaEntityReader
      */
     private function getEntityProperties(array $schema, string $entityKey): array
     {
-        return $this->getEntitySchema($schema, $entityKey)['properties'] ?? [];
-    }
-
-    /**
-     * @param array<string, mixed> $schema
-     * @return list<string>
-     */
-    private function getEntityRequiredFields(array $schema, string $entityKey): array
-    {
-        $requiredFields = $this->getEntitySchema($schema, $entityKey)['required'] ?? [];
-
-        if (!is_array($requiredFields)) {
-            return [];
-        }
-
-        return array_values(array_filter(
-            $requiredFields,
-            static fn(mixed $fieldName): bool => is_string($fieldName) && $fieldName !== ''
-        ));
-    }
-
-    /**
-     * @param array<string, mixed> $schema
-     * @return array<string, mixed>
-     */
-    private function getEntitySchema(array $schema, string $entityKey): array
-    {
         $schemas = $schema['components']['schemas'] ?? [];
         if (!array_key_exists($entityKey, $schemas)) {
             throw new RuntimeException(sprintf('Entity "%s" not found in OpenAPI schema', $entityKey));
         }
 
-        return is_array($schemas[$entityKey]) ? $schemas[$entityKey] : [];
+        return $schemas[$entityKey]['properties'] ?? [];
     }
 
     /**
@@ -293,21 +235,5 @@ class OpenApiSchemaEntityReader
     {
         return ($definition['type'] ?? '') === 'array'
             && isset($definition['items']['$ref']);
-    }
-
-    /**
-     * @param array<string, mixed> $definition
-     */
-    private function extractFieldDescription(array $definition): ?string
-    {
-        if (isset($definition['description']) && is_string($definition['description']) && $definition['description'] !== '') {
-            return $definition['description'];
-        }
-
-        if (isset($definition['title']) && is_string($definition['title']) && $definition['title'] !== '') {
-            return $definition['title'];
-        }
-
-        return null;
     }
 }

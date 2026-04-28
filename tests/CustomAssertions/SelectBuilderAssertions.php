@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\CustomAssertions;
 
 use Bitrix24\SDK\Attributes\OpenApiEntity;
-use Bitrix24\SDK\OpenApi\Domain\Schema\OpenApiSchemaEntityReader;
+use Bitrix24\SDK\OpenApi\Domain\OpenApiSchemaEntityReader;
 use Bitrix24\SDK\Services\AbstractSelectBuilder;
 use PHPUnit\Framework\Assert;
 use Symfony\Component\Filesystem\Filesystem;

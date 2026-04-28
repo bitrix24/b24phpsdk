@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\OpenApi\Domain;
 
-use Bitrix24\SDK\OpenApi\Domain\Schema\OpenApiSchemaEntityReader;
+use Bitrix24\SDK\OpenApi\Domain\OpenApiSchemaEntityReader;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;

@@ -11,10 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\OpenApi\Domain\Coverage;
+namespace Bitrix24\SDK\OpenApi\Domain;
 
 use Bitrix24\SDK\Attributes\OpenApiEntity;
-use Bitrix24\SDK\OpenApi\Domain\Schema\OpenApiSchemaEntityReader;
 use Bitrix24\SDK\Services\AbstractItemBuilder;
 use Bitrix24\SDK\Services\AbstractSelectBuilder;
 use ReflectionClass;

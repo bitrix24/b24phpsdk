@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\OpenApi\Domain;
 
-use Bitrix24\SDK\OpenApi\Domain\Schema\OaToSdkMethodNormalizationPolicy;
+use Bitrix24\SDK\OpenApi\Domain\OaToSdkMethodNormalizationPolicy;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 

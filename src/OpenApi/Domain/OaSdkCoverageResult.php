@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\OpenApi\Domain\Coverage;
+namespace Bitrix24\SDK\OpenApi\Domain;
 
 readonly class OaSdkCoverageResult
 {

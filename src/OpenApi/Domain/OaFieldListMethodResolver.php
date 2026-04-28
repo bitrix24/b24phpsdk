@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\OpenApi\Domain\Schema;
+namespace Bitrix24\SDK\OpenApi\Domain;
 
 use InvalidArgumentException;
 

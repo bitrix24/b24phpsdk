@@ -15,8 +15,8 @@ namespace Bitrix24\SDK\Tests\Unit\OpenApi\Domain;
 
 use Bitrix24\SDK\Attributes\Services\SupportedInSdkApiMethod;
 use Bitrix24\SDK\Core\Contracts\ApiVersion;
-use Bitrix24\SDK\OpenApi\Domain\Coverage\OaSdkCoverageCalculator;
-use Bitrix24\SDK\OpenApi\Domain\Schema\OaToSdkMethodNormalizationPolicy;
+use Bitrix24\SDK\OpenApi\Domain\OaSdkCoverageCalculator;
+use Bitrix24\SDK\OpenApi\Domain\OaToSdkMethodNormalizationPolicy;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
