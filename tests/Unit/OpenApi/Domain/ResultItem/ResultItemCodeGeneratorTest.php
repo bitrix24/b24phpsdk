@@ -27,12 +27,12 @@ class ResultItemCodeGeneratorTest extends TestCase
             'im.dialog.get'
         );
 
-        $this->assertStringContainsString('use Bitrix24\SDK\Core\Result\AbstractItem;', $code);
+        $this->assertStringContainsString('use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;', $code);
         $this->assertStringContainsString('use Carbon\CarbonImmutable;', $code);
         $this->assertStringContainsString('@property-read int $id', $code);
         $this->assertStringContainsString('@property-read CarbonImmutable|null $date_create', $code);
         $this->assertStringContainsString('@property-read CarbonImmutable|null $birthday', $code);
         $this->assertStringContainsString('@property-read array|null $permissions', $code);
-        $this->assertStringContainsString('class DialogItemResult extends AbstractItem', $code);
+        $this->assertStringContainsString('class DialogItemResult extends AbstractAnnotatedItem', $code);
     }
 }

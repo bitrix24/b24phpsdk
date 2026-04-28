@@ -50,7 +50,7 @@ final class ResultItemCodeGeneratorFromPayloadTest extends TestCase
         self::assertStringContainsString('@property-read int|null $background_id', $code);
         self::assertStringNotContainsString('@property-read array $restrictions', $code);
         self::assertStringNotContainsString('@property-read array $readed_list_item', $code);
-        self::assertStringContainsString('class DialogItemResult extends AbstractItem', $code);
+        self::assertStringContainsString('class DialogItemResult extends AbstractAnnotatedItem', $code);
     }
 
     /**
