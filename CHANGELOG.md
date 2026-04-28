@@ -3,6 +3,7 @@
 
 ### Added
 
+- Added `getLogoUrl()` and `changeLogoUrl()` methods to `Bitrix24PartnerInterface` and reference implementation with `Bitrix24PartnerLogoUrlChangedEvent` ([#452](https://github.com/bitrix24/b24phpsdk/issues/452))
 - Added typed fluent `Services\IM\Message\Attach` payload builders for `ATTACH` blocks in `im.message.add` and `im.message.update`, plus `RawAttach::fromArray()` as an object-based escape hatch for unsupported or vendor-extended payload shapes ([#426](https://github.com/bitrix24/b24phpsdk/issues/426))
 - Added `Bitrix24\SDK\Services\IM\Placements\PlacementLocationCodes` with constants `IM_TEXTAREA`, `IM_SIDEBAR`, `IM_CONTEXT_MENU`, `IM_NAVIGATION`, and `IM_SMILES_SELECTOR` (deprecated since `im 25.1600.0`) for IM widget placement codes ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
 - Added `PlacementOptionsInterface` and fluent option builders `TextareaPlacementOptions`, `SidebarPlacementOptions`, `ContextMenuPlacementOptions` under `Bitrix24\SDK\Services\IM\Placements` namespace, backed by `ChatContext`, `PlacementColor` (IM-specific) and shared `Role`, `ExtranetAvailability` string-backed enums under `Bitrix24\SDK\Services\Placement` ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
@@ -22,6 +23,7 @@
 
 ### Changed
 
+- Replaced `set*` prefix with `change*` in `Bitrix24PartnerInterface` mutator methods (`changeTitle`, `changeSite`, `changePhone`, `changeEmail`, `changeOpenLineId`, `changeExternalId`) to better express domain-level change operations ([#453](https://github.com/bitrix24/b24phpsdk/issues/453))
 - Deprecated passing `ATTACH` as raw JSON `string` to `im.message.add` and `im.message.update`; prefer `AttachPayloadInterface` for typed object payloads or raw `array` payloads for backward-compatible structures ([#426](https://github.com/bitrix24/b24phpsdk/issues/426))
 - Widened `Placement::bind()` `$options` parameter type to `PlacementOptionsInterface|array` — existing array callers remain fully compatible ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
 - Updated `b24phpsdk-maintainer` skill and `AGENTS.md`: all GitHub issues (title, body, checklists, comments) must be written in English only ([#422](https://github.com/bitrix24/b24phpsdk/issues/422))
@@ -31,6 +33,11 @@
 - Updated `b24phpsdk-maintainer` skill: hardened PR creation rules — agent must auto-create the PR via `mcp__github__create_pull_request` (never forward the `pull/new/<branch>` URL as a manual-action prompt), PR base branch is strictly `v3-dev` for v3 and `dev` for v1 (never `main`), and the PR body is always composed from `.github/PULL_REQUEST_TEMPLATE.md` read fresh from disk
 - Updated `b24phpsdk-maintainer` skill: generalized the placements workflow to cover `PlacementLocationCodes`, typed `Placements` facades, `PlacementLangMap`/`PlacementLangItem`, `LangCodes` placement, service-builder registration, docs links, and the full unit/integration test matrix
 - Updated `b24phpsdk-maintainer` skill: moved the detailed placements workflow into a dedicated adjacent guide to keep `SKILL.md` compact while preserving the full placement implementation playbook
+
+### Fixed
+
+- Fixed `User\Service\Batch::get()` yielding `DealItemResult` instead of `UserItemResult` ([#447](https://github.com/bitrix24/b24phpsdk/issues/447))
+- Fixed abstract `Bitrix24PartnerInterfaceTest` and `Bitrix24PartnerRepositoryInterfaceTest` contracts: dropped `createdAt` / `updatedAt` from the factory method signature and data provider so implementations that initialise both timestamps internally (e.g. `new CarbonImmutable()` in the constructor) no longer fail with microsecond mismatches ([#457](https://github.com/bitrix24/b24phpsdk/issues/457))
 
 ## 3.1.0
 

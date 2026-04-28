@@ -20,7 +20,6 @@ use Bitrix24\SDK\Application\Contracts\Bitrix24Partners\Repository\Bitrix24Partn
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Tests\Application\Contracts\TestRepositoryFlusherInterface;
 use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
-use Carbon\CarbonImmutable;
 use Generator;
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumber;
@@ -36,8 +35,6 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
 {
     abstract protected function createBitrix24PartnerImplementation(
         Uuid                  $uuid,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
         ?int                  $bitrix24PartnerNumber,
@@ -45,7 +42,8 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId): Bitrix24PartnerInterface;
+        ?string               $externalId
+    ): Bitrix24PartnerInterface;
 
     abstract protected function createBitrix24PartnerRepositoryImplementation(): Bitrix24PartnerRepositoryInterface;
 
@@ -60,8 +58,6 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
     #[TestDox('test save method')]
     final public function testSave(
         Uuid                  $uuid,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
         ?int                  $bitrix24PartnerNumber,
@@ -71,9 +67,8 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
         ?string               $openLineId,
         ?string               $externalId,
         string                $comment
-    ): void
-    {
-        $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
+    ): void {
+        $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $b24PartnerRepository = $this->createBitrix24PartnerRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -93,8 +88,6 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
     #[TestDox('test save with two bitrix24partner number')]
     final public function testSaveWithTwoBitrix24PartnerNumber(
         Uuid                  $uuid,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
         ?int                  $bitrix24PartnerNumber,
@@ -104,9 +97,8 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
         ?string               $openLineId,
         ?string               $externalId,
         string                $comment
-    ): void
-    {
-        $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
+    ): void {
+        $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $b24PartnerRepository = $this->createBitrix24PartnerRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -116,7 +108,7 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
         $res = $b24PartnerRepository->getById($b24Partner->getId());
         $this->assertEquals($b24Partner, $res);
 
-        $secondB24Partner = $this->createBitrix24PartnerImplementation(Uuid::v7(), $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
+        $secondB24Partner = $this->createBitrix24PartnerImplementation(Uuid::v7(), $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $this->expectException(InvalidArgumentException::class);
         $b24PartnerRepository->save($secondB24Partner);
     }
@@ -130,8 +122,6 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
     #[TestDox('test delete method')]
     final public function testDelete(
         Uuid                  $uuid,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
         ?int                  $bitrix24PartnerNumber,
@@ -141,9 +131,8 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
         ?string               $openLineId,
         ?string               $externalId,
         string                $comment
-    ): void
-    {
-        $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
+    ): void {
+        $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $b24PartnerRepository = $this->createBitrix24PartnerRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -166,8 +155,6 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
     #[TestDox('test save method')]
     final public function testGetById(
         Uuid                  $uuid,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
         ?int                  $bitrix24PartnerNumber,
@@ -177,9 +164,8 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
         ?string               $openLineId,
         ?string               $externalId,
         string                $comment
-    ): void
-    {
-        $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
+    ): void {
+        $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $b24PartnerRepository = $this->createBitrix24PartnerRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -201,8 +187,6 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
     #[TestDox('test findByBitrix24PartnerNumber method')]
     final public function testFindByBitrix24PartnerNumber(
         Uuid                  $uuid,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
         ?int                  $bitrix24PartnerNumber,
@@ -212,9 +196,8 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
         ?string               $openLineId,
         ?string               $externalId,
         string                $comment
-    ): void
-    {
-        $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
+    ): void {
+        $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $b24PartnerRepository = $this->createBitrix24PartnerRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -232,8 +215,6 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
     #[TestDox('test findByTitle method')]
     final public function testFindByTitle(
         Uuid                  $uuid,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
         ?int                  $bitrix24PartnerNumber,
@@ -243,9 +224,8 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
         ?string               $openLineId,
         ?string               $externalId,
         string                $comment
-    ): void
-    {
-        $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
+    ): void {
+        $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $b24PartnerRepository = $this->createBitrix24PartnerRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -263,8 +243,6 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
     #[TestDox('test findByExternalId method')]
     final public function testFindByExternalId(
         Uuid                  $uuid,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
         ?int                  $bitrix24PartnerNumber,
@@ -274,9 +252,8 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
         ?string               $openLineId,
         ?string               $externalId,
         string                $comment
-    ): void
-    {
-        $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $createdAt, $updatedAt, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
+    ): void {
+        $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
         $b24PartnerRepository = $this->createBitrix24PartnerRepositoryImplementation();
         $flusher = $this->createRepositoryFlusherImplementation();
 
@@ -297,8 +274,6 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
     {
         yield 'partner-status-active-all-fields' => [
             Uuid::v7(), //id
-            CarbonImmutable::now(), // createdAt
-            CarbonImmutable::now(), // updatedAt
             Bitrix24PartnerStatus::active,
             'Bitrix24 Partner LLC', // title
             12345, // bitrix24 partner number, optional

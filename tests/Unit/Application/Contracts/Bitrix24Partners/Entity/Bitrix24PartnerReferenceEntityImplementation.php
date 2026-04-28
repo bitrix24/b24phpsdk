@@ -42,23 +42,28 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
 
     private array $events = [];
 
+    private readonly CarbonImmutable $createdAt;
+
+    private CarbonImmutable $updatedAt;
+
     public function __construct(
-        private readonly Uuid            $id,
-        private readonly CarbonImmutable $createdAt,
-        private CarbonImmutable          $updatedAt,
-        private Bitrix24PartnerStatus    $bitrix24PartnerStatus,
-        private string                   $title,
-        private readonly int             $bitrix24PartnerNumber,
-        private ?string                  $site,
-        private ?PhoneNumber             $phoneNumber,
-        private ?string                  $email,
-        private ?string                  $openLineId,
-        private ?string                  $externalId
-    )
-    {
+        private readonly Uuid         $id,
+        private Bitrix24PartnerStatus $bitrix24PartnerStatus,
+        private string                $title,
+        private readonly int          $bitrix24PartnerNumber,
+        private ?string               $site,
+        private ?PhoneNumber          $phoneNumber,
+        private ?string               $email,
+        private ?string               $openLineId,
+        private ?string               $externalId,
+        private ?string               $logoUrl = null
+    ) {
         if ($bitrix24PartnerNumber <= 0) {
             throw new InvalidArgumentException(sprintf('bitrix24 partner number must be positive int, now «%s»', $bitrix24PartnerNumber));
         }
+
+        $this->createdAt = new CarbonImmutable();
+        $this->updatedAt = new CarbonImmutable();
     }
 
     #[\Override]
@@ -82,7 +87,7 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     }
 
     #[\Override]
-    public function setExternalId(?string $externalId): void
+    public function changeExternalId(?string $externalId): void
     {
         if ($externalId !== null && trim($externalId) === '') {
             throw new InvalidArgumentException('externalId cannot be an empty string');
@@ -107,7 +112,7 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     }
 
     #[\Override]
-    public function setTitle(string $title): void
+    public function changeTitle(string $title): void
     {
         if (trim($title) === '') {
             throw new InvalidArgumentException('partner title cannot be an empty string');
@@ -124,7 +129,7 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     }
 
     #[\Override]
-    public function setSite(?string $site): void
+    public function changeSite(?string $site): void
     {
         if ($site !== null && trim($site) === '') {
             throw new InvalidArgumentException('site cannot be an empty string');
@@ -141,7 +146,7 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     }
 
     #[\Override]
-    public function setPhone(?PhoneNumber $phoneNumber): void
+    public function changePhone(?PhoneNumber $phoneNumber): void
     {
         $this->phoneNumber = $phoneNumber;
         $this->updatedAt = new CarbonImmutable();
@@ -154,7 +159,7 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     }
 
     #[\Override]
-    public function setEmail(?string $email): void
+    public function changeEmail(?string $email): void
     {
         if ($email !== null && trim($email) === '') {
             throw new InvalidArgumentException('email cannot be an empty string');
@@ -181,7 +186,7 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     }
 
     #[\Override]
-    public function setOpenLineId(?string $openLineId): void
+    public function changeOpenLineId(?string $openLineId): void
     {
         if ($openLineId !== null && trim($openLineId) === '') {
             throw new InvalidArgumentException('openLineId cannot be an empty string');
@@ -217,8 +222,11 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     {
         if (Bitrix24PartnerStatus::blocked !== $this->bitrix24PartnerStatus) {
             throw new InvalidArgumentException(
-                sprintf('you can activate bitrix24 partner only in status blocked, now bitrix24 partner in status %s',
-                    $this->bitrix24PartnerStatus->name));
+                sprintf(
+                    'you can activate bitrix24 partner only in status blocked, now bitrix24 partner in status %s',
+                    $this->bitrix24PartnerStatus->name
+                )
+            );
         }
 
         $this->bitrix24PartnerStatus = Bitrix24PartnerStatus::active;
@@ -234,9 +242,11 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     {
         if (Bitrix24PartnerStatus::deleted === $this->bitrix24PartnerStatus || Bitrix24PartnerStatus::blocked === $this->bitrix24PartnerStatus) {
             throw new InvalidArgumentException(
-                sprintf('you cannot block bitrix24 partner in status «%s»',
+                sprintf(
+                    'you cannot block bitrix24 partner in status «%s»',
                     $this->bitrix24PartnerStatus->name
-                ));
+                )
+            );
         }
 
         $this->bitrix24PartnerStatus = Bitrix24PartnerStatus::blocked;
@@ -249,8 +259,11 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     {
         if (Bitrix24PartnerStatus::deleted === $this->bitrix24PartnerStatus) {
             throw new InvalidArgumentException(
-                sprintf('you cannot mark bitrix24 partner as deleted in status %s',
-                    $this->bitrix24PartnerStatus->name));
+                sprintf(
+                    'you cannot mark bitrix24 partner as deleted in status %s',
+                    $this->bitrix24PartnerStatus->name
+                )
+            );
         }
 
         $this->bitrix24PartnerStatus = Bitrix24PartnerStatus::deleted;
@@ -262,5 +275,22 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     public function getComment(): ?string
     {
         return $this->comment;
+    }
+
+    #[\Override]
+    public function getLogoUrl(): ?string
+    {
+        return $this->logoUrl;
+    }
+
+    #[\Override]
+    public function changeLogoUrl(?string $logoUrl): void
+    {
+        if ($logoUrl !== null && trim($logoUrl) === '') {
+            throw new InvalidArgumentException('logoUrl cannot be an empty string');
+        }
+
+        $this->logoUrl = $logoUrl;
+        $this->updatedAt = new CarbonImmutable();
     }
 }
