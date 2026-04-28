@@ -23,7 +23,7 @@
 
 namespace <?= $namespace ?>;
 
-use Bitrix24\SDK\Core\Result\AbstractItem;
+use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
 <?php if ($needsCarbon): ?>
 use Carbon\CarbonImmutable;
 <?php endif; ?>
@@ -33,6 +33,6 @@ use Carbon\CarbonImmutable;
  * @property-read <?= $field['phpType'] ?> $<?= $field['name'] . "\n" ?>
 <?php endforeach; ?>
  */
-class <?= $className ?> extends AbstractItem
+class <?= $className ?> extends AbstractAnnotatedItem
 {
 }

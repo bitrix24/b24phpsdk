@@ -140,6 +140,7 @@ final readonly class DefaultResultItemGeneratorWorkflow
             return $this->restDocsPayloadProvider->provide(
                 markdownFile: $markdownPath,
                 method: $methodName,
+                object: $this->resolveRestDocsObject($methodName),
             );
         }
 
@@ -156,6 +157,7 @@ final readonly class DefaultResultItemGeneratorWorkflow
             return $this->restDocsPayloadProvider->provide(
                 markdownFile: $markdownPath,
                 method: $methodName,
+                object: $this->resolveRestDocsObject($methodName),
             );
         } finally {
             $this->filesystem->remove($markdownPath);
@@ -169,6 +171,14 @@ final readonly class DefaultResultItemGeneratorWorkflow
     {
         if ($this->generationTargetResolver !== null) {
             return ($this->generationTargetResolver)($methodName);
+        }
+
+        if ($methodName === 'im.dialog.messages.get') {
+            return [
+                'namespace' => 'Bitrix24\\SDK\\Services\\IM\\Dialog\\Result',
+                'className' => 'MessageItemResult',
+                'path' => 'src/Services/IM/Dialog/Result/MessageItemResult.php',
+            ];
         }
 
         $segments = array_values(array_filter(explode('.', $methodName), static fn (string $segment): bool => $segment !== ''));
@@ -358,6 +368,7 @@ final readonly class DefaultResultItemGeneratorWorkflow
     {
         return match ($methodName) {
             'im.dialog.get' => ['DIALOG_ID' => $this->requireImDialogGetSampleDialogId()],
+            'im.dialog.messages.get' => ['DIALOG_ID' => $this->requireImDialogGetSampleDialogId(), 'LIMIT' => 10],
             default => [],
         };
     }
@@ -382,7 +393,16 @@ final readonly class DefaultResultItemGeneratorWorkflow
     private function resolveResponsePath(string $methodName): string
     {
         return match ($methodName) {
+            'im.dialog.messages.get' => 'messages',
             default => '',
+        };
+    }
+
+    private function resolveRestDocsObject(string $methodName): string
+    {
+        return match ($methodName) {
+            'im.dialog.messages.get' => 'message',
+            default => 'result-item',
         };
     }
 }
