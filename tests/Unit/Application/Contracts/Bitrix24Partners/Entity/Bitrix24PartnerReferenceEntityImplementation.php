@@ -42,24 +42,28 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
 
     private array $events = [];
 
+    private readonly CarbonImmutable $createdAt;
+
+    private CarbonImmutable $updatedAt;
+
     public function __construct(
-        private readonly Uuid            $id,
-        private readonly CarbonImmutable $createdAt,
-        private CarbonImmutable          $updatedAt,
-        private Bitrix24PartnerStatus    $bitrix24PartnerStatus,
-        private string                   $title,
-        private readonly int             $bitrix24PartnerNumber,
-        private ?string                  $site,
-        private ?PhoneNumber             $phoneNumber,
-        private ?string                  $email,
-        private ?string                  $openLineId,
-        private ?string                  $externalId,
-        private ?string                  $logoUrl = null
-    )
-    {
+        private readonly Uuid         $id,
+        private Bitrix24PartnerStatus $bitrix24PartnerStatus,
+        private string                $title,
+        private readonly int          $bitrix24PartnerNumber,
+        private ?string               $site,
+        private ?PhoneNumber          $phoneNumber,
+        private ?string               $email,
+        private ?string               $openLineId,
+        private ?string               $externalId,
+        private ?string               $logoUrl = null
+    ) {
         if ($bitrix24PartnerNumber <= 0) {
             throw new InvalidArgumentException(sprintf('bitrix24 partner number must be positive int, now «%s»', $bitrix24PartnerNumber));
         }
+
+        $this->createdAt = new CarbonImmutable();
+        $this->updatedAt = new CarbonImmutable();
     }
 
     #[\Override]
@@ -218,8 +222,11 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     {
         if (Bitrix24PartnerStatus::blocked !== $this->bitrix24PartnerStatus) {
             throw new InvalidArgumentException(
-                sprintf('you can activate bitrix24 partner only in status blocked, now bitrix24 partner in status %s',
-                    $this->bitrix24PartnerStatus->name));
+                sprintf(
+                    'you can activate bitrix24 partner only in status blocked, now bitrix24 partner in status %s',
+                    $this->bitrix24PartnerStatus->name
+                )
+            );
         }
 
         $this->bitrix24PartnerStatus = Bitrix24PartnerStatus::active;
@@ -235,9 +242,11 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     {
         if (Bitrix24PartnerStatus::deleted === $this->bitrix24PartnerStatus || Bitrix24PartnerStatus::blocked === $this->bitrix24PartnerStatus) {
             throw new InvalidArgumentException(
-                sprintf('you cannot block bitrix24 partner in status «%s»',
+                sprintf(
+                    'you cannot block bitrix24 partner in status «%s»',
                     $this->bitrix24PartnerStatus->name
-                ));
+                )
+            );
         }
 
         $this->bitrix24PartnerStatus = Bitrix24PartnerStatus::blocked;
@@ -250,8 +259,11 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
     {
         if (Bitrix24PartnerStatus::deleted === $this->bitrix24PartnerStatus) {
             throw new InvalidArgumentException(
-                sprintf('you cannot mark bitrix24 partner as deleted in status %s',
-                    $this->bitrix24PartnerStatus->name));
+                sprintf(
+                    'you cannot mark bitrix24 partner as deleted in status %s',
+                    $this->bitrix24PartnerStatus->name
+                )
+            );
         }
 
         $this->bitrix24PartnerStatus = Bitrix24PartnerStatus::deleted;
