@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Services\IM;
 
+use Bitrix24\SDK\Services\IM\Counters\Service\Counters;
 use Bitrix24\SDK\Services\IM\Dialog\Service\Dialog;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
 use Bitrix24\SDK\Services\IM\Placements\Placements;
@@ -53,6 +54,12 @@ class IMServiceBuilderTest extends TestCase
     public function testGetRevisionService(): void
     {
         $this::assertSame($this->serviceBuilder->revision(), $this->serviceBuilder->revision());
+    }
+
+    public function testGetCountersService(): void
+    {
+        $this->assertInstanceOf(Counters::class, $this->serviceBuilder->counters());
+        $this->assertSame($this->serviceBuilder->counters(), $this->serviceBuilder->counters());
     }
 
     public function testGetPlacementsService(): void

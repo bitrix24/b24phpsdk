@@ -34,6 +34,9 @@
         <testsuite name="integration_tests_im_revision">
             <directory>./tests/Integration/Services/IM/Revision/</directory>
         </testsuite>
+        <testsuite name="integration_tests_im_counters">
+            <directory>./tests/Integration/Services/IM/Counters/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_im_open_lines">
             <directory>./tests/Integration/Services/IMOpenLines/</directory>
         </testsuite>
