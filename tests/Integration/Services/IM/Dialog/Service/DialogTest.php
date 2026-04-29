@@ -85,11 +85,13 @@ final class DialogTest extends DialogChatTestCase
         $chatId = $this->createChat();
         $dialogId = $this->createDialogId($chatId);
         $needle = sprintf('needle-%s', uniqid('', true));
+        $dateFrom = CarbonImmutable::now()->subMinutes(5);
         $this->seedMessages($dialogId, [
             sprintf('prefix %s suffix', $needle),
         ]);
+        $dateTo = CarbonImmutable::now()->addMinutes(5);
 
-        $dialogMessageSearchResult = $this->dialogService->messagesSearch($chatId, $needle, limit: 20);
+        $dialogMessageSearchResult = $this->dialogService->messagesSearch($chatId, $needle, $dateFrom, $dateTo, limit: 20);
         $texts = array_map(
             static fn(object $message): string => $message->text,
             $dialogMessageSearchResult->messages()

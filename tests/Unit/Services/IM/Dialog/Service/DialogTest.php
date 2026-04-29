@@ -22,6 +22,7 @@ use Bitrix24\SDK\Services\IM\Dialog\Result\DialogReadResult;
 use Bitrix24\SDK\Services\IM\Dialog\Result\DialogResult;
 use Bitrix24\SDK\Services\IM\Dialog\Result\DialogUsersResult;
 use Bitrix24\SDK\Services\IM\Dialog\Service\Dialog;
+use Carbon\CarbonImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -83,6 +84,9 @@ final class DialogTest extends TestCase
     public function testMessagesSearchMapsSearchFiltersAndOrder(): void
     {
         $response = $this->createStub(Response::class);
+        $dateFrom = CarbonImmutable::parse('2026-04-01T00:00:00+00:00');
+        $dateTo = CarbonImmutable::parse('2026-04-30T23:59:59+00:00');
+        $date = CarbonImmutable::parse('2026-04-22T12:00:00+00:00');
 
         $this->coreMock
             ->expects($this->once())
@@ -102,9 +106,9 @@ final class DialogTest extends TestCase
         $dialogMessageSearchResult = $this->service->messagesSearch(
             15,
             'invoice',
-            '2026-04-01T00:00:00+00:00',
-            '2026-04-30T23:59:59+00:00',
-            '2026-04-22T12:00:00+00:00',
+            $dateFrom,
+            $dateTo,
+            $date,
             ['ID' => 'ASC'],
             100,
             77,

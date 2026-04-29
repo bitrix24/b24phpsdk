@@ -25,6 +25,7 @@ use Bitrix24\SDK\Services\IM\Dialog\Result\DialogMessagesResult;
 use Bitrix24\SDK\Services\IM\Dialog\Result\DialogReadResult;
 use Bitrix24\SDK\Services\IM\Dialog\Result\DialogResult;
 use Bitrix24\SDK\Services\IM\Dialog\Result\DialogUsersResult;
+use Carbon\CarbonImmutable;
 
 #[ApiServiceMetadata(new Scope(['im']))]
 class Dialog extends AbstractService
@@ -81,15 +82,15 @@ class Dialog extends AbstractService
      */
     #[ApiEndpointMetadata(
         'im.dialog.messages.search',
-        'https://apidocs.bitrix24.ru/api-reference/chats/messages/im-dialog-messages-search.html',
+        'https://apidocs.bitrix24.com/api-reference/chats/messages/im-dialog-messages-search.html',
         'Search messages in a chat'
     )]
     public function messagesSearch(
         int $chatId,
         ?string $searchMessage = null,
-        ?string $dateFrom = null,
-        ?string $dateTo = null,
-        ?string $date = null,
+        ?CarbonImmutable $dateFrom = null,
+        ?CarbonImmutable $dateTo = null,
+        ?CarbonImmutable $date = null,
         ?array $order = null,
         ?int $limit = null,
         ?int $lastId = null,
@@ -97,9 +98,9 @@ class Dialog extends AbstractService
         $payload = [
             'CHAT_ID' => $chatId,
             'SEARCH_MESSAGE' => $searchMessage,
-            'DATE_FROM' => $dateFrom,
-            'DATE_TO' => $dateTo,
-            'DATE' => $date,
+            'DATE_FROM' => $dateFrom?->toAtomString(),
+            'DATE_TO' => $dateTo?->toAtomString(),
+            'DATE' => $date?->toAtomString(),
             'ORDER' => $order,
             'LIMIT' => $limit,
             'LAST_ID' => $lastId,
