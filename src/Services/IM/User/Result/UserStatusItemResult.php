@@ -21,22 +21,4 @@ use Bitrix24\SDK\Services\IM\User\UserStatusType;
  */
 class UserStatusItemResult extends AbstractAnnotatedItem
 {
-    #[\Override]
-    public function __get($offset)
-    {
-        return match ($offset) {
-            'STATUS' => $this->getStatus(),
-            default => $this->data[$offset] ?? null,
-        };
-    }
-
-    public function getStatus(): ?UserStatusType
-    {
-        $status = $this->data['STATUS'] ?? null;
-        if (!is_string($status) || $status === '') {
-            return null;
-        }
-
-        return UserStatusType::from($status);
-    }
 }

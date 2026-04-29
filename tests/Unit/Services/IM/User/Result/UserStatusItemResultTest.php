@@ -28,7 +28,6 @@ class UserStatusItemResultTest extends TestCase
         $userStatusItemResult = new UserStatusItemResult(['STATUS' => 'online']);
 
         $this->assertSame(UserStatusType::Online, $userStatusItemResult->STATUS);
-        $this->assertSame(UserStatusType::Online, $userStatusItemResult->getStatus());
     }
 
     #[Test]
@@ -37,6 +36,5 @@ class UserStatusItemResultTest extends TestCase
         $userStatusItemResult = new UserStatusItemResult(['STATUS' => false]);
 
         $this->assertNull($userStatusItemResult->STATUS);
-        $this->assertNull($userStatusItemResult->getStatus());
     }
 }
