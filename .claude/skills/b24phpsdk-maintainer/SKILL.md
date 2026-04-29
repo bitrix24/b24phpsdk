@@ -29,6 +29,30 @@ Do not proceed with any workflow until the command completes successfully.
 
 ---
 
+## SDK file code generators
+
+Before manually creating or updating SDK PHP files that match one of the generator-supported
+contracts below, use the generator first. If the generator cannot be used for the current
+case, write the reason explicitly in `.tasks/<issue-number>/plan.md` before proceeding with
+manual edits.
+
+| File type | Required generator |
+|---|---|
+| `src/Services/**/Result/*ItemResult.php` with `@property-read` field annotations | `php bin/console b24-dev:result-item-generator <method.name> --stage=all` |
+| `src/Services/**/Service/*SelectBuilder.php` | `php bin/console b24-dev:generate-select-builder <openapi-entity-key> --namespace=<namespace> --class-name=<class> --output=<path>` |
+| `src/Services/**/Service/*ItemBuilder.php` | `php bin/console b24-dev:generate-item-builder <openapi-operation-path> --namespace=<namespace> --class-name=<class> --output=<path>` |
+
+Generator usage rules:
+
+- Run `make oa-schema-build` first; the generators rely on `docs/open-api/openapi.json`.
+- Include the generator command in the issue plan for any generated SDK file.
+- Review generated code against existing SDK naming, namespace, result-envelope, casting, and
+  backward-compatibility patterns before committing it.
+- After generating a `*ItemResult.php`, keep the mandatory live annotation/type-casting
+  integration test described below.
+
+---
+
 ## Webhook URL format for direct curl requests
 
 When making direct `curl` calls to inspect raw API responses (e.g., during integration test

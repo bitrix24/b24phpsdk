@@ -41,6 +41,7 @@
 - Updated `b24phpsdk-maintainer` skill: moved the detailed placements workflow into a dedicated adjacent guide to keep `SKILL.md` compact while preserving the full placement implementation playbook
 - Updated `b24phpsdk-maintainer` skill: require `CarbonImmutable` for public service method arguments that represent date or date-time values
 - Updated `b24phpsdk-maintainer` skill: require `ApiEndpointMetadata` documentation links to use the English `https://apidocs.bitrix24.com/` site
+- Updated `b24phpsdk-maintainer` skill: require SDK file generators for supported `*ItemResult`, `*SelectBuilder`, and `*ItemBuilder` files before manual edits
 
 ### Fixed
 
