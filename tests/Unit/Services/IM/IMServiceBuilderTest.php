@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Tests\Unit\Services\IM;
 
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
 use Bitrix24\SDK\Services\IM\Placements\Placements;
+use Bitrix24\SDK\Services\IM\User\Service\UserStatus;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBatch;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBulkItemsReader;
@@ -41,6 +42,12 @@ class IMServiceBuilderTest extends TestCase
     public function testGetMessageService(): void
     {
         $this::assertSame($this->serviceBuilder->message(), $this->serviceBuilder->message());
+    }
+
+    public function testGetUserStatusService(): void
+    {
+        $this->assertInstanceOf(UserStatus::class, $this->serviceBuilder->userStatus());
+        $this->assertSame($this->serviceBuilder->userStatus(), $this->serviceBuilder->userStatus());
     }
 
     public function testGetPlacementsService(): void

@@ -21,6 +21,7 @@ use Bitrix24\SDK\Services\IM\Message\Service\Message;
 use Bitrix24\SDK\Services\IM\Notify\Service\Notify;
 use Bitrix24\SDK\Services\IM\Placements\PlacementLocationCodes;
 use Bitrix24\SDK\Services\IM\Placements\Placements;
+use Bitrix24\SDK\Services\IM\User\Service\UserStatus;
 use Bitrix24\SDK\Services\Placement\Service\Placement;
 
 #[ApiServiceBuilderMetadata(new Scope(['im']))]
@@ -48,6 +49,15 @@ class IMServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Message($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function userStatus(): UserStatus
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new UserStatus($this->core, $this->log);
         }
 
         return $this->serviceCache[__METHOD__];

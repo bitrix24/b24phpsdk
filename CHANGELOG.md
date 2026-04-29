@@ -17,6 +17,7 @@
     - `share` — create an object from a message (`im.message.share`), with typed `ShareType` enum (`CHAT`/`TASK`/`POST`/`CALEND`)
     - `command` — invoke a chat-bot command (`im.message.command`)
 - Added `IMServiceBuilder::message()` accessor and cached service instance ([#426](https://github.com/bitrix24/b24phpsdk/issues/426))
+- Added `Bitrix24\SDK\Services\IM\User\Service\UserStatus` service wrapping `im.user.status.get`, `im.user.status.set`, `im.user.status.idle.start`, and `im.user.status.idle.end`, with `UserStatusType` enum and `UserStatusResult`; exposed via `IMServiceBuilder::userStatus()` ([#430](https://github.com/bitrix24/b24phpsdk/issues/430))
 
 
 
