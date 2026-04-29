@@ -83,6 +83,7 @@ help:
 	@echo "test-integration-im-open-lines-session - run IMOpenLines Session integration tests"
 	@echo "test-integration-im-open-lines-operator - run IMOpenLines Operator integration tests"
 	@echo "test-integration-im-chat - run IM Chat integration tests"
+	@echo "test-integration-im-notify - run IM Notify integration tests"
 	@echo "test-integration-scope-lists - run Lists integration tests"
 	@echo "test-integration-lists-service - run Lists Service integration tests"
 	@echo "test-integration-lists-field - run Lists Field integration tests"
@@ -242,6 +243,10 @@ test-integration-paysystem-settings:
 .PHONY: test-integration-im-message
 test-integration-im-message:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_message
+
+.PHONY: test-integration-im-notify
+test-integration-im-notify:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_notify
 
 .PHONY: test-integration-scope-im-open-lines
 test-integration-scope-im-open-lines:

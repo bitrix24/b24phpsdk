@@ -19,6 +19,7 @@
     - `share` — create an object from a message (`im.message.share`), with typed `ShareType` enum (`CHAT`/`TASK`/`POST`/`CALEND`)
     - `command` — invoke a chat-bot command (`im.message.command`)
 - Added `IMServiceBuilder::message()` accessor and cached service instance ([#426](https://github.com/bitrix24/b24phpsdk/issues/426))
+- Extended `IM\Notify` service with `send` (`im.notify`), `getList` (`im.notify.get`), `historySearch` (`im.notify.history.search`), `markAllAsRead` (`im.notify.read.all`), `getSchema` (`im.notify.schema.get`) methods; refactored `markMessagesAsRead`/`markMessagesAsUnread` to call `im.notify.read.list` instead of `im.notify.read`; added `NotifyItemResult`, `NotifiesResult`, `NotifyHistorySearchResult`, `NotifyReadAllResult`, `NotifySchemaItemResult`, `NotifySchemaResult` result types ([#428](https://github.com/bitrix24/b24phpsdk/issues/428))
 
 
 
