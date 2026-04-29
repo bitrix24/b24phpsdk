@@ -3,6 +3,7 @@
 
 ### Added
 
+- Added `IM\Counters` service with `im.counters.get` support for retrieving unread message and notification counters ([#433](https://github.com/bitrix24/b24phpsdk/issues/433))
 - Added `getLogoUrl()` and `changeLogoUrl()` methods to `Bitrix24PartnerInterface` and reference implementation with `Bitrix24PartnerLogoUrlChangedEvent` ([#452](https://github.com/bitrix24/b24phpsdk/issues/452))
 - Added typed fluent `Services\IM\Message\Attach` payload builders for `ATTACH` blocks in `im.message.add` and `im.message.update`, plus `RawAttach::fromArray()` as an object-based escape hatch for unsupported or vendor-extended payload shapes ([#426](https://github.com/bitrix24/b24phpsdk/issues/426))
 - Added `Bitrix24\SDK\Services\IM\Placements\PlacementLocationCodes` with constants `IM_TEXTAREA`, `IM_SIDEBAR`, `IM_CONTEXT_MENU`, `IM_NAVIGATION`, and `IM_SMILES_SELECTOR` (deprecated since `im 25.1600.0`) for IM widget placement codes ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
