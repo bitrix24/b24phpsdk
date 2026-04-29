@@ -19,16 +19,20 @@ use Carbon\CarbonImmutable;
 /**
  * @property-read string $id
  * @property-read string $type
- * @property-read string $avatar
- * @property-read string $color
+ * @property-read array $avatar
  * @property-read string $title
  * @property-read int $counter
  * @property-read bool $unread
  * @property-read bool $pinned
- * @property-read int $user_id
  * @property-read int $chat_id
  * @property-read array $message
- * @property-read CarbonImmutable|null $date_message
+ * @property-read int $last_id
+ * @property-read bool $has_reminder
+ * @property-read CarbonImmutable $date_update
+ * @property-read CarbonImmutable $date_last_activity
+ * @property-read array $chat
+ * @property-read array $user
+ * @property-read array $options
  */
 class RecentItemResult extends AbstractAnnotatedItem
 {

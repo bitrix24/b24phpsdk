@@ -25,7 +25,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(RecentItemResult::class)]
-class RecentItemResultTest extends TestCase
+class RecentItemResultAnnotationsTest extends TestCase
 {
     use CustomBitrix24Assertions;
 
@@ -43,7 +43,7 @@ class RecentItemResultTest extends TestCase
      */
     #[Test]
     #[TestDox('all fields in RecentItemResult are annotated in phpdoc and match with raw api response')]
-    public function testAllFieldsAreAnnotated(): void
+    public function testAllSystemFieldsAnnotated(): void
     {
         $rawResult = $this->recentService->get()
             ->getCoreResponse()
@@ -71,7 +71,7 @@ class RecentItemResultTest extends TestCase
      */
     #[Test]
     #[TestDox('all fields in RecentItemResult have valid type casting in magic getters')]
-    public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
+    public function testAllSystemFieldsHasValidTypeAnnotation(): void
     {
         $items = $this->recentService->get()->items();
 
