@@ -38,13 +38,15 @@ class RevisionTest extends TestCase
      * @throws TransportException
      */
     #[Test]
-    #[TestDox('im.revision.get returns non-negative revision numbers for REST, MOBILE and WEB')]
+    #[TestDox('im.revision.get returns non-negative revision numbers')]
     public function testGet(): void
     {
         $revision = $this->revisionService->get()->revision();
 
-        $this->assertGreaterThanOrEqual(0, $revision->REST);
-        $this->assertGreaterThanOrEqual(0, $revision->MOBILE);
-        $this->assertGreaterThanOrEqual(0, $revision->WEB);
+        $this->assertGreaterThanOrEqual(0, $revision->rest);
+        $this->assertGreaterThanOrEqual(0, $revision->mobile);
+        $this->assertGreaterThanOrEqual(0, $revision->web);
+        $this->assertGreaterThanOrEqual(0, $revision->desktop);
+        $this->assertGreaterThanOrEqual(0, $revision->im_revision_mobile);
     }
 }

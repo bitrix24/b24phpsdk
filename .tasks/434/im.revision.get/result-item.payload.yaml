@@ -1,0 +1,58 @@
+version: 1
+method: im.revision.get
+object: result
+generated_from:
+  - b24restdocs
+
+fields:
+  - code: rest
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: REST API IM revision
+    notes: null
+
+  - code: web
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Web API IM revision
+    notes: null
+
+  - code: mobile
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Mobile API IM revision
+    notes: null
+
+  - code: desktop
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Desktop API IM revision
+    notes: null
+
+  - code: im_revision_mobile
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: "Additional compatibility field, duplicates result.mobile"
+    notes: null
+
+sections: []

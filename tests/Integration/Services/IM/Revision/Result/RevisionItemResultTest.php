@@ -62,10 +62,10 @@ class RevisionItemResultTest extends TestCase
     #[TestDox('all fields in RevisionItemResult have valid type casting in magic getters')]
     public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
     {
-        $revisionItem = $this->revisionService->get()->revision();
+        $revisionItemResult = $this->revisionService->get()->revision();
 
         $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations(
-            $revisionItem,
+            $revisionItemResult,
             RevisionItemResult::class,
         );
     }
