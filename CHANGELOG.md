@@ -12,6 +12,7 @@
 - Added integration test `PlacementLocationCodesTest` that asserts (via reflection) every `IM_`-prefixed code returned by `placement.list` is declared as a constant in `PlacementLocationCodes` ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
 - Added `Bitrix24\SDK\Services\IM\Chat\Service\Chat` service wrapping `im.chat.add`, `im.chat.get`, `im.chat.leave`, `im.chat.mute`, `im.chat.setOwner`, `im.chat.updateAvatar`, `im.chat.updateColor`, `im.chat.updateTitle`, with enums `ChatType`, `ChatColor`, `ChatEntityType`, result types `ChatItemResult`/`ChatResult`, and `IMServiceBuilder::chat()` accessor ([#423](https://github.com/bitrix24/b24phpsdk/issues/423))
 - Added `Bitrix24\SDK\Services\IM\Dialog\Service\Dialog` service for `im.dialog.*` support, with typed result wrappers, `IMServiceBuilder::dialog()`, and dedicated unit/integration/annotation coverage ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
+- Added `Bitrix24\SDK\Services\IM\User\Service\User` service for `im.user.get` and `im.user.list.get` support, with typed result wrappers `UserResult`/`UsersResult`/`UserItemResult`, `IMServiceBuilder::user()` accessor, and unit/integration/annotation test coverage ([#429](https://github.com/bitrix24/b24phpsdk/issues/429))
 - Added `b24-dev:result-item-generator` developer command for staged ResultItem payload build, verification, apply, and generation workflows backed by OpenAPI, REST documentation, and live API metadata ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
 - Added `Services\IM\Message\Service\Message` service for `im.message.*` support ([#426](https://github.com/bitrix24/b24phpsdk/issues/426)):
     - `add` — send a message (`im.message.add`)
@@ -54,6 +55,7 @@
 ### Fixed
 
 - Fixed `Core::call()` handling of REST API v3 HTTP 401 error responses: array-shaped `error` payloads are now routed through `ApiLevelErrorHandler` instead of triggering `Array to string conversion`, and Bitrix24 v3 access-denied errors map to `AuthForbiddenException`.
+- Fixed `IM\User\Result\UserItemResult::last_activity_date` PHPDoc annotation so the magic getter casts live `im.user.get` date-time values to `CarbonImmutable`.
 - Fixed `User\Service\Batch::get()` yielding `DealItemResult` instead of `UserItemResult` ([#447](https://github.com/bitrix24/b24phpsdk/issues/447))
 - Fixed abstract `Bitrix24PartnerInterfaceTest` and `Bitrix24PartnerRepositoryInterfaceTest` contracts: dropped `createdAt` / `updatedAt` from the factory method signature and data provider so implementations that initialise both timestamps internally (e.g. `new CarbonImmutable()` in the constructor) no longer fail with microsecond mismatches ([#457](https://github.com/bitrix24/b24phpsdk/issues/457))
 

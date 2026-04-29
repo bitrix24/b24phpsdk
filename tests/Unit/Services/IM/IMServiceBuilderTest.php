@@ -16,6 +16,7 @@ namespace Bitrix24\SDK\Tests\Unit\Services\IM;
 use Bitrix24\SDK\Services\IM\Counters\Service\Counters;
 use Bitrix24\SDK\Services\IM\Dialog\Service\Dialog;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
+use Bitrix24\SDK\Services\IM\User\Service\User;
 use Bitrix24\SDK\Services\IM\Placements\Placements;
 use Bitrix24\SDK\Services\IM\User\Service\UserStatus;
 use Bitrix24\SDK\Services\ServiceBuilder;
@@ -67,6 +68,12 @@ class IMServiceBuilderTest extends TestCase
     {
         $this->assertInstanceOf(UserStatus::class, $this->serviceBuilder->userStatus());
         $this->assertSame($this->serviceBuilder->userStatus(), $this->serviceBuilder->userStatus());
+    }
+
+    public function testGetUserService(): void
+    {
+        $this->assertInstanceOf(User::class, $this->serviceBuilder->user());
+        $this->assertSame($this->serviceBuilder->user(), $this->serviceBuilder->user());
     }
 
     public function testGetPlacementsService(): void
