@@ -21,8 +21,10 @@ class UserStatusResult extends AbstractResult
     /**
      * @throws BaseException
      */
-    public function status(): string
+    public function status(): UserStatusItemResult
     {
-        return (string)$this->getCoreResponse()->getResponseData()->getResult()[0];
+        return new UserStatusItemResult([
+            'STATUS' => $this->getCoreResponse()->getResponseData()->getResult()[0] ?? null,
+        ]);
     }
 }

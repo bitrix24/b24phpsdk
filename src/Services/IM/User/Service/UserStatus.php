@@ -49,10 +49,10 @@ class UserStatus extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/chats/users/im-user-status-set.html',
         'Set current user status'
     )]
-    public function set(UserStatusType $status): UpdatedItemResult
+    public function set(UserStatusType $userStatusType): UpdatedItemResult
     {
         return new UpdatedItemResult($this->core->call('im.user.status.set', [
-            'STATUS' => $status->value,
+            'STATUS' => $userStatusType->value,
         ]));
     }
 

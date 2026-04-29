@@ -19,5 +19,6 @@ enum UserStatusType: string
     case Idle    = 'idle';
     case Away    = 'away';
     case Dnd     = 'dnd';
+    case Break   = 'break';
     case Offline = 'offline';
 }

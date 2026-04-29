@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\IM\User\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Services\IM\User\Result\UserStatusItemResult;
 use Bitrix24\SDK\Services\IM\User\Service\UserStatus;
 use Bitrix24\SDK\Services\IM\User\UserStatusType;
 use Bitrix24\SDK\Tests\Integration\Factory;
@@ -39,11 +40,13 @@ class UserStatusTest extends TestCase
      * @throws TransportException
      */
     #[Test]
-    #[TestDox('im.user.status.get returns a non-empty status string')]
+    #[TestDox('im.user.status.get returns a status item result')]
     public function testGet(): void
     {
-        $status = $this->userStatusService->get()->status();
-        $this->assertNotEmpty($status);
+        $userStatusItemResult = $this->userStatusService->get()->status();
+
+        $this->assertInstanceOf(UserStatusItemResult::class, $userStatusItemResult);
+        $this->assertTrue($userStatusItemResult->STATUS === null || $userStatusItemResult->STATUS instanceof UserStatusType);
     }
 
     /**
@@ -54,8 +57,8 @@ class UserStatusTest extends TestCase
     #[TestDox('im.user.status.set returns success for UserStatusType::Online')]
     public function testSet(): void
     {
-        $result = $this->userStatusService->set(UserStatusType::Online);
-        $this->assertTrue($result->isSuccess());
+        $updatedItemResult = $this->userStatusService->set(UserStatusType::Online);
+        $this->assertTrue($updatedItemResult->isSuccess());
     }
 
     /**
@@ -66,8 +69,8 @@ class UserStatusTest extends TestCase
     #[TestDox('im.user.status.idle.start returns success')]
     public function testIdleStart(): void
     {
-        $result = $this->userStatusService->idleStart();
-        $this->assertTrue($result->isSuccess());
+        $updatedItemResult = $this->userStatusService->idleStart();
+        $this->assertTrue($updatedItemResult->isSuccess());
     }
 
     /**
@@ -78,7 +81,7 @@ class UserStatusTest extends TestCase
     #[TestDox('im.user.status.idle.end returns success')]
     public function testIdleEnd(): void
     {
-        $result = $this->userStatusService->idleEnd();
-        $this->assertTrue($result->isSuccess());
+        $updatedItemResult = $this->userStatusService->idleEnd();
+        $this->assertTrue($updatedItemResult->isSuccess());
     }
 }
