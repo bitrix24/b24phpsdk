@@ -43,10 +43,12 @@ class CountersTest extends TestCase
     {
         $counters = $this->countersService->get()->counters();
 
-        $this->assertIsString($counters->TYPE);
-        $this->assertIsInt($counters->MESSAGE);
-        $this->assertIsInt($counters->NOTIFY);
-        $this->assertIsInt($counters->CHAT);
-        $this->assertIsInt($counters->LINES);
+        $this->assertIsArray($counters->TYPE);
+        $this->assertIsArray($counters->CHAT);
+        $this->assertIsArray($counters->CHAT_MUTED);
+        $this->assertIsArray($counters->CHAT_UNREAD);
+        $this->assertIsArray($counters->LINES);
+        $this->assertIsArray($counters->DIALOG);
+        $this->assertIsArray($counters->DIALOG_UNREAD);
     }
 }

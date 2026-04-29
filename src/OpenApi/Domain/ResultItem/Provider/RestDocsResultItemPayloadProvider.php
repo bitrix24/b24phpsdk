@@ -46,7 +46,15 @@ final class RestDocsResultItemPayloadProvider
                 object: $rootObject['name'],
                 generatedFrom: ['b24restdocs'],
                 fields: $rootObject['fields'],
-                sections: [],
+                sections: array_values(array_map(
+                    fn(array $section): ResultItemPayloadSection => new ResultItemPayloadSection(
+                        name: $section['name'],
+                        kind: 'object',
+                        source: 'b24restdocs',
+                        fields: $section['fields'],
+                    ),
+                    $objects,
+                )),
             );
         }
 
@@ -75,30 +83,20 @@ final class RestDocsResultItemPayloadProvider
      */
     private function extractReturnedDataObject(string $markdown, string $object): ?array
     {
-        $lines = preg_split('/\R/u', $markdown) ?: [];
-
-        foreach ($lines as $index => $line) {
-            if (preg_match('/^##\s+Returned Data\s*$/i', trim($line)) !== 1) {
-                continue;
-            }
-
-            $tableBlock = $this->findNextTableBlock($lines, $index + 1);
-            if ($tableBlock === null) {
-                return null;
-            }
-
-            $fields = $this->extractNestedObjectFieldsFromReturnedData($tableBlock, $object);
-            if ($fields === []) {
-                return null;
-            }
-
-            return [
-                'name' => $object,
-                'fields' => $fields,
-            ];
+        $tableBlock = $this->findReturnedDataTableBlock($markdown);
+        if ($tableBlock === null) {
+            return null;
         }
 
-        return null;
+        $fields = $this->extractNestedObjectFieldsFromReturnedData($tableBlock, $object);
+        if ($fields === []) {
+            return null;
+        }
+
+        return [
+            'name' => $object,
+            'fields' => $fields,
+        ];
     }
 
     /**
@@ -107,8 +105,16 @@ final class RestDocsResultItemPayloadProvider
     private function extractSingleReturnedDataObject(string $markdown): ?array
     {
         $objects = $this->extractReturnedDataObjects($markdown);
+        if (count($objects) === 1) {
+            return array_values($objects)[0];
+        }
 
-        return count($objects) === 1 ? array_values($objects)[0] : null;
+        $tableBlock = $this->findReturnedDataTableBlock($markdown);
+        if ($tableBlock === null) {
+            return null;
+        }
+
+        return $this->extractDirectResultObjectFromReturnedData($tableBlock);
     }
 
     /**
@@ -116,22 +122,60 @@ final class RestDocsResultItemPayloadProvider
      */
     private function extractReturnedDataObjects(string $markdown): array
     {
+        $tableBlock = $this->findReturnedDataTableBlock($markdown);
+        if ($tableBlock === null) {
+            return [];
+        }
+
+        return $this->extractNestedObjectsFromReturnedData($tableBlock);
+    }
+
+    private function findReturnedDataTableBlock(string $markdown): ?string
+    {
         $lines = preg_split('/\R/u', $markdown) ?: [];
 
         foreach ($lines as $index => $line) {
-            if (preg_match('/^##\s+Returned Data\s*$/i', trim($line)) !== 1) {
+            if (preg_match('/^#{2,6}\s+Returned Data\s*$/i', trim($line)) !== 1) {
                 continue;
             }
 
-            $tableBlock = $this->findNextTableBlock($lines, $index + 1);
-            if ($tableBlock === null) {
-                return [];
-            }
-
-            return $this->extractNestedObjectsFromReturnedData($tableBlock);
+            return $this->findNextTableBlock($lines, $index + 1);
         }
 
-        return [];
+        return null;
+    }
+
+    /**
+     * @return array{name: string, fields: list<ResultItemPayloadField>}|null
+     */
+    private function extractDirectResultObjectFromReturnedData(string $tableBlock): ?array
+    {
+        $fields = $this->parseTableBlock($tableBlock);
+        $hasResultRoot = false;
+        $rootFields = [];
+
+        foreach ($fields as $field) {
+            $normalizedFieldCode = $this->normalizeIdentifier($field->code);
+            if ($normalizedFieldCode === 'result') {
+                $hasResultRoot = true;
+                continue;
+            }
+
+            if ($normalizedFieldCode === 'time' || str_contains($field->code, '.')) {
+                continue;
+            }
+
+            $rootFields[] = $field;
+        }
+
+        if (!$hasResultRoot || $rootFields === []) {
+            return null;
+        }
+
+        return [
+            'name' => 'result',
+            'fields' => $rootFields,
+        ];
     }
 
     /**

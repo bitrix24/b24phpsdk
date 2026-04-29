@@ -31,6 +31,7 @@
 - Widened `Placement::bind()` `$options` parameter type to `PlacementOptionsInterface|array` — existing array callers remain fully compatible ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
 - Regenerated `DialogItemResult` from the ResultItem generator payload, including imported `CarbonImmutable` PHPDoc types and live-verified nullable fields ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
 - Regenerated IM `ChatItemResult`, `DialogUserItemResult`, and `DialogReadStateItemResult` from ResultItem generator payloads and extended the generator workflow for their REST docs response shapes ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
+- Regenerated IM `CountersItemResult` from a live-verified ResultItem generator payload and extended REST docs payload extraction to support direct root fields in `Returned Data` tables ([#433](https://github.com/bitrix24/b24phpsdk/issues/433))
 - Regenerated IM `RevisionItemResult` from a live-verified ResultItem generator payload and extended REST docs payload extraction to support `Returned Data` tables with nested `result.*` fields ([#434](https://github.com/bitrix24/b24phpsdk/issues/434))
 - Added Typhoon-based runtime casting for `DialogItemResult` magic getters so annotated fields such as `date_create` return their PHPDoc-declared SDK types ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
 - Moved `typhoon/reflection` to runtime dependencies because annotated result-item casting uses it outside development tooling ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))

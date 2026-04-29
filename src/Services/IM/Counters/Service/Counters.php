@@ -30,7 +30,7 @@ class Counters extends AbstractService
      */
     #[ApiEndpointMetadata(
         'im.counters.get',
-        'https://apidocs.bitrix24.com/api-reference/chats/counters/im-counters-get.html',
+        'https://apidocs.bitrix24.com/api-reference/chats/im-counters-get.html',
         'Get unread message and notification counters for the current user'
     )]
     public function get(): CountersResult
