@@ -16,6 +16,7 @@ namespace Bitrix24\SDK\Tests\Unit\Services\IM;
 use Bitrix24\SDK\Services\IM\Counters\Service\Counters;
 use Bitrix24\SDK\Services\IM\Dialog\Service\Dialog;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
+use Bitrix24\SDK\Services\IM\Recent\Service\Recent;
 use Bitrix24\SDK\Services\IM\User\Service\User;
 use Bitrix24\SDK\Services\IM\Placements\Placements;
 use Bitrix24\SDK\Services\IM\User\Service\UserStatus;
@@ -31,6 +32,12 @@ use Psr\Log\NullLogger;
 class IMServiceBuilderTest extends TestCase
 {
     private IMServiceBuilder $serviceBuilder;
+
+    public function testGetRecentService(): void
+    {
+        $this->assertInstanceOf(Recent::class, $this->serviceBuilder->recent());
+        $this->assertSame($this->serviceBuilder->recent(), $this->serviceBuilder->recent());
+    }
 
     public function testGetIMService(): void
     {

@@ -3,6 +3,7 @@
 
 ### Added
 
+- Added `Bitrix24\SDK\Services\IM\Recent\Service\Recent` service wrapping `im.recent.get`, `im.recent.list`, `im.recent.pin`, `im.recent.unread`, and `im.recent.hide`, with `RecentItemResult`/`RecentsResult` and `IMServiceBuilder::recent()` accessor ([#427](https://github.com/bitrix24/b24phpsdk/issues/427))
 - Added `Bitrix24\SDK\Services\IM\Revision\Service\Revision` service wrapping `im.revision.get` for IM module API revision/compatibility checks, with `RevisionItemResult` (`rest`, `web`, `mobile`, `desktop`, `im_revision_mobile` fields) and `IMServiceBuilder::revision()` accessor ([#434](https://github.com/bitrix24/b24phpsdk/issues/434))
 - Added `IM\Counters` service with `im.counters.get` support for retrieving unread message and notification counters ([#433](https://github.com/bitrix24/b24phpsdk/issues/433))
 - Added `getLogoUrl()` and `changeLogoUrl()` methods to `Bitrix24PartnerInterface` and reference implementation with `Bitrix24PartnerLogoUrlChangedEvent` ([#452](https://github.com/bitrix24/b24phpsdk/issues/452))
@@ -55,6 +56,7 @@
 
 ### Fixed
 
+- Fixed `IM\Recent\Result\RecentItemResult` PHPDoc annotations to match live `im.recent.get` payload fields and magic-getter casting ([#427](https://github.com/bitrix24/b24phpsdk/issues/427))
 - Fixed `Core::call()` handling of REST API v3 HTTP 401 error responses: array-shaped `error` payloads are now routed through `ApiLevelErrorHandler` instead of triggering `Array to string conversion`, and Bitrix24 v3 access-denied errors map to `AuthForbiddenException`.
 - Fixed `IM\User\Result\UserItemResult::last_activity_date` PHPDoc annotation so the magic getter casts live `im.user.get` date-time values to `CarbonImmutable`.
 - Fixed IM Notify result annotations for live `im.notify.get` and `im.notify.schema.get` payloads, including uppercase schema fields and list-normalized schema items.
