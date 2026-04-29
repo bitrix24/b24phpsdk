@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Tests\Unit\Services\IM;
 
 use Bitrix24\SDK\Services\IM\Dialog\Service\Dialog;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
+use Bitrix24\SDK\Services\IM\User\Service\User;
 use Bitrix24\SDK\Services\IM\Placements\Placements;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBatch;
@@ -48,6 +49,12 @@ class IMServiceBuilderTest extends TestCase
     {
         $this->assertInstanceOf(Dialog::class, $this->serviceBuilder->dialog());
         $this->assertSame($this->serviceBuilder->dialog(), $this->serviceBuilder->dialog());
+    }
+
+    public function testGetUserService(): void
+    {
+        $this->assertInstanceOf(User::class, $this->serviceBuilder->user());
+        $this->assertSame($this->serviceBuilder->user(), $this->serviceBuilder->user());
     }
 
     public function testGetPlacementsService(): void
