@@ -29,6 +29,30 @@ Do not proceed with any workflow until the command completes successfully.
 
 ---
 
+## SDK file code generators
+
+Before manually creating or updating SDK PHP files that match one of the generator-supported
+contracts below, use the generator first. If the generator cannot be used for the current
+case, write the reason explicitly in `.tasks/<issue-number>/plan.md` before proceeding with
+manual edits.
+
+| File type | Required generator |
+|---|---|
+| `src/Services/**/Result/*ItemResult.php` with `@property-read` field annotations | `php bin/console b24-dev:result-item-generator <method.name> --stage=all` |
+| `src/Services/**/Service/*SelectBuilder.php` | `php bin/console b24-dev:generate-select-builder <openapi-entity-key> --namespace=<namespace> --class-name=<class> --output=<path>` |
+| `src/Services/**/Service/*ItemBuilder.php` | `php bin/console b24-dev:generate-item-builder <openapi-operation-path> --namespace=<namespace> --class-name=<class> --output=<path>` |
+
+Generator usage rules:
+
+- Run `make oa-schema-build` first; the generators rely on `docs/open-api/openapi.json`.
+- Include the generator command in the issue plan for any generated SDK file.
+- Review generated code against existing SDK naming, namespace, result-envelope, casting, and
+  backward-compatibility patterns before committing it.
+- After generating a `*ItemResult.php`, keep the mandatory live annotation/type-casting
+  integration test described below.
+
+---
+
 ## Webhook URL format for direct curl requests
 
 When making direct `curl` calls to inspect raw API responses (e.g., during integration test
@@ -593,6 +617,20 @@ For each REST method involved in the issue:
 
 Record findings in the **Context** section of `plan.md` so the plan is grounded in actual API behaviour, not assumptions.
 
+### Service method date/time arguments
+
+When adding or changing service methods, any argument that represents a date or date-time
+value must be typed as `CarbonImmutable` in the public SDK method signature. Convert it to
+the Bitrix24 REST payload format at the service boundary, following existing service
+patterns. Do not expose raw date/time strings in service method arguments when the SDK can
+accept a typed immutable date value instead.
+
+### ApiEndpointMetadata documentation links
+
+When adding or changing `ApiEndpointMetadata` attributes, documentation links must point to
+the English Bitrix24 API documentation site under `https://apidocs.bitrix24.com/`. Do not
+use localized documentation hosts for these attribute links.
+
 ### Step 3 — Determine the type
 
 Classify the issue:
@@ -715,6 +753,10 @@ Do not write production code before having a failing test. This applies to every
 
 After all files from the plan are written and the plan is marked complete,
 run checks in two phases. **Do not start phase 2 until phase 1 is fully green.**
+
+Completion invariant: every completed implementation task must run `make lint-rector`
+before it is reported as finished. This applies even when a narrower check set is chosen
+for a small or targeted change.
 
 ### Phase 1 — Light checks (linters + unit tests)
 

@@ -1,0 +1,321 @@
+version: 1
+method: im.dialog.users.list
+object: result
+generated_from:
+  - b24restdocs
+
+fields:
+  - code: id
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: User identifier
+    notes: null
+
+  - code: active
+    source_type: boolean
+    phpdoc_type: bool
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: User activity status
+    notes: null
+
+  - code: name
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: User's full name
+    notes: null
+
+  - code: first_name
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: User's first name
+    notes: null
+
+  - code: last_name
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: User's last name
+    notes: null
+
+  - code: work_position
+    source_type: string
+    phpdoc_type: "string|null"
+    format: null
+    required: false
+    nullable: true
+    source: b24restdocs
+    description: User's position. Can be null
+    notes: null
+
+  - code: color
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: User's color in HEX format
+    notes: null
+
+  - code: avatar
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Link to the avatar
+    notes: "If empty, the avatar is not set"
+
+  - code: avatar_hr
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Link to the high-resolution avatar
+    notes: null
+
+  - code: gender
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: User's gender
+    notes: null
+
+  - code: birthday
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Birthday in DD-MM format or an empty string
+    notes: null
+
+  - code: extranet
+    source_type: boolean
+    phpdoc_type: bool
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Indicator of an external extranet user
+    notes: null
+
+  - code: network
+    source_type: boolean
+    phpdoc_type: bool
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Indicator of a Bitrix24.Network user
+    notes: null
+
+  - code: bot
+    source_type: boolean
+    phpdoc_type: bool
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Indicator of a bot
+    notes: null
+
+  - code: connector
+    source_type: boolean
+    phpdoc_type: bool
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Indicator of an Open Channels user
+    notes: null
+
+  - code: external_auth_id
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: External authorization code
+    notes: null
+
+  - code: status
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: User status
+    notes: null
+
+  - code: idle
+    source_type: boolean
+    phpdoc_type: bool
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Date when the user stepped away from the computer
+    notes: "If not set, false"
+
+  - code: last_activity_date
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Date of the user's last activity
+    notes: null
+
+  - code: mobile_last_date
+    source_type: boolean
+    phpdoc_type: bool
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Date of the last activity in the mobile application
+    notes: "If not set, false"
+
+  - code: desktop_last_date
+    source_type: boolean
+    phpdoc_type: bool
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Date of the last activity in the desktop application
+    notes: "If not set, false"
+
+  - code: absent
+    source_type: boolean
+    phpdoc_type: bool
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Date of the user's absence
+    notes: "If not set, false"
+
+  - code: departments
+    source_type: array
+    phpdoc_type: array
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: List of user department identifiers
+    notes: null
+
+  - code: phones
+    source_type: object
+    phpdoc_type: array
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Contact user phones. Can be false
+    notes: null
+
+  - code: bot_data
+    source_type: object
+    phpdoc_type: "array|null"
+    format: null
+    required: false
+    nullable: true
+    source: b24restdocs
+    description: "Bot data. For a regular user, it can be null"
+    notes: null
+
+  - code: type
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: User type
+    notes: null
+
+  - code: website
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: User's website
+    notes: null
+
+  - code: email
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: User's email
+    notes: null
+
+sections:
+  - name: result_phones
+    kind: object
+    source: b24restdocs
+    fields:
+      - code: work_phone
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Work phone
+        notes: null
+
+      - code: personal_mobile
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Mobile phone
+        notes: null
+
+      - code: personal_phone
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Home phone
+        notes: null
