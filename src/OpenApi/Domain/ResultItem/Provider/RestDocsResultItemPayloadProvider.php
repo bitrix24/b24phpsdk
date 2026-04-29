@@ -28,11 +28,34 @@ final class RestDocsResultItemPayloadProvider
         $objects = $this->extractObjects($markdown);
         $rootKey = $this->normalizeIdentifier($object);
         if (!array_key_exists($rootKey, $objects)) {
-            throw new RuntimeException(sprintf(
-                'Object "%s" was not found in REST docs markdown file "%s"',
-                $object,
-                $markdownFile,
-            ));
+            $rootObject = $this->extractReturnedDataObject($markdown, $rootKey);
+            if ($rootObject === null && $rootKey === 'result_item') {
+                $rootObject = $this->extractSingleReturnedDataObject($markdown);
+            }
+
+            if ($rootObject === null) {
+                throw new RuntimeException(sprintf(
+                    'Object "%s" was not found in REST docs markdown file "%s"',
+                    $object,
+                    $markdownFile,
+                ));
+            }
+
+            return new ResultItemPayload(
+                method: $method,
+                object: $rootObject['name'],
+                generatedFrom: ['b24restdocs'],
+                fields: $rootObject['fields'],
+                sections: array_values(array_map(
+                    fn(array $section): ResultItemPayloadSection => new ResultItemPayloadSection(
+                        name: $section['name'],
+                        kind: 'object',
+                        source: 'b24restdocs',
+                        fields: $section['fields'],
+                    ),
+                    $objects,
+                )),
+            );
         }
 
         $rootObject = $objects[$rootKey];
@@ -53,6 +76,181 @@ final class RestDocsResultItemPayloadProvider
                 $objects,
             )),
         );
+    }
+
+    /**
+     * @return array{name: string, fields: list<ResultItemPayloadField>}|null
+     */
+    private function extractReturnedDataObject(string $markdown, string $object): ?array
+    {
+        $tableBlock = $this->findReturnedDataTableBlock($markdown);
+        if ($tableBlock === null) {
+            return null;
+        }
+
+        $fields = $this->extractNestedObjectFieldsFromReturnedData($tableBlock, $object);
+        if ($fields === []) {
+            return null;
+        }
+
+        return [
+            'name' => $object,
+            'fields' => $fields,
+        ];
+    }
+
+    /**
+     * @return array{name: string, fields: list<ResultItemPayloadField>}|null
+     */
+    private function extractSingleReturnedDataObject(string $markdown): ?array
+    {
+        $objects = $this->extractReturnedDataObjects($markdown);
+        if (count($objects) === 1) {
+            return array_values($objects)[0];
+        }
+
+        $tableBlock = $this->findReturnedDataTableBlock($markdown);
+        if ($tableBlock === null) {
+            return null;
+        }
+
+        return $this->extractDirectResultObjectFromReturnedData($tableBlock);
+    }
+
+    /**
+     * @return array<string, array{name: string, fields: list<ResultItemPayloadField>}>
+     */
+    private function extractReturnedDataObjects(string $markdown): array
+    {
+        $tableBlock = $this->findReturnedDataTableBlock($markdown);
+        if ($tableBlock === null) {
+            return [];
+        }
+
+        return $this->extractNestedObjectsFromReturnedData($tableBlock);
+    }
+
+    private function findReturnedDataTableBlock(string $markdown): ?string
+    {
+        $lines = preg_split('/\R/u', $markdown) ?: [];
+
+        foreach ($lines as $index => $line) {
+            if (preg_match('/^#{2,6}\s+Returned Data\s*$/i', trim($line)) !== 1) {
+                continue;
+            }
+
+            return $this->findNextTableBlock($lines, $index + 1);
+        }
+
+        return null;
+    }
+
+    /**
+     * @return array{name: string, fields: list<ResultItemPayloadField>}|null
+     */
+    private function extractDirectResultObjectFromReturnedData(string $tableBlock): ?array
+    {
+        $fields = $this->parseTableBlock($tableBlock);
+        $hasResultRoot = false;
+        $rootFields = [];
+
+        foreach ($fields as $field) {
+            $normalizedFieldCode = $this->normalizeIdentifier($field->code);
+            if ($normalizedFieldCode === 'result') {
+                $hasResultRoot = true;
+                continue;
+            }
+
+            if ($normalizedFieldCode === 'time' || str_contains($field->code, '.')) {
+                continue;
+            }
+
+            $rootFields[] = $field;
+        }
+
+        if (!$hasResultRoot || $rootFields === []) {
+            return null;
+        }
+
+        return [
+            'name' => 'result',
+            'fields' => $rootFields,
+        ];
+    }
+
+    /**
+     * @return list<ResultItemPayloadField>
+     */
+    private function extractNestedObjectFieldsFromReturnedData(string $tableBlock, string $object): array
+    {
+        $fields = [];
+        $normalizedPrefix = $this->normalizeIdentifier($object . '.');
+
+        foreach ($this->parseTableBlock($tableBlock) as $field) {
+            $fieldCode = $this->normalizeIdentifier($field->code);
+            if (!str_starts_with($fieldCode, $normalizedPrefix)) {
+                continue;
+            }
+
+            $code = str_starts_with($field->code, $object . '.')
+                ? substr($field->code, strlen($object) + 1)
+                : substr($fieldCode, strlen($normalizedPrefix));
+            if ($code === '' || str_contains($code, '.')) {
+                continue;
+            }
+
+            $fields[] = new ResultItemPayloadField(
+                code: $code,
+                sourceType: $field->sourceType,
+                phpdocType: $field->phpdocType,
+                format: $field->format,
+                required: $field->required,
+                nullable: $field->nullable,
+                source: $field->source,
+                description: $field->description,
+                notes: $field->notes,
+            );
+        }
+
+        return $fields;
+    }
+
+    /**
+     * @return array<string, array{name: string, fields: list<ResultItemPayloadField>}>
+     */
+    private function extractNestedObjectsFromReturnedData(string $tableBlock): array
+    {
+        $objects = [];
+
+        foreach ($this->parseTableBlock($tableBlock) as $field) {
+            if (!str_contains($field->code, '.')) {
+                continue;
+            }
+
+            [$object, $fieldCode] = explode('.', $field->code, 2);
+            if ($object === '' || $fieldCode === '' || str_contains($fieldCode, '.')) {
+                continue;
+            }
+
+            $normalizedObject = $this->normalizeIdentifier($object);
+            $objects[$normalizedObject] ??= [
+                'name' => $object,
+                'fields' => [],
+            ];
+            $objects[$normalizedObject]['fields'][] = new ResultItemPayloadField(
+                code: $fieldCode,
+                sourceType: $field->sourceType,
+                phpdocType: $field->phpdocType,
+                format: $field->format,
+                required: $field->required,
+                nullable: $field->nullable,
+                source: $field->source,
+                description: $field->description,
+                notes: $field->notes,
+            );
+        }
+
+        return $objects;
     }
 
     /**

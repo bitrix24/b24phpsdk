@@ -220,6 +220,23 @@ MARKDOWN);
 `integer` | Number of unread messages after executing the method ||
 |#
 MARKDOWN);
+
+        $this->filesystem->dumpFile($this->markdownFixturePath('im.revision.get'), <<<'MARKDOWN'
+## Returned Data
+
+#|
+|| **Name**
+`type` | **Description** ||
+|| **result**
+`object` | Root object with API revisions ||
+|| **result.rest**
+`integer` | REST API revision ||
+|| **result.web**
+`integer` | Web client revision ||
+|| **result.mobile**
+`integer` | Mobile client revision ||
+|#
+MARKDOWN);
     }
 
     #[\Override]
@@ -556,6 +573,32 @@ MARKDOWN);
     }
 
     #[Test]
+    public function stageAllForRevisionGetUsesResultObjectAndWritesRevisionItemResult(): void
+    {
+        $this->resultFetcher = new FakeBitrix24MethodResultFetcher([
+            'rest' => 14,
+            'web' => 1,
+            'mobile' => 1,
+        ]);
+
+        $this->runBuildAndGenerateForMethod('im.revision.get', ['all']);
+
+        $payloadPath = $this->payloadPathForMethod('im.revision.get');
+        $generatedPath = $this->tempDirectory . '/src/Services/IM/Revision/Result/RevisionItemResult.php';
+        $resultItemPayload = (new ResultItemPayloadSerializer())->decode((string) file_get_contents($payloadPath));
+        $generatedCode = (string) file_get_contents($generatedPath);
+
+        self::assertSame('result', $resultItemPayload->object);
+        self::assertSame('int', $this->findField($resultItemPayload->fields, 'rest')?->phpdocType);
+        self::assertSame('int', $this->findField($resultItemPayload->fields, 'web')?->phpdocType);
+        self::assertSame('int', $this->findField($resultItemPayload->fields, 'mobile')?->phpdocType);
+        self::assertStringContainsString('class RevisionItemResult extends AbstractAnnotatedItem', $generatedCode);
+        self::assertStringContainsString('@property-read int $rest', $generatedCode);
+        self::assertStringContainsString('@property-read int $web', $generatedCode);
+        self::assertStringContainsString('@property-read int $mobile', $generatedCode);
+    }
+
+    #[Test]
     public function itReturnsFailureWhenCurrentBranchResolutionFails(): void
     {
         $commandTester = new CommandTester(new class(
@@ -657,6 +700,7 @@ MARKDOWN);
                 'im.chat.get',
                 'im.dialog.users.list',
                 'im.dialog.read',
+                'im.revision.get',
             ], true) ? $this->markdownFixturePath($methodName === 'im.dialog.messages.get' ? self::METHOD_NAME : $methodName) : null,
             $useDefaultGenerationTargetResolver ? null : ($generationTargetResolver ?? fn(string $methodName): array => [
                 'namespace' => 'Bitrix24\\SDK\\Services\\IM\\Dialog\\Result',

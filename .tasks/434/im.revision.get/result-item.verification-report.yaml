@@ -1,0 +1,16 @@
+method: im.revision.get
+confirmed_fields:
+  - code: rest
+    section: null
+  - code: web
+    section: null
+  - code: mobile
+    section: null
+  - code: desktop
+    section: null
+  - code: im_revision_mobile
+    section: null
+missing_fields: []
+unexpected_fields: []
+type_mismatches: []
+nullability_observations: []
