@@ -3,6 +3,8 @@
 
 ### Added
 
+- Added `Bitrix24\SDK\Services\IM\Revision\Service\Revision` service wrapping `im.revision.get` for IM module API revision/compatibility checks, with `RevisionItemResult` (`rest`, `web`, `mobile`, `desktop`, `im_revision_mobile` fields) and `IMServiceBuilder::revision()` accessor ([#434](https://github.com/bitrix24/b24phpsdk/issues/434))
+- Added `IM\Counters` service with `im.counters.get` support for retrieving unread message and notification counters ([#433](https://github.com/bitrix24/b24phpsdk/issues/433))
 - Added `getLogoUrl()` and `changeLogoUrl()` methods to `Bitrix24PartnerInterface` and reference implementation with `Bitrix24PartnerLogoUrlChangedEvent` ([#452](https://github.com/bitrix24/b24phpsdk/issues/452))
 - Added typed fluent `Services\IM\Message\Attach` payload builders for `ATTACH` blocks in `im.message.add` and `im.message.update`, plus `RawAttach::fromArray()` as an object-based escape hatch for unsupported or vendor-extended payload shapes ([#426](https://github.com/bitrix24/b24phpsdk/issues/426))
 - Added `Bitrix24\SDK\Services\IM\Placements\PlacementLocationCodes` with constants `IM_TEXTAREA`, `IM_SIDEBAR`, `IM_CONTEXT_MENU`, `IM_NAVIGATION`, and `IM_SMILES_SELECTOR` (deprecated since `im 25.1600.0`) for IM widget placement codes ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
@@ -20,6 +22,7 @@
     - `share` — create an object from a message (`im.message.share`), with typed `ShareType` enum (`CHAT`/`TASK`/`POST`/`CALEND`)
     - `command` — invoke a chat-bot command (`im.message.command`)
 - Added `IMServiceBuilder::message()` accessor and cached service instance ([#426](https://github.com/bitrix24/b24phpsdk/issues/426))
+- Added `Bitrix24\SDK\Services\IM\User\Service\UserStatus` service wrapping `im.user.status.get`, `im.user.status.set`, `im.user.status.idle.start`, and `im.user.status.idle.end`, with `UserStatusType` enum and `UserStatusResult`; exposed via `IMServiceBuilder::userStatus()` ([#430](https://github.com/bitrix24/b24phpsdk/issues/430))
 
 
 
@@ -30,6 +33,9 @@
 - Widened `Placement::bind()` `$options` parameter type to `PlacementOptionsInterface|array` — existing array callers remain fully compatible ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
 - Regenerated `DialogItemResult` from the ResultItem generator payload, including imported `CarbonImmutable` PHPDoc types and live-verified nullable fields ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
 - Regenerated IM `ChatItemResult`, `DialogUserItemResult`, and `DialogReadStateItemResult` from ResultItem generator payloads and extended the generator workflow for their REST docs response shapes ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
+- Regenerated IM `CountersItemResult` from a live-verified ResultItem generator payload and extended REST docs payload extraction to support direct root fields in `Returned Data` tables ([#433](https://github.com/bitrix24/b24phpsdk/issues/433))
+- Regenerated IM `RevisionItemResult` from a live-verified ResultItem generator payload and extended REST docs payload extraction to support `Returned Data` tables with nested `result.*` fields ([#434](https://github.com/bitrix24/b24phpsdk/issues/434))
+- Changed `UserStatusResult::status()` to return `UserStatusItemResult` with enum-backed `STATUS` access via `UserStatusType`; backed-enum casting now lives in `AbstractAnnotatedItem` for all annotated result items ([#430](https://github.com/bitrix24/b24phpsdk/issues/430))
 - Added Typhoon-based runtime casting for `DialogItemResult` magic getters so annotated fields such as `date_create` return their PHPDoc-declared SDK types ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
 - Moved `typhoon/reflection` to runtime dependencies because annotated result-item casting uses it outside development tooling ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
 - Updated `Dialog::messagesSearch()` date filters to accept `CarbonImmutable` arguments and serialize them to REST date-time strings at the service boundary ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))

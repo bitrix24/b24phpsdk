@@ -67,6 +67,106 @@ final class RestDocsResultItemPayloadProviderTest extends TestCase
         );
     }
 
+    #[Test]
+    public function itBuildsResultObjectPayloadFromReturnedDataTable(): void
+    {
+        $markdownFile = sys_get_temp_dir() . '/rest-docs-returned-data-' . uniqid('', true) . '.md';
+        file_put_contents($markdownFile, <<<'MARKDOWN'
+# Get API Revisions im.revision.get
+
+## Returned Data
+
+#|
+|| **Name**
+`Type` | **Description** ||
+|| **result**
+[`object`](../data-types.md) | Root object with API revisions ||
+|| **result.rest**
+[`integer`](../data-types.md) | REST API IM revision ||
+|| **result.web**
+[`integer`](../data-types.md) | Web API IM revision ||
+|| **result.mobile**
+[`integer`](../data-types.md) | Mobile API IM revision ||
+|| **time**
+[`time`](../data-types.md#time) | Information about the request execution time ||
+|#
+MARKDOWN);
+
+        try {
+            $resultItemPayload = (new RestDocsResultItemPayloadProvider())->provide(
+                markdownFile: $markdownFile,
+                method: 'im.revision.get',
+            );
+        } finally {
+            unlink($markdownFile);
+        }
+
+        self::assertSame('im.revision.get', $resultItemPayload->method);
+        self::assertSame('result', $resultItemPayload->object);
+        self::assertSame('int', $this->findField($resultItemPayload->fields, 'rest')?->phpdocType);
+        self::assertSame('int', $this->findField($resultItemPayload->fields, 'web')?->phpdocType);
+        self::assertSame('int', $this->findField($resultItemPayload->fields, 'mobile')?->phpdocType);
+        self::assertNull($this->findField($resultItemPayload->fields, 'time'));
+    }
+
+    #[Test]
+    public function itBuildsResultObjectPayloadFromReturnedDataTableWithDirectRootFields(): void
+    {
+        $markdownFile = sys_get_temp_dir() . '/rest-docs-returned-data-direct-root-' . uniqid('', true) . '.md';
+        file_put_contents($markdownFile, <<<'MARKDOWN'
+# Get Counters im.counters.get
+
+### Returned Data
+
+#|
+|| **Name**
+`Type` | **Description** ||
+|| **result**
+[`object`](../data-types.md) | Root object with counters ||
+|| **TYPE**
+[`object`](../data-types.md) | Total counters by type ||
+|| **CHAT**
+[`array`](../data-types.md) | Counters for chats ||
+|| **CHAT_MUTED**
+[`object`](../data-types.md) | Counters for muted chats ||
+|| **time**
+[`time`](../data-types.md#time) | Information about the request execution time ||
+|#
+
+#### TYPE Object {#type}
+
+#|
+|| **Name**
+`Type` | **Description** ||
+|| **ALL**
+[`integer`](../data-types.md) | Total number of unread messages and notifications ||
+|| **NOTIFY**
+[`integer`](../data-types.md) | Total number of unread notifications ||
+|#
+MARKDOWN);
+
+        try {
+            $resultItemPayload = (new RestDocsResultItemPayloadProvider())->provide(
+                markdownFile: $markdownFile,
+                method: 'im.counters.get',
+            );
+        } finally {
+            unlink($markdownFile);
+        }
+
+        self::assertSame('im.counters.get', $resultItemPayload->method);
+        self::assertSame('result', $resultItemPayload->object);
+        self::assertSame('array', $this->findField($resultItemPayload->fields, 'TYPE')?->phpdocType);
+        self::assertSame('array', $this->findField($resultItemPayload->fields, 'CHAT')?->phpdocType);
+        self::assertSame('array', $this->findField($resultItemPayload->fields, 'CHAT_MUTED')?->phpdocType);
+        self::assertNull($this->findField($resultItemPayload->fields, 'time'));
+
+        $typeSection = $this->findSection($resultItemPayload->sections, 'type');
+        self::assertNotNull($typeSection);
+        self::assertSame('int', $this->findField($typeSection->fields, 'ALL')?->phpdocType);
+        self::assertSame('int', $this->findField($typeSection->fields, 'NOTIFY')?->phpdocType);
+    }
+
     /**
      * @param list<\Bitrix24\SDK\OpenApi\Domain\ResultItem\Payload\ResultItemPayloadField> $fields
      */
