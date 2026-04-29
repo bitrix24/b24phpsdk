@@ -43,6 +43,7 @@
 - Updated `b24phpsdk-maintainer` skill: require `CarbonImmutable` for public service method arguments that represent date or date-time values
 - Updated `b24phpsdk-maintainer` skill: require `ApiEndpointMetadata` documentation links to use the English `https://apidocs.bitrix24.com/` site
 - Updated `b24phpsdk-maintainer` skill: require SDK file generators for supported `*ItemResult`, `*SelectBuilder`, and `*ItemBuilder` files before manual edits
+- Updated `b24phpsdk-maintainer` skill and `AGENTS.md`: require `make lint-rector` before reporting completed tasks, including microtasks that bypass the maintainer skill
 
 ### Fixed
 

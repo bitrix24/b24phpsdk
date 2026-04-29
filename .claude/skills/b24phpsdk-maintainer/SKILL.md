@@ -754,6 +754,10 @@ Do not write production code before having a failing test. This applies to every
 After all files from the plan are written and the plan is marked complete,
 run checks in two phases. **Do not start phase 2 until phase 1 is fully green.**
 
+Completion invariant: every completed implementation task must run `make lint-rector`
+before it is reported as finished. This applies even when a narrower check set is chosen
+for a small or targeted change.
+
 ### Phase 1 — Light checks (linters + unit tests)
 
 Run in this order:

@@ -481,11 +481,11 @@ MARKDOWN);
 
         $payloadPath = $this->payloadPathForMethod('im.chat.get');
         $generatedPath = $this->tempDirectory . '/src/Services/IM/Chat/Result/ChatItemResult.php';
-        $payload = (new ResultItemPayloadSerializer())->decode((string) file_get_contents($payloadPath));
+        $resultItemPayload = (new ResultItemPayloadSerializer())->decode((string) file_get_contents($payloadPath));
         $generatedCode = (string) file_get_contents($generatedPath);
-        $idField = $this->findField($payload->fields, 'ID');
+        $idField = $this->findField($resultItemPayload->fields, 'ID');
 
-        self::assertSame('result', $payload->object);
+        self::assertSame('result', $resultItemPayload->object);
         self::assertNotNull($idField);
         self::assertSame('int', $idField->phpdocType);
         self::assertSame(
@@ -503,11 +503,11 @@ MARKDOWN);
 
         $payloadPath = $this->payloadPathForMethod('im.dialog.users.list');
         $generatedPath = $this->tempDirectory . '/src/Services/IM/Dialog/Result/DialogUserItemResult.php';
-        $payload = (new ResultItemPayloadSerializer())->decode((string) file_get_contents($payloadPath));
+        $resultItemPayload = (new ResultItemPayloadSerializer())->decode((string) file_get_contents($payloadPath));
         $generatedCode = (string) file_get_contents($generatedPath);
 
-        self::assertSame('result', $payload->object);
-        self::assertSame('int', $this->findField($payload->fields, 'id')?->phpdocType);
+        self::assertSame('result', $resultItemPayload->object);
+        self::assertSame('int', $this->findField($resultItemPayload->fields, 'id')?->phpdocType);
         self::assertStringContainsString('class DialogUserItemResult extends AbstractAnnotatedItem', $generatedCode);
         self::assertStringContainsString('@property-read int $id', $generatedCode);
     }
@@ -546,11 +546,11 @@ MARKDOWN);
 
         $payloadPath = $this->payloadPathForMethod('im.dialog.read');
         $generatedPath = $this->tempDirectory . '/src/Services/IM/Dialog/Result/DialogReadStateItemResult.php';
-        $payload = (new ResultItemPayloadSerializer())->decode((string) file_get_contents($payloadPath));
+        $resultItemPayload = (new ResultItemPayloadSerializer())->decode((string) file_get_contents($payloadPath));
         $generatedCode = (string) file_get_contents($generatedPath);
 
-        self::assertSame('result', $payload->object);
-        self::assertSame('string', $this->findField($payload->fields, 'dialogId')?->phpdocType);
+        self::assertSame('result', $resultItemPayload->object);
+        self::assertSame('string', $this->findField($resultItemPayload->fields, 'dialogId')?->phpdocType);
         self::assertStringContainsString('class DialogReadStateItemResult extends AbstractAnnotatedItem', $generatedCode);
         self::assertStringContainsString('@property-read string $dialogId', $generatedCode);
     }
