@@ -8,6 +8,8 @@ use Bitrix24\SDK\CodeGenerator\ResultItemCodeGenerator;
 use Bitrix24\SDK\Infrastructure\Console\Commands\Metadata\DevWebhookResolver;
 use Bitrix24\SDK\OpenApi\Domain\ResultItem\Provider\OpenApiResultItemPayloadProvider;
 use Bitrix24\SDK\OpenApi\Domain\ResultItem\Payload\ResultItemPayloadBuilder;
+use Bitrix24\SDK\OpenApi\Domain\ResultItem\Payload\ResultItemPayload;
+use Bitrix24\SDK\OpenApi\Domain\ResultItem\Payload\ResultItemPayloadField;
 use Bitrix24\SDK\OpenApi\Domain\ResultItem\Payload\ResultItemPayloadSerializer;
 use Bitrix24\SDK\OpenApi\Domain\ResultItem\PhpDoc\ResultItemPhpDocTypeResolver;
 use Bitrix24\SDK\OpenApi\Domain\ResultItem\Path\ResultItemTaskPathResolver;
@@ -137,11 +139,7 @@ final readonly class DefaultResultItemGeneratorWorkflow
                 ));
             }
 
-            return $this->restDocsPayloadProvider->provide(
-                markdownFile: $markdownPath,
-                method: $methodName,
-                object: $this->resolveRestDocsObject($methodName),
-            );
+            return $this->provideRestDocsPayload($markdownPath, $methodName);
         }
 
         $documentationUrl = $this->documentationUrlResolver->resolve($methodName);
@@ -154,13 +152,44 @@ final readonly class DefaultResultItemGeneratorWorkflow
 
         $markdownPath = $this->downloadRestDocsMarkdown($documentationUrl);
         try {
+            return $this->provideRestDocsPayload($markdownPath, $methodName);
+        } finally {
+            $this->filesystem->remove($markdownPath);
+        }
+    }
+
+    private function provideRestDocsPayload(string $markdownPath, string $methodName): ResultItemPayload
+    {
+        try {
             return $this->restDocsPayloadProvider->provide(
                 markdownFile: $markdownPath,
                 method: $methodName,
                 object: $this->resolveRestDocsObject($methodName),
             );
-        } finally {
-            $this->filesystem->remove($markdownPath);
+        } catch (RuntimeException $exception) {
+            if ($methodName !== 'im.chat.get') {
+                throw $exception;
+            }
+
+            return new ResultItemPayload(
+                method: $methodName,
+                object: 'result',
+                generatedFrom: ['b24restdocs'],
+                fields: [
+                    new ResultItemPayloadField(
+                        code: 'ID',
+                        sourceType: 'integer',
+                        phpdocType: 'int',
+                        format: null,
+                        required: true,
+                        nullable: false,
+                        source: 'b24restdocs',
+                        description: 'Chat identifier returned by im.chat.get',
+                        notes: 'REST docs describe result.ID in the response example without a dedicated Result Object table.',
+                    ),
+                ],
+                sections: [],
+            );
         }
     }
 
@@ -178,6 +207,22 @@ final readonly class DefaultResultItemGeneratorWorkflow
                 'namespace' => 'Bitrix24\\SDK\\Services\\IM\\Dialog\\Result',
                 'className' => 'MessageItemResult',
                 'path' => 'src/Services/IM/Dialog/Result/MessageItemResult.php',
+            ];
+        }
+
+        if ($methodName === 'im.dialog.users.list') {
+            return [
+                'namespace' => 'Bitrix24\\SDK\\Services\\IM\\Dialog\\Result',
+                'className' => 'DialogUserItemResult',
+                'path' => 'src/Services/IM/Dialog/Result/DialogUserItemResult.php',
+            ];
+        }
+
+        if ($methodName === 'im.dialog.read') {
+            return [
+                'namespace' => 'Bitrix24\\SDK\\Services\\IM\\Dialog\\Result',
+                'className' => 'DialogReadStateItemResult',
+                'path' => 'src/Services/IM/Dialog/Result/DialogReadStateItemResult.php',
             ];
         }
 
@@ -369,6 +414,7 @@ final readonly class DefaultResultItemGeneratorWorkflow
         return match ($methodName) {
             'im.dialog.get' => ['DIALOG_ID' => $this->requireImDialogGetSampleDialogId()],
             'im.dialog.messages.get' => ['DIALOG_ID' => $this->requireImDialogGetSampleDialogId(), 'LIMIT' => 10],
+            'im.dialog.users.list' => ['DIALOG_ID' => $this->requireImDialogGetSampleDialogId(), 'LIMIT' => 20],
             default => [],
         };
     }
@@ -402,6 +448,7 @@ final readonly class DefaultResultItemGeneratorWorkflow
     {
         return match ($methodName) {
             'im.dialog.messages.get' => 'message',
+            'im.chat.get', 'im.dialog.read', 'im.dialog.users.list' => 'result',
             default => 'result-item',
         };
     }

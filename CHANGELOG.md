@@ -28,6 +28,7 @@
 - Deprecated passing `ATTACH` as raw JSON `string` to `im.message.add` and `im.message.update`; prefer `AttachPayloadInterface` for typed object payloads or raw `array` payloads for backward-compatible structures ([#426](https://github.com/bitrix24/b24phpsdk/issues/426))
 - Widened `Placement::bind()` `$options` parameter type to `PlacementOptionsInterface|array` — existing array callers remain fully compatible ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
 - Regenerated `DialogItemResult` from the ResultItem generator payload, including imported `CarbonImmutable` PHPDoc types and live-verified nullable fields ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
+- Regenerated IM `ChatItemResult`, `DialogUserItemResult`, and `DialogReadStateItemResult` from ResultItem generator payloads and extended the generator workflow for their REST docs response shapes ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
 - Added Typhoon-based runtime casting for `DialogItemResult` magic getters so annotated fields such as `date_create` return their PHPDoc-declared SDK types ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
 - Moved `typhoon/reflection` to runtime dependencies because annotated result-item casting uses it outside development tooling ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
 - Updated `Dialog::messagesSearch()` date filters to accept `CarbonImmutable` arguments and serialize them to REST date-time strings at the service boundary ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))

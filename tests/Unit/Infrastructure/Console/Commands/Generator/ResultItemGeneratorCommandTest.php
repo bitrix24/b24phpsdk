@@ -133,7 +133,7 @@ final class ResultItemGeneratorCommandTest extends TestCase
 }
 JSON);
 
-        $this->filesystem->dumpFile($this->markdownFixturePath(), <<<'MARKDOWN'
+        $this->filesystem->dumpFile($this->markdownFixturePath(self::METHOD_NAME), <<<'MARKDOWN'
 #### Object result-item {#result-item}
 
 #|
@@ -174,6 +174,50 @@ JSON);
 `object` | Message parameters ||
 || **disappearing_date**
 `datetime` | Message disappearing date, `null` if not set ||
+|#
+MARKDOWN);
+
+        $this->filesystem->dumpFile($this->markdownFixturePath('im.chat.get'), <<<'MARKDOWN'
+## Response Handling
+
+```json
+{
+    "result": {
+        "ID": 1437
+    }
+}
+```
+MARKDOWN);
+
+        $this->filesystem->dumpFile($this->markdownFixturePath('im.dialog.users.list'), <<<'MARKDOWN'
+#### Result Object {#result}
+
+#|
+|| **Name**
+`type` | **Description** ||
+|| **id**
+`integer` | User identifier ||
+|| **name**
+`string` | User's full name ||
+|| **active**
+`boolean` | User activity status ||
+|#
+MARKDOWN);
+
+        $this->filesystem->dumpFile($this->markdownFixturePath('im.dialog.read'), <<<'MARKDOWN'
+#### Result Object {#result}
+
+#|
+|| **Name**
+`type` | **Description** ||
+|| **dialogId**
+`string` | Identifier of the dialog ||
+|| **chatId**
+`integer` | Identifier of the chat ||
+|| **lastId**
+`integer` | Identifier of the last read message ||
+|| **counter**
+`integer` | Number of unread messages after executing the method ||
 |#
 MARKDOWN);
     }
@@ -431,6 +475,87 @@ MARKDOWN);
     }
 
     #[Test]
+    public function buildAndGenerateForImChatGetUsesResultObjectAndWritesChatItemResult(): void
+    {
+        $this->runBuildAndGenerateForMethod('im.chat.get');
+
+        $payloadPath = $this->payloadPathForMethod('im.chat.get');
+        $generatedPath = $this->tempDirectory . '/src/Services/IM/Chat/Result/ChatItemResult.php';
+        $payload = (new ResultItemPayloadSerializer())->decode((string) file_get_contents($payloadPath));
+        $generatedCode = (string) file_get_contents($generatedPath);
+        $idField = $this->findField($payload->fields, 'ID');
+
+        self::assertSame('result', $payload->object);
+        self::assertNotNull($idField);
+        self::assertSame('int', $idField->phpdocType);
+        self::assertSame(
+            'REST docs describe result.ID in the response example without a dedicated Result Object table.',
+            $idField->notes,
+        );
+        self::assertStringContainsString('class ChatItemResult extends AbstractAnnotatedItem', $generatedCode);
+        self::assertStringContainsString('@property-read int $ID', $generatedCode);
+    }
+
+    #[Test]
+    public function buildAndGenerateForDialogUsersListUsesResultObjectAndWritesDialogUserItemResult(): void
+    {
+        $this->runBuildAndGenerateForMethod('im.dialog.users.list');
+
+        $payloadPath = $this->payloadPathForMethod('im.dialog.users.list');
+        $generatedPath = $this->tempDirectory . '/src/Services/IM/Dialog/Result/DialogUserItemResult.php';
+        $payload = (new ResultItemPayloadSerializer())->decode((string) file_get_contents($payloadPath));
+        $generatedCode = (string) file_get_contents($generatedPath);
+
+        self::assertSame('result', $payload->object);
+        self::assertSame('int', $this->findField($payload->fields, 'id')?->phpdocType);
+        self::assertStringContainsString('class DialogUserItemResult extends AbstractAnnotatedItem', $generatedCode);
+        self::assertStringContainsString('@property-read int $id', $generatedCode);
+    }
+
+    #[Test]
+    public function verifyStageForDialogUsersListUsesSampleDialogIdAndLimit(): void
+    {
+        $this->resultFetcher = new FakeBitrix24MethodResultFetcher([
+            'id' => 1,
+            'name' => 'Alice Example',
+            'active' => true,
+        ]);
+        $this->runBuildAndGenerateForMethod('im.dialog.users.list', ['build']);
+
+        $commandTester = new CommandTester($this->createCommand(
+            $this->createWorkflow(useDefaultGenerationTargetResolver: true),
+        ));
+
+        $status = $commandTester->execute([
+            'method-name' => 'im.dialog.users.list',
+            '--stage' => 'verify',
+        ], ['decorated' => false]);
+
+        self::assertSame(Command::SUCCESS, $status, $commandTester->getDisplay());
+        self::assertSame([[
+            'webhook' => 'https://unit.test/rest/1/token/',
+            'methodName' => 'im.dialog.users.list',
+            'params' => ['DIALOG_ID' => self::UNIT_SAMPLE_DIALOG_ID, 'LIMIT' => 20],
+        ]], $this->resultFetcher->calls);
+    }
+
+    #[Test]
+    public function buildAndGenerateForDialogReadUsesResultObjectAndWritesDialogReadStateItemResult(): void
+    {
+        $this->runBuildAndGenerateForMethod('im.dialog.read');
+
+        $payloadPath = $this->payloadPathForMethod('im.dialog.read');
+        $generatedPath = $this->tempDirectory . '/src/Services/IM/Dialog/Result/DialogReadStateItemResult.php';
+        $payload = (new ResultItemPayloadSerializer())->decode((string) file_get_contents($payloadPath));
+        $generatedCode = (string) file_get_contents($generatedPath);
+
+        self::assertSame('result', $payload->object);
+        self::assertSame('string', $this->findField($payload->fields, 'dialogId')?->phpdocType);
+        self::assertStringContainsString('class DialogReadStateItemResult extends AbstractAnnotatedItem', $generatedCode);
+        self::assertStringContainsString('@property-read string $dialogId', $generatedCode);
+    }
+
+    #[Test]
     public function itReturnsFailureWhenCurrentBranchResolutionFails(): void
     {
         $commandTester = new CommandTester(new class(
@@ -478,6 +603,32 @@ MARKDOWN);
         self::assertSame(Command::SUCCESS, $status);
     }
 
+    /**
+     * @param list<string> $stages
+     */
+    private function runBuildAndGenerateForMethod(string $methodName, array $stages = ['build', 'generate']): void
+    {
+        $originalWorkingDirectory = getcwd();
+        self::assertIsString($originalWorkingDirectory);
+        chdir($this->tempDirectory);
+
+        try {
+            $commandTester = new CommandTester($this->createCommand(
+                $this->createWorkflow(useDefaultGenerationTargetResolver: true),
+            ));
+
+            foreach ($stages as $stage) {
+                $status = $commandTester->execute([
+                    'method-name' => $methodName,
+                    '--stage' => $stage,
+                ], ['decorated' => false]);
+                self::assertSame(Command::SUCCESS, $status, $commandTester->getDisplay());
+            }
+        } finally {
+            chdir($originalWorkingDirectory);
+        }
+    }
+
     private function createWorkflow(
         ?\Closure $documentationMarkdownPathResolver = null,
         ?\Closure $generationTargetResolver = null,
@@ -503,7 +654,10 @@ MARKDOWN);
             $documentationMarkdownPathResolver ?? fn(string $methodName): ?string => in_array($methodName, [
                 self::METHOD_NAME,
                 'im.dialog.messages.get',
-            ], true) ? $this->markdownFixturePath() : null,
+                'im.chat.get',
+                'im.dialog.users.list',
+                'im.dialog.read',
+            ], true) ? $this->markdownFixturePath($methodName === 'im.dialog.messages.get' ? self::METHOD_NAME : $methodName) : null,
             $useDefaultGenerationTargetResolver ? null : ($generationTargetResolver ?? fn(string $methodName): array => [
                 'namespace' => 'Bitrix24\\SDK\\Services\\IM\\Dialog\\Result',
                 'className' => 'DialogItemResult',
@@ -514,7 +668,12 @@ MARKDOWN);
 
     private function payloadPath(): string
     {
-        return $this->tempDirectory . '/.tasks/' . self::ISSUE_ID . '/' . self::METHOD_NAME . '/result-item.payload.yaml';
+        return $this->payloadPathForMethod(self::METHOD_NAME);
+    }
+
+    private function payloadPathForMethod(string $methodName): string
+    {
+        return $this->tempDirectory . '/.tasks/' . self::ISSUE_ID . '/' . $methodName . '/result-item.payload.yaml';
     }
 
     private function reportPath(): string
@@ -532,9 +691,9 @@ MARKDOWN);
         return $this->tempDirectory . '/result-item-openapi.json';
     }
 
-    private function markdownFixturePath(): string
+    private function markdownFixturePath(string $methodName): string
     {
-        return $this->tempDirectory . '/im-dialog-get.md';
+        return $this->tempDirectory . '/' . str_replace('.', '-', $methodName) . '.md';
     }
 
     /**

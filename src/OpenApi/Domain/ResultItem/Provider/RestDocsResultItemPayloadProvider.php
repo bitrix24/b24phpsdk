@@ -64,7 +64,7 @@ final class RestDocsResultItemPayloadProvider
         $objects = [];
 
         foreach ($lines as $index => $line) {
-            if (!preg_match('/^####\s+Object\s+(.+?)\s+\{#([^}]+)\}\s*$/', trim($line), $matches)) {
+            if (!preg_match('/^####\s+(?:Object\s+)?(.+?)\s+\{#([^}]+)\}\s*$/', trim($line), $matches)) {
                 continue;
             }
 
