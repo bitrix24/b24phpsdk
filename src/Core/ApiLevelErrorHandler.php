@@ -169,6 +169,7 @@ class ApiLevelErrorHandler
             case 'bad_request_no_fields_to_update':
                 throw new InvalidArgumentException(sprintf('%s - %s', $errorCode, $errorDescription));
             case 'access_denied':
+            case 'bitrix_rest_v3_exception_accessdeniedexception':
             case 'bizproc_workflow_template_access_denied':
                 throw new AuthForbiddenException(sprintf('%s - %s', $errorCode, $errorDescription));
             case 'query_limit_exceeded':

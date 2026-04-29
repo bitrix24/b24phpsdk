@@ -1,0 +1,865 @@
+version: 1
+method: im.dialog.messages.get
+object: message
+generated_from:
+  - b24restdocs
+
+fields:
+  - code: id
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Identifier of the message
+    notes: null
+
+  - code: chat_id
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Identifier of the chat
+    notes: null
+
+  - code: chatId
+    source_type: integer
+    phpdoc_type: "int|null"
+    format: null
+    required: false
+    nullable: true
+    source: live-api
+    description: Chat identifier returned by im.dialog.messages.search
+    notes: Observed in live API verification for im.dialog.messages.search
+
+  - code: author_id
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: "Identifier of the author, 0 for system messages"
+    notes: null
+
+  - code: authorId
+    source_type: integer
+    phpdoc_type: "int|null"
+    format: null
+    required: false
+    nullable: true
+    source: live-api
+    description: Author identifier returned by im.dialog.messages.search
+    notes: Observed in live API verification for im.dialog.messages.search
+
+  - code: date
+    source_type: datetime
+    phpdoc_type: Carbon\CarbonImmutable
+    format: date-time
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Date of the message in ISO 8601 format
+    notes: null
+
+  - code: text
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Text of the message
+    notes: null
+
+  - code: isSystem
+    source_type: boolean
+    phpdoc_type: "bool|null"
+    format: null
+    required: false
+    nullable: true
+    source: live-api
+    description: System message flag returned by im.dialog.messages.search
+    notes: Observed in live API verification for im.dialog.messages.search
+
+  - code: unread
+    source_type: boolean
+    phpdoc_type: bool
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Indicator of unread message
+    notes: null
+
+  - code: uuid
+    source_type: string
+    phpdoc_type: "string|null"
+    format: null
+    required: false
+    nullable: true
+    source: b24restdocs
+    description: "Unique identifier of the message, null for system messages"
+    notes: null
+
+  - code: replaces
+    source_type: array
+    phpdoc_type: "array|null"
+    format: null
+    required: false
+    nullable: true
+    source: b24restdocs
+    description: Array of text replacements for the message
+    notes: Nullable because im.dialog.messages.search can omit this field
+
+  - code: forward
+    source_type: object
+    phpdoc_type: "array|null"
+    format: null
+    required: false
+    nullable: true
+    source: live-api
+    description: Forwarding information returned by im.dialog.messages.search
+    notes: Observed in live API verification for im.dialog.messages.search
+
+  - code: params
+    source_type: object
+    phpdoc_type: array
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: "Additional parameters of the message (detailed description). The set of fields in the object depends on the type of message: regular or system."
+    notes: null
+
+  - code: viewedByOthers
+    source_type: boolean
+    phpdoc_type: "bool|null"
+    format: null
+    required: false
+    nullable: true
+    source: live-api
+    description: Other participants viewed flag returned by im.dialog.messages.search
+    notes: Observed in live API verification for im.dialog.messages.search
+
+  - code: viewed
+    source_type: boolean
+    phpdoc_type: "bool|null"
+    format: null
+    required: false
+    nullable: true
+    source: live-api
+    description: Current user viewed flag returned by im.dialog.messages.search
+    notes: Observed in live API verification for im.dialog.messages.search
+
+  - code: disappearing_date
+    source_type: datetime
+    phpdoc_type: "Carbon\\CarbonImmutable|null"
+    format: date-time
+    required: false
+    nullable: true
+    source: b24restdocs
+    description: "Date of disappearance of the message, null if not set"
+    notes: null
+
+sections:
+  - name: result
+    kind: object
+    source: b24restdocs
+    fields:
+      - code: chat_id
+        source_type: integer
+        phpdoc_type: int
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Identifier of the chat
+        notes: null
+
+      - code: messages
+        source_type: array
+        phpdoc_type: array
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Array of messages (detailed description). The method will return an empty array if a non-existent identifier is specified in LAST_ID or FIRST_ID.
+        notes: null
+
+      - code: users
+        source_type: array
+        phpdoc_type: array
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Users from the selection (detailed description). The method will return an empty array if a non-existent identifier is specified in LAST_ID or FIRST_ID.
+        notes: null
+
+      - code: files
+        source_type: array
+        phpdoc_type: array
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Files from the selection (detailed description). The method will return an empty array if a non-existent identifier is specified in LAST_ID or FIRST_ID.
+        notes: null
+
+  - name: params
+    kind: object
+    source: b24restdocs
+    fields:
+      - code: LIKE
+        source_type: array
+        phpdoc_type: array
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Identifiers of users who reacted to the message
+        notes: null
+
+      - code: CODE
+        source_type: array
+        phpdoc_type: array
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: "Codes of system events: - CHAT_JOIN — user added to the chat - CHAT_LEAVE — user left the chat"
+        notes: null
+
+      - code: NOTIFY
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Indicator of notification sending. Value N — notification is not sent
+        notes: null
+
+  - name: user
+    kind: object
+    source: b24restdocs
+    fields:
+      - code: id
+        source_type: integer
+        phpdoc_type: int
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Identifier of the user
+        notes: null
+
+      - code: active
+        source_type: boolean
+        phpdoc_type: bool
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Indicator of active user
+        notes: null
+
+      - code: name
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Full name
+        notes: null
+
+      - code: first_name
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: First name
+        notes: null
+
+      - code: last_name
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Last name
+        notes: null
+
+      - code: work_position
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Job title
+        notes: null
+
+      - code: color
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Avatar color in hex format
+        notes: null
+
+      - code: avatar
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Link to the avatar
+        notes: null
+
+      - code: avatar_hr
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Link to the high-resolution avatar
+        notes: null
+
+      - code: gender
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Gender. - M — male - F — female
+        notes: null
+
+      - code: birthday
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Date of birth
+        notes: null
+
+      - code: extranet
+        source_type: boolean
+        phpdoc_type: bool
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Indicator of extranet user
+        notes: null
+
+      - code: network
+        source_type: boolean
+        phpdoc_type: bool
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Indicator of Bitrix24 network user
+        notes: null
+
+      - code: bot
+        source_type: boolean
+        phpdoc_type: bool
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Indicator of bot
+        notes: null
+
+      - code: connector
+        source_type: boolean
+        phpdoc_type: bool
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Indicator of Open Lines user
+        notes: null
+
+      - code: external_auth_id
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Type of authentication
+        notes: null
+
+      - code: status
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: User status
+        notes: null
+
+      - code: idle
+        source_type: boolean
+        phpdoc_type: bool
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Indicator of user inactivity
+        notes: null
+
+      - code: last_activity_date
+        source_type: datetime
+        phpdoc_type: Carbon\CarbonImmutable
+        format: date-time
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Date of last activity
+        notes: null
+
+      - code: mobile_last_date
+        source_type: datetime
+        phpdoc_type: Carbon\CarbonImmutable
+        format: date-time
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: "Date of last activity in the mobile app, false if the app was not used"
+        notes: null
+
+      - code: desktop_last_date
+        source_type: datetime
+        phpdoc_type: Carbon\CarbonImmutable
+        format: date-time
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: "Date of last activity in the desktop app, false if the app was not used"
+        notes: null
+
+      - code: absent
+        source_type: boolean
+        phpdoc_type: bool
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Indicator of user absence
+        notes: null
+
+      - code: departments
+        source_type: array
+        phpdoc_type: array
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Identifiers of user departments
+        notes: null
+
+      - code: phones
+        source_type: object
+        phpdoc_type: "array|null"
+        format: null
+        required: false
+        nullable: true
+        source: b24restdocs
+        description: "User phones, false if not specified"
+        notes: null
+
+      - code: bot_data
+        source_type: object
+        phpdoc_type: "array|null"
+        format: null
+        required: false
+        nullable: true
+        source: b24restdocs
+        description: "Bot data, null for regular users"
+        notes: null
+
+      - code: type
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: User type
+        notes: null
+
+      - code: website
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: User website
+        notes: null
+
+      - code: email
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: User e-mail
+        notes: null
+
+  - name: file
+    kind: object
+    source: b24restdocs
+    fields:
+      - code: id
+        source_type: integer
+        phpdoc_type: int
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Identifier of the file
+        notes: null
+
+      - code: chatId
+        source_type: integer
+        phpdoc_type: int
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Identifier of the chat
+        notes: null
+
+      - code: date
+        source_type: datetime
+        phpdoc_type: Carbon\CarbonImmutable
+        format: date-time
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Date of file upload
+        notes: null
+
+      - code: type
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: "Type of file: image, video, audio, file"
+        notes: null
+
+      - code: name
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Name of the file
+        notes: null
+
+      - code: extension
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: File extension
+        notes: null
+
+      - code: size
+        source_type: integer
+        phpdoc_type: int
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Size in bytes
+        notes: null
+
+      - code: image
+        source_type: object
+        phpdoc_type: array
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Dimensions of the image for files of type image (detailed description)
+        notes: null
+
+      - code: status
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: "Status of the file: done — uploaded"
+        notes: null
+
+      - code: progress
+        source_type: integer
+        phpdoc_type: int
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Percentage of file upload
+        notes: null
+
+      - code: authorId
+        source_type: integer
+        phpdoc_type: int
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Identifier of the file author
+        notes: null
+
+      - code: authorName
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Name of the file author
+        notes: null
+
+      - code: urlPreview
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Link for file preview
+        notes: null
+
+      - code: urlShow
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Link for displaying the file
+        notes: null
+
+      - code: urlDownload
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Link for downloading the file
+        notes: null
+
+      - code: viewerAttrs
+        source_type: object
+        phpdoc_type: array
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Attributes for file viewer (detailed description)
+        notes: null
+
+      - code: mediaUrl
+        source_type: object
+        phpdoc_type: array
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Media file URL for preview (detailed description)
+        notes: null
+
+      - code: isTranscribable
+        source_type: boolean
+        phpdoc_type: bool
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Indicator of transcribability
+        notes: null
+
+      - code: isVideoNote
+        source_type: boolean
+        phpdoc_type: bool
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Indicator of video note
+        notes: null
+
+      - code: isVoiceNote
+        source_type: boolean
+        phpdoc_type: bool
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Indicator of voice note
+        notes: null
+
+  - name: image
+    kind: object
+    source: b24restdocs
+    fields:
+      - code: height
+        source_type: integer
+        phpdoc_type: int
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Height of the image in pixels
+        notes: null
+
+      - code: width
+        source_type: integer
+        phpdoc_type: int
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Width of the image in pixels
+        notes: null
+
+  - name: viewerattrs
+    kind: object
+    source: b24restdocs
+    fields:
+      - code: viewer
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Type of viewer
+        notes: null
+
+      - code: viewerType
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Type of file display
+        notes: null
+
+      - code: src
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Link to the file
+        notes: null
+
+      - code: viewerResized
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Link to the reduced version of the file
+        notes: null
+
+      - code: objectId
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Identifier of the file object
+        notes: null
+
+      - code: viewerGroupBy
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Identifier of the group for viewing files in the chat
+        notes: null
+
+      - code: imChatId
+        source_type: integer
+        phpdoc_type: int
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Identifier of the chat
+        notes: null
+
+      - code: title
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Name of the file
+        notes: null
+
+      - code: actions
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Available actions with the file in JSON format
+        notes: null
+
+  - name: mediaurl
+    kind: object
+    source: b24restdocs
+    fields:
+      - code: preview
+        source_type: object
+        phpdoc_type: array
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Links for file preview. The keys of the object are the dimensions of the image in pixels
+        notes: null
