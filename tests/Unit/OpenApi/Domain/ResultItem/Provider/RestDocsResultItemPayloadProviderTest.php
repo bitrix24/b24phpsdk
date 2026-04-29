@@ -67,6 +67,48 @@ final class RestDocsResultItemPayloadProviderTest extends TestCase
         );
     }
 
+    #[Test]
+    public function itBuildsResultObjectPayloadFromReturnedDataTable(): void
+    {
+        $markdownFile = sys_get_temp_dir() . '/rest-docs-returned-data-' . uniqid('', true) . '.md';
+        file_put_contents($markdownFile, <<<'MARKDOWN'
+# Get API Revisions im.revision.get
+
+## Returned Data
+
+#|
+|| **Name**
+`Type` | **Description** ||
+|| **result**
+[`object`](../data-types.md) | Root object with API revisions ||
+|| **result.rest**
+[`integer`](../data-types.md) | REST API IM revision ||
+|| **result.web**
+[`integer`](../data-types.md) | Web API IM revision ||
+|| **result.mobile**
+[`integer`](../data-types.md) | Mobile API IM revision ||
+|| **time**
+[`time`](../data-types.md#time) | Information about the request execution time ||
+|#
+MARKDOWN);
+
+        try {
+            $resultItemPayload = (new RestDocsResultItemPayloadProvider())->provide(
+                markdownFile: $markdownFile,
+                method: 'im.revision.get',
+            );
+        } finally {
+            unlink($markdownFile);
+        }
+
+        self::assertSame('im.revision.get', $resultItemPayload->method);
+        self::assertSame('result', $resultItemPayload->object);
+        self::assertSame('int', $this->findField($resultItemPayload->fields, 'rest')?->phpdocType);
+        self::assertSame('int', $this->findField($resultItemPayload->fields, 'web')?->phpdocType);
+        self::assertSame('int', $this->findField($resultItemPayload->fields, 'mobile')?->phpdocType);
+        self::assertNull($this->findField($resultItemPayload->fields, 'time'));
+    }
+
     /**
      * @param list<\Bitrix24\SDK\OpenApi\Domain\ResultItem\Payload\ResultItemPayloadField> $fields
      */

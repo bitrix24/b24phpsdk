@@ -50,6 +50,11 @@ class IMServiceBuilderTest extends TestCase
         $this->assertSame($this->serviceBuilder->dialog(), $this->serviceBuilder->dialog());
     }
 
+    public function testGetRevisionService(): void
+    {
+        $this::assertSame($this->serviceBuilder->revision(), $this->serviceBuilder->revision());
+    }
+
     public function testGetPlacementsService(): void
     {
         $this->assertInstanceOf(Placements::class, $this->serviceBuilder->placements());

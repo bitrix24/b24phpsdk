@@ -78,6 +78,7 @@ help:
 	@echo "test-integration-scope-landing-template - run Landing Template integration tests"
 	@echo "test-integration-im-message - run IM Message integration tests"
 	@echo "test-integration-im-dialog - run IM Dialog integration tests"
+	@echo "test-integration-im-revision - run IM Revision integration tests"
 	@echo "test-integration-im-open-lines-config - run IMOpenLines Config integration tests"
 	@echo "test-integration-im-open-lines-crm-chat - run IMOpenLines CRMChat integration tests"
 	@echo "test-integration-im-open-lines-session - run IMOpenLines Session integration tests"
@@ -242,6 +243,10 @@ test-integration-paysystem-settings:
 .PHONY: test-integration-im-message
 test-integration-im-message:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_message
+
+.PHONY: test-integration-im-revision
+test-integration-im-revision:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_revision
 
 .PHONY: test-integration-scope-im-open-lines
 test-integration-scope-im-open-lines:
