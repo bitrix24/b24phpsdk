@@ -80,6 +80,7 @@ help:
 	@echo "test-integration-im-dialog - run IM Dialog integration tests"
 	@echo "test-integration-im-revision - run IM Revision integration tests"
 	@echo "test-integration-im-counters - run IM Counters integration tests"
+	@echo "test-integration-im-user-status - run IM UserStatus integration tests"
 	@echo "test-integration-im-open-lines-config - run IMOpenLines Config integration tests"
 	@echo "test-integration-im-open-lines-crm-chat - run IMOpenLines CRMChat integration tests"
 	@echo "test-integration-im-open-lines-session - run IMOpenLines Session integration tests"
@@ -252,6 +253,10 @@ test-integration-im-revision:
 .PHONY: test-integration-im-counters
 test-integration-im-counters:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_counters
+
+.PHONY: test-integration-im-user-status
+test-integration-im-user-status:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_user_status
 
 .PHONY: test-integration-scope-im-open-lines
 test-integration-scope-im-open-lines:

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\Result;
 
+use BackedEnum;
 use Carbon\CarbonImmutable;
 use Typhoon\Reflection\TyphoonReflector;
 
@@ -89,6 +90,11 @@ abstract class AbstractAnnotatedItem extends AbstractItem
             return $this->castArrayValue($value, $type);
         }
 
+        $backedEnumClass = $this->resolveBackedEnumClass($type);
+        if ($backedEnumClass !== null) {
+            return $this->castBackedEnumValue($value, $type, $backedEnumClass);
+        }
+
         if (str_contains($type, 'bool')) {
             return match ($value) {
                 true, 'Y', 'y', '1', 1 => true,
@@ -110,6 +116,58 @@ abstract class AbstractAnnotatedItem extends AbstractItem
         }
 
         return $value;
+    }
+
+    /**
+     * @param class-string<BackedEnum> $backedEnumClass
+     */
+    private function castBackedEnumValue(mixed $value, string $type, string $backedEnumClass): mixed
+    {
+        if ($value instanceof $backedEnumClass) {
+            return $value;
+        }
+
+        if (($value === '' || $value === false || $value === null) && $this->isNullableType($type)) {
+            return null;
+        }
+
+        if (!is_int($value) && !is_string($value)) {
+            return $value;
+        }
+
+        return $backedEnumClass::tryFrom($value) ?? ($this->isNullableType($type) ? null : $value);
+    }
+
+    /**
+     * @return class-string<BackedEnum>|null
+     */
+    private function resolveBackedEnumClass(string $type): ?string
+    {
+        foreach (preg_split('/[|&]/', $type) ?: [] as $candidate) {
+            $candidate = ltrim(trim($candidate), '?\\');
+            if ($candidate === '') {
+                continue;
+            }
+
+            if ($candidate === 'null') {
+                continue;
+            }
+
+            if (str_contains($candidate, '<')) {
+                continue;
+            }
+
+            if (enum_exists($candidate) && is_a($candidate, BackedEnum::class, true)) {
+                return $candidate;
+            }
+        }
+
+        return null;
+    }
+
+    private function isNullableType(string $type): bool
+    {
+        return str_contains($type, 'null') || str_starts_with($type, '?');
     }
 
     private function castArrayValue(mixed $value, string $type): array
