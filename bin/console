@@ -13,8 +13,13 @@
 use Bitrix24\SDK\Attributes\Services\AttributesParser;
 use Bitrix24\SDK\Deprecations\DeprecatedMethods;
 use Bitrix24\SDK\CodeGenerator\ItemBuilderCodeGenerator;
+use Bitrix24\SDK\CodeGenerator\ResultItemCodeGenerator;
+use Bitrix24\SDK\Infrastructure\Console\Commands\Generator\ApiEndpointDocumentationUrlResolver;
+use Bitrix24\SDK\Infrastructure\Console\Commands\Generator\BranchIssueIdResolver;
 use Bitrix24\SDK\Infrastructure\Console\Commands\Generator\GenerateItemBuilderCommand;
 use Bitrix24\SDK\Infrastructure\Console\Commands\Generator\GenerateSelectBuilderCommand;
+use Bitrix24\SDK\Infrastructure\Console\Commands\Generator\ResultItemGeneratorCommand;
+use Bitrix24\SDK\Infrastructure\Console\Commands\Metadata\Bitrix24MethodResultFetcher;
 use Bitrix24\SDK\Infrastructure\Console\Commands\Metadata\Bitrix24V3FieldMetadataFetcher;
 use Bitrix24\SDK\Infrastructure\Console\Commands\Metadata\DevWebhookResolver;
 use Bitrix24\SDK\Infrastructure\Console\Commands\Metadata\ShowV3FieldMetadataCommand;
@@ -24,6 +29,15 @@ use Bitrix24\SDK\OpenApi\Domain\OpenApiSchemaEntityReader;
 use Bitrix24\SDK\OpenApi\Domain\OaSchemaMethodReader;
 use Bitrix24\SDK\OpenApi\Domain\OaSdkCoverageCalculator;
 use Bitrix24\SDK\OpenApi\Domain\OaToSdkMethodNormalizationPolicy;
+use Bitrix24\SDK\OpenApi\Domain\ResultItem\Provider\OpenApiResultItemPayloadProvider;
+use Bitrix24\SDK\OpenApi\Domain\ResultItem\Provider\RestDocsResultItemPayloadProvider;
+use Bitrix24\SDK\OpenApi\Domain\ResultItem\Payload\ResultItemPayloadBuilder;
+use Bitrix24\SDK\OpenApi\Domain\ResultItem\Payload\ResultItemPayloadSerializer;
+use Bitrix24\SDK\OpenApi\Domain\ResultItem\Verification\ResultItemPayloadVerifier;
+use Bitrix24\SDK\OpenApi\Domain\ResultItem\PhpDoc\ResultItemPhpDocTypeResolver;
+use Bitrix24\SDK\OpenApi\Domain\ResultItem\Path\ResultItemTaskPathResolver;
+use Bitrix24\SDK\OpenApi\Domain\ResultItem\Verification\ResultItemVerificationApplier;
+use Bitrix24\SDK\OpenApi\Domain\ResultItem\Verification\ResultItemVerificationReportSerializer;
 use Bitrix24\SDK\CodeGenerator\SelectBuilderCodeGenerator;
 use Bitrix24\SDK\OpenApi\Infrastructure\Console\SchemaBuilder;
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
@@ -78,6 +92,7 @@ $log = new Logger('bitrix24-php-sdk-cli');
 $log->pushHandler(new StreamHandler($_ENV['LOGS_FILE'], (int)$_ENV['LOGS_LEVEL']));
 $log->pushProcessor(new MemoryUsageProcessor(true, true));
 
+$filesystem = new Symfony\Component\Filesystem\Filesystem();
 $attributesParser = new AttributesParser(TyphoonReflector::build(), new Symfony\Component\Filesystem\Filesystem());
 
 $application = new Application();
@@ -114,6 +129,31 @@ $application->addCommand(
         new OpenApiSchemaEntityReader(new Symfony\Component\Filesystem\Filesystem()),
         new ItemBuilderCodeGenerator(),
         new Symfony\Component\Filesystem\Filesystem()
+    )
+);
+$application->addCommand(
+    new ResultItemGeneratorCommand(
+        new BranchIssueIdResolver(),
+        new ResultItemTaskPathResolver(),
+        ResultItemGeneratorCommand::createDefaultWorkflow(
+            new OpenApiResultItemPayloadProvider(
+                new OpenApiSchemaEntityReader($filesystem),
+                new ResultItemPhpDocTypeResolver(),
+            ),
+            new RestDocsResultItemPayloadProvider(new ResultItemPhpDocTypeResolver()),
+            new ResultItemPayloadBuilder(),
+            new ResultItemPayloadSerializer(),
+            new ResultItemPayloadVerifier(
+                new Bitrix24MethodResultFetcher($log),
+                new ResultItemPhpDocTypeResolver(),
+            ),
+            new ResultItemVerificationReportSerializer(),
+            new ResultItemVerificationApplier(new ResultItemPhpDocTypeResolver()),
+            new ResultItemCodeGenerator(),
+            new ApiEndpointDocumentationUrlResolver(new Symfony\Component\Finder\Finder()),
+            new DevWebhookResolver(),
+            $filesystem,
+        ),
     )
 );
 $application->addCommand(new CopyPropertyValues($log));

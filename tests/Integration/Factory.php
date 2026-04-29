@@ -50,7 +50,7 @@ class Factory
         return new ServiceBuilder(
             self::getCore($isNeedApplicationCredentials),
             self::getBatchService($isNeedApplicationCredentials),
-            self::getBulkItemsReader(),
+            self::getBulkItemsReader($isNeedApplicationCredentials),
             self::getLogger()
         );
     }
@@ -67,9 +67,11 @@ class Factory
      * @return \Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface
      * @throws InvalidArgumentException
      */
-    public static function getBulkItemsReader(): BulkItemsReaderInterface
+    public static function getBulkItemsReader(bool $isNeedApplicationCredentials = false): BulkItemsReaderInterface
     {
-        return (new BulkItemsReaderBuilder(self::getCore(), self::getBatchService(), self::getLogger()))->build();
+        return (new BulkItemsReaderBuilder(
+            self::getCore($isNeedApplicationCredentials), self::getBatchService($isNeedApplicationCredentials), self::getLogger()
+        ))->build();
     }
 
     /**
@@ -79,15 +81,6 @@ class Factory
      */
     public static function getCore(bool $isNeedApplicationCredentials = false): CoreInterface
     {
-        $default = (new CoreBuilder())
-            ->withLogger(self::getLogger())
-            ->withCredentials(
-                Credentials::createFromWebhook(
-                    new WebhookUrl($_ENV['BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK'] ?? $_ENV['BITRIX24_WEBHOOK'])
-                )
-            )
-            ->build();
-
         if ($isNeedApplicationCredentials) {
             // load application credentials and rewrite default incoming webhook credentials from bootstrap.php file
             (new Dotenv())->loadEnv(dirname(__DIR__, 2) . '/tests/ApplicationBridge/.env');
@@ -117,7 +110,15 @@ class Factory
                 ->withCredentials($credentials)
                 ->build();
         }
-        return $default;
+
+        return (new CoreBuilder())
+            ->withLogger(self::getLogger())
+            ->withCredentials(
+                Credentials::createFromWebhook(
+                    new WebhookUrl($_ENV['BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK'] ?? $_ENV['BITRIX24_WEBHOOK'])
+                )
+            )
+            ->build();
     }
 
     /**

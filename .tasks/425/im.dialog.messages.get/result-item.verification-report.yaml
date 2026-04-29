@@ -1,0 +1,169 @@
+method: im.dialog.messages.get
+confirmed_fields:
+  - code: id
+    section: null
+  - code: chat_id
+    section: null
+  - code: author_id
+    section: null
+  - code: date
+    section: null
+  - code: text
+    section: null
+  - code: unread
+    section: null
+  - code: replaces
+    section: null
+missing_fields:
+  - code: chat_id
+    section: result
+  - code: messages
+    section: result
+  - code: users
+    section: result
+  - code: files
+    section: result
+  - code: LIKE
+    section: params
+  - code: CODE
+    section: params
+  - code: NOTIFY
+    section: params
+  - code: id
+    section: user
+  - code: active
+    section: user
+  - code: name
+    section: user
+  - code: first_name
+    section: user
+  - code: last_name
+    section: user
+  - code: work_position
+    section: user
+  - code: color
+    section: user
+  - code: avatar
+    section: user
+  - code: avatar_hr
+    section: user
+  - code: gender
+    section: user
+  - code: birthday
+    section: user
+  - code: extranet
+    section: user
+  - code: network
+    section: user
+  - code: bot
+    section: user
+  - code: connector
+    section: user
+  - code: external_auth_id
+    section: user
+  - code: status
+    section: user
+  - code: idle
+    section: user
+  - code: last_activity_date
+    section: user
+  - code: mobile_last_date
+    section: user
+  - code: desktop_last_date
+    section: user
+  - code: absent
+    section: user
+  - code: departments
+    section: user
+  - code: phones
+    section: user
+  - code: bot_data
+    section: user
+  - code: type
+    section: user
+  - code: website
+    section: user
+  - code: email
+    section: user
+  - code: id
+    section: file
+  - code: chatId
+    section: file
+  - code: date
+    section: file
+  - code: type
+    section: file
+  - code: name
+    section: file
+  - code: extension
+    section: file
+  - code: size
+    section: file
+  - code: image
+    section: file
+  - code: status
+    section: file
+  - code: progress
+    section: file
+  - code: authorId
+    section: file
+  - code: authorName
+    section: file
+  - code: urlPreview
+    section: file
+  - code: urlShow
+    section: file
+  - code: urlDownload
+    section: file
+  - code: viewerAttrs
+    section: file
+  - code: mediaUrl
+    section: file
+  - code: isTranscribable
+    section: file
+  - code: isVideoNote
+    section: file
+  - code: isVoiceNote
+    section: file
+  - code: height
+    section: image
+  - code: width
+    section: image
+  - code: viewer
+    section: viewerattrs
+  - code: viewerType
+    section: viewerattrs
+  - code: src
+    section: viewerattrs
+  - code: viewerResized
+    section: viewerattrs
+  - code: objectId
+    section: viewerattrs
+  - code: viewerGroupBy
+    section: viewerattrs
+  - code: imChatId
+    section: viewerattrs
+  - code: title
+    section: viewerattrs
+  - code: actions
+    section: viewerattrs
+  - code: preview
+    section: mediaurl
+unexpected_fields: []
+type_mismatches:
+  - action: review_type_mismatch
+    code: params
+    section: null
+    expected_source_type: object
+    actual_source_type: array
+    expected_phpdoc_type: array
+    actual_phpdoc_type: array
+    expected_format: null
+    actual_format: null
+nullability_observations:
+  - action: mark_nullable
+    code: uuid
+    section: null
+  - action: mark_nullable
+    code: disappearing_date
+    section: null

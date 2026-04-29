@@ -42,6 +42,10 @@ Do not skip this step even for small edits.
 - For SDK/live API coverage use the `make` targets that wrap the console commands.
 - For OA-schema-based coverage use the dedicated `make` target once it is available in the repository.
 
+## Microtask completion checks
+- For small tasks that do not invoke `.claude/skills/b24phpsdk-maintainer/SKILL.md`, run `make lint-rector` before reporting the task as finished.
+- If Rector fails, fix the reported issues and rerun `make lint-rector` until it passes.
+
 ## Post-push PR status
 
 - After **every** `git push` to a branch that has an open Pull Request (including the initial push that creates the PR and every subsequent push to the same branch), poll the PR CI status until it reaches a terminal state.
