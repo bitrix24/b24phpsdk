@@ -30,7 +30,6 @@ use Carbon\CarbonImmutable;
  * @property-read string $setting_name
  * @property-read string $text
  * @property-read string $notify_read
- * @property-read string|null $notify_buttons
  * @property-read array|null $params
  */
 class NotifyItemResult extends AbstractAnnotatedItem

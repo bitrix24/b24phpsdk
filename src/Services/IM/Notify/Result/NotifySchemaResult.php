@@ -28,7 +28,7 @@ class NotifySchemaResult extends AbstractResult
 
         return array_map(
             static fn(array $module): NotifySchemaItemResult => new NotifySchemaItemResult($module),
-            array_filter($result, 'is_array')
+            array_values(array_filter($result, 'is_array'))
         );
     }
 }

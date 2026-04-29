@@ -30,7 +30,7 @@ final class NotifyTest extends TestCase
     {
         $response = $this->createStub(Response::class);
         $core = $this->createMock(CoreInterface::class);
-        $service = new Notify($core, new NullLogger());
+        $notify = new Notify($core, new NullLogger());
 
         $core->expects($this->once())
             ->method('call')
@@ -45,7 +45,7 @@ final class NotifyTest extends TestCase
             ])
             ->willReturn($response);
 
-        $service->send(42, 'Hello');
+        $notify->send(42, 'Hello');
     }
 
     #[Test]
@@ -53,7 +53,7 @@ final class NotifyTest extends TestCase
     {
         $response = $this->createStub(Response::class);
         $core = $this->createMock(CoreInterface::class);
-        $service = new Notify($core, new NullLogger());
+        $notify = new Notify($core, new NullLogger());
 
         $core->expects($this->once())
             ->method('call')
@@ -64,7 +64,7 @@ final class NotifyTest extends TestCase
             ])
             ->willReturn($response);
 
-        $service->getList(10, 3, 20);
+        $notify->getList(10, 3, 20);
     }
 
     #[Test]
@@ -72,7 +72,7 @@ final class NotifyTest extends TestCase
     {
         $response = $this->createStub(Response::class);
         $core = $this->createMock(CoreInterface::class);
-        $service = new Notify($core, new NullLogger());
+        $notify = new Notify($core, new NullLogger());
 
         $from = CarbonImmutable::parse('2024-01-01T00:00:00+00:00');
         $to = CarbonImmutable::parse('2024-01-31T23:59:59+00:00');
@@ -90,7 +90,7 @@ final class NotifyTest extends TestCase
             ])
             ->willReturn($response);
 
-        $service->historySearch(
+        $notify->historySearch(
             searchText: 'test',
             searchTypes: ['SYSTEM'],
             searchDateFrom: $from,
@@ -106,14 +106,14 @@ final class NotifyTest extends TestCase
     {
         $response = $this->createStub(Response::class);
         $core = $this->createMock(CoreInterface::class);
-        $service = new Notify($core, new NullLogger());
+        $notify = new Notify($core, new NullLogger());
 
         $core->expects($this->once())
             ->method('call')
             ->with('im.notify.read.all', [])
             ->willReturn($response);
 
-        $service->markAllAsRead();
+        $notify->markAllAsRead();
     }
 
     #[Test]
@@ -121,7 +121,7 @@ final class NotifyTest extends TestCase
     {
         $response = $this->createStub(Response::class);
         $core = $this->createMock(CoreInterface::class);
-        $service = new Notify($core, new NullLogger());
+        $notify = new Notify($core, new NullLogger());
 
         $core->expects($this->once())
             ->method('call')
@@ -131,7 +131,7 @@ final class NotifyTest extends TestCase
             ])
             ->willReturn($response);
 
-        $service->markMessagesAsRead([1, 2, 3]);
+        $notify->markMessagesAsRead([1, 2, 3]);
     }
 
     #[Test]
@@ -139,7 +139,7 @@ final class NotifyTest extends TestCase
     {
         $response = $this->createStub(Response::class);
         $core = $this->createMock(CoreInterface::class);
-        $service = new Notify($core, new NullLogger());
+        $notify = new Notify($core, new NullLogger());
 
         $core->expects($this->once())
             ->method('call')
@@ -149,7 +149,7 @@ final class NotifyTest extends TestCase
             ])
             ->willReturn($response);
 
-        $service->markMessagesAsUnread([4, 5]);
+        $notify->markMessagesAsUnread([4, 5]);
     }
 
     #[Test]
@@ -157,13 +157,13 @@ final class NotifyTest extends TestCase
     {
         $response = $this->createStub(Response::class);
         $core = $this->createMock(CoreInterface::class);
-        $service = new Notify($core, new NullLogger());
+        $notify = new Notify($core, new NullLogger());
 
         $core->expects($this->once())
             ->method('call')
             ->with('im.notify.schema.get', [])
             ->willReturn($response);
 
-        $service->getSchema();
+        $notify->getSchema();
     }
 }

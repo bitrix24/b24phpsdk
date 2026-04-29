@@ -16,9 +16,9 @@ namespace Bitrix24\SDK\Services\IM\Notify\Result;
 use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
 
 /**
- * @property-read string $name
- * @property-read string $module_id
- * @property-read array $list
+ * @property-read string $NAME
+ * @property-read string $MODULE_ID
+ * @property-read array $LIST
  */
 class NotifySchemaItemResult extends AbstractAnnotatedItem
 {

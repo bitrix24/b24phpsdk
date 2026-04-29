@@ -57,6 +57,7 @@
 
 - Fixed `Core::call()` handling of REST API v3 HTTP 401 error responses: array-shaped `error` payloads are now routed through `ApiLevelErrorHandler` instead of triggering `Array to string conversion`, and Bitrix24 v3 access-denied errors map to `AuthForbiddenException`.
 - Fixed `IM\User\Result\UserItemResult::last_activity_date` PHPDoc annotation so the magic getter casts live `im.user.get` date-time values to `CarbonImmutable`.
+- Fixed IM Notify result annotations for live `im.notify.get` and `im.notify.schema.get` payloads, including uppercase schema fields and list-normalized schema items.
 - Fixed `User\Service\Batch::get()` yielding `DealItemResult` instead of `UserItemResult` ([#447](https://github.com/bitrix24/b24phpsdk/issues/447))
 - Fixed abstract `Bitrix24PartnerInterfaceTest` and `Bitrix24PartnerRepositoryInterfaceTest` contracts: dropped `createdAt` / `updatedAt` from the factory method signature and data provider so implementations that initialise both timestamps internally (e.g. `new CarbonImmutable()` in the constructor) no longer fail with microsecond mismatches ([#457](https://github.com/bitrix24/b24phpsdk/issues/457))
 

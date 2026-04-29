@@ -30,6 +30,7 @@ class NotifyItemResultAnnotationsTest extends TestCase
     use CustomBitrix24Assertions;
 
     private Notify $notifyService;
+
     private int $currentUserId;
 
     /**

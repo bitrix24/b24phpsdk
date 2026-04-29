@@ -26,6 +26,7 @@ use PHPUnit\Framework\TestCase;
 class NotifyTest extends TestCase
 {
     private Notify $imNotifyService;
+
     private int $currentUserId;
 
     /**
@@ -36,8 +37,8 @@ class NotifyTest extends TestCase
     #[TestDox('Test send notification from system')]
     public function testFromSystem(): void
     {
-        $result = $this->imNotifyService->fromSystem($this->currentUserId, sprintf('Test message at %s', time()));
-        $this->assertGreaterThan(0, $result->getId());
+        $addedItemResult = $this->imNotifyService->fromSystem($this->currentUserId, sprintf('Test message at %s', time()));
+        $this->assertGreaterThan(0, $addedItemResult->getId());
     }
 
     /**
@@ -48,8 +49,8 @@ class NotifyTest extends TestCase
     #[TestDox('Test send notification from personal')]
     public function testFromPersonal(): void
     {
-        $result = $this->imNotifyService->fromPersonal($this->currentUserId, sprintf('Test message at %s', time()));
-        $this->assertGreaterThan(0, $result->getId());
+        $addedItemResult = $this->imNotifyService->fromPersonal($this->currentUserId, sprintf('Test message at %s', time()));
+        $this->assertGreaterThan(0, $addedItemResult->getId());
     }
 
     /**
@@ -60,12 +61,12 @@ class NotifyTest extends TestCase
     #[TestDox('Test send notification via im.notify')]
     public function testSend(): void
     {
-        $result = $this->imNotifyService->send(
+        $addedItemResult = $this->imNotifyService->send(
             $this->currentUserId,
             sprintf('Test notify at %s', time()),
             'USER'
         );
-        $this->assertGreaterThan(0, $result->getId());
+        $this->assertGreaterThan(0, $addedItemResult->getId());
     }
 
     /**
@@ -76,9 +77,9 @@ class NotifyTest extends TestCase
     #[TestDox('Test delete notification')]
     public function testDelete(): void
     {
-        $added = $this->imNotifyService->fromSystem($this->currentUserId, sprintf('Test message for delete at %s', time()));
-        $this->assertGreaterThan(0, $added->getId());
-        $this->assertTrue($this->imNotifyService->delete($added->getId())->isSuccess());
+        $addedItemResult = $this->imNotifyService->fromSystem($this->currentUserId, sprintf('Test message for delete at %s', time()));
+        $this->assertGreaterThan(0, $addedItemResult->getId());
+        $this->assertTrue($this->imNotifyService->delete($addedItemResult->getId())->isSuccess());
     }
 
     /**
@@ -89,9 +90,9 @@ class NotifyTest extends TestCase
     #[TestDox('Test mark as read notification')]
     public function testMarkAsRead(): void
     {
-        $added = $this->imNotifyService->fromSystem($this->currentUserId, sprintf('Test message for mark as read at %s', time()));
-        $this->assertGreaterThan(0, $added->getId());
-        $this->assertTrue($this->imNotifyService->markAsRead($added->getId())->isSuccess());
+        $addedItemResult = $this->imNotifyService->fromSystem($this->currentUserId, sprintf('Test message for mark as read at %s', time()));
+        $this->assertGreaterThan(0, $addedItemResult->getId());
+        $this->assertTrue($this->imNotifyService->markAsRead($addedItemResult->getId())->isSuccess());
     }
 
     /**
@@ -143,10 +144,10 @@ class NotifyTest extends TestCase
     {
         $this->imNotifyService->fromSystem($this->currentUserId, sprintf('Test for getList at %s', time()));
 
-        $result = $this->imNotifyService->getList(null, null, 10);
-        $this->assertIsArray($result->notifications());
-        $this->assertGreaterThanOrEqual(0, $result->totalCount());
-        $this->assertGreaterThanOrEqual(0, $result->totalUnreadCount());
+        $notifiesResult = $this->imNotifyService->getList(null, null, 10);
+        $this->assertIsArray($notifiesResult->notifications());
+        $this->assertGreaterThanOrEqual(0, $notifiesResult->totalCount());
+        $this->assertGreaterThanOrEqual(0, $notifiesResult->totalUnreadCount());
     }
 
     /**
@@ -159,9 +160,9 @@ class NotifyTest extends TestCase
     {
         $this->imNotifyService->fromSystem($this->currentUserId, sprintf('Test for markAllAsRead at %s', time()));
 
-        $result = $this->imNotifyService->markAllAsRead();
-        $this->assertTrue($result->isSuccess());
-        $this->assertGreaterThanOrEqual(0, $result->newCounter());
+        $notifyReadAllResult = $this->imNotifyService->markAllAsRead();
+        $this->assertTrue($notifyReadAllResult->isSuccess());
+        $this->assertGreaterThanOrEqual(0, $notifyReadAllResult->newCounter());
     }
 
     /**
@@ -172,9 +173,9 @@ class NotifyTest extends TestCase
     #[TestDox('Test search notification history')]
     public function testHistorySearch(): void
     {
-        $result = $this->imNotifyService->historySearch(searchText: 'test', limit: 10);
-        $this->assertIsArray($result->notifications());
-        $this->assertGreaterThanOrEqual(0, $result->totalResults());
+        $notifyHistorySearchResult = $this->imNotifyService->historySearch(searchText: 'test', limit: 10);
+        $this->assertIsArray($notifyHistorySearchResult->notifications());
+        $this->assertGreaterThanOrEqual(0, $notifyHistorySearchResult->totalResults());
     }
 
     /**
@@ -185,8 +186,8 @@ class NotifyTest extends TestCase
     #[TestDox('Test get notification schema')]
     public function testGetSchema(): void
     {
-        $result = $this->imNotifyService->getSchema();
-        $this->assertNotEmpty($result->schema());
+        $notifySchemaResult = $this->imNotifyService->getSchema();
+        $this->assertNotEmpty($notifySchemaResult->schema());
     }
 
     /**
@@ -197,9 +198,9 @@ class NotifyTest extends TestCase
     #[TestDox('Test Interaction with notification buttons')]
     public function testConfirm(): void
     {
-        $added = $this->imNotifyService->fromPersonal($this->currentUserId, sprintf('Test message at %s', time()));
-        $this->assertGreaterThan(0, $added->getId());
-        $this->imNotifyService->confirm($added->getId(), true);
+        $addedItemResult = $this->imNotifyService->fromPersonal($this->currentUserId, sprintf('Test message at %s', time()));
+        $this->assertGreaterThan(0, $addedItemResult->getId());
+        $this->imNotifyService->confirm($addedItemResult->getId(), true);
     }
 
     /**
@@ -210,9 +211,9 @@ class NotifyTest extends TestCase
     #[TestDox('Test response to notification with quick reply')]
     public function testAnswer(): void
     {
-        $added = $this->imNotifyService->fromPersonal($this->currentUserId, sprintf('Test message at %s', time()));
-        $this->assertGreaterThan(0, $added->getId());
-        $this->imNotifyService->answer($added->getId(), 'reply text');
+        $addedItemResult = $this->imNotifyService->fromPersonal($this->currentUserId, sprintf('Test message at %s', time()));
+        $this->assertGreaterThan(0, $addedItemResult->getId());
+        $this->imNotifyService->answer($addedItemResult->getId(), 'reply text');
     }
 
     #[\Override]
