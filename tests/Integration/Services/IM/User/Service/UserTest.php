@@ -82,7 +82,7 @@ final class UserTest extends TestCase
         $this->assertNotEmpty($users);
         $this->assertContainsOnlyInstancesOf(UserItemResult::class, $users);
 
-        $ids = array_map(static fn(UserItemResult $u): int => $u->id, $users);
+        $ids = array_map(static fn(UserItemResult $userItemResult): int => $userItemResult->id, $users);
         $this->assertContains($currentUser->id, $ids);
     }
 }

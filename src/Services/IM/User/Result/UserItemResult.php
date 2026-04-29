@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\IM\User\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Carbon\CarbonImmutable;
 
 /**
  * @property-read int $id
@@ -34,7 +35,7 @@ use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
  * @property-read string $external_auth_id
  * @property-read string $status
  * @property-read bool $idle
- * @property-read string $last_activity_date
+ * @property-read CarbonImmutable $last_activity_date
  * @property-read bool $mobile_last_date
  * @property-read bool $desktop_last_date
  * @property-read bool $absent

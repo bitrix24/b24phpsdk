@@ -49,9 +49,9 @@ final class UserTest extends TestCase
             ->with('im.user.get', [])
             ->willReturn($response);
 
-        $result = $this->service->get();
+        $userResult = $this->service->get();
 
-        self::assertInstanceOf(UserResult::class, $result);
+        self::assertInstanceOf(UserResult::class, $userResult);
     }
 
     #[Test]
@@ -65,9 +65,9 @@ final class UserTest extends TestCase
             ->with('im.user.get', ['ID' => 42])
             ->willReturn($response);
 
-        $result = $this->service->get(42);
+        $userResult = $this->service->get(42);
 
-        self::assertInstanceOf(UserResult::class, $result);
+        self::assertInstanceOf(UserResult::class, $userResult);
     }
 
     #[Test]
@@ -81,8 +81,8 @@ final class UserTest extends TestCase
             ->with('im.user.list.get', ['ID' => [1, 2, 3]])
             ->willReturn($response);
 
-        $result = $this->service->listGet([1, 2, 3]);
+        $usersResult = $this->service->listGet([1, 2, 3]);
 
-        self::assertInstanceOf(UsersResult::class, $result);
+        self::assertInstanceOf(UsersResult::class, $usersResult);
     }
 }
