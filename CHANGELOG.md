@@ -3,6 +3,7 @@
 
 ### Added
 
+- Added `Bitrix24\SDK\Services\IM\Chat\Service\ChatUser` service wrapping `im.chat.user.add`, `im.chat.user.delete`, `im.chat.user.list` for chat participant management, with `ChatUserListResult` and `IMServiceBuilder::chatUser()` accessor ([#424](https://github.com/bitrix24/b24phpsdk/issues/424))
 - Added `Bitrix24\SDK\Services\IM\Revision\Service\Revision` service wrapping `im.revision.get` for IM module API revision/compatibility checks, with `RevisionItemResult` (`rest`, `web`, `mobile`, `desktop`, `im_revision_mobile` fields) and `IMServiceBuilder::revision()` accessor ([#434](https://github.com/bitrix24/b24phpsdk/issues/434))
 - Added `IM\Counters` service with `im.counters.get` support for retrieving unread message and notification counters ([#433](https://github.com/bitrix24/b24phpsdk/issues/433))
 - Added `getLogoUrl()` and `changeLogoUrl()` methods to `Bitrix24PartnerInterface` and reference implementation with `Bitrix24PartnerLogoUrlChangedEvent` ([#452](https://github.com/bitrix24/b24phpsdk/issues/452))
