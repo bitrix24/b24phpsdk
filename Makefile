@@ -57,6 +57,7 @@ help:
 	@echo "lint-deptrac              - lint source code with deptrac (architecture checks)"
 	@echo ""
 	@echo "test-unit                 - run unit tests"
+	@echo "test-file path=<path>     - run PHPUnit for a specific test file or directory"
 	@echo "test-integration-calendar-event - run Calendar Event integration tests"
 	@echo "test-integration-calendar-resource - run Calendar Resource integration tests"
 	@echo "test-integration-sale-basket-property - run BasketProperty integration tests"
@@ -76,6 +77,7 @@ help:
 	@echo "test-integration-landing-role - run Landing Role integration tests"
 	@echo "test-integration-scope-landing-template - run Landing Template integration tests"
 	@echo "test-integration-im-message - run IM Message integration tests"
+	@echo "test-integration-im-dialog - run IM Dialog integration tests"
 	@echo "test-integration-im-revision - run IM Revision integration tests"
 	@echo "test-integration-im-open-lines-config - run IMOpenLines Config integration tests"
 	@echo "test-integration-im-open-lines-crm-chat - run IMOpenLines CRMChat integration tests"
@@ -190,6 +192,13 @@ lint-all: lint-allowed-licenses lint-cs-fixer lint-phpstan lint-rector lint-dept
 test-unit:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite unit_tests --display-warnings
 
+.PHONY: test-file
+test-file:
+ifndef path
+	$(error path is required, usage: make test-file path=tests/Unit/ExampleTest.php)
+endif
+	docker compose run --rm php-cli vendor/bin/phpunit $(path) --display-warnings
+
 # integration tests with granularity by api-scope
 .PHONY: test-integration-scope-telephony
 test-integration-scope-telephony:
@@ -206,6 +215,10 @@ test-integration-scope-im:
 .PHONY: test-integration-im-chat
 test-integration-im-chat:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_chat
+
+.PHONY: test-integration-im-dialog
+test-integration-im-dialog:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_dialog
 
 .PHONY: test-integration-scope-placement
 test-integration-scope-placement:

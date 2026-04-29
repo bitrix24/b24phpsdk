@@ -25,6 +25,9 @@
         <testsuite name="integration_tests_im_chat">
             <directory>./tests/Integration/Services/IM/Chat/</directory>
         </testsuite>
+        <testsuite name="integration_tests_im_dialog">
+            <directory>./tests/Integration/Services/IM/Dialog/</directory>
+        </testsuite>
         <testsuite name="integration_tests_im_message">
             <directory>./tests/Integration/Services/IM/Message/</directory>
         </testsuite>

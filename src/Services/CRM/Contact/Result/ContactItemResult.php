@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Contact\Result;
 
-use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
+use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Email;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\InstantMessenger;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Phone;
@@ -73,8 +74,10 @@ use Carbon\CarbonImmutable;
  * @property-read string|null $UTM_TERM
  * @property-read Website[] $WEB
  */
-class ContactItemResult extends AbstractCrmItem
+class ContactItemResult extends AbstractAnnotatedItem
 {
+    private const string CRM_USERFIELD_PREFIX = 'UF_CRM_';
+
     /**
      * @param string $userfieldName
      *
@@ -83,6 +86,36 @@ class ContactItemResult extends AbstractCrmItem
      */
     public function getUserfieldByFieldName(string $userfieldName): mixed
     {
-        return $this->getKeyWithUserfieldByFieldName($userfieldName);
+        if (!str_starts_with($userfieldName, self::CRM_USERFIELD_PREFIX)) {
+            $userfieldName = self::CRM_USERFIELD_PREFIX . $userfieldName;
+        }
+
+        if (!$this->isKeyExists($userfieldName)) {
+            throw new UserfieldNotFoundException(sprintf('crm userfield not found by field name %s', $userfieldName));
+        }
+
+        return $this->$userfieldName;
+    }
+
+    /**
+     * @param positive-int $entityTypeId
+     * @throws InvalidArgumentException
+     */
+    public function getSmartProcessItem(int $entityTypeId): ?int
+    {
+        if ($entityTypeId <= 0) {
+            throw new InvalidArgumentException('entityTypeId must be positive integer');
+        }
+
+        $fieldKey = sprintf('PARENT_ID_%d', $entityTypeId);
+        if (!array_key_exists($fieldKey, $this->data)) {
+            throw new InvalidArgumentException(sprintf('field «%s» for smart process with entityTypeId «%d» not found', $fieldKey, $entityTypeId));
+        }
+
+        if ($this->data[$fieldKey] === '' || $this->data[$fieldKey] === null) {
+            return null;
+        }
+
+        return (int)$this->data[$fieldKey];
     }
 }

@@ -137,6 +137,11 @@ class ApiLevelErrorHandlerTest extends TestCase
             new AuthForbiddenException(),
         ];
 
+        yield 'v3 - Bitrix REST access denied exception' => [
+            ['error' => ['code' => 'BITRIX_REST_V3_EXCEPTION_ACCESSDENIEDEXCEPTION', 'message' => 'Access denied']],
+            new AuthForbiddenException(),
+        ];
+
         yield 'v3 - query limit exceeded' => [
             ['error' => ['code' => 'QUERY_LIMIT_EXCEEDED', 'message' => 'Too many requests']],
             new QueryLimitExceededException(),

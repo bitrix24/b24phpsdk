@@ -1,0 +1,677 @@
+version: 1
+method: im.dialog.get
+object: result-item
+generated_from:
+  - b24restdocs
+
+fields:
+  - code: id
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Chat identifier
+    notes: null
+
+  - code: parent_chat_id
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Parent chat identifier
+    notes: null
+
+  - code: parent_message_id
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Parent message identifier
+    notes: null
+
+  - code: name
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Chat name
+    notes: null
+
+  - code: description
+    source_type: string
+    phpdoc_type: "string|null"
+    format: null
+    required: true
+    nullable: true
+    source: b24restdocs
+    description: Chat description
+    notes: null
+
+  - code: owner
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Chat owner identifier
+    notes: null
+
+  - code: extranet
+    source_type: boolean
+    phpdoc_type: bool
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Indicator of external extranet user participation
+    notes: null
+
+  - code: avatar
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Link to the chat avatar
+    notes: null
+
+  - code: color
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Chat color in HEX format
+    notes: null
+
+  - code: type
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Chat type
+    notes: null
+
+  - code: counter
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Unread message counter
+    notes: null
+
+  - code: user_counter
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Number of chat participants
+    notes: null
+
+  - code: message_count
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Number of messages in the chat
+    notes: null
+
+  - code: unread_id
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Identifier of the first unread message
+    notes: null
+
+  - code: restrictions
+    source_type: object
+    phpdoc_type: array
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Restrictions on actions in the chat (detailed description)
+    notes: null
+
+  - code: last_message_id
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Identifier of the last message
+    notes: null
+
+  - code: last_id
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Identifier of the last read message
+    notes: null
+
+  - code: marked_id
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Identifier of the marked message
+    notes: null
+
+  - code: disk_folder_id
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Identifier of the chat folder on Drive
+    notes: null
+
+  - code: entity_type
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: "External code of the chat: type"
+    notes: null
+
+  - code: entity_id
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: "External code of the chat: identifier"
+    notes: null
+
+  - code: entity_data_1
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: External data 1 for the chat
+    notes: null
+
+  - code: entity_data_2
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: External data 2 for the chat
+    notes: null
+
+  - code: entity_data_3
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: External data 3 for the chat
+    notes: null
+
+  - code: mute_list
+    source_type: array
+    phpdoc_type: array
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: List of users with notifications disabled
+    notes: null
+
+  - code: date_create
+    source_type: datetime
+    phpdoc_type: Carbon\CarbonImmutable
+    format: date-time
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Chat creation date in ATOM format
+    notes: null
+
+  - code: message_type
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Type of chat messages
+    notes: null
+
+  - code: public
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Indicator of chat public status
+    notes: null
+
+  - code: role
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Current user's role in the chat
+    notes: null
+
+  - code: entity_link
+    source_type: object
+    phpdoc_type: array
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Link to the related object (detailed description)
+    notes: null
+
+  - code: text_field_enabled
+    source_type: boolean
+    phpdoc_type: bool
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Availability of the message input field
+    notes: null
+
+  - code: background_id
+    source_type: integer
+    phpdoc_type: "int|null"
+    format: null
+    required: false
+    nullable: true
+    source: b24restdocs
+    description: Identifier of the chat background
+    notes: "If not specified, the value is null"
+
+  - code: permissions
+    source_type: object
+    phpdoc_type: array
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Permissions for actions in the chat (detailed description)
+    notes: null
+
+  - code: is_new
+    source_type: boolean
+    phpdoc_type: bool
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Indicator of a new dialog
+    notes: null
+
+  - code: readed_list
+    source_type: array
+    phpdoc_type: array
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: List of users and read statuses (detailed description)
+    notes: null
+
+  - code: manager_list
+    source_type: array
+    phpdoc_type: array
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: List of chat manager identifiers
+    notes: null
+
+  - code: last_message_views
+    source_type: object
+    phpdoc_type: array
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Information about views of the last message (detailed description)
+    notes: null
+
+  - code: dialog_id
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Identifier of the dialog passed in the DIALOG_ID parameter
+    notes: null
+
+sections:
+  - name: restrictions
+    kind: object
+    source: b24restdocs
+    fields:
+      - code: avatar
+        source_type: boolean
+        phpdoc_type: bool
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Availability of avatar change
+        notes: null
+
+      - code: rename
+        source_type: boolean
+        phpdoc_type: bool
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Availability of name change
+        notes: null
+
+      - code: extend
+        source_type: boolean
+        phpdoc_type: bool
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Availability of chat extension
+        notes: null
+
+      - code: call
+        source_type: boolean
+        phpdoc_type: bool
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Availability of calls
+        notes: null
+
+      - code: mute
+        source_type: boolean
+        phpdoc_type: bool
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Availability of notifications mute
+        notes: null
+
+      - code: leave
+        source_type: boolean
+        phpdoc_type: bool
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Availability of leaving the chat
+        notes: null
+
+      - code: leave_owner
+        source_type: boolean
+        phpdoc_type: bool
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Availability of owner leaving the chat
+        notes: null
+
+      - code: send
+        source_type: boolean
+        phpdoc_type: bool
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Availability of message sending
+        notes: null
+
+      - code: user_list
+        source_type: boolean
+        phpdoc_type: bool
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Availability of viewing the participant list
+        notes: null
+
+      - code: path
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Link to the chat
+        notes: null
+
+      - code: path_title
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Text of the link to the chat
+        notes: null
+
+  - name: entity_link
+    kind: object
+    source: b24restdocs
+    fields:
+      - code: type
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Type of the related object
+        notes: null
+
+      - code: url
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Link to the related object
+        notes: null
+
+      - code: id
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Identifier of the related object
+        notes: null
+
+  - name: permissions
+    kind: object
+    source: b24restdocs
+    fields:
+      - code: manage_users_add
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Permission to add participants
+        notes: null
+
+      - code: manage_users_delete
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Permission to remove participants
+        notes: null
+
+      - code: manage_ui
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Permission to manage the chat interface
+        notes: null
+
+      - code: manage_settings
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Permission to manage chat settings
+        notes: null
+
+      - code: manage_messages
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Permission to manage messages
+        notes: null
+
+      - code: can_post
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Permission to send messages
+        notes: null
+
+  - name: readed_list_item
+    kind: object
+    source: b24restdocs
+    fields:
+      - code: user_id
+        source_type: integer
+        phpdoc_type: int
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: User identifier
+        notes: null
+
+      - code: user_name
+        source_type: string
+        phpdoc_type: string
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: User name
+        notes: null
+
+      - code: message_id
+        source_type: integer
+        phpdoc_type: int
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Identifier of the last read message
+        notes: null
+
+      - code: date
+        source_type: datetime
+        phpdoc_type: "Carbon\\CarbonImmutable|null"
+        format: date-time
+        required: false
+        nullable: true
+        source: b24restdocs
+        description: Read date
+        notes: "If not specified, the value is null"
+
+  - name: last_message_views
+    kind: object
+    source: b24restdocs
+    fields:
+      - code: message_id
+        source_type: integer
+        phpdoc_type: int
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Identifier of the message
+        notes: null
+
+      - code: first_viewers
+        source_type: array
+        phpdoc_type: array
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: List of first viewers
+        notes: null
+
+      - code: count_of_viewers
+        source_type: integer
+        phpdoc_type: int
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Number of views
+        notes: null

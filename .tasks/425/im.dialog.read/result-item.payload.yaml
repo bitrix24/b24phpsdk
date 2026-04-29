@@ -1,0 +1,48 @@
+version: 1
+method: im.dialog.read
+object: result
+generated_from:
+  - b24restdocs
+
+fields:
+  - code: dialogId
+    source_type: string
+    phpdoc_type: string
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Identifier of the dialog
+    notes: null
+
+  - code: chatId
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Identifier of the chat
+    notes: null
+
+  - code: lastId
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Identifier of the last read message
+    notes: null
+
+  - code: counter
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Number of unread messages after executing the method
+    notes: null
+
+sections: []
