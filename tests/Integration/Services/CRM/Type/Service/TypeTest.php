@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Type\Service;
 use Bitrix24\SDK\Core\Fields\FieldsFilter;
 use Bitrix24\SDK\Services\CRM\Type\Result\TypeItemResult;
 use Bitrix24\SDK\Services\CRM\Type\Service\Type;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
@@ -99,6 +99,6 @@ class TypeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->typeService = Fabric::getServiceBuilder()->getCRMScope()->type();
+        $this->typeService = Factory::getServiceBuilder()->getCRMScope()->type();
     }
 }

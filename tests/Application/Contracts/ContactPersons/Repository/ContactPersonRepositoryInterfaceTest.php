@@ -39,6 +39,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
+        int                 $bitrix24UserId,
         string              $name,
         ?string             $surname,
         ?string             $patronymic,
@@ -48,7 +49,6 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
-        ?int                $bitrix24UserId,
         ?Uuid               $bitrix24PartnerId,
         ?string             $userAgent,
         ?string             $userAgentReferer,
@@ -69,6 +69,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
+        int                 $bitrix24UserId,
         string              $name,
         ?string             $surname,
         ?string             $patronymic,
@@ -78,7 +79,6 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
-        ?int                $bitrix24UserId,
         ?Uuid               $bitrix24PartnerId,
         ?string             $userAgent,
         ?string             $userAgentReferer,
@@ -86,7 +86,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     ): void
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $bitrix24UserId, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
         $flusher = $this->createRepositoryFlusherImplementation();
 
         $contactPersonRepository->save($contactPerson);
@@ -108,6 +108,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
+        int                 $bitrix24UserId,
         string              $name,
         ?string             $surname,
         ?string             $patronymic,
@@ -117,7 +118,6 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
-        ?int                $bitrix24UserId,
         ?Uuid               $bitrix24PartnerId,
         ?string             $userAgent,
         ?string             $userAgentReferer,
@@ -125,7 +125,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     ): void
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $bitrix24UserId, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
         $flusher = $this->createRepositoryFlusherImplementation();
 
         $contactPersonRepository->save($contactPerson);
@@ -152,6 +152,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
+        int                 $bitrix24UserId,
         string              $name,
         ?string             $surname,
         ?string             $patronymic,
@@ -161,7 +162,6 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
-        ?int                $bitrix24UserId,
         ?Uuid               $bitrix24PartnerId,
         ?string             $userAgent,
         ?string             $userAgentReferer,
@@ -169,7 +169,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     ): void
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $bitrix24UserId, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
         $this->expectException(ContactPersonNotFoundException::class);
         $contactPersonRepository->delete($contactPerson->getId());
     }
@@ -185,6 +185,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
+        int                 $bitrix24UserId,
         string              $name,
         ?string             $surname,
         ?string             $patronymic,
@@ -194,7 +195,6 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
-        ?int                $bitrix24UserId,
         ?Uuid               $bitrix24PartnerId,
         ?string             $userAgent,
         ?string             $userAgentReferer,
@@ -202,7 +202,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     ): void
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $bitrix24UserId, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
         $flusher = $this->createRepositoryFlusherImplementation();
 
         $contactPersonRepository->save($contactPerson);
@@ -220,6 +220,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
+        int                 $bitrix24UserId,
         string              $name,
         ?string             $surname,
         ?string             $patronymic,
@@ -229,7 +230,6 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
-        ?int                $bitrix24UserId,
         ?Uuid               $bitrix24PartnerId,
         ?string             $userAgent,
         ?string             $userAgentReferer,
@@ -250,6 +250,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
+        int                 $bitrix24UserId,
         string              $name,
         ?string             $surname,
         ?string             $patronymic,
@@ -259,7 +260,6 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
-        ?int                $bitrix24UserId,
         ?Uuid               $bitrix24PartnerId,
         ?string             $userAgent,
         ?string             $userAgentReferer,
@@ -267,7 +267,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     ): void
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $bitrix24UserId, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
         $flusher = $this->createRepositoryFlusherImplementation();
 
         $contactPersonRepository->save($contactPerson);
@@ -285,6 +285,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
+        int                 $bitrix24UserId,
         string              $name,
         ?string             $surname,
         ?string             $patronymic,
@@ -294,7 +295,6 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
-        ?int                $bitrix24UserId,
         ?Uuid               $bitrix24PartnerId,
         ?string             $userAgent,
         ?string             $userAgentReferer,
@@ -302,7 +302,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     ): void
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $bitrix24UserId, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
         $flusher = $this->createRepositoryFlusherImplementation();
 
         $contactPersonRepository->save($contactPerson);
@@ -320,6 +320,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
+        int                 $bitrix24UserId,
         string              $name,
         ?string             $surname,
         ?string             $patronymic,
@@ -329,7 +330,6 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
-        ?int                $bitrix24UserId,
         ?Uuid               $bitrix24PartnerId,
         ?string             $userAgent,
         ?string             $userAgentReferer,
@@ -337,7 +337,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     ): void
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $bitrix24PartnerId, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $bitrix24UserId, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
         $flusher = $this->createRepositoryFlusherImplementation();
 
         $contactPersonRepository->save($contactPerson);
@@ -356,8 +356,8 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         $flusher = $this->createRepositoryFlusherImplementation();
         $expectedContactPerson = null;
         foreach ($items as $item) {
-            [$uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp] = $item;
-            $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+            [$uuid, $createdAt, $updatedAt, $contactPersonStatus, $bitrix24UserId, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp] = $item;
+            $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $bitrix24UserId, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
 
             $contactPersonRepository->save($contactPerson);
             if (!$expectedContactPerson instanceof ContactPersonInterface) {
@@ -383,8 +383,8 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
 
         $expectedContactPerson = null;
         foreach ($items as $item) {
-            [$uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp] = $item;
-            $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+            [$uuid, $createdAt, $updatedAt, $contactPersonStatus, $bitrix24UserId, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp] = $item;
+            $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $bitrix24UserId, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
 
             $contactPersonRepository->save($contactPerson);
             if (!$expectedContactPerson instanceof ContactPersonInterface) {
@@ -411,6 +411,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
+        int                 $bitrix24UserId,
         string              $name,
         ?string             $surname,
         ?string             $patronymic,
@@ -420,7 +421,6 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
-        ?int                $bitrix24UserId,
         ?Uuid               $bitrix24PartnerId,
         ?string             $userAgent,
         ?string             $userAgentReferer,
@@ -428,7 +428,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     ): void
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $bitrix24UserId, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
         $flusher = $this->createRepositoryFlusherImplementation();
 
         $externalId = Uuid::v7();
@@ -451,6 +451,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
+        int                 $bitrix24UserId,
         string              $name,
         ?string             $surname,
         ?string             $patronymic,
@@ -460,7 +461,6 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
-        ?int                $bitrix24UserId,
         ?Uuid               $bitrix24PartnerId,
         ?string             $userAgent,
         ?string             $userAgentReferer,
@@ -468,7 +468,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     ): void
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $bitrix24UserId, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
         $flusher = $this->createRepositoryFlusherImplementation();
 
         $contactPersonRepository->save($contactPerson);
@@ -487,6 +487,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
+        int                 $bitrix24UserId,
         string              $name,
         ?string             $surname,
         ?string             $patronymic,
@@ -496,7 +497,6 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
-        ?int                $bitrix24UserId,
         ?Uuid               $bitrix24PartnerId,
         ?string             $userAgent,
         ?string             $userAgentReferer,
@@ -504,7 +504,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     ): void
     {
         $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $bitrix24UserId, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
         $flusher = $this->createRepositoryFlusherImplementation();
 
         $contactPersonRepository->save($contactPerson);
@@ -525,8 +525,8 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         $flusher = $this->createRepositoryFlusherImplementation();
         $expectedExternalId = null;
         foreach ($items as $item) {
-            [$uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp] = $item;
-            $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
+            [$uuid, $createdAt, $updatedAt, $contactPersonStatus, $bitrix24UserId, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp] = $item;
+            $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $bitrix24UserId, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $bitrix24PartnerId, $userAgent, $userAgentReferer, $userAgentIp);
             $contactPersonRepository->save($contactPerson);
             $flusher->flush();
 
@@ -556,6 +556,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
                     CarbonImmutable::now(),
                     CarbonImmutable::now(),
                     ContactPersonStatus::active,
+                    random_int(1, 1000),
                     $fullName->name,
                     $fullName->surname,
                     $fullName->patronymic,
@@ -564,7 +565,6 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
                     'comment',
                     DemoDataGenerator::getMobilePhone(),
                     CarbonImmutable::now(),
-                    null,
                     null,
                     null,
                     DemoDataGenerator::getUserAgent(),
@@ -576,6 +576,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
                     CarbonImmutable::now(),
                     CarbonImmutable::now(),
                     ContactPersonStatus::active,
+                    random_int(1, 1000),
                     $fullName->name,
                     $fullName->surname,
                     $fullName->patronymic,
@@ -585,7 +586,6 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
                     DemoDataGenerator::getMobilePhone(),
                     null,
                     $externalId,
-                    null,
                     null,
                     DemoDataGenerator::getUserAgent(),
                     'https://bitrix24.com/apps/store?utm_source=bx24',
@@ -596,6 +596,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
                     CarbonImmutable::now(),
                     CarbonImmutable::now(),
                     ContactPersonStatus::active,
+                    random_int(1, 1000),
                     $fullName->name,
                     $fullName->surname,
                     $fullName->patronymic,
@@ -605,7 +606,6 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
                     DemoDataGenerator::getMobilePhone(),
                     null,
                     $externalId,
-                    null,
                     null,
                     DemoDataGenerator::getUserAgent(),
                     'https://bitrix24.com/apps/store?utm_source=bx24',
@@ -624,6 +624,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
             CarbonImmutable::now(),
             CarbonImmutable::now(),
             ContactPersonStatus::active,
+            random_int(1, 1000),
             $fullName->name,
             $fullName->surname,
             $fullName->patronymic,
@@ -632,7 +633,6 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
             'comment',
             DemoDataGenerator::getMobilePhone(),
             CarbonImmutable::now(),
-            null,
             null,
             null,
             DemoDataGenerator::getUserAgent(),
@@ -650,6 +650,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
             CarbonImmutable::now(),
             CarbonImmutable::now(),
             ContactPersonStatus::active,
+            random_int(1, 1000),
             $fullName->name,
             $fullName->surname,
             $fullName->patronymic,
@@ -658,7 +659,6 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
             'comment',
             DemoDataGenerator::getMobilePhone(),
             CarbonImmutable::now(),
-            null,
             null,
             null,
             DemoDataGenerator::getUserAgent(),
@@ -671,6 +671,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
             CarbonImmutable::now(),
             CarbonImmutable::now(),
             ContactPersonStatus::blocked,
+            random_int(1, 1000),
             $fullName->name,
             $fullName->surname,
             $fullName->patronymic,
@@ -679,7 +680,6 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
             'comment',
             DemoDataGenerator::getMobilePhone(),
             CarbonImmutable::now(),
-            null,
             null,
             null,
             DemoDataGenerator::getUserAgent(),
@@ -692,6 +692,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
             CarbonImmutable::now(),
             CarbonImmutable::now(),
             ContactPersonStatus::deleted,
+            random_int(1, 1000),
             $fullName->name,
             $fullName->surname,
             $fullName->patronymic,
@@ -700,7 +701,6 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
             'comment',
             DemoDataGenerator::getMobilePhone(),
             CarbonImmutable::now(),
-            null,
             null,
             null,
             DemoDataGenerator::getUserAgent(),

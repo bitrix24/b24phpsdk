@@ -18,7 +18,11 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\IMOpenLines\Connector\Result\ConnectorItemResult;
 use Bitrix24\SDK\Services\IMOpenLines\Connector\Service\Connector;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
+<<<<<<< HEAD
 use Bitrix24\SDK\Tests\Integration\Fabric;
+=======
+use Bitrix24\SDK\Tests\Integration\Factory;
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -484,7 +488,11 @@ class ConnectorTest extends TestCase
             $newName = 'New Test Chat Name ' . $timestamp;
             
             // Get current user ID
+<<<<<<< HEAD
             $userId = (string)Fabric::getServiceBuilder(true)->getMainScope()->main()->getCurrentUserProfile()->getUserProfile()->ID;
+=======
+            $userId = (string)Factory::getServiceBuilder(true)->getMainScope()->main()->getCurrentUserProfile()->getUserProfile()->ID;
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
             
             $result = $this->connectorService->setChatName($connectorData['ID'], $lineId, $chatId, $newName, $userId);
             
@@ -522,7 +530,11 @@ class ConnectorTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
+<<<<<<< HEAD
         $this->connectorService = Fabric::getServiceBuilder(true)->getIMOpenLinesScope()->connector();
+=======
+        $this->connectorService = Factory::getServiceBuilder(true)->getIMOpenLinesScope()->connector();
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
     }
 
     #[\Override]

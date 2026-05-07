@@ -14,7 +14,10 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Unit\Core\Response\DTO;
 
 use Bitrix24\SDK\Core\Response\DTO\Time;
+use Carbon\CarbonImmutable;
 use Generator;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -40,6 +43,26 @@ class TimeTest extends TestCase
         $this->assertEquals($result['operating_reset_at'], $time->operatingResetAt);
         $this->assertEquals($result['date_start'], $time->dateStart->format(\DATE_ATOM));
         $this->assertEquals($result['date_finish'], $time->dateFinish->format(\DATE_ATOM));
+    }
+
+    #[Test]
+    #[TestDox('initWithZeroValues() creates a Time with all-zero numeric fields and current-time dates')]
+    public function testInitWithZeroValues(): void
+    {
+        $before = CarbonImmutable::now();
+        $time = Time::initWithZeroValues();
+        $after = CarbonImmutable::now();
+
+        $this->assertSame(0.0, $time->start);
+        $this->assertSame(0.0, $time->finish);
+        $this->assertSame(0.0, $time->duration);
+        $this->assertSame(0.0, $time->processing);
+        $this->assertSame(0.0, $time->operating);
+        $this->assertNull($time->operatingResetAt);
+        $this->assertTrue($time->dateStart->greaterThanOrEqualTo($before));
+        $this->assertTrue($time->dateStart->lessThanOrEqualTo($after));
+        $this->assertTrue($time->dateFinish->greaterThanOrEqualTo($before));
+        $this->assertTrue($time->dateFinish->lessThanOrEqualTo($after));
     }
 
     public static function timingsDataProvider(): Generator

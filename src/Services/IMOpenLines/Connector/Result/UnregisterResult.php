@@ -30,12 +30,23 @@ class UnregisterResult extends AbstractResult
     public function isSuccess(): bool
     {
         $result = $this->getCoreResponse()->getResponseData()->getResult();
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
         // Response format: [result] => 1
         if (isset($result['result'])) {
             return (bool)$result['result'];
         }
+<<<<<<< HEAD
 
         return false;
     }
 }
+=======
+        
+        return false;
+    }
+}
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6

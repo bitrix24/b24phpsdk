@@ -5,30 +5,69 @@ Bitrix24 REST API PHP SDK
 
 An official PHP library for the Bitrix24 REST API
 
+## SDK Versions
+
+This library ships two major versions that coexist on separate branches:
+
+| | v1 (`main` branch) | v3 (`v3` branch) |
+|---|---|---|
+| **PHP** | 8.2, 8.3, 8.4 | 8.4, 8.5 |
+| **API endpoints** | `{portal}/rest/{user_id}/{token}/{method}` | `{portal}/rest/api/{user_id}/{token}/{method}` |
+| **New REST methods** | — | ✅ |
+| **Breaking changes** | No | ✅ |
+| **Semver** | `1.*` | `3.*` |
+| **Status** | Stable / production-ready | Active development |
+
+**Which version should I use?**
+
+- **v1** — choose this for PHP 8.2–8.4 projects, production deployments, or when you don't need the newest Bitrix24 API methods.
+- **v3** — choose this for PHP 8.4+ projects that need access to new REST API methods and are comfortable adopting breaking changes.
+
 ## Build status
 
-| CI\CD [status](https://github.com/bitrix24/b24phpsdk/actions) on `master`                                                                                                                   | 
-|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
-| [![allowed licenses check](https://github.com/bitrix24/b24phpsdk/actions/workflows/license-check.yml/badge.svg)](https://github.com/bitrix24/b24phpsdk/actions/workflows/license-check.yml) | 
-| [![php-cs-fixer check](https://github.com/bitrix24/b24phpsdk/actions/workflows/php-cs-fixer.yml/badge.svg)](https://github.com/bitrix24/b24phpsdk/actions/workflows/php-cs-fixer.yml)                         |
-| [![phpstan check](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpstan.yml/badge.svg)](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpstan.yml)                      | 
-| [![rector check](https://github.com/bitrix24/b24phpsdk/actions/workflows/rector.yml/badge.svg)](https://github.com/bitrix24/b24phpsdk/actions/workflows/rector.yml)                         |  
-| [![unit-tests status](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpunit.yml/badge.svg)](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpunit.yml)                  | 
+| CI\CD check | [`main`](https://github.com/bitrix24/b24phpsdk/actions?query=branch%3Amain) | [`v3`](https://github.com/bitrix24/b24phpsdk/actions?query=branch%3Av3) |
+|---|---|---|
+| allowed licenses | [![](https://github.com/bitrix24/b24phpsdk/actions/workflows/license-check.yml/badge.svg?branch=main)](https://github.com/bitrix24/b24phpsdk/actions/workflows/license-check.yml) | [![](https://github.com/bitrix24/b24phpsdk/actions/workflows/license-check.yml/badge.svg?branch=v3)](https://github.com/bitrix24/b24phpsdk/actions/workflows/license-check.yml) |
+| php-cs-fixer | [![](https://github.com/bitrix24/b24phpsdk/actions/workflows/php-cs-fixer.yml/badge.svg?branch=main)](https://github.com/bitrix24/b24phpsdk/actions/workflows/php-cs-fixer.yml) | [![](https://github.com/bitrix24/b24phpsdk/actions/workflows/php-cs-fixer.yml/badge.svg?branch=v3)](https://github.com/bitrix24/b24phpsdk/actions/workflows/php-cs-fixer.yml) |
+| phpstan | [![](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpstan.yml/badge.svg?branch=main)](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpstan.yml) | [![](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpstan.yml/badge.svg?branch=v3)](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpstan.yml) |
+| rector | [![](https://github.com/bitrix24/b24phpsdk/actions/workflows/rector.yml/badge.svg?branch=main)](https://github.com/bitrix24/b24phpsdk/actions/workflows/rector.yml) | [![](https://github.com/bitrix24/b24phpsdk/actions/workflows/rector.yml/badge.svg?branch=v3)](https://github.com/bitrix24/b24phpsdk/actions/workflows/rector.yml) |
+| deptrac | — | [![](https://github.com/bitrix24/b24phpsdk/actions/workflows/deptrac.yml/badge.svg?branch=v3)](https://github.com/bitrix24/b24phpsdk/actions/workflows/deptrac.yml) |
+| unit tests | [![](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpunit.yml/badge.svg?branch=main)](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpunit.yml) | [![](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpunit.yml/badge.svg?branch=v3)](https://github.com/bitrix24/b24phpsdk/actions/workflows/phpunit.yml) |
 
 Integration tests run in GitHub actions with real Bitrix24 portal
 
 ## Installation
 
-Install the latest version with
+Install the stable v1 version (PHP 8.2+):
 
 ```bash
-composer require bitrix24/b24phpsdk
+composer require bitrix24/b24phpsdk:"^1.0"
 ```
-If You work on Windows:
-- please use [WSL - Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/) 
-- if your filesystem is NTFS, You can disable flag `git config --global core.protectNTFS false` for checkout folders started with dot.
 
+<<<<<<< HEAD
 Or add `"bitrix24/b24phpsdk": "1.10.*"` to `composer.json` of your application.
+=======
+Install the new v3 version (PHP 8.4+, breaking changes):
+
+```bash
+composer require bitrix24/b24phpsdk:"^3.1"
+```
+
+If you work on Windows:
+- please use [WSL - Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/)
+- if your filesystem is NTFS, you can disable the flag `git config --global core.protectNTFS false` for checkout folders starting with a dot.
+
+## Branch status
+
+| Branch | Purpose |
+|---|---|
+| `main` | Stable v1.x production releases |
+| `dev` | v1.x integration and pre-release testing |
+| `v3` | Stable v3.x production releases |
+| `v3-dev` | Active v3 development with breaking changes |
+
+Each major version has its own `dev` branch. Cross-version changes are applied via cherry-pick — branches are never merged across major versions.
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
 
 ## B24PhpSdk ✨FEATURES✨
 
@@ -97,7 +136,6 @@ Performance improvements 🚀
 ## Documentation
 
 - [Bitrix24 API documentation - English](https://apidocs.bitrix24.com/)
-- [Internal documentation](docs/EN/README.md) for B24PhpSdk
 
 ## Requirements
 
@@ -296,10 +334,9 @@ For running integration test you must:
 6. Assign all permisions with webhook and click «save» button.
 7. Create file `/tests/.env.local` with same settings, see comments in `/tests/.env` file.
 
-```yaml
-APP_ENV=dev
-BITRIX24_WEBHOOK=https:// your Bitrix24 webhook url
-INTEGRATION_TEST_LOG_LEVEL=500
+```dotenv
+BITRIX24_WEBHOOK=https://your-portal.bitrix24.com/rest/1/your-webhook-token/
+INTEGRATION_TEST_LOG_LEVEL=100
 ```
 
 8. call in command line

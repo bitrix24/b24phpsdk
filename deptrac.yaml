@@ -1,0 +1,113 @@
+deptrac:
+  cache_file: var/deptrac/.deptrac.cache
+  paths:
+    - src
+
+  layers:
+    - name: Core
+      collectors:
+        - type: directory
+          value: src/Core
+
+    - name: Application
+      collectors:
+        - type: directory
+          value: src/Application
+
+    - name: Infrastructure
+      collectors:
+        - type: directory
+          value: src/Infrastructure
+
+    - name: Services
+      collectors:
+        - type: directory
+          value: src/Services
+
+    - name: Legacy
+      collectors:
+        - type: directory
+          value: src/Legacy
+
+  ruleset:
+    # Core is the foundation — depends on nothing inside the SDK.
+    # Violations below are pre-existing technical debt (skip_violations).
+    Core: []
+
+    # Application may use Core and Services.
+    # Services is allowed because Application/Workflows/Robots bridges
+    # service-level Workflow types (WorkflowDocumentId, IncomingRobotRequest, etc.).
+    Application:
+      - Core
+      - Services
+
+    # Infrastructure may use Core and Services.
+    # Services is allowed because console documentation commands
+    # (GenerateCoverageDocumentationCommand, ShowCoverageStatisticsCommand, etc.)
+    # act as aggregators over the full service layer by design.
+    Infrastructure:
+      - Core
+      - Services
+
+    # Services may use Core, Application, and Legacy.
+    # Legacy is allowed because ServiceBuilder is the root entry point
+    # that exposes all APIs including the legacy Task v1 API.
+    Services:
+      - Core
+      - Application
+      - Legacy
+
+    # Legacy may use Core, Application, and Services (as documented in architecture.md).
+    Legacy:
+      - Core
+      - Application
+      - Services
+
+  # Pre-existing architectural violations that need separate refactoring tasks.
+  # DO NOT add new entries here — fix the import instead.
+  # Format: violating class → list of wrongly imported classes
+  skip_violations:
+
+    # TODO: move RequestIdGeneratorInterface and DefaultRequestIdGenerator to Core.
+    # Core should not depend on Infrastructure — these are low-level contracts.
+    Bitrix24\SDK\Core\ApiClient:
+      - Bitrix24\SDK\Infrastructure\HttpClient\RequestId\RequestIdGeneratorInterface
+    Bitrix24\SDK\Core\CoreBuilder:
+      - Bitrix24\SDK\Infrastructure\HttpClient\RequestId\RequestIdGeneratorInterface
+      - Bitrix24\SDK\Infrastructure\HttpClient\RequestId\DefaultRequestIdGenerator
+    Bitrix24\SDK\Core\EndpointUrlFormatter:
+      - Bitrix24\SDK\Infrastructure\HttpClient\RequestId\RequestIdGeneratorInterface
+
+    # TODO: move Workflow exceptions to Core\Exceptions or keep them in Services
+    # but remove Core's dependency on them (Core should not know about specific services).
+    Bitrix24\SDK\Core\ApiLevelErrorHandler:
+      - Bitrix24\SDK\Services\Workflows\Exceptions\WorkflowTaskAlreadyCompletedException
+      - Bitrix24\SDK\Services\Workflows\Exceptions\ActivityOrRobotAlreadyInstalledException
+      - Bitrix24\SDK\Services\Workflows\Exceptions\ActivityOrRobotValidationFailureException
+
+    # TODO: move EventAuthItem, AbstractEventRequest, AbstractRequest to Core\Events
+    # so that Core contracts do not depend on Application request objects.
+    Bitrix24\SDK\Core\Contracts\Events\EventInterface:
+      - Bitrix24\SDK\Application\Requests\Events\EventAuthItem
+    Bitrix24\SDK\Core\Requests\Events\UnsupportedRemoteEvent:
+      - Bitrix24\SDK\Application\Requests\Events\AbstractEventRequest
+      - Bitrix24\SDK\Application\Requests\Events\EventAuthItem
+      - Bitrix24\SDK\Application\Requests\AbstractRequest
+    Bitrix24\SDK\Core\Credentials\Credentials:
+      - Bitrix24\SDK\Application\Requests\Placement\PlacementRequest
+
+    # TODO: move ApplicationStatus to Core so that Core\Response can reference it
+    # without depending on the Application layer.
+    Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken:
+      - Bitrix24\SDK\Application\ApplicationStatus
+
+    # TODO: move Base64Encoder to Core\Encoding (or a standalone utility).
+    # Services should not depend on Infrastructure implementation details.
+    Bitrix24\SDK\Services\Telephony\ExternalCall\Service\ExternalCall:
+      - Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder
+    Bitrix24\SDK\Services\Telephony\TelephonyServiceBuilder:
+      - Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder
+    Bitrix24\SDK\Services\Workflows\Template\Service\Template:
+      - Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder
+    Bitrix24\SDK\Services\Workflows\WorkflowsServiceBuilder:
+      - Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder

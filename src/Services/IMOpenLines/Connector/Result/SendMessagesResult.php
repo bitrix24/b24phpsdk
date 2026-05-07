@@ -30,15 +30,26 @@ class SendMessagesResult extends AbstractResult
     public function isSuccess(): bool
     {
         $result = $this->getCoreResponse()->getResponseData()->getResult();
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
         // Response format: [SUCCESS] => 1
         if (isset($result['SUCCESS'])) {
             return (bool)$result['SUCCESS'];
         }
+<<<<<<< HEAD
 
         return false;
     }
 
+=======
+        
+        return false;
+    }
+    
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
     /**
      * Get operation result data
      *
@@ -51,14 +62,25 @@ class SendMessagesResult extends AbstractResult
     {
         return $this->getCoreResponse()->getResponseData()->getResult();
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
     /**
      * Get result data
      */
     public function getData(): ?array
     {
         $result = $this->getResult();
+<<<<<<< HEAD
 
         return $result['DATA'] ?? null;
     }
 }
+=======
+        
+        return $result['DATA'] ?? null;
+    }
+}
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6

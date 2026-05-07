@@ -25,6 +25,7 @@ class PropertyRelationFieldsResult extends FieldsResult
     /**
      * @throws BaseException
      */
+    #[\Override]
     public function getFieldsDescription(): array
     {
         $result = $this->getCoreResponse()->getResponseData()->getResult();

@@ -128,8 +128,12 @@ class Connector extends AbstractService
     public function status(string $line, string $connector): StatusResult
     {
         return new StatusResult(
+<<<<<<< HEAD
             $this->core->call(
                 'imconnector.status',
+=======
+            $this->core->call('imconnector.status',
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
                 [
                     'LINE' => $line,
                     'CONNECTOR' => $connector
@@ -391,4 +395,8 @@ class Connector extends AbstractService
             $this->core->call('imconnector.chat.name.set', $params)
         );
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6

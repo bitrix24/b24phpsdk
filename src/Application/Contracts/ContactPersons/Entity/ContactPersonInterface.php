@@ -77,9 +77,10 @@ interface ContactPersonInterface
     public function changeEmail(?string $email): void;
 
     /**
-     * @return void mark contact person email as verified (send check main)
+     * Mark contact person email as verified.
+     * If $verifiedAt is null, the current timestamp is used.
      */
-    public function markEmailAsVerified(): void;
+    public function markEmailAsVerified(?CarbonImmutable $verifiedAt = null): void;
 
     /**
      * @return bool is email verified with send code or magic link
@@ -109,9 +110,9 @@ interface ContactPersonInterface
     public function getMobilePhoneVerifiedAt(): ?CarbonImmutable;
 
     /**
-     * @return void mark contact person mobile phone as verified (send check main)
+     * @param CarbonImmutable|null $verifiedAt verification timestamp; defaults to now when null
      */
-    public function markMobilePhoneAsVerified(): void;
+    public function markMobilePhoneAsVerified(?CarbonImmutable $verifiedAt = null): void;
 
     /**
      * @return non-empty-string|null get comment for this contact person
@@ -129,9 +130,9 @@ interface ContactPersonInterface
     public function getExternalId(): ?string;
 
     /**
-     * @return int|null get bitrix24 user id if contact person mapped on bitrix24 user
+     * @return int get bitrix24 user id
      */
-    public function getBitrix24UserId(): ?int;
+    public function getBitrix24UserId(): int;
 
     /**
      * @return Uuid|null get bitrix24 partner uuid if contact person is partner employee
@@ -142,6 +143,11 @@ interface ContactPersonInterface
      * @param Uuid|null $uuid set bitrix24 partner uuid if contact person is partner employee
      */
     public function setBitrix24PartnerId(?Uuid $uuid): void;
+
+    /**
+     * @return bool true if contact person is a partner employee (has bitrix24 partner id set)
+     */
+    public function isPartner(): bool;
 
     public function getUserAgentInfo(): UserAgentInfo;
 }

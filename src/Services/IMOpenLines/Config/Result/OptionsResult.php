@@ -34,12 +34,20 @@ class OptionsResult extends AbstractResult
     public function getOptions(): array
     {
         $result = $this->getCoreResponse()->getResponseData()->getResult();
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
         $options = [];
         foreach ($result as $data) {
             $options[] = new OptionItemResult($data);
         }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
         return $options;
     }
 }

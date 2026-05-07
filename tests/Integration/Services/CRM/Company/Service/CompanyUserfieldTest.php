@@ -17,7 +17,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Company\Service;
 use Bitrix24\SDK\Services\CRM\Company\Service\CompanyUserfield;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\Userfield\SystemUserfieldBuilder;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -45,7 +45,7 @@ class CompanyUserfieldTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->sb = Fabric::getServiceBuilder();
+        $this->sb = Factory::getServiceBuilder();
     }
 
     protected function tearDown(): void

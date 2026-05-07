@@ -19,10 +19,18 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  * Class ConnectorItemResult
  *
  * Represents a single connector item from imconnector.list method
+<<<<<<< HEAD
  *
+=======
+ * 
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
  * @property-read string $id     Connector identifier
  * @property-read string $name   Connector display name
  */
 class ConnectorItemResult extends AbstractItem
 {
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6

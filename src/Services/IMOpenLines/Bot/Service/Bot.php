@@ -21,6 +21,10 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Core\Result\EmptyResult;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['imopenlines', 'imbot']))]
@@ -90,7 +94,11 @@ class Bot extends AbstractService
      *
      * @param int    $chatId Chat identifier
      * @param int    $userId User identifier to whom the conversation is being redirected
+<<<<<<< HEAD
      * @param bool   $leave If false is specified, the chatbot will not leave this chat after redirection and will remain until the user confirms
+=======
+     * @param string $leave  Y/N. If N is specified, the chatbot will not leave this chat after redirection and will remain until the user confirms
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
      *
      * @throws BaseException
      * @throws TransportException
@@ -100,14 +108,23 @@ class Bot extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/imopenlines/openlines/chat-bots/imopenlines-bot-session-transfer.html',
         'Transfers the conversation to a specific operator by user ID'
     )]
+<<<<<<< HEAD
     public function transferToUser(int $chatId, int $userId, bool $leave = false): EmptyResult
     {
         $leaveStr = ($leave) ? 'Y' : 'N';
+=======
+    public function transferToUser(int $chatId, int $userId, string $leave = 'N'): EmptyResult
+    {
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
         return new EmptyResult(
             $this->core->call('imopenlines.bot.session.transfer', [
                 'CHAT_ID' => $chatId,
                 'USER_ID' => $userId,
+<<<<<<< HEAD
                 'LEAVE' => $leaveStr,
+=======
+                'LEAVE' => $leave,
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
             ])
         );
     }
@@ -117,9 +134,15 @@ class Bot extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/imopenlines/openlines/chat-bots/imopenlines-bot-session-transfer.html
      *
+<<<<<<< HEAD
      * @param int  $chatId  Chat identifier
      * @param int  $queueId Queue identifier to which the conversation is being redirected
      * @param bool $leave If false is specified, the chatbot will not leave this chat after redirection and will remain until the user confirms
+=======
+     * @param int    $chatId  Chat identifier
+     * @param int    $queueId Queue identifier to which the conversation is being redirected
+     * @param string $leave   Y/N. If N is specified, the chatbot will not leave this chat after redirection and will remain until the user confirms
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
      *
      * @throws BaseException
      * @throws TransportException
@@ -129,14 +152,23 @@ class Bot extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/imopenlines/openlines/chat-bots/imopenlines-bot-session-transfer.html',
         'Transfers the conversation to another open line queue'
     )]
+<<<<<<< HEAD
     public function transferToQueue(int $chatId, int $queueId, bool $leave = false): EmptyResult
     {
         $leaveStr = ($leave) ? 'Y' : 'N';
+=======
+    public function transferToQueue(int $chatId, int $queueId, string $leave = 'N'): EmptyResult
+    {
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
         return new EmptyResult(
             $this->core->call('imopenlines.bot.session.transfer', [
                 'CHAT_ID' => $chatId,
                 'QUEUE_ID' => $queueId,
+<<<<<<< HEAD
                 'LEAVE' => $leaveStr,
+=======
+                'LEAVE' => $leave,
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
             ])
         );
     }
@@ -164,4 +196,8 @@ class Bot extends AbstractService
             ])
         );
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6

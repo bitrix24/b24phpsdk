@@ -13,50 +13,22 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Services\Task\Service;
 
-use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Core;
-use Bitrix24\SDK\Services\Task\Result\TaskItemResult;
 use Bitrix24\SDK\Services\Task\Service\Task;
+use Bitrix24\SDK\Services\Task\Service\TaskItemBuilder;
+use Bitrix24\SDK\Services\Task\Service\TaskItemSelectBuilder;
 use Bitrix24\SDK\Services\User\Service\User;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
-use PHPUnit\Framework\Attributes\CoversFunction;
+use Bitrix24\SDK\Tests\Integration\Factory;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class TaskTest
- *
- * @package Bitrix24\SDK\Tests\Integration\Services\Task\Service
- */
-#[CoversMethod(Task::class,'add')]
-#[CoversMethod(Task::class,'delete')]
-#[CoversMethod(Task::class,'get')]
-#[CoversMethod(Task::class,'list')]
-#[CoversMethod(Task::class,'fields')]
-#[CoversMethod(Task::class,'update')]
-#[CoversMethod(Task::class,'countByFilter')]
-#[CoversMethod(Task::class,'addDependence')]
-#[CoversMethod(Task::class,'deleteDependence')]
-#[CoversMethod(Task::class,'delegate')]
-#[CoversMethod(Task::class,'getCounters')]
-#[CoversMethod(Task::class,'getAccess')]
-#[CoversMethod(Task::class,'start')]
-#[CoversMethod(Task::class,'pause')]
-#[CoversMethod(Task::class,'defer')]
-#[CoversMethod(Task::class,'complete')]
-#[CoversMethod(Task::class,'renew')]
-#[CoversMethod(Task::class,'approve')]
-#[CoversMethod(Task::class,'disapprove')]
-#[CoversMethod(Task::class,'startwatch')]
-#[CoversMethod(Task::class,'stopwatch')]
-#[CoversMethod(Task::class,'mute')]
-#[CoversMethod(Task::class,'unmute')]
-#[CoversMethod(Task::class,'addFavorite')]
-#[CoversMethod(Task::class,'removeFavorite')]
-#[CoversMethod(Task::class,'historyList')]
-#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\Task\Service\Task::class)]
+#[CoversMethod(Task::class, 'get')]
+#[CoversMethod(Task::class, 'add')]
+#[CoversMethod(Task::class, 'delete')]
+#[CoversMethod(Task::class, 'update')]
+#[CoversClass(Task::class)]
 class TaskTest extends TestCase
 {
     use CustomBitrix24Assertions;
@@ -65,15 +37,21 @@ class TaskTest extends TestCase
 
     protected User $userService;
 
+<<<<<<< HEAD
 
+=======
+    #[\Override]
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
     protected function setUp(): void
     {
-        $this->taskService = Fabric::getServiceBuilder()->getTaskScope()->task();
-        $this->userService = Fabric::getServiceBuilder()->getUserScope()->user();
+        $this->taskService = Factory::getServiceBuilder(false)->getTaskScope()->task();
+        $this->userService = Factory::getServiceBuilder()->getUserScope()->user();
     }
 
-    public function testAllSystemFieldsAnnotated(): void
+    #[TestDox('Get task by id with all fields')]
+    public function testGetTaskByIdWithAllFields(): void
     {
+<<<<<<< HEAD
         $fields = $this->normalizeFieldKeys($this->taskService->fields()->getFieldsDescription());
         $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($fields));
         $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, TaskItemResult::class);
@@ -141,22 +119,60 @@ class TaskTest extends TestCase
      * @throws TransportException
      */
     public function testList(): void
-    {
-        $taskId = $this->getTaskId();
-        $this->assertEquals(
-            $taskId,
-            $this->taskService->list(['ID'=>'ASC'], ['ID'=> $taskId])->getTasks()[0]->id
+=======
+        $userItemResult = $this->userService->current()->user();
+        $taskResult = $this->taskService->add(
+            new TaskItemBuilder(
+                sprintf('Test task %s', time()),
+                $userItemResult->ID,
+                $userItemResult->ID
+            )
         );
 
-        $this->taskService->delete($taskId);
+        $res = $this->taskService->get($taskResult->task()->id);
+
+        $this->assertEquals($taskResult->task()->id, $res->task()->id);
+        $this->taskService->delete($taskResult->task()->id);
     }
 
-    /**
-     * @throws BaseException
-     * @throws TransportException
-     */
-    public function testUpdate(): void
+    #[TestDox('Get task by id with selected fields from select builder')]
+    public function testGetTaskByIdWithSelectedFields(): void
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
     {
+        $userItemResult = $this->userService->current()->user();
+        $taskResult = $this->taskService->add(
+            new TaskItemBuilder(
+                sprintf('Test task %s', time()),
+                $userItemResult->ID,
+                $userItemResult->ID
+            )
+        );
+
+        $taskItemSelectBuilder = (new TaskItemSelectBuilder())
+            ->title();
+
+        $res = $this->taskService->get(
+            $taskResult->task()->id,
+            $taskItemSelectBuilder
+        );
+
+        $this->assertEquals(
+            array_keys($res->getCoreResponse()->getResponseData()->getResult()['item']),
+            $taskItemSelectBuilder->buildSelect()
+        );
+
+<<<<<<< HEAD
+        $this->taskService->delete($taskId);
+=======
+        $this->assertEquals($taskResult->task()->id, $res->task()->id);
+        $this->taskService->delete($taskResult->task()->id);
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
+    }
+
+    #[TestDox('Add task with default fields')]
+    public function testAddTaskWithDefaultFields(): void
+    {
+<<<<<<< HEAD
         $taskId = $this->getTaskId();
         $newTitle = 'Test2 task';
 
@@ -329,5 +345,67 @@ class TaskTest extends TestCase
         }
 
         return $result;
+=======
+        $userItemResult = $this->userService->current()->user();
+        $taskResult = $this->taskService->add(
+            (new TaskItemBuilder(
+                sprintf('Test task %s', time()),
+                $userItemResult->ID,
+                $userItemResult->ID
+            ))
+                ->description(sprintf('Test task description %s', time()))
+        );
+
+        $res = $this->taskService->get($taskResult->task()->id);
+
+        $this->assertEquals($taskResult->task(), $res->task());
+
+        $this->taskService->delete($taskResult->task()->id);
+    }
+
+    #[TestDox('Delete task with id')]
+    public function testDeleteTask(): void
+    {
+        $userItemResult = $this->userService->current()->user();
+        $taskResult = $this->taskService->add(
+            new TaskItemBuilder(
+                sprintf('Test task %s', time()),
+                $userItemResult->ID,
+                $userItemResult->ID
+            )
+        );
+        $this->assertTrue($this->taskService->delete($taskResult->task()->id)->isSuccess());
+    }
+
+    #[TestDox('Update task')]
+    public function testUpdateTask(): void
+    {
+        $userItemResult = $this->userService->current()->user();
+        $taskResult = $this->taskService->add(
+            (new TaskItemBuilder(
+                sprintf('Test task %s', time()),
+                $userItemResult->ID,
+                $userItemResult->ID
+            ))
+                ->description(sprintf('Test task description %s', time()))
+        );
+
+        $this->assertTrue(
+            $this->taskService->update(
+                $taskResult->task()->id,
+                (new TaskItemBuilder(
+                    $taskResult->task()->title,
+                    $userItemResult->ID,
+                    $userItemResult->ID,
+                ))
+                    ->description('updated description')
+            )->isSuccess()
+        );
+
+        $res = $this->taskService->get($taskResult->task()->id);
+
+        $this->assertEquals('updated description', $res->task()->description);
+        $this->taskService->delete($taskResult->task()->id);
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
     }
 }

@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\ItemNotFoundException;
 use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
 use Bitrix24\SDK\Services\CRM\Item\Service\Item;
 use Bitrix24\SDK\Services\CRM\Type\Service\Type;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
@@ -179,10 +179,11 @@ class ItemTest extends TestCase
         $this->assertTrue($this->typeService->delete($addedTypeItemResult->type()->entityTypeId)->isSuccess());
     }
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->typeService = Fabric::getServiceBuilder()->getCRMScope()->type();
-        $this->itemService = Fabric::getServiceBuilder()->getCRMScope()->item();
-        $this->contactService = Fabric::getServiceBuilder()->getCRMScope()->contact();
+        $this->typeService = Factory::getServiceBuilder()->getCRMScope()->type();
+        $this->itemService = Factory::getServiceBuilder()->getCRMScope()->item();
+        $this->contactService = Factory::getServiceBuilder()->getCRMScope()->contact();
     }
 }

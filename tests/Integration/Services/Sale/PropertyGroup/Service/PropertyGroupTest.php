@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Sale\PropertyGroup\Result\PropertyGroupItemResult;
 use Bitrix24\SDK\Services\Sale\PropertyGroup\Service\PropertyGroup;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -40,12 +40,14 @@ class PropertyGroupTest extends TestCase
     /** @var int[] */
     private array $createdIds = [];
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->service = Fabric::getServiceBuilder()->getSaleScope()->propertyGroup();
+        $this->service = Factory::getServiceBuilder()->getSaleScope()->propertyGroup();
         $this->personTypeId = $this->getPersonTypeId();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->deletePersonType($this->personTypeId);
@@ -101,7 +103,7 @@ class PropertyGroupTest extends TestCase
     
     protected function getPersonTypeId(): int
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         return (int)$core->call('sale.persontype.add', [
             'fields' => [
                 'name' => 'Test Person Type',
@@ -112,7 +114,7 @@ class PropertyGroupTest extends TestCase
 
     protected function deletePersonType(int $id): void
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         $core->call('sale.persontype.delete', [
             'id' => $id
        ]);

@@ -46,6 +46,7 @@ class ApplicationInfoItemResult extends AbstractItem
      * @throws UnknownScopeCodeException
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function __get($offset)
     {
         switch ($offset) {

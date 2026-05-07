@@ -41,6 +41,7 @@ class Batch extends \Bitrix24\SDK\Core\Batch
      * @return Generator<int, ResponseData>|ResponseData[]
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\Override]
     public function deleteEntityItems(
         string $apiMethod,
         array $entityItemId,
@@ -113,6 +114,7 @@ class Batch extends \Bitrix24\SDK\Core\Batch
      * @return Generator<int, ResponseData>|ResponseData[]
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
+    #[\Override]
     public function updateEntityItems(string $apiMethod, array $entityItems): Generator
     {
         $this->logger->debug(
@@ -174,10 +176,34 @@ class Batch extends \Bitrix24\SDK\Core\Batch
      * Determines the ID key for Sale API
      * Sale API always uses lowercase 'id' regardless of parameters
      */
+<<<<<<< HEAD
     protected function determineKeyId(string $apiMethod, ?array $additionalParameters): string
     {
         return 'id';
     }
+=======
+    #[\Override]
+    public function getTraversableList(
+        string $apiMethod,
+        ?array $order = [],
+        ?array $filter = [],
+        ?array $select = [],
+        ?int $limit = null,
+        ?array $additionalParameters = null
+    ): Generator {
+        $apiMethod = strtolower($apiMethod);
+        $this->logger->debug(
+            'getTraversableList.start',
+            [
+                'apiMethod' => $apiMethod,
+                'order' => $order,
+                'filter' => $filter,
+                'select' => $select,
+                'limit' => $limit,
+                'additionalParameters' => $additionalParameters,
+            ]
+        );
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
 
     /**
      * Returns relative path to previous ID value for dynamic filtering

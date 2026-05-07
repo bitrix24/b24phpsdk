@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Infrastructure\Console\Commands\Documentation;
 
 use Bitrix24\SDK\Attributes\Services\AttributesParser;
+use Bitrix24\SDK\Attributes\Services\SupportedInSdkApiMethod;
 use Bitrix24\SDK\Deprecations\DeprecatedMethods;
 use Bitrix24\SDK\Infrastructure\Console\Commands\SplashScreen;
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
@@ -240,13 +241,13 @@ class ShowCoverageStatisticsCommand extends Command
                         );
                         $sdkMethods = array_map(
                             'strtolower',
-                            array_column(
+                            array_map(
+                                static fn (SupportedInSdkApiMethod $supportedInSdkApiMethod): string => $supportedInSdkApiMethod->name,
                                 $this->attributesParser->getSupportedInSdkApiMethods(
                                     $sdkClassNames,
                                     $sdkBasePath,
                                     Scope::initFromString($menuItem),
-                                ),
-                                'name'
+                                )
                             )
                         );
                         sort($apiMethods);

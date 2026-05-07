@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Automation\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Automation\Service\Trigger;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -35,7 +35,7 @@ class BatchTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->triggerService = Fabric::getServiceBuilder(true)->getCRMScope()->trigger();
+        $this->triggerService = Factory::getServiceBuilder(true)->getCRMScope()->trigger();
     }
     
     /**

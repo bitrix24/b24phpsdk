@@ -1,0 +1,43 @@
+{
+  "openapi": "3.0.0",
+  "info": {"title": "Test", "version": "1.0.0"},
+  "components": {
+    "schemas": {
+      "bitrix.test.addressdto": {
+        "type": "object",
+        "properties": {
+          "street": {"type": "string", "title": "street"},
+          "city":   {"type": "string", "title": "city"}
+        }
+      },
+      "bitrix.test.tagdto": {
+        "type": "object",
+        "properties": {
+          "id":   {"type": "integer", "title": "id"},
+          "name": {"type": "string",  "title": "name"}
+        }
+      },
+      "bitrix.test.simpledto": {
+        "type": "object",
+        "properties": {
+          "id":     {"type": "integer", "title": "id"},
+          "title":  {"type": "string",  "title": "title"},
+          "active": {"type": "boolean", "title": "active"}
+        }
+      },
+      "bitrix.test.complexdto": {
+        "type": "object",
+        "properties": {
+          "id":      {"type": "integer", "title": "id"},
+          "name":    {"type": "string",  "title": "name"},
+          "address": {"$ref": "#/components/schemas/bitrix.test.addressdto", "title": "address"},
+          "tags":    {
+            "type": "array",
+            "items": {"$ref": "#/components/schemas/bitrix.test.tagdto"},
+            "title": "tags"
+          }
+        }
+      }
+    }
+  }
+}

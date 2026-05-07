@@ -27,6 +27,7 @@ class UpdatedElapseditemResult extends UpdatedItemResult
     /**
      * @throws BaseException
      */
+    #[\Override]
     public function isSuccess(): bool
     {
         return is_null($this->getCoreResponse()->getResponseData()->getResult()[0]);

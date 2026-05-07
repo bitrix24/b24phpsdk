@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Unit\Services\CRM;
 
 use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
-use Bitrix24\SDK\Services\RemoteEventsFabric;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBatch;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBulkItemsReader;
@@ -63,6 +62,7 @@ class CRMServiceBuilderTest extends TestCase
         $this::assertSame($this->serviceBuilder->dealCategoryStage(), $this->serviceBuilder->dealCategoryStage());
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->serviceBuilder = (new ServiceBuilder(

@@ -16,7 +16,11 @@ namespace Bitrix24\SDK\Tests\Integration\Services\IMOpenLines\Session\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\IMOpenLines\Session\Service\Session;
+<<<<<<< HEAD
 use Bitrix24\SDK\Tests\Integration\Fabric;
+=======
+use Bitrix24\SDK\Tests\Integration\Factory;
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
@@ -36,7 +40,11 @@ class SessionTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
+<<<<<<< HEAD
         $this->sessionService = Fabric::getServiceBuilder()->getIMOpenLinesScope()->session();
+=======
+        $this->sessionService = Factory::getServiceBuilder()->getIMOpenLinesScope()->session();
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
     }
 
     /**

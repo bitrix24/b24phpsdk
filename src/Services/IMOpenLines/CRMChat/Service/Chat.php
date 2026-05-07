@@ -24,6 +24,10 @@ use Bitrix24\SDK\Services\IMOpenLines\CRMChat\Result\ChatListResult;
 use Bitrix24\SDK\Services\IMOpenLines\CRMChat\Result\ChatLastIdResult;
 use Bitrix24\SDK\Services\IMOpenLines\CRMChat\Result\ChatUserAddedResult;
 use Bitrix24\SDK\Services\IMOpenLines\CRMChat\Result\ChatUserDeletedResult;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['imopenlines']))]
@@ -57,11 +61,19 @@ class Chat extends AbstractService
             'CRM_ENTITY_TYPE' => $crmEntityType,
             'CRM_ENTITY' => $crmEntity,
         ];
+<<<<<<< HEAD
 
         if ($activeOnly !== null) {
             $params['ACTIVE_ONLY'] = $activeOnly ? 'Y' : 'N';
         }
 
+=======
+        
+        if ($activeOnly !== null) {
+            $params['ACTIVE_ONLY'] = $activeOnly ? 'Y' : 'N';
+        }
+        
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
         return new ChatListResult(
             $this->core->call('imopenlines.crm.chat.get', $params)
         );
@@ -118,11 +130,19 @@ class Chat extends AbstractService
             'CRM_ENTITY' => $crmEntity,
             'USER_ID' => $userId,
         ];
+<<<<<<< HEAD
 
         if ($chatId !== null) {
             $params['CHAT_ID'] = $chatId;
         }
 
+=======
+        
+        if ($chatId !== null) {
+            $params['CHAT_ID'] = $chatId;
+        }
+        
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
         return new ChatUserAddedResult(
             $this->core->call('imopenlines.crm.chat.user.add', $params)
         );
@@ -153,13 +173,25 @@ class Chat extends AbstractService
             'CRM_ENTITY' => $crmEntity,
             'USER_ID' => $userId,
         ];
+<<<<<<< HEAD
 
         if ($chatId !== null) {
             $params['CHAT_ID'] = $chatId;
         }
 
+=======
+        
+        if ($chatId !== null) {
+            $params['CHAT_ID'] = $chatId;
+        }
+        
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
         return new ChatUserDeletedResult(
             $this->core->call('imopenlines.crm.chat.user.delete', $params)
         );
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6

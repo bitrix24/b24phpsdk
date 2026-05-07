@@ -23,4 +23,8 @@ class OnOpenLineMessageDelete extends AbstractEventRequest
     {
         return new OnOpenLineMessageDeletePayload($this->eventPayload['data']);
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6

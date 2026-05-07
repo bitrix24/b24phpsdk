@@ -19,7 +19,11 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  * Class ChatItemResult
  *
  * Represents a single chat item
+<<<<<<< HEAD
  *
+=======
+ * 
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
  * @property-read string $CHAT_ID Identifier of the chat
  * @property-read string $CONNECTOR_ID Identifier of the connector
  * @property-read string $CONNECTOR_TITLE Title of the connector
@@ -28,4 +32,8 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  */
 class ChatItemResult extends AbstractItem
 {
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6

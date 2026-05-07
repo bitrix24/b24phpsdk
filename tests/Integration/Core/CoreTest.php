@@ -22,7 +22,7 @@ use Bitrix24\SDK\Core\Credentials\Endpoints;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\MethodNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -71,8 +71,8 @@ class CoreTest extends TestCase
 
     public function setUp(): void
     {
-        $this->core = Fabric::getCore();
+        $this->core = Factory::getCore();
         $this->stopwatch = new Stopwatch(true);
-        $this->log = Fabric::getLogger();
+        $this->log = Factory::getLogger();
     }
 }

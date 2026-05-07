@@ -8,16 +8,17 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Sale\PersonTypeStatus\Service\PersonTypeStatus;
 use Bitrix24\SDK\Services\Sale\PersonTypeStatus\Result\PersonTypeStatusItemResult;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 class PersonTypeStatusTest extends TestCase
 {
     protected PersonTypeStatus $service;
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->service = Fabric::getServiceBuilder()->getSaleScope()->personTypeStatus();
+        $this->service = Factory::getServiceBuilder()->getSaleScope()->personTypeStatus();
     }
 
     /**
@@ -85,7 +86,7 @@ class PersonTypeStatusTest extends TestCase
 
     protected function getPersonTypeId(): int
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         return (int)$core->call('sale.persontype.add', [
             'fields' => [
                 'name' => 'Test Person Type',
@@ -96,7 +97,7 @@ class PersonTypeStatusTest extends TestCase
 
     protected function deletePersonType(int $id): void
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         $core->call('sale.persontype.delete', [
             'id' => $id
        ]);

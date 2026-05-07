@@ -30,8 +30,16 @@ class ChatLastIdResult extends AbstractResult
     public function getLastChatId(): string
     {
         $result = $this->getCoreResponse()->getResponseData()->getResult();
+<<<<<<< HEAD
 
         // According to docs, this returns a scalar value, but SDK converts it to array
         return is_array($result) ? (string)$result[0] : (string)$result;
     }
 }
+=======
+        
+        // According to docs, this returns a scalar value, but SDK converts it to array
+        return is_array($result) ? (string)$result[0] : (string)$result;
+    }
+}
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6

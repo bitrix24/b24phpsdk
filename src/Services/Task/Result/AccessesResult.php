@@ -30,11 +30,12 @@ class AccessesResult extends AbstractResult
      */
     public function getAccesses(): array
     {
-        $items = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult()['allowedActions'] as $userId => $item) {
-            $items[] = new AccessItemResult($item, $userId);
+        $result = $this->getCoreResponse()->getResponseData()->getResult();
+
+        if ($result === []) {
+            return [];
         }
 
-        return $items;
+        return [new AccessItemResult($result, 0)];
     }
 }

@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Sale\Cashbox\Service\Cashbox;
 use Bitrix24\SDK\Services\Sale\CashboxHandler\Service\CashboxHandler;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -38,10 +38,11 @@ class CashboxTest extends TestCase
 
     protected CashboxHandler $cashboxHandlerService;
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->cashboxService = Fabric::getServiceBuilder()->getSaleScope()->cashbox();
-        $this->cashboxHandlerService = Fabric::getServiceBuilder()->getSaleScope()->cashboxHandler();
+        $this->cashboxService = Factory::getServiceBuilder()->getSaleScope()->cashbox();
+        $this->cashboxHandlerService = Factory::getServiceBuilder()->getSaleScope()->cashboxHandler();
     }
 
     /**

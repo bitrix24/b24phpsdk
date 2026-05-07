@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Integration\Core;
 
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use Fig\Http\Message\StatusCodeInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -42,6 +42,6 @@ class CoreStrictParamsOrderTest extends TestCase
 
     public function setUp(): void
     {
-        $this->core = Fabric::getCore(false, true);
+        $this->core = Factory::getCore(false, true);
     }
 }

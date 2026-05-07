@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\PhoneCollectionBuilder;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\PhoneNumberBuilder;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -129,6 +129,6 @@ class ContactBatchTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->contactService = Fabric::getServiceBuilder()->getCRMScope()->contact();
+        $this->contactService = Factory::getServiceBuilder()->getCRMScope()->contact();
     }
 }

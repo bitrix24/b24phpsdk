@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\Paysystem\Handler\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Paysystem\Handler\Service\Handler;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -34,9 +34,10 @@ class HandlerTest extends TestCase
 {
     protected Handler $handlerService;
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->handlerService = Fabric::getServiceBuilder()->getPaysystemScope()->handler();
+        $this->handlerService = Factory::getServiceBuilder()->getPaysystemScope()->handler();
     }
 
     /**

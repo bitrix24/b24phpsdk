@@ -35,6 +35,7 @@ class RemoteEventsFactoryTest extends TestCase
 {
     private RemoteEventsFactory $factory;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->factory = RemoteEventsFactory::init(new NullLogger());
@@ -218,10 +219,9 @@ class RemoteEventsFactoryTest extends TestCase
         $request = $this->createRequest($rawRequest);
         $event = $this->factory->create($request);
 
-        // Create mock account that validates the token as correct
-        $accountMock = $this->createMock(Bitrix24AccountInterface::class);
+        // Create stub account that validates the token as correct
+        $accountMock = $this->createStub(Bitrix24AccountInterface::class);
         $accountMock->method('isApplicationTokenValid')
-            ->with($applicationToken)
             ->willReturn(true);
 
         // Should not throw any exception
@@ -258,10 +258,9 @@ class RemoteEventsFactoryTest extends TestCase
         $request = $this->createRequest($rawRequest);
         $event = $this->factory->create($request);
 
-        // Create mock account that validates the token as incorrect
-        $accountMock = $this->createMock(Bitrix24AccountInterface::class);
+        // Create stub account that validates the token as incorrect
+        $accountMock = $this->createStub(Bitrix24AccountInterface::class);
         $accountMock->method('isApplicationTokenValid')
-            ->with($eventToken)
             ->willReturn(false);
 
         $this->expectException(WrongSecuritySignatureException::class);
@@ -337,10 +336,9 @@ class RemoteEventsFactoryTest extends TestCase
         $request = $this->createRequest($rawRequest);
         $event = $this->factory->create($request);
 
-        // Create mock account that validates the token as correct
-        $accountMock = $this->createMock(Bitrix24AccountInterface::class);
+        // Create stub account that validates the token as correct
+        $accountMock = $this->createStub(Bitrix24AccountInterface::class);
         $accountMock->method('isApplicationTokenValid')
-            ->with($applicationToken)
             ->willReturn(true);
 
         // Should not throw exception

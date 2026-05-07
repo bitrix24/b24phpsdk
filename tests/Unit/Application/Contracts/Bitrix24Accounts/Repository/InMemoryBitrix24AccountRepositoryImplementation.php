@@ -34,6 +34,7 @@ class InMemoryBitrix24AccountRepositoryImplementation implements Bitrix24Account
     ) {
     }
 
+    #[\Override]
     public function save(Bitrix24AccountInterface $bitrix24Account): void
     {
         $this->logger->debug('b24AccountRepository.save', ['id' => $bitrix24Account->getId()->toRfc4122()]);
@@ -41,6 +42,7 @@ class InMemoryBitrix24AccountRepositoryImplementation implements Bitrix24Account
         $this->items[$bitrix24Account->getId()->toRfc4122()] = $bitrix24Account;
     }
 
+    #[\Override]
     public function delete(Uuid $uuid): void
     {
         $this->logger->debug('b24AccountRepository.delete', ['id' => $uuid->toRfc4122()]);
@@ -59,6 +61,7 @@ class InMemoryBitrix24AccountRepositoryImplementation implements Bitrix24Account
         unset($this->items[$uuid->toRfc4122()]);
     }
 
+    #[\Override]
     public function getById(Uuid $uuid): Bitrix24AccountInterface
     {
         $this->logger->debug('b24AccountRepository.getById', ['id' => $uuid->toRfc4122()]);
@@ -73,6 +76,7 @@ class InMemoryBitrix24AccountRepositoryImplementation implements Bitrix24Account
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function findOneAdminByMemberId(string $memberId): ?Bitrix24AccountInterface
     {
         $this->logger->debug('b24AccountRepository.findOneAdminByMemberId', ['memberId' => $memberId]);
@@ -93,6 +97,7 @@ class InMemoryBitrix24AccountRepositoryImplementation implements Bitrix24Account
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function findByMemberId(
         string $memberId,
         ?Bitrix24AccountStatus $bitrix24AccountStatus = null,
@@ -130,6 +135,7 @@ class InMemoryBitrix24AccountRepositoryImplementation implements Bitrix24Account
         return $items;
     }
 
+    #[\Override]
     public function findByApplicationToken(string $applicationToken): array
     {
         $this->logger->debug('b24AccountRepository.findByApplicationToken', [
@@ -153,6 +159,7 @@ class InMemoryBitrix24AccountRepositoryImplementation implements Bitrix24Account
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function findByDomain(string $domainUrl, ?Bitrix24AccountStatus $bitrix24AccountStatus = null, ?bool $isAdmin = null): array
     {
         $this->logger->debug('b24AccountRepository.findByDomain', [

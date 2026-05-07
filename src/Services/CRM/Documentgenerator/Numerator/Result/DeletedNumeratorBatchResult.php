@@ -22,6 +22,7 @@ use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
  */
 class DeletedNumeratorBatchResult extends DeletedItemBatchResult
 {
+    #[\Override]
     public function isSuccess(): bool
     {
         return (bool)$this->getResponseData()->getResult();

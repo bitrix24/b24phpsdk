@@ -28,6 +28,7 @@ class FieldsCatalogProductResult extends FieldsResult
     /**
      * Get fields description from response
      */
+    #[\Override]
     public function getFieldsDescription(): array
     {
         return $this->getCoreResponse()->getResponseData()->getResult()['basketItem'];

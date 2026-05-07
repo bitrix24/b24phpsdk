@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
 use Bitrix24\SDK\Services\CRM\Contact\Service\ContactUserfield;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 class ContactUserfieldUseCaseTest extends TestCase
@@ -72,8 +72,8 @@ class ContactUserfieldUseCaseTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contactService = Fabric::getServiceBuilder()->getCRMScope()->contact();
-        $this->contactUserfieldService = Fabric::getServiceBuilder()->getCRMScope()->contactUserfield();
+        $this->contactService = Factory::getServiceBuilder()->getCRMScope()->contact();
+        $this->contactUserfieldService = Factory::getServiceBuilder()->getCRMScope()->contactUserfield();
 
         $this->contactUserfieldId = $this->contactUserfieldService->add(
             [

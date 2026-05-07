@@ -32,12 +32,23 @@ class ChatListResult extends AbstractResult
     public function getChats(): array
     {
         $result = $this->getCoreResponse()->getResponseData()->getResult();
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
         $chats = [];
         foreach ($result as $chat) {
             $chats[] = new ChatItemResult($chat);
         }
+<<<<<<< HEAD
 
         return $chats;
     }
 }
+=======
+        
+        return $chats;
+    }
+}
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6

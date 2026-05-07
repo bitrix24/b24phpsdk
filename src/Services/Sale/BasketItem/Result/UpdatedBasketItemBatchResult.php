@@ -26,6 +26,7 @@ class UpdatedBasketItemBatchResult extends UpdatedItemBatchResult
     /**
      * @throws BaseException
      */
+    #[\Override]
     public function isSuccess(): bool
     {
         return (bool)$this->getResponseData()->getResult()['basketItem'];

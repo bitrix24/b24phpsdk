@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Currency\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\ServiceBuilder;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use Bitrix24\SDK\Services\CRM\Currency\Service\Currency;
 use PHPUnit\Framework\TestCase;
 
@@ -38,9 +38,10 @@ class BatchTest extends TestCase
 
     protected Currency $currencyService;
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->sb = Fabric::getServiceBuilder();
+        $this->sb = Factory::getServiceBuilder();
         $this->currencyService = $this->sb->getCRMScope()->currency();
     }
 

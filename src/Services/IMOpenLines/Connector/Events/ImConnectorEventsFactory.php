@@ -16,6 +16,10 @@ namespace Bitrix24\SDK\Services\IMOpenLines\Connector\Events;
 use Bitrix24\SDK\Core\Contracts\Events\EventInterface;
 use Bitrix24\SDK\Core\Contracts\Events\EventsFabricInterface;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
 use Bitrix24\SDK\Services\IMOpenLines\Connector\Events\OnImConnectorMessageAdd\OnImConnectorMessageAdd;
 use Bitrix24\SDK\Services\IMOpenLines\Connector\Events\OnImConnectorDialogStart\OnImConnectorDialogStart;
 use Bitrix24\SDK\Services\IMOpenLines\Connector\Events\OnImConnectorMessageUpdate\OnImConnectorMessageUpdate;
@@ -23,6 +27,10 @@ use Bitrix24\SDK\Services\IMOpenLines\Connector\Events\OnImConnectorMessageDelet
 use Bitrix24\SDK\Services\IMOpenLines\Connector\Events\OnImConnectorDialogFinish\OnImConnectorDialogFinish;
 use Bitrix24\SDK\Services\IMOpenLines\Connector\Events\OnImConnectorStatusDelete\OnImConnectorStatusDelete;
 use Bitrix24\SDK\Services\IMOpenLines\Connector\Events\OnImConnectorLineDelete\OnImConnectorLineDelete;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
 use Symfony\Component\HttpFoundation\Request;
 
 readonly class ImConnectorEventsFactory implements EventsFabricInterface

@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Status\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Status\Service\Status;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,7 +32,7 @@ class BatchTest extends TestCase
     
     protected function setUp(): void
     {
-        $this->statusService = Fabric::getServiceBuilder()->getCRMScope()->status();
+        $this->statusService = Factory::getServiceBuilder()->getCRMScope()->status();
     }
 
     /**

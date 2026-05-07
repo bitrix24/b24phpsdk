@@ -21,7 +21,7 @@ use Bitrix24\SDK\Services\CRM\Common\CardFieldConfiguration;
 use Bitrix24\SDK\Services\CRM\Common\CardSectionConfiguration;
 use Bitrix24\SDK\Services\CRM\Deal\Service\DealDetailsConfiguration;
 use Bitrix24\SDK\Services\ServiceBuilder;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -42,12 +42,14 @@ class DealDetailsConfigurationTest extends TestCase
 
     private DealDetailsConfiguration $dealConfig;
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->sb = Fabric::getServiceBuilder();
+        $this->sb = Factory::getServiceBuilder();
         $this->dealConfig = $this->sb->getCRMScope()->dealDetailsConfiguration();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
           $this->dealConfig->resetGeneral();

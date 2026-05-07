@@ -47,6 +47,7 @@ use Carbon\CarbonImmutable;
  */
 class UserItemResult extends AbstractItem
 {
+    #[\Override]
     public function __get($offset)
     {
         switch ($offset) {

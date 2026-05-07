@@ -28,6 +28,7 @@ class FieldsBasketItemResult extends FieldsResult
      *
      * @return array{type:string, isRequired:bool, isReadOnly:bool, isImmutable:bool}[]
      */
+    #[\Override]
     public function getFieldsDescription(): array
     {
         return $this->getCoreResponse()->getResponseData()->getResult()['basketItem'];

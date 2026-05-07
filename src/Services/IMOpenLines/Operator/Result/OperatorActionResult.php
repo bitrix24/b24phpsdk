@@ -31,7 +31,11 @@ class OperatorActionResult extends AbstractResult
     public function isSuccess(): bool
     {
         $result = $this->getCoreResponse()->getResponseData()->getResult();
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
         // Handle different response formats
         if (array_key_exists(0, $result)) {
             $value = $result[0];
@@ -41,8 +45,16 @@ class OperatorActionResult extends AbstractResult
 
             return (bool)$value;
         }
+<<<<<<< HEAD
 
         // For non-array results, convert to boolean
         return (bool)$result;
     }
 }
+=======
+        
+        // For non-array results, convert to boolean
+        return (bool)$result;
+    }
+}
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6

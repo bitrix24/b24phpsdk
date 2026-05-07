@@ -21,6 +21,7 @@ class PersonTypeStatusFieldsResult extends FieldsResult
     /**
      * @throws BaseException
      */
+    #[\Override]
     public function getFieldsDescription(): array
     {
         return $this->getCoreResponse()->getResponseData()->getResult()['businessValuePersonDomain'];

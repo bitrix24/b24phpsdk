@@ -37,6 +37,7 @@ use Money\Money;
  */
 class OnVoximplantCallEndEventPayload extends AbstractItem
 {
+    #[\Override]
     public function __get($offset)
     {
         return match ($offset) {

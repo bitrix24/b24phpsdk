@@ -26,16 +26,22 @@ class Endpoints
          */
         string $clientUrl,
         /**
-         * @phpstan-param non-empty-string|null $authServerUrl
-         * @todo in v2 make it required
+         * @phpstan-param non-empty-string $authServerUrl
          */
+<<<<<<< HEAD
         private readonly ?string $authServerUrl = null
+=======
+        private readonly string $authServerUrl
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
     ) {
         // Normalize client URL - add https:// protocol if not present
         $this->clientUrl = $this->normalizeUrl($clientUrl);
-
         $this->validateUrl('clientUrl', $this->clientUrl);
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
         $this->validateUrl('BITRIX24_PHP_SDK_DEFAULT_AUTH_SERVER_URL', $authServerUrl);
     }
 
@@ -68,6 +74,15 @@ class Endpoints
     public function getAuthServerUrl(): string
     {
         return $this->authServerUrl;
+    }
+
+    /**
+     * @param non-empty-string $clientUrl
+     * @throws InvalidArgumentException
+     */
+    public static function initByDefault(string $clientUrl): self
+    {
+        return new self($clientUrl, DefaultOAuthServerUrl::default());
     }
 
     /**

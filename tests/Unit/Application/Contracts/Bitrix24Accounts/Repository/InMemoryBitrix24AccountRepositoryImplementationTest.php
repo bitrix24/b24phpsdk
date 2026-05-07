@@ -21,7 +21,6 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Tests\Application\Contracts\Bitrix24Accounts\Repository\Bitrix24AccountRepositoryInterfaceTest;
 use Bitrix24\SDK\Tests\Application\Contracts\NullableFlusher;
 use Bitrix24\SDK\Tests\Application\Contracts\TestRepositoryFlusherInterface;
-use Bitrix24\SDK\Tests\Integration\Fabric;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountReferenceEntityImplementation;
 use Carbon\CarbonImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -31,6 +30,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(Bitrix24AccountRepositoryInterface::class)]
 class InMemoryBitrix24AccountRepositoryImplementationTest extends Bitrix24AccountRepositoryInterfaceTest
 {
+    #[\Override]
     protected function createBitrix24AccountImplementation(
         Uuid                  $uuid,
         int                   $bitrix24UserId,
@@ -56,11 +56,13 @@ class InMemoryBitrix24AccountRepositoryImplementationTest extends Bitrix24Accoun
         );
     }
 
+    #[\Override]
     protected function createBitrix24AccountRepositoryImplementation(): Bitrix24AccountRepositoryInterface
     {
         return new InMemoryBitrix24AccountRepositoryImplementation(new NullLogger());
     }
 
+    #[\Override]
     protected function createRepositoryFlusherImplementation(): TestRepositoryFlusherInterface
     {
         return new NullableFlusher();

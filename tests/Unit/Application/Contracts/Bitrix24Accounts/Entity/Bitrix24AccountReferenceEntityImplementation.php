@@ -68,36 +68,43 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function getId(): Uuid
     {
         return $this->id;
     }
 
+    #[\Override]
     public function getBitrix24UserId(): int
     {
         return $this->bitrix24UserId;
     }
 
+    #[\Override]
     public function isBitrix24UserAdmin(): bool
     {
         return $this->isBitrix24UserAdmin;
     }
 
+    #[\Override]
     public function isMasterAccount(): bool
     {
         return $this->isMasterAccount;
     }
 
+    #[\Override]
     public function getMemberId(): string
     {
         return $this->memberId;
     }
 
+    #[\Override]
     public function getDomainUrl(): string
     {
         return $this->domainUrl;
     }
 
+    #[\Override]
     public function getStatus(): Bitrix24AccountStatus
     {
         return $this->accountStatus;
@@ -106,6 +113,7 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function setApplicationToken(string $applicationToken): void
     {
         if ($applicationToken === '') {
@@ -115,6 +123,7 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
         $this->applicationToken = $applicationToken;
     }
 
+    #[\Override]
     public function getAuthToken(): AuthToken
     {
         return new AuthToken($this->accessToken, $this->refreshToken, $this->expires);
@@ -123,6 +132,7 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function renewAuthToken(RenewedAuthToken $renewedAuthToken): void
     {
         if ($this->memberId !== $renewedAuthToken->memberId) {
@@ -143,6 +153,7 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function getApplicationVersion(): int
     {
         return $this->applicationVersion;
@@ -151,6 +162,7 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
     /**
      * @throws UnknownScopeCodeException
      */
+    #[\Override]
     public function getApplicationScope(): Scope
     {
         return new Scope($this->applicationScope);
@@ -159,6 +171,7 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function changeDomainUrl(string $newDomainUrl): void
     {
         if ($newDomainUrl === '') {
@@ -183,6 +196,7 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function applicationInstalled(?string $applicationToken): void
     {
         if (Bitrix24AccountStatus::new !== $this->accountStatus) {
@@ -208,6 +222,7 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function applicationUninstalled(?string $applicationToken): void
     {
         if ($applicationToken === '') {
@@ -239,16 +254,19 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function isApplicationTokenValid(string $applicationToken): bool
     {
         return $this->applicationToken === $applicationToken;
     }
 
+    #[\Override]
     public function getCreatedAt(): CarbonImmutable
     {
         return $this->createdAt;
     }
 
+    #[\Override]
     public function getUpdatedAt(): CarbonImmutable
     {
         return $this->updatedAt;
@@ -257,6 +275,7 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function updateApplicationVersion(AuthToken $authToken, int $b24UserId, int $version, ?Scope $newScope): void
     {
         if (Bitrix24AccountStatus::active !== $this->accountStatus) {
@@ -295,6 +314,7 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function markAsActive(?string $comment): void
     {
         if (Bitrix24AccountStatus::blocked !== $this->accountStatus) {
@@ -314,6 +334,7 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function markAsBlocked(?string $comment): void
     {
         if (Bitrix24AccountStatus::deleted === $this->accountStatus) {
@@ -325,6 +346,7 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
         $this->updatedAt = new CarbonImmutable();
     }
 
+    #[\Override]
     public function getComment(): ?string
     {
         return $this->comment;

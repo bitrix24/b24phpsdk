@@ -36,6 +36,7 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
     ) {
     }
 
+    #[\Override]
     public function save(ApplicationInstallationInterface $applicationInstallation): void
     {
         $this->logger->debug('InMemoryApplicationInstallationRepositoryImplementation.save', ['id' => $applicationInstallation->getId()->toRfc4122()]);
@@ -43,6 +44,7 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
         $this->items[$applicationInstallation->getId()->toRfc4122()] = $applicationInstallation;
     }
 
+    #[\Override]
     public function delete(Uuid $uuid): void
     {
         $this->logger->debug('InMemoryApplicationInstallationRepositoryImplementation.delete', ['id' => $uuid->toRfc4122()]);
@@ -61,6 +63,7 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
         unset($this->items[$uuid->toRfc4122()]);
     }
 
+    #[\Override]
     public function getById(Uuid $uuid): ApplicationInstallationInterface
     {
         $this->logger->debug('InMemoryApplicationInstallationRepositoryImplementation.getById', ['id' => $uuid->toRfc4122()]);
@@ -72,6 +75,7 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
         return $this->items[$uuid->toRfc4122()];
     }
 
+    #[\Override]
     public function findByBitrix24AccountId(Uuid $uuid): ?ApplicationInstallationInterface
     {
         $this->logger->debug('InMemoryApplicationInstallationRepositoryImplementation.findByBitrix24AccountId', ['id' => $uuid->toRfc4122()]);
@@ -85,6 +89,7 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
         return null;
     }
 
+    #[\Override]
     public function findByExternalId(string $externalId): array
     {
         $this->logger->debug('InMemoryApplicationInstallationRepositoryImplementation.findByExternalId', ['externalId' => $externalId]);
@@ -105,6 +110,7 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function findByBitrix24AccountMemberId(string $memberId): ?ApplicationInstallationInterface
     {
         $this->logger->debug('InMemoryApplicationInstallationRepositoryImplementation.findByMemberId', ['memberId' => $memberId]);
@@ -113,25 +119,24 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
             throw new InvalidArgumentException('memberId id cannot be empty string');
         }
 
-        $b24Accounts = $this->bitrix24AccountRepository->findByMemberId(
-            $memberId,
-            Bitrix24AccountStatus::active,
-            null,
-            null,
-            true
-        );
-        $b24Account = null;
-        if ($b24Accounts !== []) {
-            $b24Account = $b24Accounts[0];
-        }
+        foreach ([Bitrix24AccountStatus::active, Bitrix24AccountStatus::new, Bitrix24AccountStatus::blocked] as $accountStatus) {
+            $b24Accounts = $this->bitrix24AccountRepository->findByMemberId(
+                $memberId,
+                $accountStatus,
+                null,
+                null,
+                true
+            );
 
-        if ($b24Account === null) {
-            return null;
-        }
-
-        foreach ($this->items as $item) {
-            if ($item->getBitrix24AccountId()->equals($b24Account->getId())) {
-                return $item;
+            foreach ($b24Accounts as $b24Account) {
+                foreach ($this->items as $item) {
+                    if (
+                        $item->getBitrix24AccountId()->equals($b24Account->getId())
+                        && ApplicationInstallationStatus::deleted !== $item->getStatus()
+                    ) {
+                        return $item;
+                    }
+                }
             }
         }
 
@@ -141,6 +146,7 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
     /**
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function findByApplicationToken(string $applicationToken): ?ApplicationInstallationInterface
     {
         $this->logger->debug('InMemoryApplicationInstallationRepositoryImplementation.findByApplicationToken', ['applicationToken' => $applicationToken]);

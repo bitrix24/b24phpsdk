@@ -20,7 +20,7 @@ use Bitrix24\SDK\Services\CRM\Lead\Service\Lead;
 use Bitrix24\SDK\Services\CRM\Lead\Service\LeadContact;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Builders\Services\CRM\ContactBuilder;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -48,13 +48,15 @@ class LeadContactTest extends TestCase
 
     private Contact  $contactService;
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->sb = Fabric::getServiceBuilder();
+        $this->sb = Factory::getServiceBuilder();
         $this->leadService = $this->sb->getCRMScope()->lead();
         $this->contactService = $this->sb->getCRMScope()->contact();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         foreach ($this->leadService->batch->delete($this->createdLeads) as $result) {

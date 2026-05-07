@@ -19,7 +19,11 @@ use Bitrix24\SDK\Services\SonetGroup\Result\SonetGroupGetItemResult;
 use Bitrix24\SDK\Services\SonetGroup\Result\SonetGroupListItemResult;
 use Bitrix24\SDK\Services\SonetGroup\Service\SonetGroup;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
+<<<<<<< HEAD
 use Bitrix24\SDK\Tests\Integration\Fabric;
+=======
+use Bitrix24\SDK\Tests\Integration\Factory;
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -56,7 +60,11 @@ class SonetGroupTest extends TestCase
      */
     private function getCurrentUserId(): int
     {
+<<<<<<< HEAD
         $userService = Fabric::getServiceBuilder()->getUserScope()->user();
+=======
+        $userService = Factory::getServiceBuilder()->getUserScope()->user();
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
         $userResult = $userService->current();
         
         return $userResult->user()->ID;
@@ -422,7 +430,11 @@ class SonetGroupTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
+<<<<<<< HEAD
         $this->sonetGroupService = Fabric::getServiceBuilder()->getSonetGroupScope()->sonetGroup();
+=======
+        $this->sonetGroupService = Factory::getServiceBuilder()->getSonetGroupScope()->sonetGroup();
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
     }
 
     #[\Override]

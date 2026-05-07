@@ -26,6 +26,10 @@ use Bitrix24\SDK\Services\IMOpenLines\Session\Result\HistoryResult;
 use Bitrix24\SDK\Services\IMOpenLines\Session\Result\OpenResult;
 use Bitrix24\SDK\Services\IMOpenLines\Session\Result\PinAllResult;
 use Bitrix24\SDK\Services\IMOpenLines\Session\Result\UnpinAllResult;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['imopenlines']))]
@@ -376,4 +380,8 @@ class Session extends AbstractService
             ])
         );
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6

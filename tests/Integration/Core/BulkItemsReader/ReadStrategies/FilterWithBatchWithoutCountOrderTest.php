@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\BulkItemsReader\ReadStrategies\FilterWithBatchWithoutCount
 use Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Stopwatch\Stopwatch;
 
@@ -81,10 +81,10 @@ class FilterWithBatchWithoutCountOrderTest extends TestCase
     public function setUp(): void
     {
         $this->stopwatch = new Stopwatch(true);
-        $this->serviceBuilder = Fabric::getServiceBuilder();
+        $this->serviceBuilder = Factory::getServiceBuilder();
         $this->bulkItemsReader = new FilterWithBatchWithoutCountOrder(
-            Fabric::getBatchService(),
-            Fabric::getLogger()
+            Factory::getBatchService(),
+            Factory::getLogger()
         );
 
         // prepare demo data

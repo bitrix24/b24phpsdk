@@ -23,7 +23,6 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Tests\Application\Contracts\ContactPersons\Repository\ContactPersonRepositoryInterfaceTest;
 use Bitrix24\SDK\Tests\Application\Contracts\NullableFlusher;
 use Bitrix24\SDK\Tests\Application\Contracts\TestRepositoryFlusherInterface;
-use Bitrix24\SDK\Tests\Integration\Fabric;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountReferenceEntityImplementation;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\ContactPersons\Entity\ContactPersonReferenceEntityImplementation;
 use Carbon\CarbonImmutable;
@@ -60,11 +59,13 @@ class InMemoryContactPersonRepositoryImplementationTest extends ContactPersonRep
         );
     }
 
+    #[\Override]
     protected function createContactPersonImplementation(
         Uuid $uuid,
         CarbonImmutable $createdAt,
         CarbonImmutable $updatedAt,
         ContactPersonStatus $contactPersonStatus,
+        int $bitrix24UserId,
         string $name,
         ?string $surname,
         ?string $patronymic,
@@ -74,7 +75,6 @@ class InMemoryContactPersonRepositoryImplementationTest extends ContactPersonRep
         ?PhoneNumber $phoneNumber,
         ?CarbonImmutable $mobilePhoneVerifiedAt,
         ?string $externalId,
-        ?int $bitrix24UserId,
         ?Uuid $bitrix24PartnerId,
         ?string $userAgent,
         ?string $userAgentReferer,
@@ -85,6 +85,7 @@ class InMemoryContactPersonRepositoryImplementationTest extends ContactPersonRep
             $createdAt,
             $updatedAt,
             $contactPersonStatus,
+            $bitrix24UserId,
             $name,
             $surname,
             $patronymic,
@@ -94,7 +95,6 @@ class InMemoryContactPersonRepositoryImplementationTest extends ContactPersonRep
             $phoneNumber,
             $mobilePhoneVerifiedAt,
             $externalId,
-            $bitrix24UserId,
             $bitrix24PartnerId,
             $userAgent,
             $userAgentReferer,
@@ -102,12 +102,14 @@ class InMemoryContactPersonRepositoryImplementationTest extends ContactPersonRep
         );
     }
 
+    #[\Override]
     protected function createRepositoryFlusherImplementation(): TestRepositoryFlusherInterface
     {
         return new NullableFlusher();
     }
 
 
+    #[\Override]
     protected function createContactPersonRepositoryImplementation(): ContactPersonRepositoryInterface
     {
         return new InMemoryContactPersonRepositoryImplementation(new NullLogger());

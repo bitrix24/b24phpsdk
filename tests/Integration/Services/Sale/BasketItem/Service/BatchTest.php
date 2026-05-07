@@ -16,7 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\Sale\BasketItem\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Sale\BasketItem\Service\BasketItem;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -37,9 +37,10 @@ class BatchTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    #[\Override]
     protected function setUp(): void
     {
-        $serviceBuilder = Fabric::getServiceBuilder();
+        $serviceBuilder = Factory::getServiceBuilder();
         $this->basketItemService = $serviceBuilder->getSaleScope()->basketItem();
 
         // Create person type
@@ -67,9 +68,10 @@ class BatchTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    #[\Override]
     protected function tearDown(): void
     {
-        $serviceBuilder = Fabric::getServiceBuilder();
+        $serviceBuilder = Factory::getServiceBuilder();
 
         // Delete test order
         $serviceBuilder->getSaleScope()->order()->delete($this->orderId);

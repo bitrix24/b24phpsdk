@@ -19,7 +19,7 @@ use Bitrix24\SDK\Services\Telephony\Common\PbxType;
 use Bitrix24\SDK\Services\Telephony\ExternalLine\Service\ExternalLine;
 use Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Service\Sip;
 use Bitrix24\SDK\Services\Telephony\Voximplant\TTS\Voices\Service\Voices;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -43,8 +43,9 @@ class VoicesTest extends TestCase
         $this->assertGreaterThanOrEqual(1, count($voximplantVoicesResult->getVoices()));
     }
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->voices = Fabric::getServiceBuilder()->getTelephonyScope()->getVoximplantServiceBuilder()->ttsVoices();
+        $this->voices = Factory::getServiceBuilder()->getTelephonyScope()->getVoximplantServiceBuilder()->ttsVoices();
     }
 }

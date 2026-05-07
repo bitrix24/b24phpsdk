@@ -1,0 +1,43 @@
+{
+  "openapi": "3.0.0",
+  "info": {"title": "Test", "version": "1.0.0"},
+  "components": {
+    "schemas": {
+      "bitrix.test.responsedto": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "integer"}
+        }
+      }
+    }
+  },
+  "paths": {
+    "/tasks.task.add": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fields": {
+                    "type": "object",
+                    "properties": {
+                      "title":       {"type": "string",  "description": "Task title"},
+                      "creatorId":   {"type": "integer", "description": "Creator ID"},
+                      "responsibleId":{"type": "integer","description": "Responsible user ID"},
+                      "deadline":    {"type": "string",  "description": "Deadline date"},
+                      "needsControl":{"type": "boolean", "description": "Needs control flag"},
+                      "tags":        {"type": "array",   "description": "Tags"},
+                      "parentTask":  {"$ref": "#/components/schemas/bitrix.test.responsedto"}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

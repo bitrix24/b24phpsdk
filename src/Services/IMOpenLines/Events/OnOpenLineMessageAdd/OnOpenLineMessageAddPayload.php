@@ -110,4 +110,8 @@ class OnOpenLineMessageAddRefItem extends AbstractItem
  */
 class OnOpenLineMessageAddExtraItem extends AbstractItem
 {
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6

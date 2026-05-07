@@ -25,8 +25,10 @@ use Bitrix24\SDK\Core\Exceptions\PortalDomainNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Exceptions\UserNotFoundOrIsNotActiveException;
+use Bitrix24\SDK\Core\Exceptions\ValidationException;
 use Bitrix24\SDK\Core\Exceptions\WrongAuthTypeException;
 use Bitrix24\SDK\Core\Exceptions\WrongClientException;
+use Bitrix24\SDK\Core\Response\DTO\UnsuccessfulResponseError;
 use Bitrix24\SDK\Services\Workflows\Exceptions\ActivityOrRobotAlreadyInstalledException;
 use Bitrix24\SDK\Services\Workflows\Exceptions\ActivityOrRobotValidationFailureException;
 use Bitrix24\SDK\Services\Workflows\Exceptions\WorkflowTaskAlreadyCompletedException;
@@ -61,13 +63,18 @@ class ApiLevelErrorHandler
      */
     public function handle(array $responseBody): void
     {
-        // single query error response
+        // v3 unified error response: {"error": {"code": "...", "message": "...", "validation": [...]}}
+        if (array_key_exists(self::ERROR_KEY, $responseBody) && is_array($responseBody[self::ERROR_KEY])) {
+            $this->handleError($responseBody);
+        }
+
+        // v1 single query error response: {"error": "CODE", "error_description": "..."}
         if (array_key_exists(self::ERROR_KEY, $responseBody) && array_key_exists(self::ERROR_DESCRIPTION_KEY, $responseBody)) {
             $this->handleError($responseBody);
         }
 
-        // error in refresh token request
-        if (array_key_exists(self::ERROR_KEY, $responseBody) && !array_key_exists(self::RESULT_KEY, $responseBody)) {
+        // v1 error in refresh token request: {"error": "code"} without result key
+        if (array_key_exists(self::ERROR_KEY, $responseBody) && !is_array($responseBody[self::ERROR_KEY]) && !array_key_exists(self::RESULT_KEY, $responseBody)) {
             $this->handleError($responseBody);
         }
 
@@ -90,8 +97,20 @@ class ApiLevelErrorHandler
      */
     private function handleError(array $responseBody, ?string $batchCommandId = null): void
     {
-        $errorCode = strtolower(trim((string)$responseBody[self::ERROR_KEY]));
-        $errorDescription = array_key_exists(self::ERROR_DESCRIPTION_KEY, $responseBody) ? strtolower(trim((string)$responseBody[self::ERROR_DESCRIPTION_KEY])) : null;
+        $error = $responseBody[self::ERROR_KEY];
+        $unsuccessfulResponseError = null;
+        if (is_array($error)) {
+            // API v3 format: {"error": {"code": "...", "message": "...", "validation": [...]}}
+            $unsuccessfulResponseError = UnsuccessfulResponseError::fromArray($error);
+            $errorCode = strtolower(trim($unsuccessfulResponseError->code));
+            $errorDescription = strtolower(trim($unsuccessfulResponseError->message));
+        } else {
+            // API v1 format: {"error": "ERROR_CODE", "error_description": "..."}
+            $errorCode = strtolower(trim((string)$error));
+            $errorDescription = array_key_exists(self::ERROR_DESCRIPTION_KEY, $responseBody)
+                ? strtolower(trim((string)$responseBody[self::ERROR_DESCRIPTION_KEY]))
+                : null;
+        }
 
         $this->logger->debug(
             'handle.errorInformation',
@@ -106,22 +125,30 @@ class ApiLevelErrorHandler
             $batchErrorPrefix = sprintf(' batch command id: %s', $batchCommandId);
         }
 
+        // v3: throw ValidationException when validation errors are present
+        if ($unsuccessfulResponseError instanceof \Bitrix24\SDK\Core\Response\DTO\UnsuccessfulResponseError && $unsuccessfulResponseError->validation !== []) {
+            throw new ValidationException(
+                sprintf('%s - %s%s', $errorCode, $errorDescription, $batchErrorPrefix),
+                $unsuccessfulResponseError->validation
+            );
+        }
+
         // todo send issues to bitrix24
         // fix errors without error_code responses
-        if ($errorCode === '' && strtolower((string) $errorDescription) === strtolower('You can delete ONLY templates created by current application')) {
+        if ($errorCode === '' && strtolower((string)$errorDescription) === strtolower('You can delete ONLY templates created by current application')) {
             $errorCode = 'bizproc_workflow_template_access_denied';
         }
 
-        if ($errorCode === '' && strtolower((string) $errorDescription) === strtolower('No fields to update.')) {
+        if ($errorCode === '' && strtolower((string)$errorDescription) === strtolower('No fields to update.')) {
             $errorCode = 'bad_request_no_fields_to_update';
         }
 
-        if ($errorCode === '' && strtolower((string) $errorDescription) === strtolower('User is not found or is not active')) {
+        if ($errorCode === '' && strtolower((string)$errorDescription) === strtolower('User is not found or is not active')) {
             $errorCode = 'user_not_found_or_is_not_active';
         }
 
         // crm.requisite.get
-        if ($errorCode === '' && str_contains(strtolower((string)$errorDescription),'not found')) {
+        if ($errorCode === '' && str_contains(strtolower((string)$errorDescription), 'not found')) {
             $errorCode = 'error_not_found';
         }
 
@@ -134,7 +161,9 @@ class ApiLevelErrorHandler
         // NO_AUTH_FOUND
         // INSUFFICIENT_SCOPE
 
-        switch ($errorCode) {
+        switch (strtolower($errorCode)) {
+            case 'internal_server_error':
+                throw new TransportException(sprintf('%s - %s', $errorCode, $errorDescription));
             case 'error_task_completed':
                 throw new WorkflowTaskAlreadyCompletedException(sprintf('%s - %s', $errorCode, $errorDescription));
             case 'bad_request_no_fields_to_update':
@@ -163,6 +192,8 @@ class ApiLevelErrorHandler
             case 'not_found':
             case 'error_not_found':
                 throw new ItemNotFoundException(sprintf('%s - %s', $errorCode, $errorDescription));
+            case 'bitrix_rest_v3_exception_unknowndtopropertyexception':
+                throw new InvalidArgumentException(sprintf('%s - %s %s', $errorCode, $errorDescription, $batchErrorPrefix));
             default:
                 throw new BaseException(sprintf('%s - %s %s', $errorCode, $errorDescription, $batchErrorPrefix));
         }

@@ -15,16 +15,16 @@ Store information about person who installed application
 | `getUpdatedAt()`              | `CarbonImmutable`     | Returns date and time contact person was last updated                       | -                          |
 | `getEmail()`                  | `?string`             | Returns contact person email (if any)                                       | -                          |
 | `changeEmail()`               | `void`                | Changes contact person email                                                | -                          |
-| `markEmailAsVerified()`       | `void`                | Marks contact person email as verified                                      | -                          |
+| `markEmailAsVerified(?CarbonImmutable $verifiedAt = null)` | `void` | Marks contact person email as verified; uses current time if no date supplied | -            |
 | `getEmailVerifiedAt()`        | `?CarbonImmutable`    | Returns date and time email was verified (if verified)                      | -                          |
 | `changeMobilePhone()`         | `void`                | Changes mobile phone for contact person                                     | -                          |
 | `getMobilePhone()`            | `?PhoneNumber`        | Returns contact person mobile phone (if any)                                | -                          |
 | `getMobilePhoneVerifiedAt()`  | `?CarbonImmutable`    | Returns date and time mobile phone was verified (if verified)               | -                          |
-| `markMobilePhoneAsVerified()` | `void`                | Marks contact person mobile phone as verified                               | -                          |
+| `markMobilePhoneAsVerified(?CarbonImmutable $verifiedAt = null)` | `void` | Marks contact person mobile phone as verified | `?CarbonImmutable $verifiedAt = null` — verification timestamp, defaults to now |
 | `getComment()`                | `?string`             | Returns comment for this contact person (if any)                            | -                          |
 | `setExternalId()`             | `void`                | Sets external id for contact person from external system                    | -                          |
 | `getExternalId()`             | `?string`             | Returns external id for contact person (if any)                             | -                          |
-| `getBitrix24UserId()`         | `?int`                | Returns bitrix24 user id if contact person mapped on bitrix24 user (if any) | -                          |
+| `getBitrix24UserId()`         | `int`                 | Returns bitrix24 user id                                                    | -                          |
 | `getBitrix24PartnerId()`      | `?Uuid`               | Returns bitrix24 partner id if contact person is bitrix24 partner employee  | -                          |
 | `setBitrix24PartnerId()`      | `void`                | Change bitrix24 partner id if contact person is bitrix24 partner employee   | -                          |
 | `getUserAgent()`              | `?string`             | Returns user agent for contact person                                       | -                          |

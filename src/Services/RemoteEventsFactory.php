@@ -24,6 +24,11 @@ use Bitrix24\SDK\Core\Requests\Events\UnsupportedRemoteEvent;
 use Bitrix24\SDK\Services\Calendar\Events\CalendarEventsFactory;
 use Bitrix24\SDK\Services\CRM\Company\Events\CrmCompanyEventsFactory;
 use Bitrix24\SDK\Services\CRM\Contact\Events\CrmContactEventsFactory;
+<<<<<<< HEAD
+=======
+use Bitrix24\SDK\Services\CRM\Documentgenerator\Document\Events\CrmDocumentGeneratorDocumentEventsFactory;
+use Bitrix24\SDK\Services\IMOpenLines\Events\IMOpenLinesEventsFactory;
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
 use Bitrix24\SDK\Services\SonetGroup\Events\SonetGroupEventsFactory;
 use Bitrix24\SDK\Services\Telephony\Events\TelephonyEventsFactory;
 use Bitrix24\SDK\Services\IMOpenLines\Connector\Events\ImConnectorEventsFactory;
@@ -224,10 +229,17 @@ readonly class RemoteEventsFactory
                 new CalendarEventsFactory(),
                 new CrmCompanyEventsFactory(),
                 new CrmContactEventsFactory(),
+<<<<<<< HEAD
                 new SonetGroupEventsFactory(),
                 new SaleEventsFactory(),
                 new ImConnectorEventsFactory(),
                 new TaskEventsFactory(),
+=======
+                new CrmDocumentGeneratorDocumentEventsFactory(),
+                new IMOpenLinesEventsFactory(),
+                new SonetGroupEventsFactory(),
+                new Sale\Events\SaleEventsFactory(),
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
             ],
             $logger
         );

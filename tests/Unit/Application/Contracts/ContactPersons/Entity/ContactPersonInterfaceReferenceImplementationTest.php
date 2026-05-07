@@ -25,11 +25,13 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(ContactPersonReferenceEntityImplementation::class)]
 class ContactPersonInterfaceReferenceImplementationTest extends ContactPersonInterfaceTest
 {
+    #[\Override]
     protected function createContactPersonImplementation(
         Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
+        int                 $bitrix24UserId,
         string              $name,
         ?string             $surname,
         ?string             $patronymic,
@@ -39,7 +41,6 @@ class ContactPersonInterfaceReferenceImplementationTest extends ContactPersonInt
         ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
-        ?int                $bitrix24UserId,
         ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
@@ -51,6 +52,7 @@ class ContactPersonInterfaceReferenceImplementationTest extends ContactPersonInt
             $createdAt,
             $updatedAt,
             $contactPersonStatus,
+            $bitrix24UserId,
             $name,
             $surname,
             $patronymic,
@@ -60,7 +62,6 @@ class ContactPersonInterfaceReferenceImplementationTest extends ContactPersonInt
             $phoneNumber,
             $mobilePhoneVerifiedAt,
             $externalId,
-            $bitrix24UserId,
             $bitrix24PartnerUuid,
             $userAgent,
             $userAgentReferer,

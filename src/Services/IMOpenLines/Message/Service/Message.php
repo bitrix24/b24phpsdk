@@ -23,6 +23,10 @@ use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\IMOpenLines\Message\Result\CrmMessageAddResult;
 use Bitrix24\SDK\Services\IMOpenLines\Message\Result\QuickSaveResult;
 use Bitrix24\SDK\Services\IMOpenLines\Message\Result\SessionStartResult;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['imopenlines']))]
@@ -113,4 +117,8 @@ class Message extends AbstractService
             ])
         );
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6

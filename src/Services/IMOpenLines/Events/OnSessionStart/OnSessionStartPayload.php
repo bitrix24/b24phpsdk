@@ -24,7 +24,11 @@ class OnSessionStartPayload extends AbstractItem
      * @property-read array $connector Object with connector information: connector_id, line_id, chat_id, user_id
      * @property-read array $chat Object with chat information: id
      * @property-read array $user Object with user information: id, name
+<<<<<<< HEAD
      * @property-read array $line Object with open line information: id, name
+=======
+     * @property-read array $line Object with open line information: id, name  
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
      */
     public function data(): OnSessionStartDataItem
     {
@@ -92,4 +96,8 @@ class OnSessionStartUserItem extends AbstractItem
  */
 class OnSessionStartLineItem extends AbstractItem
 {
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6

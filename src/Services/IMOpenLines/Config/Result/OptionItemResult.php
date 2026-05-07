@@ -19,7 +19,11 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  * Class OptionItemResult
  *
  * Represents a single open line configuration
+<<<<<<< HEAD
  *
+=======
+ * 
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
  * @property-read int $ID Open line identifier
  * @property-read string $ACTIVE Active status (Y/N)
  * @property-read string $LINE_NAME Line name

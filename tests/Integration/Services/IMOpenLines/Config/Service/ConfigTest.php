@@ -19,7 +19,11 @@ use Bitrix24\SDK\Services\IMOpenLines\Config\Result\GetRevisionResult;
 use Bitrix24\SDK\Services\IMOpenLines\Config\Result\OptionItemResult;
 use Bitrix24\SDK\Services\IMOpenLines\Config\Result\PathResult;
 use Bitrix24\SDK\Services\IMOpenLines\Config\Service\Config;
+<<<<<<< HEAD
 use Bitrix24\SDK\Tests\Integration\Fabric;
+=======
+use Bitrix24\SDK\Tests\Integration\Factory;
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -260,7 +264,11 @@ class ConfigTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
+<<<<<<< HEAD
         $this->configService = Fabric::getServiceBuilder(true)->getIMOpenLinesScope()->config();
+=======
+        $this->configService = Factory::getServiceBuilder(true)->getIMOpenLinesScope()->config();
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
     }
 
     #[\Override]

@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core;
 use Bitrix24\SDK\Services\Sale\Order\Result\OrderItemResult;
 use Bitrix24\SDK\Services\Sale\Order\Service\Order;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -41,9 +41,10 @@ class OrderTest extends TestCase
     
     protected Order $orderService;
     
+    #[\Override]
     protected function setUp(): void
     {
-        $this->orderService = Fabric::getServiceBuilder()->getSaleScope()->order();
+        $this->orderService = Factory::getServiceBuilder()->getSaleScope()->order();
     }
 
     public function testAllSystemFieldsAnnotated(): void
@@ -216,7 +217,7 @@ class OrderTest extends TestCase
     
     protected function getPersonTypeId(): int
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         return (int)$core->call('sale.persontype.add', [
             'fields' => [
                 'name' => 'Test Person Type',
@@ -227,7 +228,7 @@ class OrderTest extends TestCase
 
     protected function deletePersonType(int $id): void
     {
-        $core = Fabric::getCore();
+        $core = Factory::getCore();
         $core->call('sale.persontype.delete', [
             'id' => $id
        ]);

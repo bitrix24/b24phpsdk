@@ -27,6 +27,10 @@ use Bitrix24\SDK\Services\IMOpenLines\Config\Result\GetResult;
 use Bitrix24\SDK\Services\IMOpenLines\Config\Result\GetRevisionResult;
 use Bitrix24\SDK\Services\IMOpenLines\Config\Result\OptionsResult;
 use Bitrix24\SDK\Services\IMOpenLines\Config\Result\PathResult;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['imopenlines']))]
@@ -45,7 +49,11 @@ class Config extends AbstractService
      * @param array<string, mixed> $params Configuration parameters for the open line.
      *                                     Available parameters include:
      *                                     - WELCOME_BOT_ENABLE (bool): Enable welcome bot
+<<<<<<< HEAD
      *                                     - WELCOME_BOT_JOIN (string): Welcome bot join message
+=======
+     *                                     - WELCOME_BOT_JOIN (string): Welcome bot join message  
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
      *                                     - ACTIVE (bool): Line active status
      *                                     - LINE_NAME (string): Open line name
      *                                     - CRM (bool): Enable CRM integration
@@ -65,7 +73,11 @@ class Config extends AbstractService
     {
         return new AddedItemResult(
             $this->core->call(
+<<<<<<< HEAD
                 'imopenlines.config.add',
+=======
+                'imopenlines.config.add', 
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
                 [
                     'PARAMS' => $params
                 ]
@@ -91,12 +103,18 @@ class Config extends AbstractService
     public function delete(int $configId): DeletedItemResult
     {
         return new DeletedItemResult(
+<<<<<<< HEAD
             $this->core->call(
                 'imopenlines.config.delete',
                 [
                 'CONFIG_ID' => $configId,
                 ]
             )
+=======
+            $this->core->call('imopenlines.config.delete', [
+                'CONFIG_ID' => $configId,
+            ])
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
         );
     }
 
@@ -117,6 +135,7 @@ class Config extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/imopenlines/openlines/imopenlines-config-get.html',
         'Retrieves an open line by Id'
     )]
+<<<<<<< HEAD
     public function get(int $configId, bool $withQueue = true, bool $showOffline = true): GetResult
     {
         return new GetResult(
@@ -126,6 +145,16 @@ class Config extends AbstractService
                     'CONFIG_ID' => $configId,
                     'WITH_QUEUE' => ($withQueue ? 'Y' : 'N'),
                     'SHOW_OFFLINE' => ($showOffline ? 'Y' : 'N'),
+=======
+    public function get(int $configId, bool $withQueue=true, bool $showOffline = true): GetResult
+    {
+        return new GetResult(
+            $this->core->call('imopenlines.config.get', 
+                [
+                    'CONFIG_ID' => $configId,
+                    'WITH_QUEUE' => ($withQueue ? 'Y':'N'),
+                    'SHOW_OFFLINE' => ($showOffline ? 'Y':'N'),
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
                 ]
             )
         );
@@ -149,6 +178,7 @@ class Config extends AbstractService
     {
         $params = [];
         $optionsParam = [];
+<<<<<<< HEAD
 
         if ($select !== null) {
             $params['select'] = $select;
@@ -169,6 +199,27 @@ class Config extends AbstractService
         return new OptionsResult(
             $this->core->call(
                 'imopenlines.config.list.get',
+=======
+        
+        if ($select !== null) {
+            $params['select'] = $select;
+        }
+        
+        if ($order !== null) {
+            $params['order'] = $order;
+        }
+        
+        if ($filter !== null) {
+            $params['filter'] = $filter;
+        }
+        
+        if ($options !== null) {
+            $optionsParam = $options;
+        }
+        
+        return new OptionsResult(
+            $this->core->call('imopenlines.config.list.get',
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
                 [
                     'PARAMS' => $params,
                     'OPTIONS' => $optionsParam
@@ -216,6 +267,7 @@ class Config extends AbstractService
     public function update(int $id, array $params): UpdatedItemResult
     {
         return new UpdatedItemResult(
+<<<<<<< HEAD
             $this->core->call(
                 'imopenlines.config.update',
                 [
@@ -223,6 +275,12 @@ class Config extends AbstractService
                 'PARAMS' => $params
                 ]
             )
+=======
+            $this->core->call('imopenlines.config.update', [
+                'CONFIG_ID' => $id, 
+                'PARAMS' => $params
+            ])
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
         );
     }
 
@@ -244,12 +302,18 @@ class Config extends AbstractService
     public function joinNetwork(string $code): AddedItemResult
     {
         return new AddedItemResult(
+<<<<<<< HEAD
             $this->core->call(
                 'imopenlines.network.join',
                 [
                 'CODE' => $code
                 ]
             )
+=======
+            $this->core->call('imopenlines.network.join', [
+                'CODE' => $code
+            ])
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
         );
     }
 
@@ -272,5 +336,9 @@ class Config extends AbstractService
             $this->core->call('imopenlines.revision.get', [])
         );
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
 }

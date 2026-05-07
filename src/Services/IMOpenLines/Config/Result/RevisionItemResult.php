@@ -19,7 +19,11 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  * Class RevisionItemResult
  *
  * Represents a set of revisions
+<<<<<<< HEAD
  *
+=======
+ * 
+>>>>>>> 4e6e76c48dee212540ce7f8b740643014af953e6
  * @property-read int $rest   API revision for REST clients
  * @property-read int $web    API revision for web/desktop client
  * @property-read int $mobile API revision for mobile client

@@ -31,6 +31,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(Bitrix24AccountInterface::class)]
 class ApplicationInstallationInterfaceReferenceImplementationTest extends ApplicationInstallationInterfaceTest
 {
+    #[\Override]
     protected function createApplicationInstallationImplementation(
         Uuid                          $uuid,
         ApplicationInstallationStatus $applicationInstallationStatus,

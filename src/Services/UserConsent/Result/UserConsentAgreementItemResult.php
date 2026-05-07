@@ -30,6 +30,7 @@ class UserConsentAgreementItemResult extends AbstractItem
      *
      * @return bool|int|mixed|null
      */
+    #[\Override]
     public function __get($offset)
     {
         switch ($offset) {

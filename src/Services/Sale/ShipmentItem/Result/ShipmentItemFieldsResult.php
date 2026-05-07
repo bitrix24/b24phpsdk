@@ -17,6 +17,7 @@ use Bitrix24\SDK\Core\Result\FieldsResult;
 
 class ShipmentItemFieldsResult extends FieldsResult
 {
+    #[\Override]
     public function getFieldsDescription(): array
     {
         return $this->getCoreResponse()->getResponseData()->getResult()['shipmentItem'];
