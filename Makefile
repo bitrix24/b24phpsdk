@@ -607,6 +607,14 @@ integration_tests_sale_payment_item_basket:
 integration_tests_crm_documentgenerator_numerator:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_documentgenerator_numerator
 
+.PHONY: test-integration-scope-biconnector
+test-integration-scope-biconnector:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_biconnector
+
+.PHONY: test-integration-biconnector-connector
+test-integration-biconnector-connector:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_biconnector_connector
+
 .PHONY: integration_tests_crm_documentgenerator_document
 integration_tests_crm_documentgenerator_document:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_documentgenerator_document
