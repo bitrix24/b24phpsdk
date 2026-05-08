@@ -141,7 +141,7 @@ class Connector extends AbstractService
      * @param array $order  - sort fields, e.g. ['id' => 'ASC']
      * @param array $filter - filter fields
      * @param array $select - fields to include in the result
-     * @param int   $start  - offset for pagination
+     * @param int   $page   - page number for pagination (page size is 50 records per page)
      *
      * @throws BaseException
      * @throws TransportException
@@ -151,7 +151,7 @@ class Connector extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/biconnector/connector/biconnector-connector-list.html',
         'Get a list of connectors'
     )]
-    public function list(array $order = [], array $filter = [], array $select = [], int $start = 0): ConnectorsResult
+    public function list(array $order = [], array $filter = [], array $select = [], int $page = 1): ConnectorsResult
     {
         return new ConnectorsResult(
             $this->core->call(
@@ -160,7 +160,7 @@ class Connector extends AbstractService
                     'order'  => $order,
                     'filter' => $filter,
                     'select' => $select,
-                    'start'  => $start,
+                    'page'   => $page,
                 ]
             )
         );
