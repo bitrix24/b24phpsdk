@@ -29,14 +29,6 @@ interface Bitrix24PartnerRepositoryInterface
     public function save(Bitrix24PartnerInterface $bitrix24Partner): void;
 
     /**
-     * Delete bitrix24 partner from persistence storage
-     *
-     * @throws Bitrix24PartnerNotFoundException
-     * @throws InvalidArgumentException
-     */
-    public function delete(Uuid $uuid): void;
-
-    /**
      * Get bitrix24 partner by id
      *
      * @throws Bitrix24PartnerNotFoundException
