@@ -43,17 +43,50 @@ class BatchTest extends TestCase
     }
 
     /**
+     * Returns the minimum set of required fields to create a connector.
+     *
+     * @return array{
+     *   title: string,
+     *   logo: string,
+     *   urlCheck: string,
+     *   urlData: string,
+     *   urlTableList: string,
+     *   urlTableDescription: string,
+     *   settings: array,
+     * }
+     */
+    private function makeConnectorFields(string $title): array
+    {
+        return [
+            'title'               => $title,
+            'logo'                => 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjIiIGhlaWdodD0iMjIiIHZpZXdCb3g9IjAgMCAyMiAyMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KCTxjaXJjbGUgY3g9IjExIiBjeT0iMTEiIHI9IjEwIiBmaWxsPSIjRkYzQjNCIiAvPgoJPHRleHQgeD0iMTEiIHk9IjEzIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNiIgZmlsbD0iI0ZGRkZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC13ZWlnaHQ9ImJvbGQiPlJFU1Q8L3RleHQ+Cjwvc3ZnPg==',
+            'urlCheck'             => 'http://example.com/api/check',
+            'urlTableList'         => 'http://example.com/api/table_list',
+            'urlTableDescription'  => 'http://example.com/api/table_description',
+            'urlData'              => 'http://example.com/api/data',
+            'settings'             => [
+                [
+                    'name' => 'Login',
+                    'type' => 'STRING',
+                    'code' => 'login',
+                ],
+                [
+                    'name' => 'Password',
+                    'type' => 'STRING',
+                    'code' => 'password',
+                ],
+            ],
+        ];
+    }
+
+    /**
      * @throws BaseException
      * @throws TransportException
      */
     public function testBatchList(): void
     {
-        $name = 'connector-' . $this->faker->uuid();
-        $code = 'code_' . substr($this->faker->uuid(), 0, 8);
-        $id = $this->connectorService->add([
-            'name' => $name,
-            'code' => $code,
-        ])->getId();
+        $title = 'connector-' . $this->faker->uuid();
+        $id = $this->connectorService->add($this->makeConnectorFields($title))->getId();
 
         $count = 0;
         foreach ($this->connectorService->batch->list([], [], [], 10) as $item) {
@@ -74,14 +107,8 @@ class BatchTest extends TestCase
     public function testBatchAdd(): void
     {
         $connectors = [];
-        $codes = [];
         for ($i = 0; $i < 3; $i++) {
-            $code = 'code_' . substr($this->faker->uuid(), 0, 8);
-            $codes[] = $code;
-            $connectors[] = [
-                'name' => 'connector-batch-' . $this->faker->uuid(),
-                'code' => $code,
-            ];
+            $connectors[] = $this->makeConnectorFields('connector-batch-' . $this->faker->uuid());
         }
 
         $addedIds = [];
@@ -106,10 +133,9 @@ class BatchTest extends TestCase
     {
         $ids = [];
         for ($i = 0; $i < 2; $i++) {
-            $ids[] = $this->connectorService->add([
-                'name' => 'connector-del-batch-' . $this->faker->uuid(),
-                'code' => 'code_' . substr($this->faker->uuid(), 0, 8),
-            ])->getId();
+            $ids[] = $this->connectorService->add(
+                $this->makeConnectorFields('connector-del-batch-' . $this->faker->uuid())
+            )->getId();
         }
 
         foreach ($this->connectorService->batch->delete($ids) as $result) {

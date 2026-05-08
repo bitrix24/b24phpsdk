@@ -18,12 +18,10 @@ use Bitrix24\SDK\Services\Biconnector\Connector\Result\ConnectorItemResult;
 use Bitrix24\SDK\Services\Biconnector\Connector\Service\Connector;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 use Bitrix24\SDK\Tests\Integration\Factory;
-use Faker\Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Faker;
 
 #[CoversClass(ConnectorItemResult::class)]
 class ConnectorItemResultAnnotationsTest extends TestCase
@@ -32,10 +30,6 @@ class ConnectorItemResultAnnotationsTest extends TestCase
 
     private Connector $connectorService;
 
-    private Generator $faker;
-
-    private int $createdConnectorId;
-
     /**
      * @throws InvalidArgumentException
      */
@@ -43,50 +37,68 @@ class ConnectorItemResultAnnotationsTest extends TestCase
     protected function setUp(): void
     {
         $this->connectorService = Factory::getServiceBuilder()->getBiconnectorScope()->connector();
-        $this->faker = Faker\Factory::create();
-
-        // Create a connector to use in tests
-        $this->createdConnectorId = $this->connectorService->add([
-            'name' => 'test-annotations-' . $this->faker->uuid(),
-            'code' => 'code_' . substr($this->faker->uuid(), 0, 8),
-        ])->getId();
-    }
-
-    #[\Override]
-    protected function tearDown(): void
-    {
-        $this->connectorService->delete($this->createdConnectorId);
     }
 
     #[Test]
-    #[TestDox('all fields in ConnectorItemResult are annotated and match live API response')]
+    #[TestDox('all fields in ConnectorItemResult are annotated and match live API fields schema')]
     public function testAllSystemFieldsAnnotated(): void
     {
-        $rawItem = $this->connectorService->get($this->createdConnectorId)
-            ->getCoreResponse()
-            ->getResponseData()
-            ->getResult();
-
-        // Handle nested envelope: result['connector'] or result directly
-        if (!empty($rawItem['connector']) && is_array($rawItem['connector'])) {
-            $rawItem = $rawItem['connector'];
-        }
+        $fieldCodes = $this->getConnectorFieldCodes();
 
         $this->assertBitrix24AllResultItemFieldsAnnotated(
-            array_keys($rawItem),
+            $fieldCodes,
             ConnectorItemResult::class
         );
     }
 
     #[Test]
-    #[TestDox('all fields in ConnectorItemResult have valid type casting in magic getters')]
+    #[TestDox('all fields in ConnectorItemResult have valid type casting matching API fields schema')]
     public function testAllSystemFieldsHasValidTypeAnnotation(): void
     {
-        $connectorItemResult = $this->connectorService->get($this->createdConnectorId)->connector();
+        $fieldTypesMap = $this->getConnectorFieldTypesMap();
 
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations(
-            $connectorItemResult,
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
+            $fieldTypesMap,
             ConnectorItemResult::class
         );
+    }
+
+    /**
+     * Returns list of field codes from biconnector.connector.fields API.
+     *
+     * @return array<int, string>
+     */
+    private function getConnectorFieldCodes(): array
+    {
+        $raw = $this->connectorService->fields()->getFieldsDescription();
+        $fields = $raw['fields'] ?? [];
+
+        return array_column($fields, 'title');
+    }
+
+    /**
+     * Returns field type map compatible with assertBitrix24AllResultItemFieldsHasValidTypeAnnotation.
+     * Normalises biconnector-specific types to types known by the shared assertion.
+     *
+     * @return array<string, array{type: string}>
+     */
+    private function getConnectorFieldTypesMap(): array
+    {
+        $raw = $this->connectorService->fields()->getFieldsDescription();
+        $fields = $raw['fields'] ?? [];
+
+        $result = [];
+        foreach ($fields as $field) {
+            $apiType = $field['type'];
+
+            // biconnector uses 'boolean' — map to 'char' which the shared assertion handles as bool
+            if ($apiType === 'boolean') {
+                $apiType = 'char';
+            }
+
+            $result[$field['title']] = ['type' => $apiType];
+        }
+
+        return $result;
     }
 }

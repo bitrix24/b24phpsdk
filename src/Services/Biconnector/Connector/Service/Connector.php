@@ -45,12 +45,15 @@ class Connector extends AbstractService
      * @link https://apidocs.bitrix24.com/api-reference/biconnector/connector/biconnector-connector-add.html
      *
      * @param array{
-     *   name: string,
-     *   code: string,
+     *   title: string,
+     *   logo: string,
+     *   urlCheck: string,
+     *   urlData: string,
+     *   urlTableList: string,
+     *   urlTableDescription: string,
+     *   settings: array,
      *   description?: string,
-     *   pictureUrl?: string,
-     *   settings?: array,
-     *   isEnabled?: bool
+     *   sort?: int,
      * } $fields
      *
      * @throws BaseException
@@ -79,12 +82,16 @@ class Connector extends AbstractService
      * @link https://apidocs.bitrix24.com/api-reference/biconnector/connector/biconnector-connector-update.html
      *
      * @param array{
-     *   name?: string,
-     *   code?: string,
+     *   title?: string,
+     *   logo?: string,
      *   description?: string,
-     *   pictureUrl?: string,
+     *   sort?: int,
+     *   urlCheck?: string,
+     *   urlData?: string,
+     *   urlTableList?: string,
+     *   urlTableDescription?: string,
      *   settings?: array,
-     *   isEnabled?: bool
+     *   supportMapping?: bool,
      * } $fields
      *
      * @throws BaseException
@@ -217,6 +224,6 @@ class Connector extends AbstractService
      */
     public function count(): int
     {
-        return $this->list()->getCoreResponse()->getResponseData()->getPagination()->getTotal();
+        return (int)$this->list()->getCoreResponse()->getResponseData()->getPagination()->getTotal();
     }
 }
