@@ -28,10 +28,12 @@ class ConnectorResult extends AbstractResult
     {
         $result = $this->getCoreResponse()->getResponseData()->getResult();
 
-        if (!empty($result['connector']) && is_array($result['connector'])) {
-            $result = $result['connector'];
+        // biconnector.connector.get returns the item under the 'item' key
+        if (!empty($result['item']) && is_array($result['item'])) {
+            return new ConnectorItemResult($result['item']);
         }
 
+        // Fallback: flat object at result level {"id": ..., "title": ..., ...}
         return new ConnectorItemResult($result);
     }
 }

@@ -219,11 +219,19 @@ class Connector extends AbstractService
     /**
      * Count connectors
      *
+     * Note: biconnector.connector.list does not return a total count in pagination,
+     * so we iterate all available items via batch to count them.
+     *
      * @throws BaseException
      * @throws TransportException
      */
     public function count(): int
     {
-        return (int)$this->list()->getCoreResponse()->getResponseData()->getPagination()->getTotal();
+        $count = 0;
+        foreach ($this->batch->list() as $item) {
+            $count++;
+        }
+
+        return $count;
     }
 }

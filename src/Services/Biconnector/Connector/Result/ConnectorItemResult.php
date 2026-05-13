@@ -33,8 +33,8 @@ use Carbon\CarbonImmutable;
  * @property-read string|null $urlTableList
  * @property-read string|null $urlTableDescription
  * @property-read array|null $settings
- * @property-read CarbonImmutable $dateCreate
  * @property-read bool|null $supportMapping
+ * @property-read CarbonImmutable $dateCreate
  */
 class ConnectorItemResult extends AbstractItem
 {
@@ -42,11 +42,12 @@ class ConnectorItemResult extends AbstractItem
     public function __get($offset): mixed
     {
         return match ($offset) {
-            'id'             => isset($this->data[$offset]) ? (int)$this->data[$offset] : null,
-            'sort'           => isset($this->data[$offset]) ? (int)$this->data[$offset] : null,
-            'dateCreate'     => isset($this->data[$offset]) ? CarbonImmutable::parse($this->data[$offset]) : null,
+            'id', 'sort' => isset($this->data[$offset]) ? (int)$this->data[$offset] : null,
             'supportMapping' => isset($this->data[$offset]) ? (bool)$this->data[$offset] : null,
-            default          => $this->data[$offset] ?? null,
+            'dateCreate' => isset($this->data[$offset])
+                ? CarbonImmutable::parse($this->data[$offset])
+                : null,
+            default => $this->data[$offset] ?? null,
         };
     }
 }
