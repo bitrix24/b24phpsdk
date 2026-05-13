@@ -40,7 +40,7 @@ class ConnectorTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->connectorService = Factory::getServiceBuilder()->getBiconnectorScope()->connector();
+        $this->connectorService = Factory::getServiceBuilder(true)->getBiconnectorScope()->connector();
         $this->faker = Faker\Factory::create();
     }
 
