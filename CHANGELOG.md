@@ -3,6 +3,16 @@
 
 ### Added
 
+- Added service `Services\Biconnector\Source` with support methods,
+  see [biconnector.source.* methods](https://apidocs.bitrix24.com/api-reference/biconnector/source/index.html) ([#469](https://github.com/bitrix24/b24phpsdk/issues/469)):
+    - `add` adds a new data source, with batch calls support
+    - `update` updates an existing data source, with batch calls support
+    - `get` gets information about the data source by its identifier
+    - `list` gets the list of data sources, with batch calls support
+    - `delete` deletes a data source, with batch calls support
+    - `fields` returns the fields description
+    - `count` counts data sources
+- Added `source()` accessor to `BiconnectorServiceBuilder` ([#469](https://github.com/bitrix24/b24phpsdk/issues/469))
 - Added service `Services\Biconnector\Connector` with support methods,
   see [biconnector.connector.* methods](https://github.com/bitrix24/b24phpsdk/issues/469):
     - `add` adds a new connector, with batch calls support

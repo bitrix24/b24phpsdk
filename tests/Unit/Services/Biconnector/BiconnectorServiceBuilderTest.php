@@ -41,4 +41,9 @@ class BiconnectorServiceBuilderTest extends TestCase
     {
         $this::assertSame($this->serviceBuilder->connector(), $this->serviceBuilder->connector());
     }
+
+    public function testSourceServiceIsCached(): void
+    {
+        $this::assertSame($this->serviceBuilder->source(), $this->serviceBuilder->source());
+    }
 }

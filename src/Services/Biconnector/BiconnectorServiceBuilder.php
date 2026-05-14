@@ -19,6 +19,9 @@ use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\Biconnector\Connector\Batch as ConnectorBatch;
 use Bitrix24\SDK\Services\Biconnector\Connector\Service\Batch;
 use Bitrix24\SDK\Services\Biconnector\Connector\Service\Connector;
+use Bitrix24\SDK\Services\Biconnector\Source\Batch as SourceBatch;
+use Bitrix24\SDK\Services\Biconnector\Source\Service\Batch as SourceServiceBatch;
+use Bitrix24\SDK\Services\Biconnector\Source\Service\Source;
 
 #[ApiServiceBuilderMetadata(new Scope(['biconnector']))]
 class BiconnectorServiceBuilder extends AbstractServiceBuilder
@@ -40,6 +43,29 @@ class BiconnectorServiceBuilder extends AbstractServiceBuilder
             );
             $this->serviceCache[__METHOD__] = new Connector(
                 new Batch($connectorBatch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * Get the Source service
+     *
+     * Uses a specialized SourceBatch to handle biconnector.source.* REST API differences:
+     * - delete uses lowercase 'id' instead of 'ID'
+     */
+    public function source(): Source
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $sourceBatch = new SourceBatch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Source(
+                new SourceServiceBatch($sourceBatch, $this->log),
                 $this->core,
                 $this->log
             );
