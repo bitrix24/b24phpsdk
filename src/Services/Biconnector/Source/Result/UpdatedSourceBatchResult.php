@@ -26,4 +26,3 @@ class UpdatedSourceBatchResult extends UpdatedItemBatchResult
         return (bool)$this->getResponseData()->getResult();
     }
 }
-

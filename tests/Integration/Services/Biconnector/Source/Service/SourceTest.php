@@ -222,4 +222,3 @@ class SourceTest extends TestCase
         $this->sourceService->delete($id);
     }
 }
-

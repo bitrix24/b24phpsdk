@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Services\Biconnector\Source;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Response\DTO\ResponseData;
 use Generator;
 
@@ -22,8 +23,10 @@ use Generator;
  * Class Batch
  *
  * Overrides base Batch to handle parameter naming differences in biconnector.source.* REST methods:
+ * - list uses 'page' (page number, 50 records per page) instead of 'start' (offset) for pagination
  * - delete uses lowercase 'id' instead of 'ID'
  *
+ * @see https://apidocs.bitrix24.com/api-reference/biconnector/source/biconnector-source-list.html
  * @see https://apidocs.bitrix24.com/api-reference/biconnector/source/biconnector-source-delete.html
  */
 class Batch extends \Bitrix24\SDK\Core\Batch
@@ -104,5 +107,159 @@ class Batch extends \Bitrix24\SDK\Core\Batch
 
         $this->logger->debug('deleteEntityItems.finish');
     }
-}
 
+    /**
+     * Get traversable list using page-based pagination.
+     *
+     * The biconnector.source.list method uses 'page' parameter (page number, 50 records per page)
+     * instead of the standard 'start' (offset) parameter used by most other REST methods.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/biconnector/source/biconnector-source-list.html
+     *
+     * @param array<string,string> $order
+     * @param array<string,mixed>  $filter
+     * @param array<string,mixed>  $select
+     *
+     * @return Generator<mixed>
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[\Override]
+    public function getTraversableList(
+        string $apiMethod,
+        ?array $order = [],
+        ?array $filter = [],
+        ?array $select = [],
+        ?int $limit = null,
+        ?array $additionalParameters = null
+    ): Generator {
+        yield from $this->getTraversableListWithCount(
+            $apiMethod,
+            $order ?? [],
+            $filter ?? [],
+            $select ?? [],
+            $limit,
+            $additionalParameters
+        );
+    }
+
+    /**
+     * Get traversable list using page-based pagination (page number, 50 records per page).
+     *
+     * The biconnector.source.list method accepts 'page' parameter instead of 'start'.
+     * Page 1 returns items 1–50, page 2 returns items 51–100, etc.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/biconnector/source/biconnector-source-list.html
+     *
+     * @param array<string,string> $order
+     * @param array<string,mixed>  $filter
+     * @param array<string,mixed>  $select
+     *
+     * @return Generator<mixed>
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[\Override]
+    public function getTraversableListWithCount(
+        string $apiMethod,
+        array $order,
+        array $filter,
+        array $select,
+        ?int $limit = null,
+        ?array $additionalParameters = null
+    ): Generator {
+        $this->logger->debug(
+            'getTraversableListWithCount.start',
+            [
+                'apiMethod'            => $apiMethod,
+                'order'                => $order,
+                'filter'               => $filter,
+                'select'               => $select,
+                'limit'                => $limit,
+                'additionalParameters' => $additionalParameters,
+            ]
+        );
+
+        $this->clearCommands();
+
+        // Fetch first page to determine total count
+        $params = [
+            'order'  => $order,
+            'filter' => $filter,
+            'select' => $select,
+            'page'   => 1,
+        ];
+
+        if ($additionalParameters !== null) {
+            $params = array_merge($params, $additionalParameters);
+        }
+
+        $response = $this->core->call($apiMethod, $params);
+        $total    = $response->getResponseData()->getPagination()->getTotal();
+
+        $this->logger->debug(
+            'getTraversableListWithCount.totalElementsCount',
+            [
+                'totalElementsCount' => $total,
+            ]
+        );
+
+        if ($total <= self::MAX_ELEMENTS_IN_PAGE) {
+            $elementsCounter = 0;
+            foreach ($response->getResponseData()->getResult() as $item) {
+                $elementsCounter++;
+                if ($limit !== null && $elementsCounter > $limit) {
+                    return;
+                }
+
+                yield $item;
+            }
+
+            return;
+        }
+
+        // Register batch commands for all pages
+        $totalPages = (int)ceil($total / self::MAX_ELEMENTS_IN_PAGE);
+        for ($page = 1; $page <= $totalPages; $page++) {
+            $pageParams = [
+                'order'  => $order,
+                'filter' => $filter,
+                'select' => $select,
+                'page'   => $page,
+            ];
+
+            if ($additionalParameters !== null) {
+                $pageParams = array_merge($pageParams, $additionalParameters);
+            }
+
+            $this->registerCommand($apiMethod, $pageParams);
+
+            if ($limit !== null && $limit < $page * self::MAX_ELEMENTS_IN_PAGE) {
+                break;
+            }
+        }
+
+        $this->logger->debug(
+            'getTraversableListWithCount.commandsRegistered',
+            [
+                'commandsCount'      => $this->commands->count(),
+                'totalItemsToSelect' => $total,
+            ]
+        );
+
+        $elementsCounter = 0;
+        foreach ($this->getTraversable(true) as $queryResultData) {
+            $resultElements = $this->extractElementsFromBatchResult($queryResultData, false);
+            foreach ($resultElements as $resultElement) {
+                ++$elementsCounter;
+                if ($limit !== null && $elementsCounter > $limit) {
+                    return;
+                }
+
+                yield $resultElement;
+            }
+        }
+
+        $this->logger->debug('getTraversableListWithCount.finish');
+    }
+}

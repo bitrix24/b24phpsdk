@@ -138,6 +138,7 @@ class Source extends AbstractService
      * @param array $order  - sort fields, e.g. ['id' => 'ASC']
      * @param array $filter - filter fields
      * @param array $select - fields to include in the result
+     * @param int   $page   - page number for pagination (page size is 50 records per page)
      *
      * @throws BaseException
      * @throws TransportException
@@ -147,7 +148,7 @@ class Source extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/biconnector/source/biconnector-source-list.html',
         'Get a list of data sources'
     )]
-    public function list(array $order = [], array $filter = [], array $select = []): SourcesResult
+    public function list(array $order = [], array $filter = [], array $select = [], int $page = 1): SourcesResult
     {
         return new SourcesResult(
             $this->core->call(
@@ -156,6 +157,7 @@ class Source extends AbstractService
                     'order'  => $order,
                     'filter' => $filter,
                     'select' => $select,
+                    'page'   => $page,
                 ]
             )
         );
@@ -220,4 +222,3 @@ class Source extends AbstractService
         return $count;
     }
 }
-

@@ -10,7 +10,7 @@ Now we add the `Source` entity, covering six REST methods:
 | `biconnector.source.add`     | `result.id` (int)             | Fields wrapped in `fields` |
 | `biconnector.source.update`  | `result` = `true`             |                            |
 | `biconnector.source.get`     | `result.item.connection` + root connectorId/settings | Nested; must be flattened  |
-| `biconnector.source.list`    | `result` = flat array         | Standard list method       |
+| `biconnector.source.list`    | `result` = flat array         | Uses 'page' pagination (same as connector.list) |
 | `biconnector.source.delete`  | `result` = `true`             |                            |
 | `biconnector.source.fields`  | `result.fields` array         | Returns `FieldsResult`     |
 

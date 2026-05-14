@@ -30,4 +30,3 @@ class DeletedSourceResult extends DeletedItemResult
         return (bool)$this->getCoreResponse()->getResponseData()->getResult();
     }
 }
-

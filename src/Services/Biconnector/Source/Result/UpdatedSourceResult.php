@@ -30,4 +30,3 @@ class UpdatedSourceResult extends UpdatedItemResult
         return (bool)$this->getCoreResponse()->getResponseData()->getResult();
     }
 }
-

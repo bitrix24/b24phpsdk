@@ -164,4 +164,3 @@ class BatchTest extends TestCase
         }
     }
 }
-

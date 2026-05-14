@@ -42,5 +42,3 @@ class SourcesResult extends AbstractResult
         return $items;
     }
 }
-
-

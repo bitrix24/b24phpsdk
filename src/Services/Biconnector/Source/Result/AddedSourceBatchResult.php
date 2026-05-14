@@ -32,4 +32,3 @@ class AddedSourceBatchResult extends AddedItemBatchResult
         return (int)$result;
     }
 }
-

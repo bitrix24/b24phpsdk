@@ -39,4 +39,3 @@ class AddedSourceResult extends AddedItemResult
         return (int)$result;
     }
 }
-

@@ -51,4 +51,3 @@ class SourceItemResult extends AbstractItem
         };
     }
 }
-

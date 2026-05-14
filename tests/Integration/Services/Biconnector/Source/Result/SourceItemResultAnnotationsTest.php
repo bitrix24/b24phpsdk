@@ -164,4 +164,3 @@ class SourceItemResultAnnotationsTest extends TestCase
         return $result;
     }
 }
-

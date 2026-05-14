@@ -53,4 +53,3 @@ class SourceResult extends AbstractResult
         return new SourceItemResult($result);
     }
 }
-
