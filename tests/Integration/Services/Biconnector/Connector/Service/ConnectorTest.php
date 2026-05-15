@@ -62,15 +62,30 @@ class ConnectorTest extends TestCase
         return [
             'title'               => $title,
             'logo'                => 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjIiIGhlaWdodD0iMjIiIHZpZXdCb3g9IjAgMCAyMiAyMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KCTxjaXJjbGUgY3g9IjExIiBjeT0iMTEiIHI9IjEwIiBmaWxsPSIjRkYzQjNCIiAvPgoJPHRleHQgeD0iMTEiIHk9IjEzIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNiIgZmlsbD0iI0ZGRkZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC13ZWlnaHQ9ImJvbGQiPlJFU1Q8L3RleHQ+Cjwvc3ZnPg==',
-            'urlCheck'             => 'http://example.com/api/check',
-            'urlTableList'         => 'http://example.com/api/table_list',
-            'urlTableDescription'  => 'http://example.com/api/table_description',
-            'urlData'              => 'http://example.com/api/data',
-            'settings'             => [
+            'urlCheck'           => 'https://digitmind8080.cloudpub.ru/?connection_type=mysql&action=check',
+            'urlTableList'       => 'https://digitmind8080.cloudpub.ru/?connection_type=mysql&action=table_list',
+            'urlTableDescription' => 'https://digitmind8080.cloudpub.ru/?connection_type=mysql&action=table_description',
+            'urlData'            => 'https://digitmind8080.cloudpub.ru/?connection_type=mysql&action=data',
+            'settings'           => [
                 [
-                    'name' => 'Login',
+                    'name' => 'Host',
                     'type' => 'STRING',
-                    'code' => 'login',
+                    'code' => 'host',
+                ],
+                [
+                    'name' => 'Port',
+                    'type' => 'STRING',
+                    'code' => 'port',
+                ],
+                [
+                    'name' => 'Database',
+                    'type' => 'STRING',
+                    'code' => 'database',
+                ],
+                [
+                    'name' => 'Username',
+                    'type' => 'STRING',
+                    'code' => 'username',
                 ],
                 [
                     'name' => 'Password',
