@@ -186,12 +186,14 @@ class SourceTest extends TestCase
     public function testUpdate(): void
     {
         $title = 'source-' . $this->faker->uuid();
-        $id = $this->sourceService->add($this->makeSourceFields($title))->getId();
+        $sourceFields = $this->makeSourceFields($title);
+        $id = $this->sourceService->add($sourceFields)->getId();
 
         $newTitle = $title . '-updated';
         self::assertTrue(
             $this->sourceService->update($id, [
-                'title' => $newTitle,
+                'title'    => $newTitle,
+                'settings' => $sourceFields['settings'],
             ])->isSuccess()
         );
 
