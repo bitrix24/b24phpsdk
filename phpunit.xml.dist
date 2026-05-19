@@ -343,6 +343,10 @@
             <directory>./tests/Integration/Services/Biconnector/Source/Service/</directory>
             <directory>./tests/Integration/Services/Biconnector/Source/Result/</directory>
         </testsuite>
+        <testsuite name="integration_tests_biconnector_dataset">
+            <directory>./tests/Integration/Services/Biconnector/Dataset/Service/</directory>
+            <directory>./tests/Integration/Services/Biconnector/Dataset/Result/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>

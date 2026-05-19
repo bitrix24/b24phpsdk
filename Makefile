@@ -619,6 +619,10 @@ test-integration-biconnector-connector:
 test-integration-biconnector-source:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_biconnector_source
 
+.PHONY: test-integration-biconnector-dataset
+test-integration-biconnector-dataset:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_biconnector_dataset
+
 .PHONY: integration_tests_crm_documentgenerator_document
 integration_tests_crm_documentgenerator_document:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_documentgenerator_document

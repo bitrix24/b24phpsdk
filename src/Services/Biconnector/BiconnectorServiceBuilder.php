@@ -19,6 +19,8 @@ use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\Biconnector\Connector\Batch as ConnectorBatch;
 use Bitrix24\SDK\Services\Biconnector\Connector\Service\Batch;
 use Bitrix24\SDK\Services\Biconnector\Connector\Service\Connector;
+use Bitrix24\SDK\Services\Biconnector\Dataset\Service\Batch as DatasetServiceBatch;
+use Bitrix24\SDK\Services\Biconnector\Dataset\Service\Dataset;
 use Bitrix24\SDK\Services\Biconnector\Source\Batch as SourceBatch;
 use Bitrix24\SDK\Services\Biconnector\Source\Service\Batch as SourceServiceBatch;
 use Bitrix24\SDK\Services\Biconnector\Source\Service\Source;
@@ -43,6 +45,22 @@ class BiconnectorServiceBuilder extends AbstractServiceBuilder
             );
             $this->serviceCache[__METHOD__] = new Connector(
                 new Batch($connectorBatch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * Get the Dataset service
+     */
+    public function dataset(): Dataset
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Dataset(
+                new DatasetServiceBatch($this->batch, $this->log),
                 $this->core,
                 $this->log
             );

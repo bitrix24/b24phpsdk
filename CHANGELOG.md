@@ -3,6 +3,17 @@
 
 ### Added
 
+- Added service `Services\Biconnector\Dataset` with support methods,
+  see [biconnector.dataset.* methods](https://apidocs.bitrix24.com/api-reference/biconnector/dataset/index.html) ([#469](https://github.com/bitrix24/b24phpsdk/issues/469)):
+    - `add` adds a new dataset, with batch calls support
+    - `update` updates an existing dataset description, with batch calls support
+    - `get` gets information about the dataset by its identifier
+    - `list` gets the list of datasets, with batch calls support
+    - `delete` deletes a dataset, with batch calls support
+    - `fields` returns the fields description
+    - `updateFields` adds, updates visibility of, or deletes individual dataset columns (`biconnector.dataset.fields.update`)
+    - `count` counts datasets
+- Added `dataset()` accessor to `BiconnectorServiceBuilder` ([#469](https://github.com/bitrix24/b24phpsdk/issues/469))
 - Added service `Services\Biconnector\Source` with support methods,
   see [biconnector.source.* methods](https://apidocs.bitrix24.com/api-reference/biconnector/source/index.html) ([#469](https://github.com/bitrix24/b24phpsdk/issues/469)):
     - `add` adds a new data source, with batch calls support
