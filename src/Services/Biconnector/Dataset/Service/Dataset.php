@@ -136,6 +136,7 @@ class Dataset extends AbstractService
      * @param array $order  - sort fields, e.g. ['dateCreate' => 'DESC']
      * @param array $filter - filter fields
      * @param array $select - fields to include in the result
+     * @param int   $page   - page number for pagination (page size is 50 records per page)
      *
      * @throws BaseException
      * @throws TransportException
@@ -145,7 +146,7 @@ class Dataset extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/biconnector/dataset/biconnector-dataset-list.html',
         'Get a list of datasets'
     )]
-    public function list(array $order = [], array $filter = [], array $select = []): DatasetsResult
+    public function list(array $order = [], array $filter = [], array $select = [], int $page = 1): DatasetsResult
     {
         return new DatasetsResult(
             $this->core->call(
@@ -154,6 +155,7 @@ class Dataset extends AbstractService
                     'order'  => $order,
                     'filter' => $filter,
                     'select' => $select,
+                    'page'   => $page,
                 ]
             )
         );

@@ -19,6 +19,7 @@ use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\Biconnector\Connector\Batch as ConnectorBatch;
 use Bitrix24\SDK\Services\Biconnector\Connector\Service\Batch;
 use Bitrix24\SDK\Services\Biconnector\Connector\Service\Connector;
+use Bitrix24\SDK\Services\Biconnector\Dataset\Batch as DatasetBatch;
 use Bitrix24\SDK\Services\Biconnector\Dataset\Service\Batch as DatasetServiceBatch;
 use Bitrix24\SDK\Services\Biconnector\Dataset\Service\Dataset;
 use Bitrix24\SDK\Services\Biconnector\Source\Batch as SourceBatch;
@@ -55,12 +56,20 @@ class BiconnectorServiceBuilder extends AbstractServiceBuilder
 
     /**
      * Get the Dataset service
+     *
+     * Uses a specialized DatasetBatch to handle biconnector.dataset.* REST API differences:
+     * - list uses 'page' parameter (page number) instead of standard 'start' (offset)
+     * - delete uses lowercase 'id' instead of 'ID'
      */
     public function dataset(): Dataset
     {
         if (!isset($this->serviceCache[__METHOD__])) {
+            $datasetBatch = new DatasetBatch(
+                $this->core,
+                $this->log
+            );
             $this->serviceCache[__METHOD__] = new Dataset(
-                new DatasetServiceBatch($this->batch, $this->log),
+                new DatasetServiceBatch($datasetBatch, $this->log),
                 $this->core,
                 $this->log
             );
