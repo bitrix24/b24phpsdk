@@ -62,6 +62,7 @@ help:
 	@echo "test-integration-sale-payment-item-basket - run PaymentItemBasket integration tests"
 	@echo "test-integration-sale-payment-item-shipment - run PaymentItemShipment integration tests"
 	@echo "test-integration-sale-property-relation - run PropertyRelation integration tests"
+	@echo "test-integration-scope-booking - run Booking integration tests"
 
 
 .PHONY: docker-init
@@ -242,6 +243,10 @@ test-integration-scope-sale:
 .PHONY: test-integration-scope-sonet-group
 test-integration-scope-sonet-group:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sonet_group
+
+.PHONY: test-integration-scope-booking
+test-integration-scope-booking:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_booking
 
 .PHONY: test-integration-scope-disk
 test-integration-scope-disk:
