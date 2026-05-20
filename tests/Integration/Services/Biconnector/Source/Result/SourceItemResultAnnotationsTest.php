@@ -64,7 +64,13 @@ class SourceItemResultAnnotationsTest extends TestCase
         $this->sourceId = $this->sourceService->add([
             'title'       => 'source-annotations-' . $this->faker->uuid(),
             'connectorId' => $this->connectorId,
-            'settings'    => ['token' => 'test-token-' . $this->faker->uuid()],
+            'settings'    => [
+                'host'     => '172.18.0.2',
+                'port'     => '3306',
+                'database' => 'customer_db',
+                'username' => 'testuser',
+                'password' => 'testpass123',
+            ],
         ])->getId();
     }
 

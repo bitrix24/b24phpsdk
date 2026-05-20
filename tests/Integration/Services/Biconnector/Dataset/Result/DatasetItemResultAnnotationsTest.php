@@ -68,18 +68,24 @@ class DatasetItemResultAnnotationsTest extends TestCase
         $this->sourceId = $this->sourceService->add([
             'title'       => 'source-annotations-' . $this->faker->uuid(),
             'connectorId' => $this->connectorId,
-            'settings'    => ['token' => 'test-token-' . $this->faker->uuid()],
+            'settings'    => [
+                'host'     => '172.18.0.2',
+                'port'     => '3306',
+                'database' => 'customer_db',
+                'username' => 'testuser',
+                'password' => 'testpass123',
+            ],
         ])->getId();
 
         $name = 'ds' . substr(str_replace('-', '', $this->faker->uuid()), 0, 20);
         $this->datasetId = $this->datasetService->add([
             'sourceId'     => $this->sourceId,
             'name'         => $name,
-            'externalName' => 'ext_' . $name,
-            'externalCode' => 'code_' . $name,
+            'externalName' => 'orders',
+            'externalCode' => 'orders',
             'fields'       => [
                 ['type' => 'int', 'name' => 'ID', 'externalCode' => 'ID'],
-                ['type' => 'string', 'name' => 'NAME', 'externalCode' => 'NAME'],
+                ['type' => 'double', 'name' => 'TAX_AMOUNT', 'externalCode' => 'TAX_AMOUNT'],
             ],
         ])->getId();
     }

@@ -115,7 +115,11 @@ class BatchTest extends TestCase
             'title'       => $title,
             'connectorId' => $this->connectorId,
             'settings'    => [
-                'token' => 'test-token-' . $this->faker->uuid(),
+                'host'     => '172.18.0.2',
+                'port'     => '3306',
+                'database' => 'customer_db',
+                'username' => 'testuser',
+                'password' => 'testpass123',
             ],
         ];
     }
