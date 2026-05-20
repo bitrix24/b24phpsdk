@@ -3,6 +3,8 @@
 
 ### Added
 
+- Added `Services\Booking\BookingServiceBuilder` with Booking scope wrappers and integration coverage for `booking.v1.clienttype.*`, `booking.v1.resourceType.*`, `booking.v1.resource.*`, `booking.v1.resource.slots.*`, `booking.v1.waitlist.*`, `booking.v1.waitlist.client.*`, `booking.v1.waitlist.externalData.*`, `booking.v1.booking.*`, `booking.v1.booking.client.*`, and `booking.v1.booking.externalData.*` methods.
+
 ### Changed
 
 ### Fixed
