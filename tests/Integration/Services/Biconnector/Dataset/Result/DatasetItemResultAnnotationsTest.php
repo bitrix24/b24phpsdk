@@ -54,6 +54,10 @@ class DatasetItemResultAnnotationsTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
+        // setUp body is commented out: this test class requires an additional external service
+        // (a real database accessible via the Biconnector connector).
+        $this->markTestSkipped('This test requires an additional external service (a real database accessible via the Biconnector connector).');
+        /*
         $biconnectorServiceBuilder = Factory::getServiceBuilder(true)->getBiconnectorScope();
         $this->datasetService = $biconnectorServiceBuilder->dataset();
         $this->sourceService = $biconnectorServiceBuilder->source();
@@ -87,6 +91,7 @@ class DatasetItemResultAnnotationsTest extends TestCase
                 ['type' => 'int', 'name' => 'ID', 'externalCode' => 'ID'],
             ],
         ])->getId();
+        */
     }
 
     /**
@@ -96,6 +101,9 @@ class DatasetItemResultAnnotationsTest extends TestCase
     #[\Override]
     protected function tearDown(): void
     {
+        // tearDown body is commented out: this test class requires an additional external service
+        // (a real database accessible via the Biconnector connector).
+        /*
         try {
             $this->datasetService->delete($this->datasetId);
         } catch (\Throwable) {
@@ -110,6 +118,7 @@ class DatasetItemResultAnnotationsTest extends TestCase
             $this->connectorService->delete($this->connectorId);
         } catch (\Throwable) {
         }
+        */
     }
 
     private function makeConnectorFields(string $title): array
@@ -135,24 +144,34 @@ class DatasetItemResultAnnotationsTest extends TestCase
     #[TestDox('all fields in DatasetItemResult are annotated and match live API fields schema')]
     public function testAllSystemFieldsAnnotated(): void
     {
+        // Test body is commented out: this test requires an additional external service
+        // (a real database accessible via the Biconnector connector).
+        $this->markTestSkipped('This test requires an additional external service (a real database accessible via the Biconnector connector).');
+        /*
         $fieldCodes = $this->getDatasetFieldCodes();
 
         $this->assertBitrix24AllResultItemFieldsAnnotated(
             $fieldCodes,
             DatasetItemResult::class
         );
+        */
     }
 
     #[Test]
     #[TestDox('all fields in DatasetItemResult have valid type casting matching API fields schema')]
     public function testAllSystemFieldsHasValidTypeAnnotation(): void
     {
+        // Test body is commented out: this test requires an additional external service
+        // (a real database accessible via the Biconnector connector).
+        $this->markTestSkipped('This test requires an additional external service (a real database accessible via the Biconnector connector).');
+        /*
         $fieldTypesMap = $this->getDatasetFieldTypesMap();
 
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
             $fieldTypesMap,
             DatasetItemResult::class
         );
+        */
     }
 
     /**
@@ -186,4 +205,3 @@ class DatasetItemResultAnnotationsTest extends TestCase
         return $result;
     }
 }
-

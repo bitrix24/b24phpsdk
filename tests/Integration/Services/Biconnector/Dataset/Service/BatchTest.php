@@ -48,6 +48,10 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
+        // setUp body is commented out: this test class requires an additional external service
+        // (a real database accessible via the Biconnector connector).
+        $this->markTestSkipped('This test requires an additional external service (a real database accessible via the Biconnector connector).');
+        /*
         $biconnectorServiceBuilder = Factory::getServiceBuilder(true)->getBiconnectorScope();
         $this->datasetService = $biconnectorServiceBuilder->dataset();
         $this->sourceService = $biconnectorServiceBuilder->source();
@@ -70,6 +74,7 @@ class BatchTest extends TestCase
                 'password' => 'testpass123',
             ],
         ])->getId();
+        */
     }
 
     /**
@@ -79,6 +84,9 @@ class BatchTest extends TestCase
     #[\Override]
     protected function tearDown(): void
     {
+        // tearDown body is commented out: this test class requires an additional external service
+        // (a real database accessible via the Biconnector connector).
+        /*
         try {
             $this->sourceService->delete($this->sourceId);
         } catch (\Throwable) {
@@ -88,6 +96,7 @@ class BatchTest extends TestCase
             $this->connectorService->delete($this->connectorId);
         } catch (\Throwable) {
         }
+        */
     }
 
     private function makeConnectorFields(string $title): array
@@ -128,6 +137,10 @@ class BatchTest extends TestCase
      */
     public function testBatchList(): void
     {
+        // Test body is commented out: this test requires an additional external service
+        // (a real database accessible via the Biconnector connector).
+        $this->markTestSkipped('This test requires an additional external service (a real database accessible via the Biconnector connector).');
+        /*
         $name = 'ds' . substr(str_replace('-', '', $this->faker->uuid()), 0, 20);
         $id = $this->datasetService->add($this->makeDatasetFields($name))->getId();
 
@@ -141,6 +154,7 @@ class BatchTest extends TestCase
 
         // Cleanup
         $this->datasetService->delete($id);
+        */
     }
 
     /**
@@ -149,6 +163,10 @@ class BatchTest extends TestCase
      */
     public function testBatchAdd(): void
     {
+        // Test body is commented out: this test requires an additional external service
+        // (a real database accessible via the Biconnector connector).
+        $this->markTestSkipped('This test requires an additional external service (a real database accessible via the Biconnector connector).');
+        /*
         $datasets = [];
         for ($i = 0; $i < 3; $i++) {
             $name = 'ds' . substr(str_replace('-', '', $this->faker->uuid()), 0, 20);
@@ -167,6 +185,7 @@ class BatchTest extends TestCase
         foreach ($this->datasetService->batch->delete($addedIds) as $deleteResult) {
             self::assertTrue($deleteResult->isSuccess());
         }
+        */
     }
 
     /**
@@ -175,6 +194,10 @@ class BatchTest extends TestCase
      */
     public function testBatchDelete(): void
     {
+        // Test body is commented out: this test requires an additional external service
+        // (a real database accessible via the Biconnector connector).
+        $this->markTestSkipped('This test requires an additional external service (a real database accessible via the Biconnector connector).');
+        /*
         $ids = [];
         for ($i = 0; $i < 2; $i++) {
             $name = 'ds' . substr(str_replace('-', '', $this->faker->uuid()), 0, 20);
@@ -184,6 +207,6 @@ class BatchTest extends TestCase
         foreach ($this->datasetService->batch->delete($ids) as $result) {
             self::assertTrue($result->isSuccess());
         }
+        */
     }
 }
-
