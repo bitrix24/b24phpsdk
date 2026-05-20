@@ -114,11 +114,10 @@ class BatchTest extends TestCase
         return [
             'sourceId'     => $this->sourceId,
             'name'         => $name,
-            'externalName' => 'orders',
-            'externalCode' => 'orders',
+            'externalName' => 'order_items',
+            'externalCode' => 'order_items',
             'fields'       => [
                 ['type' => 'int', 'name' => 'ID', 'externalCode' => 'ID'],
-                ['type' => 'double', 'name' => 'TAX_AMOUNT', 'externalCode' => 'TAX_AMOUNT'],
             ],
         ];
     }
