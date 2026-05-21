@@ -17,6 +17,7 @@ use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\IM\Chat\Service\Chat;
+use Bitrix24\SDK\Services\IM\Chat\Service\ChatUser;
 use Bitrix24\SDK\Services\IM\Dialog\Service\Dialog;
 use Bitrix24\SDK\Services\IM\Counters\Service\Counters;
 use Bitrix24\SDK\Services\IM\Message\Service\Message;
@@ -54,6 +55,15 @@ class IMServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Chat($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function chatUser(): ChatUser
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new ChatUser($this->core, $this->log);
         }
 
         return $this->serviceCache[__METHOD__];
