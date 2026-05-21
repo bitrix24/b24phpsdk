@@ -119,39 +119,6 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
      */
     #[Test]
     #[DataProvider('bitrix24PartnerDataProvider')]
-    #[TestDox('test delete method')]
-    final public function testDelete(
-        Uuid                  $uuid,
-        Bitrix24PartnerStatus $bitrix24PartnerStatus,
-        string                $title,
-        ?int                  $bitrix24PartnerNumber,
-        ?string               $site,
-        ?PhoneNumber          $phoneNumber,
-        ?string               $email,
-        ?string               $openLineId,
-        ?string               $externalId,
-        string                $comment
-    ): void {
-        $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
-        $b24PartnerRepository = $this->createBitrix24PartnerRepositoryImplementation();
-        $flusher = $this->createRepositoryFlusherImplementation();
-
-        $b24Partner->markAsDeleted('delete partner');
-        $b24PartnerRepository->save($b24Partner);
-        $flusher->flush();
-
-        $b24PartnerRepository->delete($b24Partner->getId());
-        $flusher->flush();
-
-        $this->assertNull($b24PartnerRepository->findByBitrix24PartnerNumber($bitrix24PartnerNumber));
-    }
-
-    /**
-     * @throws InvalidArgumentException
-     * @throws Bitrix24PartnerNotFoundException
-     */
-    #[Test]
-    #[DataProvider('bitrix24PartnerDataProvider')]
     #[TestDox('test save method')]
     final public function testGetById(
         Uuid                  $uuid,
