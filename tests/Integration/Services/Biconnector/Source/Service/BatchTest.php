@@ -20,7 +20,7 @@ use Bitrix24\SDK\Services\Biconnector\Connector\Service\Connector;
 use Bitrix24\SDK\Services\Biconnector\Source\Result\SourceItemResult;
 use Bitrix24\SDK\Services\Biconnector\Source\Service\Batch;
 use Bitrix24\SDK\Services\Biconnector\Source\Service\Source;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use Faker\Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
@@ -45,7 +45,7 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $builder = Factory::getServiceBuilder(true)->getBiconnectorScope();
+        $builder = Fabric::getServiceBuilder(true)->getBiconnectorScope();
         $this->sourceService = $builder->source();
         $this->connectorService = $builder->connector();
         $this->faker = Faker\Factory::create();

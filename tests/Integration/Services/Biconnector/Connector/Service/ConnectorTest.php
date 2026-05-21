@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Biconnector\Connector\Result\ConnectorItemResult;
 use Bitrix24\SDK\Services\Biconnector\Connector\Service\Connector;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use Faker\Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
@@ -40,7 +40,7 @@ class ConnectorTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->connectorService = Factory::getServiceBuilder(true)->getBiconnectorScope()->connector();
+        $this->connectorService = Fabric::getServiceBuilder(true)->getBiconnectorScope()->connector();
         $this->faker = Faker\Factory::create();
     }
 

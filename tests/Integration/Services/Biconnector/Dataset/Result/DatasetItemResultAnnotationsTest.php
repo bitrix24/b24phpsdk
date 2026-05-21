@@ -20,7 +20,7 @@ use Bitrix24\SDK\Services\Biconnector\Dataset\Result\DatasetItemResult;
 use Bitrix24\SDK\Services\Biconnector\Dataset\Service\Dataset;
 use Bitrix24\SDK\Services\Biconnector\Source\Service\Source;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use Faker\Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -58,7 +58,7 @@ class DatasetItemResultAnnotationsTest extends TestCase
         // (a real database accessible via the Biconnector connector).
         $this->markTestSkipped('This test requires an additional external service (a real database accessible via the Biconnector connector).');
         /*
-        $biconnectorServiceBuilder = Factory::getServiceBuilder(true)->getBiconnectorScope();
+        $biconnectorServiceBuilder = Fabric::getServiceBuilder(true)->getBiconnectorScope();
         $this->datasetService = $biconnectorServiceBuilder->dataset();
         $this->sourceService = $biconnectorServiceBuilder->source();
         $this->connectorService = $biconnectorServiceBuilder->connector();
