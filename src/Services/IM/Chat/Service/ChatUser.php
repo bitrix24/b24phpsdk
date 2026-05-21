@@ -37,7 +37,7 @@ class ChatUser extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/chats/chat-users/im-chat-user-add.html',
         'Add participants to a chat'
     )]
-    public function add(int $chatId, array $userIds, bool $hideHistory = false): UpdatedItemResult
+    public function add(int $chatId, array $userIds, bool $hideHistory = true): UpdatedItemResult
     {
         return new UpdatedItemResult($this->core->call('im.chat.user.add', [
             'CHAT_ID' => $chatId,

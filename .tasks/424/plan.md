@@ -16,6 +16,9 @@ three Bitrix24 REST API methods in the `im` scope:
 - `im.chat.user.delete`: `result` is `true` → `UpdatedItemResult`
 - `im.chat.user.list`: `result` is a flat `int[]` of user IDs → custom `ChatUserListResult`
 
+`im.chat.user.add` keeps the Bitrix24 API default of hiding previous chat history from
+new participants by default (`HIDE_HISTORY=Y`); callers can pass `false` to expose history.
+
 No `*ItemResult` with `@property-read` annotations is needed for `list` because the response
 is a flat integer array, not an associative object. Therefore no annotation integration test
 is required.
@@ -44,7 +47,7 @@ class ChatUserListResult extends AbstractResult
 #[ApiServiceMetadata(new Scope(['im']))]
 class ChatUser extends AbstractService
 {
-    public function add(int $chatId, array $userIds, bool $hideHistory = false): UpdatedItemResult;
+    public function add(int $chatId, array $userIds, bool $hideHistory = true): UpdatedItemResult;
     public function delete(int $chatId, int $userId): UpdatedItemResult;
     public function list(int $chatId): ChatUserListResult;
 }
@@ -52,7 +55,8 @@ class ChatUser extends AbstractService
 
 ### 3. `tests/Unit/Services/IM/Chat/Service/ChatUserTest.php`
 
-Standard unit test verifying the service instantiates correctly using `NullCore`.
+Unit tests verify `im.chat.user.add` payload mapping for the default hidden-history
+case (`HIDE_HISTORY=Y`) and the explicit visible-history case (`HIDE_HISTORY=N`).
 
 ### 4. `tests/Integration/Services/IM/Chat/Service/ChatUserTest.php`
 

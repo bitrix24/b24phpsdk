@@ -45,9 +45,9 @@ class ChatUserTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $imScope = Factory::getServiceBuilder()->getIMScope();
-        $this->chatService = $imScope->chat();
-        $this->chatUserService = $imScope->chatUser();
+        $imServiceBuilder = Factory::getServiceBuilder()->getIMScope();
+        $this->chatService = $imServiceBuilder->chat();
+        $this->chatUserService = $imServiceBuilder->chatUser();
         $this->currentUserId = (int)$this->chatUserService->core
             ->call('PROFILE')->getResponseData()->getResult()['ID'];
     }
@@ -59,9 +59,9 @@ class ChatUserTest extends TestCase
     #[\Override]
     protected function tearDown(): void
     {
-        foreach ($this->createdChats as $chatId) {
+        foreach ($this->createdChats as $createdChat) {
             try {
-                $this->chatService->leave($chatId);
+                $this->chatService->leave($createdChat);
             } catch (BaseException) {
                 // chat may already be left by the test itself
             }
@@ -106,9 +106,9 @@ class ChatUserTest extends TestCase
 
         $chatId = $this->createChat([$this->currentUserId]);
 
-        $result = $this->chatUserService->add($chatId, [$otherUserId]);
+        $updatedItemResult = $this->chatUserService->add($chatId, [$otherUserId]);
 
-        $this->assertTrue($result->isSuccess());
+        $this->assertTrue($updatedItemResult->isSuccess());
         $this->assertContains($otherUserId, $this->chatUserService->list($chatId)->getUserIds());
     }
 
@@ -127,9 +127,9 @@ class ChatUserTest extends TestCase
 
         $chatId = $this->createChat([$this->currentUserId, $otherUserId]);
 
-        $result = $this->chatUserService->delete($chatId, $otherUserId);
+        $updatedItemResult = $this->chatUserService->delete($chatId, $otherUserId);
 
-        $this->assertTrue($result->isSuccess());
+        $this->assertTrue($updatedItemResult->isSuccess());
     }
 
     /**
