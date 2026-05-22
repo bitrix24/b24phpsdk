@@ -24,7 +24,6 @@ interface Bitrix24PartnerRepositoryInterface
 {
     /**
      * Save bitrix24 partner to persistence storage
-     * @throws InvalidArgumentException
      */
     public function save(Bitrix24PartnerInterface $bitrix24Partner): void;
 
