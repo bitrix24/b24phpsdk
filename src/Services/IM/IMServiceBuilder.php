@@ -18,8 +18,9 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\IM\Chat\Service\Chat;
 use Bitrix24\SDK\Services\IM\Chat\Service\ChatUser;
-use Bitrix24\SDK\Services\IM\Dialog\Service\Dialog;
 use Bitrix24\SDK\Services\IM\Counters\Service\Counters;
+use Bitrix24\SDK\Services\IM\Dialog\Service\Dialog;
+use Bitrix24\SDK\Services\IM\Disk\Service\Disk;
 use Bitrix24\SDK\Services\IM\Message\Service\Message;
 use Bitrix24\SDK\Services\IM\Notify\Service\Notify;
 use Bitrix24\SDK\Services\IM\Placements\PlacementLocationCodes;
@@ -47,6 +48,15 @@ class IMServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Search($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function disk(): Disk
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Disk($this->core, $this->log);
         }
 
         return $this->serviceCache[__METHOD__];

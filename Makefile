@@ -61,6 +61,7 @@ help:
 	@echo "test-integration-calendar-event - run Calendar Event integration tests"
 	@echo "test-integration-calendar-resource - run Calendar Resource integration tests"
 	@echo "test-integration-sale-basket-property - run BasketProperty integration tests"
+	@echo "test-integration-im-disk - run IM Disk integration tests"
 	@echo "test-integration-sale-cashbox-handler - run CashboxHandler integration tests"
 	@echo "test-integration-sale-cashbox - run Cashbox integration tests"
 	@echo "test-integration-sale-delivery - run Delivery integration tests"
@@ -218,6 +219,10 @@ test-integration-scope-workflows:
 .PHONY: test-integration-scope-im
 test-integration-scope-im:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im
+
+.PHONY: test-integration-im-disk
+test-integration-im-disk:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_disk
 
 .PHONY: test-integration-im-chat
 test-integration-im-chat:

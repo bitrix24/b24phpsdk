@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Tests\Unit\Services\IM;
 
 use Bitrix24\SDK\Services\IM\Counters\Service\Counters;
 use Bitrix24\SDK\Services\IM\Dialog\Service\Dialog;
+use Bitrix24\SDK\Services\IM\Disk\Service\Disk;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
 use Bitrix24\SDK\Services\IM\Recent\Service\Recent;
 use Bitrix24\SDK\Services\IM\User\Service\User;
@@ -42,6 +43,12 @@ class IMServiceBuilderTest extends TestCase
     public function testGetIMService(): void
     {
         $this::assertSame($this->serviceBuilder->notify(), $this->serviceBuilder->notify());
+    }
+
+    public function testGetDiskService(): void
+    {
+        $this->assertInstanceOf(Disk::class, $this->serviceBuilder->disk());
+        $this->assertSame($this->serviceBuilder->disk(), $this->serviceBuilder->disk());
     }
 
     public function testGetChatService(): void
