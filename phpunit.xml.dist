@@ -43,6 +43,9 @@
         <testsuite name="integration_tests_im_recent">
             <directory>./tests/Integration/Services/IM/Recent/</directory>
         </testsuite>
+        <testsuite name="integration_tests_im_search">
+            <directory>./tests/Integration/Services/IM/Search/</directory>
+        </testsuite>
         <testsuite name="integration_tests_im_user_status">
             <directory>./tests/Integration/Services/IM/User/</directory>
         </testsuite>
