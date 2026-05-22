@@ -600,6 +600,10 @@ test-integration-main-eventlog:
 test-integration-rest-scope:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_rest_scope_service
 
+.PHONY: test-integration-scope-timeman
+test-integration-scope-timeman:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_timeman
+
 .PHONY: integration_tests_sale
 integration_tests_sale:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale

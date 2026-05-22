@@ -3,6 +3,14 @@
 
 ### Added
 
+- Added `Services\Timeman` service with support for workday tracking methods,
+  see [timeman.* methods](https://apidocs.bitrix24.com/api-reference/timeman/index.html):
+    - `open` — starts a new workday or continues after pause/close
+    - `pause` — pauses the current workday
+    - `close` — closes the current workday
+    - `status` — gets current workday status
+    - `settings` — gets user's work time settings
+  ([#484](https://github.com/bitrix24/b24phpsdk/issues/484))
 - Added `Bitrix24\SDK\Services\IM\Department\Service\Department` service wrapping `im.department.get`, `im.department.colleagues.list`, `im.department.employees.get`, and `im.department.managers.get`, with typed department/user result wrappers and `IMServiceBuilder::department()` accessor ([#432](https://github.com/bitrix24/b24phpsdk/issues/432))
 - Added `Bitrix24\SDK\Services\IM\Disk\Service\Disk` with `getFolderId(?int $chatId = null, ?string $dialogId = null)` for `im.disk.folder.get`, plus dedicated `FolderIdResult`, IM builder registration, and focused unit/integration coverage ([#435](https://github.com/bitrix24/b24phpsdk/issues/435))
 - Added `Bitrix24\SDK\Services\IM\Chat\Service\ChatUser` service wrapping `im.chat.user.add`, `im.chat.user.delete`, `im.chat.user.list` for chat participant management, with `ChatUserListResult` and `IMServiceBuilder::chatUser()` accessor ([#424](https://github.com/bitrix24/b24phpsdk/issues/424))
