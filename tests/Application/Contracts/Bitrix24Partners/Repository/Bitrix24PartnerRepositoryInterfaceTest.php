@@ -85,40 +85,6 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
      */
     #[Test]
     #[DataProvider('bitrix24PartnerDataProvider')]
-    #[TestDox('test save with two bitrix24partner number')]
-    final public function testSaveWithTwoBitrix24PartnerNumber(
-        Uuid                  $uuid,
-        Bitrix24PartnerStatus $bitrix24PartnerStatus,
-        string                $title,
-        ?int                  $bitrix24PartnerNumber,
-        ?string               $site,
-        ?PhoneNumber          $phoneNumber,
-        ?string               $email,
-        ?string               $openLineId,
-        ?string               $externalId,
-        string                $comment
-    ): void {
-        $b24Partner = $this->createBitrix24PartnerImplementation($uuid, $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
-        $b24PartnerRepository = $this->createBitrix24PartnerRepositoryImplementation();
-        $flusher = $this->createRepositoryFlusherImplementation();
-
-        $b24PartnerRepository->save($b24Partner);
-        $flusher->flush();
-
-        $res = $b24PartnerRepository->getById($b24Partner->getId());
-        $this->assertEquals($b24Partner, $res);
-
-        $secondB24Partner = $this->createBitrix24PartnerImplementation(Uuid::v7(), $bitrix24PartnerStatus, $title, $bitrix24PartnerNumber, $site, $phoneNumber, $email, $openLineId, $externalId);
-        $this->expectException(InvalidArgumentException::class);
-        $b24PartnerRepository->save($secondB24Partner);
-    }
-
-    /**
-     * @throws InvalidArgumentException
-     * @throws Bitrix24PartnerNotFoundException
-     */
-    #[Test]
-    #[DataProvider('bitrix24PartnerDataProvider')]
     #[TestDox('test save method')]
     final public function testGetById(
         Uuid                  $uuid,

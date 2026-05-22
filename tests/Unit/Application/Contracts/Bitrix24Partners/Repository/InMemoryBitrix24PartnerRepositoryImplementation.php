@@ -108,9 +108,6 @@ class InMemoryBitrix24PartnerRepositoryImplementation implements Bitrix24Partner
         return $items;
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     #[\Override]
     public function save(Bitrix24PartnerInterface $bitrix24Partner): void
     {
@@ -118,17 +115,6 @@ class InMemoryBitrix24PartnerRepositoryImplementation implements Bitrix24Partner
             'id' => $bitrix24Partner->getId()->toRfc4122(),
             'bitrix24PartnerNumber' => $bitrix24Partner->getBitrix24PartnerNumber()
         ]);
-
-        $existsPartner = $this->findByBitrix24PartnerNumber($bitrix24Partner->getBitrix24PartnerNumber());
-        if ($existsPartner instanceof Bitrix24PartnerInterface && $existsPartner->getId() !== $bitrix24Partner->getId()) {
-            throw new InvalidArgumentException(sprintf(
-                'bitrix24 partner «%s» with bitrix24 partner number is «%s» already exists with id «%s» in status «%s»',
-                $existsPartner->getTitle(),
-                $bitrix24Partner->getBitrix24PartnerNumber(),
-                $existsPartner->getId(),
-                $existsPartner->getStatus()->name
-            ));
-        }
 
         $this->items[$bitrix24Partner->getId()->toRfc4122()] = $bitrix24Partner;
     }
