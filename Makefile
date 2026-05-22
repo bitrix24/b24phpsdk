@@ -79,6 +79,7 @@ help:
 	@echo "test-integration-scope-landing-template - run Landing Template integration tests"
 	@echo "test-integration-im-message - run IM Message integration tests"
 	@echo "test-integration-im-dialog - run IM Dialog integration tests"
+	@echo "test-integration-im-department - run IM Department integration tests"
 	@echo "test-integration-im-user - run IM User integration tests"
 	@echo "test-integration-im-revision - run IM Revision integration tests"
 	@echo "test-integration-im-counters - run IM Counters integration tests"
@@ -235,6 +236,10 @@ test-integration-im-chat-user:
 .PHONY: test-integration-im-dialog
 test-integration-im-dialog:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_dialog
+
+.PHONY: test-integration-im-department
+test-integration-im-department:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_department
 
 .PHONY: test-integration-scope-placement
 test-integration-scope-placement:

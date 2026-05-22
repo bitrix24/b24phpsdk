@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Unit\Services\IM;
 
 use Bitrix24\SDK\Services\IM\Counters\Service\Counters;
+use Bitrix24\SDK\Services\IM\Department\Service\Department;
 use Bitrix24\SDK\Services\IM\Dialog\Service\Dialog;
 use Bitrix24\SDK\Services\IM\Disk\Service\Disk;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
@@ -76,6 +77,12 @@ class IMServiceBuilderTest extends TestCase
     {
         $this->assertInstanceOf(Counters::class, $this->serviceBuilder->counters());
         $this->assertSame($this->serviceBuilder->counters(), $this->serviceBuilder->counters());
+    }
+
+    public function testGetDepartmentService(): void
+    {
+        $this->assertInstanceOf(Department::class, $this->serviceBuilder->department());
+        $this->assertSame($this->serviceBuilder->department(), $this->serviceBuilder->department());
     }
 
     public function testGetUserStatusService(): void
