@@ -445,6 +445,10 @@ integration_tests_crm_documentgenerator_document:
 integration_tests_crm_documentgenerator_template:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_documentgenerator_template
 
+.PHONY: test-integration-scope-timeman
+test-integration-scope-timeman:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_timeman
+
 # work dev environment
 .PHONY: php-dev-server-up
 php-dev-server-up:
