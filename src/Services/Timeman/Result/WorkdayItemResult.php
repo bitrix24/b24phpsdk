@@ -20,7 +20,7 @@ use Carbon\CarbonImmutable;
  * Represents a single workday item returned by timeman.open, timeman.pause, timeman.close, timeman.status methods.
  *
  * @property-read string $STATUS
- * @property-read CarbonImmutable $TIME_START
+ * @property-read CarbonImmutable|null $TIME_START
  * @property-read CarbonImmutable|null $TIME_FINISH
  * @property-read string $DURATION
  * @property-read string $TIME_LEAKS
@@ -32,7 +32,6 @@ use Carbon\CarbonImmutable;
  * @property-read float $LAT_CLOSE
  * @property-read float $LON_CLOSE
  * @property-read int $TZ_OFFSET
- * @property-read CarbonImmutable|null $TIME_FINISH_DEFAULT
  */
 class WorkdayItemResult extends AbstractAnnotatedItem
 {
