@@ -29,6 +29,30 @@ Do not proceed with any workflow until the command completes successfully.
 
 ---
 
+## SDK file code generators
+
+Before manually creating or updating SDK PHP files that match one of the generator-supported
+contracts below, use the generator first. If the generator cannot be used for the current
+case, write the reason explicitly in `.tasks/<issue-number>/plan.md` before proceeding with
+manual edits.
+
+| File type | Required generator |
+|---|---|
+| `src/Services/**/Result/*ItemResult.php` with `@property-read` field annotations | `php bin/console b24-dev:result-item-generator <method.name> --stage=all` |
+| `src/Services/**/Service/*SelectBuilder.php` | `php bin/console b24-dev:generate-select-builder <openapi-entity-key> --namespace=<namespace> --class-name=<class> --output=<path>` |
+| `src/Services/**/Service/*ItemBuilder.php` | `php bin/console b24-dev:generate-item-builder <openapi-operation-path> --namespace=<namespace> --class-name=<class> --output=<path>` |
+
+Generator usage rules:
+
+- Run `make oa-schema-build` first; the generators rely on `docs/open-api/openapi.json`.
+- Include the generator command in the issue plan for any generated SDK file.
+- Review generated code against existing SDK naming, namespace, result-envelope, casting, and
+  backward-compatibility patterns before committing it.
+- After generating a `*ItemResult.php`, keep the mandatory live annotation/type-casting
+  integration test described below.
+
+---
+
 ## Webhook URL format for direct curl requests
 
 When making direct `curl` calls to inspect raw API responses (e.g., during integration test
@@ -78,6 +102,22 @@ curl -s -X POST \
   -H "Content-Type: application/json" \
   -d '{"auth": "<oauth_token>", "filter": {}, "select": ["ID"]}'
 ```
+
+---
+
+## Issue language
+
+**Rule**: every GitHub issue in `bitrix24/b24phpsdk` — title, body, and checklists — MUST be
+written in **English only**, regardless of the language used in conversation with the user.
+
+This applies to:
+- creating a new issue (`mcp__github__create_issue`, `gh issue create`)
+- updating an existing issue body or title (`mcp__github__update_issue`)
+- adding issue comments (`mcp__github__add_issue_comment`)
+
+If the conversation is in another language, translate the content to English before writing
+it to GitHub. Do not mix languages inside a single issue. Proper nouns (method names, file
+paths, URLs) stay as-is.
 
 ---
 
@@ -430,9 +470,33 @@ class <Name>ItemResultTest extends TestCase
 
 ---
 
+## Implementing placements for a scope
+
+Use this section when the user asks to add support for Bitrix24 **widget placement codes**
+(see `placement.list`), typed bind/unbind helpers, and `OPTIONS` payload builders within a
+scope (e.g. IM, CRM, Tasks, Calendar, Sonet).
+
+The full playbook is intentionally split out to keep `SKILL.md` compact. Read
+`placements.md` in this same folder before implementation.
+
+That supporting guide covers:
+
+- delivery order from `placement.list` research to final verification
+- directory layout and naming rules for `PlacementLocationCodes`, `Placements`, and
+  `<ScopePrefix>*PlacementOptions`
+- typed localization payloads via `PlacementLangItem`, `PlacementLangMap`, and shared
+  `Core\Contracts\LangCodes`
+- service-builder registration, docs-link requirements, and deprecation handling
+- mandatory unit and integration tests for codes, options, localization DTOs, and the typed
+  facade
+
+---
+
 ## Task folder and implementation plan
 
 **Rule**: before writing any code, create a dedicated folder and a plan file for the issue.
+
+> **Never** create plan files under `docs/plans/`. All plan files MUST be placed inside the task folder at `.tasks/<issue-number>/plan.md`.
 
 ### 1. Create the task folder
 
@@ -552,6 +616,20 @@ For each REST method involved in the issue:
 3. Note which API version the method belongs to (v1 or v3) — this informs the base branch choice
 
 Record findings in the **Context** section of `plan.md` so the plan is grounded in actual API behaviour, not assumptions.
+
+### Service method date/time arguments
+
+When adding or changing service methods, any argument that represents a date or date-time
+value must be typed as `CarbonImmutable` in the public SDK method signature. Convert it to
+the Bitrix24 REST payload format at the service boundary, following existing service
+patterns. Do not expose raw date/time strings in service method arguments when the SDK can
+accept a typed immutable date value instead.
+
+### ApiEndpointMetadata documentation links
+
+When adding or changing `ApiEndpointMetadata` attributes, documentation links must point to
+the English Bitrix24 API documentation site under `https://apidocs.bitrix24.com/`. Do not
+use localized documentation hosts for these attribute links.
 
 ### Step 3 — Determine the type
 
@@ -676,6 +754,10 @@ Do not write production code before having a failing test. This applies to every
 After all files from the plan are written and the plan is marked complete,
 run checks in two phases. **Do not start phase 2 until phase 1 is fully green.**
 
+Completion invariant: every completed implementation task must run `make lint-rector`
+before it is reported as finished. This applies even when a narrower check set is chosen
+for a small or targeted change.
+
 ### Phase 1 — Light checks (linters + unit tests)
 
 Run in this order:
@@ -732,6 +814,19 @@ Report the status to the user:
 ## Creating a Pull Request after a green quality gate
 
 Run this step **only after both phases of the quality gate are fully green and CHANGELOG is updated**.
+
+### Core rules (non-negotiable)
+
+- **Auto-create the PR yourself** via `mcp__github__create_pull_request` (or `gh pr create` as fallback). **Never** respond with a "click this URL to create the PR" message — the agent opens the PR, not the user. The URL returned by `git push` (`.../pull/new/<branch>`) is informational; do not forward it as a manual-action prompt.
+- **Base branch is fixed by API version:**
+
+    | API version | PR base branch |
+    |---|---|
+    | v3 | `v3-dev` |
+    | v1 | `dev` |
+
+    Never open a PR against `main`. The base must match the base branch chosen in Step 4 of the start-of-work protocol.
+- **PR body comes from the repo template.** Always read `.github/PULL_REQUEST_TEMPLATE.md` fresh from disk with `cat` immediately before composing the body. Do not reuse a memorised layout; the template evolves.
 
 **Required before starting:**
 1. Invoke `superpowers:verification-before-completion` — run all quality gate commands again, capture actual output, confirm every command passes. Do not create the PR based on remembered results.
@@ -825,6 +920,62 @@ milestone: <milestone number from step 3>
 ### Step 5 — Return the PR URL
 
 After the PR is created, output the PR URL so the user can open it directly.
+
+### Step 6 — Poll the PR status until CI completes
+
+Right after the PR is created (or after any subsequent `git push` to an existing PR
+branch), poll the PR status via MCP until all required checks finish. Do **not** declare
+the PR "pushed" or "updated" until CI has reported back — a green local quality gate does
+not guarantee green CI.
+
+Call `mcp__github__get_pull_request_status`:
+
+```
+owner: bitrix24
+repo:  b24phpsdk
+pullNumber: <PR number>
+```
+
+Interpret the response:
+
+| `state` | Meaning | Action |
+|---|---|---|
+| `pending` | One or more checks still running | Wait, then poll again |
+| `success` | All required checks passed | Report success to the user |
+| `failure` / `error` | At least one required check failed | Fetch the failing run's logs, diagnose, fix, push again, and restart polling |
+
+**Polling cadence**: wait ~60 seconds between polls. Do not spam the API.
+
+**If MCP is unavailable**, use the `gh` fallback:
+
+```bash
+gh pr checks <PR number> --repo bitrix24/b24phpsdk --watch
+```
+
+### Step 7 — Report the final CI state to the user
+
+Once polling terminates, report one of:
+
+- ✅ All checks green — include the PR URL and the list of passed checks.
+- ❌ Failing checks — include the PR URL, the names of the failed jobs, and a one-line
+  summary of what the failure indicates. Do not auto-merge or mark the work "done" in
+  this state.
+
+---
+
+## Pushing to an existing PR branch
+
+Any `git push` to a branch that already has an open PR MUST be followed by a PR status
+poll, using the same procedure as **Step 6** of the PR creation workflow above.
+
+**Rule**: after `git push origin <branch>`:
+
+1. Resolve the PR number for the branch (e.g. via `gh pr view <branch> --json number` or
+   `mcp__github__list_pull_requests` filtered by `head`).
+2. Call `mcp__github__get_pull_request_status` with that PR number.
+3. Poll until `state` is no longer `pending`.
+4. Report the final state to the user — do not consider the push "done" until CI has
+   reported back.
 
 ---
 

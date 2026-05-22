@@ -1,0 +1,18 @@
+version: 1
+method: im.chat.get
+object: result
+generated_from:
+  - b24restdocs
+
+fields:
+  - code: ID
+    source_type: integer
+    phpdoc_type: int
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Chat identifier returned by im.chat.get
+    notes: REST docs describe result.ID in the response example without a dedicated Result Object table.
+
+sections: []

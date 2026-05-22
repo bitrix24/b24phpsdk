@@ -23,6 +23,11 @@ use Bitrix24\SDK\Core\Result\AddedItemResult;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
+use Bitrix24\SDK\Services\IM\Notify\Result\NotifiesResult;
+use Bitrix24\SDK\Services\IM\Notify\Result\NotifyHistorySearchResult;
+use Bitrix24\SDK\Services\IM\Notify\Result\NotifyReadAllResult;
+use Bitrix24\SDK\Services\IM\Notify\Result\NotifySchemaResult;
+use Carbon\CarbonImmutable;
 
 #[ApiServiceMetadata(new Scope(['im']))]
 class Notify extends AbstractService
@@ -38,7 +43,7 @@ class Notify extends AbstractService
      */
     #[ApiEndpointMetadata(
         'im.notify.system.add',
-        'https://training.bitrix24.com/support/training/course/index.php?COURSE_ID=115&LESSON_ID=23904&LESSON_PATH=9691.9805.11585.23904',
+        'https://apidocs.bitrix24.com/api-reference/chats/notifications/im-notify-system-add.html',
         'Sending system notification'
     )]
     public function fromSystem(
@@ -63,9 +68,18 @@ class Notify extends AbstractService
         ));
     }
 
+    /**
+     * @param positive-int $userId
+     * @param non-empty-string $message
+     * @param non-empty-string|null $forEmailChannelMessage
+     * @param non-empty-string|null $notificationTag
+     * @param non-empty-string|null $subTag
+     * @throws BaseException
+     * @throws TransportException
+     */
     #[ApiEndpointMetadata(
         'im.notify.personal.add',
-        'https://training.bitrix24.com/support/training/course/index.php?COURSE_ID=115&LESSON_ID=23904&LESSON_PATH=9691.9805.11585.23904',
+        'https://apidocs.bitrix24.com/api-reference/chats/notifications/im-notify-personal-add.html',
         'Sending personal notification'
     )]
     public function fromPersonal(
@@ -90,9 +104,46 @@ class Notify extends AbstractService
         ));
     }
 
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'im.notify',
+        'https://apidocs.bitrix24.com/api-reference/chats/notifications/im-notify.html',
+        'Send a notification from application context'
+    )]
+    public function send(
+        int     $userId,
+        string  $message,
+        string  $type = 'USER',
+        ?string $forEmailChannelMessage = null,
+        ?string $notificationTag = null,
+        ?string $subTag = null,
+        ?array  $attachment = null
+    ): AddedItemResult
+    {
+        return new AddedItemResult($this->core->call(
+            'im.notify',
+            [
+                'USER_ID' => $userId,
+                'MESSAGE' => $message,
+                'TYPE' => $type,
+                'MESSAGE_OUT' => $forEmailChannelMessage,
+                'TAG' => $notificationTag,
+                'SUB_TAG' => $subTag,
+                'ATTACH' => $attachment,
+            ]
+        ));
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
     #[ApiEndpointMetadata(
         'im.notify.delete',
-        'https://training.bitrix24.com/support/training/course/index.php?COURSE_ID=115&LESSON_ID=23906&LESSON_PATH=9691.9805.11585.23906',
+        'https://apidocs.bitrix24.com/api-reference/chats/notifications/im-notify-delete.html',
         'Deleting notification'
     )]
     public function delete(
@@ -111,9 +162,13 @@ class Notify extends AbstractService
         ));
     }
 
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
     #[ApiEndpointMetadata(
         'im.notify.read',
-        'https://training.bitrix24.com/support/training/course/index.php?COURSE_ID=115&LESSON_ID=11587&LESSON_PATH=9691.9805.11585.11587',
+        'https://apidocs.bitrix24.com/api-reference/chats/notifications/im-notify-read.html',
         'The method cancels notification for read messages.'
     )]
     public function markAsRead(
@@ -130,9 +185,13 @@ class Notify extends AbstractService
         ));
     }
 
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
     #[ApiEndpointMetadata(
-        'im.notify.read',
-        'https://training.bitrix24.com/support/training/course/index.php?COURSE_ID=115&LESSON_ID=23908&LESSON_PATH=9691.9805.11585.23908',
+        'im.notify.read.list',
+        'https://apidocs.bitrix24.com/api-reference/chats/notifications/im-notify-read-list.html',
         '"Read" the list of notifications, excluding CONFIRM notification type'
     )]
     public function markMessagesAsRead(
@@ -140,7 +199,7 @@ class Notify extends AbstractService
     ): UpdatedItemResult
     {
         return new UpdatedItemResult($this->core->call(
-            'im.notify.read',
+            'im.notify.read.list',
             [
                 'IDS' => $notificationIds,
                 'ACTION' => 'Y',
@@ -148,9 +207,13 @@ class Notify extends AbstractService
         ));
     }
 
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
     #[ApiEndpointMetadata(
-        'im.notify.read',
-        'https://training.bitrix24.com/support/training/course/index.php?COURSE_ID=115&LESSON_ID=23908&LESSON_PATH=9691.9805.11585.23908',
+        'im.notify.read.list',
+        'https://apidocs.bitrix24.com/api-reference/chats/notifications/im-notify-read-list.html',
         '"Unread" the list of notifications, excluding CONFIRM notification type'
     )]
     public function markMessagesAsUnread(
@@ -158,7 +221,7 @@ class Notify extends AbstractService
     ): UpdatedItemResult
     {
         return new UpdatedItemResult($this->core->call(
-            'im.notify.read',
+            'im.notify.read.list',
             [
                 'IDS' => $notificationIds,
                 'ACTION' => 'N',
@@ -166,9 +229,27 @@ class Notify extends AbstractService
         ));
     }
 
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'im.notify.read.all',
+        'https://apidocs.bitrix24.com/api-reference/chats/notifications/im-notify-read-all.html',
+        'Mark all notifications as read'
+    )]
+    public function markAllAsRead(): NotifyReadAllResult
+    {
+        return new NotifyReadAllResult($this->core->call('im.notify.read.all', []));
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
     #[ApiEndpointMetadata(
         'im.notify.confirm',
-        'https://training.bitrix24.com/support/training/course/index.php?COURSE_ID=115&LESSON_ID=23912&LESSON_PATH=9691.9805.11585.23912',
+        'https://apidocs.bitrix24.com/api-reference/chats/notifications/im-notify-confirm.html',
         'Interaction with notification buttons'
     )]
     public function confirm(
@@ -185,9 +266,13 @@ class Notify extends AbstractService
         ));
     }
 
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
     #[ApiEndpointMetadata(
         'im.notify.answer',
-        'https://training.bitrix24.com/support/training/course/index.php?COURSE_ID=115&LESSON_ID=23910&LESSON_PATH=9691.9805.11585.23910',
+        'https://apidocs.bitrix24.com/api-reference/chats/notifications/im-notify-answer.html',
         'Response to notification, supporting quick reply'
     )]
     public function answer(
@@ -202,5 +287,85 @@ class Notify extends AbstractService
                 'ANSWER_TEXT' => $answerText,
             ]
         ));
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'im.notify.get',
+        'https://apidocs.bitrix24.com/api-reference/chats/notifications/im-notify-get.html',
+        'Get list of user notifications paginated by LAST_ID and LAST_TYPE'
+    )]
+    public function getList(
+        ?int $lastId = null,
+        ?int $lastType = null,
+        int  $limit = 50,
+    ): NotifiesResult
+    {
+        $params = array_filter(
+            [
+                'LAST_ID' => $lastId,
+                'LAST_TYPE' => $lastType,
+                'LIMIT' => $limit,
+            ],
+            static fn(mixed $value): bool => $value !== null
+        );
+        $params['LIMIT'] = $limit;
+
+        return new NotifiesResult($this->core->call('im.notify.get', $params));
+    }
+
+    /**
+     * @param non-empty-string[]|null $searchTypes
+     * @param positive-int[]|null $searchAuthors
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'im.notify.history.search',
+        'https://apidocs.bitrix24.com/api-reference/chats/notifications/im-notify-history-search.html',
+        'Search notification history'
+    )]
+    public function historySearch(
+        ?string          $searchText = null,
+        ?array           $searchTypes = null,
+        ?CarbonImmutable $searchDateFrom = null,
+        ?CarbonImmutable $searchDateTo = null,
+        ?array           $searchAuthors = null,
+        ?int             $lastId = null,
+        int              $limit = 50,
+    ): NotifyHistorySearchResult
+    {
+        $params = array_filter(
+            [
+                'SEARCH_TEXT' => $searchText,
+                'SEARCH_TYPES' => $searchTypes,
+                'SEARCH_DATE_FROM' => $searchDateFrom?->toIso8601String(),
+                'SEARCH_DATE_TO' => $searchDateTo?->toIso8601String(),
+                'SEARCH_AUTHORS' => $searchAuthors,
+                'LAST_ID' => $lastId,
+                'LIMIT' => $limit,
+            ],
+            static fn(mixed $value): bool => $value !== null
+        );
+        $params['LIMIT'] = $limit;
+
+        return new NotifyHistorySearchResult($this->core->call('im.notify.history.search', $params));
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'im.notify.schema.get',
+        'https://apidocs.bitrix24.com/api-reference/chats/notifications/im-notify-schema-get.html',
+        'Get schema of available notification types per module'
+    )]
+    public function getSchema(): NotifySchemaResult
+    {
+        return new NotifySchemaResult($this->core->call('im.notify.schema.get', []));
     }
 }

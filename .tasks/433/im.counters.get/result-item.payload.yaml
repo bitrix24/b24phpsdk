@@ -1,0 +1,211 @@
+version: 1
+method: im.counters.get
+object: result
+generated_from:
+  - b24restdocs
+
+fields:
+  - code: TYPE
+    source_type: object
+    phpdoc_type: array
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Total counters by type (detailed description)
+    notes: null
+
+  - code: CHAT
+    source_type: array
+    phpdoc_type: array
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: "Counters for chats. Key — chat ID, value — number of unread messages"
+    notes: null
+
+  - code: CHAT_MUTED
+    source_type: object
+    phpdoc_type: array
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: "Counters for chats with notifications disabled. Key — chat ID, value — number of unread messages"
+    notes: null
+
+  - code: CHAT_UNREAD
+    source_type: array
+    phpdoc_type: array
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Counters for chats marked as "Unread"
+    notes: null
+
+  - code: LINES
+    source_type: array
+    phpdoc_type: array
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Counters for open line chats
+    notes: null
+
+  - code: DIALOG
+    source_type: object
+    phpdoc_type: array
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: "Counters for one-on-one dialogs. Key — user ID, value — number of unread messages"
+    notes: null
+
+  - code: DIALOG_UNREAD
+    source_type: array
+    phpdoc_type: array
+    format: null
+    required: true
+    nullable: false
+    source: b24restdocs
+    description: Counters for one-on-one dialogs marked as "Unread"
+    notes: null
+
+  - code: COLLAB
+    source_type: array
+    phpdoc_type: array
+    format: null
+    required: false
+    nullable: false
+    source: api
+    description: null
+    notes: Observed in live API verification report
+
+  - code: COLLAB_UNREAD
+    source_type: array
+    phpdoc_type: array
+    format: null
+    required: false
+    nullable: false
+    source: api
+    description: null
+    notes: Observed in live API verification report
+
+  - code: COPILOT_UNREAD
+    source_type: array
+    phpdoc_type: array
+    format: null
+    required: false
+    nullable: false
+    source: api
+    description: null
+    notes: Observed in live API verification report
+
+  - code: TASKS_TASK_UNREAD
+    source_type: array
+    phpdoc_type: array
+    format: null
+    required: false
+    nullable: false
+    source: api
+    description: null
+    notes: Observed in live API verification report
+
+  - code: COPILOT
+    source_type: array
+    phpdoc_type: array
+    format: null
+    required: false
+    nullable: false
+    source: api
+    description: null
+    notes: Observed in live API verification report
+
+  - code: CHANNEL_COMMENT
+    source_type: array
+    phpdoc_type: array
+    format: null
+    required: false
+    nullable: false
+    source: api
+    description: null
+    notes: Observed in live API verification report
+
+  - code: TASKS_TASK
+    source_type: array
+    phpdoc_type: array
+    format: null
+    required: false
+    nullable: false
+    source: api
+    description: null
+    notes: Observed in live API verification report
+
+sections:
+  - name: type
+    kind: object
+    source: b24restdocs
+    fields:
+      - code: ALL
+        source_type: integer
+        phpdoc_type: int
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Total number of unread messages and notifications
+        notes: null
+
+      - code: CHAT
+        source_type: integer
+        phpdoc_type: int
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Total number of unread messages in chats
+        notes: null
+
+      - code: DIALOG
+        source_type: integer
+        phpdoc_type: int
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Total number of unread messages in dialogs
+        notes: null
+
+      - code: LINES
+        source_type: integer
+        phpdoc_type: int
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Total number of unread messages in open lines
+        notes: null
+
+      - code: NOTIFY
+        source_type: integer
+        phpdoc_type: int
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Total number of unread notifications
+        notes: null
+
+      - code: MESSENGER
+        source_type: integer
+        phpdoc_type: int
+        format: null
+        required: true
+        nullable: false
+        source: b24restdocs
+        description: Total number of unread messages in the messenger (excluding notifications)
+        notes: null

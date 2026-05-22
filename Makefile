@@ -57,9 +57,11 @@ help:
 	@echo "lint-deptrac              - lint source code with deptrac (architecture checks)"
 	@echo ""
 	@echo "test-unit                 - run unit tests"
+	@echo "test-file path=<path>     - run PHPUnit for a specific test file or directory"
 	@echo "test-integration-calendar-event - run Calendar Event integration tests"
 	@echo "test-integration-calendar-resource - run Calendar Resource integration tests"
 	@echo "test-integration-sale-basket-property - run BasketProperty integration tests"
+	@echo "test-integration-im-disk - run IM Disk integration tests"
 	@echo "test-integration-sale-cashbox-handler - run CashboxHandler integration tests"
 	@echo "test-integration-sale-cashbox - run Cashbox integration tests"
 	@echo "test-integration-sale-delivery - run Delivery integration tests"
@@ -75,10 +77,22 @@ help:
 	@echo "test-integration-landing-demos - run Landing Demos integration tests"
 	@echo "test-integration-landing-role - run Landing Role integration tests"
 	@echo "test-integration-scope-landing-template - run Landing Template integration tests"
+	@echo "test-integration-im-message - run IM Message integration tests"
+	@echo "test-integration-im-dialog - run IM Dialog integration tests"
+	@echo "test-integration-im-department - run IM Department integration tests"
+	@echo "test-integration-im-user - run IM User integration tests"
+	@echo "test-integration-im-revision - run IM Revision integration tests"
+	@echo "test-integration-im-counters - run IM Counters integration tests"
+	@echo "test-integration-im-recent - run IM Recent integration tests"
+	@echo "test-integration-im-search - run IM Search integration tests"
+	@echo "test-integration-im-user-status - run IM UserStatus integration tests"
 	@echo "test-integration-im-open-lines-config - run IMOpenLines Config integration tests"
 	@echo "test-integration-im-open-lines-crm-chat - run IMOpenLines CRMChat integration tests"
 	@echo "test-integration-im-open-lines-session - run IMOpenLines Session integration tests"
 	@echo "test-integration-im-open-lines-operator - run IMOpenLines Operator integration tests"
+	@echo "test-integration-im-chat - run IM Chat integration tests"
+	@echo "test-integration-im-chat-user - run IM Chat User integration tests"
+	@echo "test-integration-im-notify - run IM Notify integration tests"
 	@echo "test-integration-scope-lists - run Lists integration tests"
 	@echo "test-integration-lists-service - run Lists Service integration tests"
 	@echo "test-integration-lists-field - run Lists Field integration tests"
@@ -187,6 +201,13 @@ lint-all: lint-allowed-licenses lint-cs-fixer lint-phpstan lint-rector lint-dept
 test-unit:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite unit_tests --display-warnings
 
+.PHONY: test-file
+test-file:
+ifndef path
+	$(error path is required, usage: make test-file path=tests/Unit/ExampleTest.php)
+endif
+	docker compose run --rm php-cli vendor/bin/phpunit $(path) --display-warnings
+
 # integration tests with granularity by api-scope
 .PHONY: test-integration-scope-telephony
 test-integration-scope-telephony:
@@ -199,6 +220,26 @@ test-integration-scope-workflows:
 .PHONY: test-integration-scope-im
 test-integration-scope-im:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im
+
+.PHONY: test-integration-im-disk
+test-integration-im-disk:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_disk
+
+.PHONY: test-integration-im-chat
+test-integration-im-chat:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_chat
+
+.PHONY: test-integration-im-chat-user
+test-integration-im-chat-user:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_chat_user
+
+.PHONY: test-integration-im-dialog
+test-integration-im-dialog:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_dialog
+
+.PHONY: test-integration-im-department
+test-integration-im-department:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_department
 
 .PHONY: test-integration-scope-placement
 test-integration-scope-placement:
@@ -219,6 +260,38 @@ test-integration-paysystem-service:
 .PHONY: test-integration-paysystem-settings
 test-integration-paysystem-settings:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_paysystem_settings
+
+.PHONY: test-integration-im-message
+test-integration-im-message:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_message
+
+.PHONY: test-integration-im-revision
+test-integration-im-revision:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_revision
+
+.PHONY: test-integration-im-counters
+test-integration-im-counters:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_counters
+
+.PHONY: test-integration-im-recent
+test-integration-im-recent:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_recent
+
+.PHONY: test-integration-im-search
+test-integration-im-search:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_search
+
+.PHONY: test-integration-im-user-status
+test-integration-im-user-status:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_user_status
+
+.PHONY: test-integration-im-user
+test-integration-im-user:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_user
+
+.PHONY: test-integration-im-notify
+test-integration-im-notify:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_notify
 
 .PHONY: test-integration-scope-im-open-lines
 test-integration-scope-im-open-lines:

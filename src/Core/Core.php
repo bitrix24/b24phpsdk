@@ -139,6 +139,11 @@ class Core implements CoreInterface
                         ]
                     );
 
+                    if (is_array($body['error'] ?? null)) {
+                        $this->apiLevelErrorHandler->handle($body);
+                        throw new BaseException('UNAUTHORIZED request error');
+                    }
+
                     switch (strtolower((string)$body['error'])) {
                         case 'expired_token':
                             // renew access token

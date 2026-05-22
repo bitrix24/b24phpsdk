@@ -1,0 +1,57 @@
+<?php
+
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace Bitrix24\SDK\Services\IM\Search\Result;
+
+use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Carbon\CarbonImmutable;
+
+/**
+ * @property-read int $id
+ * @property-read int $parent_chat_id
+ * @property-read int $parent_message_id
+ * @property-read string $name
+ * @property-read string|null $description
+ * @property-read int $owner
+ * @property-read bool $extranet
+ * @property-read string $avatar
+ * @property-read string $color
+ * @property-read string $type
+ * @property-read int $counter
+ * @property-read int $user_counter
+ * @property-read int $message_count
+ * @property-read int $unread_id
+ * @property-read array $restrictions
+ * @property-read int $last_message_id
+ * @property-read int $last_id
+ * @property-read int $marked_id
+ * @property-read int $disk_folder_id
+ * @property-read string $entity_type
+ * @property-read string $entity_id
+ * @property-read string $entity_data_1
+ * @property-read string $entity_data_2
+ * @property-read string $entity_data_3
+ * @property-read array $mute_list
+ * @property-read CarbonImmutable $date_create
+ * @property-read string $message_type
+ * @property-read string $public
+ * @property-read string $role
+ * @property-read array $entity_link
+ * @property-read bool $text_field_enabled
+ * @property-read int|null $background_id
+ * @property-read array $permissions
+ * @property-read bool $is_new
+ */
+class SearchChatItemResult extends AbstractAnnotatedItem
+{
+}

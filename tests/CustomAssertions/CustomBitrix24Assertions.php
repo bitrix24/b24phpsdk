@@ -63,11 +63,11 @@ trait CustomBitrix24Assertions
             );
 
             match (true) {
+                str_contains($typeStr, 'array')  => $this->assertIsArray($value, $message),
                 str_contains($typeStr, 'bool')   => $this->assertIsBool($value, $message),
                 str_contains($typeStr, 'int')    => $this->assertIsInt($value, $message),
                 str_contains($typeStr, 'float')  => $this->assertIsFloat($value, $message),
                 str_contains($typeStr, 'string') => $this->assertIsString($value, $message),
-                str_contains($typeStr, 'array')  => $this->assertIsArray($value, $message),
                 default                          => $this->assertInstanceOf($typeStr, $value, $message),
             };
         }

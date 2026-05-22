@@ -15,9 +15,11 @@ namespace Bitrix24\SDK\Tests\Unit\Core;
 
 use Bitrix24\SDK\Core\ApiLevelErrorHandler;
 use Bitrix24\SDK\Core\Contracts\ApiClientInterface;
+use Bitrix24\SDK\Core\Contracts\ApiVersion;
 use Bitrix24\SDK\Core\Core;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
+use Bitrix24\SDK\Core\Exceptions\AuthForbiddenException;
 use Bitrix24\SDK\Core\Exceptions\PortalUnavailableException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -101,5 +103,35 @@ class CoreTest extends TestCase
         } catch (\Throwable) {
             // Other exceptions (e.g. from Response parsing) are acceptable in this unit test context
         }
+    }
+
+    #[Test]
+    #[TestDox('call() routes v3 unauthorized error arrays through the API error handler')]
+    public function testCallRoutesV3UnauthorizedErrorArrayThroughApiLevelErrorHandler(): void
+    {
+        $response = $this->createStub(ResponseInterface::class);
+        $response->method('getStatusCode')->willReturn(401);
+        $response->method('toArray')->willReturn([
+            'error' => [
+                'code' => 'BITRIX_REST_V3_EXCEPTION_ACCESSDENIEDEXCEPTION',
+                'message' => 'Access denied',
+            ],
+        ]);
+
+        $credentials = Credentials::createFromWebhook(new WebhookUrl('https://myportal.example.com/rest/1/token/'));
+        $apiClient = $this->createStub(ApiClientInterface::class);
+        $apiClient->method('getCredentials')->willReturn($credentials);
+        $apiClient->method('getResponse')->willReturn($response);
+
+        $core = new Core(
+            $apiClient,
+            new ApiLevelErrorHandler(new NullLogger()),
+            new EventDispatcher(),
+            new NullLogger()
+        );
+
+        $this->expectException(AuthForbiddenException::class);
+
+        $core->call('documentation', apiVersion: ApiVersion::v3);
     }
 }
