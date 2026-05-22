@@ -3,6 +3,7 @@
 
 ### Added
 
+- Added `Bitrix24\SDK\Services\IM\Department\Service\Department` service wrapping `im.department.get`, `im.department.colleagues.list`, `im.department.employees.get`, and `im.department.managers.get`, with typed department/user result wrappers and `IMServiceBuilder::department()` accessor ([#432](https://github.com/bitrix24/b24phpsdk/issues/432))
 - Added `Bitrix24\SDK\Services\IM\Disk\Service\Disk` with `getFolderId(?int $chatId = null, ?string $dialogId = null)` for `im.disk.folder.get`, plus dedicated `FolderIdResult`, IM builder registration, and focused unit/integration coverage ([#435](https://github.com/bitrix24/b24phpsdk/issues/435))
 - Added `Bitrix24\SDK\Services\IM\Chat\Service\ChatUser` service wrapping `im.chat.user.add`, `im.chat.user.delete`, `im.chat.user.list` for chat participant management, with `ChatUserListResult` and `IMServiceBuilder::chatUser()` accessor ([#424](https://github.com/bitrix24/b24phpsdk/issues/424))
 - Added `Bitrix24\SDK\Services\IM\Search\Service\Search` service wrapping `im.search.chat.list`, `im.search.user.list`, `im.search.department.list`, and deprecated legacy `im.search.last.*` methods, with typed search result wrappers and `IMServiceBuilder::search()` accessor ([#431](https://github.com/bitrix24/b24phpsdk/issues/431))

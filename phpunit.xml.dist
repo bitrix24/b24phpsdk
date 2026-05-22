@@ -34,6 +34,9 @@
         <testsuite name="integration_tests_im_dialog">
             <directory>./tests/Integration/Services/IM/Dialog/</directory>
         </testsuite>
+        <testsuite name="integration_tests_im_department">
+            <directory>./tests/Integration/Services/IM/Department/</directory>
+        </testsuite>
         <testsuite name="integration_tests_im_message">
             <directory>./tests/Integration/Services/IM/Message/</directory>
         </testsuite>
