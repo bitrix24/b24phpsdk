@@ -1,22 +1,71 @@
 # b24-php-sdk change log
-## 3.2.0 – UNRELEASED§
+## 3.2.0 – UNRELEASED
 
 ### Added
 
 - Added `Bitrix24\SDK\Services\IM\Disk\Service\Disk` with `getFolderId(?int $chatId = null, ?string $dialogId = null)` for `im.disk.folder.get`, plus dedicated `FolderIdResult`, IM builder registration, and focused unit/integration coverage ([#435](https://github.com/bitrix24/b24phpsdk/issues/435))
+- Added `Bitrix24\SDK\Services\IM\Chat\Service\ChatUser` service wrapping `im.chat.user.add`, `im.chat.user.delete`, `im.chat.user.list` for chat participant management, with `ChatUserListResult` and `IMServiceBuilder::chatUser()` accessor ([#424](https://github.com/bitrix24/b24phpsdk/issues/424))
+- Added `Bitrix24\SDK\Services\IM\Search\Service\Search` service wrapping `im.search.chat.list`, `im.search.user.list`, `im.search.department.list`, and deprecated legacy `im.search.last.*` methods, with typed search result wrappers and `IMServiceBuilder::search()` accessor ([#431](https://github.com/bitrix24/b24phpsdk/issues/431))
+- Added `Bitrix24\SDK\Services\IM\Recent\Service\Recent` service wrapping `im.recent.get`, `im.recent.list`, `im.recent.pin`, `im.recent.unread`, and `im.recent.hide`, with `RecentItemResult`/`RecentsResult` and `IMServiceBuilder::recent()` accessor ([#427](https://github.com/bitrix24/b24phpsdk/issues/427))
+- Added `Bitrix24\SDK\Services\IM\Revision\Service\Revision` service wrapping `im.revision.get` for IM module API revision/compatibility checks, with `RevisionItemResult` (`rest`, `web`, `mobile`, `desktop`, `im_revision_mobile` fields) and `IMServiceBuilder::revision()` accessor ([#434](https://github.com/bitrix24/b24phpsdk/issues/434))
+- Added `IM\Counters` service with `im.counters.get` support for retrieving unread message and notification counters ([#433](https://github.com/bitrix24/b24phpsdk/issues/433))
+- Added `getLogoUrl()` and `changeLogoUrl()` methods to `Bitrix24PartnerInterface` and reference implementation with `Bitrix24PartnerLogoUrlChangedEvent` ([#452](https://github.com/bitrix24/b24phpsdk/issues/452))
+- Added typed fluent `Services\IM\Message\Attach` payload builders for `ATTACH` blocks in `im.message.add` and `im.message.update`, plus `RawAttach::fromArray()` as an object-based escape hatch for unsupported or vendor-extended payload shapes ([#426](https://github.com/bitrix24/b24phpsdk/issues/426))
 - Added `Bitrix24\SDK\Services\IM\Placements\PlacementLocationCodes` with constants `IM_TEXTAREA`, `IM_SIDEBAR`, `IM_CONTEXT_MENU`, `IM_NAVIGATION`, and `IM_SMILES_SELECTOR` (deprecated since `im 25.1600.0`) for IM widget placement codes ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
 - Added `PlacementOptionsInterface` and fluent option builders `TextareaPlacementOptions`, `SidebarPlacementOptions`, `ContextMenuPlacementOptions` under `Bitrix24\SDK\Services\IM\Placements` namespace, backed by `ChatContext`, `PlacementColor` (IM-specific) and shared `Role`, `ExtranetAvailability` string-backed enums under `Bitrix24\SDK\Services\Placement` ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
 - Added integration test `PlacementLocationCodesTest` that asserts (via reflection) every `IM_`-prefixed code returned by `placement.list` is declared as a constant in `PlacementLocationCodes` ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
+- Added `Bitrix24\SDK\Services\IM\Chat\Service\Chat` service wrapping `im.chat.add`, `im.chat.get`, `im.chat.leave`, `im.chat.mute`, `im.chat.setOwner`, `im.chat.updateAvatar`, `im.chat.updateColor`, `im.chat.updateTitle`, with enums `ChatType`, `ChatColor`, `ChatEntityType`, result types `ChatItemResult`/`ChatResult`, and `IMServiceBuilder::chat()` accessor ([#423](https://github.com/bitrix24/b24phpsdk/issues/423))
+- Added `Bitrix24\SDK\Services\IM\Dialog\Service\Dialog` service for `im.dialog.*` support, with typed result wrappers, `IMServiceBuilder::dialog()`, and dedicated unit/integration/annotation coverage ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
+- Added `Bitrix24\SDK\Services\IM\User\Service\User` service for `im.user.get` and `im.user.list.get` support, with typed result wrappers `UserResult`/`UsersResult`/`UserItemResult`, `IMServiceBuilder::user()` accessor, and unit/integration/annotation test coverage ([#429](https://github.com/bitrix24/b24phpsdk/issues/429))
+- Added `b24-dev:result-item-generator` developer command for staged ResultItem payload build, verification, apply, and generation workflows backed by OpenAPI, REST documentation, and live API metadata ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
+- Added `Services\IM\Message\Service\Message` service for `im.message.*` support ([#426](https://github.com/bitrix24/b24phpsdk/issues/426)):
+    - `add` — send a message (`im.message.add`)
+    - `update` — edit text and parameters (`im.message.update`)
+    - `delete` — delete a message (`im.message.delete`)
+    - `like` — toggle the Like mark (`im.message.like`), with typed `LikeAction` enum (`auto`/`plus`/`minus`)
+    - `share` — create an object from a message (`im.message.share`), with typed `ShareType` enum (`CHAT`/`TASK`/`POST`/`CALEND`)
+    - `command` — invoke a chat-bot command (`im.message.command`)
+- Added `IMServiceBuilder::message()` accessor and cached service instance ([#426](https://github.com/bitrix24/b24phpsdk/issues/426))
+- Added `Bitrix24\SDK\Services\IM\User\Service\UserStatus` service wrapping `im.user.status.get`, `im.user.status.set`, `im.user.status.idle.start`, and `im.user.status.idle.end`, with `UserStatusType` enum and `UserStatusResult`; exposed via `IMServiceBuilder::userStatus()` ([#430](https://github.com/bitrix24/b24phpsdk/issues/430))
+- Extended `IM\Notify` service with `send` (`im.notify`), `getList` (`im.notify.get`), `historySearch` (`im.notify.history.search`), `markAllAsRead` (`im.notify.read.all`), `getSchema` (`im.notify.schema.get`) methods; refactored `markMessagesAsRead`/`markMessagesAsUnread` to call `im.notify.read.list` instead of `im.notify.read`; added `NotifyItemResult`, `NotifiesResult`, `NotifyHistorySearchResult`, `NotifyReadAllResult`, `NotifySchemaItemResult`, `NotifySchemaResult` result types ([#428](https://github.com/bitrix24/b24phpsdk/issues/428))
+
+
 
 ### Changed
 
+- Removed dead `delete(Uuid $uuid)` method from `Bitrix24PartnerRepositoryInterface`, its in-memory stub implementation, and the `testDelete` contract test — the soft-delete flow (`markAsDeleted()` + `save()`) makes this method redundant ([#471](https://github.com/bitrix24/b24phpsdk/issues/471))
+- Replaced `set*` prefix with `change*` in `Bitrix24PartnerInterface` mutator methods (`changeTitle`, `changeSite`, `changePhone`, `changeEmail`, `changeOpenLineId`, `changeExternalId`) to better express domain-level change operations ([#453](https://github.com/bitrix24/b24phpsdk/issues/453))
+- Deprecated passing `ATTACH` as raw JSON `string` to `im.message.add` and `im.message.update`; prefer `AttachPayloadInterface` for typed object payloads or raw `array` payloads for backward-compatible structures ([#426](https://github.com/bitrix24/b24phpsdk/issues/426))
 - Widened `Placement::bind()` `$options` parameter type to `PlacementOptionsInterface|array` — existing array callers remain fully compatible ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
+- Regenerated `DialogItemResult` from the ResultItem generator payload, including imported `CarbonImmutable` PHPDoc types and live-verified nullable fields ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
+- Regenerated IM `ChatItemResult`, `DialogUserItemResult`, and `DialogReadStateItemResult` from ResultItem generator payloads and extended the generator workflow for their REST docs response shapes ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
+- Regenerated IM `CountersItemResult` from a live-verified ResultItem generator payload and extended REST docs payload extraction to support direct root fields in `Returned Data` tables ([#433](https://github.com/bitrix24/b24phpsdk/issues/433))
+- Regenerated IM `RevisionItemResult` from a live-verified ResultItem generator payload and extended REST docs payload extraction to support `Returned Data` tables with nested `result.*` fields ([#434](https://github.com/bitrix24/b24phpsdk/issues/434))
+- Changed `UserStatusResult::status()` to return `UserStatusItemResult` with enum-backed `STATUS` access via `UserStatusType`; backed-enum casting now lives in `AbstractAnnotatedItem` for all annotated result items ([#430](https://github.com/bitrix24/b24phpsdk/issues/430))
+- Added Typhoon-based runtime casting for `DialogItemResult` magic getters so annotated fields such as `date_create` return their PHPDoc-declared SDK types ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
+- Moved `typhoon/reflection` to runtime dependencies because annotated result-item casting uses it outside development tooling ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
+- Updated `Dialog::messagesSearch()` date filters to accept `CarbonImmutable` arguments and serialize them to REST date-time strings at the service boundary ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
+- Reorganized OpenAPI ResultItem generator internals into purpose-specific `Field`, `Payload`, `Provider`, `Verification`, `PhpDoc`, and `Path` namespaces ([#425](https://github.com/bitrix24/b24phpsdk/issues/425))
 - Updated `b24phpsdk-maintainer` skill and `AGENTS.md`: all GitHub issues (title, body, checklists, comments) must be written in English only ([#422](https://github.com/bitrix24/b24phpsdk/issues/422))
 - Updated `AGENTS.md`: limit mandatory `b24phpsdk-maintainer` usage to issue, changelog, and release-related work
 - Updated `b24phpsdk-maintainer` skill: added "Implementing placements for a scope" section with directory layout, plain-class-over-enum rationale, option-builder template, shared-vs-scope-specific enum placement, and mandatory reflection-based integration test template ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
 - Updated `b24phpsdk-maintainer` skill and `AGENTS.md`: require polling PR CI status via `mcp__github__get_pull_request_status` (fallback `gh pr checks --watch`) after every push to a PR branch, with ~60s cadence, until the status reaches a terminal state ([#437](https://github.com/bitrix24/b24phpsdk/issues/437))
+- Updated `b24phpsdk-maintainer` skill: hardened PR creation rules — agent must auto-create the PR via `mcp__github__create_pull_request` (never forward the `pull/new/<branch>` URL as a manual-action prompt), PR base branch is strictly `v3-dev` for v3 and `dev` for v1 (never `main`), and the PR body is always composed from `.github/PULL_REQUEST_TEMPLATE.md` read fresh from disk
 - Updated `b24phpsdk-maintainer` skill: generalized the placements workflow to cover `PlacementLocationCodes`, typed `Placements` facades, `PlacementLangMap`/`PlacementLangItem`, `LangCodes` placement, service-builder registration, docs links, and the full unit/integration test matrix
 - Updated `b24phpsdk-maintainer` skill: moved the detailed placements workflow into a dedicated adjacent guide to keep `SKILL.md` compact while preserving the full placement implementation playbook
+- Updated `b24phpsdk-maintainer` skill: require `CarbonImmutable` for public service method arguments that represent date or date-time values
+- Updated `b24phpsdk-maintainer` skill: require `ApiEndpointMetadata` documentation links to use the English `https://apidocs.bitrix24.com/` site
+- Updated `b24phpsdk-maintainer` skill: require SDK file generators for supported `*ItemResult`, `*SelectBuilder`, and `*ItemBuilder` files before manual edits
+- Updated `b24phpsdk-maintainer` skill and `AGENTS.md`: require `make lint-rector` before reporting completed tasks, including microtasks that bypass the maintainer skill
+
+### Fixed
+
+- Fixed `IM\Recent\Result\RecentItemResult` PHPDoc annotations to match live `im.recent.get` payload fields and magic-getter casting ([#427](https://github.com/bitrix24/b24phpsdk/issues/427))
+- Fixed `Core::call()` handling of REST API v3 HTTP 401 error responses: array-shaped `error` payloads are now routed through `ApiLevelErrorHandler` instead of triggering `Array to string conversion`, and Bitrix24 v3 access-denied errors map to `AuthForbiddenException`.
+- Fixed `IM\User\Result\UserItemResult::last_activity_date` PHPDoc annotation so the magic getter casts live `im.user.get` date-time values to `CarbonImmutable`.
+- Fixed IM Notify result annotations for live `im.notify.get` and `im.notify.schema.get` payloads, including uppercase schema fields and list-normalized schema items.
+- Fixed `User\Service\Batch::get()` yielding `DealItemResult` instead of `UserItemResult` ([#447](https://github.com/bitrix24/b24phpsdk/issues/447))
+- Fixed abstract `Bitrix24PartnerInterfaceTest` and `Bitrix24PartnerRepositoryInterfaceTest` contracts: dropped `createdAt` / `updatedAt` from the factory method signature and data provider so implementations that initialise both timestamps internally (e.g. `new CarbonImmutable()` in the constructor) no longer fail with microsecond mismatches ([#457](https://github.com/bitrix24/b24phpsdk/issues/457))
 
 ## 3.1.0
 
@@ -87,6 +136,8 @@
 
 ### Fixed
 
+- Synced `TaskItemSelectBuilder` with the refreshed task OpenAPI schema so `crmItems.id` is covered in generated selections ([#449](https://github.com/bitrix24/b24phpsdk/issues/449))
+- Fixed remote webhook payload normalization so `RemoteEventsFactory` and event requests accept valid Bitrix24 form webhooks already parsed by Symfony request bags ([#443](https://github.com/bitrix24/b24phpsdk/issues/443))
 - Fixed `Response::getResponseData()` crashing when API response lacks a `time` node (e.g. documentation endpoint): added `Time::initWithZeroValues()` factory that fills numeric fields with `0.0` and date fields with `CarbonImmutable::now()` ([#343](https://github.com/bitrix24/b24phpsdk/issues/343))
 - Fixed infinite recursion in `Core::call()` when portal returns a `302` redirect to the same domain (e.g. expired-license redirect to `/bitrix/coupon_activation.php`); now throws `PortalUnavailableException` ([#372](https://github.com/bitrix24/b24phpsdk/issues/372))
 - Fixed `InMemoryApplicationInstallationRepositoryImplementation::findByBitrix24AccountMemberId()` to resolve installations for non-deleted master accounts in pending install flows, including `new` accounts, while still excluding deleted installations ([#387](https://github.com/bitrix24/b24phpsdk/issues/387))

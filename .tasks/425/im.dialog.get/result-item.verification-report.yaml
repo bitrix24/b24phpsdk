@@ -1,0 +1,138 @@
+method: im.dialog.get
+confirmed_fields:
+  - code: id
+    section: null
+  - code: parent_chat_id
+    section: null
+  - code: parent_message_id
+    section: null
+  - code: name
+    section: null
+  - code: owner
+    section: null
+  - code: extranet
+    section: null
+  - code: avatar
+    section: null
+  - code: color
+    section: null
+  - code: type
+    section: null
+  - code: counter
+    section: null
+  - code: user_counter
+    section: null
+  - code: message_count
+    section: null
+  - code: unread_id
+    section: null
+  - code: restrictions
+    section: null
+  - code: last_message_id
+    section: null
+  - code: last_id
+    section: null
+  - code: marked_id
+    section: null
+  - code: disk_folder_id
+    section: null
+  - code: entity_type
+    section: null
+  - code: entity_id
+    section: null
+  - code: entity_data_1
+    section: null
+  - code: entity_data_2
+    section: null
+  - code: entity_data_3
+    section: null
+  - code: mute_list
+    section: null
+  - code: date_create
+    section: null
+  - code: message_type
+    section: null
+  - code: public
+    section: null
+  - code: role
+    section: null
+  - code: entity_link
+    section: null
+  - code: text_field_enabled
+    section: null
+  - code: permissions
+    section: null
+  - code: is_new
+    section: null
+  - code: readed_list
+    section: null
+  - code: manager_list
+    section: null
+  - code: last_message_views
+    section: null
+  - code: dialog_id
+    section: null
+  - code: avatar
+    section: restrictions
+  - code: rename
+    section: restrictions
+  - code: extend
+    section: restrictions
+  - code: call
+    section: restrictions
+  - code: mute
+    section: restrictions
+  - code: leave
+    section: restrictions
+  - code: leave_owner
+    section: restrictions
+  - code: send
+    section: restrictions
+  - code: user_list
+    section: restrictions
+  - code: type
+    section: entity_link
+  - code: url
+    section: entity_link
+  - code: id
+    section: entity_link
+  - code: manage_users_add
+    section: permissions
+  - code: manage_users_delete
+    section: permissions
+  - code: manage_ui
+    section: permissions
+  - code: manage_settings
+    section: permissions
+  - code: manage_messages
+    section: permissions
+  - code: can_post
+    section: permissions
+  - code: message_id
+    section: last_message_views
+  - code: first_viewers
+    section: last_message_views
+  - code: count_of_viewers
+    section: last_message_views
+missing_fields:
+  - code: path
+    section: restrictions
+  - code: path_title
+    section: restrictions
+  - code: user_id
+    section: readed_list_item
+  - code: user_name
+    section: readed_list_item
+  - code: message_id
+    section: readed_list_item
+  - code: date
+    section: readed_list_item
+unexpected_fields: []
+type_mismatches: []
+nullability_observations:
+  - action: mark_nullable
+    code: description
+    section: null
+  - action: mark_nullable
+    code: background_id
+    section: null

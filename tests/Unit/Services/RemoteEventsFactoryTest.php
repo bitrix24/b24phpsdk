@@ -111,6 +111,58 @@ class RemoteEventsFactoryTest extends TestCase
     }
 
     #[Test]
+    #[TestDox('isCanProcess() should accept parsed webhook payload when raw body is empty')]
+    public function testIsCanProcessWithParsedPayloadOnly(): void
+    {
+        $request = $this->createParsedRequest([
+            'event' => 'ONAPPINSTALL',
+            'event_handler_id' => '1',
+            'data' => [
+                'VERSION' => '1',
+                'LANGUAGE_ID' => 'en',
+            ],
+            'ts' => '1762089975',
+        ]);
+
+        self::assertTrue(RemoteEventsFactory::isCanProcess($request));
+    }
+
+    #[Test]
+    #[TestDox('create() should create an event from parsed webhook payload when raw body is empty')]
+    public function testCreateApplicationInstallEventFromParsedPayloadOnly(): void
+    {
+        $request = $this->createParsedRequest([
+            'event' => 'ONAPPINSTALL',
+            'event_handler_id' => '1',
+            'data' => [
+                'VERSION' => '1',
+                'LANGUAGE_ID' => 'en',
+            ],
+            'ts' => '1762089975',
+            'auth' => [
+                'access_token' => 'test_access_token',
+                'expires' => '1762093575',
+                'expires_in' => '3600',
+                'scope' => 'crm,placement,user_brief',
+                'domain' => 'test.bitrix24.com',
+                'server_endpoint' => 'https://oauth.bitrix.info/rest/',
+                'status' => 'L',
+                'client_endpoint' => 'https://test.bitrix24.com/rest/',
+                'member_id' => 'test_member_id',
+                'user_id' => '1',
+                'application_token' => 'test_app_token',
+            ],
+        ]);
+
+        $event = $this->factory->create($request);
+
+        self::assertInstanceOf(OnApplicationInstall::class, $event);
+        self::assertSame('ONAPPINSTALL', $event->getEventCode());
+        self::assertSame('1', $event->getEventPayload()['data']['VERSION']);
+        self::assertSame('test_app_token', $event->getAuth()->application_token);
+    }
+
+    #[Test]
     #[TestDox('create() should return UnsupportedRemoteEvent for unknown event codes')]
     public function testCreateUnsupportedEvent(): void
     {
@@ -309,6 +361,39 @@ class RemoteEventsFactoryTest extends TestCase
     }
 
     #[Test]
+    #[TestDox('createEvent() should stay backward-compatible for parsed webhook payload when raw body is empty')]
+    public function testCreateEventWithParsedPayloadOnly(): void
+    {
+        $request = $this->createParsedRequest([
+            'event' => 'ONAPPINSTALL',
+            'event_handler_id' => '1',
+            'data' => [
+                'VERSION' => '1',
+                'LANGUAGE_ID' => 'en',
+            ],
+            'ts' => '1762089975',
+            'auth' => [
+                'access_token' => 'test_access_token',
+                'expires' => '1762093575',
+                'expires_in' => '3600',
+                'scope' => 'crm,placement,user_brief',
+                'domain' => 'test.bitrix24.com',
+                'server_endpoint' => 'https://oauth.bitrix.info/rest/',
+                'status' => 'L',
+                'client_endpoint' => 'https://test.bitrix24.com/rest/',
+                'member_id' => 'test_member_id',
+                'user_id' => '1',
+                'application_token' => 'test_app_token',
+            ],
+        ]);
+
+        $event = $this->factory->createEvent($request, 'test_app_token');
+
+        self::assertInstanceOf(OnApplicationInstall::class, $event);
+        self::assertSame('ONAPPINSTALL', $event->getEventCode());
+    }
+
+    #[Test]
     #[TestDox('validate() should handle various event types with correct tokens')]
     #[DataProvider('validTokenProvider')]
     public function testValidateWithVariousEventTypes(string $eventCode, string $applicationToken): void
@@ -405,6 +490,25 @@ class RemoteEventsFactoryTest extends TestCase
             [],              // files
             [],              // server
             $rawRequest      // raw content
+        );
+        $request->setMethod('POST');
+
+        return $request;
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function createParsedRequest(array $payload): Request
+    {
+        $request = new Request(
+            [],
+            $payload,
+            [],
+            [],
+            [],
+            [],
+            ''
         );
         $request->setMethod('POST');
 

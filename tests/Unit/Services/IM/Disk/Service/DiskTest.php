@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Services\IM\Disk\Service;
 
-use Bitrix24\SDK\Core\Contracts\ApiVersion;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Core\Response\DTO\Pagination;
@@ -44,14 +43,13 @@ final class DiskTest extends TestCase
                 [
                     'CHAT_ID' => 17,
                     'DIALOG_ID' => 'chat17',
-                ],
-                ApiVersion::v1
+                ]
             )
             ->willReturn($response);
 
-        $result = (new Disk($core, new NullLogger()))->getFolderId(17, 'chat17');
+        $folderIdResult = (new Disk($core, new NullLogger()))->getFolderId(17, 'chat17');
 
-        $this->assertInstanceOf(FolderIdResult::class, $result);
-        $this->assertSame(5153, $result->getId());
+        $this->assertInstanceOf(FolderIdResult::class, $folderIdResult);
+        $this->assertSame(5153, $folderIdResult->getId());
     }
 }

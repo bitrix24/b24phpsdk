@@ -45,8 +45,6 @@ class InMemoryBitrix24PartnerRepositoryImplementationTest extends Bitrix24Partne
     #[\Override]
     protected function createBitrix24PartnerImplementation(
         Uuid                  $uuid,
-        CarbonImmutable       $createdAt,
-        CarbonImmutable       $updatedAt,
         Bitrix24PartnerStatus $bitrix24PartnerStatus,
         string                $title,
         ?int                  $bitrix24PartnerId,
@@ -54,12 +52,10 @@ class InMemoryBitrix24PartnerRepositoryImplementationTest extends Bitrix24Partne
         ?PhoneNumber          $phoneNumber,
         ?string               $email,
         ?string               $openLineId,
-        ?string               $externalId): Bitrix24PartnerInterface
-    {
+        ?string               $externalId
+    ): Bitrix24PartnerInterface {
         return new Bitrix24PartnerReferenceEntityImplementation(
             $uuid,
-            $createdAt,
-            $updatedAt,
             $bitrix24PartnerStatus,
             $title,
             $bitrix24PartnerId,
@@ -67,7 +63,8 @@ class InMemoryBitrix24PartnerRepositoryImplementationTest extends Bitrix24Partne
             $phoneNumber,
             $email,
             $openLineId,
-            $externalId);
+            $externalId
+        );
     }
 
     #[\Override]

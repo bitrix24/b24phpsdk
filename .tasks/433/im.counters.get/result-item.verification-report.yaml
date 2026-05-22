@@ -1,0 +1,102 @@
+method: im.counters.get
+confirmed_fields:
+  - code: TYPE
+    section: null
+  - code: CHAT
+    section: null
+  - code: CHAT_UNREAD
+    section: null
+  - code: DIALOG_UNREAD
+    section: null
+missing_fields:
+  - code: ALL
+    section: type
+  - code: CHAT
+    section: type
+  - code: DIALOG
+    section: type
+  - code: LINES
+    section: type
+  - code: NOTIFY
+    section: type
+  - code: MESSENGER
+    section: type
+unexpected_fields:
+  - action: add_field
+    code: COLLAB
+    section: null
+    source_type: array
+    phpdoc_type: array
+    format: null
+    nullable: false
+  - action: add_field
+    code: COLLAB_UNREAD
+    section: null
+    source_type: array
+    phpdoc_type: array
+    format: null
+    nullable: false
+  - action: add_field
+    code: COPILOT_UNREAD
+    section: null
+    source_type: array
+    phpdoc_type: array
+    format: null
+    nullable: false
+  - action: add_field
+    code: TASKS_TASK_UNREAD
+    section: null
+    source_type: array
+    phpdoc_type: array
+    format: null
+    nullable: false
+  - action: add_field
+    code: COPILOT
+    section: null
+    source_type: array
+    phpdoc_type: array
+    format: null
+    nullable: false
+  - action: add_field
+    code: CHANNEL_COMMENT
+    section: null
+    source_type: array
+    phpdoc_type: array
+    format: null
+    nullable: false
+  - action: add_field
+    code: TASKS_TASK
+    section: null
+    source_type: array
+    phpdoc_type: array
+    format: null
+    nullable: false
+type_mismatches:
+  - action: review_type_mismatch
+    code: CHAT_MUTED
+    section: null
+    expected_source_type: object
+    actual_source_type: array
+    expected_phpdoc_type: array
+    actual_phpdoc_type: array
+    expected_format: null
+    actual_format: null
+  - action: review_type_mismatch
+    code: LINES
+    section: null
+    expected_source_type: array
+    actual_source_type: object
+    expected_phpdoc_type: array
+    actual_phpdoc_type: array
+    expected_format: null
+    actual_format: null
+  - action: review_type_mismatch
+    code: DIALOG
+    section: null
+    expected_source_type: object
+    actual_source_type: array
+    expected_phpdoc_type: array
+    actual_phpdoc_type: array
+    expected_format: null
+    actual_format: null
+nullability_observations: []

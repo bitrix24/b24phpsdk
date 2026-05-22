@@ -13,9 +13,14 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Services\IM;
 
+use Bitrix24\SDK\Services\IM\Counters\Service\Counters;
+use Bitrix24\SDK\Services\IM\Dialog\Service\Dialog;
 use Bitrix24\SDK\Services\IM\Disk\Service\Disk;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
+use Bitrix24\SDK\Services\IM\Recent\Service\Recent;
+use Bitrix24\SDK\Services\IM\User\Service\User;
 use Bitrix24\SDK\Services\IM\Placements\Placements;
+use Bitrix24\SDK\Services\IM\User\Service\UserStatus;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBatch;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBulkItemsReader;
@@ -29,6 +34,12 @@ class IMServiceBuilderTest extends TestCase
 {
     private IMServiceBuilder $serviceBuilder;
 
+    public function testGetRecentService(): void
+    {
+        $this->assertInstanceOf(Recent::class, $this->serviceBuilder->recent());
+        $this->assertSame($this->serviceBuilder->recent(), $this->serviceBuilder->recent());
+    }
+
     public function testGetIMService(): void
     {
         $this::assertSame($this->serviceBuilder->notify(), $this->serviceBuilder->notify());
@@ -38,6 +49,45 @@ class IMServiceBuilderTest extends TestCase
     {
         $this->assertInstanceOf(Disk::class, $this->serviceBuilder->disk());
         $this->assertSame($this->serviceBuilder->disk(), $this->serviceBuilder->disk());
+    }
+
+    public function testGetChatService(): void
+    {
+        $this::assertSame($this->serviceBuilder->chat(), $this->serviceBuilder->chat());
+    }
+
+    public function testGetMessageService(): void
+    {
+        $this::assertSame($this->serviceBuilder->message(), $this->serviceBuilder->message());
+    }
+
+    public function testGetDialogService(): void
+    {
+        $this->assertInstanceOf(Dialog::class, $this->serviceBuilder->dialog());
+        $this->assertSame($this->serviceBuilder->dialog(), $this->serviceBuilder->dialog());
+    }
+
+    public function testGetRevisionService(): void
+    {
+        $this::assertSame($this->serviceBuilder->revision(), $this->serviceBuilder->revision());
+    }
+
+    public function testGetCountersService(): void
+    {
+        $this->assertInstanceOf(Counters::class, $this->serviceBuilder->counters());
+        $this->assertSame($this->serviceBuilder->counters(), $this->serviceBuilder->counters());
+    }
+
+    public function testGetUserStatusService(): void
+    {
+        $this->assertInstanceOf(UserStatus::class, $this->serviceBuilder->userStatus());
+        $this->assertSame($this->serviceBuilder->userStatus(), $this->serviceBuilder->userStatus());
+    }
+
+    public function testGetUserService(): void
+    {
+        $this->assertInstanceOf(User::class, $this->serviceBuilder->user());
+        $this->assertSame($this->serviceBuilder->user(), $this->serviceBuilder->user());
     }
 
     public function testGetPlacementsService(): void
