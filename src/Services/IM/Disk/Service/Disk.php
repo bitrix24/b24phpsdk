@@ -30,7 +30,7 @@ class Disk extends AbstractService
      */
     #[ApiEndpointMetadata(
         'im.disk.folder.get',
-        'https://apidocs.bitrix24.ru/api-reference/chats/files/im-disk-folder-get.html',
+        'https://apidocs.bitrix24.com/api-reference/chats/files/im-disk-folder-get.html',
         'Get the identifier of the folder where chat files are stored'
     )]
     public function getFolderId(?int $chatId = null, ?string $dialogId = null): FolderIdResult
