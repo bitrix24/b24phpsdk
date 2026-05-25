@@ -1,5 +1,13 @@
 # b24-php-sdk change log
-## 3.2.0 – UNRELEASED
+## 3.3.0 – UNRELEASED
+
+### Added
+
+### Changed
+
+### Fixed
+
+## 3.2.0
 
 ### Added
 
@@ -13,6 +21,7 @@
   ([#484](https://github.com/bitrix24/b24phpsdk/issues/484))
 - Added `Bitrix24\SDK\Services\IM\Department\Service\Department` service wrapping `im.department.get`, `im.department.colleagues.list`, `im.department.employees.get`, and `im.department.managers.get`, with typed department/user result wrappers and `IMServiceBuilder::department()` accessor ([#432](https://github.com/bitrix24/b24phpsdk/issues/432))
 - Added `Bitrix24\SDK\Services\IM\Disk\Service\Disk` with `getFolderId(?int $chatId = null, ?string $dialogId = null)` for `im.disk.folder.get`, plus dedicated `FolderIdResult`, IM builder registration, and focused unit/integration coverage ([#435](https://github.com/bitrix24/b24phpsdk/issues/435))
+- Added IM Disk file operations to `Bitrix24\SDK\Services\IM\Disk\Service\Disk`: `commitFile`, `deleteFile`, `saveFile`, and `shareRecord`, with dedicated result wrappers and live IM Disk integration coverage ([#482](https://github.com/bitrix24/b24phpsdk/issues/482))
 - Added `Bitrix24\SDK\Services\IM\Chat\Service\ChatUser` service wrapping `im.chat.user.add`, `im.chat.user.delete`, `im.chat.user.list` for chat participant management, with `ChatUserListResult` and `IMServiceBuilder::chatUser()` accessor ([#424](https://github.com/bitrix24/b24phpsdk/issues/424))
 - Added `Bitrix24\SDK\Services\IM\Search\Service\Search` service wrapping `im.search.chat.list`, `im.search.user.list`, `im.search.department.list`, and deprecated legacy `im.search.last.*` methods, with typed search result wrappers and `IMServiceBuilder::search()` accessor ([#431](https://github.com/bitrix24/b24phpsdk/issues/431))
 - Added `Bitrix24\SDK\Services\IM\Recent\Service\Recent` service wrapping `im.recent.get`, `im.recent.list`, `im.recent.pin`, `im.recent.unread`, and `im.recent.hide`, with `RecentItemResult`/`RecentsResult` and `IMServiceBuilder::recent()` accessor ([#427](https://github.com/bitrix24/b24phpsdk/issues/427))
@@ -42,6 +51,7 @@
 
 ### Changed
 
+- Removed the duplicate `bitrix24PartnerNumber` uniqueness expectation from the `Bitrix24PartnerRepositoryInterface` contract so `save()` remains a persistence operation; uniqueness validation belongs in the use-case layer ([#468](https://github.com/bitrix24/b24phpsdk/issues/468))
 - Removed dead `delete(Uuid $uuid)` method from `Bitrix24PartnerRepositoryInterface`, its in-memory stub implementation, and the `testDelete` contract test — the soft-delete flow (`markAsDeleted()` + `save()`) makes this method redundant ([#471](https://github.com/bitrix24/b24phpsdk/issues/471))
 - Replaced `set*` prefix with `change*` in `Bitrix24PartnerInterface` mutator methods (`changeTitle`, `changeSite`, `changePhone`, `changeEmail`, `changeOpenLineId`, `changeExternalId`) to better express domain-level change operations ([#453](https://github.com/bitrix24/b24phpsdk/issues/453))
 - Deprecated passing `ATTACH` as raw JSON `string` to `im.message.add` and `im.message.update`; prefer `AttachPayloadInterface` for typed object payloads or raw `array` payloads for backward-compatible structures ([#426](https://github.com/bitrix24/b24phpsdk/issues/426))
