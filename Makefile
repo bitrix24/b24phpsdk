@@ -61,6 +61,7 @@ help:
 	@echo "test-integration-calendar-event - run Calendar Event integration tests"
 	@echo "test-integration-calendar-resource - run Calendar Resource integration tests"
 	@echo "test-integration-sale-basket-property - run BasketProperty integration tests"
+	@echo "test-integration-im-disk - run IM Disk integration tests"
 	@echo "test-integration-sale-cashbox-handler - run CashboxHandler integration tests"
 	@echo "test-integration-sale-cashbox - run Cashbox integration tests"
 	@echo "test-integration-sale-delivery - run Delivery integration tests"
@@ -78,10 +79,12 @@ help:
 	@echo "test-integration-scope-landing-template - run Landing Template integration tests"
 	@echo "test-integration-im-message - run IM Message integration tests"
 	@echo "test-integration-im-dialog - run IM Dialog integration tests"
+	@echo "test-integration-im-department - run IM Department integration tests"
 	@echo "test-integration-im-user - run IM User integration tests"
 	@echo "test-integration-im-revision - run IM Revision integration tests"
 	@echo "test-integration-im-counters - run IM Counters integration tests"
 	@echo "test-integration-im-recent - run IM Recent integration tests"
+	@echo "test-integration-im-search - run IM Search integration tests"
 	@echo "test-integration-im-user-status - run IM UserStatus integration tests"
 	@echo "test-integration-im-open-lines-config - run IMOpenLines Config integration tests"
 	@echo "test-integration-im-open-lines-crm-chat - run IMOpenLines CRMChat integration tests"
@@ -218,6 +221,10 @@ test-integration-scope-workflows:
 test-integration-scope-im:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im
 
+.PHONY: test-integration-im-disk
+test-integration-im-disk:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_disk
+
 .PHONY: test-integration-im-chat
 test-integration-im-chat:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_chat
@@ -229,6 +236,10 @@ test-integration-im-chat-user:
 .PHONY: test-integration-im-dialog
 test-integration-im-dialog:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_dialog
+
+.PHONY: test-integration-im-department
+test-integration-im-department:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_department
 
 .PHONY: test-integration-scope-placement
 test-integration-scope-placement:
@@ -265,6 +276,10 @@ test-integration-im-counters:
 .PHONY: test-integration-im-recent
 test-integration-im-recent:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_recent
+
+.PHONY: test-integration-im-search
+test-integration-im-search:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_search
 
 .PHONY: test-integration-im-user-status
 test-integration-im-user-status:

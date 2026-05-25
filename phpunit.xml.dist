@@ -22,6 +22,9 @@
         <testsuite name="integration_tests_scope_im">
             <directory>./tests/Integration/Services/IM/</directory>
         </testsuite>
+        <testsuite name="integration_tests_im_disk">
+            <directory>./tests/Integration/Services/IM/Disk/</directory>
+        </testsuite>
         <testsuite name="integration_tests_im_chat">
             <directory>./tests/Integration/Services/IM/Chat/</directory>
         </testsuite>
@@ -30,6 +33,9 @@
         </testsuite>
         <testsuite name="integration_tests_im_dialog">
             <directory>./tests/Integration/Services/IM/Dialog/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_department">
+            <directory>./tests/Integration/Services/IM/Department/</directory>
         </testsuite>
         <testsuite name="integration_tests_im_message">
             <directory>./tests/Integration/Services/IM/Message/</directory>
@@ -42,6 +48,9 @@
         </testsuite>
         <testsuite name="integration_tests_im_recent">
             <directory>./tests/Integration/Services/IM/Recent/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_search">
+            <directory>./tests/Integration/Services/IM/Search/</directory>
         </testsuite>
         <testsuite name="integration_tests_im_user_status">
             <directory>./tests/Integration/Services/IM/User/</directory>
