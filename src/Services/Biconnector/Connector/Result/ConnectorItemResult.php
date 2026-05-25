@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Biconnector\Connector\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractItem;
+use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
 use Carbon\CarbonImmutable;
 
 /**
@@ -36,18 +36,6 @@ use Carbon\CarbonImmutable;
  * @property-read bool|null $supportMapping
  * @property-read CarbonImmutable $dateCreate
  */
-class ConnectorItemResult extends AbstractItem
+class ConnectorItemResult extends AbstractAnnotatedItem
 {
-    #[\Override]
-    public function __get($offset): mixed
-    {
-        return match ($offset) {
-            'id', 'sort' => isset($this->data[$offset]) ? (int)$this->data[$offset] : null,
-            'supportMapping' => isset($this->data[$offset]) ? (bool)$this->data[$offset] : null,
-            'dateCreate' => isset($this->data[$offset])
-                ? CarbonImmutable::parse($this->data[$offset])
-                : null,
-            default => $this->data[$offset] ?? null,
-        };
-    }
 }

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Biconnector\Dataset\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractItem;
+use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
 use Carbon\CarbonImmutable;
 
 /**
@@ -37,19 +37,7 @@ use Carbon\CarbonImmutable;
  * @property-read int $updatedById
  * @property-read array|null $fields
  */
-class DatasetItemResult extends AbstractItem
+class DatasetItemResult extends AbstractAnnotatedItem
 {
-    #[\Override]
-    public function __get($offset): mixed
-    {
-        return match ($offset) {
-            'id', 'createdById', 'updatedById' => isset($this->data[$offset]) ? (int)$this->data[$offset] : null,
-            'sourceId', 'externalId' => isset($this->data[$offset]) ? (int)$this->data[$offset] : null,
-            'dateCreate', 'dateUpdate' => isset($this->data[$offset])
-                ? CarbonImmutable::parse($this->data[$offset])
-                : null,
-            default => $this->data[$offset] ?? null,
-        };
-    }
 }
 
