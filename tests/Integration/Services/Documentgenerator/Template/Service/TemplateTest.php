@@ -20,6 +20,7 @@ use Bitrix24\SDK\Services\Documentgenerator\Template\Result\TemplateItemResult;
 use Bitrix24\SDK\Services\Documentgenerator\Template\Service\Template;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 use Bitrix24\SDK\Tests\Integration\Factory;
+use Faker;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +29,9 @@ use PHPUnit\Framework\TestCase;
  *
  * @package Bitrix24\SDK\Tests\Integration\Services\Documentgenerator\Template\Service
  */
+#[CoversMethod(Template::class, 'add')]
+#[CoversMethod(Template::class, 'update')]
+#[CoversMethod(Template::class, 'delete')]
 #[CoversMethod(Template::class, 'get')]
 #[CoversMethod(Template::class, 'list')]
 #[CoversMethod(Template::class, 'getFields')]
@@ -39,6 +43,8 @@ class TemplateTest extends TestCase
 
     private Template $templateService;
 
+    private Faker\Generator $faker;
+
     /**
      * @throws InvalidArgumentException
      */
@@ -46,6 +52,18 @@ class TemplateTest extends TestCase
     protected function setUp(): void
     {
         $this->templateService = Factory::getServiceBuilder()->getDocumentgeneratorScope()->template();
+        $this->faker = Faker\Factory::create();
+    }
+
+    /**
+     * Helper: creates a minimal HTML template content encoded as base64 for template upload.
+     * Using HTML format avoids any dependency on the ext-zip PHP extension.
+     */
+    private function createMinimalTemplateBase64(): string
+    {
+        $html = '<html lang="en"><body><p>Test template {Number}</p></body></html>';
+
+        return base64_encode($html);
     }
 
     /**
@@ -107,6 +125,75 @@ class TemplateTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    public function testAdd(): void
+    {
+        $name = 'tpl-' . $this->faker->uuid();
+        $fileContent = $this->createMinimalTemplateBase64();
+
+        $id = $this->templateService->add([
+            'name' => $name,
+            'file' => $fileContent,
+            'numeratorId' => 1,
+            'region' => 'en',
+        ])->getId();
+
+        self::assertGreaterThanOrEqual(1, $id);
+
+        // Cleanup
+        $this->templateService->delete($id);
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testUpdate(): void
+    {
+        $name = 'tpl-' . $this->faker->uuid();
+        $fileContent = $this->createMinimalTemplateBase64();
+
+        $id = $this->templateService->add([
+            'name' => $name,
+            'file' => $fileContent,
+            'numeratorId' => 1,
+            'region' => 'en',
+        ])->getId();
+
+        $newName = $name . '-updated';
+        self::assertTrue(
+            $this->templateService->update($id, [
+                'name' => $newName,
+            ])->isSuccess()
+        );
+
+        self::assertEquals($newName, $this->templateService->get($id)->template()->name);
+
+        // Cleanup
+        $this->templateService->delete($id);
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testDelete(): void
+    {
+        $fileContent = $this->createMinimalTemplateBase64();
+
+        $id = $this->templateService->add([
+            'name' => 'tpl-' . $this->faker->uuid(),
+            'file' => $fileContent,
+            'numeratorId' => 1,
+            'region' => 'en',
+        ])->getId();
+
+        self::assertTrue($this->templateService->delete($id)->isSuccess());
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
     public function testGetFields(): void
     {
         $templateInfo = $this->getFirstTemplate();
@@ -117,5 +204,4 @@ class TemplateTest extends TestCase
         self::assertIsArray($fields);
     }
 }
-
 
