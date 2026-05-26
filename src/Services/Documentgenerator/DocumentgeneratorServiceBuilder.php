@@ -17,6 +17,7 @@ use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\Documentgenerator\Document;
+use Bitrix24\SDK\Services\Documentgenerator\Template;
 
 #[ApiServiceBuilderMetadata(new Scope(['documentgenerator']))]
 class DocumentgeneratorServiceBuilder extends AbstractServiceBuilder
@@ -30,6 +31,23 @@ class DocumentgeneratorServiceBuilder extends AbstractServiceBuilder
             );
             $this->serviceCache[__METHOD__] = new Document\Service\Document(
                 new Document\Service\Batch($documentBatch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function template(): Template\Service\Template
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $templateBatch = new Template\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Template\Service\Template(
+                new Template\Service\Batch($templateBatch, $this->log),
                 $this->core,
                 $this->log
             );

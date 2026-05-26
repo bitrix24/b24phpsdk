@@ -1,4 +1,4 @@
-# Plan: Add support for documentgenerator.document.* methods (issue #489)
+# Plan: Add support for documentgenerator.document.* and documentgenerator.template.* methods (issue #489)
 
 ## Context
 
@@ -84,5 +84,49 @@ make lint-phpstan
 make lint-deptrac
 make test-unit
 make integration_tests_documentgenerator_document
+make integration_tests_documentgenerator_template
+make integration_tests_documentgenerator_template_annotations
 ```
+
+---
+
+## Phase 2: documentgenerator.template.* (added 2026-05-26)
+
+Template methods are implemented in `src/Services/Documentgenerator/Template/`.
+
+Key differences from CRM variant:
+- `getFields` requires only `id` (no `entityTypeId`)
+- `add` supports `code` and `fileId` fields
+- `update` supports `providers` in fields
+- List response: `result.templates` keyed by id
+- Single-item response: `result.template`
+- Template fields response: `result.templateFields`
+
+### Files Created (Phase 2)
+
+1. `src/Services/Documentgenerator/Template/Result/TemplateItemResult.php`
+2. `src/Services/Documentgenerator/Template/Result/TemplateResult.php`
+3. `src/Services/Documentgenerator/Template/Result/TemplatesResult.php`
+4. `src/Services/Documentgenerator/Template/Result/AddedTemplateResult.php`
+5. `src/Services/Documentgenerator/Template/Result/UpdatedTemplateResult.php`
+6. `src/Services/Documentgenerator/Template/Result/DeletedTemplateResult.php`
+7. `src/Services/Documentgenerator/Template/Result/AddedTemplateBatchResult.php`
+8. `src/Services/Documentgenerator/Template/Result/UpdatedTemplateBatchResult.php`
+9. `src/Services/Documentgenerator/Template/Result/DeletedTemplateBatchResult.php`
+10. `src/Services/Documentgenerator/Template/Result/TemplateFieldsResult.php`
+11. `src/Services/Documentgenerator/Template/Batch.php`
+12. `src/Services/Documentgenerator/Template/Service/Batch.php`
+13. `src/Services/Documentgenerator/Template/Service/Template.php`
+14. `tests/Integration/Services/Documentgenerator/Template/Service/TemplateTest.php`
+15. `tests/Integration/Services/Documentgenerator/Template/Service/BatchTest.php`
+16. `tests/Integration/Services/Documentgenerator/Template/Result/TemplateItemResultAnnotationsTest.php`
+
+### Files Modified (Phase 2)
+
+- `src/Services/Documentgenerator/DocumentgeneratorServiceBuilder.php` — added `template()` method
+- `phpunit.xml.dist` — added 3 new test suites for template
+- `Makefile` — added 3 new make targets
+- `.php-cs-fixer.php` — added `src/Services/Documentgenerator/`
+- `phpstan.neon.dist` — added `tests/Integration/Services/Documentgenerator`
+- `CHANGELOG.md` — added Template entry under `## 3.3.0 – UNRELEASED`
 

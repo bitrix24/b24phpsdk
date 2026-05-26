@@ -643,6 +643,18 @@ integration_tests_scope_documentgenerator:
 integration_tests_documentgenerator_document:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_documentgenerator_document
 
+.PHONY: integration_tests_documentgenerator_template
+integration_tests_documentgenerator_template:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_documentgenerator_template
+
+.PHONY: integration_tests_documentgenerator_template_service
+integration_tests_documentgenerator_template_service:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_documentgenerator_template_service
+
+.PHONY: integration_tests_documentgenerator_template_annotations
+integration_tests_documentgenerator_template_annotations:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_documentgenerator_template_annotations
+
 # work dev environment
 .PHONY: php-dev-server-up
 php-dev-server-up:

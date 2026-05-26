@@ -3,6 +3,15 @@
 
 ### Added
 
+- Added service `Services\Documentgenerator\Template` with support for `documentgenerator.template.*` methods,
+  see [documentgenerator.template.* methods](https://apidocs.bitrix24.com/api-reference/document-generator/templates/index.html) ([#489](https://github.com/bitrix24/b24phpsdk/issues/489)):
+    - `add` creates a new template, with batch calls support
+    - `list` gets the list of templates, with batch calls support
+    - `update` updates an existing template, with batch calls support
+    - `delete` deletes a template, with batch calls support
+    - `get` gets information about the template by its identifier
+    - `getFields` returns the description of template fields
+    - `count` counts templates
 - Added service `Services\Documentgenerator\Document` with support for `documentgenerator.document.*` methods,
   see [documentgenerator.document.* methods](https://apidocs.bitrix24.com/api-reference/document-generator/index.html) ([#489](https://github.com/bitrix24/b24phpsdk/issues/489)):
     - `add` creates a new document based on a template and data provider, with batch calls support
