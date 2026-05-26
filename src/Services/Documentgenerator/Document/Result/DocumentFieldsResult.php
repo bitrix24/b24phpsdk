@@ -38,4 +38,3 @@ class DocumentFieldsResult extends AbstractResult
         return $result;
     }
 }
-

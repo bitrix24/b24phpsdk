@@ -28,4 +28,3 @@ class DeletedDocumentBatchResult extends DeletedItemBatchResult
         return (bool)$this->getResponseData()->getResult();
     }
 }
-

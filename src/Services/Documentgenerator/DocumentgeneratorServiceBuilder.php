@@ -56,4 +56,3 @@ class DocumentgeneratorServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 }
-

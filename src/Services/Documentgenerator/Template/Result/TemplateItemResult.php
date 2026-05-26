@@ -45,4 +45,3 @@ use Carbon\CarbonImmutable;
 class TemplateItemResult extends AbstractAnnotatedItem
 {
 }
-

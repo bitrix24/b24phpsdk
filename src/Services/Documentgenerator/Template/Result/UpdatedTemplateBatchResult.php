@@ -28,4 +28,3 @@ class UpdatedTemplateBatchResult extends UpdatedItemBatchResult
         return (bool)$this->getResponseData()->getResult();
     }
 }
-

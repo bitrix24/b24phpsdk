@@ -32,4 +32,3 @@ class AddedTemplateResult extends AddedItemResult
         return (int)$this->getCoreResponse()->getResponseData()->getResult()['template']['id'];
     }
 }
-

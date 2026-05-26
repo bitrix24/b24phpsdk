@@ -32,4 +32,3 @@ class AddedDocumentResult extends AddedItemResult
         return (int)$this->getCoreResponse()->getResponseData()->getResult()['document']['id'];
     }
 }
-

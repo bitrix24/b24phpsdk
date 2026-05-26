@@ -28,4 +28,3 @@ class AddedDocumentBatchResult extends AddedItemBatchResult
         return (int)$this->getResponseData()->getResult()['document']['id'];
     }
 }
-

@@ -60,4 +60,3 @@ class DocumentItemResult extends AbstractAnnotatedItem
         return parent::__get($offset);
     }
 }
-

@@ -243,4 +243,3 @@ class Template extends AbstractService
         return $this->list()->getCoreResponse()->getResponseData()->getPagination()->getTotal();
     }
 }
-

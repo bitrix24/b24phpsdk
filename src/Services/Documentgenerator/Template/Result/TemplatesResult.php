@@ -43,4 +43,3 @@ class TemplatesResult extends AbstractResult
         return $items;
     }
 }
-

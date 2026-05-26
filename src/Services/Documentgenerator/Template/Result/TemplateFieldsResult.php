@@ -38,4 +38,3 @@ class TemplateFieldsResult extends AbstractResult
         return $result;
     }
 }
-

@@ -47,4 +47,3 @@ class DocumentsResult extends AbstractResult
         return $items;
     }
 }
-

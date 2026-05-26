@@ -36,4 +36,3 @@ class TemplateResult extends AbstractResult
         return new TemplateItemResult($result);
     }
 }
-

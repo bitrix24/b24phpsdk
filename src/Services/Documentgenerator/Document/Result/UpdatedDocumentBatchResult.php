@@ -28,4 +28,3 @@ class UpdatedDocumentBatchResult extends UpdatedItemBatchResult
         return (bool)$this->getResponseData()->getResult();
     }
 }
-
