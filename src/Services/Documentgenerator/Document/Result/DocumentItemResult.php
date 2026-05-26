@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Documentgenerator\Document\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractItem;
+use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
 use Carbon\CarbonImmutable;
 
 /**
@@ -42,48 +42,22 @@ use Carbon\CarbonImmutable;
  * @property-read string|null $imageUrlMachine
  * @property-read string|null $creationMethod
  */
-class DocumentItemResult extends AbstractItem
+class DocumentItemResult extends AbstractAnnotatedItem
 {
     /**
      * @param int|string $offset
      *
-     * @return bool|CarbonImmutable|int|mixed|null
+     * @return mixed
      */
     #[\Override]
     public function __get($offset)
     {
-        switch ($offset) {
-            case 'createTime':
-            case 'updateTime':
-                if (isset($this->data[$offset]) && $this->data[$offset] !== '') {
-                    return CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
-                }
-
-                return null;
-            case 'id':
-            case 'templateId':
-            case 'fileId':
-            case 'imageId':
-            case 'pdfId':
-            case 'createdBy':
-            case 'updatedBy':
-                if (isset($this->data[$offset]) && $this->data[$offset] !== '' && $this->data[$offset] !== null) {
-                    return (int)$this->data[$offset];
-                }
-
-                return null;
-            case 'stampsEnabled':
-                if (isset($this->data[$offset]) && $this->data[$offset] !== null) {
-                    return (bool)$this->data[$offset];
-                }
-
-                return null;
-            case 'creationMethod':
-                // The API field name is '_creationMethod' (with leading underscore)
-                return $this->data['_creationMethod'] ?? null;
-            default:
-                return parent::__get($offset);
+        if ($offset === 'creationMethod') {
+            // The API field name is '_creationMethod' (with leading underscore)
+            return $this->data['_creationMethod'] ?? null;
         }
+
+        return parent::__get($offset);
     }
 }
 
