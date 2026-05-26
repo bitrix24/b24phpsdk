@@ -3,6 +3,17 @@
 
 ### Added
 
+- Added service `Services\Documentgenerator\Document` with support for `documentgenerator.document.*` methods,
+  see [documentgenerator.document.* methods](https://apidocs.bitrix24.com/api-reference/document-generator/index.html) ([#489](https://github.com/bitrix24/b24phpsdk/issues/489)):
+    - `add` creates a new document based on a template and data provider, with batch calls support
+    - `list` gets the list of documents, with batch calls support
+    - `update` updates an existing document, with batch calls support
+    - `delete` deletes a document, with batch calls support
+    - `get` gets information about the document by its identifier
+    - `getFields` returns the description of document fields
+    - `enablePublicUrl` enables or disables public URL for a document
+    - `count` counts documents
+
 ### Changed
 
 ### Fixed

@@ -329,6 +329,12 @@
         <testsuite name="integration_tests_crm_documentgenerator_template">
             <directory>./tests/Integration/Services/CRM/Documentgenerator/Template/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_documentgenerator">
+            <directory>./tests/Integration/Services/Documentgenerator/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_document">
+            <directory>./tests/Integration/Services/Documentgenerator/Document/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_sonet_group">
             <directory>./tests/Integration/Services/SonetGroup/</directory>
         </testsuite>
