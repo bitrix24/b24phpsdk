@@ -45,4 +45,3 @@ class NumeratorsResult extends AbstractResult
         return $items;
     }
 }
-

@@ -28,4 +28,3 @@ class UpdatedNumeratorBatchResult extends UpdatedItemBatchResult
         return (bool)$this->getResponseData()->getResult();
     }
 }
-

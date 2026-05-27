@@ -32,4 +32,3 @@ class AddedNumeratorResult extends AddedItemResult
         return (int)$this->getCoreResponse()->getResponseData()->getResult()['numerator']['id'];
     }
 }
-

@@ -32,4 +32,3 @@ class UpdatedNumeratorResult extends UpdatedItemResult
         return (bool)$this->getCoreResponse()->getResponseData()->getResult();
     }
 }
-

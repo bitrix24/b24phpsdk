@@ -27,4 +27,3 @@ use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
 class NumeratorItemResult extends AbstractAnnotatedItem
 {
 }
-

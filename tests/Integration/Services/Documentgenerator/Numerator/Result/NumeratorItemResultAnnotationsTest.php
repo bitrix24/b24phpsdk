@@ -24,7 +24,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Faker;
 
 #[CoversClass(NumeratorItemResult::class)]
 class NumeratorItemResultAnnotationsTest extends TestCase
@@ -33,8 +32,6 @@ class NumeratorItemResultAnnotationsTest extends TestCase
 
     private Numerator $numeratorService;
 
-    private Faker\Generator $faker;
-
     /**
      * @throws InvalidArgumentException
      */
@@ -42,7 +39,6 @@ class NumeratorItemResultAnnotationsTest extends TestCase
     protected function setUp(): void
     {
         $this->numeratorService = Factory::getServiceBuilder()->getDocumentgeneratorScope()->numerator();
-        $this->faker = Faker\Factory::create();
     }
 
     /**

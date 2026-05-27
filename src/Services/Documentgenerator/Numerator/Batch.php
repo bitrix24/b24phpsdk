@@ -239,4 +239,3 @@ class Batch extends \Bitrix24\SDK\Core\Batch
         $this->logger->debug('deleteEntityItems.finish');
     }
 }
-

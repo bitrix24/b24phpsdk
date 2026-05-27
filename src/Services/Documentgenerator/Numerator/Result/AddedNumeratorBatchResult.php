@@ -28,4 +28,3 @@ class AddedNumeratorBatchResult extends AddedItemBatchResult
         return (int)$this->getResponseData()->getResult()['numerator']['id'];
     }
 }
-

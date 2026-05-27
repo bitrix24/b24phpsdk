@@ -36,4 +36,3 @@ class NumeratorResult extends AbstractResult
         return new NumeratorItemResult($result);
     }
 }
-

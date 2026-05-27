@@ -32,4 +32,3 @@ class DeletedNumeratorResult extends DeletedItemResult
         return (bool)$this->getCoreResponse()->getResponseData()->getResult();
     }
 }
-
