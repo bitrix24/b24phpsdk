@@ -344,6 +344,15 @@
         <testsuite name="integration_tests_documentgenerator_template_annotations">
             <file>./tests/Integration/Services/Documentgenerator/Template/Result/TemplateItemResultAnnotationsTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_documentgenerator_numerator">
+            <directory>./tests/Integration/Services/Documentgenerator/Numerator/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_numerator_service">
+            <directory>./tests/Integration/Services/Documentgenerator/Numerator/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_numerator_annotations">
+            <file>./tests/Integration/Services/Documentgenerator/Numerator/Result/NumeratorItemResultAnnotationsTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_scope_sonet_group">
             <directory>./tests/Integration/Services/SonetGroup/</directory>
         </testsuite>

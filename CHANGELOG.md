@@ -3,6 +3,14 @@
 
 ### Added
 
+- Added service `Services\Documentgenerator\Numerator` with support for `documentgenerator.numerator.*` methods,
+  see [documentgenerator.numerator.* methods](https://apidocs.bitrix24.com/api-reference/document-generator/numerators/index.html) ([#489](https://github.com/bitrix24/b24phpsdk/issues/489)):
+    - `add` creates a new numerator, with batch calls support
+    - `list` gets the list of numerators, with batch calls support
+    - `update` updates an existing numerator, with batch calls support
+    - `delete` deletes a numerator, with batch calls support
+    - `get` gets information about the numerator by its identifier
+    - `count` counts numerators
 - Added service `Services\Documentgenerator\Template` with support for `documentgenerator.template.*` methods,
   see [documentgenerator.template.* methods](https://apidocs.bitrix24.com/api-reference/document-generator/templates/index.html) ([#489](https://github.com/bitrix24/b24phpsdk/issues/489)):
     - `add` creates a new template, with batch calls support
