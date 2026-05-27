@@ -21,7 +21,6 @@ use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
  * @property-read int $id
  * @property-read string $name
  * @property-read string $template
- * @property-read string|null $code
  * @property-read array|null $settings
  */
 class NumeratorItemResult extends AbstractAnnotatedItem
