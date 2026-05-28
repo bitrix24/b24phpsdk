@@ -362,6 +362,15 @@
         <testsuite name="integration_tests_documentgenerator_region_annotations">
             <file>./tests/Integration/Services/Documentgenerator/Region/Result/RegionItemResultAnnotationsTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_documentgenerator_role">
+            <directory>./tests/Integration/Services/Documentgenerator/Role/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_role_service">
+            <directory>./tests/Integration/Services/Documentgenerator/Role/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_role_annotations">
+            <file>./tests/Integration/Services/Documentgenerator/Role/Result/RoleItemResultAnnotationsTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_scope_sonet_group">
             <directory>./tests/Integration/Services/SonetGroup/</directory>
         </testsuite>

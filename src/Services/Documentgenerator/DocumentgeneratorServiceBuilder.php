@@ -19,6 +19,7 @@ use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\Documentgenerator\Document;
 use Bitrix24\SDK\Services\Documentgenerator\Numerator;
 use Bitrix24\SDK\Services\Documentgenerator\Region;
+use Bitrix24\SDK\Services\Documentgenerator\Role;
 use Bitrix24\SDK\Services\Documentgenerator\Template;
 
 #[ApiServiceBuilderMetadata(new Scope(['documentgenerator']))]
@@ -84,6 +85,23 @@ class DocumentgeneratorServiceBuilder extends AbstractServiceBuilder
             );
             $this->serviceCache[__METHOD__] = new Region\Service\Region(
                 new Region\Service\Batch($regionBatch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function role(): Role\Service\Role
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $roleBatch = new Role\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Role\Service\Role(
+                new Role\Service\Batch($roleBatch, $this->log),
                 $this->core,
                 $this->log
             );

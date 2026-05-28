@@ -3,6 +3,15 @@
 
 ### Added
 
+- Added service `Services\Documentgenerator\Role` with support for `documentgenerator.role.*` methods,
+  see [documentgenerator.role.* methods](https://apidocs.bitrix24.com/api-reference/document-generator/role/index.html) ([#489](https://github.com/bitrix24/b24phpsdk/issues/489)):
+    - `add` creates a new role, with batch calls support
+    - `list` gets the list of roles, with batch calls support
+    - `update` updates an existing role, with batch calls support
+    - `delete` deletes a role, with batch calls support
+    - `get` gets information about the role by its identifier (includes permissions)
+    - `fillAccesses` completely replaces the role-to-access-code binding map
+    - `count` counts roles
 - Added service `Services\Documentgenerator\Region` with support for `documentgenerator.region.*` methods,
   see [documentgenerator.region.* methods](https://apidocs.bitrix24.com/api-reference/document-generator/region/index.html) ([#489](https://github.com/bitrix24/b24phpsdk/issues/489)):
     - `add` creates a new region, with batch calls support
