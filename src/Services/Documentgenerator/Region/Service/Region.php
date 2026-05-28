@@ -45,8 +45,7 @@ class Region extends AbstractService
      *
      * @param array{
      *   languageId: string,
-     *   name: string,
-     *   code: string
+     *   title: string
      * } $fields
      *
      * @throws BaseException
@@ -76,8 +75,7 @@ class Region extends AbstractService
      *
      * @param array{
      *   languageId?: string,
-     *   name?: string,
-     *   code?: string
+     *   title?: string
      * } $fields
      *
      * @throws BaseException
@@ -179,6 +177,6 @@ class Region extends AbstractService
      */
     public function count(): int
     {
-        return $this->list()->getCoreResponse()->getResponseData()->getPagination()->getTotal();
+        return count($this->list()->getRegions());
     }
 }

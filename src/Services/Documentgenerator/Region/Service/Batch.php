@@ -74,8 +74,7 @@ class Batch
      *
      * @param array<int, array{
      *     languageId: string,
-     *     name: string,
-     *     code: string
+     *     title: string
      *   }> $regions
      *
      * @return Generator<int, AddedRegionBatchResult>

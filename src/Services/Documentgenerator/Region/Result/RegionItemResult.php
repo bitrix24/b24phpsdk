@@ -18,10 +18,13 @@ use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
 /**
  * Class RegionItemResult
  *
- * @property-read int $id
- * @property-read string $languageId
- * @property-read string $name
- * @property-read string $code
+ * @property-read int         $id
+ * @property-read string      $title
+ * @property-read string      $languageId
+ * @property-read string|null $formatDate
+ * @property-read string|null $formatDatetime
+ * @property-read string|null $formatName
+ * @property-read array       $phrases
  */
 class RegionItemResult extends AbstractAnnotatedItem
 {
