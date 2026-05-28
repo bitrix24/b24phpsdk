@@ -26,4 +26,3 @@ use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
 class RegionItemResult extends AbstractAnnotatedItem
 {
 }
-

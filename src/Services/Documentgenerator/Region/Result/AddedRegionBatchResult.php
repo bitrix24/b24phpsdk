@@ -28,4 +28,3 @@ class AddedRegionBatchResult extends AddedItemBatchResult
         return (int)$this->getResponseData()->getResult()['region']['id'];
     }
 }
-

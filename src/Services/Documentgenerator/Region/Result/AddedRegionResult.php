@@ -32,4 +32,3 @@ class AddedRegionResult extends AddedItemResult
         return (int)$this->getCoreResponse()->getResponseData()->getResult()['region']['id'];
     }
 }
-

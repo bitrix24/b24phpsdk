@@ -182,4 +182,3 @@ class Region extends AbstractService
         return $this->list()->getCoreResponse()->getResponseData()->getPagination()->getTotal();
     }
 }
-

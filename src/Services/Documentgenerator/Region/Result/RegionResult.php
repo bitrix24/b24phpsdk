@@ -36,4 +36,3 @@ class RegionResult extends AbstractResult
         return new RegionItemResult($result);
     }
 }
-

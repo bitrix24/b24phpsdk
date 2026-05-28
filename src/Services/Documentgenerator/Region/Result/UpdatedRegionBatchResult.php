@@ -28,4 +28,3 @@ class UpdatedRegionBatchResult extends UpdatedItemBatchResult
         return (bool)$this->getResponseData()->getResult();
     }
 }
-

@@ -45,4 +45,3 @@ class RegionsResult extends AbstractResult
         return $items;
     }
 }
-

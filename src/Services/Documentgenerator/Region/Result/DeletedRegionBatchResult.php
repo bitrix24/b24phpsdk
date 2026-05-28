@@ -28,4 +28,3 @@ class DeletedRegionBatchResult extends DeletedItemBatchResult
         return (bool)$this->getResponseData()->getResult();
     }
 }
-
