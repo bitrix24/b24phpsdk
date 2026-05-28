@@ -130,3 +130,61 @@ Key differences from CRM variant:
 - `phpstan.neon.dist` — added `tests/Integration/Services/Documentgenerator`
 - `CHANGELOG.md` — added Template entry under `## 3.3.0 – UNRELEASED`
 
+---
+
+## Plan: Add support for documentgenerator.region.* methods (issue #489)
+
+## Context
+
+The Bitrix24 REST API exposes a set of methods for managing document generator regions:
+- `documentgenerator.region.add` — creates a new custom region
+- `documentgenerator.region.update` — updates an existing region by `id` + `fields`
+- `documentgenerator.region.get` — returns a region by `id`
+- `documentgenerator.region.list` — returns a paginated list of regions
+- `documentgenerator.region.delete` — deletes a region by `id` (returns null on success)
+
+All methods belong to scope `documentgenerator`.
+
+API response envelope (verified against `documentgenerator.region.delete` via MCP):
+- Add → `result.region = {...}` (matching pattern of numerator.add)
+- Update → `result = null` (boolean cast = true on success)
+- Get → `result.region = {...}`
+- List → `result.regions = [...]`
+- Delete → `result = null` (boolean cast on result)
+
+Region entity fields (based on API docs):
+- `id` — int
+- `languageId` — string
+- `name` — string
+- `code` — string
+
+All REST methods use lowercase `id` parameter (not `ID`), matching the Numerator pattern.
+A custom `Batch` class (like `Numerator\Batch`) is required to override lowercase `id`
+and `regions` result key handling.
+
+---
+
+## Files to Create
+
+- `src/Services/Documentgenerator/Region/Result/RegionItemResult.php`
+- `src/Services/Documentgenerator/Region/Result/RegionResult.php`
+- `src/Services/Documentgenerator/Region/Result/RegionsResult.php`
+- `src/Services/Documentgenerator/Region/Result/AddedRegionResult.php`
+- `src/Services/Documentgenerator/Region/Result/AddedRegionBatchResult.php`
+- `src/Services/Documentgenerator/Region/Result/UpdatedRegionResult.php`
+- `src/Services/Documentgenerator/Region/Result/UpdatedRegionBatchResult.php`
+- `src/Services/Documentgenerator/Region/Result/DeletedRegionResult.php`
+- `src/Services/Documentgenerator/Region/Result/DeletedRegionBatchResult.php`
+- `src/Services/Documentgenerator/Region/Batch.php`
+- `src/Services/Documentgenerator/Region/Service/Batch.php`
+- `src/Services/Documentgenerator/Region/Service/Region.php`
+- `tests/Integration/Services/Documentgenerator/Region/Service/RegionTest.php`
+- `tests/Integration/Services/Documentgenerator/Region/Service/BatchTest.php`
+- `tests/Integration/Services/Documentgenerator/Region/Result/RegionItemResultAnnotationsTest.php`
+
+## Files to Modify
+
+- `src/Services/Documentgenerator/DocumentgeneratorServiceBuilder.php`
+- `phpunit.xml.dist`
+- `Makefile`
+- `CHANGELOG.md`

@@ -353,6 +353,15 @@
         <testsuite name="integration_tests_documentgenerator_numerator_annotations">
             <file>./tests/Integration/Services/Documentgenerator/Numerator/Result/NumeratorItemResultAnnotationsTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_documentgenerator_region">
+            <directory>./tests/Integration/Services/Documentgenerator/Region/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_region_service">
+            <directory>./tests/Integration/Services/Documentgenerator/Region/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_region_annotations">
+            <file>./tests/Integration/Services/Documentgenerator/Region/Result/RegionItemResultAnnotationsTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_scope_sonet_group">
             <directory>./tests/Integration/Services/SonetGroup/</directory>
         </testsuite>

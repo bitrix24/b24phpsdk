@@ -3,6 +3,14 @@
 
 ### Added
 
+- Added service `Services\Documentgenerator\Region` with support for `documentgenerator.region.*` methods,
+  see [documentgenerator.region.* methods](https://apidocs.bitrix24.com/api-reference/document-generator/region/index.html) ([#489](https://github.com/bitrix24/b24phpsdk/issues/489)):
+    - `add` creates a new region, with batch calls support
+    - `list` gets the list of regions, with batch calls support
+    - `update` updates an existing region, with batch calls support
+    - `delete` deletes a region, with batch calls support
+    - `get` gets information about the region by its identifier
+    - `count` counts regions
 - Added service `Services\Documentgenerator\Numerator` with support for `documentgenerator.numerator.*` methods,
   see [documentgenerator.numerator.* methods](https://apidocs.bitrix24.com/api-reference/document-generator/numerators/index.html) ([#489](https://github.com/bitrix24/b24phpsdk/issues/489)):
     - `add` creates a new numerator, with batch calls support

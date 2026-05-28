@@ -667,6 +667,18 @@ integration_tests_documentgenerator_numerator_service:
 integration_tests_documentgenerator_numerator_annotations:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_documentgenerator_numerator_annotations
 
+.PHONY: integration_tests_documentgenerator_region
+integration_tests_documentgenerator_region:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_documentgenerator_region
+
+.PHONY: integration_tests_documentgenerator_region_service
+integration_tests_documentgenerator_region_service:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_documentgenerator_region_service
+
+.PHONY: integration_tests_documentgenerator_region_annotations
+integration_tests_documentgenerator_region_annotations:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_documentgenerator_region_annotations
+
 # work dev environment
 .PHONY: php-dev-server-up
 php-dev-server-up:

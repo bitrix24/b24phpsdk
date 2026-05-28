@@ -18,6 +18,7 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\Documentgenerator\Document;
 use Bitrix24\SDK\Services\Documentgenerator\Numerator;
+use Bitrix24\SDK\Services\Documentgenerator\Region;
 use Bitrix24\SDK\Services\Documentgenerator\Template;
 
 #[ApiServiceBuilderMetadata(new Scope(['documentgenerator']))]
@@ -66,6 +67,23 @@ class DocumentgeneratorServiceBuilder extends AbstractServiceBuilder
             );
             $this->serviceCache[__METHOD__] = new Numerator\Service\Numerator(
                 new Numerator\Service\Batch($numeratorBatch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function region(): Region\Service\Region
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $regionBatch = new Region\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Region\Service\Region(
+                new Region\Service\Batch($regionBatch, $this->log),
                 $this->core,
                 $this->log
             );
