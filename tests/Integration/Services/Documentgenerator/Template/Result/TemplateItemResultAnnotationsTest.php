@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Documentgenerator\Template\Result\TemplateItemResult;
 use Bitrix24\SDK\Services\Documentgenerator\Template\Service\Template;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -38,7 +38,7 @@ class TemplateItemResultAnnotationsTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->templateService = Factory::getServiceBuilder()->getDocumentgeneratorScope()->template();
+        $this->templateService = Fabric::getServiceBuilder()->getDocumentgeneratorScope()->template();
     }
 
     /**

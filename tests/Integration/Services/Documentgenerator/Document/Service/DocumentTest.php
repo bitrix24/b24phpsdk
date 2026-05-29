@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Documentgenerator\Document\Result\DocumentItemResult;
 use Bitrix24\SDK\Services\Documentgenerator\Document\Service\Document;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 use Faker;
@@ -52,7 +52,7 @@ class DocumentTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->documentService = Factory::getServiceBuilder()->getDocumentgeneratorScope()->document();
+        $this->documentService = Fabric::getServiceBuilder()->getDocumentgeneratorScope()->document();
         $this->faker = Faker\Factory::create();
     }
 
@@ -67,7 +67,7 @@ class DocumentTest extends TestCase
      */
     private function getFirstTemplate(): array
     {
-        $core = Factory::getCore();
+        $core = Fabric::getCore();
         $response = $core->call('documentgenerator.template.list', ['select' => ['id', 'providers']]);
         $result = $response->getResponseData()->getResult();
         $templates = $result['templates'] ?? [];

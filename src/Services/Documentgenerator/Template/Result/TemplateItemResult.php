@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Documentgenerator\Template\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Bitrix24\SDK\Core\Result\AbstractItem;
 use Carbon\CarbonImmutable;
 
 /**
@@ -42,6 +42,6 @@ use Carbon\CarbonImmutable;
  * @property-read string|null $productsTableVariant
  * @property-read string|null $downloadMachine
  */
-class TemplateItemResult extends AbstractAnnotatedItem
+class TemplateItemResult extends AbstractItem
 {
 }

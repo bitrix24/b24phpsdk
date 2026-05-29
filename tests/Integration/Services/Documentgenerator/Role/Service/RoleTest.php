@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Documentgenerator\Role\Result\RoleItemResult;
 use Bitrix24\SDK\Services\Documentgenerator\Role\Service\Role;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 use Faker;
@@ -51,7 +51,7 @@ class RoleTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->roleService = Factory::getServiceBuilder()->getDocumentgeneratorScope()->role();
+        $this->roleService = Fabric::getServiceBuilder()->getDocumentgeneratorScope()->role();
         $this->faker = Faker\Factory::create();
     }
 

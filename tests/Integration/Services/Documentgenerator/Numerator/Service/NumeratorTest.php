@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Documentgenerator\Numerator\Result\NumeratorItemResult;
 use Bitrix24\SDK\Services\Documentgenerator\Numerator\Service\Numerator;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 use Faker;
@@ -50,7 +50,7 @@ class NumeratorTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->numeratorService = Factory::getServiceBuilder()->getDocumentgeneratorScope()->numerator();
+        $this->numeratorService = Fabric::getServiceBuilder()->getDocumentgeneratorScope()->numerator();
         $this->faker = Faker\Factory::create();
     }
 

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Documentgenerator\Region\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Bitrix24\SDK\Core\Result\AbstractItem;
 
 /**
  * Class RegionItemResult
@@ -26,6 +26,6 @@ use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
  * @property-read string|null $formatName
  * @property-read array       $phrases
  */
-class RegionItemResult extends AbstractAnnotatedItem
+class RegionItemResult extends AbstractItem
 {
 }

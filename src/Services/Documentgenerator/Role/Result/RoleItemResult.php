@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Documentgenerator\Role\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Bitrix24\SDK\Core\Result\AbstractItem;
 
 /**
  * Class RoleItemResult
@@ -23,6 +23,6 @@ use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
  * @property-read string      $code
  * @property-read array|null  $permissions
  */
-class RoleItemResult extends AbstractAnnotatedItem
+class RoleItemResult extends AbstractItem
 {
 }

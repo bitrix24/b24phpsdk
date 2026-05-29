@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Documentgenerator\Numerator\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Bitrix24\SDK\Core\Result\AbstractItem;
 
 /**
  * Class NumeratorItemResult
@@ -23,6 +23,6 @@ use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
  * @property-read string $template
  * @property-read array|null $settings
  */
-class NumeratorItemResult extends AbstractAnnotatedItem
+class NumeratorItemResult extends AbstractItem
 {
 }

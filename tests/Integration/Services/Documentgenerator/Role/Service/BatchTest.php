@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Documentgenerator\Role\Service\Role;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
 use Faker;
 
@@ -39,7 +39,7 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->roleService = Factory::getServiceBuilder()->getDocumentgeneratorScope()->role();
+        $this->roleService = Fabric::getServiceBuilder()->getDocumentgeneratorScope()->role();
         $this->faker = Faker\Factory::create();
     }
 

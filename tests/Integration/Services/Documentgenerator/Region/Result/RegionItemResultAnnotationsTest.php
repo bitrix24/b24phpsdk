@@ -19,7 +19,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Documentgenerator\Region\Result\RegionItemResult;
 use Bitrix24\SDK\Services\Documentgenerator\Region\Service\Region;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use Faker\Factory as FakerFactory;
 use Faker\Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -42,7 +42,7 @@ class RegionItemResultAnnotationsTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->regionService = Factory::getServiceBuilder()->getDocumentgeneratorScope()->region();
+        $this->regionService = Fabric::getServiceBuilder()->getDocumentgeneratorScope()->region();
         $this->faker = FakerFactory::create();
     }
 

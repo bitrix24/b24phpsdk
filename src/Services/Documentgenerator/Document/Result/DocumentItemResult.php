@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Documentgenerator\Document\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Bitrix24\SDK\Core\Result\AbstractItem;
 use Carbon\CarbonImmutable;
 
 /**
@@ -42,7 +42,7 @@ use Carbon\CarbonImmutable;
  * @property-read string|null $imageUrlMachine
  * @property-read string|null $creationMethod
  */
-class DocumentItemResult extends AbstractAnnotatedItem
+class DocumentItemResult extends AbstractItem
 {
     /**
      * @param int|string $offset
