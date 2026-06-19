@@ -3,6 +3,16 @@
 
 ### Added
 
+- Added service `Services\MailService` with support for `mailservice.*` methods,
+  see [mailservice.* methods](https://apidocs.bitrix24.com/api-reference/mailservice/index.html) ([#495](https://github.com/bitrix24/b24phpsdk/issues/495)):
+    - `add` creates a new mail service (IMAP integration), with batch calls support
+    - `update` updates an existing mail service, with batch calls support
+    - `get` gets information about a mail service by its identifier
+    - `list` gets the list of active mail services, with batch calls support
+    - `delete` deletes a mail service, with batch calls support
+    - `fields` returns localized field labels of a mail service
+    - `count` counts active mail services
+
 ### Changed
 
 ### Fixed

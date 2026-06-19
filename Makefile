@@ -98,6 +98,7 @@ help:
 	@echo "test-integration-lists-field - run Lists Field integration tests"
 	@echo "test-integration-lists-section - run Lists Section integration tests"
 	@echo "test-integration-lists-element - run Lists Element integration tests"
+	@echo "test-integration-mailservice - run MailService integration tests"
 
 t:
 	docker compose run --rm php-cli sh
@@ -634,6 +635,10 @@ integration_tests_crm_documentgenerator_document:
 .PHONY: integration_tests_crm_documentgenerator_template
 integration_tests_crm_documentgenerator_template:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_documentgenerator_template
+
+.PHONY: test-integration-mailservice
+test-integration-mailservice:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_mailservice
 
 # work dev environment
 .PHONY: php-dev-server-up

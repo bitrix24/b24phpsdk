@@ -344,6 +344,9 @@
             <file>./tests/Integration/Services/Rest/Service/ScopeTest.php</file>
             <file>./tests/Integration/Services/Rest/Result/ScopeMethodItemResultTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_mailservice">
+            <directory>./tests/Integration/Services/MailService/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>
