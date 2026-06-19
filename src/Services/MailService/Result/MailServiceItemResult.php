@@ -24,7 +24,7 @@ use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
  * @property-read int $SORT
  * @property-read string $NAME
  * @property-read string $SERVER
- * @property-read int $PORT
+ * @property-read int|null $PORT
  * @property-read bool $ENCRYPTION
  * @property-read string $LINK
  * @property-read string|null $ICON

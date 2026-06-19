@@ -77,6 +77,7 @@ class BatchTest extends TestCase
             $items[] = [
                 'NAME' => 'SDK Batch Delete Test ' . $i,
                 'ACTIVE' => 'Y',
+                'ENCRYPTION' => 'N',
             ];
         }
 
@@ -105,6 +106,7 @@ class BatchTest extends TestCase
             $items[] = [
                 'NAME' => 'SDK Batch Update Test ' . $i,
                 'ACTIVE' => 'Y',
+                'ENCRYPTION' => 'N',
             ];
         }
 
