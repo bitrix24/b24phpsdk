@@ -37,4 +37,13 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  */
 class MailServiceItemResult extends AbstractItem
 {
+    public function __get($offset)
+    {
+        return match ($offset) {
+            'ID', 'SORT', 'PORT', 'SMTP_PORT' => isset($this->data[$offset]) ? (int)$this->data[$offset] : null,
+            'ACTIVE', 'ENCRYPTION', 'SMTP_LOGIN_AS_IMAP', 'SMTP_PASSWORD_AS_IMAP' => $this->data[$offset] === 'Y',
+            'SMTP_ENCRYPTION', 'UPLOAD_OUTGOING' => isset($this->data[$offset]) ? $this->data[$offset] === 'Y' : null,
+            default => $this->data[$offset] ?? null,
+        };
+    }
 }

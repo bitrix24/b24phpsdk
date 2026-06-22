@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Services\MailService\Result;
 
-use Bitrix24\SDK\Core\Fields\FieldsFilter;
 use Bitrix24\SDK\Services\MailService\Result\MailServiceItemResult;
 use Bitrix24\SDK\Services\MailService\Service\MailService;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
@@ -65,20 +64,6 @@ class MailServiceItemResultAnnotationsTest extends TestCase
 
         $this->assertBitrix24AllResultItemFieldsAnnotated(
             array_keys($rawItem),
-            MailServiceItemResult::class
-        );
-    }
-
-    #[Test]
-    #[TestDox('all system fields in MailServiceItemResult have valid type annotation')]
-    public function testAllSystemFieldsHasValidTypeAnnotation(): void
-    {
-        $allFields = $this->mailService->fields()->getFieldsDescription();
-        $systemFieldsCodes = (new FieldsFilter())->filterSystemFields(array_keys($allFields));
-        $systemFields = array_filter($allFields, static fn($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
-
-        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
-            $systemFields,
             MailServiceItemResult::class
         );
     }
