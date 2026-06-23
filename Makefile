@@ -635,6 +635,18 @@ integration_tests_crm_documentgenerator_document:
 integration_tests_crm_documentgenerator_template:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_documentgenerator_template
 
+.PHONY: test-integration-scope-messageservice
+test-integration-scope-messageservice:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_messageservice
+
+.PHONY: test-integration-messageservice-sender
+test-integration-messageservice-sender:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_messageservice_sender
+
+.PHONY: test-integration-messageservice-message-status
+test-integration-messageservice-message-status:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_messageservice_message_status
+
 # work dev environment
 .PHONY: php-dev-server-up
 php-dev-server-up:

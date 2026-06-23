@@ -344,6 +344,15 @@
             <file>./tests/Integration/Services/Rest/Service/ScopeTest.php</file>
             <file>./tests/Integration/Services/Rest/Result/ScopeMethodItemResultTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_scope_messageservice">
+            <directory>./tests/Integration/Services/Messageservice/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_messageservice_sender">
+            <directory>./tests/Integration/Services/Messageservice/Sender/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_messageservice_message_status">
+            <directory>./tests/Integration/Services/Messageservice/Message/Status/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>
