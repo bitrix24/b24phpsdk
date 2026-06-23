@@ -30,7 +30,7 @@ class SenderTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->sender = Factory::getServiceBuilder()->getMessageserviceScope()->sender();
+        $this->sender = Factory::getServiceBuilder(true)->getMessageserviceScope()->sender();
         // Ensure cleanup before each test
         try {
             $this->sender->delete($this->testSenderCode);

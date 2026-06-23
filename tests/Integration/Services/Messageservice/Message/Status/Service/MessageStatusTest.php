@@ -33,7 +33,7 @@ class MessageStatusTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $messageserviceServiceBuilder = Factory::getServiceBuilder()->getMessageserviceScope();
+        $messageserviceServiceBuilder = Factory::getServiceBuilder(true)->getMessageserviceScope();
         $this->messageStatus = $messageserviceServiceBuilder->messageStatus();
         $this->sender = $messageserviceServiceBuilder->sender();
 
