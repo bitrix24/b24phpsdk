@@ -332,6 +332,9 @@
         <testsuite name="integration_tests_scope_sonet_group">
             <directory>./tests/Integration/Services/SonetGroup/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_booking">
+            <directory>./tests/Integration/Services/Booking/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_main_eventlog">
             <file>./tests/Integration/Services/Main/Service/EventLogTest.php</file>
             <file>./tests/Integration/Services/Main/EventLogField/Service/EventLogFieldTest.php</file>
