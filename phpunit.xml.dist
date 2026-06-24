@@ -349,6 +349,7 @@
         </testsuite>
         <testsuite name="integration_tests_scope_timeman">
             <directory>./tests/Integration/Services/Timeman/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_biconnector">
             <directory>./tests/Integration/Services/Biconnector/</directory>
         </testsuite>
