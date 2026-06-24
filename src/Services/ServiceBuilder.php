@@ -36,6 +36,7 @@ use Bitrix24\SDK\Services\Sale\SaleServiceBuilder;
 use Bitrix24\SDK\Services\Calendar\CalendarServiceBuilder;
 use Bitrix24\SDK\Services\Paysystem\PaysystemServiceBuilder;
 use Bitrix24\SDK\Services\SonetGroup\SonetGroupServiceBuilder;
+use Bitrix24\SDK\Services\Messageservice\MessageserviceServiceBuilder;
 use Psr\Log\LoggerInterface;
 
 class ServiceBuilder extends AbstractServiceBuilder
@@ -334,5 +335,18 @@ class ServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-    
+
+    public function getMessageserviceScope(): MessageserviceServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new MessageserviceServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 }
