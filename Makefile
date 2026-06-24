@@ -635,6 +635,22 @@ integration_tests_crm_documentgenerator_document:
 integration_tests_crm_documentgenerator_template:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_documentgenerator_template
 
+.PHONY: test-integration-scope-biconnector
+test-integration-scope-biconnector:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_biconnector
+
+.PHONY: test-integration-biconnector-connector
+test-integration-biconnector-connector:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_biconnector_connector
+
+.PHONY: test-integration-biconnector-source
+test-integration-biconnector-source:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_biconnector_source
+
+.PHONY: test-integration-biconnector-dataset
+test-integration-biconnector-dataset:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_biconnector_dataset
+
 # work dev environment
 .PHONY: php-dev-server-up
 php-dev-server-up:
