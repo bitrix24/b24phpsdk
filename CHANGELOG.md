@@ -3,6 +3,14 @@
 
 ### Added
 
+- Added `Services\Timeman` service with support for workday tracking methods,
+  see [timeman.* methods](https://apidocs.bitrix24.com/api-reference/timeman/index.html):
+    - `open` — starts a new workday or continues after pause/close
+    - `pause` — pauses the current workday
+    - `close` — closes the current workday
+    - `status` — gets current workday status
+    - `settings` — gets user's work time settings
+      ([#484](https://github.com/bitrix24/b24phpsdk/issues/484))
 - Added service `Services\Biconnector\Dataset` with support methods,
   see [biconnector.dataset.* methods](https://apidocs.bitrix24.com/api-reference/biconnector/dataset/index.html) ([#469](https://github.com/bitrix24/b24phpsdk/issues/469)):
     - `add` adds a new dataset, with batch calls support

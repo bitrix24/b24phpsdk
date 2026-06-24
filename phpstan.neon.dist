@@ -38,6 +38,7 @@ parameters:
     - tests/Integration/Services/CRM/Documentgenerator/Numerator
     - tests/Integration/Services/CRM/Documentgenerator/Document
     - tests/Integration/Services/CRM/Documentgenerator/Template
+    - tests/Integration/Services/Timeman
   excludePaths:
     # TODO: Fix type errors in RequisiteUserfieldUseCaseTest and remove this exclusion
     # Tracking: https://github.com/bitrix24/b24phpsdk/issues
