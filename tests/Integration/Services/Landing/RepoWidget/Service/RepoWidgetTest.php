@@ -38,9 +38,9 @@ class RepoWidgetTest extends TestCase
     #[\Override]
     protected function tearDown(): void
     {
-        foreach ($this->createdWidgetCodes as $code) {
+        foreach ($this->createdWidgetCodes as $createdWidgetCode) {
             try {
-                $this->repoWidgetService->unregister($code);
+                $this->repoWidgetService->unregister($createdWidgetCode);
             } catch (\Exception) {
                 // Ignore cleanup errors
             }
@@ -62,10 +62,10 @@ class RepoWidgetTest extends TestCase
             'CONTENT'  => '<div class="w-container">{{desc}}</div>',
         ];
 
-        $result = $this->repoWidgetService->register($code, $fields);
+        $addedItemResult = $this->repoWidgetService->register($code, $fields);
         $this->createdWidgetCodes[] = $code;
 
-        self::assertGreaterThan(0, $result->getId());
+        self::assertGreaterThan(0, $addedItemResult->getId());
     }
 
     /**
@@ -80,7 +80,7 @@ class RepoWidgetTest extends TestCase
             'ACTIVE'  => 'Y',
             'CONTENT' => '<div>First content</div>',
         ];
-        $result1 = $this->repoWidgetService->register($code, $fields1);
+        $addedItemResult = $this->repoWidgetService->register($code, $fields1);
         $this->createdWidgetCodes[] = $code;
 
         $fields2 = [
@@ -90,7 +90,7 @@ class RepoWidgetTest extends TestCase
         ];
         $result2 = $this->repoWidgetService->register($code, $fields2);
 
-        self::assertGreaterThan(0, $result1->getId());
+        self::assertGreaterThan(0, $addedItemResult->getId());
         self::assertGreaterThan(0, $result2->getId());
     }
 
@@ -108,9 +108,9 @@ class RepoWidgetTest extends TestCase
         ];
         $this->repoWidgetService->register($code, $fields);
 
-        $result = $this->repoWidgetService->unregister($code);
+        $deletedItemResult = $this->repoWidgetService->unregister($code);
 
-        self::assertTrue($result->isSuccess());
+        self::assertTrue($deletedItemResult->isSuccess());
     }
 
     /**
@@ -125,12 +125,12 @@ class RepoWidgetTest extends TestCase
             'ACTIVE'  => 'Y',
             'CONTENT' => '<div>{{count}}</div>',
         ];
-        $addResult = $this->repoWidgetService->register($code, $fields);
+        $addedItemResult = $this->repoWidgetService->register($code, $fields);
         $this->createdWidgetCodes[] = $code;
-        $widgetId = $addResult->getId();
+        $widgetId = $addedItemResult->getId();
 
-        $listResult = $this->repoWidgetService->getList();
-        $widgets = $listResult->getRepoWidgetItems();
+        $repoWidgetGetListResult = $this->repoWidgetService->getList();
+        $widgets = $repoWidgetGetListResult->getRepoWidgetItems();
 
         self::assertIsArray($widgets);
         self::assertNotEmpty($widgets);
@@ -161,15 +161,15 @@ class RepoWidgetTest extends TestCase
             'ACTIVE'  => 'Y',
             'CONTENT' => '<div>filter</div>',
         ];
-        $addResult = $this->repoWidgetService->register($code, $fields);
+        $addedItemResult = $this->repoWidgetService->register($code, $fields);
         $this->createdWidgetCodes[] = $code;
-        $widgetId = $addResult->getId();
+        $widgetId = $addedItemResult->getId();
 
-        $listResult = $this->repoWidgetService->getList(
+        $repoWidgetGetListResult = $this->repoWidgetService->getList(
             ['ID', 'NAME', 'ACTIVE'],
             ['ID' => $widgetId]
         );
-        $widgets = $listResult->getRepoWidgetItems();
+        $widgets = $repoWidgetGetListResult->getRepoWidgetItems();
 
         self::assertCount(1, $widgets);
         self::assertEquals($widgetId, (int)$widgets[0]->ID);
@@ -182,9 +182,9 @@ class RepoWidgetTest extends TestCase
      */
     public function testDebug(): void
     {
-        $result = $this->repoWidgetService->debug(true);
+        $repoWidgetDebugResult = $this->repoWidgetService->debug(true);
 
-        self::assertTrue($result->isEnabled());
+        self::assertTrue($repoWidgetDebugResult->isEnabled());
 
         // Restore debug mode to disabled
         $this->repoWidgetService->debug(false);
