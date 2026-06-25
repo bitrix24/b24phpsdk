@@ -32,7 +32,7 @@ class RepoWidgetTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->repoWidgetService = Factory::getServiceBuilder()->getLandingScope()->repoWidget();
+        $this->repoWidgetService = Factory::getServiceBuilder(true)->getLandingScope()->repoWidget();
     }
 
     #[\Override]
@@ -48,21 +48,37 @@ class RepoWidgetTest extends TestCase
     }
 
     /**
+     * Builds a minimal set of fields required by landing.repowidget.register.
+     *
+     * The API mandates NAME, SECTIONS, PREVIEW, and WIDGET_PARAMS.
+     *
+     * @param string $name Human-readable widget name
+     * @return array<string, mixed>
+     */
+    private function buildWidgetFields(string $name): array
+    {
+        return [
+            'NAME'          => $name,
+            'ACTIVE'        => 'Y',
+            'SECTIONS'      => 'widgets_company_life',
+            'PREVIEW'       => 'https://example.com/preview.png',
+            'CONTENT'       => '<div class="w-container">{{desc}}</div>',
+            'WIDGET_PARAMS' => [
+                'rootNode' => '.w-container',
+                'handler'  => 'https://example.com/widget-handler.php',
+                'demoData' => ['desc' => 'Test widget'],
+            ],
+        ];
+    }
+
+    /**
      * @throws BaseException
      * @throws TransportException
      */
     public function testRegister(): void
     {
         $code = 'test_widget_register_' . time();
-        $fields = [
-            'NAME'     => 'Test Vibe Widget ' . time(),
-            'ACTIVE'   => 'Y',
-            'SECTIONS' => 'widgets_company_life',
-            'PREVIEW'  => 'https://example.com/preview.png',
-            'CONTENT'  => '<div class="w-container">{{desc}}</div>',
-        ];
-
-        $addedItemResult = $this->repoWidgetService->register($code, $fields);
+        $addedItemResult = $this->repoWidgetService->register($code, $this->buildWidgetFields('Test Vibe Widget ' . time()));
         $this->createdWidgetCodes[] = $code;
 
         self::assertGreaterThan(0, $addedItemResult->getId());
@@ -75,23 +91,14 @@ class RepoWidgetTest extends TestCase
     public function testRegisterWithExistingCodeUpdatesWidget(): void
     {
         $code = 'test_widget_update_' . time();
-        $fields1 = [
-            'NAME'    => 'First Widget ' . time(),
-            'ACTIVE'  => 'Y',
-            'CONTENT' => '<div>First content</div>',
-        ];
-        $addedItemResult = $this->repoWidgetService->register($code, $fields1);
+
+        $addedItemResult = $this->repoWidgetService->register($code, $this->buildWidgetFields('First Widget ' . time()));
         $this->createdWidgetCodes[] = $code;
 
-        $fields2 = [
-            'NAME'    => 'Updated Widget ' . time(),
-            'ACTIVE'  => 'Y',
-            'CONTENT' => '<div>Updated content</div>',
-        ];
-        $result2 = $this->repoWidgetService->register($code, $fields2);
+        $addedItemResult2 = $this->repoWidgetService->register($code, $this->buildWidgetFields('Updated Widget ' . time()));
 
         self::assertGreaterThan(0, $addedItemResult->getId());
-        self::assertGreaterThan(0, $result2->getId());
+        self::assertGreaterThan(0, $addedItemResult2->getId());
     }
 
     /**
@@ -101,12 +108,7 @@ class RepoWidgetTest extends TestCase
     public function testUnregister(): void
     {
         $code = 'test_widget_unregister_' . time();
-        $fields = [
-            'NAME'    => 'Widget to remove ' . time(),
-            'ACTIVE'  => 'Y',
-            'CONTENT' => '<div>Content</div>',
-        ];
-        $this->repoWidgetService->register($code, $fields);
+        $this->repoWidgetService->register($code, $this->buildWidgetFields('Widget to remove ' . time()));
 
         $deletedItemResult = $this->repoWidgetService->unregister($code);
 
@@ -120,12 +122,8 @@ class RepoWidgetTest extends TestCase
     public function testGetList(): void
     {
         $code = 'test_widget_list_' . time();
-        $fields = [
-            'NAME'    => 'List Test Widget ' . time(),
-            'ACTIVE'  => 'Y',
-            'CONTENT' => '<div>{{count}}</div>',
-        ];
-        $addedItemResult = $this->repoWidgetService->register($code, $fields);
+        $name = 'List Test Widget ' . time();
+        $addedItemResult = $this->repoWidgetService->register($code, $this->buildWidgetFields($name));
         $this->createdWidgetCodes[] = $code;
         $widgetId = $addedItemResult->getId();
 
@@ -145,7 +143,7 @@ class RepoWidgetTest extends TestCase
         }
 
         self::assertNotNull($found, 'Registered widget must be present in getList response');
-        self::assertEquals($fields['NAME'], $found->NAME);
+        self::assertEquals($name, $found->NAME);
         self::assertEquals('Y', $found->ACTIVE);
     }
 
@@ -156,12 +154,8 @@ class RepoWidgetTest extends TestCase
     public function testGetListWithSelectAndFilter(): void
     {
         $code = 'test_widget_filter_' . time();
-        $fields = [
-            'NAME'    => 'Filter Test Widget ' . time(),
-            'ACTIVE'  => 'Y',
-            'CONTENT' => '<div>filter</div>',
-        ];
-        $addedItemResult = $this->repoWidgetService->register($code, $fields);
+        $name = 'Filter Test Widget ' . time();
+        $addedItemResult = $this->repoWidgetService->register($code, $this->buildWidgetFields($name));
         $this->createdWidgetCodes[] = $code;
         $widgetId = $addedItemResult->getId();
 
@@ -173,7 +167,7 @@ class RepoWidgetTest extends TestCase
 
         self::assertCount(1, $widgets);
         self::assertEquals($widgetId, (int)$widgets[0]->ID);
-        self::assertEquals($fields['NAME'], $widgets[0]->NAME);
+        self::assertEquals($name, $widgets[0]->NAME);
     }
 
     /**
