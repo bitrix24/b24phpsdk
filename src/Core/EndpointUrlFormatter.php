@@ -73,6 +73,17 @@ readonly class EndpointUrlFormatter
             'tasks.flow.Flow.isExists',
             'tasks.flow.Flow.activate',
             'tasks.flow.Flow.pin',
+            'booking.v1.resourceType.add',
+            'booking.v1.resourceType.update',
+            'booking.v1.resourceType.get',
+            'booking.v1.resourceType.list',
+            'booking.v1.resourceType.delete',
+            'booking.v1.waitlist.externalData.list',
+            'booking.v1.waitlist.externalData.set',
+            'booking.v1.waitlist.externalData.unset',
+            'booking.v1.booking.externalData.list',
+            'booking.v1.booking.externalData.set',
+            'booking.v1.booking.externalData.unset',
         ];
         if (!in_array($apiMethod, $caseSensitiveMethods, true)) {
             $apiMethod = strtolower($apiMethod);
