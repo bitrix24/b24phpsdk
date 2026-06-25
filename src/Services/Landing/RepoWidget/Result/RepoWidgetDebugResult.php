@@ -33,4 +33,3 @@ class RepoWidgetDebugResult extends AbstractResult
         return (bool)$this->getCoreResponse()->getResponseData()->getResult()[0];
     }
 }
-

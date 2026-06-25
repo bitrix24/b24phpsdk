@@ -190,4 +190,3 @@ class RepoWidgetTest extends TestCase
         $this->repoWidgetService->debug(false);
     }
 }
-

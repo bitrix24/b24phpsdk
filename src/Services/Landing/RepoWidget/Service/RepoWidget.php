@@ -144,4 +144,3 @@ class RepoWidget extends AbstractService
         );
     }
 }
-

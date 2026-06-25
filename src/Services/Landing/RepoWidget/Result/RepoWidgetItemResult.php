@@ -40,4 +40,3 @@ use Carbon\CarbonImmutable;
 class RepoWidgetItemResult extends AbstractAnnotatedItem
 {
 }
-

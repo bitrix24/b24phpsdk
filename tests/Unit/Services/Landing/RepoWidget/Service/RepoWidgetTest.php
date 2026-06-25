@@ -80,4 +80,3 @@ class RepoWidgetTest extends TestCase
         );
     }
 }
-

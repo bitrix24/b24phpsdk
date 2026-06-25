@@ -41,4 +41,3 @@ class RepoWidgetGetListResult extends AbstractResult
         return $items;
     }
 }
-
