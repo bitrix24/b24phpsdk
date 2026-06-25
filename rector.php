@@ -72,6 +72,8 @@ return RectorConfig::configure()
         __DIR__ . '/tests/Integration/Services/Disk',
         __DIR__ . '/src/Services/Calendar',
         __DIR__ . '/tests/Integration/Services/Calendar',
+        __DIR__ . '/src/Services/Booking',
+        __DIR__ . '/tests/Integration/Services/Booking',
         __DIR__ . '/src/Services/Lists',
         __DIR__ . '/tests/Integration/Services/Lists',
         __DIR__ . '/src/Services/CRM/Documentgenerator/Numerator',
@@ -83,6 +85,8 @@ return RectorConfig::configure()
         __DIR__ . '/src/Services/Messageservice',
         __DIR__ . '/tests/Integration/Services/Messageservice',
         __DIR__ . '/tests/Unit/',
+        __DIR__ . '/src/Services/Timeman',
+        __DIR__ . '/tests/Integration/Services/Timeman',
     ])
     ->withCache(cacheDirectory: __DIR__ . '/var/.cache/rector')
     ->withSets(
