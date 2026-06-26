@@ -385,6 +385,7 @@ class RepoTest extends TestCase
             self::assertStringContainsString($customSplitter, $processedContent);
             self::assertStringNotContainsString('#SANITIZE#', $processedContent);
         }
+
         // When not marked as bad the API may still sanitize content (e.g. split dangerous words
         // with a space internally). No strict equality assertion is made in that case.
     }
