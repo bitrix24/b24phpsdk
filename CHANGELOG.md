@@ -53,6 +53,10 @@
 
 ### Changed
 
+- Committed `composer.lock` and pinned `symfony/*` dev/CI dependencies to the 8.0.x line so the
+  CI PHPStan (1.x) job is no longer broken by Symfony 8.1 PHP 8.4 property hooks; library runtime
+  version constraints in `composer.json` are unchanged ([#386](https://github.com/bitrix24/b24phpsdk/issues/386))
+
 ### Fixed
 
 - Fixed malformed `event_type` request parameter key (it contained a tab character, so the value
