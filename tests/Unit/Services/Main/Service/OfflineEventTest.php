@@ -61,18 +61,33 @@ class OfflineEventTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('list() calls event.offline.list with filter and order')]
-    public function testListForwardsFilterAndOrder(): void
+    #[TestDox('list() calls event.offline.list with filter, auth_connector and order')]
+    public function testListForwardsFilterAuthConnectorAndOrder(): void
     {
         $method = null;
         $captured = [];
         $offlineEvent = new OfflineEvent($this->makeCoreCapturing($method, $captured), new NullLogger());
 
-        $offlineEvent->list(['ERROR' => 0], ['ID' => 'DESC']);
+        $offlineEvent->list(['ERROR' => 0], 'my_sync', ['ID' => 'DESC']);
 
         $this->assertSame('event.offline.list', $method);
         $this->assertSame(['ERROR' => 0], $captured['filter']);
+        $this->assertSame('my_sync', $captured['auth_connector']);
         $this->assertSame(['ID' => 'DESC'], $captured['order']);
+    }
+
+    #[Test]
+    #[TestDox('list() omits auth_connector when not provided')]
+    public function testListOmitsAuthConnectorWhenNotProvided(): void
+    {
+        $method = null;
+        $captured = [];
+        $offlineEvent = new OfflineEvent($this->makeCoreCapturing($method, $captured), new NullLogger());
+
+        $offlineEvent->list(['ERROR' => 0]);
+
+        $this->assertSame('event.offline.list', $method);
+        $this->assertArrayNotHasKey('auth_connector', $captured);
     }
 
     #[Test]

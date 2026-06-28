@@ -128,7 +128,7 @@ class OfflineEventTest extends TestCase
     private function pollForEvents(): array
     {
         for ($attempt = 0; $attempt < 10; ++$attempt) {
-            $events = $this->offlineEventService->list(['=EVENT_NAME' => self::EVENT_CODE], ['ID' => 'DESC'])->getEvents();
+            $events = $this->offlineEventService->list(['=EVENT_NAME' => self::EVENT_CODE], order: ['ID' => 'DESC'])->getEvents();
             if ($events !== []) {
                 return $events;
             }

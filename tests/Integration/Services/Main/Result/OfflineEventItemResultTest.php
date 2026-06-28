@@ -99,7 +99,7 @@ class OfflineEventItemResultTest extends TestCase
     #[TestDox('all fields in OfflineEventItemResult are annotated in phpdoc and match with raw api response')]
     public function testAllFieldsAreAnnotated(): void
     {
-        $rawEvents = $this->offlineEventService->list(['=EVENT_NAME' => self::EVENT_CODE], ['ID' => 'DESC'])
+        $rawEvents = $this->offlineEventService->list(['=EVENT_NAME' => self::EVENT_CODE], order: ['ID' => 'DESC'])
             ->getCoreResponse()->getResponseData()->getResult();
 
         $this->assertNotEmpty($rawEvents, 'offline queue is empty, cannot validate annotations');
@@ -114,7 +114,7 @@ class OfflineEventItemResultTest extends TestCase
     #[TestDox('all fields in OfflineEventItemResult have valid type casting in magic getters')]
     public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
     {
-        $events = $this->offlineEventService->list(['=EVENT_NAME' => self::EVENT_CODE], ['ID' => 'DESC'])->getEvents();
+        $events = $this->offlineEventService->list(['=EVENT_NAME' => self::EVENT_CODE], order: ['ID' => 'DESC'])->getEvents();
         $this->assertNotEmpty($events, 'offline queue is empty, cannot validate type casting');
 
         $offlineEventItemResult = $events[0];
@@ -138,6 +138,11 @@ class OfflineEventItemResultTest extends TestCase
             $propName = $property->id->name;
             $typeStr = stringify($property->type());
             $value = $offlineEventItemResult->$propName;
+
+            // «mixed» fields (EVENT_DATA / EVENT_ADDITIONAL) accept any runtime type by definition
+            if ($typeStr === 'mixed') {
+                continue;
+            }
 
             if (str_contains($typeStr, 'null') && $value === null) {
                 continue;
@@ -166,7 +171,7 @@ class OfflineEventItemResultTest extends TestCase
     private function waitForEvent(): void
     {
         for ($attempt = 0; $attempt < 10; ++$attempt) {
-            $events = $this->offlineEventService->list(['=EVENT_NAME' => self::EVENT_CODE], ['ID' => 'DESC'])->getEvents();
+            $events = $this->offlineEventService->list(['=EVENT_NAME' => self::EVENT_CODE], order: ['ID' => 'DESC'])->getEvents();
             if ($events !== []) {
                 return;
             }

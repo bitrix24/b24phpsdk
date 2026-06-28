@@ -19,14 +19,15 @@ use Carbon\CarbonImmutable;
 /**
  * Offline event item returned by event.offline.get / event.offline.list.
  *
- * EVENT_DATA / EVENT_ADDITIONAL are annotated as array: the API returns `false` when empty and
- * an array otherwise; AbstractAnnotatedItem coerces the value to an array on access.
+ * EVENT_DATA / EVENT_ADDITIONAL are annotated as mixed: the API returns `false` when the payload is
+ * empty and an array otherwise. Annotating them as array would make AbstractAnnotatedItem cast the
+ * empty `false` to `[false]` and corrupt the value, so the raw value is preserved as-is.
  *
  * @property-read int                  $ID
  * @property-read CarbonImmutable|null $TIMESTAMP_X
  * @property-read string|null          $EVENT_NAME
- * @property-read array                $EVENT_DATA
- * @property-read array                $EVENT_ADDITIONAL
+ * @property-read mixed                $EVENT_DATA
+ * @property-read mixed                $EVENT_ADDITIONAL
  * @property-read string               $MESSAGE_ID
  * @property-read string|null          $PROCESS_ID
  * @property-read int                  $ERROR

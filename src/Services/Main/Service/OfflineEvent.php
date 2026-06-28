@@ -61,6 +61,8 @@ class OfflineEvent extends AbstractService
      * Reads the current offline-events queue without changing its state.
      *
      * @param array<string, mixed> $filter records filter (ID, TIMESTAMP_X, EVENT_NAME, MESSAGE_ID, PROCESS_ID, ERROR)
+     * @param string|null $authConnector offline-events source key, selects the queue to read; without it
+     *                                    only source-less events are returned
      * @param array<string, string> $order records order
      *
      * @throws BaseException
@@ -72,11 +74,15 @@ class OfflineEvent extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/events/event-offline-list.html',
         'Reads the current offline-events queue without changing its state.'
     )]
-    public function list(array $filter = [], array $order = []): OfflineEventsResult
+    public function list(array $filter = [], ?string $authConnector = null, array $order = []): OfflineEventsResult
     {
         $params = [];
         if ($filter !== []) {
             $params['filter'] = $filter;
+        }
+
+        if ($authConnector !== null) {
+            $params['auth_connector'] = $authConnector;
         }
 
         if ($order !== []) {
