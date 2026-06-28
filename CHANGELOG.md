@@ -59,6 +59,9 @@
 
 ### Fixed
 
+- Fixed README "Examples" section that pointed to non-existent `/examples/webhook` and
+  `/examples/local-app` folders; instructions are now self-contained and reference
+  `tests/ApplicationBridge` for the local application ([#474](https://github.com/bitrix24/b24phpsdk/issues/474))
 - Fixed malformed `event_type` request parameter key (it contained a tab character, so the value
   never reached the API) in `Services\Main\Service\Event::bind()` and `unbind()` ([#386](https://github.com/bitrix24/b24phpsdk/issues/386))
 
