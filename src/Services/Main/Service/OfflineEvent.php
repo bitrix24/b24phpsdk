@@ -91,7 +91,7 @@ class OfflineEvent extends AbstractService
      *
      * @param string $processId reserved packet identifier returned by get() with clear=false
      * @param int[] $id record ids to clear; by default clears all records of the process_id
-     * @param int[] $messageId MESSAGE_ID values to clear; ignored when $id is provided
+     * @param string[] $messageId MESSAGE_ID values to clear; ignored when $id is provided
      *
      * @throws BaseException
      * @throws TransportException
@@ -120,7 +120,7 @@ class OfflineEvent extends AbstractService
      * Marks offline-events records as processed with an error.
      *
      * @param string $processId process identifier handling the records
-     * @param int[] $messageId MESSAGE_ID values to mark as errored
+     * @param string[] $messageId MESSAGE_ID values to mark as errored
      *
      * @throws BaseException
      * @throws TransportException

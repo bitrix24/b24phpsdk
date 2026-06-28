@@ -27,7 +27,7 @@ use Carbon\CarbonImmutable;
  * @property-read string|null          $EVENT_NAME
  * @property-read array                $EVENT_DATA
  * @property-read array                $EVENT_ADDITIONAL
- * @property-read int                  $MESSAGE_ID
+ * @property-read string               $MESSAGE_ID
  * @property-read string|null          $PROCESS_ID
  * @property-read int                  $ERROR
  */

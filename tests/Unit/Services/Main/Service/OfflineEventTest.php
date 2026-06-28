@@ -98,11 +98,11 @@ class OfflineEventTest extends TestCase
         $captured = [];
         $offlineEvent = new OfflineEvent($this->makeCoreCapturing($method, $captured), new NullLogger());
 
-        $offlineEvent->error('proc-123', [2]);
+        $offlineEvent->error('proc-123', ['20b324c42fce9afb3fe27b05cc83a66e']);
 
         $this->assertSame('event.offline.error', $method);
         $this->assertSame('proc-123', $captured['process_id']);
-        $this->assertSame([2], $captured['message_id']);
+        $this->assertSame(['20b324c42fce9afb3fe27b05cc83a66e'], $captured['message_id']);
     }
 
     /**

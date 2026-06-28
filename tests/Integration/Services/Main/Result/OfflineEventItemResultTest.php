@@ -16,12 +16,13 @@ namespace Bitrix24\SDK\Tests\Integration\Services\Main\Result;
 use Bitrix24\SDK\Services\Main\Result\OfflineEventItemResult;
 use Bitrix24\SDK\Services\Main\Service\Event;
 use Bitrix24\SDK\Services\Main\Service\EventType;
-use Bitrix24\SDK\Services\Main\Service\Main;
 use Bitrix24\SDK\Services\Main\Service\OfflineEvent;
 use Bitrix24\SDK\Services\Task\Events\OnTaskAdd\OnTaskAdd;
 use Bitrix24\SDK\Services\Task\Service\Task;
+use Bitrix24\SDK\Services\Task\Service\TaskItemBuilder;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Services\Main\OfflineEventTrigger;
 use Carbon\CarbonImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -44,28 +45,32 @@ class OfflineEventItemResultTest extends TestCase
 
     private Event $eventService;
 
-    private Task $taskService;
-
-    private Main $mainService;
+    private Task $webhookTaskService;
 
     private int $createdTaskId = 0;
 
     #[\Override]
     protected function setUp(): void
     {
-        $serviceBuilder = Factory::getServiceBuilder(true);
-        $this->offlineEventService = $serviceBuilder->getMainScope()->offlineEvent();
-        $this->eventService = $serviceBuilder->getMainScope()->event();
-        $this->mainService = $serviceBuilder->getMainScope()->main();
-        $this->taskService = $serviceBuilder->getTaskScope()->task();
+        // build the webhook trigger FIRST, before application credentials blank BITRIX24_WEBHOOK
+        $webhookServiceBuilder = OfflineEventTrigger::webhookServiceBuilder();
+        $this->webhookTaskService = $webhookServiceBuilder->getTaskScope()->task();
+        $userId = $webhookServiceBuilder->getMainScope()->main()->getCurrentUserProfile()->getUserProfile()->ID;
 
-        // ensure at least one offline event is queued so the result item carries real data
+        $mainServiceBuilder = Factory::getServiceBuilder(true)->getMainScope();
+        $this->offlineEventService = $mainServiceBuilder->offlineEvent();
+        $this->eventService = $mainServiceBuilder->event();
+
+        // ensure a single clean offline handler, then queue one event by triggering it via webhook
+        try {
+            $this->eventService->unbind(self::EVENT_CODE, self::HANDLER_URL, eventType: EventType::offline);
+        } catch (\Throwable) {
+        }
+
         $this->eventService->bind(self::EVENT_CODE, self::HANDLER_URL, eventType: EventType::offline);
-        $responsibleId = $this->mainService->getCurrentUserProfile()->getUserProfile()->ID;
-        $this->createdTaskId = $this->taskService->add([
-            'TITLE' => 'b24phpsdk offline-event annotations test',
-            'RESPONSIBLE_ID' => $responsibleId,
-        ])->task()->id;
+        $this->createdTaskId = $this->webhookTaskService->add(
+            new TaskItemBuilder('b24phpsdk offline-event annotations test', $userId, $userId)
+        )->task()->id;
         $this->waitForEvent();
     }
 
@@ -79,7 +84,7 @@ class OfflineEventItemResultTest extends TestCase
 
         if ($this->createdTaskId > 0) {
             try {
-                $this->taskService->delete($this->createdTaskId);
+                $this->webhookTaskService->delete($this->createdTaskId);
             } catch (\Throwable) {
             }
         }
