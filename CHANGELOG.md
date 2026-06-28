@@ -3,6 +3,12 @@
 
 ### Added
 
+- Added offline-events `auth_connector` support: `Core\Contracts\CoreInterface::setAuthConnector()`
+  (and `Core\CoreBuilder::withAuthConnector()`) auto-injects the parameter into every request and
+  every batch sub-command to avoid offline-event cycles; new `Services\Main\Service\OfflineEvent`
+  wraps `event.offline.get`, `event.offline.list`, `event.offline.clear`, `event.offline.error`;
+  `Services\Main\Service\Event::bind()` and `unbind()` gained `event_type` (online|offline) and
+  `auth_connector` support ([#386](https://github.com/bitrix24/b24phpsdk/issues/386))
 - Added `Services\Booking\BookingServiceBuilder` with Booking scope wrappers and integration coverage for `booking.v1.clienttype.*`, `booking.v1.resourceType.*`, `booking.v1.resource.*`, `booking.v1.resource.slots.*`, `booking.v1.waitlist.*`, `booking.v1.waitlist.client.*`, `booking.v1.waitlist.externalData.*`, `booking.v1.booking.*`, `booking.v1.booking.client.*`, and `booking.v1.booking.externalData.*` methods.
 - Added `Services\Timeman` service with support for workday tracking methods,
   see [timeman.* methods](https://apidocs.bitrix24.com/api-reference/timeman/index.html):
@@ -48,6 +54,9 @@
 ### Changed
 
 ### Fixed
+
+- Fixed malformed `event_type` request parameter key (it contained a tab character, so the value
+  never reached the API) in `Services\Main\Service\Event::bind()` and `unbind()` ([#386](https://github.com/bitrix24/b24phpsdk/issues/386))
 
 ## 3.2.0
 

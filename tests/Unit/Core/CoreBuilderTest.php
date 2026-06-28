@@ -45,4 +45,17 @@ class CoreBuilderTest extends TestCase
         (new CoreBuilder())
             ->build();
     }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function testBuildWithAuthConnector(): void
+    {
+        $core = (new CoreBuilder())
+            ->withCredentials(Credentials::createFromWebhook(new WebhookUrl('https://127.0.0.1')))
+            ->withAuthConnector('my_sync')
+            ->build();
+
+        $this->assertSame('my_sync', $core->getAuthConnector());
+    }
 }

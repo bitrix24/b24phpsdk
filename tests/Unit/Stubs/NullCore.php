@@ -31,6 +31,8 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 
 class NullCore implements CoreInterface
 {
+    private ?string $authConnector = null;
+
     /**
      *
      * @param non-empty-string $apiMethod
@@ -39,6 +41,18 @@ class NullCore implements CoreInterface
     public function call(string $apiMethod, array $parameters = [], ApiVersion $apiVersion = ApiVersion::v1): Response
     {
         return new Response(new MockResponse(''), new Command('', []), new ApiLevelErrorHandler(new NullLogger()), new NullLogger());
+    }
+
+    #[\Override]
+    public function setAuthConnector(?string $authConnector): void
+    {
+        $this->authConnector = $authConnector;
+    }
+
+    #[\Override]
+    public function getAuthConnector(): ?string
+    {
+        return $this->authConnector;
     }
 
     #[\Override]

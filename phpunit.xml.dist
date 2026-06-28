@@ -340,6 +340,10 @@
             <file>./tests/Integration/Services/Main/EventLogField/Service/EventLogFieldTest.php</file>
             <file>./tests/Integration/Services/Main/EventLogField/Result/EventLogFieldItemResultTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_scope_main_event">
+            <file>./tests/Integration/Services/Main/Service/OfflineEventTest.php</file>
+            <file>./tests/Integration/Services/Main/Result/OfflineEventItemResultTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_scope_rest">
             <directory>./tests/Integration/Services/Rest/</directory>
         </testsuite>
