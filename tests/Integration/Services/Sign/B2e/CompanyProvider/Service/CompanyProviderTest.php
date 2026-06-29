@@ -38,4 +38,3 @@ class CompanyProviderTest extends TestCase
         );
     }
 }
-

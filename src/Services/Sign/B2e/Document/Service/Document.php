@@ -92,4 +92,3 @@ class Document extends AbstractService
         return new DocumentResult($this->core->call('sign.b2e.document.get', $params));
     }
 }
-

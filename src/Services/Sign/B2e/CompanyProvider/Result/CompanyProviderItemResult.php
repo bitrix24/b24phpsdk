@@ -26,4 +26,3 @@ use Carbon\CarbonImmutable;
 class CompanyProviderItemResult extends AbstractAnnotatedItem
 {
 }
-

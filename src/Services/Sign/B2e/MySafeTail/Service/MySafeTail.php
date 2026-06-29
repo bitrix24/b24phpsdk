@@ -57,4 +57,3 @@ class MySafeTail extends AbstractService
         );
     }
 }
-

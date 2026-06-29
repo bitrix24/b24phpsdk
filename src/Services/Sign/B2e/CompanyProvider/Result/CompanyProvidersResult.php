@@ -32,4 +32,3 @@ class CompanyProvidersResult extends AbstractResult
         return $items;
     }
 }
-

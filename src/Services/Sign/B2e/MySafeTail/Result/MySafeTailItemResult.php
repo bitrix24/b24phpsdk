@@ -29,4 +29,3 @@ use Carbon\CarbonImmutable;
 class MySafeTailItemResult extends AbstractAnnotatedItem
 {
 }
-

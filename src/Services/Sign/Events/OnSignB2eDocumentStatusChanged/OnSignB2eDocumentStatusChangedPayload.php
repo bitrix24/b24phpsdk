@@ -24,4 +24,3 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
 class OnSignB2eDocumentStatusChangedPayload extends AbstractItem
 {
 }
-

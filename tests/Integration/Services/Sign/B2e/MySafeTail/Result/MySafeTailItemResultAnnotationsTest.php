@@ -55,4 +55,3 @@ class MySafeTailItemResultAnnotationsTest extends TestCase
         );
     }
 }
-

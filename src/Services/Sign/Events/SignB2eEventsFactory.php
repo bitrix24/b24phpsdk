@@ -53,6 +53,3 @@ readonly class SignB2eEventsFactory implements EventsFabricInterface
         };
     }
 }
-
-
-

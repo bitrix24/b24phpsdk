@@ -25,4 +25,3 @@ use Carbon\CarbonImmutable;
 class PersonalTailItemResult extends AbstractAnnotatedItem
 {
 }
-

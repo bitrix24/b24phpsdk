@@ -57,4 +57,3 @@ class PersonalTail extends AbstractService
         );
     }
 }
-

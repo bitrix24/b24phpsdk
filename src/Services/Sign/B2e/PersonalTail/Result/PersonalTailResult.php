@@ -32,4 +32,3 @@ class PersonalTailResult extends AbstractResult
         return $items;
     }
 }
-

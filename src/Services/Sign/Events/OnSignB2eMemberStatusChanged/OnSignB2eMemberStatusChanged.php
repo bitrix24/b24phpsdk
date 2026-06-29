@@ -29,4 +29,3 @@ class OnSignB2eMemberStatusChanged extends AbstractEventRequest
         return new OnSignB2eMemberStatusChangedPayload($this->eventPayload['data']);
     }
 }
-

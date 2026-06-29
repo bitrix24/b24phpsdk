@@ -26,4 +26,3 @@ class DocumentResult extends AbstractResult
         return new DocumentItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }
-

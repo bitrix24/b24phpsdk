@@ -61,4 +61,3 @@ class SignServiceBuilderTest extends TestCase
         $this->assertTrue(class_exists(MySafeTail::class));
     }
 }
-

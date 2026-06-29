@@ -32,4 +32,3 @@ class MySafeTailResult extends AbstractResult
         return $items;
     }
 }
-

@@ -55,4 +55,3 @@ class DocumentItemResultAnnotationsTest extends TestCase
         );
     }
 }
-

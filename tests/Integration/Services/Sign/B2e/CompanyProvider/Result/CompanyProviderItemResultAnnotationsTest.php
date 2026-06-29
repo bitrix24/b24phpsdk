@@ -55,4 +55,3 @@ class CompanyProviderItemResultAnnotationsTest extends TestCase
         );
     }
 }
-

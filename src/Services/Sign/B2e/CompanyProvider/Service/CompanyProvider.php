@@ -76,4 +76,3 @@ class CompanyProvider extends AbstractService
         return new CompanyProvidersResult($this->core->call('sign.b2e.company.provider.list', $params));
     }
 }
-

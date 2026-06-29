@@ -25,4 +25,3 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
 class OnSignB2eMemberStatusChangedPayload extends AbstractItem
 {
 }
-

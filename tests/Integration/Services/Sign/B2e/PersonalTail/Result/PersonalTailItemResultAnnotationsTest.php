@@ -55,4 +55,3 @@ class PersonalTailItemResultAnnotationsTest extends TestCase
         );
     }
 }
-

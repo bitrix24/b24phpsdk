@@ -29,4 +29,3 @@ class OnSignB2eDocumentStatusChanged extends AbstractEventRequest
         return new OnSignB2eDocumentStatusChangedPayload($this->eventPayload['data']);
     }
 }
-

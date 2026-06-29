@@ -38,4 +38,3 @@ class MySafeTailTest extends TestCase
         );
     }
 }
-
