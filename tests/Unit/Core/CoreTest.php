@@ -134,4 +134,87 @@ class CoreTest extends TestCase
 
         $core->call('documentation', apiVersion: ApiVersion::v3);
     }
+
+    #[Test]
+    #[TestDox('call() injects auth_connector into request parameters when it is set')]
+    public function testCallInjectsAuthConnectorWhenSet(): void
+    {
+        $capturedParameters = [];
+        $core = $this->makeCoreWithParameterCapture($capturedParameters);
+        $core->setAuthConnector('my_sync');
+
+        try {
+            $core->call('crm.deal.update', ['id' => 1]);
+        } catch (\Throwable) {
+            // response parsing is irrelevant — assertion is on the captured outgoing parameters
+        }
+
+        $this->assertArrayHasKey('auth_connector', $capturedParameters);
+        $this->assertSame('my_sync', $capturedParameters['auth_connector']);
+    }
+
+    #[Test]
+    #[TestDox('call() does NOT inject auth_connector when it is not set')]
+    public function testCallDoesNotInjectAuthConnectorWhenNotSet(): void
+    {
+        $capturedParameters = [];
+        $core = $this->makeCoreWithParameterCapture($capturedParameters);
+
+        try {
+            $core->call('crm.deal.update', ['id' => 1]);
+        } catch (\Throwable) {
+        }
+
+        $this->assertArrayNotHasKey('auth_connector', $capturedParameters);
+    }
+
+    #[Test]
+    #[TestDox('call() does NOT overwrite an explicit auth_connector passed in parameters')]
+    public function testCallDoesNotOverwriteExplicitAuthConnector(): void
+    {
+        $capturedParameters = [];
+        $core = $this->makeCoreWithParameterCapture($capturedParameters);
+        $core->setAuthConnector('global_connector');
+
+        try {
+            $core->call('crm.deal.update', ['id' => 1, 'auth_connector' => 'explicit_connector']);
+        } catch (\Throwable) {
+        }
+
+        $this->assertSame('explicit_connector', $capturedParameters['auth_connector']);
+    }
+
+    /**
+     * Builds a Core whose ApiClient records the parameters passed to getResponse().
+     *
+     * @param array<string, mixed> $capturedParameters captured by reference
+     */
+    private function makeCoreWithParameterCapture(array &$capturedParameters): Core
+    {
+        $okResponse = $this->createStub(ResponseInterface::class);
+        $okResponse->method('getStatusCode')->willReturn(200);
+        $okResponse->method('toArray')->willReturn([
+            'result' => [],
+            'time' => ['start' => 0.0, 'finish' => 0.0, 'duration' => 0.0, 'processing' => 0.0, 'date_start' => '', 'date_finish' => ''],
+        ]);
+
+        $apiClient = $this->createMock(ApiClientInterface::class);
+        $apiClient->method('getCredentials')->willReturn(
+            Credentials::createFromWebhook(new WebhookUrl('https://myportal.example.com/rest/1/token/'))
+        );
+        $apiClient->method('getResponse')->willReturnCallback(
+            function (string $apiMethod, array $parameters, ApiVersion $apiVersion) use (&$capturedParameters, $okResponse): ResponseInterface {
+                $capturedParameters = $parameters;
+
+                return $okResponse;
+            }
+        );
+
+        return new Core(
+            $apiClient,
+            new ApiLevelErrorHandler(new NullLogger()),
+            new EventDispatcher(),
+            new NullLogger()
+        );
+    }
 }

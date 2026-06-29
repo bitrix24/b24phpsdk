@@ -36,4 +36,15 @@ interface CoreInterface
     public function call(string $apiMethod, array $parameters = [], ApiVersion $apiVersion = ApiVersion::v1): Response;
 
     public function getApiClient(): ApiClientInterface;
+
+    /**
+     * Set the offline-events «auth_connector» source key, auto-injected into every request.
+     *
+     * Used to avoid offline-event cycles. Pass null to disable.
+     *
+     * @see https://apidocs.bitrix24.com/api-reference/events/offline-events.html
+     */
+    public function setAuthConnector(?string $authConnector): void;
+
+    public function getAuthConnector(): ?string;
 }

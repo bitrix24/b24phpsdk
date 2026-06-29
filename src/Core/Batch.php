@@ -918,11 +918,18 @@ class Batch implements BatchOperationsInterface
     private function convertToApiCommands(): array
     {
         $apiCommands = [];
+        $authConnector = $this->core->getAuthConnector();
         foreach ($this->commands as $command) {
+            $parameters = $command->getParameters();
+            if ($authConnector !== null && !array_key_exists('auth_connector', $parameters)) {
+                // inject offline-events source key into every sub-command to avoid event cycles
+                $parameters['auth_connector'] = $authConnector;
+            }
+
             $apiCommands[$command->getId()] = sprintf(
                 '%s?%s',
                 $command->getApiMethod(),
-                http_build_query($command->getParameters())
+                http_build_query($parameters)
             );
         }
 
