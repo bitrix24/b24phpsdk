@@ -34,12 +34,26 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class Core implements CoreInterface
 {
+    private ?string $authConnector = null;
+
     public function __construct(
         protected ApiClientInterface $apiClient,
         protected ApiLevelErrorHandler $apiLevelErrorHandler,
         protected EventDispatcherInterface $eventDispatcher,
         protected LoggerInterface $logger
     ) {
+    }
+
+    #[\Override]
+    public function setAuthConnector(?string $authConnector): void
+    {
+        $this->authConnector = $authConnector;
+    }
+
+    #[\Override]
+    public function getAuthConnector(): ?string
+    {
+        return $this->authConnector;
     }
 
     /**
@@ -53,6 +67,12 @@ class Core implements CoreInterface
     #[\Override]
     public function call(string $apiMethod, array $parameters = [], ApiVersion $apiVersion = ApiVersion::v1): Response
     {
+        if ($this->authConnector !== null && !array_key_exists('auth_connector', $parameters)) {
+            // inject offline-events source key to avoid event cycles;
+            // the guard also prevents double-injection on recursive retry (302 / expired_token)
+            $parameters['auth_connector'] = $this->authConnector;
+        }
+
         $this->logger->debug(
             'call.start',
             [

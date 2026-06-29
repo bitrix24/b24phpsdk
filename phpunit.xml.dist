@@ -374,10 +374,17 @@
         <testsuite name="integration_tests_scope_sonet_group">
             <directory>./tests/Integration/Services/SonetGroup/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_booking">
+            <directory>./tests/Integration/Services/Booking/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_main_eventlog">
             <file>./tests/Integration/Services/Main/Service/EventLogTest.php</file>
             <file>./tests/Integration/Services/Main/EventLogField/Service/EventLogFieldTest.php</file>
             <file>./tests/Integration/Services/Main/EventLogField/Result/EventLogFieldItemResultTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_scope_main_event">
+            <file>./tests/Integration/Services/Main/Service/OfflineEventTest.php</file>
+            <file>./tests/Integration/Services/Main/Result/OfflineEventItemResultTest.php</file>
         </testsuite>
         <testsuite name="integration_tests_scope_rest">
             <directory>./tests/Integration/Services/Rest/</directory>
@@ -385,6 +392,24 @@
         <testsuite name="integration_tests_rest_scope_service">
             <file>./tests/Integration/Services/Rest/Service/ScopeTest.php</file>
             <file>./tests/Integration/Services/Rest/Result/ScopeMethodItemResultTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_scope_timeman">
+            <directory>./tests/Integration/Services/Timeman/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_biconnector">
+            <directory>./tests/Integration/Services/Biconnector/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_biconnector_connector">
+            <directory>./tests/Integration/Services/Biconnector/Connector/Service/</directory>
+            <directory>./tests/Integration/Services/Biconnector/Connector/Result/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_biconnector_source">
+            <directory>./tests/Integration/Services/Biconnector/Source/Service/</directory>
+            <directory>./tests/Integration/Services/Biconnector/Source/Result/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_biconnector_dataset">
+            <directory>./tests/Integration/Services/Biconnector/Dataset/Service/</directory>
+            <directory>./tests/Integration/Services/Biconnector/Dataset/Result/</directory>
         </testsuite>
     </testsuites>
     <source>

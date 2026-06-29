@@ -87,4 +87,8 @@ class ServiceBuilderCacheTest extends TestCase
         $this::assertSame($this->serviceBuilder->getTelephonyScope(), $this->serviceBuilder->getTelephonyScope());
     }
 
+    public function testGetBiconnectorScopeBuilder(): void
+    {
+        $this::assertSame($this->serviceBuilder->getBiconnectorScope(), $this->serviceBuilder->getBiconnectorScope());
+    }
 }
