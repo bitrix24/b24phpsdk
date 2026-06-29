@@ -144,4 +144,19 @@ class LandingServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    /**
+     * Get RepoWidget service
+     */
+    public function repoWidget(): RepoWidget\Service\RepoWidget
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new RepoWidget\Service\RepoWidget(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 }
