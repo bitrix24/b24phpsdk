@@ -82,6 +82,8 @@ return RectorConfig::configure()
         __DIR__ . '/tests/Integration/Services/CRM/Documentgenerator/Document',
         __DIR__ . '/src/Services/CRM/Documentgenerator/Template',
         __DIR__ . '/tests/Integration/Services/CRM/Documentgenerator/Template',
+        __DIR__ . '/src/Services/Documentgenerator',
+        __DIR__ . '/tests/Integration/Services/Documentgenerator',
         __DIR__ . '/src/Services/MailService',
         __DIR__ . '/tests/Integration/Services/MailService',
         __DIR__ . '/src/Services/Messageservice',

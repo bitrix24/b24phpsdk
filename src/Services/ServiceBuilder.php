@@ -20,6 +20,7 @@ use Bitrix24\SDK\Services\AI\AIServiceBuilder;
 use Bitrix24\SDK\Services\Booking\BookingServiceBuilder;
 use Bitrix24\SDK\Services\Biconnector\BiconnectorServiceBuilder;
 use Bitrix24\SDK\Services\Catalog\CatalogServiceBuilder;
+use Bitrix24\SDK\Services\Documentgenerator\DocumentgeneratorServiceBuilder;
 use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
 use Bitrix24\SDK\Services\Disk\DiskServiceBuilder;
 use Bitrix24\SDK\Services\Entity\EntityServiceBuilder;
@@ -457,6 +458,20 @@ class ServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    public function getDocumentgeneratorScope(): DocumentgeneratorServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new DocumentgeneratorServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function getTimemanScope(): TimemanServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -470,5 +485,4 @@ class ServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-
 }

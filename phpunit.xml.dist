@@ -332,6 +332,48 @@
         <testsuite name="integration_tests_crm_documentgenerator_template">
             <directory>./tests/Integration/Services/CRM/Documentgenerator/Template/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_documentgenerator">
+            <directory>./tests/Integration/Services/Documentgenerator/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_document">
+            <directory>./tests/Integration/Services/Documentgenerator/Document/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_template">
+            <directory>./tests/Integration/Services/Documentgenerator/Template/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_template_service">
+            <directory>./tests/Integration/Services/Documentgenerator/Template/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_template_annotations">
+            <file>./tests/Integration/Services/Documentgenerator/Template/Result/TemplateItemResultAnnotationsTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_numerator">
+            <directory>./tests/Integration/Services/Documentgenerator/Numerator/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_numerator_service">
+            <directory>./tests/Integration/Services/Documentgenerator/Numerator/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_numerator_annotations">
+            <file>./tests/Integration/Services/Documentgenerator/Numerator/Result/NumeratorItemResultAnnotationsTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_region">
+            <directory>./tests/Integration/Services/Documentgenerator/Region/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_region_service">
+            <directory>./tests/Integration/Services/Documentgenerator/Region/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_region_annotations">
+            <file>./tests/Integration/Services/Documentgenerator/Region/Result/RegionItemResultAnnotationsTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_role">
+            <directory>./tests/Integration/Services/Documentgenerator/Role/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_role_service">
+            <directory>./tests/Integration/Services/Documentgenerator/Role/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_role_annotations">
+            <file>./tests/Integration/Services/Documentgenerator/Role/Result/RoleItemResultAnnotationsTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_scope_sonet_group">
             <directory>./tests/Integration/Services/SonetGroup/</directory>
         </testsuite>

@@ -23,8 +23,9 @@ use Bitrix24\SDK\Services\CRM\Activity\ActivityType;
 use Carbon\CarbonImmutable;
 use MoneyPHP\Percentage\Percentage;
 use Typhoon\Reflection\TyphoonReflector;
-use function Typhoon\Type\stringify;
 use Money\Currency;
+
+use function Typhoon\Type\stringify;
 
 trait CustomBitrix24Assertions
 {
@@ -62,13 +63,19 @@ trait CustomBitrix24Assertions
                 get_debug_type($value)
             );
 
+            // For nullable union types like "Carbon\CarbonImmutable|null", strip null before assertInstanceOf
+            $classStr = implode('|', array_values(array_filter(
+                explode('|', $typeStr),
+                static fn (string $t): bool => $t !== 'null'
+            )));
+
             match (true) {
                 str_contains($typeStr, 'array')  => $this->assertIsArray($value, $message),
                 str_contains($typeStr, 'bool')   => $this->assertIsBool($value, $message),
                 str_contains($typeStr, 'int')    => $this->assertIsInt($value, $message),
                 str_contains($typeStr, 'float')  => $this->assertIsFloat($value, $message),
                 str_contains($typeStr, 'string') => $this->assertIsString($value, $message),
-                default                          => $this->assertInstanceOf($typeStr, $value, $message),
+                default                          => $this->assertInstanceOf($classStr, $value, $message),
             };
         }
     }
