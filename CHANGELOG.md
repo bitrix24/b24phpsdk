@@ -11,7 +11,6 @@
     - `getList` gets the list of widgets for the current application
     - `debug` enables or disables debug mode for all widgets of the current application
 - Added `repoWidget()` accessor to `LandingServiceBuilder` ([#501](https://github.com/bitrix24/b24phpsdk/issues/501))
-- Added service `Services\Booking\BookingServiceBuilder` with Booking scope wrappers and integration coverage for `booking.v1.clienttype.*`, `booking.v1.resourceType.*`, `booking.v1.resource.*`, `booking.v1.resource.slots.*`, `booking.v1.waitlist.*`, `booking.v1.waitlist.client.*`, `booking.v1.waitlist.externalData.*`, `booking.v1.booking.*`, `booking.v1.booking.client.*`, and `booking.v1.booking.externalData.*` methods.
 
 ### Changed
 
