@@ -41,6 +41,7 @@ use Bitrix24\SDK\Services\Paysystem\PaysystemServiceBuilder;
 use Bitrix24\SDK\Services\SonetGroup\SonetGroupServiceBuilder;
 use Bitrix24\SDK\Legacy\LegacyServiceBuilder;
 use Bitrix24\SDK\Services\Lists\ListsServiceBuilder;
+use Bitrix24\SDK\Services\MailService\MailServiceServiceBuilder;
 use Bitrix24\SDK\Services\Messageservice\MessageserviceServiceBuilder;
 use Bitrix24\SDK\Services\Rest\RestServiceBuilder;
 use Bitrix24\SDK\Services\Timeman\TimemanServiceBuilder;
@@ -399,10 +400,25 @@ class ServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    public function getMessageserviceScope(): MessageserviceServiceBuilder
+    public function getMailServiceScope(): MailServiceServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new MailServiceServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+  
+     public function getMessageserviceScope(): MessageserviceServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new MessageserviceServiceBuilder(
+
                 $this->core,
                 $this->batch,
                 $this->bulkItemsReader,

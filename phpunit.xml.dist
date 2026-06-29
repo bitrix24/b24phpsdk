@@ -372,6 +372,8 @@
             <directory>./tests/Integration/Services/Biconnector/Dataset/Service/</directory>
             <directory>./tests/Integration/Services/Biconnector/Dataset/Result/</directory>
         </testsuite>
+        <testsuite name="integration_tests_mailservice">
+            <directory>./tests/Integration/Services/MailService/</directory>
         <testsuite name="integration_tests_scope_messageservice">
             <directory>./tests/Integration/Services/Messageservice/</directory>
         </testsuite>

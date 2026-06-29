@@ -40,6 +40,7 @@ parameters:
     - tests/Integration/Services/CRM/Documentgenerator/Document
     - tests/Integration/Services/CRM/Documentgenerator/Template
     - tests/Integration/Services/Timeman
+    - tests/Integration/Services/MailService
     - tests/Integration/Services/Messageservice
   excludePaths:
     # TODO: Fix type errors in RequisiteUserfieldUseCaseTest and remove this exclusion

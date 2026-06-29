@@ -100,6 +100,7 @@ help:
 	@echo "test-integration-lists-field - run Lists Field integration tests"
 	@echo "test-integration-lists-section - run Lists Section integration tests"
 	@echo "test-integration-lists-element - run Lists Element integration tests"
+	@echo "test-integration-mailservice - run MailService integration tests"
 
 t:
 	docker compose run --rm php-cli sh
@@ -669,6 +670,9 @@ test-integration-biconnector-source:
 test-integration-biconnector-dataset:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_biconnector_dataset
 
+.PHONY: test-integration-mailservice
+test-integration-mailservice:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_mailservice
 .PHONY: test-integration-scope-messageservice
 test-integration-scope-messageservice:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_messageservice
