@@ -22,6 +22,7 @@ use Bitrix24\SDK\Services\Main\Service\EventLog;
 use Bitrix24\SDK\Services\Main\Service\EventManager;
 use Bitrix24\SDK\Services\Main\Service\Main;
 use Bitrix24\SDK\Services\Main\Service\Event;
+use Bitrix24\SDK\Services\Main\Service\OfflineEvent;
 
 #[ApiServiceBuilderMetadata(new Scope([]))]
 
@@ -49,6 +50,15 @@ class MainServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Event($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function offlineEvent(): OfflineEvent
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new OfflineEvent($this->core, $this->log);
         }
 
         return $this->serviceCache[__METHOD__];

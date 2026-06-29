@@ -17,6 +17,8 @@ use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
 use Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Services\AI\AIServiceBuilder;
+use Bitrix24\SDK\Services\Booking\BookingServiceBuilder;
+use Bitrix24\SDK\Services\Biconnector\BiconnectorServiceBuilder;
 use Bitrix24\SDK\Services\Catalog\CatalogServiceBuilder;
 use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
 use Bitrix24\SDK\Services\Disk\DiskServiceBuilder;
@@ -40,6 +42,7 @@ use Bitrix24\SDK\Services\SonetGroup\SonetGroupServiceBuilder;
 use Bitrix24\SDK\Legacy\LegacyServiceBuilder;
 use Bitrix24\SDK\Services\Lists\ListsServiceBuilder;
 use Bitrix24\SDK\Services\Rest\RestServiceBuilder;
+use Bitrix24\SDK\Services\Timeman\TimemanServiceBuilder;
 use Psr\Log\LoggerInterface;
 
 class ServiceBuilder extends AbstractServiceBuilder
@@ -51,6 +54,20 @@ class ServiceBuilder extends AbstractServiceBuilder
         protected LoggerInterface $log
     ) {
         parent::__construct($core, $batch, $bulkItemsReader, $log);
+    }
+
+    public function getBiconnectorScope(): BiconnectorServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new BiconnectorServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
     }
 
     public function getSaleScope(): SaleServiceBuilder
@@ -283,6 +300,20 @@ class ServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    public function getBookingScope(): BookingServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new BookingServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function getBizProcScope(): WorkflowsServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -385,6 +416,20 @@ class ServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new LegacyServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function getTimemanScope(): TimemanServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new TimemanServiceBuilder(
                 $this->core,
                 $this->batch,
                 $this->bulkItemsReader,

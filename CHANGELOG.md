@@ -1,11 +1,86 @@
 # b24-php-sdk change log
-## 3.3.0 – UNRELEASED
+## 3.4.0 – UNRELEASED
 
 ### Added
 
 ### Changed
 
 ### Fixed
+
+## 3.3.0
+
+### Added
+
+- Added offline-events `auth_connector` support: `Core\Contracts\CoreInterface::setAuthConnector()`
+  (and `Core\CoreBuilder::withAuthConnector()`) auto-injects the parameter into every request and
+  every batch sub-command to avoid offline-event cycles; new `Services\Main\Service\OfflineEvent`
+  wraps `event.offline.get`, `event.offline.list`, `event.offline.clear`, `event.offline.error`;
+  `Services\Main\Service\Event::bind()` and `unbind()` gained `event_type` (online|offline) and
+  `auth_connector` support ([#386](https://github.com/bitrix24/b24phpsdk/issues/386))
+- Added `Services\Booking\BookingServiceBuilder` with Booking scope wrappers and integration coverage for `booking.v1.clienttype.*`, `booking.v1.resourceType.*`, `booking.v1.resource.*`, `booking.v1.resource.slots.*`, `booking.v1.waitlist.*`, `booking.v1.waitlist.client.*`, `booking.v1.waitlist.externalData.*`, `booking.v1.booking.*`, `booking.v1.booking.client.*`, and `booking.v1.booking.externalData.*` methods ([#473](https://github.com/bitrix24/b24phpsdk/issues/473))
+- Added `Services\Timeman` service with support for workday tracking methods,
+  see [timeman.* methods](https://apidocs.bitrix24.com/api-reference/timeman/index.html):
+    - `open` — starts a new workday or continues after pause/close
+    - `pause` — pauses the current workday
+    - `close` — closes the current workday
+    - `status` — gets current workday status
+    - `settings` — gets user's work time settings
+      ([#484](https://github.com/bitrix24/b24phpsdk/issues/484))
+- Added service `Services\Biconnector\Dataset` with support methods,
+  see [biconnector.dataset.* methods](https://apidocs.bitrix24.com/api-reference/biconnector/dataset/index.html) ([#469](https://github.com/bitrix24/b24phpsdk/issues/469)):
+    - `add` adds a new dataset, with batch calls support
+    - `update` updates an existing dataset description, with batch calls support
+    - `get` gets information about the dataset by its identifier
+    - `list` gets the list of datasets, with batch calls support
+    - `delete` deletes a dataset, with batch calls support
+    - `fields` returns the fields description
+    - `updateFields` adds, updates visibility of, or deletes individual dataset columns (`biconnector.dataset.fields.update`)
+    - `count` counts datasets
+- Added `dataset()` accessor to `BiconnectorServiceBuilder` ([#469](https://github.com/bitrix24/b24phpsdk/issues/469))
+- Added service `Services\Biconnector\Source` with support methods,
+  see [biconnector.source.* methods](https://apidocs.bitrix24.com/api-reference/biconnector/source/index.html) ([#469](https://github.com/bitrix24/b24phpsdk/issues/469)):
+    - `add` adds a new data source, with batch calls support
+    - `update` updates an existing data source, with batch calls support
+    - `get` gets information about the data source by its identifier
+    - `list` gets the list of data sources, with batch calls support
+    - `delete` deletes a data source, with batch calls support
+    - `fields` returns the fields description
+    - `count` counts data sources
+- Added `source()` accessor to `BiconnectorServiceBuilder` ([#469](https://github.com/bitrix24/b24phpsdk/issues/469))
+- Added service `Services\Biconnector\Connector` with support methods,
+  see [biconnector.connector.* methods](https://github.com/bitrix24/b24phpsdk/issues/469):
+    - `add` adds a new connector, with batch calls support
+    - `update` updates an existing connector, with batch calls support
+    - `get` gets information about the connector by its identifier
+    - `list` gets the list of connectors, with batch calls support
+    - `delete` deletes a connector, with batch calls support
+    - `fields` returns the fields description
+    - `count` counts connectors
+- Added `Bitrix24\SDK\Services\Biconnector\BiconnectorServiceBuilder` with `connector()` accessor ([#469](https://github.com/bitrix24/b24phpsdk/issues/469))
+- Added `Bitrix24\SDK\Services\ServiceBuilder::getBiconnectorScope()` method ([#469](https://github.com/bitrix24/b24phpsdk/issues/469))
+
+### Changed
+
+- Committed `composer.lock` and pinned `symfony/*` dev/CI dependencies to the 8.0.x line so the
+  CI PHPStan (1.x) job is no longer broken by Symfony 8.1 PHP 8.4 property hooks; library runtime
+  version constraints in `composer.json` are unchanged ([#386](https://github.com/bitrix24/b24phpsdk/issues/386))
+
+### Fixed
+
+- Fixed README "Examples" section that pointed to non-existent `/examples/webhook` and
+  `/examples/local-app` folders; instructions are now self-contained and reference
+  `tests/ApplicationBridge` for the local application ([#474](https://github.com/bitrix24/b24phpsdk/issues/474))
+- Fixed malformed `event_type` request parameter key (it contained a tab character, so the value
+  never reached the API) in `Services\Main\Service\Event::bind()` and `unbind()` ([#386](https://github.com/bitrix24/b24phpsdk/issues/386))
+
+### Statistics
+
+```
+Bitrix24 API-methods count: 1171
+Supported in bitrix24-php-sdk methods count: 978
+Coverage percentage: 83.52% 🚀
+Supported in bitrix24-php-sdk methods with batch wrapper count: 124
+```
 
 ## 3.2.0
 
