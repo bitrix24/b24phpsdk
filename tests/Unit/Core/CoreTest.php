@@ -198,7 +198,7 @@ class CoreTest extends TestCase
             'time' => ['start' => 0.0, 'finish' => 0.0, 'duration' => 0.0, 'processing' => 0.0, 'date_start' => '', 'date_finish' => ''],
         ]);
 
-        $apiClient = $this->createMock(ApiClientInterface::class);
+        $apiClient = $this->createStub(ApiClientInterface::class);
         $apiClient->method('getCredentials')->willReturn(
             Credentials::createFromWebhook(new WebhookUrl('https://myportal.example.com/rest/1/token/'))
         );

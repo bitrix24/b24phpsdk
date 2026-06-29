@@ -320,6 +320,9 @@
         <testsuite name="integration_tests_landing_role">
             <directory>./tests/Integration/Services/Landing/Role/</directory>
         </testsuite>
+        <testsuite name="integration_tests_landing_repowidget">
+            <directory>./tests/Integration/Services/Landing/RepoWidget/</directory>
+        </testsuite>
         <testsuite name="integration_tests_crm_documentgenerator_numerator">
             <directory>./tests/Integration/Services/CRM/Documentgenerator/Numerator/</directory>
         </testsuite>
@@ -410,6 +413,18 @@
         <testsuite name="integration_tests_biconnector_dataset">
             <directory>./tests/Integration/Services/Biconnector/Dataset/Service/</directory>
             <directory>./tests/Integration/Services/Biconnector/Dataset/Result/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_mailservice">
+            <directory>./tests/Integration/Services/MailService/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_messageservice">
+            <directory>./tests/Integration/Services/Messageservice/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_messageservice_sender">
+            <directory>./tests/Integration/Services/Messageservice/Sender/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_messageservice_message_status">
+            <directory>./tests/Integration/Services/Messageservice/Message/Status/</directory>
         </testsuite>
     </testsuites>
     <source>
