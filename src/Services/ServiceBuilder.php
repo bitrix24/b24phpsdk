@@ -42,6 +42,7 @@ use Bitrix24\SDK\Services\SonetGroup\SonetGroupServiceBuilder;
 use Bitrix24\SDK\Legacy\LegacyServiceBuilder;
 use Bitrix24\SDK\Services\Lists\ListsServiceBuilder;
 use Bitrix24\SDK\Services\Rest\RestServiceBuilder;
+use Bitrix24\SDK\Services\Sign\SignServiceBuilder;
 use Bitrix24\SDK\Services\Timeman\TimemanServiceBuilder;
 use Psr\Log\LoggerInterface;
 
@@ -210,9 +211,6 @@ class ServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return MainServiceBuilder
-     */
     public function getMainScope(): MainServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -255,9 +253,6 @@ class ServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return PlacementServiceBuilder
-     */
     public function getPlacementScope(): PlacementServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -430,6 +425,20 @@ class ServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new TimemanServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function getSignScope(): SignServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new SignServiceBuilder(
                 $this->core,
                 $this->batch,
                 $this->bulkItemsReader,
