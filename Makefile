@@ -77,6 +77,7 @@ help:
 	@echo "test-integration-landing-repo - run Landing Repo integration tests"
 	@echo "test-integration-landing-demos - run Landing Demos integration tests"
 	@echo "test-integration-landing-role - run Landing Role integration tests"
+	@echo "test-integration-landing-repowidget - run Landing RepoWidget integration tests"
 	@echo "test-integration-scope-landing-template - run Landing Template integration tests"
 	@echo "test-integration-im-message - run IM Message integration tests"
 	@echo "test-integration-im-dialog - run IM Dialog integration tests"
@@ -403,6 +404,10 @@ test-integration-landing-demos:
 test-integration-landing-role:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_role
 
+.PHONY: test-integration-landing-repowidget
+test-integration-landing-repowidget:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_repowidget
+
 .PHONY: test-integration-scope-sonet-group
 test-integration-scope-sonet-group:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sonet_group
@@ -668,6 +673,17 @@ test-integration-biconnector-dataset:
 .PHONY: test-integration-mailservice
 test-integration-mailservice:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_mailservice
+.PHONY: test-integration-scope-messageservice
+test-integration-scope-messageservice:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_messageservice
+
+.PHONY: test-integration-messageservice-sender
+test-integration-messageservice-sender:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_messageservice_sender
+
+.PHONY: test-integration-messageservice-message-status
+test-integration-messageservice-message-status:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_messageservice_message_status
 
 # work dev environment
 .PHONY: php-dev-server-up
