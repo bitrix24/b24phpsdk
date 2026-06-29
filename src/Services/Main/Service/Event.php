@@ -56,25 +56,37 @@ class Event extends AbstractService
     /**
      * Installs a new event handler.
      *
+     * @param EventType $eventType online or offline delivery type (offline events are queued and read via event.offline.*)
+     * @param string|null $authConnector offline-events source key used to avoid event cycles
      *
      * @throws BaseException
      * @throws TransportException
-     * @link https://training.bitrix24.com/rest_help/general/events_method/event_bind.php
+     * @link https://apidocs.bitrix24.com/api-reference/events/event-bind.html
      */
     #[ApiEndpointMetadata(
         'event.bind',
-        'https://training.bitrix24.com/rest_help/general/events_method/event_bind.php',
+        'https://apidocs.bitrix24.com/api-reference/events/event-bind.html',
         'Installs a new event handler.'
     )]
-    public function bind(string $eventCode, string $handlerUrl, ?int $userId = null, ?array $options = null): EventHandlerBindResult
-    {
+    public function bind(
+        string $eventCode,
+        string $handlerUrl,
+        ?int $userId = null,
+        ?array $options = null,
+        EventType $eventType = EventType::online,
+        ?string $authConnector = null
+    ): EventHandlerBindResult {
         $params = [
             'event' => $eventCode,
             'handler' => $handlerUrl,
-            'event_type	' => 'online',
+            'event_type' => $eventType->value,
         ];
         if ($userId !== null) {
             $params['auth_type'] = $userId;
+        }
+
+        if ($authConnector !== null) {
+            $params['auth_connector'] = $authConnector;
         }
 
         if (is_array($options)) {
@@ -87,22 +99,27 @@ class Event extends AbstractService
     /**
      * Uninstalls a previously installed event handler.
      *
+     * @param EventType $eventType online or offline delivery type, must match the type used at bind time
      *
      * @throws BaseException
      * @throws TransportException
-     * @link https://training.bitrix24.com/rest_help/general/events_method/event_unbind.php
+     * @link https://apidocs.bitrix24.com/api-reference/events/event-unbind.html
      */
     #[ApiEndpointMetadata(
         'event.unbind',
-        'https://training.bitrix24.com/rest_help/general/events_method/event_unbind.php',
+        'https://apidocs.bitrix24.com/api-reference/events/event-unbind.html',
         'Uninstalls a previously installed event handler.'
     )]
-    public function unbind(string $eventCode, string $handlerUrl, ?int $userId = null): EventHandlerUnbindResult
-    {
+    public function unbind(
+        string $eventCode,
+        string $handlerUrl,
+        ?int $userId = null,
+        EventType $eventType = EventType::online
+    ): EventHandlerUnbindResult {
         $params = [
             'event' => $eventCode,
             'handler' => $handlerUrl,
-            'event_type	' => 'online',
+            'event_type' => $eventType->value,
         ];
         if ($userId !== null) {
             $params['auth_type'] = $userId;

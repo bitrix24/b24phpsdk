@@ -47,7 +47,7 @@ composer require bitrix24/b24phpsdk:"^1.0"
 Install the new v3 version (PHP 8.4+, breaking changes):
 
 ```bash
-composer require bitrix24/b24phpsdk:"^3.2"
+composer require bitrix24/b24phpsdk:"^3.3"
 ```
 
 If you work on Windows:
@@ -143,17 +143,18 @@ Performance improvements 🚀
 
 ### Work with webhook
 
-1. Go to `/examples/webhook` folder
-2. Open console and install dependencies
+1. Install the SDK into your project:
 
 ```shell
-composer install
+composer require bitrix24/b24phpsdk
 ```
 
-3. Open Bitrix24 account: Developer resources → Other → Inbound webhook
-4. Open example file and insert webhook url into `$webhookUrl`
+2. Open Bitrix24 account: Developer resources → Other → Inbound webhook
+3. Create a PHP file (for example `webhook-example.php`) and insert your webhook url into `$webhookUrl`:
 
 ```php
+<?php
+
 declare(strict_types=1);
 
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
@@ -167,38 +168,40 @@ $b24Service = ServiceBuilderFactory::createServiceBuilderFromWebhook('INSERT_HER
 var_dump($b24Service->getMainScope()->main()->getApplicationInfo()->applicationInfo());
 // call core for method in not implemented service
 var_dump($b24Service->core->call('user.current'));
-
 ```
 
-5. Call php file in shell
+4. Call php file in shell
 
 ```shell
-php -f example.php
+php -f webhook-example.php
 ```
 
 ### Work with local application
 
-1. Go to `/examples/local-app` folder
-2. Open console and install dependencies
+A complete, runnable local-application example (`index.php`, `install.php`, OAuth token storage and
+credentials provider) is available in [`tests/ApplicationBridge`](tests/ApplicationBridge) — use it
+as a reference implementation.
+
+1. Install the SDK into your project:
 
 ```shell
-composer install
+composer require bitrix24/b24phpsdk
 ```
 
-3. Start local development server
+2. Start local development server
 
 ```shell
 sudo php -S 127.0.0.1:80
 ```
 
-4. Expose local server to public via [ngrok](https://ngrok.com/) and remember temporally public url –
+3. Expose local server to public via [ngrok](https://ngrok.com/) and remember temporally public url –
    `https://****.ngrok-free.app`
 
 ```shell
 ngrok http 127.0.0.1
 ```
 
-5. Check public url from ngrok and see `x-powered-by` header with **200** status-code.
+4. Check public url from ngrok and see `x-powered-by` header with **200** status-code.
 
 ```shell
 curl https://****.ngrok-free.app -I
@@ -209,13 +212,13 @@ host: ****.ngrok-free.app
 x-powered-by: PHP/8.3.8
 ```
 
-6. Open Bitrix24 account: Developer resources → Other → Local application and create new local application:
+5. Open Bitrix24 account: Developer resources → Other → Local application and create new local application:
     - `type`: server
     - `handler path`: `https://****.ngrok-free.app/index.php`
     - `Initial installation path`: `https://****.ngrok-free.app/install.php`
     - `Menu item text`: `Test local app`
     - `scope`: `crm`
-7. Save application parameters in `index.php` file:
+6. Save application parameters in `index.php` file:
     - `Application ID (client_id)` — `BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID`
     - `Application key (client_secret)` — `BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET`
     - `Assing permitions (scope)` — `BITRIX24_PHP_SDK_APPLICATION_SCOPE`
@@ -250,7 +253,7 @@ var_dump($b24Service->getMainScope()->main()->getCurrentUserProfile()->getUserPr
 ```
 
 </details>
-8. Save local application in Bitrix24 tab and press «OPEN APPLICATION» button.    
+7. Save local application in Bitrix24 tab and press «OPEN APPLICATION» button.    
 
 ### Create application for Bitrix24 marketplace
 
