@@ -3,6 +3,14 @@
 
 ### Added
 
+- Added service `Services\Messageservice\Sender` and `Services\Messageservice\Message\Status` with support for `messageservice.*` methods,
+  see [messageservice.* methods](https://apidocs.bitrix24.com/api-reference/messageservice/index.html) ([#498](https://github.com/bitrix24/b24phpsdk/issues/498)):
+    - `sender.add` — register a new SMS message service provider
+    - `sender.update` — update a registered message service provider
+    - `sender.list` — get list of sender codes registered by the current application
+    - `sender.delete` — delete a registered message service provider
+    - `message.status.update` — update delivery status of a message sent via a provider
+- Added `Services\Booking\BookingServiceBuilder` with Booking scope wrappers and integration coverage for `booking.v1.clienttype.*`, `booking.v1.resourceType.*`, `booking.v1.resource.*`, `booking.v1.resource.slots.*`, `booking.v1.waitlist.*`, `booking.v1.waitlist.client.*`, `booking.v1.waitlist.externalData.*`, `booking.v1.booking.*`, `booking.v1.booking.client.*`, and `booking.v1.booking.externalData.*` methods.
 - Added service `Services\Landing\RepoWidget` with support for Vibe widget management,
   see [landing.repowidget.* methods](https://apidocs.bitrix24.com/api-reference/vibe/index.html)
   ([#501](https://github.com/bitrix24/b24phpsdk/issues/501)):
