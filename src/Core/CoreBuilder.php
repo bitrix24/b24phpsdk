@@ -39,6 +39,8 @@ class CoreBuilder
 
     private ?Credentials $credentials = null;
 
+    private ?string $authConnector = null;
+
     private readonly ApiLevelErrorHandler $apiLevelErrorHandler;
 
     private RequestIdGeneratorInterface $requestIdGenerator;
@@ -85,6 +87,16 @@ class CoreBuilder
         return $this;
     }
 
+    /**
+     * Set the offline-events «auth_connector» source key, auto-injected into every request.
+     */
+    public function withAuthConnector(?string $authConnector): self
+    {
+        $this->authConnector = $authConnector;
+
+        return $this;
+    }
+
     public function withHttpClient(HttpClientInterface $httpClient): self
     {
         $this->httpClient = $httpClient;
@@ -126,11 +138,14 @@ class CoreBuilder
             );
         }
 
-        return new Core(
+        $core = new Core(
             $this->apiClient,
             $this->apiLevelErrorHandler,
             $this->eventDispatcher,
             $this->logger
         );
+        $core->setAuthConnector($this->authConnector);
+
+        return $core;
     }
 }
