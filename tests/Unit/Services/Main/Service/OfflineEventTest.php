@@ -132,7 +132,7 @@ class OfflineEventTest extends TestCase
             new NullLogger()
         );
 
-        $core = $this->createMock(CoreInterface::class);
+        $core = $this->createStub(CoreInterface::class);
         $core->method('call')->willReturnCallback(
             function (string $apiMethod, array $parameters = []) use (&$method, &$captured, $response): Response {
                 $method = $apiMethod;
