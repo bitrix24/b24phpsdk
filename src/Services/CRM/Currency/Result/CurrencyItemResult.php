@@ -15,13 +15,14 @@ namespace Bitrix24\SDK\Services\CRM\Currency\Result;
 
 use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
 use Carbon\CarbonImmutable;
+use Money\Money;
 
 /**
  * Class CurrencyItemResult
  *
  * @property-read string $CURRENCY
  * @property-read int|null $AMOUNT_CNT
- * @property-read Money\Money|null $AMOUNT
+ * @property-read Money|null $AMOUNT
  * @property-read int|null $SORT
  * @property-read bool|null $BASE
  * @property-read string|null $FULL_NAME

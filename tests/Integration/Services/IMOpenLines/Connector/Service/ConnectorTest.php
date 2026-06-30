@@ -72,8 +72,6 @@ class ConnectorTest extends TestCase
     /**
      * Helper method to get or create open line ID for tests
      *
-     * @throws BaseException
-     * @throws TransportException
      */
     private function getOpenLineId(): string
     {

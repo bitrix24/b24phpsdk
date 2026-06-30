@@ -3,6 +3,7 @@
 /app
 vendor
 composer.phar
+/composer.lock
 .phpunit.result.cache
 tools/.env.local
 tools/logs

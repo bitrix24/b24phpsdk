@@ -73,7 +73,7 @@ class Batch extends \Bitrix24\SDK\Core\Batch
                         sprintf(
                             'invalid type «%s» of currency code «%s» at position %s, the code must be string type',
                             gettype($code),
-                            print_r($code),
+                            print_r($code, true),
                             $cnt
                         )
                     );
@@ -84,7 +84,7 @@ class Batch extends \Bitrix24\SDK\Core\Batch
                         sprintf(
                             'invalid type «%s» of localization codes «%s» at position %s, the codes must be array type',
                             gettype($code),
-                            print_r($code),
+                            print_r($code, true),
                             $cnt
                         )
                     );
