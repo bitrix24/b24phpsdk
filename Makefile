@@ -621,6 +621,10 @@ test-integration-rest-scope:
 test-integration-scope-timeman:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_timeman
 
+.PHONY: test-integration-timeman-record
+test-integration-timeman-record:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_timeman_record
+
 .PHONY: integration_tests_sale
 integration_tests_sale:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale
