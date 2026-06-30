@@ -129,11 +129,10 @@ no client-side enforcement, matching `EventLog`). Doc link uses the **English** 
 
 `namespace Bitrix24\SDK\Services\Timeman\Record\Result;`
 `@property-read` block per the entity table above. `#[OpenApiEntity(entityKey: 'bitrix.timeman.recorddto', selectBuilder: RecordSelectBuilder::class)]`.
-Override `__get($offset)` with a `match`:
-- `id` → `(int)`
-- `userId`, `duration`, `breakLength` → `(int)` when not null/empty, else `null`
-- `startTime`, `endTime` → `CarbonImmutable::createFromFormat(DATE_ATOM, …)` when not null/empty, else `null`
-- default → `$this->data[$offset] ?? null` (covers `state` array and `isApproved` bool)
+Extends `Core\Result\AbstractAnnotatedItem` (NOT the legacy `AbstractItem`). No manual `__get` —
+the base auto-casts each field from its `@property-read` type: `id`/`userId`/`duration`/`breakLength`
+→ `int`, `startTime`/`endTime` → `CarbonImmutable` (keep `use Carbon\CarbonImmutable;` so the PHPDoc
+type resolves), `isApproved` → `bool`.
 
 ### 5. `src/Services/Timeman/Record/Result/RecordsResult.php`
 

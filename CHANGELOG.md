@@ -82,6 +82,10 @@
 
 ### Changed
 
+- Updated `b24phpsdk-maintainer` skill: `*ItemResult` classes must extend
+  `Core\Result\AbstractAnnotatedItem` (auto-casts from `@property-read` annotations) instead of the
+  legacy `AbstractItem` + manual `__get` pattern ([#518](https://github.com/bitrix24/b24phpsdk/issues/518))
+
 ### Fixed
 
 - Fixed PHPStan class loading after Symfony dependency updates by upgrading the static-analysis toolchain

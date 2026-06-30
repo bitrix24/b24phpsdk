@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\Timeman\Record\Result;
 
 use Bitrix24\SDK\Attributes\OpenApiEntity;
-use Bitrix24\SDK\Core\Result\AbstractItem;
+use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
 use Bitrix24\SDK\Services\Timeman\Record\Service\RecordSelectBuilder;
 use Carbon\CarbonImmutable;
 
@@ -37,25 +37,6 @@ use Carbon\CarbonImmutable;
     entityKey:     'bitrix.timeman.recorddto',
     selectBuilder: RecordSelectBuilder::class,
 )]
-class RecordItemResult extends AbstractItem
+class RecordItemResult extends AbstractAnnotatedItem
 {
-    /**
-     * @param int|string $offset
-     *
-     * @return int|CarbonImmutable|mixed|null
-     */
-    #[\Override]
-    public function __get($offset)
-    {
-        return match ($offset) {
-            'id' => (int)$this->data[$offset],
-            'userId', 'duration', 'breakLength' => ($this->data[$offset] !== null && $this->data[$offset] !== '')
-                ? (int)$this->data[$offset]
-                : null,
-            'startTime', 'endTime' => ($this->data[$offset] !== null && $this->data[$offset] !== '')
-                ? CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset])
-                : null,
-            default => $this->data[$offset] ?? null,
-        };
-    }
 }
