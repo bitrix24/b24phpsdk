@@ -683,6 +683,17 @@ Branch off from the corresponding base branch:
 
 Do not assume — always wait for the user's answer.
 
+#### Cross-version bugfixes (affects both 3.x and 1.x)
+
+When a bug (or a missing-field gap) affects **both** the 3.x and the 1.x release lines — including
+fixes to v1 methods whose code is identical on `dev` and `v3-dev` — always implement the fix on a
+branch off **`v3-dev`** first and open the PR against `v3-dev`. After that PR merges, **backport** the
+same change to `dev` via a separate branch and a PR against `dev`.
+
+Rationale: `v3-dev` is the forward-moving line, so the fix must never be missing there; the backport
+keeps the 1.x line in sync. Do not base such a fix on `dev` first. Record the pending `dev` backport
+as a follow-up in the task plan so it is not forgotten after the `v3-dev` PR merges.
+
 ### Step 5 — Create the branch
 
 Name the branch according to the issue type and number:

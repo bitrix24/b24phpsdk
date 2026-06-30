@@ -85,6 +85,8 @@
 - Updated `b24phpsdk-maintainer` skill: `*ItemResult` classes must extend
   `Core\Result\AbstractAnnotatedItem` (auto-casts from `@property-read` annotations) instead of the
   legacy `AbstractItem` + manual `__get` pattern ([#518](https://github.com/bitrix24/b24phpsdk/issues/518))
+- Updated `b24phpsdk-maintainer` skill: bugs affecting both the 3.x and 1.x lines are fixed from
+  `v3-dev` first and then backported to `dev` ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 
 ### Fixed
 
