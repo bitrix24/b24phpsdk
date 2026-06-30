@@ -568,15 +568,10 @@ make test-integration-scope-mail
 
 Local phase 2 status:
 
-- `make test-integration-scope-mail` currently fails on the local incoming webhook before
-  contract assertions run. Every `mail.*` call returns
-  `BITRIX_REST_V3_EXCEPTION_INSUFFICIENTSCOPEEXCEPTION` ("missing required scope").
-- `rest.scope.list` through the same SDK v3 runtime returns the `mail` method catalog, so
-  method names and v3 routing are valid.
-- `Factory::getServiceBuilder(true)` cannot be used in this worktree because
-  `tests/ApplicationBridge/.env` credentials are not configured locally.
-- Re-run `make test-integration-scope-mail` on a Bitrix24 test profile whose webhook or
-  application credentials include the runtime `mail` scope.
+- After updating `tests/.env.local` with a webhook that includes the runtime `mail` scope,
+  `make test-integration-scope-mail` passed: 27 tests, 40 assertions, 11 skipped.
+- Skipped tests are data-dependent checks for empty mailbox/contact/message collections on
+  the test portal, not authorization failures.
 
 Final pre-PR verification:
 

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Mail\MessageField\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractItem;
+use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
 
 /**
  * @property-read string      $name
@@ -28,6 +28,6 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  * @property-read bool        $multiple
  * @property-read string|null $elementType
  */
-class MessageFieldItemResult extends AbstractItem
+class MessageFieldItemResult extends AbstractAnnotatedItem
 {
 }
