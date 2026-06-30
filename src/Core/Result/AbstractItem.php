@@ -30,7 +30,7 @@ abstract class AbstractItem implements IteratorAggregate
     }
 
     /**
-     * @param int|string $offset
+     * @param string $offset
      */
     public function __isset($offset): bool
     {
@@ -38,7 +38,7 @@ abstract class AbstractItem implements IteratorAggregate
     }
 
     /**
-     * @param int|string $offset
+     * @param string $offset
      *
      * @return mixed
      */
@@ -48,23 +48,23 @@ abstract class AbstractItem implements IteratorAggregate
     }
 
     /**
-     * @param int|string $offset
+     * @param string $offset
      *
      * @return void
      * @throws ImmutableResultViolationException
      *
      */
-    public function __set($offset, mixed $value)
+    public function __set(string $offset, mixed $value)
     {
         throw new ImmutableResultViolationException(sprintf('Result is immutable, violation at offset %s', $offset));
     }
 
     /**
-     * @param int|string $offset
+     * @param string $offset
      *
      * @throws ImmutableResultViolationException
      */
-    public function __unset($offset)
+    public function __unset(string $offset)
     {
         throw new ImmutableResultViolationException(sprintf('Result is immutable, violation at offset %s', $offset));
     }

@@ -78,6 +78,9 @@
 
 ### Fixed
 
+- Fixed PHPStan class loading after Symfony dependency updates by upgrading the static-analysis toolchain
+  and keeping PHPStan/Rector quality gates green on the upgraded versions
+  ([#494](https://github.com/bitrix24/b24phpsdk/issues/494))
 - Fixed `Application\PortalLicenseFamily` enum throwing `"ent" is not a valid backing value` for
   Enterprise portals: Bitrix24 `app.info` returns `LICENSE_FAMILY = 'ent'`, but the enum had a typo
   `en`; renamed `en` → `ent` ([#500](https://github.com/bitrix24/b24phpsdk/pull/500))

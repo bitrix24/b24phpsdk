@@ -30,10 +30,15 @@ final readonly class ResultItemPayloadVerifier
         $runtimePayload = $this->resultFetcher->fetch($webhook, $payload->method, $sampleParams);
         $runtimeResultItem = $this->extractResultItem($runtimePayload, $responsePath);
 
+        /** @var list<array<string, mixed>> $confirmedFields */
         $confirmedFields = [];
+        /** @var list<array<string, mixed>> $missingFields */
         $missingFields = [];
+        /** @var list<array<string, mixed>> $unexpectedFields */
         $unexpectedFields = [];
+        /** @var list<array<string, mixed>> $typeMismatches */
         $typeMismatches = [];
+        /** @var list<array<string, mixed>> $nullabilityObservations */
         $nullabilityObservations = [];
 
         $topLevelExpectedFieldCodes = [];
@@ -170,10 +175,10 @@ final readonly class ResultItemPayloadVerifier
     }
 
     /**
-     * @param array<string, mixed> $confirmedFields
-     * @param array<string, mixed> $missingFields
-     * @param array<string, mixed> $typeMismatches
-     * @param array<string, mixed> $nullabilityObservations
+     * @param list<array<string, mixed>> $confirmedFields
+     * @param list<array<string, mixed>> $missingFields
+     * @param list<array<string, mixed>> $typeMismatches
+     * @param list<array<string, mixed>> $nullabilityObservations
      */
     private function compareExpectedField(
         ResultItemPayloadField $field,
