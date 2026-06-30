@@ -51,6 +51,23 @@ Generator usage rules:
 - After generating a `*ItemResult.php`, keep the mandatory live annotation/type-casting
   integration test described below.
 
+### Result-item base class
+
+**Rule**: every `*ItemResult.php` class MUST extend
+`Bitrix24\SDK\Core\Result\AbstractAnnotatedItem` — never the plain `AbstractItem`.
+
+`AbstractAnnotatedItem` reads the `@property-read` PHPDoc annotations and automatically casts each
+magic-getter value to the annotated type: `CarbonImmutable` (via `CarbonImmutable::parse()`), `int`,
+`float`, `bool` (incl. `Y`/`N`), `array`, nested `*ItemResult` (`array<FooItemResult>`), and backed
+enums. Because of this:
+
+- Do **not** write a manual `__get()` override with hand-rolled casting (the older `AbstractItem`
+  pattern seen in legacy classes such as `EventLogItemResult`). The base class handles it.
+- Still add `use Carbon\CarbonImmutable;` whenever a property is annotated as `CarbonImmutable`, so the
+  PHPDoc type resolves to the correct FQN and the base class recognizes it for casting.
+- Keep `#[OpenApiEntity(...)]` and the `@property-read` block — they drive both the casting and the
+  mandatory annotation/type-cast integration test.
+
 ---
 
 ## Webhook URL format for direct curl requests

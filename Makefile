@@ -625,6 +625,9 @@ test-integration-scope-timeman:
 .PHONY: test-integration-scope-humanresources
 test-integration-scope-humanresources:
 	@docker compose run --rm -e BITRIX24_WEBHOOK="$(BITRIX24_WEBHOOK)" php-cli $(PHPUNIT) --testsuite integration_tests_scope_humanresources
+.PHONY: test-integration-timeman-record
+test-integration-timeman-record:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_timeman_record
 
 .PHONY: integration_tests_sale
 integration_tests_sale:
