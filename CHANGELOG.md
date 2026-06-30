@@ -3,6 +3,12 @@
 
 ### Added
 
+- Added services `Services\Timeman\Record\Service\Record` and `Services\Timeman\RecordField\Service\RecordField`
+  with support for v3 `timeman.record.*` methods,
+  see [timeman REST v3](https://apidocs.bitrix24.com/api-reference/rest-v3/timeman/index.html) ([#518](https://github.com/bitrix24/b24phpsdk/issues/518)):
+    - `Record::list` returns employee work-time records (`timeman.record.list`), with typed `RecordSelectBuilder` / `RecordFilter`
+    - `RecordField::get` returns a single record field descriptor (`timeman.record.field.get`)
+    - `RecordField::list` returns all record field descriptors (`timeman.record.field.list`)
 - Added service `Services\Documentgenerator\Role` with support for `documentgenerator.role.*` methods,
   see [documentgenerator.role.* methods](https://apidocs.bitrix24.com/api-reference/document-generator/role/index.html) ([#489](https://github.com/bitrix24/b24phpsdk/issues/489)):
     - `add` creates a new role, with batch calls support
@@ -75,6 +81,10 @@
 - Added `repoWidget()` accessor to `LandingServiceBuilder` ([#501](https://github.com/bitrix24/b24phpsdk/issues/501))
 
 ### Changed
+
+- Updated `b24phpsdk-maintainer` skill: `*ItemResult` classes must extend
+  `Core\Result\AbstractAnnotatedItem` (auto-casts from `@property-read` annotations) instead of the
+  legacy `AbstractItem` + manual `__get` pattern ([#518](https://github.com/bitrix24/b24phpsdk/issues/518))
 
 ### Fixed
 
