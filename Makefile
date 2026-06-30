@@ -97,6 +97,7 @@ help:
 	@echo "test-integration-im-chat - run IM Chat integration tests"
 	@echo "test-integration-im-chat-user - run IM Chat User integration tests"
 	@echo "test-integration-im-notify - run IM Notify integration tests"
+	@echo "test-integration-scope-humanresources - run HumanResources integration tests"
 	@echo "test-integration-scope-lists - run Lists integration tests"
 	@echo "test-integration-lists-service - run Lists Service integration tests"
 	@echo "test-integration-lists-field - run Lists Field integration tests"
@@ -620,6 +621,10 @@ test-integration-rest-scope:
 .PHONY: test-integration-scope-timeman
 test-integration-scope-timeman:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_timeman
+
+.PHONY: test-integration-scope-humanresources
+test-integration-scope-humanresources:
+	@docker compose run --rm -e BITRIX24_WEBHOOK="$(BITRIX24_WEBHOOK)" php-cli $(PHPUNIT) --testsuite integration_tests_scope_humanresources
 
 .PHONY: integration_tests_sale
 integration_tests_sale:

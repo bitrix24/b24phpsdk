@@ -73,8 +73,14 @@
     - `getList` gets the list of widgets for the current application
     - `debug` enables or disables debug mode for all widgets of the current application
 - Added `repoWidget()` accessor to `LandingServiceBuilder` ([#501](https://github.com/bitrix24/b24phpsdk/issues/501))
+- Added `Services\HumanResources` v3 scope wrappers for company org structure,
+  employees, node communications, node members, and dedicated field metadata services
+  ([#517](https://github.com/bitrix24/b24phpsdk/issues/517))
 
 ### Changed
+
+- Updated `b24phpsdk-maintainer` skill: require dedicated field metadata services for
+  `*.field.get` and `*.field.list` endpoints ([#517](https://github.com/bitrix24/b24phpsdk/issues/517))
 
 ### Fixed
 

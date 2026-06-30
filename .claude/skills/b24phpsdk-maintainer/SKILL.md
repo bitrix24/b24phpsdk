@@ -625,6 +625,22 @@ the Bitrix24 REST payload format at the service boundary, following existing ser
 patterns. Do not expose raw date/time strings in service method arguments when the SDK can
 accept a typed immutable date value instead.
 
+### Field metadata methods
+
+When a REST API entity exposes `*.field.get` and `*.field.list`, implement those methods in
+a dedicated field metadata service instead of adding `fieldGet()` or `fieldList()` methods to
+the primary entity service.
+
+Use this shape:
+
+- service class: `Services\<Scope>\<Entity>Field\Service\<Entity>Field`
+- builder accessor: `<entity>Field()`
+- public methods: `get(string $name, array $select = [])` and `list(array $select = [])`
+- result wrappers: `<Entity>FieldResult`, `<Entity>FieldsResult`, and `<Entity>FieldItemResult`
+
+If one issue covers several entities with field metadata endpoints, create one field service
+per entity unless the scope already has an established shared field-service convention.
+
 ### ApiEndpointMetadata documentation links
 
 When adding or changing `ApiEndpointMetadata` attributes, documentation links must point to
