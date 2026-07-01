@@ -232,6 +232,36 @@
         <testsuite name="integration_tests_scope_sonet_group">
             <directory>./tests/Integration/Services/SonetGroup/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_landing">
+            <directory>./tests/Integration/Services/Landing/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_landing_site">
+            <directory>./tests/Integration/Services/Landing/Site/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_landing_page">
+            <directory>./tests/Integration/Services/Landing/Page/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_landing_syspage">
+            <directory>./tests/Integration/Services/Landing/SysPage/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_landing_repo">
+            <directory>./tests/Integration/Services/Landing/Repo/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_landing_demos">
+            <directory>./tests/Integration/Services/Landing/Demos/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_landing_template">
+            <directory>./tests/Integration/Services/Landing/Template/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_landing_block">
+            <directory>./tests/Integration/Services/Landing/Block/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_landing_role">
+            <directory>./tests/Integration/Services/Landing/Role/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_landing_repowidget">
+            <directory>./tests/Integration/Services/Landing/RepoWidget/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_biconnector">
             <directory>./tests/Integration/Services/Biconnector/</directory>
         </testsuite>
