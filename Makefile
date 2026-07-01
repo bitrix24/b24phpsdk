@@ -69,7 +69,11 @@ help:
 	@echo "test-integration-landing-role - run Landing Role integration tests"
 	@echo "test-integration-landing-repowidget - run Landing RepoWidget integration tests"
 	@echo "test-integration-scope-landing-template - run Landing Template integration tests"
-
+	@echo "test-integration-scope-sign - run Sign B2e integration tests"
+	@echo "test-integration-sign-document - run Sign Document integration tests"
+	@echo "test-integration-sign-company-provider - run Sign CompanyProvider integration tests"
+	@echo "test-integration-sign-personal-tail - run Sign PersonalTail integration tests"
+	@echo "test-integration-sign-mysafe-tail - run Sign MySafeTail integration tests"
 
 .PHONY: docker-init
 docker-init:
@@ -491,6 +495,26 @@ test-integration-landing-role:
 .PHONY: test-integration-landing-repowidget
 test-integration-landing-repowidget:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_repowidget
+
+.PHONY: test-integration-scope-sign
+test-integration-scope-sign:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sign
+
+.PHONY: test-integration-sign-document
+test-integration-sign-document:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sign_document
+
+.PHONY: test-integration-sign-company-provider
+test-integration-sign-company-provider:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sign_company_provider
+
+.PHONY: test-integration-sign-personal-tail
+test-integration-sign-personal-tail:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sign_personal_tail
+
+.PHONY: test-integration-sign-mysafe-tail
+test-integration-sign-mysafe-tail:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sign_mysafe_tail
 
 # work dev environment
 .PHONY: php-dev-server-up

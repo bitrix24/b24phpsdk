@@ -4,6 +4,16 @@
 
 ### Added
 
+- Added `Services\Sign\SignServiceBuilder` with support for `sign.b2e.*` methods and events,
+  see [sign.b2e.* methods](https://apidocs.bitrix24.com/api-reference/sign/index.html) ([#504](https://github.com/bitrix24/b24phpsdk/issues/504)):
+    - `document()->send()` — sends a document for company-side signing (КЭДО), application context only
+    - `document()->get()` — returns information about a document and its signing members
+    - `companyProvider()->list()` — returns the list of signature providers for a selected company
+    - `personalTail()->tail()` — returns the list of signed documents for the current user (КЭДО section), application context only
+    - `mySafeTail()->tail()` — returns the list of signed documents in the company safe, application context only
+- Added events support for `sign.b2e` scope via `SignB2eEventsFactory` ([#504](https://github.com/bitrix24/b24phpsdk/issues/504)):
+    - `OnSignB2eDocumentStatusChanged` — fires when document status changes
+    - `OnSignB2eMemberStatusChanged` — fires when member status changes
 - Added service `Services\Landing\Site\Service\Site` with support methods,
   see [landing.site.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
     - `add` adds a site
