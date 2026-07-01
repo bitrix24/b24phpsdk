@@ -31,9 +31,9 @@ class MySafeTailItemResult extends AbstractItem
     public function __get($offset)
     {
         return match ($offset) {
-            'create_date', 'signed_date' => !empty($this->data[$offset])
-                ? CarbonImmutable::parse($this->data[$offset])
-                : null,
+            'create_date', 'signed_date' => empty($this->data[$offset])
+                ? null
+                : CarbonImmutable::parse($this->data[$offset]),
             default => $this->data[$offset] ?? null,
         };
     }
