@@ -756,7 +756,7 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         );
         $this->assertEquals($portalLicenseFamily, $installation->getPortalLicenseFamily());
 
-        $newLicenseFamily = PortalLicenseFamily::en;
+        $newLicenseFamily = PortalLicenseFamily::ent;
         $installation->changePortalLicenseFamily($newLicenseFamily);
         $this->assertEquals($newLicenseFamily, $installation->getPortalLicenseFamily());
     }

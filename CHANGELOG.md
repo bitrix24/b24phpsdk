@@ -13,10 +13,97 @@
 - Added events support for `sign.b2e` scope via `SignB2eEventsFactory` ([#504](https://github.com/bitrix24/b24phpsdk/issues/504)):
     - `OnSignB2eDocumentStatusChanged` — fires when document status changes
     - `OnSignB2eMemberStatusChanged` — fires when member status changes
+- Added services `Services\Timeman\Record\Service\Record` and `Services\Timeman\RecordField\Service\RecordField`
+  with support for v3 `timeman.record.*` methods,
+  see [timeman REST v3](https://apidocs.bitrix24.com/api-reference/rest-v3/timeman/index.html) ([#518](https://github.com/bitrix24/b24phpsdk/issues/518)):
+    - `Record::list` returns employee work-time records (`timeman.record.list`), with typed `RecordSelectBuilder` / `RecordFilter`
+    - `RecordField::get` returns a single record field descriptor (`timeman.record.field.get`)
+    - `RecordField::list` returns all record field descriptors (`timeman.record.field.list`)
+- Added service `Services\Documentgenerator\Role` with support for `documentgenerator.role.*` methods,
+  see [documentgenerator.role.* methods](https://apidocs.bitrix24.com/api-reference/document-generator/role/index.html) ([#489](https://github.com/bitrix24/b24phpsdk/issues/489)):
+    - `add` creates a new role, with batch calls support
+    - `list` gets the list of roles, with batch calls support
+    - `update` updates an existing role, with batch calls support
+    - `delete` deletes a role, with batch calls support
+    - `get` gets information about the role by its identifier (includes permissions)
+    - `fillAccesses` completely replaces the role-to-access-code binding map
+    - `count` counts roles
+- Added service `Services\Documentgenerator\Region` with support for `documentgenerator.region.*` methods,
+  see [documentgenerator.region.* methods](https://apidocs.bitrix24.com/api-reference/document-generator/region/index.html) ([#489](https://github.com/bitrix24/b24phpsdk/issues/489)):
+    - `add` creates a new region, with batch calls support
+    - `list` gets the list of regions, with batch calls support
+    - `update` updates an existing region, with batch calls support
+    - `delete` deletes a region, with batch calls support
+    - `get` gets information about the region by its identifier
+    - `count` counts regions
+- Added service `Services\Documentgenerator\Numerator` with support for `documentgenerator.numerator.*` methods,
+  see [documentgenerator.numerator.* methods](https://apidocs.bitrix24.com/api-reference/document-generator/numerators/index.html) ([#489](https://github.com/bitrix24/b24phpsdk/issues/489)):
+    - `add` creates a new numerator, with batch calls support
+    - `list` gets the list of numerators, with batch calls support
+    - `update` updates an existing numerator, with batch calls support
+    - `delete` deletes a numerator, with batch calls support
+    - `get` gets information about the numerator by its identifier
+    - `count` counts numerators
+- Added service `Services\Documentgenerator\Template` with support for `documentgenerator.template.*` methods,
+  see [documentgenerator.template.* methods](https://apidocs.bitrix24.com/api-reference/document-generator/templates/index.html) ([#489](https://github.com/bitrix24/b24phpsdk/issues/489)):
+    - `add` creates a new template, with batch calls support
+    - `list` gets the list of templates, with batch calls support
+    - `update` updates an existing template, with batch calls support
+    - `delete` deletes a template, with batch calls support
+    - `get` gets information about the template by its identifier
+    - `getFields` returns the description of template fields
+    - `count` counts templates
+- Added service `Services\Documentgenerator\Document` with support for `documentgenerator.document.*` methods,
+  see [documentgenerator.document.* methods](https://apidocs.bitrix24.com/api-reference/document-generator/index.html) ([#489](https://github.com/bitrix24/b24phpsdk/issues/489)):
+    - `add` creates a new document based on a template and data provider, with batch calls support
+    - `list` gets the list of documents, with batch calls support
+    - `update` updates an existing document, with batch calls support
+    - `delete` deletes a document, with batch calls support
+    - `get` gets information about the document by its identifier
+    - `getFields` returns the description of document fields
+    - `enablePublicUrl` enables or disables public URL for a document
+    - `count` counts documents
+- Added service `Services\MailService` with support for `mailservice.*` methods,
+  see [mailservice.* methods](https://apidocs.bitrix24.com/api-reference/mailservice/index.html) ([#495](https://github.com/bitrix24/b24phpsdk/issues/495)):
+    - `add` creates a new mail service (IMAP integration), with batch calls support
+    - `update` updates an existing mail service, with batch calls support
+    - `get` gets information about a mail service by its identifier
+    - `list` gets the list of active mail services, with batch calls support
+    - `delete` deletes a mail service, with batch calls support
+    - `fields` returns localized field labels of a mail service
+    - `count` counts active mail services
+- Added `Services\Booking\BookingServiceBuilder` with Booking scope wrappers and integration coverage for `booking.v1.clienttype.*`, `booking.v1.resourceType.*`, `booking.v1.resource.*`, `booking.v1.resource.slots.*`, `booking.v1.waitlist.*`, `booking.v1.waitlist.client.*`, `booking.v1.waitlist.externalData.*`, `booking.v1.booking.*`, `booking.v1.booking.client.*`, and `booking.v1.booking.externalData.*` methods.
+- Added service `Services\Messageservice\Sender` and `Services\Messageservice\Message\Status` with support for `messageservice.*` methods,
+  see [messageservice.* methods](https://apidocs.bitrix24.com/api-reference/messageservice/index.html) ([#498](https://github.com/bitrix24/b24phpsdk/issues/498)):
+    - `sender.add` — register a new SMS message service provider
+    - `sender.update` — update a registered message service provider
+    - `sender.list` — get list of sender codes registered by the current application
+    - `sender.delete` — delete a registered message service provider
+    - `message.status.update` — update delivery status of a message sent via a provider
+- Added `Services\Booking\BookingServiceBuilder` with Booking scope wrappers and integration coverage for `booking.v1.clienttype.*`, `booking.v1.resourceType.*`, `booking.v1.resource.*`, `booking.v1.resource.slots.*`, `booking.v1.waitlist.*`, `booking.v1.waitlist.client.*`, `booking.v1.waitlist.externalData.*`, `booking.v1.booking.*`, `booking.v1.booking.client.*`, and `booking.v1.booking.externalData.*` methods.
+- Added service `Services\Landing\RepoWidget` with support for Vibe widget management,
+  see [landing.repowidget.* methods](https://apidocs.bitrix24.com/api-reference/vibe/index.html)
+  ([#501](https://github.com/bitrix24/b24phpsdk/issues/501)):
+    - `register` registers or updates a Vibe widget, returns widget ID
+    - `unregister` removes a Vibe widget, returns boolean success flag
+    - `getList` gets the list of widgets for the current application
+    - `debug` enables or disables debug mode for all widgets of the current application
+- Added `repoWidget()` accessor to `LandingServiceBuilder` ([#501](https://github.com/bitrix24/b24phpsdk/issues/501))
 
 ### Changed
 
+- Updated `b24phpsdk-maintainer` skill: `*ItemResult` classes must extend
+  `Core\Result\AbstractAnnotatedItem` (auto-casts from `@property-read` annotations) instead of the
+  legacy `AbstractItem` + manual `__get` pattern ([#518](https://github.com/bitrix24/b24phpsdk/issues/518))
+
 ### Fixed
+
+- Fixed PHPStan class loading after Symfony dependency updates by upgrading the static-analysis toolchain
+  and keeping PHPStan/Rector quality gates green on the upgraded versions without committing `composer.lock`
+  ([#494](https://github.com/bitrix24/b24phpsdk/issues/494))
+- Fixed `Application\PortalLicenseFamily` enum throwing `"ent" is not a valid backing value` for
+  Enterprise portals: Bitrix24 `app.info` returns `LICENSE_FAMILY = 'ent'`, but the enum had a typo
+  `en`; renamed `en` → `ent` ([#500](https://github.com/bitrix24/b24phpsdk/pull/500))
 
 ## 3.3.0
 

@@ -112,12 +112,20 @@ final class AttributesParserReturnTypesFixture
     #[ApiEndpointMetadata('test.union.result', 'https://example.com/test.union.result', apiVersion: ApiVersion::v3)]
     public function unionResult(int $id): int|string
     {
+        if ($id < 0) {
+            return 'negative';
+        }
+
         return $id;
     }
 
     #[ApiEndpointMetadata('test.nullable.result', 'https://example.com/test.nullable.result')]
     public function nullableResult(): ?AttributesParserResultFixture
     {
+        if (getenv('B24_SDK_NULLABLE_RESULT_FIXTURE') === '1') {
+            return null;
+        }
+
         return new AttributesParserResultFixture();
     }
 

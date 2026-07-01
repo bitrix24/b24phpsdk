@@ -20,6 +20,7 @@ use Bitrix24\SDK\Services\AI\AIServiceBuilder;
 use Bitrix24\SDK\Services\Booking\BookingServiceBuilder;
 use Bitrix24\SDK\Services\Biconnector\BiconnectorServiceBuilder;
 use Bitrix24\SDK\Services\Catalog\CatalogServiceBuilder;
+use Bitrix24\SDK\Services\Documentgenerator\DocumentgeneratorServiceBuilder;
 use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
 use Bitrix24\SDK\Services\Disk\DiskServiceBuilder;
 use Bitrix24\SDK\Services\Entity\EntityServiceBuilder;
@@ -41,6 +42,8 @@ use Bitrix24\SDK\Services\Paysystem\PaysystemServiceBuilder;
 use Bitrix24\SDK\Services\SonetGroup\SonetGroupServiceBuilder;
 use Bitrix24\SDK\Legacy\LegacyServiceBuilder;
 use Bitrix24\SDK\Services\Lists\ListsServiceBuilder;
+use Bitrix24\SDK\Services\MailService\MailServiceServiceBuilder;
+use Bitrix24\SDK\Services\Messageservice\MessageserviceServiceBuilder;
 use Bitrix24\SDK\Services\Rest\RestServiceBuilder;
 use Bitrix24\SDK\Services\Sign\SignServiceBuilder;
 use Bitrix24\SDK\Services\Timeman\TimemanServiceBuilder;
@@ -399,6 +402,35 @@ class ServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    public function getMailServiceScope(): MailServiceServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new MailServiceServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+  
+     public function getMessageserviceScope(): MessageserviceServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new MessageserviceServiceBuilder(
+
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function getRestScope(): RestServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -417,6 +449,20 @@ class ServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new LegacyServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function getDocumentgeneratorScope(): DocumentgeneratorServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new DocumentgeneratorServiceBuilder(
                 $this->core,
                 $this->batch,
                 $this->bulkItemsReader,

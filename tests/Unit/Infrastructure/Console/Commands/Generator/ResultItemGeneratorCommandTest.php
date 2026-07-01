@@ -294,7 +294,7 @@ MARKDOWN);
         $resultItemPayload = (new ResultItemPayloadSerializer())->decode((string) file_get_contents($this->payloadPath()));
         self::assertSame(['openapi', 'b24restdocs'], $resultItemPayload->generatedFrom);
         self::assertSame('Dialog description text', $this->findField($resultItemPayload->fields, 'description')?->description);
-        self::assertTrue($this->findField($resultItemPayload->fields, 'background_id')?->nullable ?? false);
+        self::assertTrue($this->findField($resultItemPayload->fields, 'background_id')->nullable);
         self::assertSame([], $this->resultFetcher->calls);
     }
 
@@ -477,7 +477,7 @@ MARKDOWN);
 
         self::assertSame('message', $resultItemPayload->object);
         self::assertSame(\Carbon\CarbonImmutable::class, $this->findField($resultItemPayload->fields, 'date')?->phpdocType);
-        self::assertTrue($this->findField($resultItemPayload->fields, 'uuid')?->nullable ?? false);
+        self::assertTrue($this->findField($resultItemPayload->fields, 'uuid')->nullable);
         self::assertFileExists($generatedPath);
 
         $generatedCode = (string) file_get_contents($generatedPath);

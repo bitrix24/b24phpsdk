@@ -39,7 +39,7 @@ class OpenApiSchemaEntityReader
         $keys = array_keys($schemas);
         sort($keys);
 
-        return array_values($keys);
+        return $keys;
     }
 
     /**

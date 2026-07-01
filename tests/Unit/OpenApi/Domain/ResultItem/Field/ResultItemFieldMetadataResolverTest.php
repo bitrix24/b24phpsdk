@@ -25,6 +25,10 @@ class ResultItemFieldMetadataResolverTest extends TestCase
                 #[\Override]
                 public function provide(string $schemaFile, ?string $entityKey): ?ResultFieldCollection
                 {
+                    if ($entityKey === null) {
+                        return null;
+                    }
+
                     return new ResultFieldCollection([
                         new ResultFieldDescriptor('id', 'integer'),
                     ], 'openapi');
