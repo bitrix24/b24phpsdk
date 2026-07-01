@@ -211,6 +211,9 @@ class ServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    /**
+     * @return MainServiceBuilder
+     */
     public function getMainScope(): MainServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -253,6 +256,9 @@ class ServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    /**
+     * @return PlacementServiceBuilder
+     */
     public function getPlacementScope(): PlacementServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
