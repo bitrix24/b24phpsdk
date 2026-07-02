@@ -3,6 +3,50 @@
 
 ### Added
 
+- Added service `Services\IMBot` scope with support for `imbot.v2.*` methods,
+  see [imbot.v2.* methods](https://apidocs.bitrix24.com/api-reference/chat-bots/chat-bots-v2/index.html) ([#505](https://github.com/bitrix24/b24phpsdk/issues/505)):
+    - `Bot::register` registers a new chat-bot (`imbot.v2.Bot.register`)
+    - `Bot::update` updates an existing chat-bot (`imbot.v2.Bot.update`)
+    - `Bot::get` gets information about a chat-bot (`imbot.v2.Bot.get`)
+    - `Bot::list` gets the list of chat-bots for the current application (`imbot.v2.Bot.list`)
+    - `Bot::unregister` unregisters a chat-bot (`imbot.v2.Bot.unregister`)
+    - `Chat::add` creates a new group chat on behalf of the bot (`imbot.v2.Chat.add`)
+    - `Chat::get` gets chat information by chat ID (`imbot.v2.Chat.get`)
+    - `Chat::update` updates chat properties (`imbot.v2.Chat.update`)
+    - `Chat::leave` removes the bot from a chat (`imbot.v2.Chat.leave`)
+    - `Chat::setOwner` transfers chat ownership to another user (`imbot.v2.Chat.setOwner`)
+    - `ChatUser::add` adds users to a chat (`imbot.v2.Chat.User.add`)
+    - `ChatUser::delete` removes a user from a chat (`imbot.v2.Chat.User.delete`)
+    - `ChatUser::list` gets the list of users in a chat (`imbot.v2.Chat.User.list`)
+    - `ChatManager::add` assigns manager rights to a chat member (`imbot.v2.Chat.Manager.add`)
+    - `ChatManager::delete` revokes manager rights from a chat member (`imbot.v2.Chat.Manager.delete`)
+    - `ChatMessage::send` sends a message on behalf of the bot (`imbot.v2.Chat.Message.send`)
+    - `ChatMessage::update` updates a previously sent message (`imbot.v2.Chat.Message.update`)
+    - `ChatMessage::delete` deletes a message sent by the bot (`imbot.v2.Chat.Message.delete`)
+    - `ChatMessage::read` marks a message as read (`imbot.v2.Chat.Message.read`)
+    - `ChatMessage::get` gets a message by its ID (`imbot.v2.Chat.Message.get`)
+    - `ChatMessage::getContext` gets message context around a given message (`imbot.v2.Chat.Message.getContext`)
+    - `ChatMessageReaction::add` adds a reaction to a message (`imbot.v2.Chat.Message.Reaction.add`)
+    - `ChatMessageReaction::delete` removes a reaction from a message (`imbot.v2.Chat.Message.Reaction.delete`)
+    - `Command::register` registers a slash command for a bot (`imbot.v2.Command.register`)
+    - `Command::update` updates an existing slash command (`imbot.v2.Command.update`)
+    - `Command::list` gets the list of commands registered for a bot (`imbot.v2.Command.list`)
+    - `Command::unregister` unregisters a slash command (`imbot.v2.Command.unregister`)
+    - `Command::answer` answers a command invocation with a message (`imbot.v2.Command.answer`)
+    - `ChatInputAction::notify` sends a typing indicator in the chat (`imbot.v2.Chat.InputAction.notify`)
+    - `ChatTextField::enabled` enables or disables the text field in a chat (`imbot.v2.Chat.TextField.enabled`)
+    - `Event::get` polls pending events for the bot in fetch mode (`imbot.v2.Event.get`)
+    - `File::upload` uploads a file to a chat on behalf of the bot (`imbot.v2.File.upload`)
+    - `File::download` gets a download URL for a file in a chat (`imbot.v2.File.download`)
+    - `Revision::get` gets REST API and client protocol revision numbers (`imbot.v2.Revision.get`)
+- Added services `Services\IM\EventV2` and `Services\IM\FileV2` with support for `im.v2.*` methods,
+  see [im.v2.* methods](https://apidocs.bitrix24.com/api-reference/chat-bots/chat-bots-v2/im.v2/) ([#505](https://github.com/bitrix24/b24phpsdk/issues/505)):
+    - `EventV2::subscribe` subscribes the current user to message event recording (`im.v2.Event.subscribe`)
+    - `EventV2::unsubscribe` unsubscribes the current user from message event recording (`im.v2.Event.unsubscribe`)
+    - `EventV2::get` polls pending message events for the current user (`im.v2.Event.get`)
+    - `FileV2::upload` uploads a file to a chat (`im.v2.File.upload`)
+    - `FileV2::download` gets a download URL for a file in a chat (`im.v2.File.download`)
+
 - Added services `Services\Timeman\Record\Service\Record` and `Services\Timeman\RecordField\Service\RecordField`
   with support for v3 `timeman.record.*` methods,
   see [timeman REST v3](https://apidocs.bitrix24.com/api-reference/rest-v3/timeman/index.html) ([#518](https://github.com/bitrix24/b24phpsdk/issues/518)):

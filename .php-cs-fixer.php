@@ -33,6 +33,8 @@ $finder = Finder::create()
     ->in(__DIR__ . '/src/Services/SonetGroup/')
     ->in(__DIR__ . '/src/Services/MailService/')
     ->in(__DIR__ . '/src/Services/Messageservice/')
+    ->in(__DIR__ . '/src/Services/IM/')
+    ->in(__DIR__ . '/src/Services/IMBot/')
     ->name('*.php')
     ->exclude(['vendor', 'storage', 'docker', 'docs']) // Exclude directories
     ->ignoreDotFiles(true)

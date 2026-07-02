@@ -103,6 +103,12 @@ help:
 	@echo "test-integration-lists-section - run Lists Section integration tests"
 	@echo "test-integration-lists-element - run Lists Element integration tests"
 	@echo "test-integration-mailservice - run MailService integration tests"
+	@echo "test-integration-scope-imbot - run IMBot scope integration tests"
+	@echo "test-integration-imbot-bot - run IMBot Bot integration tests"
+	@echo "test-integration-imbot-chat - run IMBot Chat integration tests"
+	@echo "test-integration-imbot-command - run IMBot Command integration tests"
+	@echo "test-integration-imbot-revision - run IMBot Revision integration tests"
+	@echo "test-integration-im-event-v2 - run IM EventV2 integration tests"
 
 t:
 	docker compose run --rm php-cli sh
@@ -746,6 +752,30 @@ test-integration-messageservice-sender:
 .PHONY: test-integration-messageservice-message-status
 test-integration-messageservice-message-status:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_messageservice_message_status
+
+.PHONY: test-integration-scope-imbot
+test-integration-scope-imbot:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_imbot
+
+.PHONY: test-integration-imbot-bot
+test-integration-imbot-bot:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_imbot_bot
+
+.PHONY: test-integration-imbot-chat
+test-integration-imbot-chat:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_imbot_chat
+
+.PHONY: test-integration-imbot-command
+test-integration-imbot-command:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_imbot_command
+
+.PHONY: test-integration-imbot-revision
+test-integration-imbot-revision:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_imbot_revision
+
+.PHONY: test-integration-im-event-v2
+test-integration-im-event-v2:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_event_v2
 
 # work dev environment
 .PHONY: php-dev-server-up
