@@ -18,8 +18,8 @@ use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Core\Result\EmptyResult;
 use Bitrix24\SDK\Services\AbstractService;
+use Bitrix24\SDK\Services\IM\FileV2\Result\FileV2DownloadResult;
 use Bitrix24\SDK\Services\IM\FileV2\Result\FileV2UploadResult;
 
 /**
@@ -80,8 +80,8 @@ class FileV2 extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/chat-bots/chat-bots-v2/im.v2/files/file-download.html',
         'Get a download URL for a file in a chat'
     )]
-    public function download(int $fileId): EmptyResult
+    public function download(int $fileId): FileV2DownloadResult
     {
-        return new EmptyResult($this->core->call('im.v2.File.download', ['fileId' => $fileId]));
+        return new FileV2DownloadResult($this->core->call('im.v2.File.download', ['fileId' => $fileId]));
     }
 }

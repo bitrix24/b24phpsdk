@@ -35,17 +35,17 @@
     - `Command::answer` answers a command invocation with a message (`imbot.v2.Command.answer`)
     - `ChatInputAction::notify` sends a typing indicator in the chat (`imbot.v2.Chat.InputAction.notify`)
     - `ChatTextField::enabled` enables or disables the text field in a chat (`imbot.v2.Chat.TextField.enabled`)
-    - `Event::get` polls pending events for the bot in fetch mode (`imbot.v2.Event.get`)
+    - `Event::get` polls pending events for the bot in fetch mode (`imbot.v2.Event.get`), returns typed `EventsResult` with `EventItemResult` items, `getNextOffset()`, and `isHasMore()`
     - `File::upload` uploads a file to a chat on behalf of the bot (`imbot.v2.File.upload`)
-    - `File::download` gets a download URL for a file in a chat (`imbot.v2.File.download`)
+    - `File::download` gets a download URL for a file in a chat (`imbot.v2.File.download`), returns typed `FileDownloadResult`
     - `Revision::get` gets REST API and client protocol revision numbers (`imbot.v2.Revision.get`)
 - Added services `Services\IM\EventV2` and `Services\IM\FileV2` with support for `im.v2.*` methods,
   see [im.v2.* methods](https://apidocs.bitrix24.com/api-reference/chat-bots/chat-bots-v2/im.v2/) ([#505](https://github.com/bitrix24/b24phpsdk/issues/505)):
     - `EventV2::subscribe` subscribes the current user to message event recording (`im.v2.Event.subscribe`)
     - `EventV2::unsubscribe` unsubscribes the current user from message event recording (`im.v2.Event.unsubscribe`)
-    - `EventV2::get` polls pending message events for the current user (`im.v2.Event.get`)
+    - `EventV2::get` polls pending message events for the current user (`im.v2.Event.get`), returns typed `EventsV2Result` with `EventV2ItemResult` items, `getNextOffset()`, and `isHasMore()`
     - `FileV2::upload` uploads a file to a chat (`im.v2.File.upload`)
-    - `FileV2::download` gets a download URL for a file in a chat (`im.v2.File.download`)
+    - `FileV2::download` gets a download URL for a file in a chat (`im.v2.File.download`), returns typed `FileV2DownloadResult`
 
 - Added services `Services\Timeman\Record\Service\Record` and `Services\Timeman\RecordField\Service\RecordField`
   with support for v3 `timeman.record.*` methods,

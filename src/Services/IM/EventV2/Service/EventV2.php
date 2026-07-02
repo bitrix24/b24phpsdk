@@ -20,6 +20,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\EmptyResult;
 use Bitrix24\SDK\Services\AbstractService;
+use Bitrix24\SDK\Services\IM\EventV2\Result\EventsV2Result;
 
 /**
  * IM v2 event subscription service.
@@ -70,6 +71,12 @@ class EventV2 extends AbstractService
     /**
      * Poll pending message events for the current user.
      *
+     * Pass 0 (or omit) on the first call. Use the returned nextOffset in subsequent calls
+     * to acknowledge already-processed events and move the queue cursor forward.
+     *
+     * @param int      $offset Acknowledges processed events. Pass nextOffset from the previous response (0 on first call).
+     * @param int|null $limit  Maximum events to return (1–1000). Default: 100.
+     *
      * @link https://apidocs.bitrix24.com/api-reference/chat-bots/chat-bots-v2/im.v2/events/event-get.html
      *
      * @throws BaseException
@@ -80,8 +87,14 @@ class EventV2 extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/chat-bots/chat-bots-v2/im.v2/events/event-get.html',
         'Poll pending message events for the current user'
     )]
-    public function get(): EmptyResult
+    public function get(int $offset = 0, ?int $limit = null): EventsV2Result
     {
-        return new EmptyResult($this->core->call('im.v2.Event.get'));
+        $params = ['offset' => $offset];
+
+        if ($limit !== null) {
+            $params['limit'] = $limit;
+        }
+
+        return new EventsV2Result($this->core->call('im.v2.Event.get', $params));
     }
 }

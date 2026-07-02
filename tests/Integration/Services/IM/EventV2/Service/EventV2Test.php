@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\IM\EventV2\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Services\IM\EventV2\Result\EventsV2Result;
 use Bitrix24\SDK\Services\IM\EventV2\Service\EventV2;
 use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -67,13 +68,17 @@ class EventV2Test extends TestCase
      * @throws TransportException
      */
     #[Test]
-    #[TestDox('im.v2.Event.get returns successful response')]
+    #[TestDox('im.v2.Event.get returns EventsV2Result with events, nextOffset and hasMore')]
     public function testGet(): void
     {
         $this->eventService->subscribe();
-        $result = $this->eventService->get();
+        $result = $this->eventService->get(0);
 
-        // EmptyResult — no exception means success
-        $this->assertNotNull($result->getCoreResponse());
+        $this->assertInstanceOf(EventsV2Result::class, $result);
+        $this->assertIsArray($result->getEvents());
+        $this->assertIsBool($result->isHasMore());
+        // nextOffset may be null when there are no events
+        $nextOffset = $result->getNextOffset();
+        $this->assertTrue($nextOffset === null || is_int($nextOffset));
     }
 }

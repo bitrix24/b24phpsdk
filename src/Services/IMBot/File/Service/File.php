@@ -18,8 +18,8 @@ use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Core\Result\EmptyResult;
 use Bitrix24\SDK\Services\AbstractService;
+use Bitrix24\SDK\Services\IMBot\File\Result\FileDownloadResult;
 use Bitrix24\SDK\Services\IMBot\File\Result\FileUploadResult;
 
 #[ApiServiceMetadata(new Scope(['imbot']))]
@@ -90,7 +90,7 @@ class File extends AbstractService
         int $botId,
         int $fileId,
         ?string $botToken = null,
-    ): EmptyResult {
+    ): FileDownloadResult {
         $params = [
             'botId' => $botId,
             'fileId' => $fileId,
@@ -100,6 +100,6 @@ class File extends AbstractService
             $params['botToken'] = $botToken;
         }
 
-        return new EmptyResult($this->core->call('imbot.v2.File.download', $params));
+        return new FileDownloadResult($this->core->call('imbot.v2.File.download', $params));
     }
 }
