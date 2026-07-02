@@ -46,7 +46,7 @@ class ChatTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $scope = Factory::getServiceBuilder()->getIMBotScope();
+        $scope = Factory::getServiceBuilder(true)->getIMBotScope();
         $this->chatService = $scope->chat();
         $this->botService = $scope->bot();
 

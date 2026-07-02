@@ -46,7 +46,7 @@ class CommandTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $scope = Factory::getServiceBuilder()->getIMBotScope();
+        $scope = Factory::getServiceBuilder(true)->getIMBotScope();
         $this->commandService = $scope->command();
         $this->botService = $scope->bot();
 

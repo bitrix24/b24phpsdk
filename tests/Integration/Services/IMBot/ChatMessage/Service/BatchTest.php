@@ -49,7 +49,7 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $scope = Factory::getServiceBuilder()->getIMBotScope();
+        $scope = Factory::getServiceBuilder(true)->getIMBotScope();
         $this->botService = $scope->bot();
         $this->chatService = $scope->chat();
         $this->chatMessageService = $scope->chatMessage();

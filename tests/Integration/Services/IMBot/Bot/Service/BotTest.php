@@ -37,7 +37,7 @@ class BotTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->botService = Factory::getServiceBuilder()->getIMBotScope()->bot();
+        $this->botService = Factory::getServiceBuilder(true)->getIMBotScope()->bot();
     }
 
     /**
