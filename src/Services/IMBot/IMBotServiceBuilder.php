@@ -22,6 +22,7 @@ use Bitrix24\SDK\Services\IMBot\Chat\Service\ChatInputAction;
 use Bitrix24\SDK\Services\IMBot\Chat\Service\ChatManager;
 use Bitrix24\SDK\Services\IMBot\Chat\Service\ChatTextField;
 use Bitrix24\SDK\Services\IMBot\Chat\Service\ChatUser;
+use Bitrix24\SDK\Services\IMBot\ChatMessage\Service\Batch as ChatMessageBatch;
 use Bitrix24\SDK\Services\IMBot\ChatMessage\Service\ChatMessage;
 use Bitrix24\SDK\Services\IMBot\ChatMessage\Service\ChatMessageReaction;
 use Bitrix24\SDK\Services\IMBot\Command\Service\Command;
@@ -93,11 +94,16 @@ class IMBotServiceBuilder extends AbstractServiceBuilder
      * Chat messages: imbot.v2.Chat.Message.send, imbot.v2.Chat.Message.update,
      * imbot.v2.Chat.Message.delete, imbot.v2.Chat.Message.read,
      * imbot.v2.Chat.Message.get, imbot.v2.Chat.Message.getContext.
+     * Batch: send, delete, update.
      */
     public function chatMessage(): ChatMessage
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new ChatMessage($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new ChatMessage(
+                new ChatMessageBatch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
         }
 
         return $this->serviceCache[__METHOD__];

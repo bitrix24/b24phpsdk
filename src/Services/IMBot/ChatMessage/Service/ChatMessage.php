@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Services\IMBot\ChatMessage\Service;
 
 use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
@@ -23,10 +24,16 @@ use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\IMBot\ChatMessage\Result\ChatMessageResult;
 use Bitrix24\SDK\Services\IMBot\ChatMessage\Result\ChatMessageSentResult;
+use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['imbot']))]
 class ChatMessage extends AbstractService
 {
+    public function __construct(public readonly Batch $batch, CoreInterface $core, LoggerInterface $logger)
+    {
+        parent::__construct($core, $logger);
+    }
+
     /**
      * Send a message on behalf of the bot.
      *

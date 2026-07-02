@@ -108,6 +108,7 @@ help:
 	@echo "test-integration-imbot-chat - run IMBot Chat integration tests"
 	@echo "test-integration-imbot-command - run IMBot Command integration tests"
 	@echo "test-integration-imbot-revision - run IMBot Revision integration tests"
+	@echo "test-integration-imbot-chat-message - run IMBot ChatMessage integration tests (incl. batch)"
 	@echo "test-integration-im-event-v2 - run IM EventV2 integration tests"
 
 t:
@@ -772,6 +773,10 @@ test-integration-imbot-command:
 .PHONY: test-integration-imbot-revision
 test-integration-imbot-revision:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_imbot_revision
+
+.PHONY: test-integration-imbot-chat-message
+test-integration-imbot-chat-message:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_imbot_chat_message
 
 .PHONY: test-integration-im-event-v2
 test-integration-im-event-v2:

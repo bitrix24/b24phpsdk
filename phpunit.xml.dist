@@ -447,6 +447,9 @@
         <testsuite name="integration_tests_imbot_revision">
             <directory>./tests/Integration/Services/IMBot/Revision/</directory>
         </testsuite>
+        <testsuite name="integration_tests_imbot_chat_message">
+            <directory>./tests/Integration/Services/IMBot/ChatMessage/</directory>
+        </testsuite>
         <testsuite name="integration_tests_im_event_v2">
             <directory>./tests/Integration/Services/IM/EventV2/</directory>
         </testsuite>

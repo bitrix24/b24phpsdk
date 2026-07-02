@@ -20,9 +20,9 @@
     - `ChatUser::list` gets the list of users in a chat (`imbot.v2.Chat.User.list`)
     - `ChatManager::add` assigns manager rights to a chat member (`imbot.v2.Chat.Manager.add`)
     - `ChatManager::delete` revokes manager rights from a chat member (`imbot.v2.Chat.Manager.delete`)
-    - `ChatMessage::send` sends a message on behalf of the bot (`imbot.v2.Chat.Message.send`)
-    - `ChatMessage::update` updates a previously sent message (`imbot.v2.Chat.Message.update`)
-    - `ChatMessage::delete` deletes a message sent by the bot (`imbot.v2.Chat.Message.delete`)
+    - `ChatMessage::send` sends a message on behalf of the bot (`imbot.v2.Chat.Message.send`), with batch calls support
+    - `ChatMessage::update` updates a previously sent message (`imbot.v2.Chat.Message.update`), with batch calls support
+    - `ChatMessage::delete` deletes a message sent by the bot (`imbot.v2.Chat.Message.delete`), with batch calls support
     - `ChatMessage::read` marks a message as read (`imbot.v2.Chat.Message.read`)
     - `ChatMessage::get` gets a message by its ID (`imbot.v2.Chat.Message.get`)
     - `ChatMessage::getContext` gets message context around a given message (`imbot.v2.Chat.Message.getContext`)
