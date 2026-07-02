@@ -3,6 +3,14 @@
 
 ### Added
 
+- Added service `Services\Note` (Knowledge Base 2.0) with support for `note.collection.*`, `note.document.*`
+  (incl. `note.document.tree.*` and `note.document.search.*`), and `note.file.*` methods,
+  see [note REST v3](https://apidocs.bitrix24.com/api-reference/rest-v3/note/index.html) ([#515](https://github.com/bitrix24/b24phpsdk/issues/515)):
+    - `Collection`: `add`, `archive`, `delete`, `fieldGet`, `fieldList`, `get`, `list` (typed `CollectionSelectBuilder`
+      and cursor pagination via `CollectionListPagination`/`CollectionListCursor`), `update`
+    - `Document`: `add`, `archive`, `delete`, `fieldGet`, `fieldList`, `get` (typed `DocumentSelectBuilder`), `update`,
+      `treeList`/`treeFieldGet`/`treeFieldList`, `searchList`/`searchFieldGet`/`searchFieldList`
+    - `File`: `add`, `fieldGet`, `fieldList`, `get`
 - Added services `Services\Timeman\Record\Service\Record` and `Services\Timeman\RecordField\Service\RecordField`
   with support for v3 `timeman.record.*` methods,
   see [timeman REST v3](https://apidocs.bitrix24.com/api-reference/rest-v3/timeman/index.html) ([#518](https://github.com/bitrix24/b24phpsdk/issues/518)):
