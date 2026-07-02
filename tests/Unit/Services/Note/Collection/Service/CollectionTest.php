@@ -141,9 +141,9 @@ class CollectionTest extends TestCase
     #[TestDox('list() forwards limit and afterCursor from a typed CollectionListPagination')]
     public function testListForwardsTypedPagination(): void
     {
-        $pagination = new CollectionListPagination(50, new CollectionListCursor(10, 99));
+        $collectionListPagination = new CollectionListPagination(50, new CollectionListCursor(10, 99));
 
-        [$method, $captured] = $this->call(static fn (Collection $service) => $service->list($pagination));
+        [$method, $captured] = $this->call(static fn (Collection $service) => $service->list($collectionListPagination));
 
         $this->assertSame('note.collection.list', $method);
         $this->assertSame(
