@@ -25,7 +25,7 @@ class SearchDepartmentsResult extends AbstractResult
     public function items(): array
     {
         return array_values(array_map(
-            static fn(array $item): SearchDepartmentItemResult => new SearchDepartmentItemResult($item),
+            static fn (array $item): SearchDepartmentItemResult => new SearchDepartmentItemResult($item),
             array_filter($this->getCoreResponse()->getResponseData()->getResult(), 'is_array')
         ));
     }

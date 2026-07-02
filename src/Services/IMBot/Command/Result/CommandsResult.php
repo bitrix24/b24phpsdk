@@ -31,7 +31,7 @@ class CommandsResult extends AbstractResult
     public function commands(): array
     {
         return array_map(
-            static fn(array $command): CommandItemResult => new CommandItemResult($command),
+            static fn (array $command): CommandItemResult => new CommandItemResult($command),
             $this->getCoreResponse()->getResponseData()->getResult()['commands'] ?? []
         );
     }

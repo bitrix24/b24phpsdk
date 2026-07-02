@@ -44,7 +44,7 @@ class EventsResult extends AbstractResult
         $events = $this->getCoreResponse()->getResponseData()->getResult()['events'] ?? [];
 
         return array_map(
-            static fn(array $event): EventItemResult => new EventItemResult($event),
+            static fn (array $event): EventItemResult => new EventItemResult($event),
             $events
         );
     }

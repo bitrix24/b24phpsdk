@@ -25,7 +25,7 @@ class DepartmentsResult extends AbstractResult
     public function items(): array
     {
         return array_values(array_map(
-            static fn(array $item): DepartmentItemResult => new DepartmentItemResult($item),
+            static fn (array $item): DepartmentItemResult => new DepartmentItemResult($item),
             array_filter($this->getCoreResponse()->getResponseData()->getResult(), 'is_array')
         ));
     }

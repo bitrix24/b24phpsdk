@@ -31,7 +31,7 @@ class BotsResult extends AbstractResult
     public function bots(): array
     {
         return array_map(
-            static fn(array $bot): BotItemResult => new BotItemResult($bot),
+            static fn (array $bot): BotItemResult => new BotItemResult($bot),
             $this->getCoreResponse()->getResponseData()->getResult()['bots'] ?? []
         );
     }

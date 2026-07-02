@@ -52,7 +52,7 @@ class DepartmentUsersByDepartmentResult extends AbstractResult
             }
 
             $usersByDepartment[(int)$departmentId] = array_values(array_map(
-                static fn(array $user): UserItemResult => new UserItemResult($user),
+                static fn (array $user): UserItemResult => new UserItemResult($user),
                 array_filter($items, 'is_array')
             ));
         }

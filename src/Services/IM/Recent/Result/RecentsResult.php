@@ -25,7 +25,7 @@ class RecentsResult extends AbstractResult
     public function items(): array
     {
         return array_values(array_map(
-            static fn(array $item): RecentItemResult => new RecentItemResult($item),
+            static fn (array $item): RecentItemResult => new RecentItemResult($item),
             array_filter($this->getCoreResponse()->getResponseData()->getResult(), 'is_array')
         ));
     }
