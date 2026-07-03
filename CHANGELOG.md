@@ -132,6 +132,11 @@
 
 ### Fixed
 
+- Fixed `PHPParser\Node` interface preload in `tests/phpunit-preload-guard.php` to prevent rector's bundled
+  `phpstan/phpdoc-parser` v2.x Lexer from replacing the project's v1.x Lexer under PHPUnit 12+; this resolves
+  `ArgumentCountError: Too few arguments to function Lexer::__construct()` in all integration tests that
+  access annotated result-item properties via `AbstractAnnotatedItem::__get`.
+
 - Fixed PHPStan class loading after Symfony dependency updates by upgrading the static-analysis toolchain
   and keeping PHPStan/Rector quality gates green on the upgraded versions without committing `composer.lock`
   ([#494](https://github.com/bitrix24/b24phpsdk/issues/494))
