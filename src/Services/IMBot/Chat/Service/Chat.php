@@ -18,10 +18,10 @@ use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Core\Result\EmptyResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\IMBot\Chat\ChatColor;
+use Bitrix24\SDK\Services\IMBot\Chat\Result\ChatLeaveResult;
 use Bitrix24\SDK\Services\IMBot\Chat\Result\ChatResult;
 
 #[ApiServiceMetadata(new Scope(['imbot']))]
@@ -154,7 +154,7 @@ class Chat extends AbstractService
         int $botId,
         int $chatId,
         ?string $botToken = null,
-    ): UpdatedItemResult {
+    ): ChatLeaveResult {
         $params = [
             'botId' => $botId,
             'chatId' => $chatId,
@@ -164,7 +164,7 @@ class Chat extends AbstractService
             $params['botToken'] = $botToken;
         }
 
-        return new UpdatedItemResult($this->core->call('imbot.v2.Chat.leave', $params));
+        return new ChatLeaveResult($this->core->call('imbot.v2.Chat.leave', $params));
     }
 
     /**

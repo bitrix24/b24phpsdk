@@ -18,6 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\IMBot\Bot\BotEventMode;
 use Bitrix24\SDK\Services\IMBot\Bot\BotType;
 use Bitrix24\SDK\Services\IMBot\Bot\Service\Bot;
+use Bitrix24\SDK\Services\IMBot\Chat\Result\ChatLeaveResult;
 use Bitrix24\SDK\Services\IMBot\Chat\Service\Chat;
 use Bitrix24\SDK\Tests\Integration\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -121,6 +122,7 @@ class ChatTest extends TestCase
 
         $result = $this->chatService->leave($this->botId, $chatId);
 
+        $this->assertInstanceOf(ChatLeaveResult::class, $result);
         $this->assertTrue($result->isSuccess());
     }
 
