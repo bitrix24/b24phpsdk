@@ -4,6 +4,11 @@
 
 ### Added
 
+- Added `Bitrix24\SDK\Core\Contracts\LangCodes` backed enum with all Bitrix24-supported language codes (`ar`, `de`, `en`, `fr`, `id`, `it`, `ja`, `ko`, `ms`, `pl`, `pt`, `ru`, `sk`, `th`, `tr`, `ua`, `vi`, `zh`) for use in `LANG_ALL` sections of `placement.bind` and similar API calls
+- Added `Bitrix24\SDK\Services\Placement\PlacementOptionsInterface` — contract for typed placement OPTIONS builders exposing `build(): array`
+- Added `Bitrix24\SDK\Services\Placement\Role` backed enum (`USER`, `ADMIN`) representing user-role filter for IM placement widgets
+- Added `Bitrix24\SDK\Services\Placement\ExtranetAvailability` backed enum (`No`/`Y`, `Yes`/`Y`) controlling extranet-user visibility of placement widgets
+
 - Added service `Services\IMBot` scope with support for `imbot.v2.*` methods,
   see [imbot.v2.* methods](https://apidocs.bitrix24.com/api-reference/chat-bots/chat-bots-v2/index.html) ([#505](https://github.com/bitrix24/b24phpsdk/issues/505)):
     - `Bot::register` registers a new chat-bot (`imbot.v2.Bot.register`)
@@ -223,6 +228,10 @@
   `start`, `pause`, `defer`, `complete`, etc.) for users migrating to the v3 SDK.
   All classes under `Bitrix24\SDK\Legacy\` are marked `@deprecated` and will be removed
   once v3 reaches feature parity with v1.
+
+### Changed
+
+- `Bitrix24\SDK\Services\Placement\Service\Placement::bind()` — `$options` parameter now accepts `PlacementOptionsInterface|array` (previously `array` only), enabling typed fluent options builders to be passed directly
 
 ## 3.0.0 - 2026.01.01
 
