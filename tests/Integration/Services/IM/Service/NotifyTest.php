@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 /**
  * This file is part of the bitrix24-php-sdk package.
@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Tests\Integration\Services\IM\Notify\Service;
+namespace Bitrix24\SDK\Tests\Integration\Services\IM\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
@@ -162,8 +162,9 @@ class NotifyTest extends TestCase
         $this->imNotifyService->confirm($addedItemResult->getId(), true);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->imNotifyService = Fabric::getServiceBuilder()->getIMScope()->notify();
+        $this->imNotifyService = Factory::getServiceBuilder()->getIMScope()->notify();
     }
 }
