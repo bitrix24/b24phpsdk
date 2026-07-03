@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This file is part of the bitrix24-php-sdk package.
@@ -44,7 +44,7 @@ abstract class DialogChatTestCase extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $imServiceBuilder = Factory::getServiceBuilder()->getIMScope();
+        $imServiceBuilder = Fabric::getServiceBuilder()->getIMScope();
         $this->dialogService = $imServiceBuilder->dialog();
         $this->chatService = $imServiceBuilder->chat();
         $this->messageService = $imServiceBuilder->message();

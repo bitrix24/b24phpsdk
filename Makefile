@@ -513,99 +513,99 @@ test-integration-landing-repowidget:
 
 .PHONY: test-integration-scope-imbot
 test-integration-scope-imbot:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_imbot
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_imbot
 
 .PHONY: test-integration-imbot-bot
 test-integration-imbot-bot:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_imbot_bot
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_imbot_bot
 
 .PHONY: test-integration-imbot-chat
 test-integration-imbot-chat:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_imbot_chat
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_imbot_chat
 
 .PHONY: test-integration-imbot-command
 test-integration-imbot-command:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_imbot_command
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_imbot_command
 
 .PHONY: test-integration-imbot-revision
 test-integration-imbot-revision:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_imbot_revision
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_imbot_revision
 
 .PHONY: test-integration-imbot-chat-message
 test-integration-imbot-chat-message:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_imbot_chat_message
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_imbot_chat_message
 
 .PHONY: test-integration-imbot-event
 test-integration-imbot-event:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_imbot_event
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_imbot_event
 
 .PHONY: test-integration-imbot-file
 test-integration-imbot-file:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_imbot_file
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_imbot_file
 
 .PHONY: test-integration-scope-im
 test-integration-scope-im:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_im
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im
 
 .PHONY: test-integration-im-disk
 test-integration-im-disk:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_disk
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_disk
 
 .PHONY: test-integration-im-message
 test-integration-im-message:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_message
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_message
 
 .PHONY: test-integration-im-dialog
 test-integration-im-dialog:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_dialog
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_dialog
 
 .PHONY: test-integration-im-department
 test-integration-im-department:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_department
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_department
 
 .PHONY: test-integration-im-user
 test-integration-im-user:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_user
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_user
 
 .PHONY: test-integration-im-revision
 test-integration-im-revision:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_revision
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_revision
 
 .PHONY: test-integration-im-counters
 test-integration-im-counters:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_counters
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_counters
 
 .PHONY: test-integration-im-recent
 test-integration-im-recent:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_recent
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_recent
 
 .PHONY: test-integration-im-search
 test-integration-im-search:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_search
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_search
 
 .PHONY: test-integration-im-user-status
 test-integration-im-user-status:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_user_status
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_user_status
 
 .PHONY: test-integration-im-chat
 test-integration-im-chat:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_chat
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_chat
 
 .PHONY: test-integration-im-chat-user
 test-integration-im-chat-user:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_chat_user
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_chat_user
 
 .PHONY: test-integration-im-notify
 test-integration-im-notify:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_notify
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_notify
 
 .PHONY: test-integration-im-event-v2
 test-integration-im-event-v2:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_event_v2
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_event_v2
 
 .PHONY: test-integration-im-file-v2
 test-integration-im-file-v2:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_file_v2
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_file_v2
 
 # work dev environment
 .PHONY: php-dev-server-up

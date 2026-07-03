@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This file is part of the bitrix24-php-sdk package.
@@ -35,7 +35,7 @@ class FileV2Test extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->fileService = Factory::getServiceBuilder()->getIMScope()->fileV2();
+        $this->fileService = Fabric::getServiceBuilder()->getIMScope()->fileV2();
     }
 
     /**

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This file is part of the bitrix24-php-sdk package.
@@ -37,7 +37,7 @@ class BotTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->botService = Factory::getServiceBuilder(true)->getIMBotScope()->bot();
+        $this->botService = Fabric::getServiceBuilder(true)->getIMBotScope()->bot();
     }
 
     /**

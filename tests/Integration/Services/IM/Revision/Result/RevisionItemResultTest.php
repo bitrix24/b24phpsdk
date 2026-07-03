@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This file is part of the bitrix24-php-sdk package.
@@ -34,7 +34,7 @@ class RevisionItemResultTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->revisionService = Factory::getServiceBuilder()->getIMScope()->revision();
+        $this->revisionService = Fabric::getServiceBuilder()->getIMScope()->revision();
     }
 
     /**

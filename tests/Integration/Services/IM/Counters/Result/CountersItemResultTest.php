@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This file is part of the bitrix24-php-sdk package.
@@ -34,7 +34,7 @@ class CountersItemResultTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->countersService = Factory::getServiceBuilder()->getIMScope()->counters();
+        $this->countersService = Fabric::getServiceBuilder()->getIMScope()->counters();
     }
 
     /**

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This file is part of the bitrix24-php-sdk package.
@@ -32,7 +32,7 @@ final class DepartmentTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->departmentService = Factory::getServiceBuilder()->getIMScope()->department();
+        $this->departmentService = Fabric::getServiceBuilder()->getIMScope()->department();
     }
 
     /**

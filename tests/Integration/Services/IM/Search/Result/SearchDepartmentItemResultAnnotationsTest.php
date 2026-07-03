@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This file is part of the bitrix24-php-sdk package.
@@ -34,7 +34,7 @@ class SearchDepartmentItemResultAnnotationsTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->searchService = Factory::getServiceBuilder()->getIMScope()->search();
+        $this->searchService = Fabric::getServiceBuilder()->getIMScope()->search();
     }
 
     /**

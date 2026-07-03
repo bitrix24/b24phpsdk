@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This file is part of the bitrix24-php-sdk package.
@@ -37,7 +37,7 @@ class MessageTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->service = Factory::getServiceBuilder()->getIMScope()->message();
+        $this->service = Fabric::getServiceBuilder()->getIMScope()->message();
         $this->currentUserId = (int)$this->service->core->call('PROFILE')
             ->getResponseData()->getResult()['ID'];
     }

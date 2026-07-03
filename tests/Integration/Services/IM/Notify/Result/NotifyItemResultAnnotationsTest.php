@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This file is part of the bitrix24-php-sdk package.
@@ -78,7 +78,7 @@ class NotifyItemResultAnnotationsTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->notifyService = Factory::getServiceBuilder()->getIMScope()->notify();
+        $this->notifyService = Fabric::getServiceBuilder()->getIMScope()->notify();
         $this->currentUserId = (int)$this->notifyService->core->call('PROFILE')
             ->getResponseData()->getResult()['ID'];
     }

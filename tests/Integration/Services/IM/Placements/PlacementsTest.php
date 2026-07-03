@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This file is part of the bitrix24-php-sdk package.
@@ -106,6 +106,6 @@ class PlacementsTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->sb = Factory::getServiceBuilder(true);
+        $this->sb = Fabric::getServiceBuilder(true);
     }
 }

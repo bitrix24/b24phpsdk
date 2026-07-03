@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This file is part of the bitrix24-php-sdk package.
@@ -31,7 +31,7 @@ class EventV2Test extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->eventService = Factory::getServiceBuilder()->getIMScope()->eventV2();
+        $this->eventService = Fabric::getServiceBuilder()->getIMScope()->eventV2();
     }
 
     /**

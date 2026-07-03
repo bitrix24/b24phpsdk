@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This file is part of the bitrix24-php-sdk package.
@@ -30,7 +30,7 @@ class RecentTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->recentService = Factory::getServiceBuilder()->getIMScope()->recent();
+        $this->recentService = Fabric::getServiceBuilder()->getIMScope()->recent();
     }
 
     /**

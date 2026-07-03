@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This file is part of the bitrix24-php-sdk package.
@@ -219,7 +219,7 @@ class NotifyTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->imNotifyService = Factory::getServiceBuilder()->getIMScope()->notify();
+        $this->imNotifyService = Fabric::getServiceBuilder()->getIMScope()->notify();
         $this->currentUserId = (int)$this->imNotifyService->core->call('PROFILE')
             ->getResponseData()->getResult()['ID'];
     }

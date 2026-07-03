@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This file is part of the bitrix24-php-sdk package.
@@ -32,7 +32,7 @@ class UserStatusTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->userStatusService = Factory::getServiceBuilder()->getIMScope()->userStatus();
+        $this->userStatusService = Fabric::getServiceBuilder()->getIMScope()->userStatus();
     }
 
     /**

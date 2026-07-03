@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This file is part of the bitrix24-php-sdk package.
@@ -44,7 +44,7 @@ class ChatTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->chatService = Factory::getServiceBuilder()->getIMScope()->chat();
+        $this->chatService = Fabric::getServiceBuilder()->getIMScope()->chat();
         $this->currentUserId = (int)$this->chatService->core
             ->call('PROFILE')->getResponseData()->getResult()['ID'];
     }

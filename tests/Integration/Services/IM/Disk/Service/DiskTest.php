@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This file is part of the bitrix24-php-sdk package.
@@ -34,9 +34,9 @@ class DiskTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->diskService = Factory::getServiceBuilder()->getIMScope()->disk();
-        $this->folderService = Factory::getServiceBuilder()->getDiskScope()->folder();
-        $this->fileService = Factory::getServiceBuilder()->getDiskScope()->file();
+        $this->diskService = Fabric::getServiceBuilder()->getIMScope()->disk();
+        $this->folderService = Fabric::getServiceBuilder()->getDiskScope()->folder();
+        $this->fileService = Fabric::getServiceBuilder()->getDiskScope()->file();
     }
 
     /**

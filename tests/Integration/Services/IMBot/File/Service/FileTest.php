@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This file is part of the bitrix24-php-sdk package.
@@ -48,7 +48,7 @@ class FileTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $scope = Factory::getServiceBuilder(true)->getIMBotScope();
+        $scope = Fabric::getServiceBuilder(true)->getIMBotScope();
         $this->botService = $scope->bot();
         $this->chatService = $scope->chat();
         $this->fileService = $scope->file();
