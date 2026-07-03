@@ -63,7 +63,6 @@ help:
 	@echo "test-integration-calendar-event - run Calendar Event integration tests"
 	@echo "test-integration-calendar-resource - run Calendar Resource integration tests"
 	@echo "test-integration-sale-basket-property - run BasketProperty integration tests"
-	@echo "test-integration-im-disk - run IM Disk integration tests"
 	@echo "test-integration-sale-cashbox-handler - run CashboxHandler integration tests"
 	@echo "test-integration-sale-cashbox - run Cashbox integration tests"
 	@echo "test-integration-sale-delivery - run Delivery integration tests"
@@ -81,6 +80,7 @@ help:
 	@echo "test-integration-landing-role - run Landing Role integration tests"
 	@echo "test-integration-landing-repowidget - run Landing RepoWidget integration tests"
 	@echo "test-integration-scope-landing-template - run Landing Template integration tests"
+	@echo "test-integration-im-disk - run IM Disk integration tests"
 	@echo "test-integration-im-message - run IM Message integration tests"
 	@echo "test-integration-im-dialog - run IM Dialog integration tests"
 	@echo "test-integration-im-department - run IM Department integration tests"
@@ -240,13 +240,9 @@ test-integration-scope-im:
 test-integration-im-disk:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_disk
 
-.PHONY: test-integration-im-chat
-test-integration-im-chat:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_chat
-
-.PHONY: test-integration-im-chat-user
-test-integration-im-chat-user:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_chat_user
+.PHONY: test-integration-im-message
+test-integration-im-message:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_message
 
 .PHONY: test-integration-im-dialog
 test-integration-im-dialog:
@@ -256,29 +252,9 @@ test-integration-im-dialog:
 test-integration-im-department:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_department
 
-.PHONY: test-integration-scope-placement
-test-integration-scope-placement:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_placement
-
-.PHONY: test-integration-scope-paysystem
-test-integration-scope-paysystem:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_paysystem
-
-.PHONY: test-integration-scope-im-open-lines-connector
-test-integration-scope-im-open-lines-connector:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_im_open_lines_connector
-
-.PHONY: test-integration-paysystem-service
-test-integration-paysystem-service:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_paysystem_service
-
-.PHONY: test-integration-paysystem-settings
-test-integration-paysystem-settings:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_paysystem_settings
-
-.PHONY: test-integration-im-message
-test-integration-im-message:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_message
+.PHONY: test-integration-im-user
+test-integration-im-user:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_user
 
 .PHONY: test-integration-im-revision
 test-integration-im-revision:
@@ -300,13 +276,37 @@ test-integration-im-search:
 test-integration-im-user-status:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_user_status
 
-.PHONY: test-integration-im-user
-test-integration-im-user:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_user
+.PHONY: test-integration-im-chat
+test-integration-im-chat:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_chat
+
+.PHONY: test-integration-im-chat-user
+test-integration-im-chat-user:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_chat_user
 
 .PHONY: test-integration-im-notify
 test-integration-im-notify:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_notify
+
+.PHONY: test-integration-scope-placement
+test-integration-scope-placement:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_placement
+
+.PHONY: test-integration-scope-paysystem
+test-integration-scope-paysystem:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_paysystem
+
+.PHONY: test-integration-scope-im-open-lines-connector
+test-integration-scope-im-open-lines-connector:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_im_open_lines_connector
+
+.PHONY: test-integration-paysystem-service
+test-integration-paysystem-service:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_paysystem_service
+
+.PHONY: test-integration-paysystem-settings
+test-integration-paysystem-settings:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_paysystem_settings
 
 .PHONY: test-integration-scope-im-open-lines
 test-integration-scope-im-open-lines:
