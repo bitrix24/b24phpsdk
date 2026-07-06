@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\CustomAssertions;
 
+use Bitrix24\SDK\Core\Result\AbstractItem;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityContentType;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityDirectionType;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityNotifyType;
@@ -27,6 +28,57 @@ use Money\Currency;
 
 trait CustomBitrix24Assertions
 {
+    /**
+     * Assert that every property-read field of $resultItemClassName, when accessed via magic getter on $item,
+     * returns a value whose PHP type matches the PHPDoc annotation.
+     *
+     * @param class-string $resultItemClassName
+     */
+    protected function assertBitrix24ResultItemFieldsTypeCastMatchAnnotations(
+        AbstractItem $item,
+        string $resultItemClassName
+    ): void {
+        $props = TyphoonReflector::build()->reflectClass($resultItemClassName)->properties();
+
+        foreach ($props as $meta) {
+            if (!$meta->isAnnotated() || $meta->isNative()) {
+                continue;
+            }
+
+            $propName = $meta->id->name;
+            $typeStr = stringify($meta->type());
+            $value = $item->$propName;
+
+            // null is always valid for nullable types
+            if (str_contains($typeStr, 'null') && $value === null) {
+                continue;
+            }
+
+            $message = sprintf(
+                'field «%s» in «%s» annotated as «%s» but actual PHP type is «%s»',
+                $propName,
+                $resultItemClassName,
+                $typeStr,
+                get_debug_type($value)
+            );
+
+            // For nullable union types like "Carbon\CarbonImmutable|null", strip null before assertInstanceOf
+            $classStr = implode('|', array_values(array_filter(
+                explode('|', $typeStr),
+                static fn (string $t): bool => $t !== 'null'
+            )));
+
+            match (true) {
+                str_contains($typeStr, 'array')  => $this->assertIsArray($value, $message),
+                str_contains($typeStr, 'bool')   => $this->assertIsBool($value, $message),
+                str_contains($typeStr, 'int')    => $this->assertIsInt($value, $message),
+                str_contains($typeStr, 'float')  => $this->assertIsFloat($value, $message),
+                str_contains($typeStr, 'string') => $this->assertIsString($value, $message),
+                default                          => $this->assertInstanceOf($classStr, $value, $message),
+            };
+        }
+    }
+
     /**
      * @param array<int, non-empty-string> $fieldCodesFromApi
      * @param class-string $resultItemClassName
