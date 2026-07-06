@@ -34,4 +34,17 @@ use Carbon\CarbonImmutable;
  */
 class NotifyItemResult extends AbstractItem
 {
+    /**
+     * @param int|string $offset
+     *
+     * @return mixed
+     */
+    public function __get($offset)
+    {
+        if ($offset === 'date' && !empty($this->data[$offset])) {
+            return CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
+        }
+
+        return parent::__get($offset);
+    }
 }

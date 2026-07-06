@@ -36,4 +36,19 @@ use Carbon\CarbonImmutable;
  */
 class RecentItemResult extends AbstractItem
 {
+    /**
+     * @param int|string $offset
+     *
+     * @return mixed
+     */
+    public function __get($offset)
+    {
+        if (($offset === 'date_update' || $offset === 'date_last_activity')
+            && !empty($this->data[$offset])
+        ) {
+            return CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
+        }
+
+        return parent::__get($offset);
+    }
 }

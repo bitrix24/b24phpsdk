@@ -54,4 +54,17 @@ use Carbon\CarbonImmutable;
  */
 class SearchChatItemResult extends AbstractItem
 {
+    /**
+     * @param int|string $offset
+     *
+     * @return mixed
+     */
+    public function __get($offset)
+    {
+        if ($offset === 'date_create' && !empty($this->data[$offset])) {
+            return CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
+        }
+
+        return parent::__get($offset);
+    }
 }

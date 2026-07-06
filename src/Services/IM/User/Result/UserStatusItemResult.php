@@ -21,4 +21,17 @@ use Bitrix24\SDK\Services\IM\User\UserStatusType;
  */
 class UserStatusItemResult extends AbstractItem
 {
+    /**
+     * @param int|string $offset
+     *
+     * @return mixed
+     */
+    public function __get($offset)
+    {
+        if ($offset === 'STATUS' && !empty($this->data[$offset])) {
+            return UserStatusType::from($this->data[$offset]);
+        }
+
+        return parent::__get($offset);
+    }
 }
