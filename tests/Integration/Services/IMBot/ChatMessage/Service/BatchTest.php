@@ -59,8 +59,8 @@ class BatchTest extends TestCase
         $botResult = $this->botService->register(
             code: $code,
             properties: ['name' => 'Test Batch Message Bot'],
-            type: BotType::bot,
-            eventMode: BotEventMode::fetch
+            botType: BotType::bot,
+            botEventMode: BotEventMode::fetch
         );
         $this->botId = $botResult->bot()->id;
 

@@ -55,8 +55,8 @@ class ChatTest extends TestCase
         $botResult = $this->botService->register(
             code: $code,
             properties: ['name' => 'Chat Test Bot'],
-            type: BotType::bot,
-            eventMode: BotEventMode::fetch
+            botType: BotType::bot,
+            botEventMode: BotEventMode::fetch
         );
         $this->botId = $botResult->bot()->id;
     }
