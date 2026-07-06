@@ -78,7 +78,7 @@ class Recent extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/chats/recent/im-recent-pin.html',
         'Pin or unpin a dialog at the top of the recent list'
     )]
-    public function pin(string $dialogId, bool $pin = true): UpdatedItemResult
+    public function pin(string|int $dialogId, bool $pin = true): UpdatedItemResult
     {
         return new UpdatedItemResult($this->core->call('im.recent.pin', [
             'DIALOG_ID' => $dialogId,
@@ -95,7 +95,7 @@ class Recent extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/chats/recent/im-recent-unread.html',
         'Set or remove the unread mark on a dialog'
     )]
-    public function unread(string $dialogId, string $action): UpdatedItemResult
+    public function unread(string|int $dialogId, string $action): UpdatedItemResult
     {
         return new UpdatedItemResult($this->core->call('im.recent.unread', [
             'DIALOG_ID' => $dialogId,
@@ -112,7 +112,7 @@ class Recent extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/chats/recent/im-recent-hide.html',
         'Remove a dialog from the recent list'
     )]
-    public function hide(string $dialogId): UpdatedItemResult
+    public function hide(string|int $dialogId): UpdatedItemResult
     {
         return new UpdatedItemResult($this->core->call('im.recent.hide', [
             'DIALOG_ID' => $dialogId,

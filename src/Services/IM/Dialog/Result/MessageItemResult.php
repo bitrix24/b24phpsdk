@@ -31,6 +31,7 @@ use Carbon\CarbonImmutable;
  * @property-read string|null $uuid
  * @property-read array|null $replaces
  * @property-read array|null $forward
+ * @property-read array|null $block
  * @property-read array $params
  * @property-read bool|null $viewedByOthers
  * @property-read bool|null $viewed
@@ -38,4 +39,19 @@ use Carbon\CarbonImmutable;
  */
 class MessageItemResult extends AbstractItem
 {
+    /**
+     * @param int|string $offset
+     *
+     * @return mixed
+     */
+    public function __get($offset)
+    {
+        if (($offset === 'date' || $offset === 'disappearing_date')
+            && !empty($this->data[$offset])
+        ) {
+            return CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
+        }
+
+        return parent::__get($offset);
+    }
 }
