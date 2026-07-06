@@ -50,19 +50,19 @@ class Bot extends AbstractService
         string $code,
         array $properties,
         ?string $botToken = null,
-        BotType $type = BotType::bot,
-        BotEventMode $eventMode = BotEventMode::fetch,
+        BotType $botType = BotType::bot,
+        BotEventMode $botEventMode = BotEventMode::fetch,
         ?string $webhookUrl = null,
         bool $isHidden = false,
         bool $isReactionsEnabled = true,
         bool $isSupportOpenline = false,
-        ?BotBackground $backgroundId = null,
+        ?BotBackground $botBackground = null,
     ): BotResult {
         $fields = [
             'code' => $code,
             'properties' => $properties,
-            'type' => $type->value,
-            'eventMode' => $eventMode->value,
+            'type' => $botType->value,
+            'eventMode' => $botEventMode->value,
             'isHidden' => $isHidden,
             'isReactionsEnabled' => $isReactionsEnabled,
             'isSupportOpenline' => $isSupportOpenline,
@@ -76,8 +76,8 @@ class Bot extends AbstractService
             $fields['webhookUrl'] = $webhookUrl;
         }
 
-        if ($backgroundId instanceof BotBackground) {
-            $fields['backgroundId'] = $backgroundId->value;
+        if ($botBackground instanceof BotBackground) {
+            $fields['backgroundId'] = $botBackground->value;
         }
 
         return new BotResult($this->core->call('imbot.v2.Bot.register', ['fields' => $fields]));

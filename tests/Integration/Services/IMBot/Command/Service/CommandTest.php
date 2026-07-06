@@ -46,18 +46,18 @@ class CommandTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $scope = Fabric::getServiceBuilder(true)->getIMBotScope();
-        $this->commandService = $scope->command();
-        $this->botService = $scope->bot();
+        $imBotServiceBuilder = Fabric::getServiceBuilder(true)->getIMBotScope();
+        $this->commandService = $imBotServiceBuilder->command();
+        $this->botService = $imBotServiceBuilder->bot();
 
         $code = sprintf('test_cmd_bot_%s', uniqid('', true));
-        $result = $this->botService->register(
+        $botResult = $this->botService->register(
             code: $code,
             properties: ['name' => 'Command Test Bot'],
             type: BotType::bot,
             eventMode: BotEventMode::fetch
         );
-        $this->botId = $result->bot()->id;
+        $this->botId = $botResult->bot()->id;
     }
 
     /**
@@ -67,9 +67,9 @@ class CommandTest extends TestCase
     #[\Override]
     protected function tearDown(): void
     {
-        foreach ($this->registeredCommandIds as $commandId) {
+        foreach ($this->registeredCommandIds as $registeredCommandId) {
             try {
-                $this->commandService->unregister($this->botId, $commandId);
+                $this->commandService->unregister($this->botId, $registeredCommandId);
             } catch (BaseException) {
                 // command may already be deleted
             }
@@ -92,14 +92,14 @@ class CommandTest extends TestCase
     {
         $commandName = sprintf('cmd_%s', substr(uniqid('', true), 0, 8));
 
-        $result = $this->commandService->register(
+        $commandResult = $this->commandService->register(
             botId: $this->botId,
             command: $commandName,
             title: ['en' => 'Test command'],
             hidden: true
         );
 
-        $command = $result->command();
+        $command = $commandResult->command();
         $this->registeredCommandIds[] = $command->id;
 
         $this->assertGreaterThan(0, $command->id);
@@ -123,9 +123,9 @@ class CommandTest extends TestCase
         )->command()->id;
         $this->registeredCommandIds[] = $commandId;
 
-        $result = $this->commandService->list($this->botId);
+        $commandsResult = $this->commandService->list($this->botId);
 
-        $this->assertNotEmpty($result->commands());
+        $this->assertNotEmpty($commandsResult->commands());
     }
 
     /**
@@ -144,9 +144,9 @@ class CommandTest extends TestCase
             hidden: true
         )->command()->id;
 
-        $result = $this->commandService->unregister($this->botId, $commandId);
+        $emptyResult = $this->commandService->unregister($this->botId, $commandId);
 
         // EmptyResult — no exception means success
-        $this->assertNotNull($result->getCoreResponse());
+        $this->assertNotNull($emptyResult->getCoreResponse());
     }
 }

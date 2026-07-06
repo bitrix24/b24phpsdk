@@ -48,10 +48,10 @@ class FileTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $scope = Fabric::getServiceBuilder(true)->getIMBotScope();
-        $this->botService = $scope->bot();
-        $this->chatService = $scope->chat();
-        $this->fileService = $scope->file();
+        $imBotServiceBuilder = Fabric::getServiceBuilder(true)->getIMBotScope();
+        $this->botService = $imBotServiceBuilder->bot();
+        $this->chatService = $imBotServiceBuilder->chat();
+        $this->fileService = $imBotServiceBuilder->file();
 
         // Register a test bot
         $code = sprintf('test_file_bot_%s', uniqid('', true));
@@ -102,7 +102,7 @@ class FileTest extends TestCase
     #[TestDox('imbot.v2.File.upload sends a file to a chat and returns FileUploadResult')]
     public function testUpload(): void
     {
-        $result = $this->fileService->upload(
+        $fileUploadResult = $this->fileService->upload(
             botId: $this->botId,
             dialogId: $this->dialogId,
             name: 'test.txt',
@@ -110,14 +110,14 @@ class FileTest extends TestCase
             message: 'Test file upload'
         );
 
-        $file = $result->file();
+        $file = $fileUploadResult->file();
 
         $this->assertGreaterThan(0, $file->id);
         $this->assertNotEmpty($file->name);
         $this->assertGreaterThan(0, $file->size);
-        $this->assertGreaterThan(0, $result->getMessageId());
-        $this->assertGreaterThan(0, $result->getChatId());
-        $this->assertNotEmpty($result->getDialogId());
+        $this->assertGreaterThan(0, $fileUploadResult->getMessageId());
+        $this->assertGreaterThan(0, $fileUploadResult->getChatId());
+        $this->assertNotEmpty($fileUploadResult->getDialogId());
     }
 
     /**
@@ -129,23 +129,23 @@ class FileTest extends TestCase
     public function testDownload(): void
     {
         // First upload a file to get a file ID
-        $uploadResult = $this->fileService->upload(
+        $fileUploadResult = $this->fileService->upload(
             botId: $this->botId,
             dialogId: $this->dialogId,
             name: 'download_test.txt',
             content: base64_encode('IMBot File download test ' . time())
         );
 
-        $fileId = $uploadResult->file()->id;
+        $fileId = $fileUploadResult->file()->id;
         $this->assertGreaterThan(0, $fileId);
 
         // Now get a download URL
-        $downloadResult = $this->fileService->download(
+        $fileDownloadResult = $this->fileService->download(
             botId: $this->botId,
             fileId: $fileId
         );
 
-        $this->assertNotEmpty($downloadResult->getDownloadUrl());
-        $this->assertStringContainsString('http', $downloadResult->getDownloadUrl());
+        $this->assertNotEmpty($fileDownloadResult->getDownloadUrl());
+        $this->assertStringContainsString('http', $fileDownloadResult->getDownloadUrl());
     }
 }

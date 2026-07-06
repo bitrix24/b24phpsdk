@@ -47,9 +47,9 @@ class BotTest extends TestCase
     #[\Override]
     protected function tearDown(): void
     {
-        foreach ($this->registeredBotIds as $botId) {
+        foreach ($this->registeredBotIds as $registeredBotId) {
             try {
-                $this->botService->unregister($botId);
+                $this->botService->unregister($registeredBotId);
             } catch (BaseException) {
                 // bot may already be deleted by the test
             }
@@ -68,14 +68,14 @@ class BotTest extends TestCase
     {
         $code = sprintf('test_bot_%s', uniqid('', true));
 
-        $result = $this->botService->register(
+        $botResult = $this->botService->register(
             code: $code,
             properties: ['name' => 'Test Bot'],
             type: BotType::bot,
             eventMode: BotEventMode::fetch
         );
 
-        $bot = $result->bot();
+        $bot = $botResult->bot();
         $this->registeredBotIds[] = $bot->id;
 
         $this->assertGreaterThan(0, $bot->id);
@@ -94,11 +94,11 @@ class BotTest extends TestCase
     {
         $code = sprintf('test_bot_%s', uniqid('', true));
 
-        $registered = $this->botService->register(
+        $botResult = $this->botService->register(
             code: $code,
             properties: ['name' => 'Test Bot'],
         );
-        $botId = $registered->bot()->id;
+        $botId = $botResult->bot()->id;
         $this->registeredBotIds[] = $botId;
 
         $result = $this->botService->get(code: $code);
@@ -116,10 +116,10 @@ class BotTest extends TestCase
     #[TestDox('imbot.v2.Bot.list returns array of bots')]
     public function testList(): void
     {
-        $result = $this->botService->list();
+        $botsResult = $this->botService->list();
 
-        $this->assertIsArray($result->bots());
-        $this->assertIsBool($result->hasNextPage());
+        $this->assertIsArray($botsResult->bots());
+        $this->assertIsBool($botsResult->hasNextPage());
     }
 
     /**
@@ -132,15 +132,15 @@ class BotTest extends TestCase
     {
         $code = sprintf('test_bot_%s', uniqid('', true));
 
-        $registered = $this->botService->register(
+        $botResult = $this->botService->register(
             code: $code,
             properties: ['name' => 'Test Bot'],
         );
-        $botId = $registered->bot()->id;
+        $botId = $botResult->bot()->id;
 
-        $result = $this->botService->unregister($botId);
+        $emptyResult = $this->botService->unregister($botId);
 
         // EmptyResult — no exception means success
-        $this->assertNotNull($result->getCoreResponse());
+        $this->assertNotNull($emptyResult->getCoreResponse());
     }
 }

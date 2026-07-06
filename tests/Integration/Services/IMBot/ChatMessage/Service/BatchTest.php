@@ -49,10 +49,10 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $scope = Fabric::getServiceBuilder(true)->getIMBotScope();
-        $this->botService = $scope->bot();
-        $this->chatService = $scope->chat();
-        $this->chatMessageService = $scope->chatMessage();
+        $imBotServiceBuilder = Fabric::getServiceBuilder(true)->getIMBotScope();
+        $this->botService = $imBotServiceBuilder->bot();
+        $this->chatService = $imBotServiceBuilder->chat();
+        $this->chatMessageService = $imBotServiceBuilder->chatMessage();
 
         // Register a test bot
         $code = sprintf('test_batch_msg_bot_%s', uniqid('', true));

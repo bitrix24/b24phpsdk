@@ -47,18 +47,18 @@ class ChatTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $scope = Fabric::getServiceBuilder(true)->getIMBotScope();
-        $this->chatService = $scope->chat();
-        $this->botService = $scope->bot();
+        $imBotServiceBuilder = Fabric::getServiceBuilder(true)->getIMBotScope();
+        $this->chatService = $imBotServiceBuilder->chat();
+        $this->botService = $imBotServiceBuilder->bot();
 
         $code = sprintf('test_chat_bot_%s', uniqid('', true));
-        $result = $this->botService->register(
+        $botResult = $this->botService->register(
             code: $code,
             properties: ['name' => 'Chat Test Bot'],
             type: BotType::bot,
             eventMode: BotEventMode::fetch
         );
-        $this->botId = $result->bot()->id;
+        $this->botId = $botResult->bot()->id;
     }
 
     /**
@@ -68,9 +68,9 @@ class ChatTest extends TestCase
     #[\Override]
     protected function tearDown(): void
     {
-        foreach ($this->createdChatIds as $chatId) {
+        foreach ($this->createdChatIds as $createdChatId) {
             try {
-                $this->chatService->leave($this->botId, $chatId);
+                $this->chatService->leave($this->botId, $createdChatId);
             } catch (BaseException) {
                 // chat may already be left
             }
@@ -92,13 +92,13 @@ class ChatTest extends TestCase
     public function testAdd(): void
     {
         $currentUserId = $this->getCurrentUserId();
-        $result = $this->chatService->add(
+        $chatResult = $this->chatService->add(
             botId: $this->botId,
             userIds: [$currentUserId],
             title: sprintf('Test Chat %s', uniqid('', true))
         );
 
-        $chat = $result->chat();
+        $chat = $chatResult->chat();
         $this->createdChatIds[] = $chat->id;
 
         $this->assertGreaterThan(0, $chat->id);
@@ -120,10 +120,10 @@ class ChatTest extends TestCase
             title: sprintf('Leave Test %s', uniqid('', true))
         )->chat()->id;
 
-        $result = $this->chatService->leave($this->botId, $chatId);
+        $chatLeaveResult = $this->chatService->leave($this->botId, $chatId);
 
-        $this->assertInstanceOf(ChatLeaveResult::class, $result);
-        $this->assertTrue($result->isSuccess());
+        $this->assertInstanceOf(ChatLeaveResult::class, $chatLeaveResult);
+        $this->assertTrue($chatLeaveResult->isSuccess());
     }
 
     /**

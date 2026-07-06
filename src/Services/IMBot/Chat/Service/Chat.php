@@ -47,7 +47,7 @@ class Chat extends AbstractService
         int $botId,
         array $userIds,
         ?string $title = null,
-        ?ChatColor $color = null,
+        ?ChatColor $chatColor = null,
         array $fields = [],
         ?string $botToken = null,
     ): ChatResult {
@@ -57,8 +57,8 @@ class Chat extends AbstractService
             $chatFields['title'] = $title;
         }
 
-        if ($color instanceof ChatColor) {
-            $chatFields['color'] = $color->value;
+        if ($chatColor instanceof ChatColor) {
+            $chatFields['color'] = $chatColor->value;
         }
 
         $params = [

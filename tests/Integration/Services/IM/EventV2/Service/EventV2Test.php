@@ -42,10 +42,10 @@ class EventV2Test extends TestCase
     #[TestDox('im.v2.Event.subscribe returns success')]
     public function testSubscribe(): void
     {
-        $result = $this->eventService->subscribe();
+        $emptyResult = $this->eventService->subscribe();
 
         // EmptyResult — no exception means success
-        $this->assertNotNull($result->getCoreResponse());
+        $this->assertNotNull($emptyResult->getCoreResponse());
     }
 
     /**
@@ -57,10 +57,10 @@ class EventV2Test extends TestCase
     public function testUnsubscribe(): void
     {
         $this->eventService->subscribe();
-        $result = $this->eventService->unsubscribe();
+        $emptyResult = $this->eventService->unsubscribe();
 
         // EmptyResult — no exception means success
-        $this->assertNotNull($result->getCoreResponse());
+        $this->assertNotNull($emptyResult->getCoreResponse());
     }
 
     /**
@@ -72,13 +72,13 @@ class EventV2Test extends TestCase
     public function testGet(): void
     {
         $this->eventService->subscribe();
-        $result = $this->eventService->get(0);
+        $eventsV2Result = $this->eventService->get(0);
 
-        $this->assertInstanceOf(EventsV2Result::class, $result);
-        $this->assertIsArray($result->getEvents());
-        $this->assertIsBool($result->isHasMore());
+        $this->assertInstanceOf(EventsV2Result::class, $eventsV2Result);
+        $this->assertIsArray($eventsV2Result->getEvents());
+        $this->assertIsBool($eventsV2Result->isHasMore());
         // nextOffset may be null when there are no events
-        $nextOffset = $result->getNextOffset();
+        $nextOffset = $eventsV2Result->getNextOffset();
         $this->assertTrue($nextOffset === null || is_int($nextOffset));
     }
 }

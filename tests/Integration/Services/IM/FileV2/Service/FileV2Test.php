@@ -86,21 +86,21 @@ class FileV2Test extends TestCase
     {
         $dialogId = $this->createChat();
 
-        $result = $this->fileService->upload(
+        $fileV2UploadResult = $this->fileService->upload(
             dialogId: $dialogId,
             name: 'test.txt',
             content: base64_encode('IM FileV2 integration test ' . time()),
             message: 'Test file upload'
         );
 
-        $file = $result->file();
+        $file = $fileV2UploadResult->file();
 
         $this->assertGreaterThan(0, $file->id);
         $this->assertNotEmpty($file->name);
         $this->assertGreaterThan(0, $file->size);
-        $this->assertGreaterThan(0, $result->getMessageId());
-        $this->assertGreaterThan(0, $result->getChatId());
-        $this->assertNotEmpty($result->getDialogId());
+        $this->assertGreaterThan(0, $fileV2UploadResult->getMessageId());
+        $this->assertGreaterThan(0, $fileV2UploadResult->getChatId());
+        $this->assertNotEmpty($fileV2UploadResult->getDialogId());
     }
 
     /**
@@ -114,19 +114,19 @@ class FileV2Test extends TestCase
         $dialogId = $this->createChat();
 
         // First upload a file to get a file ID
-        $uploadResult = $this->fileService->upload(
+        $fileV2UploadResult = $this->fileService->upload(
             dialogId: $dialogId,
             name: 'download_test.txt',
             content: base64_encode('IM FileV2 download test ' . time())
         );
 
-        $fileId = $uploadResult->file()->id;
+        $fileId = $fileV2UploadResult->file()->id;
         $this->assertGreaterThan(0, $fileId);
 
         // Now get a download URL
-        $downloadResult = $this->fileService->download($fileId);
+        $fileV2DownloadResult = $this->fileService->download($fileId);
 
-        $this->assertNotEmpty($downloadResult->getDownloadUrl());
-        $this->assertStringContainsString('http', $downloadResult->getDownloadUrl());
+        $this->assertNotEmpty($fileV2DownloadResult->getDownloadUrl());
+        $this->assertStringContainsString('http', $fileV2DownloadResult->getDownloadUrl());
     }
 }

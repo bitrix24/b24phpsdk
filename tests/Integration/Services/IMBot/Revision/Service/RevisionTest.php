@@ -41,8 +41,8 @@ class RevisionTest extends TestCase
     #[TestDox('imbot.v2.Revision.get returns positive revision numbers')]
     public function testGet(): void
     {
-        $result = $this->revisionService->get();
-        $revision = $result->revision();
+        $revisionResult = $this->revisionService->get();
+        $revision = $revisionResult->revision();
 
         $this->assertGreaterThan(0, $revision->rest);
         $this->assertGreaterThan(0, $revision->web);
