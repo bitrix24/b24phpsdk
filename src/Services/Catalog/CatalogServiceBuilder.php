@@ -17,6 +17,7 @@ use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\Catalog;
+
 #[ApiServiceBuilderMetadata(new Scope(['catalog']))]
 class CatalogServiceBuilder extends AbstractServiceBuilder
 {
