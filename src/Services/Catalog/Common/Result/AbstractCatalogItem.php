@@ -81,7 +81,7 @@ abstract class AbstractCatalogItem extends AbstractItem
             case 'dateActiveTo':
             case 'dateCreate':
             case 'timestampX':
-                if ($this->data[$offset] !== '') {
+                if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                     return CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
                 }
 
