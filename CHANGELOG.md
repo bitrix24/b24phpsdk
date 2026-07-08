@@ -3,6 +3,40 @@
 
 ### Added
 
+- Added `update` and `download` methods to `Services\Catalog\Product\Service\Product` for
+  `catalog.product.update` / `catalog.product.download`,
+  see [catalog.product.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product/index.html) ([#527](https://github.com/bitrix24/b24phpsdk/issues/527))
+- Added service `Services\Catalog\Product\ProductService\Service\ProductService` with support for
+  `catalog.product.service.*` methods,
+  see [catalog.product.service.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product/service/index.html) ([#527](https://github.com/bitrix24/b24phpsdk/issues/527)):
+    - `add` creates a new service
+    - `update` updates an existing service
+    - `get` gets information about the service by its identifier
+    - `list` gets the list of services by filter
+    - `delete` deletes a service
+    - `fieldsByFilter` returns service field descriptions by iblock filter (`catalog.product.service.getFieldsByFilter`)
+    - `download` downloads a service file
+- Added service `Services\Catalog\Product\Sku\Service\Sku` with support for `catalog.product.sku.*`
+  methods,
+  see [catalog.product.sku.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product/sku/index.html) ([#527](https://github.com/bitrix24/b24phpsdk/issues/527)):
+    - `add` creates a new parent (SKU) product
+    - `update` updates an existing parent product
+    - `get` gets information about the parent product by its identifier
+    - `list` gets the list of parent products by filter
+    - `delete` deletes a parent product
+    - `fieldsByFilter` returns parent product field descriptions by iblock filter (`catalog.product.sku.getFieldsByFilter`)
+    - `download` downloads a parent product file
+- Added service `Services\Catalog\Product\Offer\Service\Offer` with support for
+  `catalog.product.offer.*` methods,
+  see [catalog.product.offer.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product/offer/index.html) ([#527](https://github.com/bitrix24/b24phpsdk/issues/527)):
+    - `add` creates a new product variation (offer)
+    - `update` updates an existing product variation
+    - `get` gets information about the product variation by its identifier
+    - `list` gets the list of product variations by filter
+    - `delete` deletes a product variation
+    - `fieldsByFilter` returns product variation field descriptions by iblock filter (`catalog.product.offer.getFieldsByFilter`)
+    - `download` downloads a product variation file
+
 - Added services `Services\Timeman\Record\Service\Record` and `Services\Timeman\RecordField\Service\RecordField`
   with support for v3 `timeman.record.*` methods,
   see [timeman REST v3](https://apidocs.bitrix24.com/api-reference/rest-v3/timeman/index.html) ([#518](https://github.com/bitrix24/b24phpsdk/issues/518)):
@@ -94,6 +128,9 @@
 - Fixed `Application\PortalLicenseFamily` enum throwing `"ent" is not a valid backing value` for
   Enterprise portals: Bitrix24 `app.info` returns `LICENSE_FAMILY = 'ent'`, but the enum had a typo
   `en`; renamed `en` → `ent` ([#500](https://github.com/bitrix24/b24phpsdk/pull/500))
+
+- Fixed `Services\Catalog\Catalog\Result\CatalogsResult::getCatalogs()` returning `ProductItemResult`
+  instances instead of `CatalogItemResult` ([#527](https://github.com/bitrix24/b24phpsdk/issues/527))
 
 ## 3.3.0
 

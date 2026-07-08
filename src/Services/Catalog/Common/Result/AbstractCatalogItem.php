@@ -46,6 +46,7 @@ abstract class AbstractCatalogItem extends AbstractItem
             case 'active':
             case 'available':
             case 'bundle':
+            case 'vatIncluded':
                 return $this->data[$offset] === 'Y';
             case 'barcodeMulti':
             case 'canBuyZero':
@@ -70,6 +71,7 @@ abstract class AbstractCatalogItem extends AbstractItem
             case 'sort':
             case 'height':
             case 'length':
+            case 'vatId':
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                     return (int)$this->data[$offset];
                 }
