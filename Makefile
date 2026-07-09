@@ -69,6 +69,12 @@ help:
 	@echo "test-integration-landing-role - run Landing Role integration tests"
 	@echo "test-integration-landing-repowidget - run Landing RepoWidget integration tests"
 	@echo "test-integration-scope-landing-template - run Landing Template integration tests"
+	@echo "test-integration-scope-catalog - run Catalog scope integration tests"
+	@echo "test-integration-catalog-catalog - run Catalog Catalog integration tests"
+	@echo "test-integration-catalog-product - run Catalog Product integration tests"
+	@echo "test-integration-catalog-product-service - run Catalog ProductService integration tests"
+	@echo "test-integration-catalog-product-sku - run Catalog Product Sku integration tests"
+	@echo "test-integration-catalog-product-offer - run Catalog Product Offer integration tests"
 
 
 .PHONY: docker-init
@@ -491,6 +497,30 @@ test-integration-landing-role:
 .PHONY: test-integration-landing-repowidget
 test-integration-landing-repowidget:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_repowidget
+
+.PHONY: test-integration-scope-catalog
+test-integration-scope-catalog:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_catalog
+
+.PHONY: test-integration-catalog-catalog
+test-integration-catalog-catalog:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_catalog
+
+.PHONY: test-integration-catalog-product
+test-integration-catalog-product:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product
+
+.PHONY: test-integration-catalog-product-service
+test-integration-catalog-product-service:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_service
+
+.PHONY: test-integration-catalog-product-sku
+test-integration-catalog-product-sku:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_sku
+
+.PHONY: test-integration-catalog-product-offer
+test-integration-catalog-product-offer:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_offer
 
 # work dev environment
 .PHONY: php-dev-server-up
