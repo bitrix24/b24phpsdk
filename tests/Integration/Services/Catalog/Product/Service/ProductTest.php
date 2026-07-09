@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Catalog\Catalog\Service\Catalog;
 use Bitrix24\SDK\Services\Catalog\Common\ProductType;
 use Bitrix24\SDK\Services\Catalog\Product\Service\Product;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -123,7 +123,7 @@ class ProductTest extends TestCase
      * @throws TransportException If there is a transport exception thrown during the process of listing products.
      */
     #[TestDox('test Product::list')]
-    public function testList():void
+    public function testList(): void
     {
         $iblockId = $this->catalogService->list([], [], [], 1)->getCatalogs()[0]->iblockId;
         $fields = [
@@ -153,7 +153,7 @@ class ProductTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->productService = Factory::getServiceBuilder()->getCatalogScope()->product();
-        $this->catalogService = Factory::getServiceBuilder()->getCatalogScope()->catalog();
+        $this->productService = Fabric::getServiceBuilder()->getCatalogScope()->product();
+        $this->catalogService = Fabric::getServiceBuilder()->getCatalogScope()->catalog();
     }
 }

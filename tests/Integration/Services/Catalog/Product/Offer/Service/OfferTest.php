@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Catalog\Catalog\Service\Catalog;
 use Bitrix24\SDK\Services\Catalog\Product\Offer\Service\Offer;
 use Bitrix24\SDK\Services\Catalog\Product\Sku\Service\Sku;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -35,9 +35,9 @@ class OfferTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->offerService = Factory::getServiceBuilder()->getCatalogScope()->productOffer();
-        $this->skuService = Factory::getServiceBuilder()->getCatalogScope()->productSku();
-        $this->catalogService = Factory::getServiceBuilder()->getCatalogScope()->catalog();
+        $this->offerService = Fabric::getServiceBuilder()->getCatalogScope()->productOffer();
+        $this->skuService = Fabric::getServiceBuilder()->getCatalogScope()->productSku();
+        $this->catalogService = Fabric::getServiceBuilder()->getCatalogScope()->catalog();
     }
 
     /**
@@ -66,12 +66,12 @@ class OfferTest extends TestCase
             'name' => sprintf('test sku for offer %s', time()),
         ])->sku()->id;
 
-        $addResult = $this->offerService->add([
+        $offerResult = $this->offerService->add([
             'iblockId' => $offersCatalog->iblockId,
             'name' => sprintf('test offer %s', time()),
             'parentId' => $skuId,
         ]);
-        $offerId = $addResult->offer()->id;
+        $offerId = $offerResult->offer()->id;
         $this->assertGreaterThan(0, $offerId);
 
         $getResult = $this->offerService->get($offerId);
@@ -80,14 +80,14 @@ class OfferTest extends TestCase
         $updated = $this->offerService->update($offerId, ['name' => 'updated offer name']);
         $this->assertEquals('updated offer name', $updated->offer()->name);
 
-        $listResult = $this->offerService->list(
+        $offersResult = $this->offerService->list(
             ['id', 'iblockId'],
             ['id' => $offerId, 'iblockId' => $offersCatalog->iblockId]
         );
-        $this->assertCount(1, $listResult->getOffers());
+        $this->assertCount(1, $offersResult->getOffers());
 
-        $fields = $this->offerService->fieldsByFilter($offersCatalog->iblockId);
-        $this->assertIsArray($fields->getFieldsDescription());
+        $fieldsResult = $this->offerService->fieldsByFilter($offersCatalog->iblockId);
+        $this->assertIsArray($fieldsResult->getFieldsDescription());
 
         $this->assertTrue($this->offerService->delete($offerId)->isSuccess());
         $this->assertTrue($this->skuService->delete($skuId)->isSuccess());

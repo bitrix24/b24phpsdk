@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Catalog\Catalog\Service\Catalog;
 use Bitrix24\SDK\Services\Catalog\Product\ProductService\Service\ProductService;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -32,8 +32,8 @@ class ProductServiceTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->productServiceScope = Factory::getServiceBuilder()->getCatalogScope()->productService();
-        $this->catalogService = Factory::getServiceBuilder()->getCatalogScope()->catalog();
+        $this->productServiceScope = Fabric::getServiceBuilder()->getCatalogScope()->productService();
+        $this->catalogService = Fabric::getServiceBuilder()->getCatalogScope()->catalog();
     }
 
     /**
@@ -45,11 +45,11 @@ class ProductServiceTest extends TestCase
     {
         $iblockId = $this->catalogService->list([], [], [], 1)->getCatalogs()[0]->iblockId;
 
-        $addResult = $this->productServiceScope->add([
+        $productServiceResult = $this->productServiceScope->add([
             'iblockId' => $iblockId,
             'name' => sprintf('test service %s', time()),
         ]);
-        $serviceId = $addResult->productService()->id;
+        $serviceId = $productServiceResult->productService()->id;
         $this->assertGreaterThan(0, $serviceId);
 
         $getResult = $this->productServiceScope->get($serviceId);
@@ -58,14 +58,14 @@ class ProductServiceTest extends TestCase
         $updated = $this->productServiceScope->update($serviceId, ['name' => 'updated service name']);
         $this->assertEquals('updated service name', $updated->productService()->name);
 
-        $listResult = $this->productServiceScope->list(
+        $productServicesResult = $this->productServiceScope->list(
             ['id', 'iblockId'],
             ['id' => $serviceId, 'iblockId' => $iblockId]
         );
-        $this->assertCount(1, $listResult->getProductServices());
+        $this->assertCount(1, $productServicesResult->getProductServices());
 
-        $fields = $this->productServiceScope->fieldsByFilter($iblockId);
-        $this->assertIsArray($fields->getFieldsDescription());
+        $fieldsResult = $this->productServiceScope->fieldsByFilter($iblockId);
+        $this->assertIsArray($fieldsResult->getFieldsDescription());
 
         $this->assertTrue($this->productServiceScope->delete($serviceId)->isSuccess());
     }

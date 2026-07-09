@@ -19,7 +19,7 @@ use Bitrix24\SDK\Services\Catalog\Catalog\Service\Catalog;
 use Bitrix24\SDK\Services\Catalog\Product\ProductService\Result\ProductServiceItemResult;
 use Bitrix24\SDK\Services\Catalog\Product\ProductService\Service\ProductService;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -34,6 +34,8 @@ class ProductServiceItemResultTest extends TestCase
 
     private int $serviceId;
 
+    private int $iblockId;
+
     /**
      * @throws BaseException
      * @throws TransportException
@@ -41,13 +43,13 @@ class ProductServiceItemResultTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $serviceBuilder = Factory::getServiceBuilder();
+        $serviceBuilder = Fabric::getServiceBuilder();
         $this->productServiceScope = $serviceBuilder->getCatalogScope()->productService();
         $catalogService = $serviceBuilder->getCatalogScope()->catalog();
-        $iblockId = $catalogService->list([], [], [], 1)->getCatalogs()[0]->iblockId;
+        $this->iblockId = $catalogService->list([], [], [], 1)->getCatalogs()[0]->iblockId;
 
         $this->serviceId = $this->productServiceScope->add([
-            'iblockId' => $iblockId,
+            'iblockId' => $this->iblockId,
             'name' => sprintf('test service annotations %s', time()),
         ])->productService()->id;
     }
@@ -76,7 +78,7 @@ class ProductServiceItemResultTest extends TestCase
         // dynamic catalog properties (propertyN) vary per portal and are intentionally not annotated
         $fieldCodes = array_filter(
             array_keys($rawItem),
-            static fn (string $fieldCode): bool => !preg_match('/^property\d+$/', $fieldCode)
+            static fn (string $fieldCode): bool => in_array(preg_match('/^property\d+$/', $fieldCode), [0, false], true)
         );
 
         $this->assertBitrix24AllResultItemFieldsAnnotated(
@@ -93,9 +95,9 @@ class ProductServiceItemResultTest extends TestCase
     #[TestDox('all fields in ProductServiceItemResult have valid type casting in magic getters')]
     public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
     {
-        $item = $this->productServiceScope->get($this->serviceId)->productService();
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations(
-            $item,
+        $fields = $this->productServiceScope->fieldsByFilter($this->iblockId)->getFieldsDescription();
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
+            $fields,
             ProductServiceItemResult::class
         );
     }

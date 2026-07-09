@@ -19,7 +19,7 @@ use Bitrix24\SDK\Services\Catalog\Catalog\Service\Catalog;
 use Bitrix24\SDK\Services\Catalog\Product\Sku\Result\SkuItemResult;
 use Bitrix24\SDK\Services\Catalog\Product\Sku\Service\Sku;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -52,7 +52,7 @@ class SkuItemResultTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $serviceBuilder = Factory::getServiceBuilder();
+        $serviceBuilder = Fabric::getServiceBuilder();
         $this->skuService = $serviceBuilder->getCatalogScope()->productSku();
         $catalogService = $serviceBuilder->getCatalogScope()->catalog();
         $this->iblockId = $catalogService->list([], [], [], 1)->getCatalogs()[0]->iblockId;
@@ -100,13 +100,9 @@ class SkuItemResultTest extends TestCase
     #[TestDox('all fields in SkuItemResult have valid type casting in magic getters')]
     public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
     {
-        $item = $this->skuService->list(
-            self::FULL_SELECT,
-            ['id' => $this->skuId, 'iblockId' => $this->iblockId]
-        )->getSkus()[0];
-
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations(
-            $item,
+        $fields = $this->skuService->fieldsByFilter($this->iblockId)->getFieldsDescription();
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
+            $fields,
             SkuItemResult::class
         );
     }

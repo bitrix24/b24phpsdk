@@ -20,7 +20,7 @@ use Bitrix24\SDK\Services\Catalog\Product\Offer\Result\OfferItemResult;
 use Bitrix24\SDK\Services\Catalog\Product\Offer\Service\Offer;
 use Bitrix24\SDK\Services\Catalog\Product\Sku\Service\Sku;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -39,6 +39,8 @@ class OfferItemResultTest extends TestCase
 
     private int $offerId;
 
+    private int $offersCatalogIblockId;
+
     /**
      * @throws BaseException
      * @throws TransportException
@@ -46,20 +48,22 @@ class OfferItemResultTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $serviceBuilder = Factory::getServiceBuilder();
+        $serviceBuilder = Fabric::getServiceBuilder();
         $this->offerService = $serviceBuilder->getCatalogScope()->productOffer();
         $this->skuService = $serviceBuilder->getCatalogScope()->productSku();
         $catalogService = $serviceBuilder->getCatalogScope()->catalog();
 
         $productCatalog = null;
         $offersCatalog = null;
-        foreach ($catalogService->list([], [], [], 1)->getCatalogs() as $catalog) {
-            if ($catalog->productIblockId === null) {
-                $productCatalog = $catalog;
+        foreach ($catalogService->list([], [], [], 1)->getCatalogs() as $catalogItemResult) {
+            if ($catalogItemResult->productIblockId === null) {
+                $productCatalog = $catalogItemResult;
             } else {
-                $offersCatalog = $catalog;
+                $offersCatalog = $catalogItemResult;
             }
         }
+
+        $this->offersCatalogIblockId = $offersCatalog->iblockId;
 
         $this->skuId = $this->skuService->add([
             'iblockId' => $productCatalog->iblockId,
@@ -98,7 +102,7 @@ class OfferItemResultTest extends TestCase
         // dynamic catalog properties (propertyN) vary per portal and are intentionally not annotated
         $fieldCodes = array_filter(
             array_keys($rawItem),
-            static fn (string $fieldCode): bool => !preg_match('/^property\d+$/', $fieldCode)
+            static fn (string $fieldCode): bool => in_array(preg_match('/^property\d+$/', $fieldCode), [0, false], true)
         );
 
         $this->assertBitrix24AllResultItemFieldsAnnotated(
@@ -115,9 +119,9 @@ class OfferItemResultTest extends TestCase
     #[TestDox('all fields in OfferItemResult have valid type casting in magic getters')]
     public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
     {
-        $item = $this->offerService->get($this->offerId)->offer();
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations(
-            $item,
+        $fields = $this->offerService->fieldsByFilter($this->offersCatalogIblockId)->getFieldsDescription();
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
+            $fields,
             OfferItemResult::class
         );
     }

@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Catalog\Catalog\Service\Catalog;
 use Bitrix24\SDK\Services\Catalog\Product\Sku\Service\Sku;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -32,8 +32,8 @@ class SkuTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->skuService = Factory::getServiceBuilder()->getCatalogScope()->productSku();
-        $this->catalogService = Factory::getServiceBuilder()->getCatalogScope()->catalog();
+        $this->skuService = Fabric::getServiceBuilder()->getCatalogScope()->productSku();
+        $this->catalogService = Fabric::getServiceBuilder()->getCatalogScope()->catalog();
     }
 
     /**
@@ -45,11 +45,11 @@ class SkuTest extends TestCase
     {
         $iblockId = $this->catalogService->list([], [], [], 1)->getCatalogs()[0]->iblockId;
 
-        $addResult = $this->skuService->add([
+        $skuResult = $this->skuService->add([
             'iblockId' => $iblockId,
             'name' => sprintf('test sku %s', time()),
         ]);
-        $skuId = $addResult->sku()->id;
+        $skuId = $skuResult->sku()->id;
         $this->assertGreaterThan(0, $skuId);
 
         $getResult = $this->skuService->get($skuId);
@@ -58,14 +58,14 @@ class SkuTest extends TestCase
         $updated = $this->skuService->update($skuId, ['name' => 'updated sku name']);
         $this->assertEquals('updated sku name', $updated->sku()->name);
 
-        $listResult = $this->skuService->list(
+        $skusResult = $this->skuService->list(
             ['id', 'iblockId'],
             ['id' => $skuId, 'iblockId' => $iblockId]
         );
-        $this->assertCount(1, $listResult->getSkus());
+        $this->assertCount(1, $skusResult->getSkus());
 
-        $fields = $this->skuService->fieldsByFilter($iblockId);
-        $this->assertIsArray($fields->getFieldsDescription());
+        $fieldsResult = $this->skuService->fieldsByFilter($iblockId);
+        $this->assertIsArray($fieldsResult->getFieldsDescription());
 
         $this->assertTrue($this->skuService->delete($skuId)->isSuccess());
     }
