@@ -104,6 +104,7 @@ help:
 	@echo "test-integration-lists-element - run Lists Element integration tests"
 	@echo "test-integration-mailservice - run MailService integration tests"
 	@echo "test-integration-scope-catalog - run Catalog scope integration tests"
+	@echo "test-integration-catalog-catalog - run Catalog Catalog integration tests"
 	@echo "test-integration-catalog-product - run Catalog Product integration tests"
 	@echo "test-integration-catalog-product-service - run Catalog ProductService integration tests"
 	@echo "test-integration-catalog-product-sku - run Catalog Product Sku integration tests"
