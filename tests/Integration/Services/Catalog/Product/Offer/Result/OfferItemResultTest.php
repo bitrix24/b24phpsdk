@@ -119,7 +119,14 @@ class OfferItemResultTest extends TestCase
     #[TestDox('all fields in OfferItemResult have valid type casting in magic getters')]
     public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
     {
-        $fields = $this->offerService->fieldsByFilter($this->offersCatalogIblockId)->getFieldsDescription();
+        // priceType and negativeAmountTrace are present only in fieldsByFilter response, not in item response, and are not annotated
+        // dynamic catalog properties (propertyN) vary per portal and are intentionally not annotated
+        $fieldsNotInItemResponse = ['priceType', 'negativeAmountTrace'];
+        $fields = array_filter(
+            $this->offerService->fieldsByFilter($this->offersCatalogIblockId)->getFieldsDescription()['offer'],
+            static fn (string $fieldCode): bool => !in_array($fieldCode, $fieldsNotInItemResponse, true) && in_array(preg_match('/^property\d+$/', $fieldCode), [0, false], true),
+            ARRAY_FILTER_USE_KEY
+        );
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
             $fields,
             OfferItemResult::class

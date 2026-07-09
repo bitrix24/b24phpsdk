@@ -30,12 +30,12 @@ use Carbon\CarbonImmutable;
  * @property-read array|null $detailPicture
  * @property-read string $detailText
  * @property-read string $detailTextType
- * @property-read ?int $height
+ * @property-read ?string $height
  * @property-read int $id
  * @property-read int $iblockId
  * @property-read ?array $iblockSection
  * @property-read ?int $iblockSectionId
- * @property-read ?int $length
+ * @property-read ?string $length
  * @property-read ?int $measure
  * @property-read int $modifiedBy
  * @property-read string $name
@@ -44,15 +44,15 @@ use Carbon\CarbonImmutable;
  * @property-read string $previewTextType
  * @property-read ?string $purchasingCurrency
  * @property-read ?string $purchasingPrice
- * @property-read ?int $quantity
+ * @property-read ?string $quantity
  * @property-read int $sort
- * @property-read string $subscribe
+ * @property-read bool $subscribe
  * @property-read CarbonImmutable $timestampX
  * @property-read ProductType $type
  * @property-read ?int $vatId
  * @property-read bool $vatIncluded
- * @property-read ?int $weight
- * @property-read ?int $width
+ * @property-read ?string $weight
+ * @property-read ?string $width
  * @property-read string $xmlId
  */
 class SkuItemResult extends AbstractCatalogItem

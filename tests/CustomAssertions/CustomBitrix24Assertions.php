@@ -19,18 +19,19 @@ use Bitrix24\SDK\Services\CRM\Activity\ActivityNotifyType;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityPriority;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityStatus;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityType;
+use Bitrix24\SDK\Services\Catalog\Common\ProductType;
 use Carbon\CarbonImmutable;
 use MoneyPHP\Percentage\Percentage;
 use Typhoon\Reflection\TyphoonReflector;
-use function Typhoon\Type\stringify;
 use Money\Currency;
+
+use function Typhoon\Type\stringify;
 
 trait CustomBitrix24Assertions
 {
     /**
      * @param array<int, non-empty-string> $fieldCodesFromApi
      * @param class-string $resultItemClassName
-     * @return void
      */
     protected function assertBitrix24AllResultItemFieldsAnnotated(
         array $fieldCodesFromApi,
@@ -39,16 +40,17 @@ trait CustomBitrix24Assertions
         sort($fieldCodesFromApi);
 
         // parse keys from phpdoc annotation
-        $props = TyphoonReflector::build()->reflectClass($resultItemClassName)->properties();
+        $collection = TyphoonReflector::build()->reflectClass($resultItemClassName)->properties();
         $propsFromAnnotations = [];
-        foreach ($props as $meta) {
+        foreach ($collection as $meta) {
             if ($meta->isAnnotated() && !$meta->isNative()) {
                 $propsFromAnnotations[] = $meta->id->name;
             }
         }
+
         sort($propsFromAnnotations);
 
-        if (count($fieldCodesFromApi) >= $propsFromAnnotations) {
+        if (count($fieldCodesFromApi) >= count($propsFromAnnotations)) {
             $this->assertEquals(
                 $fieldCodesFromApi,
                 $propsFromAnnotations,
@@ -76,9 +78,9 @@ trait CustomBitrix24Assertions
         string $resultItemClassName
     ): void {
         // parse keys from phpdoc annotation
-        $props = TyphoonReflector::build()->reflectClass($resultItemClassName)->properties();
+        $collection = TyphoonReflector::build()->reflectClass($resultItemClassName)->properties();
         $propsFromAnnotations = [];
-        foreach ($props as $meta) {
+        foreach ($collection as $meta) {
             if ($meta->isAnnotated() && !$meta->isNative()) {
                 $propsFromAnnotations[$meta->id->name] = stringify($meta->type());
             }
@@ -105,6 +107,7 @@ trait CustomBitrix24Assertions
                         );
                         break;
                     }
+
                     // if field code contains currency
                     if (str_contains($fieldCode, 'CURRENCY_ID')) {
                         $this->assertTrue(
@@ -120,6 +123,7 @@ trait CustomBitrix24Assertions
                         );
                         break;
                     }
+
                     if (str_contains($fieldCode, 'EDIT_FORM_LABEL') ||
                         str_contains($fieldCode, 'LIST_COLUMN_LABEL') ||
                         str_contains($fieldCode, 'LIST_FILTER_LABEL')
@@ -156,6 +160,21 @@ trait CustomBitrix24Assertions
                 case 'integer':
                 case 'int':
                 case 'mail_message':
+                    if ($fieldCode === 'type') {
+                        $this->assertTrue(
+                            str_contains($propsFromAnnotations[$fieldCode], ProductType::class),
+                            sprintf(
+                                'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                                $resultItemClassName,
+                                $fieldCode,
+                                $propsFromAnnotations[$fieldCode],
+                                $fieldData['type'],
+                                ProductType::class
+                            )
+                        );
+                        break;
+                    }
+
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'int'),
                         sprintf(
@@ -183,6 +202,7 @@ trait CustomBitrix24Assertions
                         );
                         break;
                     }
+
                     if (str_contains(mb_strtoupper($fieldCode), 'QUANTITY')) {
                         $this->assertTrue(
                             str_contains($propsFromAnnotations[$fieldCode], 'string'),
@@ -197,7 +217,12 @@ trait CustomBitrix24Assertions
                         );
                         break;
                     }
-                    if (str_contains(mb_strtoupper($fieldCode), 'WEIGHT')) {
+
+                    if (str_contains(mb_strtoupper($fieldCode), 'WEIGHT')
+                        || str_contains(mb_strtoupper($fieldCode), 'HEIGHT')
+                        || str_contains(mb_strtoupper($fieldCode), 'LENGTH')
+                        || str_contains(mb_strtoupper($fieldCode), 'WIDTH')
+                    ) {
                         $this->assertTrue(
                             str_contains($propsFromAnnotations[$fieldCode], 'string'),
                             sprintf(
@@ -211,6 +236,7 @@ trait CustomBitrix24Assertions
                         );
                         break;
                     }
+
                     if (str_contains(mb_strtoupper($fieldCode), 'RATE')) {
                         $this->assertTrue(
                             str_contains($propsFromAnnotations[$fieldCode], Percentage::class),
@@ -225,8 +251,9 @@ trait CustomBitrix24Assertions
                         );
                         break;
                     }
+
                     $this->assertTrue(
-                        str_contains($propsFromAnnotations[$fieldCode], 'Money\Money'),
+                        str_contains($propsFromAnnotations[$fieldCode], \Money\Money::class),
                         sprintf(
                             'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
                             $resultItemClassName,
@@ -280,6 +307,7 @@ trait CustomBitrix24Assertions
 
                         break;
                     }
+
                     if (str_contains($fieldCode, 'durationType')
                         || str_contains($fieldCode, 'mark')
                         || str_contains($fieldCode, 'TYPE')
@@ -298,6 +326,7 @@ trait CustomBitrix24Assertions
 
                         break;
                     }
+
                     if (str_contains($fieldCode, 'priority')
                         || str_contains($fieldCode, 'status')
                     ) {
@@ -315,6 +344,7 @@ trait CustomBitrix24Assertions
 
                         break;
                     }
+
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'bool'),
                         sprintf(
@@ -329,14 +359,15 @@ trait CustomBitrix24Assertions
                     break;
                 case 'file':
                     $this->assertTrue(
-                        str_contains($propsFromAnnotations[$fieldCode], 'File'),
+                        str_contains($propsFromAnnotations[$fieldCode], 'File')
+                        || str_contains($propsFromAnnotations[$fieldCode], 'array'),
                         sprintf(
                             'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
                             $resultItemClassName,
                             $fieldCode,
                             $propsFromAnnotations[$fieldCode],
                             $fieldData['type'],
-                            'File|null'
+                            'File|null or array|null'
                         )
                     );
                     break;
@@ -365,6 +396,7 @@ trait CustomBitrix24Assertions
                         );
                         break;
                     }
+
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'int'),
                         sprintf(
@@ -462,6 +494,8 @@ trait CustomBitrix24Assertions
                     );
                     break;
                 case 'array':
+                case 'list':
+                case 'productproperty':
                 case 'crm':
                 case 'crm_activity_binding':
                 case 'crm_activity_communication':

@@ -31,12 +31,12 @@ use Carbon\CarbonImmutable;
  * @property-read array|null $detailPicture
  * @property-read string $detailText
  * @property-read string $detailTextType
- * @property-read ?int $height
+ * @property-read ?string $height
  * @property-read int $id
  * @property-read int $iblockId
  * @property-read ?array $iblockSection
  * @property-read ?int $iblockSectionId
- * @property-read ?int $length
+ * @property-read ?string $length
  * @property-read ?int $measure
  * @property-read int $modifiedBy
  * @property-read string $name
@@ -46,21 +46,21 @@ use Carbon\CarbonImmutable;
  * @property-read string $previewTextType
  * @property-read ?string $purchasingCurrency
  * @property-read ?string $purchasingPrice
- * @property-read ?int $quantity
- * @property-read ?int $quantityReserved
- * @property-read string $quantityTrace
+ * @property-read ?string $quantity
+ * @property-read ?string $quantityReserved
+ * @property-read bool $quantityTrace
  * @property-read ?int $recurSchemeLength
- * @property-read ?string $recurSchemeType
+ * @property-read ?bool $recurSchemeType
  * @property-read int $sort
- * @property-read string $subscribe
+ * @property-read bool $subscribe
  * @property-read CarbonImmutable $timestampX
  * @property-read ?int $trialPriceId
  * @property-read ProductType $type
  * @property-read ?int $vatId
  * @property-read bool $vatIncluded
- * @property-read ?int $weight
- * @property-read ?int $width
- * @property-read string $withoutOrder
+ * @property-read ?string $weight
+ * @property-read ?string $width
+ * @property-read bool $withoutOrder
  * @property-read string $xmlId
  */
 class OfferItemResult extends AbstractCatalogItem

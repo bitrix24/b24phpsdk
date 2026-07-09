@@ -500,27 +500,27 @@ test-integration-landing-repowidget:
 
 .PHONY: test-integration-scope-catalog
 test-integration-scope-catalog:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_catalog
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_catalog
 
 .PHONY: test-integration-catalog-catalog
 test-integration-catalog-catalog:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_catalog
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_catalog
 
 .PHONY: test-integration-catalog-product
 test-integration-catalog-product:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_product
 
 .PHONY: test-integration-catalog-product-service
 test-integration-catalog-product-service:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_service
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_product_service
 
 .PHONY: test-integration-catalog-product-sku
 test-integration-catalog-product-sku:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_sku
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_product_sku
 
 .PHONY: test-integration-catalog-product-offer
 test-integration-catalog-product-offer:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_offer
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_product_offer
 
 # work dev environment
 .PHONY: php-dev-server-up

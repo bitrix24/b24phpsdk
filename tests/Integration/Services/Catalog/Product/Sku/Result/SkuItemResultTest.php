@@ -100,7 +100,13 @@ class SkuItemResultTest extends TestCase
     #[TestDox('all fields in SkuItemResult have valid type casting in magic getters')]
     public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
     {
-        $fields = $this->skuService->fieldsByFilter($this->iblockId)->getFieldsDescription();
+        // priceType is present only in fieldsByFilter response, not in item response, and is not annotated
+        // dynamic catalog properties (propertyN) vary per portal and are intentionally not annotated
+        $fields = array_filter(
+            $this->skuService->fieldsByFilter($this->iblockId)->getFieldsDescription()['sku'],
+            static fn (string $fieldCode): bool => $fieldCode !== 'priceType' && in_array(preg_match('/^property\d+$/', $fieldCode), [0, false], true),
+            ARRAY_FILTER_USE_KEY
+        );
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
             $fields,
             SkuItemResult::class
