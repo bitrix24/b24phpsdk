@@ -3,6 +3,10 @@
 
 ### Added
 
+- Added `Bitrix24\SDK\Core\ValueObjects\Url` value object ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- Added `Bitrix24\SDK\Core\ValueObjects\LocalizedString` value object for typed localization maps ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- Added `Bitrix24\SDK\Services\Workflows\ValueObjects\RobotCode` and `ActivityCode` value objects ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- Added `DESCRIPTION`, `DOCUMENT_TYPE`, `FILTER` and `PLACEMENT_HANDLER` fields to `bizproc.robot.add` ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 - Added services `Services\Timeman\Record\Service\Record` and `Services\Timeman\RecordField\Service\RecordField`
   with support for v3 `timeman.record.*` methods,
   see [timeman REST v3](https://apidocs.bitrix24.com/api-reference/rest-v3/timeman/index.html) ([#518](https://github.com/bitrix24/b24phpsdk/issues/518)):
@@ -85,6 +89,9 @@
 
 ### Changed
 
+- `bizproc.robot.add` and `bizproc.robot.update` now accept a `Url` value object (or a raw string) for the handler URL ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- `bizproc.robot.add` and `bizproc.robot.update` now accept a `RobotCode` value object (or a raw string) for the code ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- `bizproc.robot.add` and `bizproc.robot.update` now accept a `LocalizedString` value object (or a raw array) for the localized `NAME` / `DESCRIPTION` ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 - Updated `b24phpsdk-maintainer` skill: require dedicated field metadata services for
   `*.field.get` and `*.field.list` endpoints ([#517](https://github.com/bitrix24/b24phpsdk/issues/517))
 - Updated `b24phpsdk-maintainer` skill: `*ItemResult` classes must extend
