@@ -24,9 +24,13 @@ In addition to the four fields, this change also:
   and `ActivityCode` (charset `a-z A-Z 0-9 . - _`, non-empty) — with unit tests. `RobotCode` is
   wired into `Robot::add()` / `Robot::update()` as a `string|RobotCode` union (same Stage-1
   pattern); `ActivityCode` is created and tested but not yet wired into the `Activity` service;
-- files a **follow-up issue** to roll Stage 1 out to the remaining ~68 SDK URL signatures (and the
-  `Activity` code migration) and then execute Stage 2 (`Url`/`Code`-only) in the next major (see
-  "Follow-up issue" section below).
+- introduces a reusable `Bitrix24\SDK\Core\ValueObjects\LocalizedString` value object (a typed
+  replacement for raw `['en' => '...']` localization maps, reusing the existing
+  `Core\Contracts\LangCodes` enum) and wires it into the `NAME` / `DESCRIPTION` parameters of
+  `Robot::add()` / `Robot::update()` as an `array|LocalizedString` union (same Stage-1 pattern);
+- files a **follow-up issue** to roll Stage 1 out to the remaining ~68 SDK URL signatures (plus the
+  `Activity` code migration and the SDK-wide `LocalizedString` adoption) and then execute Stage 2
+  (value-object-only) in the next major (see "Follow-up issue" section below).
 
 ### API method details (from Bitrix24 docs)
 
@@ -97,9 +101,10 @@ $result = CRest::call('bizproc.robot.add', [
 
 ### Locked design decisions
 
-1. **DESCRIPTION is typed as a localized `array`** — `array $localizedRobotDescription = []`,
-   consistent with the existing `array $localizedRobotName` parameter (`NAME`). A plain string
-   is passed by the caller as `['en' => '...']`.
+1. **NAME / DESCRIPTION accept `array|LocalizedString`** — both localized parameters are widened
+   from `array` to an `array|LocalizedString` union (Stage 1). A raw `['en' => '...']` array keeps
+   working; the new `LocalizedString` VO is the typed, autocomplete-friendly alternative. The
+   payload is normalized via `resolveLocalizedString()` (see decision 8).
 2. **PLACEMENT_HANDLER is a `Url` value object, validated client-side (fail-fast)** — the new
    parameter is typed `?Url $placementHandlerUrl = null`. When `$isUsePlacement === true` and
    `$placementHandlerUrl === null`, `add()` throws `InvalidArgumentException` before calling the
@@ -113,20 +118,22 @@ $result = CRest::call('bizproc.robot.add', [
    provided: arrays when non-empty; `PLACEMENT_HANDLER` when the `Url` is not `null`, serialized
    via `$placementHandlerUrl->getUrl()`. Matches `required: no` semantics.
 5. **Scope** — the four new API fields are added to `add()` only (`update()` gains no new fields).
-   The Stage-1 migrations (`handlerUrl` → `string|Url`, `code` → `string|RobotCode`) additionally
-   touch `Robot::update()`. The `Activity` service is **not** modified in this change.
+   The Stage-1 migrations (`handlerUrl` → `string|Url`, `code` → `string|RobotCode`, `NAME` /
+   `DESCRIPTION` → `array|LocalizedString`) additionally touch `Robot::update()`. The `Activity`
+   service is **not** modified in this change.
 6. **Docs link** — while editing the `#[ApiEndpointMetadata]` of `add()`, switch its URL and the
    `@see` docblock to the English `apidocs.bitrix24.com` page (skill rule for changed metadata).
 7. **New `Url` value object** — introduce `Bitrix24\SDK\Core\ValueObjects\Url`, a copy of the
    validation in `Core\Credentials\WebhookUrl`, and use it as the type of the new
    `PLACEMENT_HANDLER` parameter (VO-only, `?Url`). `WebhookUrl` is **not** refactored here; that
    migration and the SDK-wide rollout are tracked by the follow-up issue.
-8. **Normalization helpers** — private `resolveUrl(string|Url $url): string` and
-   `resolveRobotCode(string|RobotCode $code): string` in `Robot` convert a union argument to a
-   validated string for the payload: an existing value object returns `->getUrl()` / `->getCode()`;
-   a raw `string` is wrapped in `new Url(...)` / `new RobotCode(...)` first, so raw strings are
-   validated the same way. `placementHandlerUrl` is already a `Url`, so it uses `->getUrl()`
-   directly.
+8. **Normalization helpers** — private `resolveUrl(string|Url $url): string`,
+   `resolveRobotCode(string|RobotCode $code): string` and
+   `resolveLocalizedString(array|LocalizedString $value): array` in `Robot` convert a union argument
+   to the payload shape: a value object returns `->getUrl()` / `->getCode()` / `->toArray()`; a raw
+   `string` is wrapped in `new Url(...)` / `new RobotCode(...)` first (so raw strings are validated
+   the same way), while a raw localization `array` is passed through unchanged (legacy behaviour).
+   `placementHandlerUrl` is already a `Url`, so it uses `->getUrl()` directly.
 9. **Bizproc CODE value objects** — introduce `RobotCode` and `ActivityCode` in the new
    `Bitrix24\SDK\Services\Workflows\ValueObjects` namespace (**Services** layer, bizproc-specific —
    unlike the generic `Url` in `Core`). Both validate the same charset from the API docs
@@ -134,6 +141,15 @@ $result = CRest::call('bizproc.robot.add', [
    wired into `Robot::add()` / `Robot::update()` as `string|RobotCode`. `ActivityCode` is created
    and unit-tested but **not** wired into the `Activity` service in this change (deferred to the
    follow-up issue) to keep #493 from expanding into `bizproc.activity.*`.
+10. **`LocalizedString` value object** — introduce `Bitrix24\SDK\Core\ValueObjects\LocalizedString`
+    (**Core** layer, generic, reuses `Core\Contracts\LangCodes`) as a typed replacement for raw
+    `['en' => '...']` maps. Minimal, immutable-by-convention API (PSR-7 `with*()` style — **not**
+    `readonly`, so the clone-based `with()` works on PHP 8.4): a public constructor
+    `__construct(LangCodes $lang, string $text)` for the common single-language case, a fluent
+    `with(LangCodes $lang, string $text): self` for additional languages, and
+    `toArray(): array<value-of<LangCodes>, string>`. No `of()` / `create()` / `fromArray()` /
+    `get()` in the public surface (deliberately trimmed for a clean DX). Wired into `NAME` /
+    `DESCRIPTION` as `array|LocalizedString`; SDK-wide adoption is a follow-up.
 
 ### Testing constraint (documented rationale)
 
@@ -194,28 +210,30 @@ full method body lives in **Files to Modify → 1**; the signature is:
 
 ```php
 public function add(
-    string|RobotCode $code,                        // widened from string (Stage 1) ← changed
-    string|Url       $handlerUrl,                  // widened from string (Stage 1) ← changed
-    int              $b24AuthUserId,
-    array            $localizedRobotName,
-    bool             $isUseSubscription,
-    array            $properties,
-    bool             $isUsePlacement,
-    array            $returnProperties,
-    array            $localizedRobotDescription = [], // DESCRIPTION        ← new
-    array            $documentType = [],              // DOCUMENT_TYPE      ← new
-    array            $filter = [],                    // FILTER             ← new
-    ?Url             $placementHandlerUrl = null      // PLACEMENT_HANDLER  ← new (Url VO)
+    string|RobotCode        $code,                        // widened from string (Stage 1) ← changed
+    string|Url              $handlerUrl,                  // widened from string (Stage 1) ← changed
+    int                     $b24AuthUserId,
+    array|LocalizedString   $localizedRobotName,          // widened from array (Stage 1) ← changed
+    bool                    $isUseSubscription,
+    array                   $properties,
+    bool                    $isUsePlacement,
+    array                   $returnProperties,
+    array|LocalizedString   $localizedRobotDescription = [], // DESCRIPTION        ← new
+    array                   $documentType = [],              // DOCUMENT_TYPE      ← new
+    array                   $filter = [],                    // FILTER             ← new
+    ?Url                    $placementHandlerUrl = null      // PLACEMENT_HANDLER  ← new (Url VO)
 ): AddedRobotResult
 ```
 
-`update()` is changed too — its `code` and `handlerUrl` parameters are widened (no new fields):
+`update()` is changed too — its `code`, `handlerUrl` and `localizedRobotName` parameters are
+widened (no new fields):
 
 ```php
 public function update(
-    string|RobotCode $code,                        // widened from string (Stage 1) ← changed
-    Url|string|null  $handlerUrl = null,           // widened from ?string (Stage 1) ← changed
-    ?int             $b24AuthUserId = null,
+    string|RobotCode           $code,                     // widened from string (Stage 1) ← changed
+    Url|string|null            $handlerUrl = null,        // widened from ?string (Stage 1) ← changed
+    ?int                       $b24AuthUserId = null,
+    array|LocalizedString|null $localizedRobotName = null,// widened from ?array (Stage 1) ← changed
     // …remaining parameters unchanged…
 ): UpdateRobotResult
 ```
@@ -226,7 +244,8 @@ Parameter → API field mapping (`add()`):
 |---|---|---|
 | `$code` (`string\|RobotCode`) | `CODE` | always; normalized via `resolveRobotCode()` |
 | `$handlerUrl` (`string\|Url`) | `HANDLER` | always; normalized via `resolveUrl()` |
-| `$localizedRobotDescription` | `DESCRIPTION` | array is non-empty |
+| `$localizedRobotName` (`array\|LocalizedString`) | `NAME` | always; normalized via `resolveLocalizedString()` |
+| `$localizedRobotDescription` (`array\|LocalizedString`) | `DESCRIPTION` | non-empty after `resolveLocalizedString()` |
 | `$documentType` | `DOCUMENT_TYPE` | array is non-empty |
 | `$filter` | `FILTER` | array is non-empty |
 | `$placementHandlerUrl` (`?Url`) | `PLACEMENT_HANDLER` | value is not `null`; sent as `->getUrl()` |
@@ -258,12 +277,12 @@ $robot->add(
     'my_robot',                                 // code
     new Url('https://example.com/handler'),     // handlerUrl — now also accepts a Url VO
     1,                                          // b24AuthUserId
-    ['en' => 'My robot'],                       // localizedRobotName
+    new LocalizedString(LangCodes::EN, 'My robot'), // localizedRobotName — now also accepts a VO
     true,                                       // isUseSubscription
     ['text' => ['Name' => 'Text', 'Type' => 'text']],       // properties
     true,                                       // isUsePlacement
     ['result' => ['Name' => 'Result', 'Type' => 'string']], // returnProperties
-    ['en' => 'Sends a message'],                // localizedRobotDescription → DESCRIPTION
+    new LocalizedString(LangCodes::EN, 'Sends a message'), // localizedRobotDescription → DESCRIPTION
     ['crm', 'CCrmDocumentDeal', 'DEAL'],        // documentType             → DOCUMENT_TYPE
     [                                           // filter                   → FILTER
         'INCLUDE' => [
@@ -275,8 +294,13 @@ $robot->add(
 );
 ```
 
-`handlerUrl` still accepts a raw string (as in the required-arguments example above); passing a
-`Url` is the new option. `Url` is imported as `use Bitrix24\SDK\Core\ValueObjects\Url;`.
+Raw values still work everywhere (as in the required-arguments example above) — `Url` for
+`handlerUrl`, `RobotCode` for `code`, and `LocalizedString` for `NAME` / `DESCRIPTION` are the new,
+type-safe options. Imports:
+`use Bitrix24\SDK\Core\ValueObjects\Url;`,
+`use Bitrix24\SDK\Core\ValueObjects\LocalizedString;`,
+`use Bitrix24\SDK\Core\Contracts\LangCodes;`,
+`use Bitrix24\SDK\Services\Workflows\ValueObjects\RobotCode;`.
 
 ---
 
@@ -537,7 +561,9 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Services\Workflows\Robot\Service;
 
+use Bitrix24\SDK\Core\Contracts\LangCodes;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\ValueObjects\LocalizedString;
 use Bitrix24\SDK\Core\ValueObjects\Url;
 use Bitrix24\SDK\Services\Workflows\Robot\Result\AddedRobotResult;
 use Bitrix24\SDK\Services\Workflows\Robot\Result\UpdateRobotResult;
@@ -687,6 +713,24 @@ class RobotTest extends TestCase
 
         $this->assertInstanceOf(UpdateRobotResult::class, $result);
     }
+
+    #[Test]
+    #[TestDox('add() accepts a LocalizedString for the NAME (Stage 1 migration)')]
+    public function testAddAcceptsLocalizedStringName(): void
+    {
+        $result = $this->robot->add(
+            'test_robot',
+            'https://example.com/handler',
+            1,
+            new LocalizedString(LangCodes::EN, 'My robot'),
+            false,
+            [],
+            false,
+            []
+        );
+
+        $this->assertInstanceOf(AddedRobotResult::class, $result);
+    }
 }
 ```
 
@@ -694,17 +738,116 @@ class RobotTest extends TestCase
 > finalizing `setUp()`. If constructing `Batch` in a unit test is awkward, replace it with the
 > project's standard batch stub. This does not change production code.
 
+### 8. `src/Core/ValueObjects/LocalizedString.php`
+
+Generic **Core** value object replacing raw `['en' => '...']` localization maps; reuses the
+existing `Core\Contracts\LangCodes` enum. Immutable-by-convention (PSR-7 `with*()` style) — **not**
+`readonly`, so the clone-based `with()` works on PHP 8.4. Minimal public surface: constructor +
+`with()` + `toArray()`.
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Bitrix24\SDK\Core\ValueObjects;
+
+use Bitrix24\SDK\Core\Contracts\LangCodes;
+
+final class LocalizedString
+{
+    /** @var array<value-of<LangCodes>, string> */
+    private array $values;
+
+    public function __construct(LangCodes $lang, string $text)
+    {
+        $this->values = [$lang->value => $text];
+    }
+
+    public function with(LangCodes $lang, string $text): self
+    {
+        $clone = clone $this;
+        $clone->values[$lang->value] = $text;
+
+        return $clone;
+    }
+
+    /**
+     * @return array<value-of<LangCodes>, string>
+     */
+    public function toArray(): array
+    {
+        return $this->values;
+    }
+}
+```
+
+### 9. `tests/Unit/Core/ValueObjects/LocalizedStringTest.php`
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Bitrix24\SDK\Tests\Unit\Core\ValueObjects;
+
+use Bitrix24\SDK\Core\Contracts\LangCodes;
+use Bitrix24\SDK\Core\ValueObjects\LocalizedString;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
+
+#[CoversClass(LocalizedString::class)]
+class LocalizedStringTest extends TestCase
+{
+    #[Test]
+    #[TestDox('single language via constructor maps to a lang => text array')]
+    public function testSingleLanguage(): void
+    {
+        $this->assertSame(
+            ['en' => 'My robot'],
+            (new LocalizedString(LangCodes::EN, 'My robot'))->toArray()
+        );
+    }
+
+    #[Test]
+    #[TestDox('with() adds languages immutably (original is unchanged)')]
+    public function testWithAddsLanguagesImmutably(): void
+    {
+        $en = new LocalizedString(LangCodes::EN, 'My robot');
+        $both = $en->with(LangCodes::DE, 'Mein Roboter');
+
+        $this->assertSame(['en' => 'My robot'], $en->toArray());
+        $this->assertSame(['en' => 'My robot', 'de' => 'Mein Roboter'], $both->toArray());
+    }
+
+    #[Test]
+    #[TestDox('with() on the same language overwrites the value')]
+    public function testWithOverwritesSameLanguage(): void
+    {
+        $this->assertSame(
+            ['en' => 'new'],
+            (new LocalizedString(LangCodes::EN, 'old'))->with(LangCodes::EN, 'new')->toArray()
+        );
+    }
+}
+```
+
 ---
 
 ## Files to Modify
 
 ### 1. `src/Services/Workflows/Robot/Service/Robot.php`
 
-Edits: rewrite `add()`, widen `update()`, add the private `resolveUrl()` and `resolveRobotCode()`
-helpers. Both `code` (→ `string|RobotCode`) and `handlerUrl` (→ `string|Url`) are widened in
-`add()` and `update()`. Add imports `use Bitrix24\SDK\Core\ValueObjects\Url;` and
-`use Bitrix24\SDK\Services\Workflows\ValueObjects\RobotCode;` (`InvalidArgumentException` is
-already imported at line 21). Column alignment below is illustrative — `php-cs-fixer` reformats it.
+Edits: rewrite `add()`, widen `update()`, add the private `resolveUrl()`, `resolveRobotCode()` and
+`resolveLocalizedString()` helpers. In both `add()` and `update()` the parameters `code`
+(→ `string|RobotCode`), `handlerUrl` (→ `string|Url`) and `localizedRobotName`
+(→ `array|LocalizedString`) are widened; `add()` also widens `localizedRobotDescription`. Add
+imports `use Bitrix24\SDK\Core\ValueObjects\Url;`,
+`use Bitrix24\SDK\Core\ValueObjects\LocalizedString;` and
+`use Bitrix24\SDK\Services\Workflows\ValueObjects\RobotCode;` (`InvalidArgumentException` is already
+imported at line 21). Column alignment below is illustrative — `php-cs-fixer` reformats it.
 
 **1a. `add()`** — new signature and body (also update its `@see` docblock + `#[ApiEndpointMetadata]` URL):
 
@@ -723,18 +866,18 @@ already imported at line 21). Column alignment below is illustrative — `php-cs
         'Registers new automation rule.'
     )]
     public function add(
-        string|RobotCode $code,
-        string|Url       $handlerUrl,
-        int              $b24AuthUserId,
-        array      $localizedRobotName,
-        bool       $isUseSubscription,
-        array      $properties,
-        bool       $isUsePlacement,
-        array      $returnProperties,
-        array      $localizedRobotDescription = [],
-        array      $documentType = [],
-        array      $filter = [],
-        ?Url       $placementHandlerUrl = null
+        string|RobotCode      $code,
+        string|Url            $handlerUrl,
+        int                   $b24AuthUserId,
+        array|LocalizedString $localizedRobotName,
+        bool                  $isUseSubscription,
+        array                 $properties,
+        bool                  $isUsePlacement,
+        array                 $returnProperties,
+        array|LocalizedString $localizedRobotDescription = [],
+        array                 $documentType = [],
+        array                 $filter = [],
+        ?Url                  $placementHandlerUrl = null
     ): Workflows\Robot\Result\AddedRobotResult
     {
         if ($isUsePlacement && $placementHandlerUrl === null) {
@@ -747,15 +890,16 @@ already imported at line 21). Column alignment below is illustrative — `php-cs
             'CODE' => $this->resolveRobotCode($code),
             'HANDLER' => $this->resolveUrl($handlerUrl),
             'AUTH_USER_ID' => $b24AuthUserId,
-            'NAME' => $localizedRobotName,
+            'NAME' => $this->resolveLocalizedString($localizedRobotName),
             'USE_SUBSCRIPTION' => $isUseSubscription ? 'Y' : 'N',
             'PROPERTIES' => $properties,
             'USE_PLACEMENT' => $isUsePlacement ? 'Y' : 'N',
             'RETURN_PROPERTIES' => $returnProperties,
         ];
 
-        if ($localizedRobotDescription !== []) {
-            $payload['DESCRIPTION'] = $localizedRobotDescription;
+        $description = $this->resolveLocalizedString($localizedRobotDescription);
+        if ($description !== []) {
+            $payload['DESCRIPTION'] = $description;
         }
 
         if ($documentType !== []) {
@@ -776,24 +920,27 @@ already imported at line 21). Column alignment below is illustrative — `php-cs
     }
 ```
 
-**1b. `update()`** — widen `code` and `handlerUrl`, normalize both (rest of the if-blocks
-unchanged):
+**1b. `update()`** — widen `code`, `handlerUrl` and `localizedRobotName`, normalize each (rest of
+the if-blocks unchanged):
 
 ```php
     public function update(
-        string|RobotCode $code,                 // ← changed from string
-        Url|string|null  $handlerUrl = null,    // ← changed from ?string
-        ?int             $b24AuthUserId = null,
-        ?array           $localizedRobotName = null,
-        ?bool            $isUseSubscription = null,
-        ?array           $properties = null,
-        ?bool            $isUsePlacement = null,
-        ?array           $returnProperties = null
+        string|RobotCode           $code,                 // ← changed from string
+        Url|string|null            $handlerUrl = null,    // ← changed from ?string
+        ?int                       $b24AuthUserId = null,
+        array|LocalizedString|null $localizedRobotName = null, // ← changed from ?array
+        ?bool                      $isUseSubscription = null,
+        ?array                     $properties = null,
+        ?bool                      $isUsePlacement = null,
+        ?array                     $returnProperties = null
     ): Workflows\Robot\Result\UpdateRobotResult
     {
         $fieldsToUpdate = [];
         if ($handlerUrl !== null) {
             $fieldsToUpdate['HANDLER'] = $this->resolveUrl($handlerUrl);   // ← changed
+        }
+        if ($localizedRobotName !== null) {
+            $fieldsToUpdate['NAME'] = $this->resolveLocalizedString($localizedRobotName);   // ← changed
         }
         // …remaining if-blocks unchanged…
 
@@ -825,11 +972,21 @@ unchanged):
     {
         return $code instanceof RobotCode ? $code->getCode() : (new RobotCode($code))->getCode();
     }
+
+    /**
+     * @param array<string, string>|LocalizedString $value
+     * @return array<string, string>
+     */
+    private function resolveLocalizedString(array|LocalizedString $value): array
+    {
+        return $value instanceof LocalizedString ? $value->toArray() : $value;
+    }
 ```
 
-A raw `string` is wrapped in `new Url(...)` / `new RobotCode(...)`, so an invalid value throws
-`InvalidArgumentException` — same validation whether the caller passes a string or the value
-object.
+For `Url` / `RobotCode`, a raw `string` is wrapped in `new Url(...)` / `new RobotCode(...)`, so an
+invalid value throws `InvalidArgumentException` — same validation whether the caller passes a string
+or the value object. For `LocalizedString`, a raw `array` is passed through unchanged (legacy
+behaviour); passing a `LocalizedString` is the typed path.
 
 ### 2. `CHANGELOG.md`
 
@@ -839,12 +996,14 @@ are not already present under 3.4.0):
 ```markdown
 ### Added
 - Added `Bitrix24\SDK\Core\ValueObjects\Url` value object ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- Added `Bitrix24\SDK\Core\ValueObjects\LocalizedString` value object ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 - Added `Bitrix24\SDK\Services\Workflows\ValueObjects\RobotCode` and `ActivityCode` value objects ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 - Added `DESCRIPTION`, `DOCUMENT_TYPE`, `FILTER` and `PLACEMENT_HANDLER` fields to `bizproc.robot.add` ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 
 ### Changed
 - `bizproc.robot.add` and `bizproc.robot.update` now accept a `Url` value object (or a raw string) for the handler URL ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 - `bizproc.robot.add` and `bizproc.robot.update` now accept a `RobotCode` value object (or a raw string) for the code ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- `bizproc.robot.add` and `bizproc.robot.update` now accept a `LocalizedString` value object (or a raw array) for the localized `NAME` / `DESCRIPTION` ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 ```
 
 ### Not modified (already in place)
@@ -855,11 +1014,11 @@ are not already present under 3.4.0):
 
 ---
 
-## Follow-up issue: SDK-wide `Url` adoption (two-stage refactoring)
+## Follow-up issue: SDK-wide value-object adoption (two-stage refactoring)
 
 As part of this work, file a **separate** tracking issue in `bitrix24/b24phpsdk` to continue the
-`Url` rollout beyond the `Robot` service (which is migrated in #493 as the reference
-implementation). Before creating it: search for duplicates (`gh search issues`) and verify the
+value-object rollout (`Url`, `LocalizedString`, bizproc codes) beyond the `Robot` service (which is
+migrated in #493 as the reference implementation). Before creating it: search for duplicates (`gh search issues`) and verify the
 exact label name with `gh label list --repo bitrix24/b24phpsdk` (the repo uses `enhancement in
 SDK`, not `enhancement`).
 
@@ -877,33 +1036,39 @@ validation is duplicated — only `Core\Credentials\WebhookUrl` validates via `f
 inconsistent with the SDK's value-object approach for other primitives (money, IP, phone) and lets
 invalid URLs reach the transport layer.
 
-`#493` introduced `Bitrix24\SDK\Core\ValueObjects\Url` and applied **Stage 1** to the `Robot`
-service (`bizproc.robot.add` / `bizproc.robot.update` accept `string|Url`). This issue tracks
-rolling the same pattern out to the rest of the SDK and then executing Stage 2.
+`#493` introduced `Bitrix24\SDK\Core\ValueObjects\Url` and `LocalizedString`, plus the
+`Services\Workflows\ValueObjects\RobotCode` / `ActivityCode` code objects, and applied **Stage 1**
+to the `Robot` service (`bizproc.robot.add` / `bizproc.robot.update` accept `string|Url`,
+`string|RobotCode`, `array|LocalizedString`). This issue tracks rolling the same pattern out to the
+rest of the SDK and then executing Stage 2.
 
 ## Proposed solution
 
-- **Stage 1 (non-breaking, minor release):** widen the remaining URL parameters to a `string|Url`
-  union (raw strings wrapped internally into `Url`); document raw-string usage as soft-deprecated.
-  Refactor `Core\Credentials\WebhookUrl` to build on top of `Core\ValueObjects\Url` so validation
-  lives in one place. Consider extracting the `resolveUrl()` helper introduced in `Robot` into a
-  shared location (trait or `AbstractService`).
+- **Stage 1 (URLs):** widen the remaining URL parameters to a `string|Url` union (raw strings
+  wrapped internally into `Url`); document raw-string usage as soft-deprecated. Refactor
+  `Core\Credentials\WebhookUrl` to build on top of `Core\ValueObjects\Url` so validation lives in
+  one place. Consider extracting the `resolve*()` helpers introduced in `Robot` into a shared
+  location (trait or `AbstractService`).
 - **Stage 1 (bizproc codes):** wire the `ActivityCode` value object (already created in #493) into
   `bizproc.activity.add` / `bizproc.activity.update` as `string|ActivityCode`, mirroring the
   `RobotCode` migration.
-- **Stage 2 (breaking, next major release):** type all URL and code parameters as their value
-  objects only; remove the `string` unions.
+- **Stage 1 (localization):** widen the remaining localized `array` parameters (e.g. the `Activity`
+  `NAME` / `DESCRIPTION`, and other services) to `array|LocalizedString`, reusing the VO created in
+  #493.
+- **Stage 2 (breaking, next major release):** type all URL, code and localization parameters as
+  their value objects only; remove the `string` / `array` unions.
 
 ## Acceptance criteria
 
 - [ ] `Core\ValueObjects\Url` is reused everywhere a URL is accepted as input
+- [ ] `Core\ValueObjects\LocalizedString` is reused everywhere a localized string map is accepted
 - [ ] `Core\Credentials\WebhookUrl` reuses `Url` (no duplicated validation)
-- [ ] Stage 1 preserves full backward compatibility (`string|Url`) for the remaining signatures
-- [ ] Stage 2 is scheduled for the next major and removes the `string` union
+- [ ] Stage 1 preserves full backward compatibility (`string|Url`, `array|LocalizedString`) for the remaining signatures
+- [ ] Stage 2 is scheduled for the next major and removes the `string` / `array` unions
 - [ ] Unit tests cover both stages
 - [ ] `CHANGELOG.md` is updated with the issue link
 
-Depends on #493 (introduces the `Url` value object and the Stage 1 reference implementation).
+Depends on #493 (introduces the `Url` / `LocalizedString` value objects and the Stage 1 reference implementation).
 ```
 
 ---
@@ -913,12 +1078,14 @@ Depends on #493 (introduces the `Url` value object and the Stage 1 reference imp
 Changes touch:
 - `src/Core/ValueObjects/Url.php` — new **Core** layer class; imports only
   `Core\Exceptions\InvalidArgumentException` (same layer). Core depends on nothing outside itself.
+- `src/Core/ValueObjects/LocalizedString.php` — new **Core** layer class; imports only
+  `Core\Contracts\LangCodes` (same layer). No validation/exception dependency.
 - `src/Services/Workflows/ValueObjects/RobotCode.php` and `ActivityCode.php` — new **Services**
   layer classes; import only `Core\Exceptions\InvalidArgumentException` (Services → Core allowed).
 - `src/Services/Workflows/Robot/Service/Robot.php` — **Services** layer; adds imports of
-  `Core\ValueObjects\Url` (Services → Core) and `Workflows\ValueObjects\RobotCode` (intra-Services,
-  same `Workflows` scope — the same kind of import as the existing `Workflows\Robot\Result\*` and
-  `Workflows\Template\Service\Batch` uses).
+  `Core\ValueObjects\Url` and `Core\ValueObjects\LocalizedString` (Services → Core) and
+  `Workflows\ValueObjects\RobotCode` (intra-Services, same `Workflows` scope — the same kind of
+  import as the existing `Workflows\Robot\Result\*` and `Workflows\Template\Service\Batch` uses).
 - `tests/Unit/...` — not covered by deptrac layers.
 
 No new cross-layer edge and no new `skip_violations` entry are introduced.
@@ -945,23 +1112,26 @@ context and admin rights and cannot be exercised through the webhook-based
 
 ## TDD order (for the implementation phase — do NOT start yet)
 
-1. RED: add `tests/Unit/Core/ValueObjects/UrlTest.php`; run `make test-unit` and confirm it fails
-   (class does not exist yet).
-2. GREEN: create `src/Core/ValueObjects/Url.php`; run `make test-unit` until the `Url` tests pass.
+1. RED: add `tests/Unit/Core/ValueObjects/UrlTest.php` and
+   `tests/Unit/Core/ValueObjects/LocalizedStringTest.php`; run `make test-unit` and confirm they
+   fail (classes do not exist yet).
+2. GREEN: create `src/Core/ValueObjects/Url.php` and `src/Core/ValueObjects/LocalizedString.php`;
+   run `make test-unit` until the `Url` and `LocalizedString` tests pass.
 3. RED: add `tests/Unit/Services/Workflows/ValueObjects/RobotCodeTest.php` and
    `ActivityCodeTest.php`; run `make test-unit` and confirm they fail (classes do not exist yet).
 4. GREEN: create `src/Services/Workflows/ValueObjects/RobotCode.php` and `ActivityCode.php`; run
    `make test-unit` until the code-VO tests pass.
-5. RED: add `tests/Unit/Services/Workflows/Robot/Service/RobotTest.php` with the seven tests
+5. RED: add `tests/Unit/Services/Workflows/Robot/Service/RobotTest.php` with the eight tests
    (result type, placement-with-`Url`, placement-missing-throws, `add()`/`update()` `handlerUrl`
-   as `Url`, `add()`/`update()` `code` as `RobotCode`); run `make test-unit` and confirm the new
-   behaviours fail (method not yet updated).
-6. GREEN: apply the `Robot.php` changes — add the `Url` and `RobotCode` imports, the private
-   `resolveUrl()` and `resolveRobotCode()` helpers, the four new `add()` params + placement
-   precondition + conditional payload, and widen `code`/`handlerUrl` in `add()` and `update()`;
-   run `make test-unit` until green.
+   as `Url`, `add()`/`update()` `code` as `RobotCode`, `add()` `NAME` as `LocalizedString`); run
+   `make test-unit` and confirm the new behaviours fail (method not yet updated).
+6. GREEN: apply the `Robot.php` changes — add the `Url`, `LocalizedString` and `RobotCode` imports,
+   the private `resolveUrl()`, `resolveRobotCode()` and `resolveLocalizedString()` helpers, the four
+   new `add()` params + placement precondition + conditional payload, and widen
+   `code`/`handlerUrl`/`localizedRobotName`(+`localizedRobotDescription` in `add()`) in `add()` and
+   `update()`; run `make test-unit` until green.
 7. REFACTOR: run the full light gate; adjust code style as reported by cs-fixer / rector.
-8. Update `CHANGELOG.md` (the two `### Added` VO lines, the robot-fields line, and the two
+8. Update `CHANGELOG.md` (the three `### Added` VO lines, the robot-fields line, and the three
    `### Changed` widening lines).
 9. After plan approval and a green light gate, create the follow-up issue (see "Follow-up issue"
    section) — search for duplicates and verify the label name first.
