@@ -20,8 +20,13 @@ In addition to the four fields, this change also:
 - applies **Stage 1** of the `Url` migration to the whole `Robot` service now: the existing
   `handlerUrl` parameter of `add()` and `update()` is widened to a `string|Url` union (raw strings
   stay valid — full backward compatibility);
-- files a **follow-up issue** to roll Stage 1 out to the remaining ~68 SDK URL signatures and then
-  execute Stage 2 (`Url`-only) in the next major (see "Follow-up issue" section below).
+- adds two bizproc `CODE` value objects — `Bitrix24\SDK\Services\Workflows\ValueObjects\RobotCode`
+  and `ActivityCode` (charset `a-z A-Z 0-9 . - _`, non-empty) — with unit tests. `RobotCode` is
+  wired into `Robot::add()` / `Robot::update()` as a `string|RobotCode` union (same Stage-1
+  pattern); `ActivityCode` is created and tested but not yet wired into the `Activity` service;
+- files a **follow-up issue** to roll Stage 1 out to the remaining ~68 SDK URL signatures (and the
+  `Activity` code migration) and then execute Stage 2 (`Url`/`Code`-only) in the next major (see
+  "Follow-up issue" section below).
 
 ### API method details (from Bitrix24 docs)
 
@@ -108,17 +113,27 @@ $result = CRest::call('bizproc.robot.add', [
    provided: arrays when non-empty; `PLACEMENT_HANDLER` when the `Url` is not `null`, serialized
    via `$placementHandlerUrl->getUrl()`. Matches `required: no` semantics.
 5. **Scope** — the four new API fields are added to `add()` only (`update()` gains no new fields).
-   The `string|Url` migration additionally touches `update()`'s `handlerUrl`, but no other method.
+   The Stage-1 migrations (`handlerUrl` → `string|Url`, `code` → `string|RobotCode`) additionally
+   touch `Robot::update()`. The `Activity` service is **not** modified in this change.
 6. **Docs link** — while editing the `#[ApiEndpointMetadata]` of `add()`, switch its URL and the
    `@see` docblock to the English `apidocs.bitrix24.com` page (skill rule for changed metadata).
 7. **New `Url` value object** — introduce `Bitrix24\SDK\Core\ValueObjects\Url`, a copy of the
    validation in `Core\Credentials\WebhookUrl`, and use it as the type of the new
    `PLACEMENT_HANDLER` parameter (VO-only, `?Url`). `WebhookUrl` is **not** refactored here; that
    migration and the SDK-wide rollout are tracked by the follow-up issue.
-8. **URL normalization helper** — a private `resolveUrl(string|Url $url): string` in `Robot`
-   converts a union argument to a validated string for the payload: an existing `Url` returns
-   `->getUrl()`; a raw `string` is wrapped in `new Url(...)` first, so raw strings are validated
-   the same way. `placementHandlerUrl` is already a `Url`, so it uses `->getUrl()` directly.
+8. **Normalization helpers** — private `resolveUrl(string|Url $url): string` and
+   `resolveRobotCode(string|RobotCode $code): string` in `Robot` convert a union argument to a
+   validated string for the payload: an existing value object returns `->getUrl()` / `->getCode()`;
+   a raw `string` is wrapped in `new Url(...)` / `new RobotCode(...)` first, so raw strings are
+   validated the same way. `placementHandlerUrl` is already a `Url`, so it uses `->getUrl()`
+   directly.
+9. **Bizproc CODE value objects** — introduce `RobotCode` and `ActivityCode` in the new
+   `Bitrix24\SDK\Services\Workflows\ValueObjects` namespace (**Services** layer, bizproc-specific —
+   unlike the generic `Url` in `Core`). Both validate the same charset from the API docs
+   (`a-z A-Z 0-9 . - _`, non-empty); uniqueness is server-side and not validated. `RobotCode` is
+   wired into `Robot::add()` / `Robot::update()` as `string|RobotCode`. `ActivityCode` is created
+   and unit-tested but **not** wired into the `Activity` service in this change (deferred to the
+   follow-up issue) to keep #493 from expanding into `bizproc.activity.*`.
 
 ### Testing constraint (documented rationale)
 
@@ -179,29 +194,28 @@ full method body lives in **Files to Modify → 1**; the signature is:
 
 ```php
 public function add(
-    string      $code,
-    string|Url  $handlerUrl,                     // widened from string (Stage 1) ← changed
-    int         $b24AuthUserId,
-    array       $localizedRobotName,
-    bool        $isUseSubscription,
-    array       $properties,
-    bool        $isUsePlacement,
-    array       $returnProperties,
-    array       $localizedRobotDescription = [], // DESCRIPTION        ← new
-    array       $documentType = [],              // DOCUMENT_TYPE      ← new
-    array       $filter = [],                    // FILTER             ← new
-    ?Url        $placementHandlerUrl = null      // PLACEMENT_HANDLER  ← new (Url VO)
+    string|RobotCode $code,                        // widened from string (Stage 1) ← changed
+    string|Url       $handlerUrl,                  // widened from string (Stage 1) ← changed
+    int              $b24AuthUserId,
+    array            $localizedRobotName,
+    bool             $isUseSubscription,
+    array            $properties,
+    bool             $isUsePlacement,
+    array            $returnProperties,
+    array            $localizedRobotDescription = [], // DESCRIPTION        ← new
+    array            $documentType = [],              // DOCUMENT_TYPE      ← new
+    array            $filter = [],                    // FILTER             ← new
+    ?Url             $placementHandlerUrl = null      // PLACEMENT_HANDLER  ← new (Url VO)
 ): AddedRobotResult
 ```
 
-`update()` is changed too — only its `handlerUrl` parameter is widened
-`?string` → `Url|string|null` (no new fields):
+`update()` is changed too — its `code` and `handlerUrl` parameters are widened (no new fields):
 
 ```php
 public function update(
-    string          $code,
-    Url|string|null $handlerUrl = null,          // widened from ?string (Stage 1) ← changed
-    ?int            $b24AuthUserId = null,
+    string|RobotCode $code,                        // widened from string (Stage 1) ← changed
+    Url|string|null  $handlerUrl = null,           // widened from ?string (Stage 1) ← changed
+    ?int             $b24AuthUserId = null,
     // …remaining parameters unchanged…
 ): UpdateRobotResult
 ```
@@ -210,6 +224,7 @@ Parameter → API field mapping (`add()`):
 
 | SDK parameter | API field | Sent when |
 |---|---|---|
+| `$code` (`string\|RobotCode`) | `CODE` | always; normalized via `resolveRobotCode()` |
 | `$handlerUrl` (`string\|Url`) | `HANDLER` | always; normalized via `resolveUrl()` |
 | `$localizedRobotDescription` | `DESCRIPTION` | array is non-empty |
 | `$documentType` | `DOCUMENT_TYPE` | array is non-empty |
@@ -361,7 +376,157 @@ class UrlTest extends TestCase
 }
 ```
 
-### 3. `tests/Unit/Services/Workflows/Robot/Service/RobotTest.php`
+### 3. `src/Services/Workflows/ValueObjects/RobotCode.php`
+
+Value object for the `bizproc.robot.add` / `bizproc.robot.update` `CODE` field, in the new
+`Bitrix24\SDK\Services\Workflows\ValueObjects` namespace (**Services** layer — bizproc-specific,
+unlike the generic `Url` which lives in `Core`). Validation from the API docs: allowed characters
+are `a-z A-Z 0-9 . - _`; the code must be non-empty (uniqueness is server-side, not validated
+here).
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Bitrix24\SDK\Services\Workflows\ValueObjects;
+
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+
+final class RobotCode
+{
+    private const string PATTERN = '/^[a-zA-Z0-9._-]+$/';
+
+    private string $code;
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function __construct(string $code)
+    {
+        if (preg_match(self::PATTERN, $code) !== 1) {
+            throw new InvalidArgumentException(sprintf(
+                'robot code "%s" is invalid, allowed characters are a-z, A-Z, 0-9, dot, hyphen and underscore',
+                $code
+            ));
+        }
+
+        $this->code = $code;
+    }
+
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+}
+```
+
+### 4. `src/Services/Workflows/ValueObjects/ActivityCode.php`
+
+Sibling value object for the `bizproc.activity.add` / `bizproc.activity.update` `CODE` field. Same
+allowed character set (`a-z A-Z 0-9 . - _`, non-empty) per the API docs (errors `Empty activity
+code!` / `Wrong activity code!`). **Created and unit-tested in #493; wiring it into the `Activity`
+service is deferred** (the `Activity` service is not modified in this change — see decision 9) and
+tracked by the follow-up issue, unless explicitly requested for #493.
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Bitrix24\SDK\Services\Workflows\ValueObjects;
+
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+
+final class ActivityCode
+{
+    private const string PATTERN = '/^[a-zA-Z0-9._-]+$/';
+
+    private string $code;
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function __construct(string $code)
+    {
+        if (preg_match(self::PATTERN, $code) !== 1) {
+            throw new InvalidArgumentException(sprintf(
+                'activity code "%s" is invalid, allowed characters are a-z, A-Z, 0-9, dot, hyphen and underscore',
+                $code
+            ));
+        }
+
+        $this->code = $code;
+    }
+
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+}
+```
+
+### 5. `tests/Unit/Services/Workflows/ValueObjects/RobotCodeTest.php`
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Bitrix24\SDK\Tests\Unit\Services\Workflows\ValueObjects;
+
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Services\Workflows\ValueObjects\RobotCode;
+use Generator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
+
+#[CoversClass(RobotCode::class)]
+class RobotCodeTest extends TestCase
+{
+    #[Test]
+    #[TestDox('valid robot code is accepted and returned unchanged')]
+    #[DataProvider('validCodeProvider')]
+    public function testValidCode(string $code): void
+    {
+        $this->assertSame($code, (new RobotCode($code))->getCode());
+    }
+
+    #[Test]
+    #[TestDox('invalid robot code throws InvalidArgumentException')]
+    #[DataProvider('invalidCodeProvider')]
+    public function testInvalidCode(string $code): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new RobotCode($code);
+    }
+
+    public static function validCodeProvider(): Generator
+    {
+        yield 'letters' => ['robotCode'];
+        yield 'digits' => ['robot123'];
+        yield 'dot, hyphen, underscore' => ['my.robot-code_1'];
+    }
+
+    public static function invalidCodeProvider(): Generator
+    {
+        yield 'empty' => [''];
+        yield 'space' => ['robot code'];
+        yield 'slash' => ['robot/code'];
+        yield 'unicode' => ['робот'];
+    }
+}
+```
+
+### 6. `tests/Unit/Services/Workflows/ValueObjects/ActivityCodeTest.php`
+
+Same structure as `RobotCodeTest`, targeting `ActivityCode`
+(`#[CoversClass(ActivityCode::class)]`, identical valid/invalid data sets and assertions).
+
+### 7. `tests/Unit/Services/Workflows/Robot/Service/RobotTest.php`
 
 New unit test (the Robot service has no unit tests yet). Uses `NullCore` / `NullBatch` — no HTTP.
 
@@ -378,6 +543,7 @@ use Bitrix24\SDK\Services\Workflows\Robot\Result\AddedRobotResult;
 use Bitrix24\SDK\Services\Workflows\Robot\Result\UpdateRobotResult;
 use Bitrix24\SDK\Services\Workflows\Robot\Service\Robot;
 use Bitrix24\SDK\Services\Workflows\Template\Service\Batch;
+use Bitrix24\SDK\Services\Workflows\ValueObjects\RobotCode;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullCore;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -491,6 +657,36 @@ class RobotTest extends TestCase
 
         $this->assertInstanceOf(UpdateRobotResult::class, $result);
     }
+
+    #[Test]
+    #[TestDox('add() accepts a RobotCode value object for the code (Stage 1 migration)')]
+    public function testAddAcceptsRobotCode(): void
+    {
+        $result = $this->robot->add(
+            new RobotCode('test_robot'),
+            'https://example.com/handler',
+            1,
+            ['en' => 'Robot name'],
+            false,
+            [],
+            false,
+            []
+        );
+
+        $this->assertInstanceOf(AddedRobotResult::class, $result);
+    }
+
+    #[Test]
+    #[TestDox('update() accepts a RobotCode value object for the code (Stage 1 migration)')]
+    public function testUpdateAcceptsRobotCode(): void
+    {
+        $result = $this->robot->update(
+            new RobotCode('test_robot'),
+            new Url('https://example.com/handler')
+        );
+
+        $this->assertInstanceOf(UpdateRobotResult::class, $result);
+    }
 }
 ```
 
@@ -504,9 +700,11 @@ class RobotTest extends TestCase
 
 ### 1. `src/Services/Workflows/Robot/Service/Robot.php`
 
-Three edits: rewrite `add()`, widen `update()`'s `handlerUrl`, add the private `resolveUrl()`
-helper. Also add the import `use Bitrix24\SDK\Core\ValueObjects\Url;`
-(`InvalidArgumentException` is already imported at line 21).
+Edits: rewrite `add()`, widen `update()`, add the private `resolveUrl()` and `resolveRobotCode()`
+helpers. Both `code` (→ `string|RobotCode`) and `handlerUrl` (→ `string|Url`) are widened in
+`add()` and `update()`. Add imports `use Bitrix24\SDK\Core\ValueObjects\Url;` and
+`use Bitrix24\SDK\Services\Workflows\ValueObjects\RobotCode;` (`InvalidArgumentException` is
+already imported at line 21). Column alignment below is illustrative — `php-cs-fixer` reformats it.
 
 **1a. `add()`** — new signature and body (also update its `@see` docblock + `#[ApiEndpointMetadata]` URL):
 
@@ -525,9 +723,9 @@ helper. Also add the import `use Bitrix24\SDK\Core\ValueObjects\Url;`
         'Registers new automation rule.'
     )]
     public function add(
-        string     $code,
-        string|Url $handlerUrl,
-        int        $b24AuthUserId,
+        string|RobotCode $code,
+        string|Url       $handlerUrl,
+        int              $b24AuthUserId,
         array      $localizedRobotName,
         bool       $isUseSubscription,
         array      $properties,
@@ -546,7 +744,7 @@ helper. Also add the import `use Bitrix24\SDK\Core\ValueObjects\Url;`
         }
 
         $payload = [
-            'CODE' => $code,
+            'CODE' => $this->resolveRobotCode($code),
             'HANDLER' => $this->resolveUrl($handlerUrl),
             'AUTH_USER_ID' => $b24AuthUserId,
             'NAME' => $localizedRobotName,
@@ -578,19 +776,19 @@ helper. Also add the import `use Bitrix24\SDK\Core\ValueObjects\Url;`
     }
 ```
 
-**1b. `update()`** — widen only the `handlerUrl` parameter and normalize it (rest of the method is
+**1b. `update()`** — widen `code` and `handlerUrl`, normalize both (rest of the if-blocks
 unchanged):
 
 ```php
     public function update(
-        string          $code,
-        Url|string|null $handlerUrl = null,   // ← changed from ?string
-        ?int            $b24AuthUserId = null,
-        ?array          $localizedRobotName = null,
-        ?bool           $isUseSubscription = null,
-        ?array          $properties = null,
-        ?bool           $isUsePlacement = null,
-        ?array          $returnProperties = null
+        string|RobotCode $code,                 // ← changed from string
+        Url|string|null  $handlerUrl = null,    // ← changed from ?string
+        ?int             $b24AuthUserId = null,
+        ?array           $localizedRobotName = null,
+        ?bool            $isUseSubscription = null,
+        ?array           $properties = null,
+        ?bool            $isUsePlacement = null,
+        ?array           $returnProperties = null
     ): Workflows\Robot\Result\UpdateRobotResult
     {
         $fieldsToUpdate = [];
@@ -598,10 +796,18 @@ unchanged):
             $fieldsToUpdate['HANDLER'] = $this->resolveUrl($handlerUrl);   // ← changed
         }
         // …remaining if-blocks unchanged…
+
+        return new Workflows\Robot\Result\UpdateRobotResult($this->core->call(
+            'bizproc.robot.update',
+            [
+                'CODE' => $this->resolveRobotCode($code),   // ← changed
+                'FIELDS' => $fieldsToUpdate,
+            ]
+        ));
     }
 ```
 
-**1c. Private helper** — add to the `Robot` class:
+**1c. Private helpers** — add to the `Robot` class:
 
 ```php
     /**
@@ -611,10 +817,19 @@ unchanged):
     {
         return $url instanceof Url ? $url->getUrl() : (new Url($url))->getUrl();
     }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function resolveRobotCode(string|RobotCode $code): string
+    {
+        return $code instanceof RobotCode ? $code->getCode() : (new RobotCode($code))->getCode();
+    }
 ```
 
-A raw `string` is wrapped in `new Url(...)`, so an invalid URL string throws
-`InvalidArgumentException` — same validation whether the caller passes a string or a `Url`.
+A raw `string` is wrapped in `new Url(...)` / `new RobotCode(...)`, so an invalid value throws
+`InvalidArgumentException` — same validation whether the caller passes a string or the value
+object.
 
 ### 2. `CHANGELOG.md`
 
@@ -624,10 +839,12 @@ are not already present under 3.4.0):
 ```markdown
 ### Added
 - Added `Bitrix24\SDK\Core\ValueObjects\Url` value object ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- Added `Bitrix24\SDK\Services\Workflows\ValueObjects\RobotCode` and `ActivityCode` value objects ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 - Added `DESCRIPTION`, `DOCUMENT_TYPE`, `FILTER` and `PLACEMENT_HANDLER` fields to `bizproc.robot.add` ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 
 ### Changed
 - `bizproc.robot.add` and `bizproc.robot.update` now accept a `Url` value object (or a raw string) for the handler URL ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- `bizproc.robot.add` and `bizproc.robot.update` now accept a `RobotCode` value object (or a raw string) for the code ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 ```
 
 ### Not modified (already in place)
@@ -671,8 +888,11 @@ rolling the same pattern out to the rest of the SDK and then executing Stage 2.
   Refactor `Core\Credentials\WebhookUrl` to build on top of `Core\ValueObjects\Url` so validation
   lives in one place. Consider extracting the `resolveUrl()` helper introduced in `Robot` into a
   shared location (trait or `AbstractService`).
-- **Stage 2 (breaking, next major release):** type all URL parameters as `Url` only; remove the
-  `string` union.
+- **Stage 1 (bizproc codes):** wire the `ActivityCode` value object (already created in #493) into
+  `bizproc.activity.add` / `bizproc.activity.update` as `string|ActivityCode`, mirroring the
+  `RobotCode` migration.
+- **Stage 2 (breaking, next major release):** type all URL and code parameters as their value
+  objects only; remove the `string` unions.
 
 ## Acceptance criteria
 
@@ -693,9 +913,12 @@ Depends on #493 (introduces the `Url` value object and the Stage 1 reference imp
 Changes touch:
 - `src/Core/ValueObjects/Url.php` — new **Core** layer class; imports only
   `Core\Exceptions\InvalidArgumentException` (same layer). Core depends on nothing outside itself.
-- `src/Services/Workflows/Robot/Service/Robot.php` — **Services** layer; adds an import of
-  `Core\ValueObjects\Url`. Services → Core is an allowed dependency (same as the existing
-  `InvalidArgumentException` / `CoreInterface` imports).
+- `src/Services/Workflows/ValueObjects/RobotCode.php` and `ActivityCode.php` — new **Services**
+  layer classes; import only `Core\Exceptions\InvalidArgumentException` (Services → Core allowed).
+- `src/Services/Workflows/Robot/Service/Robot.php` — **Services** layer; adds imports of
+  `Core\ValueObjects\Url` (Services → Core) and `Workflows\ValueObjects\RobotCode` (intra-Services,
+  same `Workflows` scope — the same kind of import as the existing `Workflows\Robot\Result\*` and
+  `Workflows\Template\Service\Batch` uses).
 - `tests/Unit/...` — not covered by deptrac layers.
 
 No new cross-layer edge and no new `skip_violations` entry are introduced.
@@ -725,15 +948,20 @@ context and admin rights and cannot be exercised through the webhook-based
 1. RED: add `tests/Unit/Core/ValueObjects/UrlTest.php`; run `make test-unit` and confirm it fails
    (class does not exist yet).
 2. GREEN: create `src/Core/ValueObjects/Url.php`; run `make test-unit` until the `Url` tests pass.
-3. RED: add `tests/Unit/Services/Workflows/Robot/Service/RobotTest.php` with the five tests
-   (result type, placement-with-`Url`, placement-missing-throws, `add()` `handlerUrl` as `Url`,
-   `update()` `handlerUrl` as `Url`); run `make test-unit` and confirm the new behaviours fail
-   (method not yet updated).
-4. GREEN: apply the `Robot.php` changes — add the `Url` import, the private `resolveUrl()` helper,
-   the four new `add()` params + placement precondition + conditional payload, and widen
-   `handlerUrl` to `string|Url` in `add()` and `update()`; run `make test-unit` until green.
-5. REFACTOR: run the full light gate; adjust code style as reported by cs-fixer / rector.
-6. Update `CHANGELOG.md` (the `Url` VO line, the robot-fields line, and the `### Changed` widening
-   line).
-7. After plan approval and a green light gate, create the follow-up issue (see "Follow-up issue"
+3. RED: add `tests/Unit/Services/Workflows/ValueObjects/RobotCodeTest.php` and
+   `ActivityCodeTest.php`; run `make test-unit` and confirm they fail (classes do not exist yet).
+4. GREEN: create `src/Services/Workflows/ValueObjects/RobotCode.php` and `ActivityCode.php`; run
+   `make test-unit` until the code-VO tests pass.
+5. RED: add `tests/Unit/Services/Workflows/Robot/Service/RobotTest.php` with the seven tests
+   (result type, placement-with-`Url`, placement-missing-throws, `add()`/`update()` `handlerUrl`
+   as `Url`, `add()`/`update()` `code` as `RobotCode`); run `make test-unit` and confirm the new
+   behaviours fail (method not yet updated).
+6. GREEN: apply the `Robot.php` changes — add the `Url` and `RobotCode` imports, the private
+   `resolveUrl()` and `resolveRobotCode()` helpers, the four new `add()` params + placement
+   precondition + conditional payload, and widen `code`/`handlerUrl` in `add()` and `update()`;
+   run `make test-unit` until green.
+7. REFACTOR: run the full light gate; adjust code style as reported by cs-fixer / rector.
+8. Update `CHANGELOG.md` (the two `### Added` VO lines, the robot-fields line, and the two
+   `### Changed` widening lines).
+9. After plan approval and a green light gate, create the follow-up issue (see "Follow-up issue"
    section) — search for duplicates and verify the label name first.
