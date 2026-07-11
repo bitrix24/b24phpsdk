@@ -299,7 +299,7 @@ class Productrow extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
-    public function countByFilter($filter = []): int
+    public function countByFilter(array $filter = []): int
     {
         return $this->list([], $filter, 1)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
     }
