@@ -399,6 +399,8 @@
         <testsuite name="integration_tests_scope_timeman">
             <directory>./tests/Integration/Services/Timeman/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_humanresources">
+            <directory>./tests/Integration/Services/HumanResources/</directory>
         <testsuite name="integration_tests_scope_timeman_record">
             <file>./tests/Integration/Services/Timeman/Record/Service/RecordTest.php</file>
             <file>./tests/Integration/Services/Timeman/Record/Result/RecordItemResultTest.php</file>
