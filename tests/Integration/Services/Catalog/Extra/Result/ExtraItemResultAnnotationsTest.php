@@ -39,7 +39,7 @@ class ExtraItemResultAnnotationsTest extends TestCase
     #[TestDox('all fields in ExtraItemResult are annotated in phpdoc and match with raw api response')]
     public function testAllSystemFieldsAnnotated(): void
     {
-        $propListFromApi = array_keys($this->extraService->fields()->getFieldsDescription());
+        $propListFromApi = array_keys($this->extraService->fields()->getFieldsDescription()['extra']);
 
         $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, ExtraItemResult::class);
     }
@@ -48,7 +48,7 @@ class ExtraItemResultAnnotationsTest extends TestCase
     #[TestDox('all fields in ExtraItemResult have valid type casting in magic getters')]
     public function testAllSystemFieldsHasValidTypeAnnotation(): void
     {
-        $fields = $this->extraService->fields()->getFieldsDescription();
+        $fields = $this->extraService->fields()->getFieldsDescription()['extra'];
 
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation($fields, ExtraItemResult::class);
     }

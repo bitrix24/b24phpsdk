@@ -48,7 +48,7 @@ trait CustomBitrix24Assertions
         }
         sort($propsFromAnnotations);
 
-        if (count($fieldCodesFromApi) >= $propsFromAnnotations) {
+        if (count($fieldCodesFromApi) >= count($propsFromAnnotations)) {
             $this->assertEquals(
                 $fieldCodesFromApi,
                 $propsFromAnnotations,
@@ -211,7 +211,7 @@ trait CustomBitrix24Assertions
                         );
                         break;
                     }
-                    if (str_contains(mb_strtoupper($fieldCode), 'RATE')) {
+                    if (str_contains(mb_strtoupper($fieldCode), 'RATE') || str_contains(mb_strtoupper($fieldCode), 'PERCENTAGE')) {
                         $this->assertTrue(
                             str_contains($propsFromAnnotations[$fieldCode], Percentage::class),
                             sprintf(

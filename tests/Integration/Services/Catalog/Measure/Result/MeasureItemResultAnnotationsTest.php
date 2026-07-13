@@ -39,7 +39,7 @@ class MeasureItemResultAnnotationsTest extends TestCase
     #[TestDox('all fields in MeasureItemResult are annotated in phpdoc and match with raw api response')]
     public function testAllSystemFieldsAnnotated(): void
     {
-        $propListFromApi = array_keys($this->measureService->fields()->getFieldsDescription());
+        $propListFromApi = array_keys($this->measureService->fields()->getFieldsDescription()['measure']);
 
         $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, MeasureItemResult::class);
     }
@@ -48,7 +48,7 @@ class MeasureItemResultAnnotationsTest extends TestCase
     #[TestDox('all fields in MeasureItemResult have valid type casting in magic getters')]
     public function testAllSystemFieldsHasValidTypeAnnotation(): void
     {
-        $fields = $this->measureService->fields()->getFieldsDescription();
+        $fields = $this->measureService->fields()->getFieldsDescription()['measure'];
 
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation($fields, MeasureItemResult::class);
     }
