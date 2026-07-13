@@ -13,13 +13,10 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Services\Catalog\Measure\Result;
 
-use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Catalog\Measure\Result\MeasureItemResult;
 use Bitrix24\SDK\Services\Catalog\Measure\Service\Measure;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 use Bitrix24\SDK\Tests\Integration\Fabric;
-use Faker;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -32,62 +29,27 @@ class MeasureItemResultAnnotationsTest extends TestCase
 
     private Measure $measureService;
 
-    private Faker\Generator $faker;
-
     #[\Override]
     protected function setUp(): void
     {
         $this->measureService = Fabric::getServiceBuilder()->getCatalogScope()->measure();
-        $this->faker = Faker\Factory::create();
-    }
-
-    /**
-     * @return array<string, mixed>
-     * @throws BaseException
-     * @throws TransportException
-     */
-    private function getFirstMeasureRawItem(): array
-    {
-        $id = $this->measureService->add([
-            'code' => $this->faker->unique()->numberBetween(100000, 999999),
-            'measureTitle' => 'SDK_ANNOT_TEST_' . $this->faker->uuid(),
-            'isDefault' => 'N',
-        ])->getId();
-
-        try {
-            $rawItem = $this->measureService->get($id)
-                ->getCoreResponse()->getResponseData()->getResult()['measure'] ?? [];
-        } finally {
-            $this->measureService->delete($id);
-        }
-
-        self::assertNotEmpty($rawItem, 'get() must return a measure item to run this test');
-
-        return $rawItem;
     }
 
     #[Test]
     #[TestDox('all fields in MeasureItemResult are annotated in phpdoc and match with raw api response')]
     public function testAllSystemFieldsAnnotated(): void
     {
-        $rawItem = $this->getFirstMeasureRawItem();
+        $propListFromApi = array_keys($this->measureService->fields()->getFieldsDescription());
 
-        $this->assertBitrix24AllResultItemFieldsAnnotated(
-            array_keys($rawItem),
-            MeasureItemResult::class
-        );
+        $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, MeasureItemResult::class);
     }
 
     #[Test]
     #[TestDox('all fields in MeasureItemResult have valid type casting in magic getters')]
     public function testAllSystemFieldsHasValidTypeAnnotation(): void
     {
-        $rawItem = $this->getFirstMeasureRawItem();
-        $measureItemResult = new MeasureItemResult($rawItem);
+        $fields = $this->measureService->fields()->getFieldsDescription();
 
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations(
-            $measureItemResult,
-            MeasureItemResult::class
-        );
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation($fields, MeasureItemResult::class);
     }
 }

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Catalog\Measure\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Bitrix24\SDK\Core\Result\AbstractItem;
 
 /**
  * @property-read int         $id
@@ -24,6 +24,6 @@ use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
  * @property-read string|null $symbolIntl
  * @property-read string|null $symbolLetterIntl
  */
-class MeasureItemResult extends AbstractAnnotatedItem
+class MeasureItemResult extends AbstractItem
 {
 }

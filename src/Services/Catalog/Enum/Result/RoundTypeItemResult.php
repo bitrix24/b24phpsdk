@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Catalog\Enum\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Bitrix24\SDK\Core\Result\AbstractItem;
 
 /**
  * @property-read int    $id
  * @property-read string $name
  */
-class RoundTypeItemResult extends AbstractAnnotatedItem
+class RoundTypeItemResult extends AbstractItem
 {
 }

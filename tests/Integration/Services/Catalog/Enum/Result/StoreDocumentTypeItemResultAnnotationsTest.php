@@ -63,17 +63,4 @@ class StoreDocumentTypeItemResultAnnotationsTest extends TestCase
             StoreDocumentTypeItemResult::class
         );
     }
-
-    #[Test]
-    #[TestDox('all fields in StoreDocumentTypeItemResult have valid type casting in magic getters')]
-    public function testAllSystemFieldsHasValidTypeAnnotation(): void
-    {
-        $rawItem = $this->getFirstStoreDocumentTypeRawItem();
-        $storeDocumentTypeItemResult = new StoreDocumentTypeItemResult($rawItem);
-
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations(
-            $storeDocumentTypeItemResult,
-            StoreDocumentTypeItemResult::class
-        );
-    }
 }

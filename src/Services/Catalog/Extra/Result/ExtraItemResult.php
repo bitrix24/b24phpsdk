@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Catalog\Extra\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Bitrix24\SDK\Core\Result\AbstractItem;
 
 /**
  * @property-read int    $id
  * @property-read string $name
  * @property-read float  $percentage
  */
-class ExtraItemResult extends AbstractAnnotatedItem
+class ExtraItemResult extends AbstractItem
 {
 }

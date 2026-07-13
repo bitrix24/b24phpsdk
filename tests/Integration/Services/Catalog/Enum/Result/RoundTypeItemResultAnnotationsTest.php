@@ -63,17 +63,4 @@ class RoundTypeItemResultAnnotationsTest extends TestCase
             RoundTypeItemResult::class
         );
     }
-
-    #[Test]
-    #[TestDox('all fields in RoundTypeItemResult have valid type casting in magic getters')]
-    public function testAllSystemFieldsHasValidTypeAnnotation(): void
-    {
-        $rawItem = $this->getFirstRoundTypeRawItem();
-        $roundTypeItemResult = new RoundTypeItemResult($rawItem);
-
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations(
-            $roundTypeItemResult,
-            RoundTypeItemResult::class
-        );
-    }
 }
