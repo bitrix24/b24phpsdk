@@ -751,6 +751,22 @@ test-integration-messageservice-sender:
 test-integration-messageservice-message-status:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_messageservice_message_status
 
+.PHONY: test-integration-catalog-price
+test-integration-catalog-price:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_price
+
+.PHONY: test-integration-catalog-price-type
+test-integration-catalog-price-type:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_price_type
+
+.PHONY: test-integration-catalog-price-type-lang
+test-integration-catalog-price-type-lang:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_price_type_lang
+
+.PHONY: test-integration-catalog-price-type-group
+test-integration-catalog-price-type-group:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_price_type_group
+
 # work dev environment
 .PHONY: php-dev-server-up
 php-dev-server-up:
