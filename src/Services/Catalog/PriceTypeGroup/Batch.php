@@ -18,40 +18,65 @@ use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Response\DTO\ResponseData;
 use Generator;
 
+/**
+ * Class Batch
+ *
+ * Overrides base Batch to handle parameter naming differences in catalog.priceTypeGroup.* REST methods:
+ * - delete uses lowercase 'id' instead of 'ID'
+ *
+ * @see https://apidocs.bitrix24.com/api-reference/catalog/price-type/price-type-group/catalog-price-type-group-delete.html
+ * @see https://apidocs.bitrix24.com/api-reference/catalog/price-type/price-type-group/catalog-price-type-group-list.html
+ */
 class Batch extends \Bitrix24\SDK\Core\Batch
 {
     /**
-     * Delete price type ↔ purchasing group binding items with batch call using lowercase «id» parameter key
+     * Determines the ID key — lowercase 'id' for catalog price type group
+     */
+    #[\Override]
+    protected function determineKeyId(string $apiMethod, ?array $additionalParameters): string
+    {
+        return 'id';
+    }
+
+    /**
+     * Delete entity items with batch call using lowercase 'id' parameter
      *
-     * @param int[] $entityItemId
+     * @param int[]             $entityItemId
+     * @param array<mixed>|null $additionalParameters
      *
-     * @return Generator<int, ResponseData>
+     * @return Generator<int, ResponseData>|ResponseData[]
      * @throws BaseException
      */
-    public function deletePriceTypeGroupItems(string $apiMethod, array $entityItemId): Generator
-    {
+    #[\Override]
+    public function deleteEntityItems(
+        string $apiMethod,
+        array $entityItemId,
+        ?array $additionalParameters = null
+    ): Generator {
         $this->logger->debug(
-            'deletePriceTypeGroupItems.start',
+            'deleteEntityItems.start',
             [
                 'apiMethod' => $apiMethod,
                 'entityItems' => $entityItemId,
+                'additionalParameters' => $additionalParameters,
             ]
         );
 
         try {
             $this->clearCommands();
-            foreach ($entityItemId as $cnt => $id) {
-                if (!is_int($id)) {
+            foreach ($entityItemId as $cnt => $itemId) {
+                if (!is_int($itemId)) {
                     throw new InvalidArgumentException(
                         sprintf(
-                            'invalid type «%s» of price type group id at position %s, id must be integer type',
-                            gettype($id),
+                            'invalid type «%s» of price type group id «%s» at position %s, price type group id must be integer type',
+                            gettype($itemId),
+                            $itemId,
                             $cnt
                         )
                     );
                 }
 
-                $this->registerCommand($apiMethod, ['id' => $id]);
+                $this->registerCommand($apiMethod, ['id' => $itemId]);
             }
 
             foreach ($this->getTraversable(true) as $cnt => $deletedItemResult) {
@@ -78,6 +103,6 @@ class Batch extends \Bitrix24\SDK\Core\Batch
             throw new BaseException($errorMessage, $exception->getCode(), $exception);
         }
 
-        $this->logger->debug('deletePriceTypeGroupItems.finish');
+        $this->logger->debug('deleteEntityItems.finish');
     }
 }

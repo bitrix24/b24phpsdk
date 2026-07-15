@@ -71,7 +71,7 @@ class Batch
     )]
     public function delete(array $priceTypeId): Generator
     {
-        foreach ($this->batch->deletePriceTypeItems('catalog.priceType.delete', $priceTypeId) as $key => $item) {
+        foreach ($this->batch->deleteEntityItems('catalog.priceType.delete', $priceTypeId) as $key => $item) {
             yield $key => new DeletedItemBatchResult($item);
         }
     }
