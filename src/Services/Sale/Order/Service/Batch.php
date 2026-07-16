@@ -95,7 +95,6 @@ class Batch
      * @param array $select Fields to select
      * @param int|null $limit Maximum number of items to return
      *
-     * @return Generator|OrderItemResult[]
      * @throws BaseException
      */
     #[ApiBatchMethodMetadata(

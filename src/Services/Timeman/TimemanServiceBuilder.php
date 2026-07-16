@@ -16,6 +16,8 @@ namespace Bitrix24\SDK\Services\Timeman;
 use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
+use Bitrix24\SDK\Services\Timeman\Record\Service\Record;
+use Bitrix24\SDK\Services\Timeman\RecordField\Service\RecordField;
 use Bitrix24\SDK\Services\Timeman\Service\Timeman;
 
 #[ApiServiceBuilderMetadata(new Scope(['timeman']))]
@@ -25,6 +27,30 @@ class TimemanServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Timeman(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function record(): Record
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Record(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function recordField(): RecordField
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new RecordField(
                 $this->core,
                 $this->log
             );

@@ -3,6 +3,16 @@
 
 ### Added
 
+- Added `Bitrix24\SDK\Core\ValueObjects\Url` value object ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- Added `Bitrix24\SDK\Core\ValueObjects\LocalizedString` value object for typed localization maps ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- Added `Bitrix24\SDK\Services\Workflows\ValueObjects\RobotCode` and `ActivityCode` value objects ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- Added `DESCRIPTION`, `DOCUMENT_TYPE`, `FILTER` and `PLACEMENT_HANDLER` fields to `bizproc.robot.add` ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- Added services `Services\Timeman\Record\Service\Record` and `Services\Timeman\RecordField\Service\RecordField`
+  with support for v3 `timeman.record.*` methods,
+  see [timeman REST v3](https://apidocs.bitrix24.com/api-reference/rest-v3/timeman/index.html) ([#518](https://github.com/bitrix24/b24phpsdk/issues/518)):
+    - `Record::list` returns employee work-time records (`timeman.record.list`), with typed `RecordSelectBuilder` / `RecordFilter`
+    - `RecordField::get` returns a single record field descriptor (`timeman.record.field.get`)
+    - `RecordField::list` returns all record field descriptors (`timeman.record.field.list`)
 - Added service `Services\Documentgenerator\Role` with support for `documentgenerator.role.*` methods,
   see [documentgenerator.role.* methods](https://apidocs.bitrix24.com/api-reference/document-generator/role/index.html) ([#489](https://github.com/bitrix24/b24phpsdk/issues/489)):
     - `add` creates a new role, with batch calls support
@@ -75,8 +85,22 @@
     - `getList` gets the list of widgets for the current application
     - `debug` enables or disables debug mode for all widgets of the current application
 - Added `repoWidget()` accessor to `LandingServiceBuilder` ([#501](https://github.com/bitrix24/b24phpsdk/issues/501))
+- Added `Services\HumanResources` v3 scope wrappers for company org structure,
+  employees, node communications, node members, and dedicated field metadata services
+  ([#517](https://github.com/bitrix24/b24phpsdk/issues/517))
 
 ### Changed
+
+- `bizproc.robot.add` and `bizproc.robot.update` now accept a `Url` value object (or a raw string) for the handler URL ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- `bizproc.robot.add` and `bizproc.robot.update` now accept a `RobotCode` value object (or a raw string) for the code ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- `bizproc.robot.add` and `bizproc.robot.update` now accept a `LocalizedString` value object (or a raw array) for the localized `NAME` / `DESCRIPTION` ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- Updated `b24phpsdk-maintainer` skill: require dedicated field metadata services for
+  `*.field.get` and `*.field.list` endpoints ([#517](https://github.com/bitrix24/b24phpsdk/issues/517))
+- Updated `b24phpsdk-maintainer` skill: `*ItemResult` classes must extend
+  `Core\Result\AbstractAnnotatedItem` (auto-casts from `@property-read` annotations) instead of the
+  legacy `AbstractItem` + manual `__get` pattern ([#518](https://github.com/bitrix24/b24phpsdk/issues/518))
+- Updated `b24phpsdk-maintainer` skill: bugs affecting both the 3.x and 1.x lines are fixed from
+  `v3-dev` first and then backported to `dev` ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 
 ### Fixed
 

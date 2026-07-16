@@ -24,6 +24,7 @@ use Bitrix24\SDK\Services\Documentgenerator\DocumentgeneratorServiceBuilder;
 use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
 use Bitrix24\SDK\Services\Disk\DiskServiceBuilder;
 use Bitrix24\SDK\Services\Entity\EntityServiceBuilder;
+use Bitrix24\SDK\Services\HumanResources\HumanResourcesServiceBuilder;
 use Bitrix24\SDK\Services\Department\DepartmentServiceBuilder;
 use Bitrix24\SDK\Services\Task\TaskServiceBuilder;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
@@ -491,6 +492,20 @@ class ServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new TimemanServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function getHumanResourcesScope(): HumanResourcesServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new HumanResourcesServiceBuilder(
                 $this->core,
                 $this->batch,
                 $this->bulkItemsReader,

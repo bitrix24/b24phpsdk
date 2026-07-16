@@ -51,6 +51,23 @@ Generator usage rules:
 - After generating a `*ItemResult.php`, keep the mandatory live annotation/type-casting
   integration test described below.
 
+### Result-item base class
+
+**Rule**: every `*ItemResult.php` class MUST extend
+`Bitrix24\SDK\Core\Result\AbstractAnnotatedItem` — never the plain `AbstractItem`.
+
+`AbstractAnnotatedItem` reads the `@property-read` PHPDoc annotations and automatically casts each
+magic-getter value to the annotated type: `CarbonImmutable` (via `CarbonImmutable::parse()`), `int`,
+`float`, `bool` (incl. `Y`/`N`), `array`, nested `*ItemResult` (`array<FooItemResult>`), and backed
+enums. Because of this:
+
+- Do **not** write a manual `__get()` override with hand-rolled casting (the older `AbstractItem`
+  pattern seen in legacy classes such as `EventLogItemResult`). The base class handles it.
+- Still add `use Carbon\CarbonImmutable;` whenever a property is annotated as `CarbonImmutable`, so the
+  PHPDoc type resolves to the correct FQN and the base class recognizes it for casting.
+- Keep `#[OpenApiEntity(...)]` and the `@property-read` block — they drive both the casting and the
+  mandatory annotation/type-cast integration test.
+
 ---
 
 ## Webhook URL format for direct curl requests
@@ -625,6 +642,22 @@ the Bitrix24 REST payload format at the service boundary, following existing ser
 patterns. Do not expose raw date/time strings in service method arguments when the SDK can
 accept a typed immutable date value instead.
 
+### Field metadata methods
+
+When a REST API entity exposes `*.field.get` and `*.field.list`, implement those methods in
+a dedicated field metadata service instead of adding `fieldGet()` or `fieldList()` methods to
+the primary entity service.
+
+Use this shape:
+
+- service class: `Services\<Scope>\<Entity>Field\Service\<Entity>Field`
+- builder accessor: `<entity>Field()`
+- public methods: `get(string $name, array $select = [])` and `list(array $select = [])`
+- result wrappers: `<Entity>FieldResult`, `<Entity>FieldsResult`, and `<Entity>FieldItemResult`
+
+If one issue covers several entities with field metadata endpoints, create one field service
+per entity unless the scope already has an established shared field-service convention.
+
 ### ApiEndpointMetadata documentation links
 
 When adding or changing `ApiEndpointMetadata` attributes, documentation links must point to
@@ -665,6 +698,17 @@ Branch off from the corresponding base branch:
 | v3 | `v3-dev` |
 
 Do not assume — always wait for the user's answer.
+
+#### Cross-version bugfixes (affects both 3.x and 1.x)
+
+When a bug (or a missing-field gap) affects **both** the 3.x and the 1.x release lines — including
+fixes to v1 methods whose code is identical on `dev` and `v3-dev` — always implement the fix on a
+branch off **`v3-dev`** first and open the PR against `v3-dev`. After that PR merges, **backport** the
+same change to `dev` via a separate branch and a PR against `dev`.
+
+Rationale: `v3-dev` is the forward-moving line, so the fix must never be missing there; the backport
+keeps the 1.x line in sync. Do not base such a fix on `dev` first. Record the pending `dev` backport
+as a follow-up in the task plan so it is not forgotten after the `v3-dev` PR merges.
 
 ### Step 5 — Create the branch
 
