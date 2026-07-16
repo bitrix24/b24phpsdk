@@ -33,16 +33,17 @@ class PriceItemResult extends AbstractItem
     /**
      * @param int|string $offset
      *
-     * @return CarbonImmutable|mixed|null
+     * @return CarbonImmutable|float|mixed|null
      */
     public function __get($offset)
     {
-        if ($offset === 'timestampX') {
-            return $this->data[$offset] !== null && $this->data[$offset] !== ''
+        return match ($offset) {
+            'price' => (float)$this->data[$offset],
+            'priceScale' => $this->data[$offset] !== null ? (float)$this->data[$offset] : null,
+            'timestampX' => $this->data[$offset] !== null && $this->data[$offset] !== ''
                 ? CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset])
-                : null;
-        }
-
-        return $this->data[$offset] ?? null;
+                : null,
+            default => $this->data[$offset] ?? null,
+        };
     }
 }
