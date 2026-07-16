@@ -76,6 +76,9 @@ class PriceTypeLangItemResultTest extends TestCase
     public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
     {
         $priceTypeLangItemResult = $this->priceTypeLangService->get($this->priceTypeLangId)->priceTypeLang();
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($priceTypeLangItemResult, PriceTypeLangItemResult::class);
+        $this->assertIsInt($priceTypeLangItemResult->id);
+        $this->assertIsInt($priceTypeLangItemResult->catalogGroupId);
+        $this->assertIsString($priceTypeLangItemResult->lang);
+        $this->assertIsString($priceTypeLangItemResult->name);
     }
 }

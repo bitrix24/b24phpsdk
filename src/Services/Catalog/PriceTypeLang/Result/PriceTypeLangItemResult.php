@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Catalog\PriceTypeLang\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Bitrix24\SDK\Core\Result\AbstractItem;
 
 /**
  * @property-read int    $id
@@ -21,6 +21,6 @@ use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
  * @property-read string $lang
  * @property-read string $name
  */
-class PriceTypeLangItemResult extends AbstractAnnotatedItem
+class PriceTypeLangItemResult extends AbstractItem
 {
 }

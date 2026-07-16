@@ -40,15 +40,15 @@ class PriceTypeTest extends TestCase
     public function testAddGetDelete(): void
     {
         $name = sprintf('test price type %s', time());
-        $addResult = $this->priceTypeService->add([
+        $priceTypeResult = $this->priceTypeService->add([
             'name' => $name,
             'base' => 'N',
             'sort' => 50,
             'xmlId' => sprintf('test-price-type-%s', time()),
         ]);
-        $priceTypeId = $addResult->priceType()->id;
-        $this->assertSame($name, $addResult->priceType()->name);
-        $this->assertFalse($addResult->priceType()->base);
+        $priceTypeId = $priceTypeResult->priceType()->id;
+        $this->assertSame($name, $priceTypeResult->priceType()->name);
+        $this->assertFalse($priceTypeResult->priceType()->base);
 
         $getResult = $this->priceTypeService->get($priceTypeId);
         $this->assertSame($priceTypeId, $getResult->priceType()->id);
@@ -69,8 +69,8 @@ class PriceTypeTest extends TestCase
         ])->priceType()->id;
 
         $updatedName = sprintf('updated price type %s', time());
-        $updateResult = $this->priceTypeService->update($priceTypeId, ['name' => $updatedName]);
-        $this->assertSame($updatedName, $updateResult->priceType()->name);
+        $priceTypeResult = $this->priceTypeService->update($priceTypeId, ['name' => $updatedName]);
+        $this->assertSame($updatedName, $priceTypeResult->priceType()->name);
 
         $this->priceTypeService->delete($priceTypeId);
     }
@@ -87,8 +87,8 @@ class PriceTypeTest extends TestCase
             'sort' => 50,
         ])->priceType()->id;
 
-        $listResult = $this->priceTypeService->list([], ['id' => $priceTypeId]);
-        $this->assertCount(1, $listResult->getPriceTypes());
+        $priceTypesResult = $this->priceTypeService->list([], ['id' => $priceTypeId]);
+        $this->assertCount(1, $priceTypesResult->getPriceTypes());
 
         $this->priceTypeService->delete($priceTypeId);
     }

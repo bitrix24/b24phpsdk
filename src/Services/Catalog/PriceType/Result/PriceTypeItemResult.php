@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Catalog\PriceType\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Bitrix24\SDK\Core\Result\AbstractItem;
 use Carbon\CarbonImmutable;
 
 /**
@@ -27,6 +27,21 @@ use Carbon\CarbonImmutable;
  * @property-read CarbonImmutable|null $dateCreate
  * @property-read CarbonImmutable|null $timestampX
  */
-class PriceTypeItemResult extends AbstractAnnotatedItem
+class PriceTypeItemResult extends AbstractItem
 {
+    /**
+     * @param int|string $offset
+     *
+     * @return bool|CarbonImmutable|mixed|null
+     */
+    public function __get($offset)
+    {
+        return match ($offset) {
+            'base' => $this->data[$offset] === 'Y',
+            'dateCreate', 'timestampX' => $this->data[$offset] !== null && $this->data[$offset] !== ''
+                ? CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset])
+                : null,
+            default => $this->data[$offset] ?? null,
+        };
+    }
 }

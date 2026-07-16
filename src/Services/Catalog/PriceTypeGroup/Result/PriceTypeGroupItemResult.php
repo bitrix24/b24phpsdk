@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Catalog\PriceTypeGroup\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Bitrix24\SDK\Core\Result\AbstractItem;
 
 /**
  * @property-read int  $id
@@ -21,6 +21,19 @@ use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
  * @property-read int  $groupId
  * @property-read bool $access
  */
-class PriceTypeGroupItemResult extends AbstractAnnotatedItem
+class PriceTypeGroupItemResult extends AbstractItem
 {
+    /**
+     * @param int|string $offset
+     *
+     * @return bool|mixed|null
+     */
+    public function __get($offset)
+    {
+        if ($offset === 'access') {
+            return $this->data[$offset] === 'Y';
+        }
+
+        return $this->data[$offset] ?? null;
+    }
 }

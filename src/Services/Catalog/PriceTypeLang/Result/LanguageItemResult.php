@@ -13,13 +13,26 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Catalog\PriceTypeLang\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Bitrix24\SDK\Core\Result\AbstractItem;
 
 /**
  * @property-read string $lid
  * @property-read string $name
  * @property-read bool   $active
  */
-class LanguageItemResult extends AbstractAnnotatedItem
+class LanguageItemResult extends AbstractItem
 {
+    /**
+     * @param int|string $offset
+     *
+     * @return bool|mixed|null
+     */
+    public function __get($offset)
+    {
+        if ($offset === 'active') {
+            return $this->data[$offset] === 'Y';
+        }
+
+        return $this->data[$offset] ?? null;
+    }
 }

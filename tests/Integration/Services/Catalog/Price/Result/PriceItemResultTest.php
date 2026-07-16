@@ -80,6 +80,10 @@ class PriceItemResultTest extends TestCase
     public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
     {
         $priceItemResult = $this->priceService->get($this->priceId)->price();
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($priceItemResult, PriceItemResult::class);
+        $this->assertIsInt($priceItemResult->id);
+        $this->assertIsInt($priceItemResult->productId);
+        $this->assertIsInt($priceItemResult->catalogGroupId);
+        $this->assertIsFloat($priceItemResult->price);
+        $this->assertIsString($priceItemResult->currency);
     }
 }

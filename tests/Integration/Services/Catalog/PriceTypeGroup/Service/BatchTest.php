@@ -62,13 +62,13 @@ class BatchTest extends TestCase
     #[TestDox('test Batch::delete')]
     public function testDelete(): void
     {
-        $listResult = $this->priceTypeGroupService->list(
+        $priceTypeGroupsResult = $this->priceTypeGroupService->list(
             [],
             ['catalogGroupId' => $this->priceTypeId]
         );
         $bindingIds = array_map(
             static fn ($binding): int => $binding->id,
-            $listResult->getPriceTypeGroups()
+            $priceTypeGroupsResult->getPriceTypeGroups()
         );
         $this->assertNotEmpty($bindingIds);
 

@@ -48,6 +48,8 @@ class LanguageItemResultTest extends TestCase
     public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
     {
         $languages = $this->priceTypeLangService->getLanguages()->getLanguages();
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($languages[0], LanguageItemResult::class);
+        $this->assertIsString($languages[0]->lid);
+        $this->assertIsString($languages[0]->name);
+        $this->assertIsBool($languages[0]->active);
     }
 }

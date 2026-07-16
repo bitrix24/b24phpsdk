@@ -62,24 +62,24 @@ class PriceTypeGroupTest extends TestCase
     #[TestDox('test PriceTypeGroup::list, PriceTypeGroup::delete, PriceTypeGroup::add')]
     public function testListDeleteAdd(): void
     {
-        $listResult = $this->priceTypeGroupService->list(
+        $priceTypeGroupsResult = $this->priceTypeGroupService->list(
             [],
             ['catalogGroupId' => $this->priceTypeId, 'groupId' => 1, 'access' => 'N']
         );
-        $bindings = $listResult->getPriceTypeGroups();
+        $bindings = $priceTypeGroupsResult->getPriceTypeGroups();
         $this->assertCount(1, $bindings);
         $bindingId = $bindings[0]->id;
 
         $this->assertTrue($this->priceTypeGroupService->delete($bindingId)->isSuccess());
 
-        $addResult = $this->priceTypeGroupService->add([
+        $priceTypeGroupResult = $this->priceTypeGroupService->add([
             'catalogGroupId' => $this->priceTypeId,
             'groupId' => 1,
             'access' => 'N',
         ]);
-        $this->assertSame($this->priceTypeId, $addResult->priceTypeGroup()->catalogGroupId);
-        $this->assertSame(1, $addResult->priceTypeGroup()->groupId);
-        $this->assertFalse($addResult->priceTypeGroup()->access);
+        $this->assertSame($this->priceTypeId, $priceTypeGroupResult->priceTypeGroup()->catalogGroupId);
+        $this->assertSame(1, $priceTypeGroupResult->priceTypeGroup()->groupId);
+        $this->assertFalse($priceTypeGroupResult->priceTypeGroup()->access);
     }
 
     /**

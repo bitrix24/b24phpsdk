@@ -95,8 +95,8 @@ class PriceTest extends TestCase
             'currency' => 'USD',
         ])->price()->id;
 
-        $updateResult = $this->priceService->update($priceId, ['price' => 200.0, 'currency' => 'USD']);
-        $this->assertSame(200.0, $updateResult->price()->price);
+        $priceResult = $this->priceService->update($priceId, ['price' => 200.0, 'currency' => 'USD']);
+        $this->assertSame(200.0, $priceResult->price()->price);
 
         $this->priceService->delete($priceId);
     }
@@ -115,8 +115,8 @@ class PriceTest extends TestCase
             'currency' => 'USD',
         ])->price()->id;
 
-        $listResult = $this->priceService->list([], ['productId' => $this->productId], ['id' => 'ASC']);
-        $this->assertGreaterThanOrEqual(1, count($listResult->getPrices()));
+        $pricesResult = $this->priceService->list([], ['productId' => $this->productId], ['id' => 'ASC']);
+        $this->assertGreaterThanOrEqual(1, count($pricesResult->getPrices()));
 
         $this->priceService->delete($priceId);
     }
@@ -128,10 +128,10 @@ class PriceTest extends TestCase
     #[TestDox('test Price::modify')]
     public function testModify(): void
     {
-        $modifyResult = $this->priceService->modify($this->productId, [
+        $pricesResult = $this->priceService->modify($this->productId, [
             ['catalogGroupId' => 1, 'currency' => 'USD', 'price' => 300.0],
         ]);
-        $prices = $modifyResult->getPrices();
+        $prices = $pricesResult->getPrices();
         $this->assertCount(1, $prices);
         $this->assertSame(300.0, $prices[0]->price);
 

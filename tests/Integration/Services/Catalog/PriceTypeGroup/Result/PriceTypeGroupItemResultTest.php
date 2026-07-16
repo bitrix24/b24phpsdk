@@ -67,6 +67,9 @@ class PriceTypeGroupItemResultTest extends TestCase
     public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
     {
         $bindings = $this->priceTypeGroupService->list([], ['catalogGroupId' => $this->priceTypeId])->getPriceTypeGroups();
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($bindings[0], PriceTypeGroupItemResult::class);
+        $this->assertIsInt($bindings[0]->id);
+        $this->assertIsInt($bindings[0]->catalogGroupId);
+        $this->assertIsInt($bindings[0]->groupId);
+        $this->assertIsBool($bindings[0]->access);
     }
 }

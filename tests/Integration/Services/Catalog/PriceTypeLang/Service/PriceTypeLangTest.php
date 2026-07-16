@@ -61,14 +61,14 @@ class PriceTypeLangTest extends TestCase
     #[TestDox('test PriceTypeLang::add, PriceTypeLang::get, PriceTypeLang::delete')]
     public function testAddGetDelete(): void
     {
-        $addResult = $this->priceTypeLangService->add([
+        $priceTypeLangResult = $this->priceTypeLangService->add([
             'catalogGroupId' => $this->priceTypeId,
             'lang' => 'kz',
             'name' => 'PRICE',
         ]);
-        $langId = $addResult->priceTypeLang()->id;
-        $this->assertSame('PRICE', $addResult->priceTypeLang()->name);
-        $this->assertSame('kz', $addResult->priceTypeLang()->lang);
+        $langId = $priceTypeLangResult->priceTypeLang()->id;
+        $this->assertSame('PRICE', $priceTypeLangResult->priceTypeLang()->name);
+        $this->assertSame('kz', $priceTypeLangResult->priceTypeLang()->lang);
 
         $getResult = $this->priceTypeLangService->get($langId);
         $this->assertSame($langId, $getResult->priceTypeLang()->id);
@@ -89,8 +89,8 @@ class PriceTypeLangTest extends TestCase
             'name' => 'PRICE',
         ])->priceTypeLang()->id;
 
-        $updateResult = $this->priceTypeLangService->update($langId, ['name' => 'Base Price']);
-        $this->assertSame('Base Price', $updateResult->priceTypeLang()->name);
+        $priceTypeLangResult = $this->priceTypeLangService->update($langId, ['name' => 'Base Price']);
+        $this->assertSame('Base Price', $priceTypeLangResult->priceTypeLang()->name);
 
         $this->priceTypeLangService->delete($langId);
     }
@@ -108,8 +108,8 @@ class PriceTypeLangTest extends TestCase
             'name' => 'PRICE',
         ])->priceTypeLang()->id;
 
-        $listResult = $this->priceTypeLangService->list([], ['catalogGroupId' => $this->priceTypeId]);
-        $this->assertCount(1, $listResult->getPriceTypeLangs());
+        $priceTypeLangsResult = $this->priceTypeLangService->list([], ['catalogGroupId' => $this->priceTypeId]);
+        $this->assertCount(1, $priceTypeLangsResult->getPriceTypeLangs());
 
         $this->priceTypeLangService->delete($langId);
     }
