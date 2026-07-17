@@ -21,13 +21,23 @@ use Generator;
 /**
  * Class Batch
  *
- * Overrides base Batch to handle parameter naming differences in catalog.productImage.delete:
- * the method requires both 'productId' and 'id' parameters instead of the standard single 'ID'.
+ * Overrides base Batch to handle parameter naming differences in catalog.productImage.* REST methods:
+ * - the identifier field is lowercase 'id' instead of the standard 'ID'
+ * - delete requires both 'productId' and 'id' parameters instead of the standard single 'ID'
  *
  * @package Bitrix24\SDK\Services\Catalog\ProductImage
  */
 class Batch extends \Bitrix24\SDK\Core\Batch
 {
+    /**
+     * Determines the ID key — lowercase 'id' for catalog product image
+     */
+    #[\Override]
+    protected function determineKeyId(string $apiMethod, ?array $additionalParameters): string
+    {
+        return 'id';
+    }
+
     /**
      * Delete product images with batch call
      *

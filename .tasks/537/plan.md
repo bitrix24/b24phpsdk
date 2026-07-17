@@ -343,3 +343,26 @@ All files from the plan were created/modified. Quality gate results:
   `AbstractAnnotatedItem`'s Typhoon-based reflection.
 
 CHANGELOG.md, phpunit.xml.dist, Makefile all updated per plan.
+
+## Follow-up: determineKeyId() override (user feedback)
+
+User pointed out that when the REST identifier field casing differs from the SDK's default
+`ID` (e.g. `catalog.productImage.*` uses lowercase `id`), the convention in this codebase is to
+extend `\Bitrix24\SDK\Core\Batch` and override `determineKeyId()` to return the lowercase key —
+see `src/Services/Biconnector/Connector/Batch.php` and `src/Services/Biconnector/Source/Batch.php`
+for the reference pattern. `src/Services/Catalog/ProductImage/Batch.php` already extended
+`Core\Batch` (for the custom two-key `deleteEntityItems()`), but was missing the
+`determineKeyId()` override. Added:
+
+```php
+#[\Override]
+protected function determineKeyId(string $apiMethod, ?array $additionalParameters): string
+{
+    return 'id';
+}
+```
+
+This keeps `getTraversableList()`/`getTraversableListWithCount()` correct if ever invoked
+against this custom `Batch` instance (they default to `'ID'` otherwise). Verified no regression:
+`lint-cs-fixer`, `lint-rector`, `lint-phpstan`, `lint-deptrac` all still green; unit tests (5/5)
+and integration tests (8/10, same 2 pre-existing vendor-conflict errors as before) unchanged.

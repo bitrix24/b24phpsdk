@@ -46,14 +46,19 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    /**
+     * Get the ProductImage service
+     *
+     * Uses a specialized ProductImage\Batch to handle catalog.productImage.* REST API differences:
+     * - the identifier field is lowercase 'id' instead of standard 'ID'
+     * - delete requires both 'productId' and 'id' parameters instead of a single 'ID'
+     */
     public function productImage(): Catalog\ProductImage\Service\ProductImage
     {
         if (!isset($this->serviceCache[__METHOD__])) {
+            $productImageBatch = new Catalog\ProductImage\Batch($this->core, $this->log);
             $this->serviceCache[__METHOD__] = new Catalog\ProductImage\Service\ProductImage(
-                new Catalog\ProductImage\Service\Batch(
-                    new Catalog\ProductImage\Batch($this->core, $this->log),
-                    $this->log
-                ),
+                new Catalog\ProductImage\Service\Batch($productImageBatch, $this->log),
                 $this->core,
                 $this->log
             );
