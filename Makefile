@@ -104,6 +104,7 @@ help:
 	@echo "test-integration-lists-section - run Lists Section integration tests"
 	@echo "test-integration-lists-element - run Lists Element integration tests"
 	@echo "test-integration-mailservice - run MailService integration tests"
+	@echo "test-integration-scope-mail - run Mail scope integration tests"
 
 t:
 	docker compose run --rm php-cli sh
@@ -622,6 +623,9 @@ test-integration-rest-scope:
 test-integration-scope-timeman:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_timeman
 
+.PHONY: test-integration-scope-mail
+test-integration-scope-mail:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_mail
 .PHONY: test-integration-scope-humanresources
 test-integration-scope-humanresources:
 	@docker compose run --rm -e BITRIX24_WEBHOOK="$(BITRIX24_WEBHOOK)" php-cli $(PHPUNIT) --testsuite integration_tests_scope_humanresources

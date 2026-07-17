@@ -66,6 +66,8 @@
     - `delete` deletes a mail service, with batch calls support
     - `fields` returns localized field labels of a mail service
     - `count` counts active mail services
+- Added REST API v3 `Services\Mail` scope wrappers for `mail.*` mailbox, message, recipient,
+  and field metadata methods ([#516](https://github.com/bitrix24/b24phpsdk/issues/516))
 - Added `Services\Booking\BookingServiceBuilder` with Booking scope wrappers and integration coverage for `booking.v1.clienttype.*`, `booking.v1.resourceType.*`, `booking.v1.resource.*`, `booking.v1.resource.slots.*`, `booking.v1.waitlist.*`, `booking.v1.waitlist.client.*`, `booking.v1.waitlist.externalData.*`, `booking.v1.booking.*`, `booking.v1.booking.client.*`, and `booking.v1.booking.externalData.*` methods.
 - Added service `Services\Messageservice\Sender` and `Services\Messageservice\Message\Status` with support for `messageservice.*` methods,
   see [messageservice.* methods](https://apidocs.bitrix24.com/api-reference/messageservice/index.html) ([#498](https://github.com/bitrix24/b24phpsdk/issues/498)):

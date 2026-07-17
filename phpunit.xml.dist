@@ -426,6 +426,9 @@
         <testsuite name="integration_tests_mailservice">
             <directory>./tests/Integration/Services/MailService/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_mail">
+            <directory>./tests/Integration/Services/Mail/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_messageservice">
             <directory>./tests/Integration/Services/Messageservice/</directory>
         </testsuite>
