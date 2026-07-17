@@ -751,6 +751,10 @@ test-integration-messageservice-sender:
 test-integration-messageservice-message-status:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_messageservice_message_status
 
+.PHONY: test-integration-catalog-product-image
+test-integration-catalog-product-image:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_image
+
 # work dev environment
 .PHONY: php-dev-server-up
 php-dev-server-up:

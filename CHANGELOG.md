@@ -3,6 +3,13 @@
 
 ### Added
 
+- Added service `Services\Catalog\ProductImage` with support for `catalog.productImage.*` methods,
+  see [catalog.productImage.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product-image/index.html) ([#537](https://github.com/bitrix24/b24phpsdk/issues/537)):
+    - `add` adds an image to a product, parent product, variation, or service, with batch calls support
+    - `get` gets information about a product image by its identifier
+    - `list` gets the list of images for a product, with batch calls support
+    - `delete` deletes a product image, with batch calls support
+    - `getFields` returns the description of product image fields
 - Added `Bitrix24\SDK\Core\ValueObjects\Url` value object ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 - Added `Bitrix24\SDK\Core\ValueObjects\LocalizedString` value object for typed localization maps ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 - Added `Bitrix24\SDK\Services\Workflows\ValueObjects\RobotCode` and `ActivityCode` value objects ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
