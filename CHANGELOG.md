@@ -1,5 +1,5 @@
 # b24-php-sdk change log
-## 3.4.0 – UNRELEASED
+## 3.4.0
 
 ### Added
 
@@ -74,9 +74,13 @@
     - `delete` deletes a mail service, with batch calls support
     - `fields` returns localized field labels of a mail service
     - `count` counts active mail services
-- Added REST API v3 `Services\Mail` scope wrappers for `mail.*` mailbox, message, recipient,
-  and field metadata methods ([#516](https://github.com/bitrix24/b24phpsdk/issues/516))
-- Added `Services\Booking\BookingServiceBuilder` with Booking scope wrappers and integration coverage for `booking.v1.clienttype.*`, `booking.v1.resourceType.*`, `booking.v1.resource.*`, `booking.v1.resource.slots.*`, `booking.v1.waitlist.*`, `booking.v1.waitlist.client.*`, `booking.v1.waitlist.externalData.*`, `booking.v1.booking.*`, `booking.v1.booking.client.*`, and `booking.v1.booking.externalData.*` methods.
+- Added REST API v3 scope `Services\Mail` with `Mailbox`, `Message`, and `Recipient` services and
+  dedicated `MailboxField`, `MessageField`, and `RecipientField` field metadata services ([#516](https://github.com/bitrix24/b24phpsdk/issues/516)):
+    - `Mailbox`: `list`, `get`, `senders`, with batch calls support
+    - `Message`: `list`, `get`, `send`, `reply`, `forward`, `thread`, `moveToFolder`, `createCalendarEvent`,
+      `createChat`, `createCrmActivity`, `removeCrmActivity`, `createFeedPost`, `createTask`, with batch calls support
+    - `Recipient`: `listContacts`, `listEmployees`, with batch calls support
+    - field metadata services cover `mail.mailbox.field.*`, `mail.message.field.*`, and `mail.recipient.field.*`
 - Added service `Services\Messageservice\Sender` and `Services\Messageservice\Message\Status` with support for `messageservice.*` methods,
   see [messageservice.* methods](https://apidocs.bitrix24.com/api-reference/messageservice/index.html) ([#498](https://github.com/bitrix24/b24phpsdk/issues/498)):
     - `sender.add` — register a new SMS message service provider
@@ -84,7 +88,6 @@
     - `sender.list` — get list of sender codes registered by the current application
     - `sender.delete` — delete a registered message service provider
     - `message.status.update` — update delivery status of a message sent via a provider
-- Added `Services\Booking\BookingServiceBuilder` with Booking scope wrappers and integration coverage for `booking.v1.clienttype.*`, `booking.v1.resourceType.*`, `booking.v1.resource.*`, `booking.v1.resource.slots.*`, `booking.v1.waitlist.*`, `booking.v1.waitlist.client.*`, `booking.v1.waitlist.externalData.*`, `booking.v1.booking.*`, `booking.v1.booking.client.*`, and `booking.v1.booking.externalData.*` methods.
 - Added service `Services\Landing\RepoWidget` with support for Vibe widget management,
   see [landing.repowidget.* methods](https://apidocs.bitrix24.com/api-reference/vibe/index.html)
   ([#501](https://github.com/bitrix24/b24phpsdk/issues/501)):
@@ -118,6 +121,8 @@
 - Fixed `Application\PortalLicenseFamily` enum throwing `"ent" is not a valid backing value` for
   Enterprise portals: Bitrix24 `app.info` returns `LICENSE_FAMILY = 'ent'`, but the enum had a typo
   `en`; renamed `en` → `ent` ([#500](https://github.com/bitrix24/b24phpsdk/pull/500))
+- Fixed malformed `testsuite` tag in `phpunit.xml.dist` (missing closing tag introduced by a merge) that made
+  the config invalid XML and prevented the whole unit suite from running on `v3-dev` ([#532](https://github.com/bitrix24/b24phpsdk/pull/532))
 
 ## 3.3.0
 
