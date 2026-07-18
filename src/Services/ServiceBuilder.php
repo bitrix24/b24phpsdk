@@ -24,6 +24,7 @@ use Bitrix24\SDK\Services\Documentgenerator\DocumentgeneratorServiceBuilder;
 use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
 use Bitrix24\SDK\Services\Disk\DiskServiceBuilder;
 use Bitrix24\SDK\Services\Entity\EntityServiceBuilder;
+use Bitrix24\SDK\Services\HumanResources\HumanResourcesServiceBuilder;
 use Bitrix24\SDK\Services\Department\DepartmentServiceBuilder;
 use Bitrix24\SDK\Services\Task\TaskServiceBuilder;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
@@ -42,6 +43,7 @@ use Bitrix24\SDK\Services\Paysystem\PaysystemServiceBuilder;
 use Bitrix24\SDK\Services\SonetGroup\SonetGroupServiceBuilder;
 use Bitrix24\SDK\Legacy\LegacyServiceBuilder;
 use Bitrix24\SDK\Services\Lists\ListsServiceBuilder;
+use Bitrix24\SDK\Services\Mail\MailServiceBuilder;
 use Bitrix24\SDK\Services\MailService\MailServiceServiceBuilder;
 use Bitrix24\SDK\Services\Messageservice\MessageserviceServiceBuilder;
 use Bitrix24\SDK\Services\Note\NoteServiceBuilder;
@@ -415,6 +417,20 @@ class ServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    public function getMailScope(): MailServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new MailServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
   
      public function getMessageserviceScope(): MessageserviceServiceBuilder
     {
@@ -491,6 +507,20 @@ class ServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new TimemanServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function getHumanResourcesScope(): HumanResourcesServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new HumanResourcesServiceBuilder(
                 $this->core,
                 $this->batch,
                 $this->bulkItemsReader,

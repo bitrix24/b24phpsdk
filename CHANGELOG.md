@@ -11,6 +11,10 @@
     - `Document`: `add`, `archive`, `delete`, `fieldGet`, `fieldList`, `get` (typed `DocumentSelectBuilder`), `update`,
       `treeList`/`treeFieldGet`/`treeFieldList`, `searchList`/`searchFieldGet`/`searchFieldList`
     - `File`: `add`, `fieldGet`, `fieldList`, `get`
+- Added `Bitrix24\SDK\Core\ValueObjects\Url` value object ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- Added `Bitrix24\SDK\Core\ValueObjects\LocalizedString` value object for typed localization maps ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- Added `Bitrix24\SDK\Services\Workflows\ValueObjects\RobotCode` and `ActivityCode` value objects ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- Added `DESCRIPTION`, `DOCUMENT_TYPE`, `FILTER` and `PLACEMENT_HANDLER` fields to `bizproc.robot.add` ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 - Added services `Services\Timeman\Record\Service\Record` and `Services\Timeman\RecordField\Service\RecordField`
   with support for v3 `timeman.record.*` methods,
   see [timeman REST v3](https://apidocs.bitrix24.com/api-reference/rest-v3/timeman/index.html) ([#518](https://github.com/bitrix24/b24phpsdk/issues/518)):
@@ -70,6 +74,8 @@
     - `delete` deletes a mail service, with batch calls support
     - `fields` returns localized field labels of a mail service
     - `count` counts active mail services
+- Added REST API v3 `Services\Mail` scope wrappers for `mail.*` mailbox, message, recipient,
+  and field metadata methods ([#516](https://github.com/bitrix24/b24phpsdk/issues/516))
 - Added `Services\Booking\BookingServiceBuilder` with Booking scope wrappers and integration coverage for `booking.v1.clienttype.*`, `booking.v1.resourceType.*`, `booking.v1.resource.*`, `booking.v1.resource.slots.*`, `booking.v1.waitlist.*`, `booking.v1.waitlist.client.*`, `booking.v1.waitlist.externalData.*`, `booking.v1.booking.*`, `booking.v1.booking.client.*`, and `booking.v1.booking.externalData.*` methods.
 - Added service `Services\Messageservice\Sender` and `Services\Messageservice\Message\Status` with support for `messageservice.*` methods,
   see [messageservice.* methods](https://apidocs.bitrix24.com/api-reference/messageservice/index.html) ([#498](https://github.com/bitrix24/b24phpsdk/issues/498)):
@@ -87,12 +93,22 @@
     - `getList` gets the list of widgets for the current application
     - `debug` enables or disables debug mode for all widgets of the current application
 - Added `repoWidget()` accessor to `LandingServiceBuilder` ([#501](https://github.com/bitrix24/b24phpsdk/issues/501))
+- Added `Services\HumanResources` v3 scope wrappers for company org structure,
+  employees, node communications, node members, and dedicated field metadata services
+  ([#517](https://github.com/bitrix24/b24phpsdk/issues/517))
 
 ### Changed
 
+- `bizproc.robot.add` and `bizproc.robot.update` now accept a `Url` value object (or a raw string) for the handler URL ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- `bizproc.robot.add` and `bizproc.robot.update` now accept a `RobotCode` value object (or a raw string) for the code ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- `bizproc.robot.add` and `bizproc.robot.update` now accept a `LocalizedString` value object (or a raw array) for the localized `NAME` / `DESCRIPTION` ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- Updated `b24phpsdk-maintainer` skill: require dedicated field metadata services for
+  `*.field.get` and `*.field.list` endpoints ([#517](https://github.com/bitrix24/b24phpsdk/issues/517))
 - Updated `b24phpsdk-maintainer` skill: `*ItemResult` classes must extend
   `Core\Result\AbstractAnnotatedItem` (auto-casts from `@property-read` annotations) instead of the
   legacy `AbstractItem` + manual `__get` pattern ([#518](https://github.com/bitrix24/b24phpsdk/issues/518))
+- Updated `b24phpsdk-maintainer` skill: bugs affecting both the 3.x and 1.x lines are fixed from
+  `v3-dev` first and then backported to `dev` ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 
 ### Fixed
 

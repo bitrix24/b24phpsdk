@@ -21,11 +21,14 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
+use Bitrix24\SDK\Core\ValueObjects\LocalizedString;
+use Bitrix24\SDK\Core\ValueObjects\Url;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Workflows;
 use Bitrix24\SDK\Services\Workflows\Robot\Result\AddedRobotResult;
 use Bitrix24\SDK\Services\Workflows\Robot\Result\UpdateRobotResult;
 use Bitrix24\SDK\Services\Workflows\Template\Service\Batch;
+use Bitrix24\SDK\Services\Workflows\ValueObjects\RobotCode;
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['bizproc']))]
@@ -43,38 +46,67 @@ class Robot extends AbstractService
     /**
      * Registers new automation rule.
      *
-     *
      * @return AddedRobotResult
      * @throws BaseException
+     * @throws InvalidArgumentException
      * @throws TransportException
-     * @see https://training.bitrix24.com/rest_help/workflows/app_automation_rules/bizproc_robot_add.php
+     * @see https://apidocs.bitrix24.com/api-reference/bizproc/bizproc-robot/bizproc-robot-add.html
      */
     #[ApiEndpointMetadata(
         'bizproc.robot.add',
-        'https://training.bitrix24.com/rest_help/workflows/app_automation_rules/bizproc_robot_add.php',
+        'https://apidocs.bitrix24.com/api-reference/bizproc/bizproc-robot/bizproc-robot-add.html',
         'Registers new automation rule.'
     )]
     public function add(
-        string $code,
-        string $handlerUrl,
-        int    $b24AuthUserId,
-        array  $localizedRobotName,
-        bool   $isUseSubscription,
-        array  $properties,
-        bool   $isUsePlacement,
-        array  $returnProperties
+        string|RobotCode      $code,
+        string|Url            $handlerUrl,
+        int                   $b24AuthUserId,
+        array|LocalizedString $localizedRobotName,
+        bool                  $isUseSubscription,
+        array                 $properties,
+        bool                  $isUsePlacement,
+        array                 $returnProperties,
+        array|LocalizedString $localizedRobotDescription = [],
+        array                 $documentType = [],
+        array                 $filter = [],
+        ?Url                  $placementHandlerUrl = null
     ): Workflows\Robot\Result\AddedRobotResult
     {
-        return new Workflows\Robot\Result\AddedRobotResult($this->core->call('bizproc.robot.add', [
-            'CODE' => $code,
-            'HANDLER' => $handlerUrl,
+        if ($isUsePlacement && $placementHandlerUrl === null) {
+            throw new InvalidArgumentException('placementHandlerUrl is required when isUsePlacement is true');
+        }
+
+        $payload = [
+            'CODE' => $this->resolveRobotCode($code),
+            'HANDLER' => $this->resolveUrl($handlerUrl),
             'AUTH_USER_ID' => $b24AuthUserId,
-            'NAME' => $localizedRobotName,
+            'NAME' => $this->resolveLocalizedString($localizedRobotName),
             'USE_SUBSCRIPTION' => $isUseSubscription ? 'Y' : 'N',
             'PROPERTIES' => $properties,
             'USE_PLACEMENT' => $isUsePlacement ? 'Y' : 'N',
-            'RETURN_PROPERTIES' => $returnProperties
-        ]));
+            'RETURN_PROPERTIES' => $returnProperties,
+        ];
+
+        $description = $this->resolveLocalizedString($localizedRobotDescription);
+        if ($description !== []) {
+            $payload['DESCRIPTION'] = $description;
+        }
+
+        if ($documentType !== []) {
+            $payload['DOCUMENT_TYPE'] = $documentType;
+        }
+
+        if ($filter !== []) {
+            $payload['FILTER'] = $filter;
+        }
+
+        if ($placementHandlerUrl !== null) {
+            $payload['PLACEMENT_HANDLER'] = $placementHandlerUrl->getUrl();
+        }
+
+        return new Workflows\Robot\Result\AddedRobotResult(
+            $this->core->call('bizproc.robot.add', $payload)
+        );
     }
 
     /**
@@ -131,25 +163,25 @@ class Robot extends AbstractService
         'updates fields of automation rules'
     )]
     public function update(
-        string  $code,
-        ?string $handlerUrl = null,
-        ?int    $b24AuthUserId = null,
-        ?array  $localizedRobotName = null,
-        ?bool   $isUseSubscription = null,
-        ?array  $properties = null,
-        ?bool   $isUsePlacement = null,
-        ?array  $returnProperties = null
+        string|RobotCode           $code,
+        Url|string|null            $handlerUrl = null,
+        ?int                       $b24AuthUserId = null,
+        array|LocalizedString|null $localizedRobotName = null,
+        ?bool                      $isUseSubscription = null,
+        ?array                     $properties = null,
+        ?bool                      $isUsePlacement = null,
+        ?array                     $returnProperties = null
     ): Workflows\Robot\Result\UpdateRobotResult
     {
         $fieldsToUpdate = [];
         if ($handlerUrl !== null) {
-            $fieldsToUpdate['HANDLER'] = $handlerUrl;
+            $fieldsToUpdate['HANDLER'] = $this->resolveUrl($handlerUrl);
         }
         if ($b24AuthUserId !== null) {
             $fieldsToUpdate['AUTH_USER_ID'] = $b24AuthUserId;
         }
         if ($localizedRobotName !== null) {
-            $fieldsToUpdate['NAME'] = $localizedRobotName;
+            $fieldsToUpdate['NAME'] = $this->resolveLocalizedString($localizedRobotName);
         }
         if ($isUseSubscription !== null) {
             $fieldsToUpdate['USE_SUBSCRIPTION'] = $isUseSubscription ? 'Y' : 'N';
@@ -169,8 +201,33 @@ class Robot extends AbstractService
         return new Workflows\Robot\Result\UpdateRobotResult($this->core->call(
             'bizproc.robot.update',
             [
-                'CODE' => $code,
+                'CODE' => $this->resolveRobotCode($code),
                 'FIELDS' => $fieldsToUpdate
             ]));
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function resolveUrl(string|Url $url): string
+    {
+        return $url instanceof Url ? $url->getUrl() : (new Url($url))->getUrl();
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function resolveRobotCode(string|RobotCode $code): string
+    {
+        return $code instanceof RobotCode ? $code->getCode() : (new RobotCode($code))->getCode();
+    }
+
+    /**
+     * @param array<string, string>|LocalizedString $value
+     * @return array<string, string>
+     */
+    private function resolveLocalizedString(array|LocalizedString $value): array
+    {
+        return $value instanceof LocalizedString ? $value->toArray() : $value;
     }
 }
