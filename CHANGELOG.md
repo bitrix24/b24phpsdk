@@ -3,6 +3,14 @@
 
 ### Added
 
+- Added service `Services\Note` (Knowledge Base 2.0) with support for `note.collection.*`, `note.document.*`
+  (incl. `note.document.tree.*` and `note.document.search.*`), and `note.file.*` methods,
+  see [note REST v3](https://apidocs.bitrix24.com/api-reference/rest-v3/note/index.html) ([#515](https://github.com/bitrix24/b24phpsdk/issues/515)):
+    - `Collection`: `add`, `archive`, `delete`, `fieldGet`, `fieldList`, `get`, `list` (typed `CollectionSelectBuilder`
+      and cursor pagination via `CollectionListPagination`/`CollectionListCursor`), `update`
+    - `Document`: `add`, `archive`, `delete`, `fieldGet`, `fieldList`, `get` (typed `DocumentSelectBuilder`), `update`,
+      `treeList`/`treeFieldGet`/`treeFieldList`, `searchList`/`searchFieldGet`/`searchFieldList`
+    - `File`: `add`, `fieldGet`, `fieldList`, `get`
 - Added `Bitrix24\SDK\Core\ValueObjects\Url` value object ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 - Added `Bitrix24\SDK\Core\ValueObjects\LocalizedString` value object for typed localization maps ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 - Added `Bitrix24\SDK\Services\Workflows\ValueObjects\RobotCode` and `ActivityCode` value objects ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))

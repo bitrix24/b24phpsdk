@@ -633,6 +633,22 @@ test-integration-scope-humanresources:
 test-integration-timeman-record:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_timeman_record
 
+.PHONY: test-integration-scope-note
+test-integration-scope-note:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_note
+
+.PHONY: test-integration-note-collection
+test-integration-note-collection:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_note_collection
+
+.PHONY: test-integration-note-document
+test-integration-note-document:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_note_document
+
+.PHONY: test-integration-note-file
+test-integration-note-file:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_note_file
+
 .PHONY: integration_tests_sale
 integration_tests_sale:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale

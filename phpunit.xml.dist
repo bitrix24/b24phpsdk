@@ -408,6 +408,21 @@
             <file>./tests/Integration/Services/Timeman/RecordField/Service/RecordFieldTest.php</file>
             <file>./tests/Integration/Services/Timeman/RecordField/Result/RecordFieldItemResultTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_scope_note">
+            <directory>./tests/Integration/Services/Note/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_note_collection">
+            <directory>./tests/Integration/Services/Note/Collection/Service/</directory>
+            <directory>./tests/Integration/Services/Note/Collection/Result/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_note_document">
+            <directory>./tests/Integration/Services/Note/Document/Service/</directory>
+            <directory>./tests/Integration/Services/Note/Document/Result/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_note_file">
+            <directory>./tests/Integration/Services/Note/File/Service/</directory>
+            <directory>./tests/Integration/Services/Note/File/Result/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_biconnector">
             <directory>./tests/Integration/Services/Biconnector/</directory>
         </testsuite>
