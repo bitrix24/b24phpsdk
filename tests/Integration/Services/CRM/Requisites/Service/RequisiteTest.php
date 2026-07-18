@@ -56,7 +56,7 @@ class RequisiteTest extends TestCase
         $this->requisitePresetId = current(
             array_filter(
                 $this->sb->getCRMScope()->requisitePreset()->list()->getRequisitePresets(),
-                fn($item): bool => str_contains($item->XML_ID, 'COMPANY#')
+                fn($item): bool => str_contains((string) $item->XML_ID, 'COMPANY#')
             )
         )->ID;
         $this->entityTypeIdCompany = current(

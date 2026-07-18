@@ -66,7 +66,7 @@ class BatchTest extends TestCase
     }
 
     /**
-     * Builds a CoreInterface mock that records the cmd payload passed to the «batch» call.
+     * Builds a CoreInterface stub that records the cmd payload passed to the «batch» call.
      *
      * @param array<string, string> $capturedCommands captured by reference
      */
@@ -79,7 +79,7 @@ class BatchTest extends TestCase
             new NullLogger()
         );
 
-        $core = $this->createMock(CoreInterface::class);
+        $core = $this->createStub(CoreInterface::class);
         $core->method('getAuthConnector')->willReturn($authConnector);
         $core->method('call')->willReturnCallback(
             function (string $apiMethod, array $parameters = []) use (&$capturedCommands, $response): Response {

@@ -200,32 +200,30 @@ class OperatorTest extends TestCase
     {
         $invalidChatId = 999999999;
         
-        // Test all methods throw appropriate exceptions for invalid parameters
-        $methods = [
-            'answer' => [$invalidChatId, 'chat_id'],
-            'finish' => [$invalidChatId, 'chat_id'],
-            'anotherFinish' => [$invalidChatId, 'chat_id'],
-            'skip' => [$invalidChatId, 'chat_id'],
-            'spam' => [$invalidChatId, 'chat_id'],
-            'transfer' => [[$invalidChatId, 123], 'operator_wrong']
-        ];
-
-        foreach ($methods as $methodName => [$args, $expectedErrorCode]) {
+        foreach (['answer', 'finish', 'anotherFinish', 'skip', 'spam'] as $methodName) {
             try {
-                if (is_array($args)) {
-                    $this->operatorService->$methodName(...$args);
-                } else {
-                    $this->operatorService->$methodName($args);
-                }
+                $this->operatorService->$methodName($invalidChatId);
                 
                 $this->fail(sprintf('Method %s should have thrown an exception for invalid parameters', $methodName));
             } catch (BaseException $e) {
                 $this->assertStringContainsString(
-                    $expectedErrorCode,
+                    'chat_id',
                     strtolower($e->getMessage()),
-                    sprintf('Method %s should throw exception with error code %s', $methodName, $expectedErrorCode)
+                    sprintf('Method %s should throw exception with error code chat_id', $methodName)
                 );
             }
+        }
+
+        try {
+            $this->operatorService->transfer($invalidChatId, 123);
+
+            $this->fail('Method transfer should have thrown an exception for invalid parameters');
+        } catch (BaseException $e) {
+            $this->assertStringContainsString(
+                'operator_wrong',
+                strtolower($e->getMessage()),
+                'Method transfer should throw exception with error code operator_wrong'
+            );
         }
     }
 }

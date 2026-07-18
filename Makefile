@@ -18,6 +18,8 @@ ENV_LOCAL := $(PWD)/tests/.env.local
 include $(ENV)
 -include $(ENV_LOCAL)
 
+PHPUNIT := php -d auto_prepend_file=tests/phpunit-preload-guard.php vendor/bin/phpunit
+
 help:
 	@echo "-------------------------"
 	@echo "    Bitrix24 PHP SDK"
@@ -77,6 +79,7 @@ help:
 	@echo "test-integration-landing-repo - run Landing Repo integration tests"
 	@echo "test-integration-landing-demos - run Landing Demos integration tests"
 	@echo "test-integration-landing-role - run Landing Role integration tests"
+	@echo "test-integration-landing-repowidget - run Landing RepoWidget integration tests"
 	@echo "test-integration-scope-landing-template - run Landing Template integration tests"
 	@echo "test-integration-im-message - run IM Message integration tests"
 	@echo "test-integration-im-dialog - run IM Dialog integration tests"
@@ -94,11 +97,14 @@ help:
 	@echo "test-integration-im-chat - run IM Chat integration tests"
 	@echo "test-integration-im-chat-user - run IM Chat User integration tests"
 	@echo "test-integration-im-notify - run IM Notify integration tests"
+	@echo "test-integration-scope-humanresources - run HumanResources integration tests"
 	@echo "test-integration-scope-lists - run Lists integration tests"
 	@echo "test-integration-lists-service - run Lists Service integration tests"
 	@echo "test-integration-lists-field - run Lists Field integration tests"
 	@echo "test-integration-lists-section - run Lists Section integration tests"
 	@echo "test-integration-lists-element - run Lists Element integration tests"
+	@echo "test-integration-mailservice - run MailService integration tests"
+	@echo "test-integration-scope-mail - run Mail scope integration tests"
 
 t:
 	docker compose run --rm php-cli sh
@@ -200,469 +206,570 @@ lint-all: lint-allowed-licenses lint-cs-fixer lint-phpstan lint-rector lint-dept
 # unit tests
 .PHONY: test-unit
 test-unit:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite unit_tests --display-warnings
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite unit_tests --display-warnings
 
 .PHONY: test-file
 test-file:
 ifndef path
 	$(error path is required, usage: make test-file path=tests/Unit/ExampleTest.php)
 endif
-	docker compose run --rm php-cli vendor/bin/phpunit $(path) --display-warnings
+	docker compose run --rm php-cli $(PHPUNIT) $(path) --display-warnings
 
 # integration tests with granularity by api-scope
 .PHONY: test-integration-scope-telephony
 test-integration-scope-telephony:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_telephony
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_telephony
 
 .PHONY: test-integration-scope-workflows
 test-integration-scope-workflows:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_workflows
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_workflows
 
 .PHONY: test-integration-scope-im
 test-integration-scope-im:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_im
 
 .PHONY: test-integration-im-disk
 test-integration-im-disk:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_disk
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_disk
 
 .PHONY: test-integration-im-chat
 test-integration-im-chat:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_chat
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_chat
 
 .PHONY: test-integration-im-chat-user
 test-integration-im-chat-user:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_chat_user
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_chat_user
 
 .PHONY: test-integration-im-dialog
 test-integration-im-dialog:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_dialog
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_dialog
 
 .PHONY: test-integration-im-department
 test-integration-im-department:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_department
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_department
 
 .PHONY: test-integration-scope-placement
 test-integration-scope-placement:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_placement
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_placement
 
 .PHONY: test-integration-scope-paysystem
 test-integration-scope-paysystem:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_paysystem
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_paysystem
 
 .PHONY: test-integration-scope-im-open-lines-connector
 test-integration-scope-im-open-lines-connector:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im_open_lines_connector
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_im_open_lines_connector
 
 .PHONY: test-integration-paysystem-service
 test-integration-paysystem-service:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_paysystem_service
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_paysystem_service
 
 .PHONY: test-integration-paysystem-settings
 test-integration-paysystem-settings:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_paysystem_settings
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_paysystem_settings
 
 .PHONY: test-integration-im-message
 test-integration-im-message:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_message
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_message
 
 .PHONY: test-integration-im-revision
 test-integration-im-revision:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_revision
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_revision
 
 .PHONY: test-integration-im-counters
 test-integration-im-counters:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_counters
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_counters
 
 .PHONY: test-integration-im-recent
 test-integration-im-recent:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_recent
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_recent
 
 .PHONY: test-integration-im-search
 test-integration-im-search:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_search
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_search
 
 .PHONY: test-integration-im-user-status
 test-integration-im-user-status:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_user_status
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_user_status
 
 .PHONY: test-integration-im-user
 test-integration-im-user:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_user
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_user
 
 .PHONY: test-integration-im-notify
 test-integration-im-notify:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_notify
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_notify
 
 .PHONY: test-integration-scope-im-open-lines
 test-integration-scope-im-open-lines:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im_open_lines
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_im_open_lines
 
 .PHONY: test-integration-im-open-lines-config
 test-integration-im-open-lines-config:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_open_lines_config
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_open_lines_config
 
 .PHONY: test-integration-im-open-lines-crm-chat
 test-integration-im-open-lines-crm-chat:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_open_lines_crm_chat
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_open_lines_crm_chat
 
 .PHONY: test-integration-im-open-lines-session
 test-integration-im-open-lines-session:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_open_lines_session
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_open_lines_session
 
 .PHONY: test-integration-im-open-lines-operator
 test-integration-im-open-lines-operator:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_open_lines_operator
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_open_lines_operator
 
 .PHONY: test-integration-scope-lists
 test-integration-scope-lists:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_lists
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_lists
 
 .PHONY: test-integration-lists-service
 test-integration-lists-service:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lists_service
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_lists_service
 
 .PHONY: test-integration-lists-field
 test-integration-lists-field:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lists_field
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_lists_field
 
 .PHONY: test-integration-lists-section
 test-integration-lists-section:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lists_section
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_lists_section
 
 .PHONY: test-integration-lists-element
 test-integration-lists-element:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lists_element
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_lists_element
 
 .PHONY: test-integration-scope-user
 test-integration-scope-user:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_user
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_user
 
 .PHONY: test-integration-scope-user-consent
 test-integration-scope-user-consent:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_user_consent
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_user_consent
 
 .PHONY: test-integration-core
 test-integration-core:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_core
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_core
 
 .PHONY: test-integration-core-list
 test-integration-core-list:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_core-list
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_core-list
 
 .PHONY: test-integration-scope-entity
 test-integration-scope-entity:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_entity
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_entity
 
 .PHONY: test-integration-scope-ai-admin
 test-integration-scope-ai-admin:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_ai_admin
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_ai_admin
 
 .PHONY: test-integration-scope-log
 test-integration-scope-log:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_log
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_log
 
 .PHONY: test-integration-scope-sale
 test-integration-scope-sale:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sale
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_sale
 
 .PHONY: test-integration-scope-landing
 test-integration-scope-landing:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_landing
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_landing
 
 .PHONY: test-integration-scope-landing-template
 test-integration-scope-landing-template:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_landing_template
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_landing_template
 
 .PHONY: test-integration-landing-block
 test-integration-landing-block:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_block
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_landing_block
 
 .PHONY: test-integration-landing-site
 test-integration-landing-site:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_site
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_landing_site
 
 .PHONY: test-integration-landing-page
 test-integration-landing-page:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_page
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_landing_page
 
 .PHONY: test-integration-landing-syspage
 test-integration-landing-syspage:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_syspage
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_landing_syspage
 
 .PHONY: test-integration-landing-repo
 test-integration-landing-repo:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_repo
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_landing_repo
 
 .PHONY: test-integration-landing-demos
 test-integration-landing-demos:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_demos
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_landing_demos
 
 .PHONY: test-integration-landing-role
 test-integration-landing-role:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_role
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_landing_role
+
+.PHONY: test-integration-landing-repowidget
+test-integration-landing-repowidget:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_landing_repowidget
 
 .PHONY: test-integration-scope-sonet-group
 test-integration-scope-sonet-group:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sonet_group
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_sonet_group
 
 .PHONY: test-integration-scope-booking
 test-integration-scope-booking:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_booking
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_booking
 
 .PHONY: test-integration-scope-disk
 test-integration-scope-disk:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_disk
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_disk
 
 .PHONY: test-integration-disk-service
 test-integration-disk-service:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_disk_service
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_disk_service
 
 .PHONY: test-integration-disk-file
 test-integration-disk-file:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_disk_file
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_disk_file
 
 .PHONY: test-integration-disk-storage
 test-integration-disk-storage:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_disk_storage
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_disk_storage
 .PHONY: test-integration-scope-calendar
 test-integration-scope-calendar:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_calendar
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_calendar
 
 .PHONY: test-integration-calendar-event
 test-integration-calendar-event:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_calendar_event
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_calendar_event
 
 .PHONY: test-integration-calendar-resource
 test-integration-calendar-resource:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_calendar_resource
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_calendar_resource
 
 .PHONY: test-integration-sale-status
 test-integration-sale-status:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_status
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_status
 
 .PHONY: test-integration-sale-status-lang
 test-integration-sale-status-lang:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_status_lang
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_status_lang
 
 .PHONY: test-integration-scope-sale-shipment
 test-integration-scope-sale-shipment:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_shipment
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_shipment
 
 .PHONY: test-integration-scope-sale-shipment-property
 test-integration-scope-sale-shipment-property:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_shipment_property
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_shipment_property
 
 .PHONY: test-integration-scope-sale-shipment-property-value
 test-integration-scope-sale-shipment-property-value:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_shipment_property_value
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_shipment_property_value
 
 .PHONY: test-integration-scope-sale-shipment-item
 test-integration-scope-sale-shipment-item:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_shipment_item
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_shipment_item
 
 .PHONY: test-integration-sale-basket-property
 test-integration-sale-basket-property:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_basket_property
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_basket_property
 
 .PHONY: test-integration-sale-basket
 test-integration-sale-basket:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_basket
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_basket
 	
 .PHONY: test-integration-sale-order
 test-integration-sale-order:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_order
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_order
 
 .PHONY: test-integration-sale-cashbox-handler
 test-integration-sale-cashbox-handler:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_cashbox_handler
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_cashbox_handler
 
 .PHONY: test-integration-sale-cashbox
 test-integration-sale-cashbox:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_cashbox
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_cashbox
  
 .PHONY: test-integration-sale-payment-item-basket
 test-integration-sale-payment-item-basket:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_payment_item_basket
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_payment_item_basket
 
 .PHONY: test-integration-sale-payment-item-shipment
 test-integration-sale-payment-item-shipment:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_payment_item_shipment
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_payment_item_shipment
 
 .PHONY: test-integration-sale-property-relation
 test-integration-sale-property-relation:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_property_relation
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_property_relation
 
 .PHONY: test-integration-scope-crm
 test-integration-scope-crm:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_crm
   
 .PHONY: integration_tests_scope_crm_address
 integration_tests_scope_crm_address:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_address
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_crm_address
 	
 .PHONY: integration_tests_scope_crm_deal_details
 integration_tests_scope_crm_deal_details:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_deal_details
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_crm_deal_details
 
 .PHONY: integration_tests_scope_crm_contact_details
 integration_tests_scope_crm_contact_details:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_contact_details
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_crm_contact_details
 
 .PHONY: integration_tests_lead_userfield
 integration_tests_lead_userfield:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_userfield
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_lead_userfield
 	
 .PHONY: integration_tests_lead_userfield_use_case
 integration_tests_lead_userfield_use_case:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_userfield_use_case
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_lead_userfield_use_case
   
 .PHONY: integration_tests_scope_crm_currency
 integration_tests_scope_crm_currency:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm_currency
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_crm_currency
 
 .PHONY: integration_tests_deal_recurring
 integration_tests_deal_recurring:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_deal_recurring
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_deal_recurring
 	
 .PHONY: integration_tests_lead_contacts
 integration_tests_lead_contacts:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_contacts
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_lead_contacts
 
 .PHONY: integration_tests_lead_details
 integration_tests_lead_details:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_details
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_lead_details
 
 .PHONY: integration_tests_scope_automation
 integration_tests_scope_automation:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_automation
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_automation
 	
 .PHONY: integration_tests_crm_item
 integration_tests_crm_item:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_item
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_item
 
 .PHONY: integration_tests_lead_productrows
 integration_tests_lead_productrows:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_lead_productrows
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_lead_productrows
 
 .PHONY: integration_tests_crm_quote
 integration_tests_crm_quote:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_quote
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_quote
 	
 .PHONY: integration_tests_crm_requisite
 integration_tests_crm_requisite:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_requisite
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_requisite
 	
 .PHONY: integration_tests_crm_preset_field
 integration_tests_crm_preset_field:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_preset_field
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_preset_field
 	
 .PHONY: integration_tests_crm_requisite_userfield
 integration_tests_crm_requisite_userfield:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_requisite_userfield
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_requisite_userfield
 
 .PHONY: integration_tests_crm_status
 integration_tests_crm_status:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_status
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_status
 
 .PHONY: integration_tests_crm_timeline
 integration_tests_crm_timeline:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_timeline
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_timeline
 
 .PHONY: integration_tests_department
 integration_tests_department:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_department
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_department
 	
 .PHONY: integration_tests_task
 integration_tests_task:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_task
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_task
 
 .PHONY: test-integration-task-chat-message-field
 test-integration-task-chat-message-field:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_task_chat_message_field
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_task_chat_message_field
 
 .PHONY: test-integration-task-file-field
 test-integration-task-file-field:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_task_file_field
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_task_file_field
 
 .PHONY: test-integration-task-access-field
 test-integration-task-access-field:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_task_access_field
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_task_access_field
 
 .PHONY: test-integration-task-field
 test-integration-task-field:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_task_field
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_task_field
 
 .PHONY: test-integration-legacy-task
 test-integration-legacy-task:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_legacy_task
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_legacy_task
 
 .PHONY: test-integration-main-eventlog
 test-integration-main-eventlog:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_main_eventlog
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_main_eventlog
 
 .PHONY: test-integration-main-event
 test-integration-main-event:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_main_event
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_main_event
 
 .PHONY: test-integration-rest-scope
 test-integration-rest-scope:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_rest_scope_service
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_rest_scope_service
 
 .PHONY: test-integration-scope-timeman
 test-integration-scope-timeman:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_timeman
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_timeman
+
+.PHONY: test-integration-scope-mail
+test-integration-scope-mail:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_mail
+.PHONY: test-integration-scope-humanresources
+test-integration-scope-humanresources:
+	@docker compose run --rm -e BITRIX24_WEBHOOK="$(BITRIX24_WEBHOOK)" php-cli $(PHPUNIT) --testsuite integration_tests_scope_humanresources
+.PHONY: test-integration-timeman-record
+test-integration-timeman-record:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_timeman_record
+
+.PHONY: test-integration-scope-note
+test-integration-scope-note:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_note
+
+.PHONY: test-integration-note-collection
+test-integration-note-collection:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_note_collection
+
+.PHONY: test-integration-note-document
+test-integration-note-document:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_note_document
+
+.PHONY: test-integration-note-file
+test-integration-note-file:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_note_file
 
 .PHONY: integration_tests_sale
 integration_tests_sale:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale
 	
 .PHONY: integration_tests_sale_payment
 integration_tests_sale_payment:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_payment
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_payment
 
 .PHONY: test-integration-sale-delivery-handler
 test-integration-sale-delivery-handler:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_delivery_handler
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_delivery_handler
 
 .PHONY: test-integration-sale-delivery
 test-integration-sale-delivery:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_delivery
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_delivery
 
 .PHONY: test-integration-sale-delivery-extra-service
 test-integration-sale-delivery-extra-service:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_delivery_extra_service
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_delivery_extra_service
 .PHONY: integration_tests_sale_payment_item_basket
 integration_tests_sale_payment_item_basket:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_payment_item_basket
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_payment_item_basket
 
 .PHONY: integration_tests_crm_documentgenerator_numerator
 integration_tests_crm_documentgenerator_numerator:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_documentgenerator_numerator
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_documentgenerator_numerator
 
 .PHONY: integration_tests_crm_documentgenerator_document
 integration_tests_crm_documentgenerator_document:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_documentgenerator_document
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_documentgenerator_document
 
 .PHONY: integration_tests_crm_documentgenerator_template
 integration_tests_crm_documentgenerator_template:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_documentgenerator_template
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_documentgenerator_template
+
+.PHONY: integration_tests_scope_documentgenerator
+integration_tests_scope_documentgenerator:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_documentgenerator
+
+.PHONY: integration_tests_documentgenerator_document
+integration_tests_documentgenerator_document:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_documentgenerator_document
+
+.PHONY: integration_tests_documentgenerator_template
+integration_tests_documentgenerator_template:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_documentgenerator_template
+
+.PHONY: integration_tests_documentgenerator_template_service
+integration_tests_documentgenerator_template_service:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_documentgenerator_template_service
+
+.PHONY: integration_tests_documentgenerator_template_annotations
+integration_tests_documentgenerator_template_annotations:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_documentgenerator_template_annotations
+
+.PHONY: integration_tests_documentgenerator_numerator
+integration_tests_documentgenerator_numerator:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_documentgenerator_numerator
+
+.PHONY: integration_tests_documentgenerator_numerator_service
+integration_tests_documentgenerator_numerator_service:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_documentgenerator_numerator_service
+
+.PHONY: integration_tests_documentgenerator_numerator_annotations
+integration_tests_documentgenerator_numerator_annotations:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_documentgenerator_numerator_annotations
+
+.PHONY: integration_tests_documentgenerator_region
+integration_tests_documentgenerator_region:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_documentgenerator_region
+
+.PHONY: integration_tests_documentgenerator_region_service
+integration_tests_documentgenerator_region_service:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_documentgenerator_region_service
+
+.PHONY: integration_tests_documentgenerator_region_annotations
+integration_tests_documentgenerator_region_annotations:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_documentgenerator_region_annotations
+
+.PHONY: integration_tests_documentgenerator_role
+integration_tests_documentgenerator_role:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_documentgenerator_role
+
+.PHONY: integration_tests_documentgenerator_role_service
+integration_tests_documentgenerator_role_service:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_documentgenerator_role_service
+
+.PHONY: integration_tests_documentgenerator_role_annotations
+integration_tests_documentgenerator_role_annotations:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_documentgenerator_role_annotations
 
 .PHONY: test-integration-scope-biconnector
 test-integration-scope-biconnector:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_biconnector
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_biconnector
 
 .PHONY: test-integration-biconnector-connector
 test-integration-biconnector-connector:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_biconnector_connector
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_biconnector_connector
 
 .PHONY: test-integration-biconnector-source
 test-integration-biconnector-source:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_biconnector_source
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_biconnector_source
 
 .PHONY: test-integration-biconnector-dataset
 test-integration-biconnector-dataset:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_biconnector_dataset
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_biconnector_dataset
+
+.PHONY: test-integration-mailservice
+test-integration-mailservice:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_mailservice
+.PHONY: test-integration-scope-messageservice
+test-integration-scope-messageservice:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_messageservice
+
+.PHONY: test-integration-messageservice-sender
+test-integration-messageservice-sender:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_messageservice_sender
+
+.PHONY: test-integration-messageservice-message-status
+test-integration-messageservice-message-status:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_messageservice_message_status
 
 # work dev environment
 .PHONY: php-dev-server-up

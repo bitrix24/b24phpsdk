@@ -1036,7 +1036,7 @@ class GenerateExamplesForDocumentationCommand extends Command
     }
 
     /**
-     * @return array<int<0,max>, array<string,string>>
+     * @return list<array{method_name: string, method_return_type: non-empty-string, is_declared_in_current_file: bool}>
      */
     private function getClassMethods(string $className): array
     {
