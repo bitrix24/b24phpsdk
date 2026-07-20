@@ -34,8 +34,7 @@ class Product extends AbstractService
         public Batch           $batch,
         CoreInterface   $core,
         LoggerInterface $logger
-    )
-    {
+    ) {
         parent::__construct($core, $logger);
     }
 

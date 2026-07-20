@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Catalog\ProductImage\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Bitrix24\SDK\Services\Catalog\Common\Result\AbstractCatalogItem;
 use Carbon\CarbonImmutable;
 
 /**
@@ -25,6 +25,6 @@ use Carbon\CarbonImmutable;
  * @property-read string|null $detailUrl
  * @property-read string|null $downloadUrl
  */
-class ProductImageItemResult extends AbstractAnnotatedItem
+class ProductImageItemResult extends AbstractCatalogItem
 {
 }

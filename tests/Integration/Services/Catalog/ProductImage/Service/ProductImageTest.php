@@ -90,17 +90,17 @@ class ProductImageTest extends TestCase
     #[TestDox('test ProductImage::get')]
     public function testGet(): void
     {
-        $addedImage = $this->productImageService->add(
+        $productImageItemResult = $this->productImageService->add(
             $this->productId,
             ['test.jpeg', self::TEST_IMAGE_BASE64]
         )->productImage();
 
-        $fetchedImage = $this->productImageService->get($this->productId, $addedImage->id)->productImage();
-        $this->assertEquals($addedImage->id, $fetchedImage->id);
-        $this->assertEquals($addedImage->name, $fetchedImage->name);
+        $fetchedImage = $this->productImageService->get($this->productId, $productImageItemResult->id)->productImage();
+        $this->assertEquals($productImageItemResult->id, $fetchedImage->id);
+        $this->assertEquals($productImageItemResult->name, $fetchedImage->name);
 
         // Cleanup
-        $this->productImageService->delete($this->productId, $addedImage->id);
+        $this->productImageService->delete($this->productId, $productImageItemResult->id);
     }
 
     /**
@@ -110,17 +110,17 @@ class ProductImageTest extends TestCase
     #[TestDox('test ProductImage::list')]
     public function testList(): void
     {
-        $addedImage = $this->productImageService->add(
+        $productImageItemResult = $this->productImageService->add(
             $this->productId,
             ['test.jpeg', self::TEST_IMAGE_BASE64]
         )->productImage();
 
         $images = $this->productImageService->list($this->productId)->getProductImages();
         $this->assertCount(1, $images);
-        $this->assertEquals($addedImage->id, $images[0]->id);
+        $this->assertEquals($productImageItemResult->id, $images[0]->id);
 
         // Cleanup
-        $this->productImageService->delete($this->productId, $addedImage->id);
+        $this->productImageService->delete($this->productId, $productImageItemResult->id);
     }
 
     /**
@@ -130,12 +130,12 @@ class ProductImageTest extends TestCase
     #[TestDox('test ProductImage::delete')]
     public function testDelete(): void
     {
-        $addedImage = $this->productImageService->add(
+        $productImageItemResult = $this->productImageService->add(
             $this->productId,
             ['test.jpeg', self::TEST_IMAGE_BASE64]
         )->productImage();
 
-        $this->assertTrue($this->productImageService->delete($this->productId, $addedImage->id)->isSuccess());
+        $this->assertTrue($this->productImageService->delete($this->productId, $productImageItemResult->id)->isSuccess());
 
         $images = $this->productImageService->list($this->productId)->getProductImages();
         $this->assertCount(0, $images);

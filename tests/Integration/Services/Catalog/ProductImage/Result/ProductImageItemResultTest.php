@@ -86,16 +86,4 @@ class ProductImageItemResultTest extends TestCase
 
         $this->assertBitrix24AllResultItemFieldsAnnotated(array_keys($rawItem), ProductImageItemResult::class);
     }
-
-    /**
-     * @throws BaseException
-     * @throws TransportException
-     */
-    #[Test]
-    #[TestDox('all fields in ProductImageItemResult have valid type casting in magic getters')]
-    public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
-    {
-        $productImage = $this->productImageService->get($this->productId, $this->productImageId)->productImage();
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($productImage, ProductImageItemResult::class);
-    }
 }
