@@ -104,6 +104,7 @@ help:
 	@echo "test-integration-lists-section - run Lists Section integration tests"
 	@echo "test-integration-lists-element - run Lists Element integration tests"
 	@echo "test-integration-mailservice - run MailService integration tests"
+	@echo "test-integration-scope-mail - run Mail scope integration tests"
 
 t:
 	docker compose run --rm php-cli sh
@@ -622,12 +623,31 @@ test-integration-rest-scope:
 test-integration-scope-timeman:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_timeman
 
+.PHONY: test-integration-scope-mail
+test-integration-scope-mail:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_mail
 .PHONY: test-integration-scope-humanresources
 test-integration-scope-humanresources:
 	@docker compose run --rm -e BITRIX24_WEBHOOK="$(BITRIX24_WEBHOOK)" php-cli $(PHPUNIT) --testsuite integration_tests_scope_humanresources
 .PHONY: test-integration-timeman-record
 test-integration-timeman-record:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_timeman_record
+
+.PHONY: test-integration-scope-note
+test-integration-scope-note:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_note
+
+.PHONY: test-integration-note-collection
+test-integration-note-collection:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_note_collection
+
+.PHONY: test-integration-note-document
+test-integration-note-document:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_note_document
+
+.PHONY: test-integration-note-file
+test-integration-note-file:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_note_file
 
 .PHONY: integration_tests_sale
 integration_tests_sale:
