@@ -17,6 +17,7 @@ use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\Catalog;
+
 #[ApiServiceBuilderMetadata(new Scope(['catalog']))]
 class CatalogServiceBuilder extends AbstractServiceBuilder
 {
@@ -37,6 +38,27 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Catalog\Catalog\Service\Catalog(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * Get the ProductImage service
+     *
+     * Uses a specialized ProductImage\Batch to handle catalog.productImage.* REST API differences:
+     * - the identifier field is lowercase 'id' instead of standard 'ID'
+     * - delete requires both 'productId' and 'id' parameters instead of a single 'ID'
+     */
+    public function productImage(): Catalog\ProductImage\Service\ProductImage
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $productImageBatch = new Catalog\ProductImage\Batch($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new Catalog\ProductImage\Service\ProductImage(
+                new Catalog\ProductImage\Service\Batch($productImageBatch, $this->log),
                 $this->core,
                 $this->log
             );
