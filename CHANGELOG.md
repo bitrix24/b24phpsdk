@@ -1,5 +1,6 @@
 # b24-php-sdk change log
-## 3.4.0
+
+## Unreleased
 
 ### Added
 
@@ -10,6 +11,11 @@
     - `list` gets the list of images for a product, with batch calls support
     - `delete` deletes a product image, with batch calls support
     - `getFields` returns the description of product image fields
+
+## 3.4.0
+
+### Added
+
 - Added service `Services\Note` (Knowledge Base 2.0) with support for `note.collection.*`, `note.document.*`
   (incl. `note.document.tree.*` and `note.document.search.*`), and `note.file.*` methods,
   see [note REST v3](https://apidocs.bitrix24.com/api-reference/rest-v3/note/index.html) ([#515](https://github.com/bitrix24/b24phpsdk/issues/515)):
