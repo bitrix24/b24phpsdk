@@ -453,6 +453,15 @@
         <testsuite name="integration_tests_messageservice_message_status">
             <directory>./tests/Integration/Services/Messageservice/Message/Status/</directory>
         </testsuite>
+        <testsuite name="integration_tests_catalog_product_property">
+            <directory>./tests/Integration/Services/Catalog/ProductProperty/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_product_property_service">
+            <directory>./tests/Integration/Services/Catalog/ProductProperty/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_product_property_annotations">
+            <file>./tests/Integration/Services/Catalog/ProductProperty/Result/ProductPropertyItemResultAnnotationsTest.php</file>
+        </testsuite>
     </testsuites>
     <source>
         <include>

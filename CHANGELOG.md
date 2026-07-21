@@ -1,4 +1,18 @@
 # b24-php-sdk change log
+
+## Unreleased
+
+### Added
+
+- Added service `Services\Catalog\ProductProperty` with support methods,
+  see [catalog.productProperty.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product-property/index.html) ([#538](https://github.com/bitrix24/b24phpsdk/issues/538)):
+    - `add` creates a new product or variation property, with batch calls support
+    - `update` updates an existing product or variation property, with batch calls support
+    - `get` gets information about a product or variation property by its identifier
+    - `list` gets the list of product and variation properties by filter, with batch calls support
+    - `delete` deletes a product or variation property, with batch calls support
+    - `getFields` returns the description of product or variation property fields
+
 ## 3.4.0
 
 ### Added
