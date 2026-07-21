@@ -602,10 +602,14 @@ the single `update()` method) — document this in the method docblock.
 parameter in batch commands, but `Core\Batch::deleteEntityItems()` sends uppercase `ID` — confirmed
 by a live batch-delete integration test failure (`could not find value for parameter {id}`). Fixed
 by adding `src/Services/Catalog/ProductProperty/Batch.php extends \Bitrix24\SDK\Core\Batch`,
-overriding `deleteEntityItems()` to send `['id' => $itemId]`, following the exact
-`Services\Task\Batch`/`Services\CRM\Currency\Batch` pattern. Wired into
-`CatalogServiceBuilder::productProperty()` by constructing `new Catalog\ProductProperty\Batch($this->core, $this->log)`
-instead of reusing the shared `$this->batch`, matching `CRMServiceBuilder::currency()`.
+overriding `deleteEntityItems()` to send `['id' => $itemId]`. Also overrides
+`determineKeyId()` to return lowercase `'id'`, matching the more recent reference implementation
+`Services\Biconnector\Connector\Batch`/`Services\Biconnector\Source\Batch` (which additionally
+override list pagination for a `page`-based method — not needed here since
+`catalog.productProperty.list` uses standard `start`-based pagination, so only `deleteEntityItems()`
+and `determineKeyId()` are overridden). Wired into `CatalogServiceBuilder::productProperty()` by
+constructing `new Catalog\ProductProperty\Batch($this->core, $this->log)` instead of reusing the
+shared `$this->batch`, matching `CRMServiceBuilder::currency()`.
 
 No separate `ProductPropertyServiceBuilder.php` file is needed — `ProductProperty` is registered
 directly inside the existing `src/Services/Catalog/CatalogServiceBuilder.php` (see Files to Modify

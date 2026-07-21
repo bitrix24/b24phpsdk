@@ -21,10 +21,24 @@ use Generator;
 /**
  * Class Batch
  *
+ * Overrides base Batch to handle a parameter naming difference in catalog.productProperty.* REST
+ * methods: delete uses lowercase 'id' instead of 'ID'.
+ *
+ * @see https://apidocs.bitrix24.com/api-reference/catalog/product-property/catalog-product-property-delete.html
+ *
  * @package Bitrix24\SDK\Services\Catalog\ProductProperty
  */
 class Batch extends \Bitrix24\SDK\Core\Batch
 {
+    /**
+     * Determines the ID key — lowercase 'id' for catalog product property
+     */
+    #[\Override]
+    protected function determineKeyId(string $apiMethod, ?array $additionalParameters): string
+    {
+        return 'id';
+    }
+
     /**
      * Delete entity items with batch call
      *
