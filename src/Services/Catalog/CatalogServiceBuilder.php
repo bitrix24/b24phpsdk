@@ -17,6 +17,7 @@ use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\Catalog;
+
 #[ApiServiceBuilderMetadata(new Scope(['catalog']))]
 class CatalogServiceBuilder extends AbstractServiceBuilder
 {
@@ -37,6 +38,23 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Catalog\Catalog\Service\Catalog(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function productProperty(): Catalog\ProductProperty\Service\ProductProperty
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new Catalog\ProductProperty\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Catalog\ProductProperty\Service\ProductProperty(
+                new Catalog\ProductProperty\Service\Batch($batch, $this->log),
                 $this->core,
                 $this->log
             );
