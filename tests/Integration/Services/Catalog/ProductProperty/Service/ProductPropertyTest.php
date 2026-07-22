@@ -144,11 +144,11 @@ class ProductPropertyTest extends TestCase
         ])->productProperty()->id;
 
         $updatedName = 'SDK_TEST_UPDATED_' . $this->faker->uuid();
-        $updated = $this->productPropertyService->update($id, [
+        $productPropertyItemResult = $this->productPropertyService->update($id, [
             'iblockId' => $this->iblockId,
             'name' => $updatedName,
         ])->productProperty();
-        self::assertEquals($updatedName, $updated->name);
+        self::assertEquals($updatedName, $productPropertyItemResult->name);
 
         $this->safeDelete($id);
     }

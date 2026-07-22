@@ -94,7 +94,7 @@ class ProductPropertyTest extends TestCase
     public function testAddSendsNestedFields(): void
     {
         [$method, $captured] = $this->call(
-            static fn (ProductProperty $service) => $service->add(['iblockId' => 19, 'name' => 'Size'])
+            static fn (ProductProperty $productProperty): ProductPropertyResult => $productProperty->add(['iblockId' => 19, 'name' => 'Size'])
         );
 
         $this->assertSame('catalog.productProperty.add', $method);
@@ -106,7 +106,7 @@ class ProductPropertyTest extends TestCase
     public function testUpdateSendsIdAndFields(): void
     {
         [$method, $captured] = $this->call(
-            static fn (ProductProperty $service) => $service->update(115, ['iblockId' => 19, 'name' => 'Size'])
+            static fn (ProductProperty $productProperty): ProductPropertyResult => $productProperty->update(115, ['iblockId' => 19, 'name' => 'Size'])
         );
 
         $this->assertSame('catalog.productProperty.update', $method);
@@ -118,7 +118,7 @@ class ProductPropertyTest extends TestCase
     #[TestDox('get() sends the property id')]
     public function testGetSendsId(): void
     {
-        [$method, $captured] = $this->call(static fn (ProductProperty $service) => $service->get(115));
+        [$method, $captured] = $this->call(static fn (ProductProperty $productProperty): ProductPropertyResult => $productProperty->get(115));
 
         $this->assertSame('catalog.productProperty.get', $method);
         $this->assertSame(115, $captured['id']);
@@ -129,7 +129,7 @@ class ProductPropertyTest extends TestCase
     public function testListSendsSelectFilterOrder(): void
     {
         [$method, $captured] = $this->call(
-            static fn (ProductProperty $service) => $service->list(['id', 'name'], ['iblockId' => 19], ['id' => 'ASC'])
+            static fn (ProductProperty $productProperty): ProductPropertiesResult => $productProperty->list(['id', 'name'], ['iblockId' => 19], ['id' => 'ASC'])
         );
 
         $this->assertSame('catalog.productProperty.list', $method);
@@ -142,7 +142,7 @@ class ProductPropertyTest extends TestCase
     #[TestDox('delete() sends the property id')]
     public function testDeleteSendsId(): void
     {
-        [$method, $captured] = $this->call(static fn (ProductProperty $service) => $service->delete(115));
+        [$method, $captured] = $this->call(static fn (ProductProperty $productProperty): DeletedProductPropertyResult => $productProperty->delete(115));
 
         $this->assertSame('catalog.productProperty.delete', $method);
         $this->assertSame(115, $captured['id']);

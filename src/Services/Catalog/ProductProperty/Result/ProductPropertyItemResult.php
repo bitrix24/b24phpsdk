@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Catalog\ProductProperty\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Bitrix24\SDK\Core\Result\AbstractItem;
 use Carbon\CarbonImmutable;
 
 /**
@@ -44,6 +44,49 @@ use Carbon\CarbonImmutable;
  * @property-read bool|null       $withDescription
  * @property-read string|null     $xmlId
  */
-class ProductPropertyItemResult extends AbstractAnnotatedItem
+class ProductPropertyItemResult extends AbstractItem
 {
+    /**
+     * @param int|string $offset
+     *
+     * @return bool|CarbonImmutable|int|mixed|null
+     */
+    #[\Override]
+    public function __get($offset)
+    {
+        switch ($offset) {
+            case 'active':
+            case 'filtrable':
+            case 'isRequired':
+            case 'multiple':
+            case 'searchable':
+                return $this->data[$offset] === 'Y';
+            case 'withDescription':
+                if ($this->data[$offset] !== null) {
+                    return $this->data[$offset] === 'Y';
+                }
+
+                return null;
+            case 'colCount':
+            case 'iblockId':
+            case 'id':
+            case 'linkIblockId':
+            case 'multipleCnt':
+            case 'rowCount':
+            case 'sort':
+                if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
+                    return (int)$this->data[$offset];
+                }
+
+                return null;
+            case 'timestampX':
+                if ($this->data[$offset] !== null && $this->data[$offset] !== '') {
+                    return CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
+                }
+
+                return null;
+        }
+
+        return $this->data[$offset] ?? null;
+    }
 }
