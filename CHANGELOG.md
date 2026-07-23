@@ -13,6 +13,13 @@
     - `delete` deletes a list-type property value by identifier
     - `getFields` returns the description of list-type property value fields
 
+### Fixed
+
+- Fixed batch operations for `Services\Catalog\Product` using the wrong-case `ID` key instead of
+  the lowercase `id` key expected by `catalog.product.list` and `catalog.product.delete`: added
+  `Services\Catalog\Product\Batch` overriding `determineKeyId()` and `deleteEntityItems()`,
+  registered in `CatalogServiceBuilder::product()` ([#549](https://github.com/bitrix24/b24phpsdk/issues/549))
+
 ## 3.4.0
 
 ### Added

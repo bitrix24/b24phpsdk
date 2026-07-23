@@ -24,8 +24,9 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
     public function product(): Catalog\Product\Service\Product
     {
         if (!isset($this->serviceCache[__METHOD__])) {
+            $productBatch = new Catalog\Product\Batch($this->core, $this->log);
             $this->serviceCache[__METHOD__] = new Catalog\Product\Service\Product(
-                new Catalog\Product\Service\Batch($this->batch, $this->log),
+                new Catalog\Product\Service\Batch($productBatch, $this->log),
                 $this->core,
                 $this->log
             );
