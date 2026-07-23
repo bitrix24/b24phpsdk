@@ -1,4 +1,18 @@
 # b24-php-sdk change log
+
+## Unreleased
+
+### Added
+
+- Added service `Services\Catalog\ProductPropertyEnum` with support methods,
+  see [catalog.productPropertyEnum.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product-property-enum/index.html) ([#549](https://github.com/bitrix24/b24phpsdk/issues/549)):
+    - `add` creates a new list-type property value
+    - `update` updates an existing list-type property value
+    - `get` gets a list-type property value by identifier
+    - `list` gets the list of list-type property values by filter
+    - `delete` deletes a list-type property value by identifier
+    - `getFields` returns the description of list-type property value fields
+
 ## 3.4.0
 
 ### Added
