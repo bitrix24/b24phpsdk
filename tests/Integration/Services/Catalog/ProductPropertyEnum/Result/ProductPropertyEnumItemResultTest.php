@@ -52,9 +52,9 @@ class ProductPropertyEnumItemResultTest extends TestCase
     #[TestDox('all fields in ProductPropertyEnumItemResult have valid type casting in magic getters')]
     public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
     {
-        $productPropertyEnumItemResult = $this->productPropertyEnumService->get($this->productPropertyEnumId)->productPropertyEnum();
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations(
-            $productPropertyEnumItemResult,
+        $fields = $this->productPropertyEnumService->getFields()->getFieldsDescription();
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
+            $fields,
             ProductPropertyEnumItemResult::class
         );
     }
@@ -81,14 +81,14 @@ class ProductPropertyEnumItemResultTest extends TestCase
         ]);
         $this->propertyId = (int)$propertyResponse->getResponseData()->getResult()['productProperty']['id'];
 
-        $addResult = $this->productPropertyEnumService->add([
+        $productPropertyEnumResult = $this->productPropertyEnumService->add([
             'propertyId' => $this->propertyId,
             'value' => sprintf('test value %s', time()),
             'xmlId' => sprintf('test-xml-id-%s', time()),
             'def' => 'Y',
             'sort' => 100,
         ]);
-        $this->productPropertyEnumId = $addResult->productPropertyEnum()->id;
+        $this->productPropertyEnumId = $productPropertyEnumResult->productPropertyEnum()->id;
     }
 
     /**

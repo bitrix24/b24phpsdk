@@ -42,12 +42,12 @@ class ProductPropertyEnumTest extends TestCase
             'def' => 'Y',
             'sort' => 100,
         ];
-        $result = $this->productPropertyEnumService->add($fields);
-        $this->assertEquals($fields['value'], $result->productPropertyEnum()->value);
-        $this->assertEquals($fields['xmlId'], $result->productPropertyEnum()->xmlId);
-        $this->assertEquals($this->propertyId, $result->productPropertyEnum()->propertyId);
+        $productPropertyEnumResult = $this->productPropertyEnumService->add($fields);
+        $this->assertEquals($fields['value'], $productPropertyEnumResult->productPropertyEnum()->value);
+        $this->assertEquals($fields['xmlId'], $productPropertyEnumResult->productPropertyEnum()->xmlId);
+        $this->assertEquals($this->propertyId, $productPropertyEnumResult->productPropertyEnum()->propertyId);
 
-        $this->productPropertyEnumService->delete($result->productPropertyEnum()->id);
+        $this->productPropertyEnumService->delete($productPropertyEnumResult->productPropertyEnum()->id);
     }
 
     /**
@@ -57,20 +57,20 @@ class ProductPropertyEnumTest extends TestCase
     #[TestDox('test ProductPropertyEnum::update')]
     public function testUpdate(): void
     {
-        $addResult = $this->productPropertyEnumService->add([
+        $productPropertyEnumResult = $this->productPropertyEnumService->add([
             'propertyId' => $this->propertyId,
             'value' => sprintf('test value %s', time()),
             'xmlId' => sprintf('test-xml-id-%s', time()),
             'def' => 'N',
             'sort' => 100,
         ]);
-        $id = $addResult->productPropertyEnum()->id;
+        $id = $productPropertyEnumResult->productPropertyEnum()->id;
 
         $updatedValue = sprintf('updated value %s', time());
         $this->productPropertyEnumService->update($id, [
             'propertyId' => $this->propertyId,
             'value' => $updatedValue,
-            'xmlId' => $addResult->productPropertyEnum()->xmlId,
+            'xmlId' => $productPropertyEnumResult->productPropertyEnum()->xmlId,
             'def' => 'N',
             'sort' => 200,
         ]);
@@ -89,18 +89,18 @@ class ProductPropertyEnumTest extends TestCase
     #[TestDox('test ProductPropertyEnum::get')]
     public function testGet(): void
     {
-        $addResult = $this->productPropertyEnumService->add([
+        $productPropertyEnumResult = $this->productPropertyEnumService->add([
             'propertyId' => $this->propertyId,
             'value' => sprintf('test value %s', time()),
             'xmlId' => sprintf('test-xml-id-%s', time()),
             'def' => 'N',
             'sort' => 100,
         ]);
-        $id = $addResult->productPropertyEnum()->id;
+        $id = $productPropertyEnumResult->productPropertyEnum()->id;
 
         $getResult = $this->productPropertyEnumService->get($id);
         $this->assertEquals($id, $getResult->productPropertyEnum()->id);
-        $this->assertEquals($addResult->productPropertyEnum()->value, $getResult->productPropertyEnum()->value);
+        $this->assertEquals($productPropertyEnumResult->productPropertyEnum()->value, $getResult->productPropertyEnum()->value);
 
         $this->productPropertyEnumService->delete($id);
     }
@@ -112,22 +112,22 @@ class ProductPropertyEnumTest extends TestCase
     #[TestDox('test ProductPropertyEnum::list')]
     public function testList(): void
     {
-        $addResult = $this->productPropertyEnumService->add([
+        $productPropertyEnumResult = $this->productPropertyEnumService->add([
             'propertyId' => $this->propertyId,
             'value' => sprintf('test value %s', time()),
             'xmlId' => sprintf('test-xml-id-%s', time()),
             'def' => 'N',
             'sort' => 100,
         ]);
-        $id = $addResult->productPropertyEnum()->id;
+        $id = $productPropertyEnumResult->productPropertyEnum()->id;
 
-        $listResult = $this->productPropertyEnumService->list(
+        $productPropertyEnumsResult = $this->productPropertyEnumService->list(
             ['id', 'propertyId', 'value', 'xmlId', 'def', 'sort'],
             ['id' => $id],
             ['id' => 'ASC']
         );
-        $this->assertCount(1, $listResult->getProductPropertyEnums());
-        $this->assertEquals($id, $listResult->getProductPropertyEnums()[0]->id);
+        $this->assertCount(1, $productPropertyEnumsResult->getProductPropertyEnums());
+        $this->assertEquals($id, $productPropertyEnumsResult->getProductPropertyEnums()[0]->id);
 
         $this->productPropertyEnumService->delete($id);
     }
@@ -139,19 +139,19 @@ class ProductPropertyEnumTest extends TestCase
     #[TestDox('test ProductPropertyEnum::delete')]
     public function testDelete(): void
     {
-        $addResult = $this->productPropertyEnumService->add([
+        $productPropertyEnumResult = $this->productPropertyEnumService->add([
             'propertyId' => $this->propertyId,
             'value' => sprintf('test value %s', time()),
             'xmlId' => sprintf('test-xml-id-%s', time()),
             'def' => 'N',
             'sort' => 100,
         ]);
-        $id = $addResult->productPropertyEnum()->id;
+        $id = $productPropertyEnumResult->productPropertyEnum()->id;
 
         $this->assertTrue($this->productPropertyEnumService->delete($id)->isSuccess());
 
-        $listResult = $this->productPropertyEnumService->list([], ['id' => $id]);
-        $this->assertCount(0, $listResult->getProductPropertyEnums());
+        $productPropertyEnumsResult = $this->productPropertyEnumService->list([], ['id' => $id]);
+        $this->assertCount(0, $productPropertyEnumsResult->getProductPropertyEnums());
     }
 
     /**

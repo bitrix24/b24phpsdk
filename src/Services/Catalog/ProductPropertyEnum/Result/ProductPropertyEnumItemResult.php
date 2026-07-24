@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Catalog\ProductPropertyEnum\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Bitrix24\SDK\Core\Result\AbstractItem;
 
 /**
  * @property-read int $id
@@ -23,6 +23,33 @@ use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
  * @property-read bool|null $def
  * @property-read int|null $sort
  */
-class ProductPropertyEnumItemResult extends AbstractAnnotatedItem
+class ProductPropertyEnumItemResult extends AbstractItem
 {
+    /**
+     * @param int|string $offset
+     *
+     * @return bool|int|mixed|null
+     */
+    public function __get($offset)
+    {
+        switch ($offset) {
+            case 'id':
+            case 'propertyId':
+                return (int)$this->data[$offset];
+            case 'def':
+                if ($this->data[$offset] !== null) {
+                    return $this->data[$offset] === 'Y';
+                }
+
+                return null;
+            case 'sort':
+                if ($this->data[$offset] !== null) {
+                    return (int)$this->data[$offset];
+                }
+
+                return null;
+        }
+
+        return $this->data[$offset] ?? null;
+    }
 }
