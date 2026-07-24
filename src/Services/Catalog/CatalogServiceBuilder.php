@@ -17,14 +17,16 @@ use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\Catalog;
+
 #[ApiServiceBuilderMetadata(new Scope(['catalog']))]
 class CatalogServiceBuilder extends AbstractServiceBuilder
 {
     public function product(): Catalog\Product\Service\Product
     {
         if (!isset($this->serviceCache[__METHOD__])) {
+            $productBatch = new Catalog\Product\Batch($this->core, $this->log);
             $this->serviceCache[__METHOD__] = new Catalog\Product\Service\Product(
-                new Catalog\Product\Service\Batch($this->batch, $this->log),
+                new Catalog\Product\Service\Batch($productBatch, $this->log),
                 $this->core,
                 $this->log
             );
@@ -37,6 +39,20 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Catalog\Catalog\Service\Catalog(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function productPropertyEnum(): Catalog\ProductPropertyEnum\Service\ProductPropertyEnum
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $productPropertyEnumBatch = new Catalog\ProductPropertyEnum\Batch($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new Catalog\ProductPropertyEnum\Service\ProductPropertyEnum(
+                new Catalog\ProductPropertyEnum\Service\Batch($productPropertyEnumBatch, $this->log),
                 $this->core,
                 $this->log
             );
