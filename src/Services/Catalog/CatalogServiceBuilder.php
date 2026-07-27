@@ -49,7 +49,14 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
     public function productPropertyFeature(): Catalog\ProductPropertyFeature\Service\ProductPropertyFeature
     {
         if (!isset($this->serviceCache[__METHOD__])) {
+            // Use specialized Batch for ProductPropertyFeature to ensure correct REST parameter mapping
+            // (lowercase 'id' key, unlike the base Batch default of uppercase 'ID')
+            $productPropertyFeatureBatch = new Catalog\ProductPropertyFeature\Batch(
+                $this->core,
+                $this->log
+            );
             $this->serviceCache[__METHOD__] = new Catalog\ProductPropertyFeature\Service\ProductPropertyFeature(
+                new Catalog\ProductPropertyFeature\Service\Batch($productPropertyFeatureBatch, $this->log),
                 $this->core,
                 $this->log
             );

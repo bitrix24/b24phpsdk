@@ -24,7 +24,9 @@ use Bitrix24\SDK\Services\Catalog\ProductPropertyFeature\Result\ProductPropertyF
 use Bitrix24\SDK\Services\Catalog\ProductPropertyFeature\Result\ProductPropertyFeatureResult;
 use Bitrix24\SDK\Services\Catalog\ProductPropertyFeature\Result\ProductPropertyFeatureUpdatedResult;
 use Bitrix24\SDK\Services\Catalog\ProductPropertyFeature\Result\ProductPropertyFeaturesResult;
+use Bitrix24\SDK\Services\Catalog\ProductPropertyFeature\Service\Batch;
 use Bitrix24\SDK\Services\Catalog\ProductPropertyFeature\Service\ProductPropertyFeature;
+use Bitrix24\SDK\Tests\Unit\Stubs\NullBatch;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullCore;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -41,7 +43,11 @@ class ProductPropertyFeatureTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->service = new ProductPropertyFeature(new NullCore(), new NullLogger());
+        $this->service = new ProductPropertyFeature(
+            new Batch(new NullBatch(), new NullLogger()),
+            new NullCore(),
+            new NullLogger()
+        );
     }
 
     #[Test]
@@ -232,7 +238,11 @@ class ProductPropertyFeatureTest extends TestCase
             }
         );
 
-        $action(new ProductPropertyFeature($core, new NullLogger()));
+        $action(new ProductPropertyFeature(
+            new Batch(new NullBatch(), new NullLogger()),
+            $core,
+            new NullLogger()
+        ));
 
         return [$method, $captured];
     }

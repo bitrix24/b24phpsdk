@@ -602,3 +602,105 @@ experiment above). The integration test files
 `tests/Integration/Services/Catalog/ProductPropertyFeature/Result/ProductPropertyFeatureItemResultTest.php`)
 are complete, follow the required patterns, and are expected to pass once the repo-wide `rector`/`deptrac`
 `phpstan/phpdoc-parser` scoping conflict is fixed independently (worth filing as its own tracking issue).
+
+**Update**: the environment was later fixed independently (a `tests/phpunit-preload-guard.php` script plus a
+`PHPUNIT := php -d auto_prepend_file=tests/phpunit-preload-guard.php vendor/bin/phpunit` wrapper were added to
+`Makefile`, apparently by the user/tooling, outside this task). Re-running the full `unit_tests` suite through
+this wrapper now passes 1126/1126 with zero errors, and all integration tests for this scope (7 tests, see
+Batch section below) pass cleanly through the same wrapper.
+
+---
+
+## Follow-up: dedicated `Batch.php` for `catalog.productPropertyFeature.*` (case-sensitivity fix)
+
+After the initial implementation above, a code-review pass identified that `catalog.productPropertyFeature.*`
+REST methods use a **lowercase** `id` key (confirmed via real API responses:
+`catalog.productPropertyFeature.get`/`update` take `{"id": N, ...}`, not `{"ID": N, ...}`), while
+`Bitrix24\SDK\Core\Batch::determineKeyId()` defaults to uppercase `'ID'` for any non-CRM method. This affects
+the base `Batch`'s `getTraversableList()`/`getTraversableListWithCount()` pagination logic (sort key, filter
+operator keys, reference-field paths all derive from `determineKeyId()`).
+
+Per the project convention demonstrated by `Services\Biconnector\Connector\Batch` and
+`Services\Biconnector\Source\Batch`, added a dedicated low-level `Batch` class:
+
+### `src/Services/Catalog/ProductPropertyFeature/Batch.php`
+
+Extends `\Bitrix24\SDK\Core\Batch`, overrides:
+- `determineKeyId()` → returns `'id'` (lowercase) unconditionally for this scope.
+- `extractElementsFromBatchResult()` → **a second, independently discovered issue**: the base class's
+  non-CRM branch returns `$responseData->getResult()` verbatim, assuming the REST method returns a flat array
+  in `result`. But `catalog.productPropertyFeature.list` wraps its items under the named key
+  `result.productPropertyFeatures` (confirmed both via `bitrix-method-details` docs and live API response),
+  so the base implementation silently treated the whole associative result as a single non-conforming
+  "element" — reproduced as a real bug via a live-portal batch-add-then-batch-list round trip (added IDs did
+  not appear in the immediately-following batch `list()` output, despite the raw curl request/response for
+  the same data confirming the API itself was consistent). Fixed by overriding the method to read
+  `$responseData->getResult()['productPropertyFeatures'] ?? []`.
+
+### `src/Services/Catalog/ProductPropertyFeature/Service/Batch.php`
+
+Typed batch facade (pattern: `Services\Biconnector\Connector\Service\Batch`), constructor takes
+`BatchOperationsInterface $batch` + `LoggerInterface $log`. Methods:
+- `list(array $order, array $filter, array $select, ?int $limit)` → `Generator<int, ProductPropertyFeatureItemResult>`,
+  delegates to `$this->batch->getTraversableListWithCount('catalog.productPropertyFeature.list', ...)`.
+- `add(array $productPropertyFeatures)` → `Generator<int, ProductPropertyFeatureAddedBatchResult>`, wraps each
+  item as `['fields' => $item]` and delegates to `addEntityItems()`.
+- `update(array $entityItems)` → `Generator<int, ProductPropertyFeatureUpdatedBatchResult>`, delegates to
+  `updateEntityItems()` (already lowercase-`id`-compatible in the base class — no override needed there).
+- No `delete()` — the REST scope has no delete method.
+
+### New Result classes
+
+- `Result/ProductPropertyFeatureAddedBatchResult.php` — extends `Core\Result\AddedItemBatchResult`, overrides
+  `getId()` to read `getResult()['productPropertyFeature']['id']` (the base class assumes a flat scalar id at
+  `getResult()[0]`, which does not match this scope's nested single-object envelope — same class of mismatch
+  already handled for the non-batch `add`/`update` in the original implementation above).
+- `Result/ProductPropertyFeatureUpdatedBatchResult.php` — extends `Core\Result\UpdatedItemBatchResult`,
+  overrides `isSuccess()` to check `isset(getResult()['productPropertyFeature'])` (the base class assumes a
+  boolean at `getResult()[0]`).
+
+### Changes to existing files
+
+- `src/Services/Catalog/ProductPropertyFeature/Service/ProductPropertyFeature.php` — constructor now takes
+  `public Batch $batch` as the first parameter (pattern: `Services\Catalog\Product\Service\Product`,
+  `Services\Biconnector\Connector\Service\Connector`), exposing `$productPropertyFeatureService->batch->...()`
+  for typed batch access.
+- `src/Services/Catalog/CatalogServiceBuilder.php` — `productPropertyFeature()` accessor now builds the
+  low-level `Catalog\ProductPropertyFeature\Batch` and wraps it in `Catalog\ProductPropertyFeature\Service\Batch`
+  before injecting into the service, mirroring `BiconnectorServiceBuilder::connector()`.
+- `tests/Unit/Services/Catalog/ProductPropertyFeature/Service/ProductPropertyFeatureTest.php` — `setUp()`/`call()`
+  updated to construct `ProductPropertyFeature` with a `Batch(new NullBatch(), new NullLogger())` first argument.
+
+### New test files
+
+- `tests/Unit/Services/Catalog/ProductPropertyFeature/Service/BatchTest.php` — 3 tests: `list()` yields
+  `ProductPropertyFeatureItemResult` (via `NullBatch`), `add()` forwards the `fields` wrapper and yields
+  `ProductPropertyFeatureAddedBatchResult` (via a mocked `BatchOperationsInterface` asserting the exact
+  `addEntityItems()` call), `update()` yields `ProductPropertyFeatureUpdatedBatchResult`.
+- `tests/Integration/Services/Catalog/ProductPropertyFeature/Service/BatchTest.php` — 2 tests against the live
+  portal: `testBatchAddAndList` (batch-add 2 items, batch-list them back by `propertyId` filter, assert both
+  added IDs appear) and `testBatchUpdate` (add one item, batch-update its `isEnabled` flag, verify via `get()`).
+  Fixture setup/teardown reuses the same throwaway `catalog.productProperty` pattern as the non-batch
+  integration test (no `catalog.productPropertyFeature.delete` exists, so cleanup deletes the owning property
+  instead, cascading the feature rows with it).
+
+### Verification (batch follow-up)
+
+```bash
+docker compose run --rm php-cli vendor/bin/php-cs-fixer check --verbose --diff
+docker compose run --rm php-cli vendor/bin/rector process --dry-run
+docker compose run --rm php-cli vendor/bin/phpstan --memory-limit=2G analyse -vvv
+docker compose run --rm php-cli vendor/bin/deptrac analyse
+docker compose run --rm php-cli php -d auto_prepend_file=tests/phpunit-preload-guard.php vendor/bin/phpunit --testsuite unit_tests --display-warnings
+docker compose run --rm php-cli php -d auto_prepend_file=tests/phpunit-preload-guard.php vendor/bin/phpunit --testsuite integration_tests_catalog_product_property_feature --display-warnings
+```
+
+Results: cs-fixer — clean for all `ProductPropertyFeature/*` files (11 pre-existing files under
+`Catalog/Product` and `Catalog/Catalog` also got flagged after `.php-cs-fixer.php` was independently widened
+to cover `src/Services/Catalog/` as a whole — all `single_blank_line_at_eof`/formatting issues pre-dating this
+task, left untouched as out of scope). rector — clean. phpstan — clean (one type-mismatch caught and fixed in
+`BatchTest.php`: `list()`'s third positional argument is `$select`, not `$order` — corrected the test call).
+deptrac — 0 violations. Full `unit_tests` suite — 1126/1126 passing. Integration suite for this scope —
+7/7 passing (5 from the original implementation + 2 new batch tests).
+
+No `CHANGELOG.md` entry was added for this follow-up, per explicit user instruction.
