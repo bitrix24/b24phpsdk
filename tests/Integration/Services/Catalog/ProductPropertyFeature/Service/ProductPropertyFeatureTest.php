@@ -65,28 +65,28 @@ class ProductPropertyFeatureTest extends TestCase
      */
     public function testAddGetUpdateList(): void
     {
-        $addedResult = $this->service->add([
+        $productPropertyFeatureAddedResult = $this->service->add([
             'propertyId' => $this->propertyId,
             'moduleId' => 'iblock',
             'featureId' => 'LIST_PAGE_SHOW',
             'isEnabled' => 'Y',
         ]);
-        $id = $addedResult->getId();
+        $id = $productPropertyFeatureAddedResult->getId();
         self::assertGreaterThan(0, $id);
 
-        $item = $this->service->get($id)->productPropertyFeature();
-        self::assertEquals($this->propertyId, $item->propertyId);
-        self::assertEquals('iblock', $item->moduleId);
-        self::assertEquals('LIST_PAGE_SHOW', $item->featureId);
-        self::assertTrue($item->isEnabled);
+        $productPropertyFeatureItemResult = $this->service->get($id)->productPropertyFeature();
+        self::assertEquals($this->propertyId, $productPropertyFeatureItemResult->propertyId);
+        self::assertEquals('iblock', $productPropertyFeatureItemResult->moduleId);
+        self::assertEquals('LIST_PAGE_SHOW', $productPropertyFeatureItemResult->featureId);
+        self::assertTrue($productPropertyFeatureItemResult->isEnabled);
 
-        $updatedResult = $this->service->update($id, [
+        $productPropertyFeatureUpdatedResult = $this->service->update($id, [
             'propertyId' => $this->propertyId,
             'moduleId' => 'iblock',
             'featureId' => 'LIST_PAGE_SHOW',
             'isEnabled' => 'N',
         ]);
-        self::assertTrue($updatedResult->isSuccess());
+        self::assertTrue($productPropertyFeatureUpdatedResult->isSuccess());
         self::assertFalse($this->service->get($id)->productPropertyFeature()->isEnabled);
 
         $list = $this->service->list(

@@ -127,7 +127,7 @@ class ProductPropertyFeatureTest extends TestCase
     #[TestDox('add() calls catalog.productPropertyFeature.add with a nested fields object')]
     public function testAddSendsNestedFields(): void
     {
-        [$method, $captured] = $this->call(static fn (ProductPropertyFeature $service) => $service->add([
+        [$method, $captured] = $this->call(static fn (ProductPropertyFeature $productPropertyFeature): \Bitrix24\SDK\Services\Catalog\ProductPropertyFeature\Result\ProductPropertyFeatureAddedResult => $productPropertyFeature->add([
             'propertyId' => 901,
             'moduleId' => 'iblock',
             'featureId' => 'LIST_PAGE_SHOW',
@@ -149,7 +149,7 @@ class ProductPropertyFeatureTest extends TestCase
     #[TestDox('update() sends id and nested fields')]
     public function testUpdateSendsIdAndFields(): void
     {
-        [$method, $captured] = $this->call(static fn (ProductPropertyFeature $service) => $service->update(101, [
+        [$method, $captured] = $this->call(static fn (ProductPropertyFeature $productPropertyFeature): \Bitrix24\SDK\Services\Catalog\ProductPropertyFeature\Result\ProductPropertyFeatureUpdatedResult => $productPropertyFeature->update(101, [
             'propertyId' => 901,
             'moduleId' => 'iblock',
             'featureId' => 'LIST_PAGE_SHOW',
@@ -170,7 +170,7 @@ class ProductPropertyFeatureTest extends TestCase
     #[TestDox('get() sends the id')]
     public function testGetSendsId(): void
     {
-        [$method, $captured] = $this->call(static fn (ProductPropertyFeature $service) => $service->get(101));
+        [$method, $captured] = $this->call(static fn (ProductPropertyFeature $productPropertyFeature): \Bitrix24\SDK\Services\Catalog\ProductPropertyFeature\Result\ProductPropertyFeatureResult => $productPropertyFeature->get(101));
 
         $this->assertSame('catalog.productPropertyFeature.get', $method);
         $this->assertSame(101, $captured['id']);
@@ -180,7 +180,7 @@ class ProductPropertyFeatureTest extends TestCase
     #[TestDox('list() sends select, filter and order')]
     public function testListSendsSelectFilterOrder(): void
     {
-        [$method, $captured] = $this->call(static fn (ProductPropertyFeature $service) => $service->list(
+        [$method, $captured] = $this->call(static fn (ProductPropertyFeature $productPropertyFeature): \Bitrix24\SDK\Services\Catalog\ProductPropertyFeature\Result\ProductPropertyFeaturesResult => $productPropertyFeature->list(
             ['id', 'propertyId'],
             ['propertyId' => 901],
             ['id' => 'ASC']
@@ -197,7 +197,7 @@ class ProductPropertyFeatureTest extends TestCase
     public function testGetAvailableFeaturesByPropertySendsPropertyId(): void
     {
         [$method, $captured] = $this->call(
-            static fn (ProductPropertyFeature $service) => $service->getAvailableFeaturesByProperty(901)
+            static fn (ProductPropertyFeature $productPropertyFeature): \Bitrix24\SDK\Services\Catalog\ProductPropertyFeature\Result\AvailableFeaturesResult => $productPropertyFeature->getAvailableFeaturesByProperty(901)
         );
 
         $this->assertSame('catalog.productPropertyFeature.getAvailableFeaturesByProperty', $method);
@@ -208,7 +208,7 @@ class ProductPropertyFeatureTest extends TestCase
     #[TestDox('getFields() calls catalog.productPropertyFeature.getFields with no parameters')]
     public function testGetFieldsSendsNoParameters(): void
     {
-        [$method, $captured] = $this->call(static fn (ProductPropertyFeature $service) => $service->getFields());
+        [$method, $captured] = $this->call(static fn (ProductPropertyFeature $productPropertyFeature): \Bitrix24\SDK\Services\Catalog\ProductPropertyFeature\Result\ProductPropertyFeatureFieldsResult => $productPropertyFeature->getFields());
 
         $this->assertSame('catalog.productPropertyFeature.getFields', $method);
         $this->assertSame([], $captured);

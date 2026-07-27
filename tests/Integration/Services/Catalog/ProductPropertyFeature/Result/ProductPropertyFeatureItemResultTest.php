@@ -67,14 +67,18 @@ class ProductPropertyFeatureItemResultTest extends TestCase
     #[TestDox('all fields in ProductPropertyFeatureItemResult have valid type casting in magic getters')]
     public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
     {
-        $item = $this->productPropertyFeatureService->add([
+        $productPropertyFeatureItemResult = $this->productPropertyFeatureService->add([
             'propertyId' => $this->propertyId,
             'moduleId' => 'iblock',
             'featureId' => 'LIST_PAGE_SHOW',
             'isEnabled' => 'Y',
         ])->productPropertyFeature();
 
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($item, ProductPropertyFeatureItemResult::class);
+        self::assertIsInt($productPropertyFeatureItemResult->id);
+        self::assertIsInt($productPropertyFeatureItemResult->propertyId);
+        self::assertIsString($productPropertyFeatureItemResult->moduleId);
+        self::assertIsString($productPropertyFeatureItemResult->featureId);
+        self::assertIsBool($productPropertyFeatureItemResult->isEnabled);
     }
 
     protected function createProductProperty(): int
