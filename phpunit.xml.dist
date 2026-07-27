@@ -453,6 +453,9 @@
         <testsuite name="integration_tests_messageservice_message_status">
             <directory>./tests/Integration/Services/Messageservice/Message/Status/</directory>
         </testsuite>
+        <testsuite name="integration_tests_catalog_product_property_feature">
+            <directory>./tests/Integration/Services/Catalog/ProductPropertyFeature/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>

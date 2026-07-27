@@ -1,4 +1,19 @@
 # b24-php-sdk change log
+
+## Unreleased
+
+### Added
+
+- Added service `Services\Catalog\ProductPropertyFeature` with support for `catalog.productPropertyFeature.*`
+  methods,
+  see [catalog.productPropertyFeature.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product-property-feature/index.html) ([#553](https://github.com/bitrix24/b24phpsdk/issues/553)):
+    - `add` adds a parameter (feature) for a product or variation property
+    - `update` updates a parameter of a product or variation property by id
+    - `get` returns a product or variation property parameter by id
+    - `list` returns the list of product/variation property parameters matching the filter
+    - `getAvailableFeaturesByProperty` returns the list of available parameters for a given property
+    - `getFields` returns the description of product/variation property parameter fields
+
 ## 3.4.0
 
 ### Added
