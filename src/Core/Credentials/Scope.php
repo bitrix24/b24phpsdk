@@ -87,7 +87,7 @@ class Scope
         'vote',
     ];
 
-    protected array $currentScope = [];
+    protected array $currentScope;
 
     /**
      * Scope constructor.
