@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Catalog\ProductPropertySection\ProductPropertySectionDisplayType;
 use Bitrix24\SDK\Services\Catalog\ProductPropertySection\Service\ProductPropertySection;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -78,14 +78,14 @@ class ProductPropertySectionTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->productPropertySectionService = Factory::getServiceBuilder()
+        $this->productPropertySectionService = Fabric::getServiceBuilder()
             ->getCatalogScope()
             ->productPropertySection();
 
-        $this->iblockId = Factory::getServiceBuilder()->getCatalogScope()->catalog()
+        $this->iblockId = Fabric::getServiceBuilder()->getCatalogScope()->catalog()
             ->list([], [], [], 1)->getCatalogs()[0]->iblockId;
 
-        $propertyAddResult = Factory::getCore()->call('catalog.productProperty.add', [
+        $propertyAddResult = Fabric::getCore()->call('catalog.productProperty.add', [
             'fields' => [
                 'iblockId' => $this->iblockId,
                 'name' => sprintf('test property %s', time()),
@@ -104,6 +104,6 @@ class ProductPropertySectionTest extends TestCase
     #[\Override]
     protected function tearDown(): void
     {
-        Factory::getCore()->call('catalog.productProperty.delete', ['id' => $this->propertyId]);
+        Fabric::getCore()->call('catalog.productProperty.delete', ['id' => $this->propertyId]);
     }
 }
