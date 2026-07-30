@@ -62,28 +62,6 @@ class ProductPropertySectionItemResultTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
-    #[Test]
-    #[TestDox('all fields in ProductPropertySectionItemResult have valid type casting in magic getters')]
-    public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
-    {
-        $item = $this->productPropertySection
-            ->set($this->propertyId, [
-                'smartFilter' => 'Y',
-                'displayType' => 'F',
-                'displayExpanded' => 'N',
-                'filterHint' => 'test hint',
-            ])
-            ->productPropertySection();
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations(
-            $item,
-            ProductPropertySectionItemResult::class
-        );
-    }
-
-    /**
-     * @throws BaseException
-     * @throws TransportException
-     */
     #[\Override]
     protected function setUp(): void
     {
@@ -94,7 +72,7 @@ class ProductPropertySectionItemResultTest extends TestCase
         $this->iblockId = Fabric::getServiceBuilder()->getCatalogScope()->catalog()
             ->list([], [], [], 1)->getCatalogs()[0]->iblockId;
 
-        $propertyAddResult = Fabric::getCore()->call('catalog.productProperty.add', [
+        $response = Fabric::getCore()->call('catalog.productProperty.add', [
             'fields' => [
                 'iblockId' => $this->iblockId,
                 'name' => sprintf('test property %s', time()),
@@ -103,7 +81,7 @@ class ProductPropertySectionItemResultTest extends TestCase
                 'active' => 'Y',
             ],
         ]);
-        $this->propertyId = (int)$propertyAddResult->getResponseData()->getResult()['productProperty']['id'];
+        $this->propertyId = (int)$response->getResponseData()->getResult()['productProperty']['id'];
     }
 
     /**

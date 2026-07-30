@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Catalog\ProductPropertySection\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Bitrix24\SDK\Core\Result\AbstractItem;
 use Bitrix24\SDK\Services\Catalog\ProductPropertySection\ProductPropertySectionDisplayType;
 
 /**
@@ -25,6 +25,21 @@ use Bitrix24\SDK\Services\Catalog\ProductPropertySection\ProductPropertySectionD
  * @property-read int $iblockId
  * @property-read int $sectionId
  */
-class ProductPropertySectionItemResult extends AbstractAnnotatedItem
+class ProductPropertySectionItemResult extends AbstractItem
 {
+    /**
+     * @param int|string $offset
+     *
+     * @return bool|int|ProductPropertySectionDisplayType|string|null
+     */
+    public function __get($offset)
+    {
+        return match ($offset) {
+            'smartFilter', 'displayExpanded' => $this->data[$offset] === 'Y',
+            'displayType' => ProductPropertySectionDisplayType::from($this->data[$offset]),
+            'propertyId', 'iblockId', 'sectionId' => (int)$this->data[$offset],
+            'filterHint' => (string)$this->data[$offset],
+            default => $this->data[$offset] ?? null,
+        };
+    }
 }

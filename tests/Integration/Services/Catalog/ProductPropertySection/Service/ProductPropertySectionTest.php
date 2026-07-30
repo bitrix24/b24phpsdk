@@ -44,12 +44,12 @@ class ProductPropertySectionTest extends TestCase
             'displayExpanded' => 'N',
             'filterHint' => 'test hint',
         ];
-        $setResult = $this->productPropertySectionService->set($this->propertyId, $fields)->productPropertySection();
-        $this->assertEquals($this->propertyId, $setResult->propertyId);
-        $this->assertTrue($setResult->smartFilter);
-        $this->assertEquals(ProductPropertySectionDisplayType::checkboxes, $setResult->displayType);
-        $this->assertFalse($setResult->displayExpanded);
-        $this->assertEquals('test hint', $setResult->filterHint);
+        $productPropertySectionItemResult = $this->productPropertySectionService->set($this->propertyId, $fields)->productPropertySection();
+        $this->assertEquals($this->propertyId, $productPropertySectionItemResult->propertyId);
+        $this->assertTrue($productPropertySectionItemResult->smartFilter);
+        $this->assertEquals(ProductPropertySectionDisplayType::checkboxes, $productPropertySectionItemResult->displayType);
+        $this->assertFalse($productPropertySectionItemResult->displayExpanded);
+        $this->assertEquals('test hint', $productPropertySectionItemResult->filterHint);
 
         $getResult = $this->productPropertySectionService->get($this->propertyId)->productPropertySection();
         $this->assertEquals($this->propertyId, $getResult->propertyId);
@@ -85,7 +85,7 @@ class ProductPropertySectionTest extends TestCase
         $this->iblockId = Fabric::getServiceBuilder()->getCatalogScope()->catalog()
             ->list([], [], [], 1)->getCatalogs()[0]->iblockId;
 
-        $propertyAddResult = Fabric::getCore()->call('catalog.productProperty.add', [
+        $response = Fabric::getCore()->call('catalog.productProperty.add', [
             'fields' => [
                 'iblockId' => $this->iblockId,
                 'name' => sprintf('test property %s', time()),
@@ -94,7 +94,7 @@ class ProductPropertySectionTest extends TestCase
                 'active' => 'Y',
             ],
         ]);
-        $this->propertyId = (int)$propertyAddResult->getResponseData()->getResult()['productProperty']['id'];
+        $this->propertyId = (int)$response->getResponseData()->getResult()['productProperty']['id'];
     }
 
     /**
