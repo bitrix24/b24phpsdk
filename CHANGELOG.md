@@ -1,4 +1,5 @@
 # b24-php-sdk change log
+
 ## Unreleased
 
 ### Added
