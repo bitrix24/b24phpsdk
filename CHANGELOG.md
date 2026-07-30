@@ -4,6 +4,12 @@
 
 ### Added
 
+- Added service `Services\Catalog\ProductPropertySection` with support for
+  `catalog.productPropertySection.*` methods,
+  see [catalog.productPropertySection.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product-property-section/index.html) ([#558](https://github.com/bitrix24/b24phpsdk/issues/558)):
+    - `get` returns the section settings of a product property or variation by property ID
+    - `list` returns a list of section settings for product properties/variations by filter
+    - `set` sets or updates the section settings of a product property or variation
 - Added service `Services\Landing\Site\Service\Site` with support methods,
   see [landing.site.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
     - `add` adds a site

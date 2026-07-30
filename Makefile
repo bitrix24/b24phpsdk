@@ -492,6 +492,10 @@ test-integration-landing-role:
 test-integration-landing-repowidget:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_repowidget
 
+.PHONY: test-integration-scope-catalog-product-property-section
+test-integration-scope-catalog-product-property-section:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_catalog_product_property_section
+
 # work dev environment
 .PHONY: php-dev-server-up
 php-dev-server-up:
