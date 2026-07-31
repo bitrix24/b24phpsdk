@@ -775,6 +775,9 @@ test-integration-messageservice-message-status:
 .PHONY: test-integration-catalog-product-property-feature
 test-integration-catalog-product-property-feature:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_property_feature
+.PHONY: test-integration-scope-catalog-product-property-section
+test-integration-scope-catalog-product-property-section:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_catalog_product_property_section
 
 # work dev environment
 .PHONY: php-dev-server-up

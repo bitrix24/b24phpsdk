@@ -13,6 +13,12 @@
     - `list` returns the list of product/variation property parameters matching the filter
     - `getAvailableFeaturesByProperty` returns the list of available parameters for a given property
     - `getFields` returns the description of product/variation property parameter fields
+- Added service `Services\Catalog\ProductPropertySection` with support for
+  `catalog.productPropertySection.*` methods,
+  see [catalog.productPropertySection.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product-property-section/index.html) ([#558](https://github.com/bitrix24/b24phpsdk/issues/558)):
+    - `get` returns the section settings of a product property or variation by property ID
+    - `list` returns a list of section settings for product properties/variations by filter
+    - `set` sets or updates the section settings of a product property or variation
 
 ## 3.4.0
 
