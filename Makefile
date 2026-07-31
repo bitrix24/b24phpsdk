@@ -787,6 +787,27 @@ test-integration-catalog-price-type-lang:
 .PHONY: test-integration-catalog-price-type-group
 test-integration-catalog-price-type-group:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_price_type_group
+.PHONY: test-integration-catalog-product-image
+test-integration-catalog-product-image:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_image
+.PHONY: integration-tests-catalog-product-property
+integration-tests-catalog-product-property:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_property
+
+.PHONY: integration-tests-catalog-product-property-service
+integration-tests-catalog-product-property-service:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_property_service
+
+.PHONY: integration-tests-catalog-product-property-annotations
+integration-tests-catalog-product-property-annotations:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_property_annotations
+.PHONY: test-integration-catalog-product-property-enum
+test-integration-catalog-product-property-enum:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_property_enum
+
+.PHONY: test-integration-catalog-product-property-enum-annotations
+test-integration-catalog-product-property-enum-annotations:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_property_enum_annotations
 .PHONY: test-integration-catalog-product-property-feature
 test-integration-catalog-product-property-feature:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_property_feature

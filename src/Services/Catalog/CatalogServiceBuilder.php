@@ -24,8 +24,9 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
     public function product(): Catalog\Product\Service\Product
     {
         if (!isset($this->serviceCache[__METHOD__])) {
+            $productBatch = new Catalog\Product\Batch($this->core, $this->log);
             $this->serviceCache[__METHOD__] = new Catalog\Product\Service\Product(
-                new Catalog\Product\Service\Batch($this->batch, $this->log),
+                new Catalog\Product\Service\Batch($productBatch, $this->log),
                 $this->core,
                 $this->log
             );
@@ -61,6 +62,20 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+  
+      public function productImage(): Catalog\ProductImage\Service\ProductImage
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $productImageBatch = new Catalog\ProductImage\Batch($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new Catalog\ProductImage\Service\ProductImage(
+                new Catalog\ProductImage\Service\Batch($productImageBatch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 
     public function priceType(): Catalog\PriceType\Service\PriceType
     {
@@ -70,6 +85,21 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
                     new Catalog\PriceType\Batch($this->core, $this->log),
                     $this->log
                 ),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+  
+
+    public function productPropertyEnum(): Catalog\ProductPropertyEnum\Service\ProductPropertyEnum
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $productPropertyEnumBatch = new Catalog\ProductPropertyEnum\Batch($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new Catalog\ProductPropertyEnum\Service\ProductPropertyEnum(
+                new Catalog\ProductPropertyEnum\Service\Batch($productPropertyEnumBatch, $this->log),
                 $this->core,
                 $this->log
             );
@@ -105,6 +135,23 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
             );
             $this->serviceCache[__METHOD__] = new Catalog\ProductPropertyFeature\Service\ProductPropertyFeature(
                 new Catalog\ProductPropertyFeature\Service\Batch($productPropertyFeatureBatch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+  
+      public function productProperty(): Catalog\ProductProperty\Service\ProductProperty
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new Catalog\ProductProperty\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Catalog\ProductProperty\Service\ProductProperty(
+                new Catalog\ProductProperty\Service\Batch($batch, $this->log),
                 $this->core,
                 $this->log
             );
