@@ -64,7 +64,7 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-  
+
     public function productPropertySection(): Catalog\ProductPropertySection\Service\ProductPropertySection
     {
         if (!isset($this->serviceCache[__METHOD__])) {
