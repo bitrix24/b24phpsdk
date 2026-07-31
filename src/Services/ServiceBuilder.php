@@ -49,6 +49,7 @@ use Bitrix24\SDK\Services\MailService\MailServiceServiceBuilder;
 use Bitrix24\SDK\Services\Messageservice\MessageserviceServiceBuilder;
 use Bitrix24\SDK\Services\Note\NoteServiceBuilder;
 use Bitrix24\SDK\Services\Rest\RestServiceBuilder;
+use Bitrix24\SDK\Services\Sign\SignServiceBuilder;
 use Bitrix24\SDK\Services\Timeman\TimemanServiceBuilder;
 use Psr\Log\LoggerInterface;
 
@@ -532,7 +533,20 @@ class ServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    public function getHumanResourcesScope(): HumanResourcesServiceBuilder
+    public function getSignScope(): SignServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new SignServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+      public function getHumanResourcesScope(): HumanResourcesServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new HumanResourcesServiceBuilder(

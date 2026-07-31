@@ -453,6 +453,24 @@
         <testsuite name="integration_tests_messageservice_message_status">
             <directory>./tests/Integration/Services/Messageservice/Message/Status/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_sign">
+            <directory>./tests/Integration/Services/Sign/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sign_document">
+            <directory>./tests/Integration/Services/Sign/B2e/Document/Service/</directory>
+            <directory>./tests/Integration/Services/Sign/B2e/Document/Result/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sign_company_provider">
+            <directory>./tests/Integration/Services/Sign/B2e/CompanyProvider/Service/</directory>
+            <directory>./tests/Integration/Services/Sign/B2e/CompanyProvider/Result/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sign_personal_tail">
+            <directory>./tests/Integration/Services/Sign/B2e/PersonalTail/Service/</directory>
+            <directory>./tests/Integration/Services/Sign/B2e/PersonalTail/Result/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sign_mysafe_tail">
+            <directory>./tests/Integration/Services/Sign/B2e/MySafeTail/Service/</directory>
+            <directory>./tests/Integration/Services/Sign/B2e/MySafeTail/Result/</directory>
         <testsuite name="integration_tests_scope_imbot">
             <directory>./tests/Integration/Services/IMBot/</directory>
         </testsuite>

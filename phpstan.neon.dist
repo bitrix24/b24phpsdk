@@ -43,6 +43,7 @@ parameters:
     - tests/Integration/Services/Timeman
     - tests/Integration/Services/MailService
     - tests/Integration/Services/Messageservice
+    - tests/Integration/Services/Sign
     - tests/Integration/Services/IMBot
   excludePaths:
     # TODO: Fix type errors in RequisiteUserfieldUseCaseTest and remove this exclusion

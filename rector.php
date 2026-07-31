@@ -91,6 +91,8 @@ return RectorConfig::configure()
         __DIR__ . '/tests/Unit/',
         __DIR__ . '/src/Services/Timeman',
         __DIR__ . '/tests/Integration/Services/Timeman',
+        __DIR__ . '/src/Services/Sign',
+        __DIR__ . '/tests/Integration/Services/Sign',
         __DIR__ . '/src/Services/IMBot',
         __DIR__ . '/tests/Integration/Services/IMBot',
     ])

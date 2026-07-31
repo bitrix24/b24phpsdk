@@ -105,6 +105,11 @@ help:
 	@echo "test-integration-lists-section - run Lists Section integration tests"
 	@echo "test-integration-lists-element - run Lists Element integration tests"
 	@echo "test-integration-mailservice - run MailService integration tests"
+	@echo "test-integration-scope-sign - run Sign B2e integration tests"
+	@echo "test-integration-sign-document - run Sign Document integration tests"
+	@echo "test-integration-sign-company-provider - run Sign CompanyProvider integration tests"
+	@echo "test-integration-sign-personal-tail - run Sign PersonalTail integration tests"
+	@echo "test-integration-sign-mysafe-tail - run Sign MySafeTail integration tests"
 	@echo "test-integration-scope-imbot - run IMBot scope integration tests"
 	@echo "test-integration-imbot-bot - run IMBot Bot integration tests"
 	@echo "test-integration-imbot-chat - run IMBot Chat integration tests"
@@ -788,6 +793,25 @@ test-integration-messageservice-sender:
 test-integration-messageservice-message-status:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_messageservice_message_status
 
+.PHONY: test-integration-scope-sign
+test-integration-scope-sign:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sign
+
+.PHONY: test-integration-sign-document
+test-integration-sign-document:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sign_document
+
+.PHONY: test-integration-sign-company-provider
+test-integration-sign-company-provider:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sign_company_provider
+
+.PHONY: test-integration-sign-personal-tail
+test-integration-sign-personal-tail:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sign_personal_tail
+
+.PHONY: test-integration-sign-mysafe-tail
+test-integration-sign-mysafe-tail:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sign_mysafe_tail
 .PHONY: test-integration-scope-imbot
 test-integration-scope-imbot:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_imbot
