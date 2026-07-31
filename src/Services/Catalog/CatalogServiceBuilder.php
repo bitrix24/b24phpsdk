@@ -58,8 +58,8 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-  
-      public function price(): Catalog\Price\Service\Price
+
+    public function price(): Catalog\Price\Service\Price
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Catalog\Price\Service\Price(
@@ -86,8 +86,8 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-  
-      public function productImage(): Catalog\ProductImage\Service\ProductImage
+
+    public function productImage(): Catalog\ProductImage\Service\ProductImage
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $productImageBatch = new Catalog\ProductImage\Batch($this->core, $this->log);
@@ -112,8 +112,8 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-  
-      public function priceType(): Catalog\PriceType\Service\PriceType
+
+    public function priceType(): Catalog\PriceType\Service\PriceType
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Catalog\PriceType\Service\PriceType(

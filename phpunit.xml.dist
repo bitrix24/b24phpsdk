@@ -461,6 +461,7 @@
         </testsuite>
         <testsuite name="integration_tests_catalog_measure">
             <directory>./tests/Integration/Services/Catalog/Measure/</directory>
+        </testsuite>
         <testsuite name="integration_tests_catalog_price">
             <directory>./tests/Integration/Services/Catalog/Price/</directory>
         </testsuite>
