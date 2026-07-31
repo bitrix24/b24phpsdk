@@ -54,6 +54,15 @@
 
 ### Added
 
+- Added services `Services\Catalog\Price\Service\Price`, `Services\Catalog\PriceType\Service\PriceType`,
+  `Services\Catalog\PriceTypeLang\Service\PriceTypeLang`, `Services\Catalog\PriceTypeGroup\Service\PriceTypeGroup`
+  with support methods, see [catalog.price.* methods](https://apidocs.bitrix24.com/api-reference/catalog/price/index.html)
+  and [catalog.priceType.* methods](https://apidocs.bitrix24.com/api-reference/catalog/price-type/index.html)
+  ([#536](https://github.com/bitrix24/b24phpsdk/issues/536)):
+    - `Price::add` / `update` / `modify` / `get` / `list` / `delete` / `getFields`, with batch calls support
+    - `PriceType::add` / `update` / `get` / `list` / `delete` / `getFields`, with batch calls support
+    - `PriceTypeLang::add` / `update` / `get` / `list` / `delete` / `getLanguages` / `getFields`, with batch calls support
+    - `PriceTypeGroup::add` / `list` / `delete` / `getFields`, with batch calls support
 - Added service `Services\Note` (Knowledge Base 2.0) with support for `note.collection.*`, `note.document.*`
   (incl. `note.document.tree.*` and `note.document.search.*`), and `note.file.*` methods,
   see [note REST v3](https://apidocs.bitrix24.com/api-reference/rest-v3/note/index.html) ([#515](https://github.com/bitrix24/b24phpsdk/issues/515)):

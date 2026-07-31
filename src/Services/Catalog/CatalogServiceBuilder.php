@@ -47,14 +47,23 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * Get the ProductImage service
-     *
-     * Uses a specialized ProductImage\Batch to handle catalog.productImage.* REST API differences:
-     * - the identifier field is lowercase 'id' instead of standard 'ID'
-     * - delete requires both 'productId' and 'id' parameters instead of a single 'ID'
-     */
-    public function productImage(): Catalog\ProductImage\Service\ProductImage
+    public function price(): Catalog\Price\Service\Price
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\Price\Service\Price(
+                new Catalog\Price\Service\Batch(
+                    new Catalog\Price\Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+  
+      public function productImage(): Catalog\ProductImage\Service\ProductImage
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $productImageBatch = new Catalog\ProductImage\Batch($this->core, $this->log);
@@ -67,6 +76,23 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    public function priceType(): Catalog\PriceType\Service\PriceType
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\PriceType\Service\PriceType(
+                new Catalog\PriceType\Service\Batch(
+                    new Catalog\PriceType\Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+  
 
     public function productPropertyEnum(): Catalog\ProductPropertyEnum\Service\ProductPropertyEnum
     {
@@ -82,7 +108,23 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    public function productPropertyFeature(): Catalog\ProductPropertyFeature\Service\ProductPropertyFeature
+    public function priceTypeLang(): Catalog\PriceTypeLang\Service\PriceTypeLang
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\PriceTypeLang\Service\PriceTypeLang(
+                new Catalog\PriceTypeLang\Service\Batch(
+                    new Catalog\PriceTypeLang\Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+  
+      public function productPropertyFeature(): Catalog\ProductPropertyFeature\Service\ProductPropertyFeature
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             // Use specialized Batch for ProductPropertyFeature to ensure correct REST parameter mapping
@@ -100,8 +142,8 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-
-    public function productProperty(): Catalog\ProductProperty\Service\ProductProperty
+  
+      public function productProperty(): Catalog\ProductProperty\Service\ProductProperty
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $batch = new Catalog\ProductProperty\Batch(
@@ -118,10 +160,14 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    public function productPropertySection(): Catalog\ProductPropertySection\Service\ProductPropertySection
+    public function priceTypeGroup(): Catalog\PriceTypeGroup\Service\PriceTypeGroup
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Catalog\ProductPropertySection\Service\ProductPropertySection(
+            $this->serviceCache[__METHOD__] = new Catalog\PriceTypeGroup\Service\PriceTypeGroup(
+                new Catalog\PriceTypeGroup\Service\Batch(
+                    new Catalog\PriceTypeGroup\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -129,4 +175,17 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+              
+public function productPropertySection(): Catalog\ProductPropertySection\Service\ProductPropertySection
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\ProductPropertySection\Service\ProductPropertySection(
+
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }          
 }
