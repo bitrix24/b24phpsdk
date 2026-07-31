@@ -79,6 +79,23 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+  
+     public function productProperty(): Catalog\ProductProperty\Service\ProductProperty
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $batch = new Catalog\ProductProperty\Batch(
+                $this->core,
+                $this->log
+            );
+            $this->serviceCache[__METHOD__] = new Catalog\ProductProperty\Service\ProductProperty(
+                new Catalog\ProductProperty\Service\Batch($batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 
     public function productPropertySection(): Catalog\ProductPropertySection\Service\ProductPropertySection
     {
@@ -90,5 +107,5 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
         }
 
         return $this->serviceCache[__METHOD__];
-    }
+    }  
 }
