@@ -1,5 +1,26 @@
 # b24-php-sdk change log
-## 3.4.0 – UNRELEASED
+
+## Unreleased
+
+### Added
+
+- Added service `Services\Catalog\ProductPropertyFeature` with support for `catalog.productPropertyFeature.*`
+  methods,
+  see [catalog.productPropertyFeature.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product-property-feature/index.html) ([#553](https://github.com/bitrix24/b24phpsdk/issues/553)):
+    - `add` adds a parameter (feature) for a product or variation property
+    - `update` updates a parameter of a product or variation property by id
+    - `get` returns a product or variation property parameter by id
+    - `list` returns the list of product/variation property parameters matching the filter
+    - `getAvailableFeaturesByProperty` returns the list of available parameters for a given property
+    - `getFields` returns the description of product/variation property parameter fields
+- Added service `Services\Catalog\ProductPropertySection` with support for
+  `catalog.productPropertySection.*` methods,
+  see [catalog.productPropertySection.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product-property-section/index.html) ([#558](https://github.com/bitrix24/b24phpsdk/issues/558)):
+    - `get` returns the section settings of a product property or variation by property ID
+    - `list` returns a list of section settings for product properties/variations by filter
+    - `set` sets or updates the section settings of a product property or variation
+
+## 3.4.0
 
 ### Added
 
@@ -12,6 +33,18 @@
     - `PriceType::add` / `update` / `get` / `list` / `delete` / `getFields`, with batch calls support
     - `PriceTypeLang::add` / `update` / `get` / `list` / `delete` / `getLanguages` / `getFields`, with batch calls support
     - `PriceTypeGroup::add` / `list` / `delete` / `getFields`, with batch calls support
+- Added service `Services\Note` (Knowledge Base 2.0) with support for `note.collection.*`, `note.document.*`
+  (incl. `note.document.tree.*` and `note.document.search.*`), and `note.file.*` methods,
+  see [note REST v3](https://apidocs.bitrix24.com/api-reference/rest-v3/note/index.html) ([#515](https://github.com/bitrix24/b24phpsdk/issues/515)):
+    - `Collection`: `add`, `archive`, `delete`, `fieldGet`, `fieldList`, `get`, `list` (typed `CollectionSelectBuilder`
+      and cursor pagination via `CollectionListPagination`/`CollectionListCursor`), `update`
+    - `Document`: `add`, `archive`, `delete`, `fieldGet`, `fieldList`, `get` (typed `DocumentSelectBuilder`), `update`,
+      `treeList`/`treeFieldGet`/`treeFieldList`, `searchList`/`searchFieldGet`/`searchFieldList`
+    - `File`: `add`, `fieldGet`, `fieldList`, `get`
+- Added `Bitrix24\SDK\Core\ValueObjects\Url` value object ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- Added `Bitrix24\SDK\Core\ValueObjects\LocalizedString` value object for typed localization maps ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- Added `Bitrix24\SDK\Services\Workflows\ValueObjects\RobotCode` and `ActivityCode` value objects ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- Added `DESCRIPTION`, `DOCUMENT_TYPE`, `FILTER` and `PLACEMENT_HANDLER` fields to `bizproc.robot.add` ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 - Added services `Services\Timeman\Record\Service\Record` and `Services\Timeman\RecordField\Service\RecordField`
   with support for v3 `timeman.record.*` methods,
   see [timeman REST v3](https://apidocs.bitrix24.com/api-reference/rest-v3/timeman/index.html) ([#518](https://github.com/bitrix24/b24phpsdk/issues/518)):
@@ -71,7 +104,13 @@
     - `delete` deletes a mail service, with batch calls support
     - `fields` returns localized field labels of a mail service
     - `count` counts active mail services
-- Added `Services\Booking\BookingServiceBuilder` with Booking scope wrappers and integration coverage for `booking.v1.clienttype.*`, `booking.v1.resourceType.*`, `booking.v1.resource.*`, `booking.v1.resource.slots.*`, `booking.v1.waitlist.*`, `booking.v1.waitlist.client.*`, `booking.v1.waitlist.externalData.*`, `booking.v1.booking.*`, `booking.v1.booking.client.*`, and `booking.v1.booking.externalData.*` methods.
+- Added REST API v3 scope `Services\Mail` with `Mailbox`, `Message`, and `Recipient` services and
+  dedicated `MailboxField`, `MessageField`, and `RecipientField` field metadata services ([#516](https://github.com/bitrix24/b24phpsdk/issues/516)):
+    - `Mailbox`: `list`, `get`, `senders`, with batch calls support
+    - `Message`: `list`, `get`, `send`, `reply`, `forward`, `thread`, `moveToFolder`, `createCalendarEvent`,
+      `createChat`, `createCrmActivity`, `removeCrmActivity`, `createFeedPost`, `createTask`, with batch calls support
+    - `Recipient`: `listContacts`, `listEmployees`, with batch calls support
+    - field metadata services cover `mail.mailbox.field.*`, `mail.message.field.*`, and `mail.recipient.field.*`
 - Added service `Services\Messageservice\Sender` and `Services\Messageservice\Message\Status` with support for `messageservice.*` methods,
   see [messageservice.* methods](https://apidocs.bitrix24.com/api-reference/messageservice/index.html) ([#498](https://github.com/bitrix24/b24phpsdk/issues/498)):
     - `sender.add` — register a new SMS message service provider
@@ -79,7 +118,6 @@
     - `sender.list` — get list of sender codes registered by the current application
     - `sender.delete` — delete a registered message service provider
     - `message.status.update` — update delivery status of a message sent via a provider
-- Added `Services\Booking\BookingServiceBuilder` with Booking scope wrappers and integration coverage for `booking.v1.clienttype.*`, `booking.v1.resourceType.*`, `booking.v1.resource.*`, `booking.v1.resource.slots.*`, `booking.v1.waitlist.*`, `booking.v1.waitlist.client.*`, `booking.v1.waitlist.externalData.*`, `booking.v1.booking.*`, `booking.v1.booking.client.*`, and `booking.v1.booking.externalData.*` methods.
 - Added service `Services\Landing\RepoWidget` with support for Vibe widget management,
   see [landing.repowidget.* methods](https://apidocs.bitrix24.com/api-reference/vibe/index.html)
   ([#501](https://github.com/bitrix24/b24phpsdk/issues/501)):
@@ -94,11 +132,16 @@
 
 ### Changed
 
+- `bizproc.robot.add` and `bizproc.robot.update` now accept a `Url` value object (or a raw string) for the handler URL ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- `bizproc.robot.add` and `bizproc.robot.update` now accept a `RobotCode` value object (or a raw string) for the code ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
+- `bizproc.robot.add` and `bizproc.robot.update` now accept a `LocalizedString` value object (or a raw array) for the localized `NAME` / `DESCRIPTION` ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 - Updated `b24phpsdk-maintainer` skill: require dedicated field metadata services for
   `*.field.get` and `*.field.list` endpoints ([#517](https://github.com/bitrix24/b24phpsdk/issues/517))
 - Updated `b24phpsdk-maintainer` skill: `*ItemResult` classes must extend
   `Core\Result\AbstractAnnotatedItem` (auto-casts from `@property-read` annotations) instead of the
   legacy `AbstractItem` + manual `__get` pattern ([#518](https://github.com/bitrix24/b24phpsdk/issues/518))
+- Updated `b24phpsdk-maintainer` skill: bugs affecting both the 3.x and 1.x lines are fixed from
+  `v3-dev` first and then backported to `dev` ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 
 ### Fixed
 
@@ -108,6 +151,8 @@
 - Fixed `Application\PortalLicenseFamily` enum throwing `"ent" is not a valid backing value` for
   Enterprise portals: Bitrix24 `app.info` returns `LICENSE_FAMILY = 'ent'`, but the enum had a typo
   `en`; renamed `en` → `ent` ([#500](https://github.com/bitrix24/b24phpsdk/pull/500))
+- Fixed malformed `testsuite` tag in `phpunit.xml.dist` (missing closing tag introduced by a merge) that made
+  the config invalid XML and prevented the whole unit suite from running on `v3-dev` ([#532](https://github.com/bitrix24/b24phpsdk/pull/532))
 
 ## 3.3.0
 
