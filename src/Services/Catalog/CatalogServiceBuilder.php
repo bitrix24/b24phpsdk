@@ -82,7 +82,7 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-  
+
     public function catalogEnum(): Catalog\Enum\Service\CatalogEnum
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -257,5 +257,5 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
         }
 
         return $this->serviceCache[__METHOD__];
-    }  
+    }
 }
