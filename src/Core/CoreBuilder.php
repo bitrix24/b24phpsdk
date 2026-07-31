@@ -70,9 +70,6 @@ class CoreBuilder
         $this->requestIdGenerator = $requestIdGenerator;
     }
 
-    /**
-     * @return $this
-     */
     public function withCredentials(Credentials $credentials): self
     {
         $this->credentials = $credentials;

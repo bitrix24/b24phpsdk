@@ -25,7 +25,7 @@ class NotifiesResult extends AbstractResult
     public function notifications(): array
     {
         return array_map(
-            static fn(array $item): NotifyItemResult => new NotifyItemResult($item),
+            static fn (array $item): NotifyItemResult => new NotifyItemResult($item),
             array_filter($this->payload()['notifications'] ?? [], 'is_array')
         );
     }

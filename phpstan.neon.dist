@@ -44,6 +44,7 @@ parameters:
     - tests/Integration/Services/MailService
     - tests/Integration/Services/Messageservice
     - tests/Integration/Services/Sign
+    - tests/Integration/Services/IMBot
   excludePaths:
     # TODO: Fix type errors in RequisiteUserfieldUseCaseTest and remove this exclusion
     # Tracking: https://github.com/bitrix24/b24phpsdk/issues

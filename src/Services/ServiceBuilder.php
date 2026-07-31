@@ -24,9 +24,11 @@ use Bitrix24\SDK\Services\Documentgenerator\DocumentgeneratorServiceBuilder;
 use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
 use Bitrix24\SDK\Services\Disk\DiskServiceBuilder;
 use Bitrix24\SDK\Services\Entity\EntityServiceBuilder;
+use Bitrix24\SDK\Services\HumanResources\HumanResourcesServiceBuilder;
 use Bitrix24\SDK\Services\Department\DepartmentServiceBuilder;
 use Bitrix24\SDK\Services\Task\TaskServiceBuilder;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
+use Bitrix24\SDK\Services\IMBot\IMBotServiceBuilder;
 use Bitrix24\SDK\Services\IMOpenLines\IMOpenLinesServiceBuilder;
 use Bitrix24\SDK\Services\Log\LogServiceBuilder;
 use Bitrix24\SDK\Services\Main\MainServiceBuilder;
@@ -42,8 +44,10 @@ use Bitrix24\SDK\Services\Paysystem\PaysystemServiceBuilder;
 use Bitrix24\SDK\Services\SonetGroup\SonetGroupServiceBuilder;
 use Bitrix24\SDK\Legacy\LegacyServiceBuilder;
 use Bitrix24\SDK\Services\Lists\ListsServiceBuilder;
+use Bitrix24\SDK\Services\Mail\MailServiceBuilder;
 use Bitrix24\SDK\Services\MailService\MailServiceServiceBuilder;
 use Bitrix24\SDK\Services\Messageservice\MessageserviceServiceBuilder;
+use Bitrix24\SDK\Services\Note\NoteServiceBuilder;
 use Bitrix24\SDK\Services\Rest\RestServiceBuilder;
 use Bitrix24\SDK\Services\Sign\SignServiceBuilder;
 use Bitrix24\SDK\Services\Timeman\TimemanServiceBuilder;
@@ -190,6 +194,20 @@ class ServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new IMServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function getIMBotScope(): IMBotServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new IMBotServiceBuilder(
                 $this->core,
                 $this->batch,
                 $this->bulkItemsReader,
@@ -415,12 +433,40 @@ class ServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    public function getMailScope(): MailServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new MailServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
   
      public function getMessageserviceScope(): MessageserviceServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new MessageserviceServiceBuilder(
 
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function getNoteScope(): NoteServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new NoteServiceBuilder(
                 $this->core,
                 $this->batch,
                 $this->bulkItemsReader,
@@ -491,6 +537,19 @@ class ServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new SignServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+      public function getHumanResourcesScope(): HumanResourcesServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new HumanResourcesServiceBuilder(
                 $this->core,
                 $this->batch,
                 $this->bulkItemsReader,
