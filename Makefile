@@ -72,6 +72,7 @@ help:
 	@echo "test-integration-sale-payment-item-basket - run PaymentItemBasket integration tests"
 	@echo "test-integration-sale-payment-item-shipment - run PaymentItemShipment integration tests"
 	@echo "test-integration-sale-property-relation - run PropertyRelation integration tests"
+	@echo "test-integration-catalog-product-property-feature - run ProductPropertyFeature integration tests"
 	@echo "test-integration-scope-booking - run Booking integration tests"
 	@echo "test-integration-landing-page - run Landing Page integration tests"
 	@echo "test-integration-landing-syspage - run Landing SysPage integration tests"
@@ -97,6 +98,7 @@ help:
 	@echo "test-integration-im-chat - run IM Chat integration tests"
 	@echo "test-integration-im-chat-user - run IM Chat User integration tests"
 	@echo "test-integration-im-notify - run IM Notify integration tests"
+	@echo "test-integration-scope-humanresources - run HumanResources integration tests"
 	@echo "test-integration-scope-lists - run Lists integration tests"
 	@echo "test-integration-lists-service - run Lists Service integration tests"
 	@echo "test-integration-lists-field - run Lists Field integration tests"
@@ -113,6 +115,13 @@ help:
 	@echo "test-integration-imbot-file - run IMBot File integration tests"
 	@echo "test-integration-im-event-v2 - run IM EventV2 integration tests"
 	@echo "test-integration-im-file-v2 - run IM FileV2 integration tests"
+	@echo "test-integration-scope-catalog - run Catalog scope integration tests"
+	@echo "test-integration-catalog-catalog - run Catalog Catalog integration tests"
+	@echo "test-integration-catalog-product - run Catalog Product integration tests"
+	@echo "test-integration-catalog-product-service - run Catalog ProductService integration tests"
+	@echo "test-integration-catalog-product-sku - run Catalog Product Sku integration tests"
+	@echo "test-integration-catalog-product-offer - run Catalog Product Offer integration tests"
+	@echo "test-integration-scope-mail - run Mail scope integration tests"
 
 t:
 	docker compose run --rm php-cli sh
@@ -631,9 +640,31 @@ test-integration-rest-scope:
 test-integration-scope-timeman:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_timeman
 
+.PHONY: test-integration-scope-mail
+test-integration-scope-mail:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_mail
+.PHONY: test-integration-scope-humanresources
+test-integration-scope-humanresources:
+	@docker compose run --rm -e BITRIX24_WEBHOOK="$(BITRIX24_WEBHOOK)" php-cli $(PHPUNIT) --testsuite integration_tests_scope_humanresources
 .PHONY: test-integration-timeman-record
 test-integration-timeman-record:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_timeman_record
+
+.PHONY: test-integration-scope-note
+test-integration-scope-note:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_note
+
+.PHONY: test-integration-note-collection
+test-integration-note-collection:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_note_collection
+
+.PHONY: test-integration-note-document
+test-integration-note-document:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_note_document
+
+.PHONY: test-integration-note-file
+test-integration-note-file:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_note_file
 
 .PHONY: integration_tests_sale
 integration_tests_sale:
@@ -796,6 +827,82 @@ test-integration-im-event-v2:
 .PHONY: test-integration-im-file-v2
 test-integration-im-file-v2:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_file_v2
+.PHONY: test-integration-scope-catalog
+test-integration-scope-catalog:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_catalog
+
+.PHONY: test-integration-catalog-catalog
+test-integration-catalog-catalog:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_catalog
+
+.PHONY: test-integration-catalog-product
+test-integration-catalog-product:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product
+
+.PHONY: test-integration-catalog-product-service
+test-integration-catalog-product-service:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_service
+
+.PHONY: test-integration-catalog-product-sku
+test-integration-catalog-product-sku:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_sku
+
+.PHONY: test-integration-catalog-product-offer
+test-integration-catalog-product-offer:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_offer
+.PHONY: test-integration-catalog-enum
+test-integration-catalog-enum:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_enum
+
+.PHONY: test-integration-catalog-extra
+test-integration-catalog-extra:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_extra
+
+.PHONY: test-integration-catalog-measure
+test-integration-catalog-measure:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_measure
+.PHONY: test-integration-catalog-price
+test-integration-catalog-price:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_price
+
+.PHONY: test-integration-catalog-price-type
+test-integration-catalog-price-type:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_price_type
+
+.PHONY: test-integration-catalog-price-type-lang
+test-integration-catalog-price-type-lang:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_price_type_lang
+
+.PHONY: test-integration-catalog-price-type-group
+test-integration-catalog-price-type-group:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_price_type_group
+.PHONY: test-integration-catalog-product-image
+test-integration-catalog-product-image:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_image
+.PHONY: integration-tests-catalog-product-property
+integration-tests-catalog-product-property:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_property
+
+.PHONY: integration-tests-catalog-product-property-service
+integration-tests-catalog-product-property-service:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_property_service
+
+.PHONY: integration-tests-catalog-product-property-annotations
+integration-tests-catalog-product-property-annotations:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_property_annotations
+.PHONY: test-integration-catalog-product-property-enum
+test-integration-catalog-product-property-enum:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_property_enum
+
+.PHONY: test-integration-catalog-product-property-enum-annotations
+test-integration-catalog-product-property-enum-annotations:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_property_enum_annotations
+.PHONY: test-integration-catalog-product-property-feature
+test-integration-catalog-product-property-feature:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_property_feature
+.PHONY: test-integration-scope-catalog-product-property-section
+test-integration-scope-catalog-product-property-section:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_catalog_product_property_section
 
 # work dev environment
 .PHONY: php-dev-server-up
