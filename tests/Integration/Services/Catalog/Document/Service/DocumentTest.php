@@ -158,13 +158,10 @@ class DocumentTest extends TestCase
     #[TestDox('test Document::conduct, Document::cancel')]
     public function testConductCancel(): void
     {
-        // application credentials are required here: the incoming webhook cannot fully
-        // process inventory objects (stock adjustment warehouse resolution) needed for conduct
-        $documentService = Factory::getServiceBuilder(true)->getCatalogScope()->document();
         $documentId = $this->createDocumentWithElement('test document conduct');
 
-        $this->assertTrue($documentService->conduct($documentId)->isSuccess());
-        $this->assertTrue($documentService->cancel($documentId)->isSuccess());
+        $this->assertTrue($this->documentService->conduct($documentId)->isSuccess());
+        $this->assertTrue($this->documentService->cancel($documentId)->isSuccess());
     }
 
     /**
@@ -174,48 +171,38 @@ class DocumentTest extends TestCase
     #[TestDox('test Document::conductList, Document::cancelList')]
     public function testConductListCancelList(): void
     {
-        // application credentials are required here: the incoming webhook cannot fully
-        // process inventory objects (stock adjustment warehouse resolution) needed for conduct
-        $documentService = Factory::getServiceBuilder(true)->getCatalogScope()->document();
         $documentIds = [
             $this->createDocumentWithElement('test document conductList 0'),
             $this->createDocumentWithElement('test document conductList 1'),
         ];
 
-        $this->assertTrue($documentService->conductList($documentIds)->isSuccess());
-        $this->assertTrue($documentService->cancelList($documentIds)->isSuccess());
+        $this->assertTrue($this->documentService->conductList($documentIds)->isSuccess());
+        $this->assertTrue($this->documentService->cancelList($documentIds)->isSuccess());
     }
 
     /**
      * Creates a stock-taking document ('S') with one line item so it can be conducted.
      * docType 'S' is used because it does not require a supplier, unlike docType 'A' (goods receipt).
      *
-     * Uses application credentials: the incoming webhook cannot fully process inventory objects
-     * (stock adjustment warehouse resolution) needed for conduct.
-     *
      * @throws BaseException
      * @throws TransportException
      */
     private function createDocumentWithElement(string $title): int
     {
-        $serviceBuilder = Factory::getServiceBuilder(true);
-        $documentService = $serviceBuilder->getCatalogScope()->document();
-        $documentElementService = $serviceBuilder->getCatalogScope()->documentElement();
-        $productService = $serviceBuilder->getCatalogScope()->product();
-
-        $iblockId = $serviceBuilder->getCatalogScope()->catalog()->list([], [], [], 1)->getCatalogs()[0]->iblockId;
+        $iblockId = Factory::getServiceBuilder(true)->getCatalogScope()->catalog()
+            ->list([], [], [], 1)->getCatalogs()[0]->iblockId;
 
         $stores = Factory::getCore(true)->call('catalog.store.list', ['select' => ['id'], 'filter' => ['active' => 'Y']])
             ->getResponseData()->getResult();
         $storeId = $stores['stores'][0]['id'];
 
-        $productId = $productService->add([
+        $productId = $this->productService->add([
             'iblockId' => $iblockId,
             'name' => sprintf('%s product %s', $title, time()),
         ])->product()->id;
         $this->createdProductIds[] = $productId;
 
-        $documentId = $documentService->add([
+        $documentId = $this->documentService->add([
             'docType' => 'S',
             'currency' => 'USD',
             'responsibleId' => 1,
@@ -223,7 +210,7 @@ class DocumentTest extends TestCase
         ])->document()->id;
         $this->createdDocumentIds[] = $documentId;
 
-        $documentElementService->add([
+        $this->documentElementService->add([
             'docId' => $documentId,
             'elementId' => $productId,
             'storeTo' => $storeId,
