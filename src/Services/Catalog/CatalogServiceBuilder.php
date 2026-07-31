@@ -90,8 +90,5 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
         }
 
         return $this->serviceCache[__METHOD__];
-    }  
-  
-  
-  
+    }
 }
