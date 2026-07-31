@@ -67,8 +67,8 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-  
-      public function productPropertyEnum(): Catalog\ProductPropertyEnum\Service\ProductPropertyEnum
+
+    public function productPropertyEnum(): Catalog\ProductPropertyEnum\Service\ProductPropertyEnum
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $productPropertyEnumBatch = new Catalog\ProductPropertyEnum\Batch($this->core, $this->log);
@@ -81,8 +81,6 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-  
-  
 
     public function productPropertyFeature(): Catalog\ProductPropertyFeature\Service\ProductPropertyFeature
     {
@@ -102,8 +100,8 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-  
-     public function productProperty(): Catalog\ProductProperty\Service\ProductProperty
+
+    public function productProperty(): Catalog\ProductProperty\Service\ProductProperty
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $batch = new Catalog\ProductProperty\Batch(
@@ -130,5 +128,5 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
         }
 
         return $this->serviceCache[__METHOD__];
-    }  
+    }
 }
