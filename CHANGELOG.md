@@ -19,6 +19,21 @@
   the lowercase `id` key expected by `catalog.product.list` and `catalog.product.delete`: added
   `Services\Catalog\Product\Batch` overriding `determineKeyId()` and `deleteEntityItems()`,
   registered in `CatalogServiceBuilder::product()` ([#549](https://github.com/bitrix24/b24phpsdk/issues/549))
+- Added service `Services\Catalog\ProductPropertyFeature` with support for `catalog.productPropertyFeature.*`
+  methods,
+  see [catalog.productPropertyFeature.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product-property-feature/index.html) ([#553](https://github.com/bitrix24/b24phpsdk/issues/553)):
+    - `add` adds a parameter (feature) for a product or variation property
+    - `update` updates a parameter of a product or variation property by id
+    - `get` returns a product or variation property parameter by id
+    - `list` returns the list of product/variation property parameters matching the filter
+    - `getAvailableFeaturesByProperty` returns the list of available parameters for a given property
+    - `getFields` returns the description of product/variation property parameter fields
+- Added service `Services\Catalog\ProductPropertySection` with support for
+  `catalog.productPropertySection.*` methods,
+  see [catalog.productPropertySection.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product-property-section/index.html) ([#558](https://github.com/bitrix24/b24phpsdk/issues/558)):
+    - `get` returns the section settings of a product property or variation by property ID
+    - `list` returns a list of section settings for product properties/variations by filter
+    - `set` sets or updates the section settings of a product property or variation
 
 ## 3.4.0
 

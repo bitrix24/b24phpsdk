@@ -42,6 +42,7 @@ class Scope
         'documentgenerator',
         'entity',
         'forum',
+        'humanresources',
         'humanresources.hcmlink',
         'iblock',
         'im',
@@ -54,10 +55,12 @@ class Scope
         'landing_cloud',
         'lists',
         'log',
+        'mail',
         'mailservice',
         'main',
         'messageservice',
         'mobile',
+        'note',
         'notifications',
         'pay_system',
         'placement',
@@ -87,7 +90,7 @@ class Scope
         'vote',
     ];
 
-    protected array $currentScope = [];
+    protected array $currentScope;
 
     /**
      * Scope constructor.
