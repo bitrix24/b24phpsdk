@@ -453,6 +453,26 @@
         <testsuite name="integration_tests_messageservice_message_status">
             <directory>./tests/Integration/Services/Messageservice/Message/Status/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_catalog">
+            <directory>./tests/Integration/Services/Catalog/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_catalog">
+            <file>./tests/Integration/Services/Catalog/Catalog/Service/CatalogTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_product">
+            <file>./tests/Integration/Services/Catalog/Product/Service/ProductTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_product_service">
+            <file>./tests/Integration/Services/Catalog/Product/ProductService/Service/ProductServiceTest.php</file>
+            <file>./tests/Integration/Services/Catalog/Product/ProductService/Result/ProductServiceItemResultTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_product_sku">
+            <file>./tests/Integration/Services/Catalog/Product/Sku/Service/SkuTest.php</file>
+            <file>./tests/Integration/Services/Catalog/Product/Sku/Result/SkuItemResultTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_product_offer">
+            <file>./tests/Integration/Services/Catalog/Product/Offer/Service/OfferTest.php</file>
+            <file>./tests/Integration/Services/Catalog/Product/Offer/Result/OfferItemResultTest.php</file>
         <testsuite name="integration_tests_catalog_enum">
             <directory>./tests/Integration/Services/Catalog/Enum/</directory>
         </testsuite>

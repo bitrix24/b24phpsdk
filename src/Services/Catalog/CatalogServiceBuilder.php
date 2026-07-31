@@ -21,6 +21,18 @@ use Bitrix24\SDK\Services\Catalog;
 #[ApiServiceBuilderMetadata(new Scope(['catalog']))]
 class CatalogServiceBuilder extends AbstractServiceBuilder
 {
+    public function catalog(): Catalog\Catalog\Service\Catalog
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\Catalog\Service\Catalog(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function product(): Catalog\Product\Service\Product
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -35,10 +47,10 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    public function catalog(): Catalog\Catalog\Service\Catalog
+    public function productService(): Catalog\Product\ProductService\Service\ProductService
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Catalog\Catalog\Service\Catalog(
+            $this->serviceCache[__METHOD__] = new Catalog\Product\ProductService\Service\ProductService(
                 $this->core,
                 $this->log
             );
@@ -47,6 +59,30 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    public function productSku(): Catalog\Product\Sku\Service\Sku
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\Product\Sku\Service\Sku(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function productOffer(): Catalog\Product\Offer\Service\Offer
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\Product\Offer\Service\Offer(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+  
     public function catalogEnum(): Catalog\Enum\Service\CatalogEnum
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -221,5 +257,5 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
         }
 
         return $this->serviceCache[__METHOD__];
-    }
+    }  
 }

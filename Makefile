@@ -105,6 +105,12 @@ help:
 	@echo "test-integration-lists-section - run Lists Section integration tests"
 	@echo "test-integration-lists-element - run Lists Element integration tests"
 	@echo "test-integration-mailservice - run MailService integration tests"
+	@echo "test-integration-scope-catalog - run Catalog scope integration tests"
+	@echo "test-integration-catalog-catalog - run Catalog Catalog integration tests"
+	@echo "test-integration-catalog-product - run Catalog Product integration tests"
+	@echo "test-integration-catalog-product-service - run Catalog ProductService integration tests"
+	@echo "test-integration-catalog-product-sku - run Catalog Product Sku integration tests"
+	@echo "test-integration-catalog-product-offer - run Catalog Product Offer integration tests"
 	@echo "test-integration-scope-mail - run Mail scope integration tests"
 
 t:
@@ -772,6 +778,29 @@ test-integration-messageservice-sender:
 test-integration-messageservice-message-status:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_messageservice_message_status
 
+.PHONY: test-integration-scope-catalog
+test-integration-scope-catalog:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_catalog
+
+.PHONY: test-integration-catalog-catalog
+test-integration-catalog-catalog:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_catalog
+
+.PHONY: test-integration-catalog-product
+test-integration-catalog-product:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product
+
+.PHONY: test-integration-catalog-product-service
+test-integration-catalog-product-service:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_service
+
+.PHONY: test-integration-catalog-product-sku
+test-integration-catalog-product-sku:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_sku
+
+.PHONY: test-integration-catalog-product-offer
+test-integration-catalog-product-offer:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_offer
 .PHONY: test-integration-catalog-enum
 test-integration-catalog-enum:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_enum
