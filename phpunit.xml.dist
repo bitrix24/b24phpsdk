@@ -502,6 +502,18 @@
             <file>./tests/Integration/Services/Catalog/ProductPropertySection/Service/ProductPropertySectionTest.php</file>
             <file>./tests/Integration/Services/Catalog/ProductPropertySection/Result/ProductPropertySectionItemResultTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_catalog_document">
+            <directory>./tests/Integration/Services/Catalog/Document/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_document_annotations">
+            <file>./tests/Integration/Services/Catalog/Document/Result/DocumentItemResultTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_document_element">
+            <directory>./tests/Integration/Services/Catalog/DocumentElement/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_document_element_annotations">
+            <file>./tests/Integration/Services/Catalog/DocumentElement/Result/DocumentElementItemResultTest.php</file>
+        </testsuite>
     </testsuites>
     <source>
         <include>
