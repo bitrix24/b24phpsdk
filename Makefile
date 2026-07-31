@@ -772,6 +772,17 @@ test-integration-messageservice-sender:
 test-integration-messageservice-message-status:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_messageservice_message_status
 
+.PHONY: test-integration-catalog-enum
+test-integration-catalog-enum:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_enum
+
+.PHONY: test-integration-catalog-extra
+test-integration-catalog-extra:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_extra
+
+.PHONY: test-integration-catalog-measure
+test-integration-catalog-measure:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_measure
 .PHONY: test-integration-catalog-price
 test-integration-catalog-price:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_price

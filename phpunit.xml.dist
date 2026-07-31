@@ -453,6 +453,14 @@
         <testsuite name="integration_tests_messageservice_message_status">
             <directory>./tests/Integration/Services/Messageservice/Message/Status/</directory>
         </testsuite>
+        <testsuite name="integration_tests_catalog_enum">
+            <directory>./tests/Integration/Services/Catalog/Enum/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_extra">
+            <directory>./tests/Integration/Services/Catalog/Extra/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_measure">
+            <directory>./tests/Integration/Services/Catalog/Measure/</directory>
         <testsuite name="integration_tests_catalog_price">
             <directory>./tests/Integration/Services/Catalog/Price/</directory>
         </testsuite>
