@@ -4,6 +4,13 @@
 
 ### Added
 
+- Added service `Services\Catalog\ProductImage` with support for `catalog.productImage.*` methods,
+  see [catalog.productImage.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product-image/index.html) ([#537](https://github.com/bitrix24/b24phpsdk/issues/537)):
+    - `add` adds an image to a product, parent product, variation, or service, with batch calls support
+    - `get` gets information about a product image by its identifier
+    - `list` gets the list of images for a product, with batch calls support
+    - `delete` deletes a product image, with batch calls support
+    - `getFields` returns the description of product image fields
 - Added service `Services\Catalog\ProductProperty` with support methods,
   see [catalog.productProperty.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product-property/index.html) ([#538](https://github.com/bitrix24/b24phpsdk/issues/538)):
     - `add` creates a new product or variation property, with batch calls support

@@ -47,7 +47,28 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    public function productPropertyEnum(): Catalog\ProductPropertyEnum\Service\ProductPropertyEnum
+    /**
+     * Get the ProductImage service
+     *
+     * Uses a specialized ProductImage\Batch to handle catalog.productImage.* REST API differences:
+     * - the identifier field is lowercase 'id' instead of standard 'ID'
+     * - delete requires both 'productId' and 'id' parameters instead of a single 'ID'
+     */
+    public function productImage(): Catalog\ProductImage\Service\ProductImage
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $productImageBatch = new Catalog\ProductImage\Batch($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new Catalog\ProductImage\Service\ProductImage(
+                new Catalog\ProductImage\Service\Batch($productImageBatch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+  
+      public function productPropertyEnum(): Catalog\ProductPropertyEnum\Service\ProductPropertyEnum
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $productPropertyEnumBatch = new Catalog\ProductPropertyEnum\Batch($this->core, $this->log);
@@ -60,6 +81,8 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+  
+  
 
     public function productPropertyFeature(): Catalog\ProductPropertyFeature\Service\ProductPropertyFeature
     {

@@ -772,6 +772,9 @@ test-integration-messageservice-sender:
 test-integration-messageservice-message-status:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_messageservice_message_status
 
+.PHONY: test-integration-catalog-product-image
+test-integration-catalog-product-image:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_image
 .PHONY: integration-tests-catalog-product-property
 integration-tests-catalog-product-property:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_property
