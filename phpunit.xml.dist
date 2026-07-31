@@ -482,6 +482,7 @@
         </testsuite>
         <testsuite name="integration_tests_im_file_v2">
             <directory>./tests/Integration/Services/IM/FileV2/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_catalog">
             <directory>./tests/Integration/Services/Catalog/</directory>
         </testsuite>
