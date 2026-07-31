@@ -453,6 +453,10 @@
         <testsuite name="integration_tests_messageservice_message_status">
             <directory>./tests/Integration/Services/Messageservice/Message/Status/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_catalog_product_property_section">
+            <file>./tests/Integration/Services/Catalog/ProductPropertySection/Service/ProductPropertySectionTest.php</file>
+            <file>./tests/Integration/Services/Catalog/ProductPropertySection/Result/ProductPropertySectionItemResultTest.php</file>
+        </testsuite>
     </testsuites>
     <source>
         <include>
