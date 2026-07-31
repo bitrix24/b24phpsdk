@@ -772,6 +772,13 @@ test-integration-messageservice-sender:
 test-integration-messageservice-message-status:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_messageservice_message_status
 
+.PHONY: test-integration-catalog-product-property-enum
+test-integration-catalog-product-property-enum:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_property_enum
+
+.PHONY: test-integration-catalog-product-property-enum-annotations
+test-integration-catalog-product-property-enum-annotations:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_property_enum_annotations
 .PHONY: test-integration-catalog-product-property-feature
 test-integration-catalog-product-property-feature:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_property_feature
