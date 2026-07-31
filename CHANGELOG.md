@@ -146,6 +146,9 @@
 
 ### Changed
 
+- Updated `b24phpsdk-developer` skill: added distributable SDK consumer guidance for product
+  application developers, with Claude Code and Codex project loaders plus `llm/skills` Composer
+  metadata ([#562](https://github.com/bitrix24/b24phpsdk/issues/562))
 - `bizproc.robot.add` and `bizproc.robot.update` now accept a `Url` value object (or a raw string) for the handler URL ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 - `bizproc.robot.add` and `bizproc.robot.update` now accept a `RobotCode` value object (or a raw string) for the code ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))
 - `bizproc.robot.add` and `bizproc.robot.update` now accept a `LocalizedString` value object (or a raw array) for the localized `NAME` / `DESCRIPTION` ([#493](https://github.com/bitrix24/b24phpsdk/issues/493))

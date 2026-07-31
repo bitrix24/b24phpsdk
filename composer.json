@@ -77,5 +77,10 @@
       "Bitrix24\\SDK\\Tools\\": "tools",
       "Bitrix24\\SDK\\Tests\\": "tests"
     }
+  },
+  "extra": {
+    "skills": {
+      "source": "resources/skills"
+    }
   }
 }
