@@ -464,6 +464,7 @@
         </testsuite>
         <testsuite name="integration_tests_catalog_price_type_group">
             <directory>./tests/Integration/Services/Catalog/PriceTypeGroup/</directory>
+        </testsuite>
         <testsuite name="integration_tests_catalog_product_image">
             <directory>./tests/Integration/Services/Catalog/ProductImage/</directory>
         </testsuite>

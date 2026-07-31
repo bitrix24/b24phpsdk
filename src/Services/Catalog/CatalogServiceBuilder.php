@@ -62,8 +62,8 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-  
-      public function productImage(): Catalog\ProductImage\Service\ProductImage
+
+    public function productImage(): Catalog\ProductImage\Service\ProductImage
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $productImageBatch = new Catalog\ProductImage\Batch($this->core, $this->log);
@@ -92,7 +92,6 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-  
 
     public function productPropertyEnum(): Catalog\ProductPropertyEnum\Service\ProductPropertyEnum
     {
@@ -123,8 +122,8 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-  
-      public function productPropertyFeature(): Catalog\ProductPropertyFeature\Service\ProductPropertyFeature
+
+    public function productPropertyFeature(): Catalog\ProductPropertyFeature\Service\ProductPropertyFeature
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             // Use specialized Batch for ProductPropertyFeature to ensure correct REST parameter mapping
@@ -142,8 +141,8 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-  
-      public function productProperty(): Catalog\ProductProperty\Service\ProductProperty
+
+    public function productProperty(): Catalog\ProductProperty\Service\ProductProperty
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $batch = new Catalog\ProductProperty\Batch(
@@ -175,17 +174,16 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-              
-public function productPropertySection(): Catalog\ProductPropertySection\Service\ProductPropertySection
+
+    public function productPropertySection(): Catalog\ProductPropertySection\Service\ProductPropertySection
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Catalog\ProductPropertySection\Service\ProductPropertySection(
-
                 $this->core,
                 $this->log
             );
         }
 
         return $this->serviceCache[__METHOD__];
-    }          
+    }
 }
