@@ -73,6 +73,7 @@ help:
 	@echo "test-integration-sale-payment-item-basket - run PaymentItemBasket integration tests"
 	@echo "test-integration-sale-payment-item-shipment - run PaymentItemShipment integration tests"
 	@echo "test-integration-sale-property-relation - run PropertyRelation integration tests"
+	@echo "test-integration-catalog-product-property-feature - run ProductPropertyFeature integration tests"
 	@echo "test-integration-scope-booking - run Booking integration tests"
 	@echo "test-integration-landing-page - run Landing Page integration tests"
 	@echo "test-integration-landing-syspage - run Landing SysPage integration tests"
@@ -782,6 +783,19 @@ integration-tests-catalog-product-property-service:
 .PHONY: integration-tests-catalog-product-property-annotations
 integration-tests-catalog-product-property-annotations:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_property_annotations
+.PHONY: test-integration-catalog-product-property-enum
+test-integration-catalog-product-property-enum:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_property_enum
+
+.PHONY: test-integration-catalog-product-property-enum-annotations
+test-integration-catalog-product-property-enum-annotations:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_property_enum_annotations
+.PHONY: test-integration-catalog-product-property-feature
+test-integration-catalog-product-property-feature:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_property_feature
+.PHONY: test-integration-scope-catalog-product-property-section
+test-integration-scope-catalog-product-property-section:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_catalog_product_property_section
 
 # work dev environment
 .PHONY: php-dev-server-up
