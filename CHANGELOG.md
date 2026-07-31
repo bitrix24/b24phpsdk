@@ -74,6 +74,8 @@
 
 ### Fixed
 
+- Fixed `Services\CRM\Lead\Service\Batch::list()` returning `DealItemResult`
+  instead of `LeadItemResult` items ([#470](https://github.com/bitrix24/b24phpsdk/pull/470))
 - Fixed batch operations for `Services\Catalog\Product` using the wrong-case `ID` key instead of
   the lowercase `id` key expected by `catalog.product.list` and `catalog.product.delete`: added
   `Services\Catalog\Product\Batch` overriding `determineKeyId()` and `deleteEntityItems()`,
