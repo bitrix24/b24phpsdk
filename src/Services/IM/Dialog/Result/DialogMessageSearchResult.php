@@ -25,7 +25,7 @@ class DialogMessageSearchResult extends AbstractResult
     public function messages(): array
     {
         return array_map(
-            static fn(array $message): MessageItemResult => new MessageItemResult($message),
+            static fn (array $message): MessageItemResult => new MessageItemResult($message),
             array_filter($this->payload()['messages'] ?? [], 'is_array')
         );
     }

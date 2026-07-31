@@ -453,6 +453,35 @@
         <testsuite name="integration_tests_messageservice_message_status">
             <directory>./tests/Integration/Services/Messageservice/Message/Status/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_imbot">
+            <directory>./tests/Integration/Services/IMBot/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_imbot_bot">
+            <directory>./tests/Integration/Services/IMBot/Bot/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_imbot_chat">
+            <directory>./tests/Integration/Services/IMBot/Chat/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_imbot_command">
+            <directory>./tests/Integration/Services/IMBot/Command/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_imbot_revision">
+            <directory>./tests/Integration/Services/IMBot/Revision/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_imbot_chat_message">
+            <directory>./tests/Integration/Services/IMBot/ChatMessage/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_imbot_event">
+            <directory>./tests/Integration/Services/IMBot/Event/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_imbot_file">
+            <directory>./tests/Integration/Services/IMBot/File/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_event_v2">
+            <directory>./tests/Integration/Services/IM/EventV2/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_file_v2">
+            <directory>./tests/Integration/Services/IM/FileV2/</directory>
         <testsuite name="integration_tests_scope_catalog">
             <directory>./tests/Integration/Services/Catalog/</directory>
         </testsuite>

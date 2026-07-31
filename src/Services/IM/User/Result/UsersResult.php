@@ -25,7 +25,7 @@ class UsersResult extends AbstractResult
     public function users(): array
     {
         return array_values(array_map(
-            static fn(array $user): UserItemResult => new UserItemResult($user),
+            static fn (array $user): UserItemResult => new UserItemResult($user),
             array_filter($this->getCoreResponse()->getResponseData()->getResult(), 'is_array')
         ));
     }

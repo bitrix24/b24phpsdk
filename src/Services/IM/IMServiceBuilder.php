@@ -31,6 +31,8 @@ use Bitrix24\SDK\Services\IM\Revision\Service\Revision;
 use Bitrix24\SDK\Services\IM\Search\Service\Search;
 use Bitrix24\SDK\Services\IM\User\Service\UserStatus;
 use Bitrix24\SDK\Services\IM\User\Service\User;
+use Bitrix24\SDK\Services\IM\EventV2\Service\EventV2;
+use Bitrix24\SDK\Services\IM\FileV2\Service\FileV2;
 use Bitrix24\SDK\Services\Placement\Service\Placement;
 
 #[ApiServiceBuilderMetadata(new Scope(['im']))]
@@ -162,6 +164,24 @@ class IMServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Placements(new Placement($this->core, $this->log));
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function eventV2(): EventV2
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new EventV2($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function fileV2(): FileV2
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new FileV2($this->core, $this->log);
         }
 
         return $this->serviceCache[__METHOD__];

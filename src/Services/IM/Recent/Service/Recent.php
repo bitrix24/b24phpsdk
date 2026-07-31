@@ -43,7 +43,7 @@ class Recent extends AbstractService
 
         return new RecentsResult($this->core->call('im.recent.get', array_filter(
             $payload,
-            static fn(mixed $value): bool => $value !== null
+            static fn (mixed $value): bool => $value !== null
         )));
     }
 
@@ -65,7 +65,7 @@ class Recent extends AbstractService
 
         return new RecentsResult($this->core->call('im.recent.list', array_filter(
             $payload,
-            static fn(mixed $value): bool => $value !== null
+            static fn (mixed $value): bool => $value !== null
         )));
     }
 

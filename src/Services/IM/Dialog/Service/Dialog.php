@@ -70,7 +70,7 @@ class Dialog extends AbstractService
 
         return new DialogMessagesResult($this->core->call('im.dialog.messages.get', array_filter(
             $payload,
-            static fn(mixed $value): bool => $value !== null
+            static fn (mixed $value): bool => $value !== null
         )));
     }
 
@@ -108,7 +108,7 @@ class Dialog extends AbstractService
 
         return new DialogMessageSearchResult($this->core->call('im.dialog.messages.search', array_filter(
             $payload,
-            static fn(mixed $value): bool => $value !== null
+            static fn (mixed $value): bool => $value !== null
         )));
     }
 
@@ -190,7 +190,7 @@ class Dialog extends AbstractService
 
         return new DialogUsersResult($this->core->call('im.dialog.users.list', array_filter(
             $payload,
-            static fn(mixed $value): bool => $value !== null
+            static fn (mixed $value): bool => $value !== null
         )));
     }
 

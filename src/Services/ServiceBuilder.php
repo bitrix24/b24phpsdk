@@ -28,6 +28,7 @@ use Bitrix24\SDK\Services\HumanResources\HumanResourcesServiceBuilder;
 use Bitrix24\SDK\Services\Department\DepartmentServiceBuilder;
 use Bitrix24\SDK\Services\Task\TaskServiceBuilder;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
+use Bitrix24\SDK\Services\IMBot\IMBotServiceBuilder;
 use Bitrix24\SDK\Services\IMOpenLines\IMOpenLinesServiceBuilder;
 use Bitrix24\SDK\Services\Log\LogServiceBuilder;
 use Bitrix24\SDK\Services\Main\MainServiceBuilder;
@@ -192,6 +193,20 @@ class ServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new IMServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function getIMBotScope(): IMBotServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new IMBotServiceBuilder(
                 $this->core,
                 $this->batch,
                 $this->bulkItemsReader,
