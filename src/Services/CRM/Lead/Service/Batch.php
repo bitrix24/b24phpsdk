@@ -20,7 +20,7 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
 use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
-use Bitrix24\SDK\Services\CRM\Deal\Result\DealItemResult;
+use Bitrix24\SDK\Services\CRM\Lead\Result\LeadItemResult;
 use Generator;
 use Psr\Log\LoggerInterface;
 
@@ -126,7 +126,7 @@ class Batch
      *                         } $filter
      * @param array    $select = ['ID','TITLE','TYPE_ID','CATEGORY_ID','STAGE_ID','STAGE_SEMANTIC_ID','IS_NEW','IS_RECURRING','IS_RETURN_CUSTOMER','IS_REPEATED_APPROACH','PROBABILITY','CURRENCY_ID','OPPORTUNITY','IS_MANUAL_OPPORTUNITY','TAX_VALUE','COMPANY_ID','CONTACT_ID','CONTACT_IDS','QUOTE_ID','BEGINDATE','CLOSEDATE','OPENED','CLOSED','COMMENTS','ASSIGNED_BY_ID','CREATED_BY_ID','MODIFY_BY_ID','DATE_CREATE','DATE_MODIFY','SOURCE_ID','SOURCE_DESCRIPTION','LEAD_ID','ADDITIONAL_INFO','LOCATION_ID','ORIGINATOR_ID','ORIGIN_ID','UTM_SOURCE','UTM_MEDIUM','UTM_CAMPAIGN','UTM_CONTENT','UTM_TERM']
      *
-     * @return Generator<int, DealItemResult>
+     * @return Generator<int, LeadItemResult>
      * @throws BaseException
      */
     #[ApiBatchMethodMetadata(
@@ -146,7 +146,7 @@ class Batch
             ]
         );
         foreach ($this->batch->getTraversableList('crm.lead.list', $order, $filter, $select, $limit) as $key => $value) {
-            yield $key => new DealItemResult($value);
+            yield $key => new LeadItemResult($value);
         }
     }
 
