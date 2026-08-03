@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\IM\Notify\Service;
 
-
 use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
@@ -53,8 +52,7 @@ class Notify extends AbstractService
         ?string $notificationTag = null,
         ?string $subTag = null,
         ?array  $attachment = null
-    ): AddedItemResult
-    {
+    ): AddedItemResult {
         return new AddedItemResult($this->core->call(
             'im.notify.system.add',
             [
@@ -89,8 +87,7 @@ class Notify extends AbstractService
         ?string $notificationTag = null,
         ?string $subTag = null,
         ?array  $attachment = null
-    ): AddedItemResult
-    {
+    ): AddedItemResult {
         return new AddedItemResult($this->core->call(
             'im.notify.personal.add',
             [
@@ -121,8 +118,7 @@ class Notify extends AbstractService
         ?string $notificationTag = null,
         ?string $subTag = null,
         ?array  $attachment = null
-    ): AddedItemResult
-    {
+    ): AddedItemResult {
         return new AddedItemResult($this->core->call(
             'im.notify',
             [
@@ -150,8 +146,7 @@ class Notify extends AbstractService
         int     $notificationId,
         ?string $notificationTag = null,
         ?string $subTag = null,
-    ): DeletedItemResult
-    {
+    ): DeletedItemResult {
         return new DeletedItemResult($this->core->call(
             'im.notify.delete',
             [
@@ -174,8 +169,7 @@ class Notify extends AbstractService
     public function markAsRead(
         int  $notificationId,
         bool $isOnlyCurrent = true,
-    ): UpdatedItemResult
-    {
+    ): UpdatedItemResult {
         return new UpdatedItemResult($this->core->call(
             'im.notify.read',
             [
@@ -196,8 +190,7 @@ class Notify extends AbstractService
     )]
     public function markMessagesAsRead(
         array $notificationIds
-    ): UpdatedItemResult
-    {
+    ): UpdatedItemResult {
         return new UpdatedItemResult($this->core->call(
             'im.notify.read.list',
             [
@@ -218,8 +211,7 @@ class Notify extends AbstractService
     )]
     public function markMessagesAsUnread(
         array $notificationIds
-    ): UpdatedItemResult
-    {
+    ): UpdatedItemResult {
         return new UpdatedItemResult($this->core->call(
             'im.notify.read.list',
             [
@@ -255,8 +247,7 @@ class Notify extends AbstractService
     public function confirm(
         int  $notificationId,
         bool $isAccept
-    ): UpdatedItemResult
-    {
+    ): UpdatedItemResult {
         return new UpdatedItemResult($this->core->call(
             'im.notify.confirm',
             [
@@ -278,8 +269,7 @@ class Notify extends AbstractService
     public function answer(
         int    $notificationId,
         string $answerText
-    ): UpdatedItemResult
-    {
+    ): UpdatedItemResult {
         return new UpdatedItemResult($this->core->call(
             'im.notify.answer',
             [
@@ -302,15 +292,14 @@ class Notify extends AbstractService
         ?int $lastId = null,
         ?int $lastType = null,
         int  $limit = 50,
-    ): NotifiesResult
-    {
+    ): NotifiesResult {
         $params = array_filter(
             [
                 'LAST_ID' => $lastId,
                 'LAST_TYPE' => $lastType,
                 'LIMIT' => $limit,
             ],
-            static fn(mixed $value): bool => $value !== null
+            static fn (mixed $value): bool => $value !== null
         );
         $params['LIMIT'] = $limit;
 
@@ -336,8 +325,7 @@ class Notify extends AbstractService
         ?array           $searchAuthors = null,
         ?int             $lastId = null,
         int              $limit = 50,
-    ): NotifyHistorySearchResult
-    {
+    ): NotifyHistorySearchResult {
         $params = array_filter(
             [
                 'SEARCH_TEXT' => $searchText,
@@ -348,7 +336,7 @@ class Notify extends AbstractService
                 'LAST_ID' => $lastId,
                 'LIMIT' => $limit,
             ],
-            static fn(mixed $value): bool => $value !== null
+            static fn (mixed $value): bool => $value !== null
         );
         $params['LIMIT'] = $limit;
 

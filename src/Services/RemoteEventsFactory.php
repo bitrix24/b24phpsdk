@@ -29,6 +29,7 @@ use Bitrix24\SDK\Services\CRM\Documentgenerator\Document\Events\CrmDocumentGener
 use Bitrix24\SDK\Services\IMOpenLines\Events\IMOpenLinesEventsFactory;
 use Bitrix24\SDK\Services\SonetGroup\Events\SonetGroupEventsFactory;
 use Bitrix24\SDK\Services\Telephony\Events\TelephonyEventsFactory;
+use Bitrix24\SDK\Services\Sign\Events\SignB2eEventsFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -81,9 +82,9 @@ readonly class RemoteEventsFactory
         }
 
         $event = new UnsupportedRemoteEvent($request);
-        foreach ($this->eventsFabrics as $itemFabric) {
-            if ($itemFabric->isSupport($payload['event'])) {
-                $event = $itemFabric->create($request);
+        foreach ($this->eventsFabrics as $eventFabric) {
+            if ($eventFabric->isSupport($payload['event'])) {
+                $event = $eventFabric->create($request);
                 break;
             }
         }
@@ -155,6 +156,7 @@ readonly class RemoteEventsFactory
             ]);
             throw new InvalidArgumentException('key «event» not found in request payload');
         }
+
         if ($applicationToken !== null && trim($applicationToken) === '') {
             throw new InvalidArgumentException('application token cannot be empty');
         }
@@ -166,9 +168,9 @@ readonly class RemoteEventsFactory
         ]);
 
         $event = new UnsupportedRemoteEvent($request);
-        foreach ($this->eventsFabrics as $itemFabric) {
-            if ($itemFabric->isSupport($eventCode)) {
-                $event = $itemFabric->create($request);
+        foreach ($this->eventsFabrics as $eventFabric) {
+            if ($eventFabric->isSupport($eventCode)) {
+                $event = $eventFabric->create($request);
                 break;
             }
         }
@@ -225,6 +227,7 @@ readonly class RemoteEventsFactory
                 new IMOpenLinesEventsFactory(),
                 new SonetGroupEventsFactory(),
                 new Sale\Events\SaleEventsFactory(),
+                new SignB2eEventsFactory(),
             ],
             $logger
         );

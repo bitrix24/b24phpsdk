@@ -25,7 +25,7 @@ class SearchChatsResult extends AbstractResult
     public function items(): array
     {
         return array_values(array_map(
-            static fn(array $item): SearchChatItemResult => new SearchChatItemResult($item),
+            static fn (array $item): SearchChatItemResult => new SearchChatItemResult($item),
             array_filter($this->getCoreResponse()->getResponseData()->getResult(), 'is_array')
         ));
     }

@@ -25,7 +25,7 @@ class DialogUsersResult extends AbstractResult
     public function users(): array
     {
         return array_map(
-            static fn(array $user): DialogUserItemResult => new DialogUserItemResult($user),
+            static fn (array $user): DialogUserItemResult => new DialogUserItemResult($user),
             array_filter($this->getCoreResponse()->getResponseData()->getResult(), 'is_array')
         );
     }

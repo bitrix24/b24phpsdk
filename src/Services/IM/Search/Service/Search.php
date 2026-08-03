@@ -52,7 +52,7 @@ class Search extends AbstractService
 
         return new SearchChatsResult($this->core->call('im.search.chat.list', array_filter(
             $payload,
-            static fn(mixed $value): bool => $value !== null
+            static fn (mixed $value): bool => $value !== null
         )));
     }
 
@@ -75,7 +75,7 @@ class Search extends AbstractService
 
         return new SearchUsersResult($this->core->call('im.search.user.list', array_filter(
             $payload,
-            static fn(mixed $value): bool => $value !== null
+            static fn (mixed $value): bool => $value !== null
         )));
     }
 
@@ -103,7 +103,7 @@ class Search extends AbstractService
 
         return new SearchDepartmentsResult($this->core->call('im.search.department.list', array_filter(
             $payload,
-            static fn(mixed $value): bool => $value !== null
+            static fn (mixed $value): bool => $value !== null
         )));
     }
 

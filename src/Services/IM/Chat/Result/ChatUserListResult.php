@@ -25,7 +25,7 @@ class ChatUserListResult extends AbstractResult
     public function getUserIds(): array
     {
         return array_map(
-            static fn(mixed $id): int => (int)$id,
+            static fn (mixed $id): int => (int)$id,
             $this->getCoreResponse()->getResponseData()->getResult()
         );
     }

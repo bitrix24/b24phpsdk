@@ -315,6 +315,16 @@ skip_violations:
 |---|---|
 | `make test-integration-main-eventlog` | Event log (`main.eventlog.*`) |
 
+### Tests — integration (Catalog)
+
+| Target | Suite |
+|---|---|
+| `make test-integration-scope-catalog` | Full Catalog scope |
+| `make test-integration-catalog-product` | Product |
+| `make test-integration-catalog-product-service` | Product Service (`catalog.product.service.*`) |
+| `make test-integration-catalog-product-sku` | Product Sku (`catalog.product.sku.*`) |
+| `make test-integration-catalog-product-offer` | Product Offer (`catalog.product.offer.*`) |
+
 ---
 
 ## Test structure

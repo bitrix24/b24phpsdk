@@ -143,7 +143,7 @@ class Disk extends AbstractService
     {
         return array_filter(
             $payload,
-            static fn(mixed $value): bool => $value !== null
+            static fn (mixed $value): bool => $value !== null
         );
     }
 }
