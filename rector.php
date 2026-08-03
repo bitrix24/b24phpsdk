@@ -121,7 +121,6 @@ return RectorConfig::configure()
         naming: true,
         instanceOf: true,
         earlyReturn: true,
-        strictBooleans: false
     )
     ->withSkip([
         RenamePropertyToMatchTypeRector::class,

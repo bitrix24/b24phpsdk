@@ -93,6 +93,10 @@
 
 ### Fixed
 
+- Fixed `make lint-rector` failing with `Unknown named parameter $strictBooleans`: the
+  `strictBooleans` parameter was removed from `RectorConfigBuilder::withPreparedSets()`
+  in the installed Rector version; removed the obsolete `strictBooleans: false` entry
+  from `rector.php`
 - Fixed `Services\CRM\Lead\Service\Batch::list()` returning `DealItemResult`
   instead of `LeadItemResult` items ([#470](https://github.com/bitrix24/b24phpsdk/pull/470))
 - Fixed batch operations for `Services\Catalog\Product` using the wrong-case `ID` key instead of
