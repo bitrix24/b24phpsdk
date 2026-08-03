@@ -97,6 +97,8 @@
   `strictBooleans` parameter was removed from `RectorConfigBuilder::withPreparedSets()`
   in the installed Rector version; removed the obsolete `strictBooleans: false` entry
   from `rector.php`
+- Applied `AllowMockObjectsForDataProviderRector`: added `#[AllowMockObjectsWithoutExpectations]`
+  to `tests/Unit/Services/RemoteEventsFactoryTest.php` per `make lint-rector-fix`
 - Fixed `Services\CRM\Lead\Service\Batch::list()` returning `DealItemResult`
   instead of `LeadItemResult` items ([#470](https://github.com/bitrix24/b24phpsdk/pull/470))
 - Fixed batch operations for `Services\Catalog\Product` using the wrong-case `ID` key instead of
