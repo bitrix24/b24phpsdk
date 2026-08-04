@@ -4,6 +4,26 @@
 
 ### Added
 
+- Added service `Services\Catalog\Document` with support methods,
+  see [catalog.document.* methods](https://apidocs.bitrix24.com/api-reference/catalog/document/index.html) ([#559](https://github.com/bitrix24/b24phpsdk/issues/559)):
+    - `add` creates a new warehouse accounting document, with batch calls support
+    - `update` updates an existing document, with batch calls support
+    - `list` gets the list of documents
+    - `delete` deletes a document, with batch calls support
+    - `deleteList` deletes a group of documents
+    - `conduct` conducts (activates) a document
+    - `conductList` conducts a group of documents
+    - `cancel` cancels conducting of a document
+    - `cancelList` cancels conducting of a group of documents
+    - `getFields` returns the description of document fields
+    - `modeStatus` checks whether warehouse accounting mode is enabled
+- Added service `Services\Catalog\DocumentElement` with support methods,
+  see [catalog.document.element.* methods](https://apidocs.bitrix24.com/api-reference/catalog/document/document-element/index.html) ([#559](https://github.com/bitrix24/b24phpsdk/issues/559)):
+    - `add` adds a product line item to a warehouse accounting document, with batch calls support
+    - `update` updates a document line item, with batch calls support
+    - `list` gets the list of document line items
+    - `delete` deletes a document line item, with batch calls support
+    - `getFields` returns the description of document element fields
 - Added service `Services\Landing\Site\Service\Site` with support methods,
   see [landing.site.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
     - `add` adds a site
