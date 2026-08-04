@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Services\Catalog\Document\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractItem;
 use Carbon\CarbonImmutable;
+use Money\Money;
 
 /**
  * @property-read int                  $id
@@ -28,7 +29,7 @@ use Carbon\CarbonImmutable;
  * @property-read CarbonImmutable|null $dateStatus
  * @property-read string|null          $title
  * @property-read string|null          $commentary
- * @property-read float|null           $total
+ * @property-read Money|null           $total
  * @property-read string|null          $docNumber
  * @property-read int|null             $createdBy
  * @property-read int|null             $modifiedBy

@@ -225,6 +225,21 @@ trait CustomBitrix24Assertions
                         );
                         break;
                     }
+                    // catalog.document.element field «amount» is a stock quantity, not a monetary amount
+                    if ($fieldCode === 'amount') {
+                        $this->assertTrue(
+                            str_contains($propsFromAnnotations[$fieldCode], 'float'),
+                            sprintf(
+                                'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                                $resultItemClassName,
+                                $fieldCode,
+                                $propsFromAnnotations[$fieldCode],
+                                $fieldData['type'],
+                                'float'
+                            )
+                        );
+                        break;
+                    }
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'Money\Money'),
                         sprintf(
@@ -252,6 +267,22 @@ trait CustomBitrix24Assertions
                     );
                     break;
                 case 'char':
+                    // catalog.document(.element) fields use «char» for plain strings, not Y/N flags
+                    if (in_array($fieldCode, ['commentary', 'currency', 'docType', 'siteId', 'status'], true)) {
+                        $this->assertTrue(
+                            str_contains($propsFromAnnotations[$fieldCode], 'string'),
+                            sprintf(
+                                'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                                $resultItemClassName,
+                                $fieldCode,
+                                $propsFromAnnotations[$fieldCode],
+                                $fieldData['type'],
+                                'string'
+                            )
+                        );
+                        break;
+                    }
+
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'bool'),
                         sprintf(

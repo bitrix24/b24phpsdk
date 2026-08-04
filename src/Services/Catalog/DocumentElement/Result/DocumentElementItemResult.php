@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\Catalog\DocumentElement\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractItem;
+use Money\Money;
 
 /**
  * @property-read int        $id
@@ -22,7 +23,7 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  * @property-read int|null   $storeFrom
  * @property-read int|null   $storeTo
  * @property-read float      $amount
- * @property-read float|null $purchasingPrice
+ * @property-read Money|null $purchasingPrice
  */
 class DocumentElementItemResult extends AbstractItem
 {
