@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Catalog\DocumentElement\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Bitrix24\SDK\Core\Result\AbstractItem;
 
 /**
  * @property-read int        $id
@@ -24,6 +24,6 @@ use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
  * @property-read float      $amount
  * @property-read float|null $purchasingPrice
  */
-class DocumentElementItemResult extends AbstractAnnotatedItem
+class DocumentElementItemResult extends AbstractItem
 {
 }

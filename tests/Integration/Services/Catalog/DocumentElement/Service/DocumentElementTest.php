@@ -87,23 +87,23 @@ class DocumentElementTest extends TestCase
     #[TestDox('test DocumentElement::add, DocumentElement::update, DocumentElement::list, DocumentElement::delete')]
     public function testAddUpdateListDelete(): void
     {
-        $addResult = $this->documentElementService->add([
+        $documentElementResult = $this->documentElementService->add([
             'docId' => $this->documentId,
             'elementId' => $this->productId,
             'storeTo' => 0,
             'amount' => 5,
             'purchasingPrice' => 10.5,
         ]);
-        $documentElementId = $addResult->documentElement()->id;
+        $documentElementId = $documentElementResult->documentElement()->id;
 
-        $this->assertSame($this->documentId, $addResult->documentElement()->docId);
-        $this->assertSame($this->productId, $addResult->documentElement()->elementId);
+        $this->assertSame($this->documentId, $documentElementResult->documentElement()->docId);
+        $this->assertSame($this->productId, $documentElementResult->documentElement()->elementId);
 
         $updateResult = $this->documentElementService->update($documentElementId, ['amount' => 8]);
         $this->assertEqualsWithDelta(8.0, $updateResult->documentElement()->amount, PHP_FLOAT_EPSILON);
 
-        $listResult = $this->documentElementService->list([], ['docId' => $this->documentId]);
-        $this->assertCount(1, $listResult->getDocumentElements());
+        $documentElementsResult = $this->documentElementService->list([], ['docId' => $this->documentId]);
+        $this->assertCount(1, $documentElementsResult->getDocumentElements());
 
         $this->assertTrue($this->documentElementService->delete($documentElementId)->isSuccess());
     }

@@ -62,7 +62,9 @@ class DocumentItemResultTest extends TestCase
     #[TestDox('all fields in DocumentItemResult have valid type casting in magic getters')]
     public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
     {
-        $documentItemResult = $this->documentService->list([], ['id' => $this->documentId])->getDocuments()[0];
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($documentItemResult, DocumentItemResult::class);
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
+            $this->documentService->getFields()->getFieldsDescription(),
+            DocumentItemResult::class
+        );
     }
 }

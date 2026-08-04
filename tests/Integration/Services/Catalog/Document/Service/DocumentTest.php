@@ -54,23 +54,23 @@ class DocumentTest extends TestCase
     #[\Override]
     protected function tearDown(): void
     {
-        foreach ($this->createdDocumentIds as $documentId) {
+        foreach ($this->createdDocumentIds as $createdDocumentId) {
             try {
-                $this->documentService->cancel($documentId);
+                $this->documentService->cancel($createdDocumentId);
             } catch (\Throwable) {
                 // document may not be conducted, ignore
             }
 
             try {
-                $this->documentService->delete($documentId);
+                $this->documentService->delete($createdDocumentId);
             } catch (\Throwable) {
                 // already removed, ignore
             }
         }
 
-        foreach ($this->createdProductIds as $productId) {
+        foreach ($this->createdProductIds as $createdProductId) {
             try {
-                $this->productService->delete($productId);
+                $this->productService->delete($createdProductId);
             } catch (\Throwable) {
                 // already removed, ignore
             }
@@ -85,24 +85,24 @@ class DocumentTest extends TestCase
     public function testAddUpdateListDelete(): void
     {
         $title = sprintf('test document %s', time());
-        $addResult = $this->documentService->add([
+        $documentResult = $this->documentService->add([
             'docType' => 'A',
             'currency' => 'USD',
             'responsibleId' => 1,
             'title' => $title,
         ]);
-        $documentId = $addResult->document()->id;
+        $documentId = $documentResult->document()->id;
         $this->createdDocumentIds[] = $documentId;
 
-        $this->assertSame($title, $addResult->document()->title);
-        $this->assertSame('A', $addResult->document()->docType);
+        $this->assertSame($title, $documentResult->document()->title);
+        $this->assertSame('A', $documentResult->document()->docType);
 
         $updatedTitle = sprintf('updated test document %s', time());
         $updateResult = $this->documentService->update($documentId, ['title' => $updatedTitle]);
         $this->assertSame($updatedTitle, $updateResult->document()->title);
 
-        $listResult = $this->documentService->list([], ['id' => $documentId]);
-        $this->assertCount(1, $listResult->getDocuments());
+        $documentsResult = $this->documentService->list([], ['id' => $documentId]);
+        $this->assertCount(1, $documentsResult->getDocuments());
 
         $this->assertTrue($this->documentService->delete($documentId)->isSuccess());
         $this->createdDocumentIds = array_diff($this->createdDocumentIds, [$documentId]);

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Catalog\Document\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Bitrix24\SDK\Core\Result\AbstractItem;
 use Carbon\CarbonImmutable;
 
 /**
@@ -35,6 +35,6 @@ use Carbon\CarbonImmutable;
  * @property-read string|null          $status
  * @property-read int|null             $statusBy
  */
-class DocumentItemResult extends AbstractAnnotatedItem
+class DocumentItemResult extends AbstractItem
 {
 }
