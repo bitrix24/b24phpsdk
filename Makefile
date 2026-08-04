@@ -492,6 +492,20 @@ test-integration-landing-role:
 test-integration-landing-repowidget:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_repowidget
 
+.PHONY: test-integration-catalog-document
+test-integration-catalog-document:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_document
+.PHONY: test-integration-catalog-document-annotations
+test-integration-catalog-document-annotations:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_document_annotations
+
+.PHONY: test-integration-catalog-document-element
+test-integration-catalog-document-element:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_document_element
+.PHONY: test-integration-catalog-document-element-annotations
+test-integration-catalog-document-element-annotations:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_document_element_annotations
+
 # work dev environment
 .PHONY: php-dev-server-up
 php-dev-server-up:
