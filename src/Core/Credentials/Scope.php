@@ -81,12 +81,14 @@ class Scope
         'tasksmobile',
         'telephony',
         'timeman',
+        'timemanmobile',
         'user',
         'user.userfield',
         'user_basic',
         'user_brief',
         'userconsent',
         'userfieldconfig',
+        'vibecodeconnector',
         'vote',
     ];
 

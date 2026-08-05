@@ -183,7 +183,7 @@ class Core implements CoreInterface
                             $this->eventDispatcher->dispatch(new AuthTokenRenewedEvent($renewedToken));
 
                             // repeat previous api-call with new auth token
-                            $response = $this->call($apiMethod, $parameters);
+                            $response = $this->call($apiMethod, $parameters, $apiVersion);
                             $this->logger->debug(
                                 'api call repeated',
                                 [
