@@ -298,6 +298,10 @@ skip_violations:
 | `make test-integration-catalog-price-type` | Price type |
 | `make test-integration-catalog-price-type-lang` | Price type language translations |
 | `make test-integration-catalog-price-type-group` | Price type ↔ purchasing group bindings |
+| `make test-integration-catalog-document` | Warehouse accounting documents |
+| `make test-integration-catalog-document-annotations` | Warehouse accounting document result annotations |
+| `make test-integration-catalog-document-element` | Warehouse accounting document line items |
+| `make test-integration-catalog-document-element-annotations` | Warehouse accounting document line item result annotations |
 
 ### Tests — integration (Tasks)
 

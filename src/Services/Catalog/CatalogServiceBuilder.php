@@ -258,4 +258,36 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    public function document(): Catalog\Document\Service\Document
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\Document\Service\Document(
+                new Catalog\Document\Service\Batch(
+                    new Catalog\Document\Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function documentElement(): Catalog\DocumentElement\Service\DocumentElement
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\DocumentElement\Service\DocumentElement(
+                new Catalog\DocumentElement\Service\Batch(
+                    new Catalog\DocumentElement\Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 }

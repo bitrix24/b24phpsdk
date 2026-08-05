@@ -900,6 +900,7 @@ test-integration-catalog-price-type-lang:
 .PHONY: test-integration-catalog-price-type-group
 test-integration-catalog-price-type-group:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_price_type_group
+
 .PHONY: test-integration-catalog-product-image
 test-integration-catalog-product-image:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_product_image
@@ -927,6 +928,20 @@ test-integration-catalog-product-property-feature:
 .PHONY: test-integration-scope-catalog-product-property-section
 test-integration-scope-catalog-product-property-section:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_catalog_product_property_section
+
+.PHONY: test-integration-catalog-document
+test-integration-catalog-document:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_document
+.PHONY: test-integration-catalog-document-annotations
+test-integration-catalog-document-annotations:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_document_annotations
+
+.PHONY: test-integration-catalog-document-element
+test-integration-catalog-document-element:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_document_element
+.PHONY: test-integration-catalog-document-element-annotations
+test-integration-catalog-document-element-annotations:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_document_element_annotations
 
 # work dev environment
 .PHONY: php-dev-server-up
