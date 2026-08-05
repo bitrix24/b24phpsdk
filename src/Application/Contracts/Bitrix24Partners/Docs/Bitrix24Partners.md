@@ -63,7 +63,9 @@ stateDiagram-v2
     - use case ChangePhone
     - use case ChangeEmail
     - use case ChangeOpenLineId
-- `public function findByBitrix24PartnerNumber(int $bitrix24PartnerNumber): ?Bitrix24PartnerInterface;`
+- `public function findByBitrix24PartnerNumber(int $bitrix24PartnerNumber, bool $withDeleted = false): ?Bitrix24PartnerInterface;`
+    - default lookup excludes `deleted` partners
+    - pass `$withDeleted = true` to include soft-deleted partners
 - `public function findByTitle(string $title): array;`
     - use case Create
     - use case ChangeSite

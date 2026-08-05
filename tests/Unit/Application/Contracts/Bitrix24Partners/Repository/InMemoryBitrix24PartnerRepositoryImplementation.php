@@ -34,19 +34,26 @@ class InMemoryBitrix24PartnerRepositoryImplementation implements Bitrix24Partner
     }
 
     #[\Override]
-    public function findByBitrix24PartnerNumber(int $bitrix24PartnerNumber): ?Bitrix24PartnerInterface
+    public function findByBitrix24PartnerNumber(int $bitrix24PartnerNumber, bool $withDeleted = false): ?Bitrix24PartnerInterface
     {
         $this->logger->debug('b24PartnerRepository.findByBitrix24PartnerNumber', [
-            'bitrix24PartnerNumber' => $bitrix24PartnerNumber
+            'bitrix24PartnerNumber' => $bitrix24PartnerNumber,
+            'withDeleted' => $withDeleted,
         ]);
 
         foreach ($this->items as $item) {
-            if ($item->getBitrix24PartnerNumber() === $bitrix24PartnerNumber) {
-                $this->logger->debug('b24PartnerRepository.findByBitrix24PartnerNumber.found', [
-                    'id' => $item->getId()->toRfc4122()
-                ]);
-                return $item;
+            if ($item->getBitrix24PartnerNumber() !== $bitrix24PartnerNumber) {
+                continue;
             }
+
+            if (!$withDeleted && Bitrix24PartnerStatus::deleted === $item->getStatus()) {
+                continue;
+            }
+
+            $this->logger->debug('b24PartnerRepository.findByBitrix24PartnerNumber.found', [
+                'id' => $item->getId()->toRfc4122(),
+            ]);
+            return $item;
         }
 
         return null;
