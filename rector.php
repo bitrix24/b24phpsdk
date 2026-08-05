@@ -120,8 +120,7 @@ return RectorConfig::configure()
         privatization: true,
         naming: true,
         instanceOf: true,
-        earlyReturn: true,
-        strictBooleans: false
+        earlyReturn: true
     )
     ->withSkip([
         RenamePropertyToMatchTypeRector::class,

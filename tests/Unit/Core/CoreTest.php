@@ -13,14 +13,20 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Core;
 
+use Bitrix24\SDK\Application\ApplicationStatus;
 use Bitrix24\SDK\Core\ApiLevelErrorHandler;
 use Bitrix24\SDK\Core\Contracts\ApiClientInterface;
 use Bitrix24\SDK\Core\Contracts\ApiVersion;
 use Bitrix24\SDK\Core\Core;
+use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
+use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Credentials;
+use Bitrix24\SDK\Core\Credentials\Endpoints;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Exceptions\AuthForbiddenException;
 use Bitrix24\SDK\Core\Exceptions\PortalUnavailableException;
+use Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -133,6 +139,60 @@ class CoreTest extends TestCase
         $this->expectException(AuthForbiddenException::class);
 
         $core->call('documentation', apiVersion: ApiVersion::v3);
+    }
+
+    #[Test]
+    #[TestDox('call() preserves API version when repeating a request after expired_token renewal')]
+    public function testCallPreservesApiVersionAfterExpiredTokenRenewal(): void
+    {
+        $expiredTokenResponse = $this->createStub(ResponseInterface::class);
+        $expiredTokenResponse->method('getStatusCode')->willReturn(401);
+        $expiredTokenResponse->method('toArray')->willReturn(['error' => 'expired_token']);
+
+        $okResponse = $this->createStub(ResponseInterface::class);
+        $okResponse->method('getStatusCode')->willReturn(200);
+
+        $credentials = Credentials::createFromOAuth(
+            new AuthToken('old-access-token', 'old-refresh-token', time() - 3600),
+            new ApplicationProfile('client-id', 'client-secret', new Scope(['tasks'])),
+            new Endpoints('https://myportal.example.com', 'https://oauth.bitrix.info/')
+        );
+        $renewedAuthToken = new RenewedAuthToken(
+            new AuthToken('new-access-token', 'new-refresh-token', time() + 3600),
+            'member-id',
+            'https://myportal.example.com',
+            'https://oauth.bitrix.info/',
+            ApplicationStatus::subscription(),
+            'myportal.example.com'
+        );
+
+        $capturedApiVersions = [];
+        $responses = [$expiredTokenResponse, $okResponse];
+
+        $apiClient = $this->createMock(ApiClientInterface::class);
+        $apiClient->method('getCredentials')->willReturn($credentials);
+        $apiClient->expects($this->once())->method('getNewAuthToken')->willReturn($renewedAuthToken);
+        $apiClient
+            ->expects($this->exactly(2))
+            ->method('getResponse')
+            ->willReturnCallback(
+                static function (string $apiMethod, array $parameters, ApiVersion $apiVersion) use (&$capturedApiVersions, &$responses): ResponseInterface {
+                    $capturedApiVersions[] = $apiVersion;
+
+                    return array_shift($responses);
+                }
+            );
+
+        $core = new Core(
+            $apiClient,
+            new ApiLevelErrorHandler(new NullLogger()),
+            new EventDispatcher(),
+            new NullLogger()
+        );
+
+        $core->call('tasks.task.get', ['id' => 1], ApiVersion::v3);
+
+        $this->assertSame([ApiVersion::v3, ApiVersion::v3], $capturedApiVersions);
     }
 
     #[Test]

@@ -74,6 +74,10 @@
 
 ### Fixed
 
+- Fixed `Core::call()` preserving the requested API version when retrying a request after OAuth token
+  renewal ([#544](https://github.com/bitrix24/b24phpsdk/issues/544))
+- Added missing available scope codes `timemanmobile` and `vibecodeconnector` to `Scope`
+  ([#544](https://github.com/bitrix24/b24phpsdk/issues/544))
 - Fixed `Services\CRM\Lead\Service\Batch::list()` returning `DealItemResult`
   instead of `LeadItemResult` items ([#470](https://github.com/bitrix24/b24phpsdk/pull/470))
 - Fixed batch operations for `Services\Catalog\Product` using the wrong-case `ID` key instead of
