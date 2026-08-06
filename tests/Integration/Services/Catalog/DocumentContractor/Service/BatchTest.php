@@ -16,7 +16,6 @@ namespace Bitrix24\SDK\Tests\Integration\Services\Catalog\DocumentContractor\Ser
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Services\Catalog\Document\Service\Document;
 use Bitrix24\SDK\Services\Catalog\DocumentContractor\Service\Batch;
 use Bitrix24\SDK\Services\Catalog\DocumentContractor\Service\DocumentContractor;
 use Bitrix24\SDK\Tests\Integration\Fabric;
@@ -28,8 +27,6 @@ use PHPUnit\Framework\TestCase;
 class BatchTest extends TestCase
 {
     private DocumentContractor $documentContractorService;
-
-    private Document $documentService;
 
     private CoreInterface $core;
 
@@ -57,17 +54,18 @@ class BatchTest extends TestCase
     {
         $serviceBuilder = Fabric::getServiceBuilder();
         $this->documentContractorService = $serviceBuilder->getCatalogScope()->documentContractor();
-        $this->documentService = $serviceBuilder->getCatalogScope()->document();
         $this->core = Fabric::getCore();
 
         // a document can only have one contractor binding, so each binding needs its own document
         for ($i = 0; $i < 2; ++$i) {
-            $documentId = $this->documentService->add([
-                'docType' => 'A',
-                'currency' => 'USD',
-                'responsibleId' => 1,
-                'title' => sprintf('test document contractor batch %s-%s', time(), $i),
-            ])->document()->id;
+            $documentId = (int) $this->core->call('catalog.document.add', [
+                'fields' => [
+                    'docType' => 'A',
+                    'currency' => 'USD',
+                    'responsibleId' => 1,
+                    'title' => sprintf('test document contractor batch %s-%s', time(), $i),
+                ],
+            ])->getResponseData()->getResult()['document']['id'];
             $this->documentIds[] = $documentId;
 
             $contactId = (int) $this->core->call('crm.contact.add', [
@@ -88,7 +86,7 @@ class BatchTest extends TestCase
     {
         foreach ($this->documentIds as $documentId) {
             try {
-                $this->documentService->delete($documentId);
+                $this->core->call('catalog.document.delete', ['id' => $documentId]);
             } catch (\Throwable) {
                 // already removed, ignore
             }

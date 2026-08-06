@@ -69,7 +69,9 @@ class Product extends AbstractService
     )]
     public function add(array $productFields): ProductResult
     {
-        return new ProductResult($this->core->call('catalog.product.add', [
+        return new ProductResult($this->core->call(
+            'catalog.product.add',
+            [
                 'fields' => $productFields
             ]
         ));

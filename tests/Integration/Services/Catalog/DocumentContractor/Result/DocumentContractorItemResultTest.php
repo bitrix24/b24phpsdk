@@ -16,7 +16,6 @@ namespace Bitrix24\SDK\Tests\Integration\Services\Catalog\DocumentContractor\Res
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Services\Catalog\Document\Service\Document;
 use Bitrix24\SDK\Services\Catalog\DocumentContractor\Result\DocumentContractorItemResult;
 use Bitrix24\SDK\Services\Catalog\DocumentContractor\Service\DocumentContractor;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
@@ -33,8 +32,6 @@ class DocumentContractorItemResultTest extends TestCase
 
     private DocumentContractor $documentContractorService;
 
-    private Document $documentService;
-
     private CoreInterface $core;
 
     private int $documentId;
@@ -50,15 +47,16 @@ class DocumentContractorItemResultTest extends TestCase
     {
         $serviceBuilder = Fabric::getServiceBuilder();
         $this->documentContractorService = $serviceBuilder->getCatalogScope()->documentContractor();
-        $this->documentService = $serviceBuilder->getCatalogScope()->document();
         $this->core = Fabric::getCore();
 
-        $this->documentId = $this->documentService->add([
-            'docType' => 'A',
-            'currency' => 'USD',
-            'responsibleId' => 1,
-            'title' => sprintf('test document contractor annotations %s', time()),
-        ])->document()->id;
+        $this->documentId = (int) $this->core->call('catalog.document.add', [
+            'fields' => [
+                'docType' => 'A',
+                'currency' => 'USD',
+                'responsibleId' => 1,
+                'title' => sprintf('test document contractor annotations %s', time()),
+            ],
+        ])->getResponseData()->getResult()['document']['id'];
 
         $this->contactId = (int) $this->core->call('crm.contact.add', [
             'fields' => ['NAME' => sprintf('test contractor contact annotations %s', time())],
@@ -75,7 +73,7 @@ class DocumentContractorItemResultTest extends TestCase
     protected function tearDown(): void
     {
         try {
-            $this->documentService->delete($this->documentId);
+            $this->core->call('catalog.document.delete', ['id' => $this->documentId]);
         } catch (\Throwable) {
             // already removed, ignore
         }
@@ -97,10 +95,12 @@ class DocumentContractorItemResultTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('all fields in DocumentContractorItemResult have valid type casting in magic getters')]
-    public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
+    #[TestDox('all fields in DocumentContractorItemResult have valid type annotation')]
+    public function testAllFieldsHasValidTypeAnnotation(): void
     {
-        $bindings = $this->documentContractorService->list([], ['documentId' => $this->documentId])->getDocumentContractors();
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($bindings[0], DocumentContractorItemResult::class);
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
+            $this->documentContractorService->getFields()->getFieldsDescription(),
+            DocumentContractorItemResult::class
+        );
     }
 }

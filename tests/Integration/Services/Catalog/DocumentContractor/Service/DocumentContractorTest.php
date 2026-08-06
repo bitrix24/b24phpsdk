@@ -16,7 +16,6 @@ namespace Bitrix24\SDK\Tests\Integration\Services\Catalog\DocumentContractor\Ser
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Services\Catalog\Document\Service\Document;
 use Bitrix24\SDK\Services\Catalog\DocumentContractor\Service\DocumentContractor;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -27,8 +26,6 @@ use PHPUnit\Framework\TestCase;
 class DocumentContractorTest extends TestCase
 {
     private DocumentContractor $documentContractorService;
-
-    private Document $documentService;
 
     private CoreInterface $core;
 
@@ -45,15 +42,16 @@ class DocumentContractorTest extends TestCase
     {
         $serviceBuilder = Fabric::getServiceBuilder();
         $this->documentContractorService = $serviceBuilder->getCatalogScope()->documentContractor();
-        $this->documentService = $serviceBuilder->getCatalogScope()->document();
         $this->core = Fabric::getCore();
 
-        $this->documentId = $this->documentService->add([
-            'docType' => 'A',
-            'currency' => 'USD',
-            'responsibleId' => 1,
-            'title' => sprintf('test document contractor %s', time()),
-        ])->document()->id;
+        $this->documentId = (int) $this->core->call('catalog.document.add', [
+            'fields' => [
+                'docType' => 'A',
+                'currency' => 'USD',
+                'responsibleId' => 1,
+                'title' => sprintf('test document contractor %s', time()),
+            ],
+        ])->getResponseData()->getResult()['document']['id'];
 
         $this->contactId = (int) $this->core->call('crm.contact.add', [
             'fields' => ['NAME' => sprintf('test contractor contact %s', time())],
@@ -64,7 +62,7 @@ class DocumentContractorTest extends TestCase
     protected function tearDown(): void
     {
         try {
-            $this->documentService->delete($this->documentId);
+            $this->core->call('catalog.document.delete', ['id' => $this->documentId]);
         } catch (\Throwable) {
             // already removed, ignore
         }
@@ -83,18 +81,18 @@ class DocumentContractorTest extends TestCase
     #[TestDox('test DocumentContractor::add, DocumentContractor::list, DocumentContractor::delete')]
     public function testAddListDelete(): void
     {
-        $addResult = $this->documentContractorService->add([
+        $documentContractorResult = $this->documentContractorService->add([
             'documentId' => $this->documentId,
             'entityTypeId' => 3,
             'entityId' => $this->contactId,
         ]);
-        $this->assertSame($this->documentId, $addResult->documentContractor()->documentId);
-        $this->assertSame(3, $addResult->documentContractor()->entityTypeId);
-        $this->assertSame($this->contactId, $addResult->documentContractor()->entityId);
-        $bindingId = $addResult->documentContractor()->id;
+        $this->assertSame($this->documentId, $documentContractorResult->documentContractor()->documentId);
+        $this->assertSame(3, $documentContractorResult->documentContractor()->entityTypeId);
+        $this->assertSame($this->contactId, $documentContractorResult->documentContractor()->entityId);
+        $bindingId = $documentContractorResult->documentContractor()->id;
 
-        $listResult = $this->documentContractorService->list([], ['documentId' => $this->documentId]);
-        $bindings = $listResult->getDocumentContractors();
+        $documentContractorsResult = $this->documentContractorService->list([], ['documentId' => $this->documentId]);
+        $bindings = $documentContractorsResult->getDocumentContractors();
         $this->assertCount(1, $bindings);
         $this->assertSame($bindingId, $bindings[0]->id);
 

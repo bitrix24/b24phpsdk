@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Catalog\DocumentContractor\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Bitrix24\SDK\Core\Result\AbstractItem;
 
 /**
  * @property-read int $id
@@ -21,6 +21,27 @@ use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
  * @property-read int $entityTypeId
  * @property-read int $entityId
  */
-class DocumentContractorItemResult extends AbstractAnnotatedItem
+class DocumentContractorItemResult extends AbstractItem
 {
+    /**
+     * @param int|string $offset
+     *
+     * @return int|mixed|null
+     */
+    public function __get($offset)
+    {
+        switch ($offset) {
+            case 'id':
+            case 'documentId':
+            case 'entityTypeId':
+            case 'entityId':
+                if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
+                    return (int)$this->data[$offset];
+                }
+
+                return null;
+            default:
+                return $this->data[$offset] ?? null;
+        }
+    }
 }
