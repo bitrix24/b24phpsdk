@@ -25,7 +25,6 @@ use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Catalog\Common\ProductType;
 use Bitrix24\SDK\Services\Catalog\Product\Result\ProductResult;
 use Bitrix24\SDK\Services\Catalog\Product\Result\ProductsResult;
-
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['catalog']))]
@@ -35,8 +34,7 @@ class Product extends AbstractService
         public Batch           $batch,
         CoreInterface   $core,
         LoggerInterface $logger
-    )
-    {
+    ) {
         parent::__construct($core, $logger);
     }
 
