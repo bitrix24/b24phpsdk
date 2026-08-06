@@ -33,12 +33,20 @@ class BatchTest extends TestCase
 
     private CoreInterface $core;
 
-    private int $documentId;
+    /**
+     * @var int[]
+     */
+    private array $documentIds = [];
 
     /**
      * @var int[]
      */
     private array $contactIds = [];
+
+    /**
+     * @var int[]
+     */
+    private array $bindingIds = [];
 
     /**
      * @throws BaseException
@@ -52,34 +60,38 @@ class BatchTest extends TestCase
         $this->documentService = $serviceBuilder->getCatalogScope()->document();
         $this->core = Factory::getCore();
 
-        $this->documentId = $this->documentService->add([
-            'docType' => 'A',
-            'currency' => 'USD',
-            'responsibleId' => 1,
-            'title' => sprintf('test document contractor batch %s', time()),
-        ])->document()->id;
-
+        // a document can only have one contractor binding, so each binding needs its own document
         for ($i = 0; $i < 2; ++$i) {
+            $documentId = $this->documentService->add([
+                'docType' => 'A',
+                'currency' => 'USD',
+                'responsibleId' => 1,
+                'title' => sprintf('test document contractor batch %s-%s', time(), $i),
+            ])->document()->id;
+            $this->documentIds[] = $documentId;
+
             $contactId = (int) $this->core->call('crm.contact.add', [
                 'fields' => ['NAME' => sprintf('test contractor contact batch %s-%s', time(), $i)],
             ])->getResponseData()->getResult();
             $this->contactIds[] = $contactId;
 
-            $this->documentContractorService->add([
-                'documentId' => $this->documentId,
+            $this->bindingIds[] = $this->documentContractorService->add([
+                'documentId' => $documentId,
                 'entityTypeId' => 3,
                 'entityId' => $contactId,
-            ]);
+            ])->documentContractor()->id;
         }
     }
 
     #[\Override]
     protected function tearDown(): void
     {
-        try {
-            $this->documentService->delete($this->documentId);
-        } catch (\Throwable) {
-            // already removed, ignore
+        foreach ($this->documentIds as $documentId) {
+            try {
+                $this->documentService->delete($documentId);
+            } catch (\Throwable) {
+                // already removed, ignore
+            }
         }
 
         foreach ($this->contactIds as $contactId) {
@@ -98,19 +110,14 @@ class BatchTest extends TestCase
     #[TestDox('test Batch::delete')]
     public function testDelete(): void
     {
-        $listResult = $this->documentContractorService->list([], ['documentId' => $this->documentId]);
-        $bindingIds = array_map(
-            static fn ($binding): int => $binding->id,
-            $listResult->getDocumentContractors()
-        );
-        $this->assertNotEmpty($bindingIds);
+        $this->assertNotEmpty($this->bindingIds);
 
         $deletedCount = 0;
-        foreach ($this->documentContractorService->batch->delete($bindingIds) as $deletedItemResult) {
+        foreach ($this->documentContractorService->batch->delete($this->bindingIds) as $deletedItemResult) {
             $this->assertTrue($deletedItemResult->isSuccess());
             $deletedCount++;
         }
 
-        $this->assertSame(count($bindingIds), $deletedCount);
+        $this->assertSame(count($this->bindingIds), $deletedCount);
     }
 }
