@@ -584,6 +584,9 @@
         <testsuite name="integration_tests_catalog_document_element_annotations">
             <file>./tests/Integration/Services/Catalog/DocumentElement/Result/DocumentElementItemResultTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_catalog_ratio">
+            <directory>./tests/Integration/Services/Catalog/Ratio/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>

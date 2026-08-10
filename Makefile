@@ -885,6 +885,7 @@ test-integration-catalog-extra:
 .PHONY: test-integration-catalog-measure
 test-integration-catalog-measure:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_measure
+
 .PHONY: test-integration-catalog-price
 test-integration-catalog-price:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_price
@@ -942,6 +943,10 @@ test-integration-catalog-document-element:
 .PHONY: test-integration-catalog-document-element-annotations
 test-integration-catalog-document-element-annotations:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_document_element_annotations
+
+.PHONY: test-integration-catalog-ratio
+test-integration-catalog-ratio:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_ratio
 
 # work dev environment
 .PHONY: php-dev-server-up
