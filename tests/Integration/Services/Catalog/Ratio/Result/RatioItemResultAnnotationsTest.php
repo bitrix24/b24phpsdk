@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Tests\Integration\Services\Catalog\Ratio\Result;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Core\Fields\FieldsFilter;
 use Bitrix24\SDK\Services\Catalog\Ratio\Result\RatioItemResult;
 use Bitrix24\SDK\Services\Catalog\Ratio\Service\Ratio;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
@@ -38,34 +39,26 @@ class RatioItemResultAnnotationsTest extends TestCase
     }
 
     /**
-     * catalog.ratio has no REST method to create a ratio — ratios are created implicitly when a
-     * product's measurement unit ratio is configured.
-     * If the portal has none, this test is skipped as there is no way to fabricate one via REST.
+     * catalog.ratio.getFields wraps the actual field descriptions under a «ratio» key,
+     * unlike most other bitrix24 *.getFields methods that return a flat field map.
      *
-     * @return array<string, mixed>
+     * @return array<string, array<string, mixed>>
      * @throws BaseException
      * @throws TransportException
      */
-    private function getFirstRatioRawItem(): array
+    private function getRatioFieldsDescription(): array
     {
-        $rawItems = $this->ratioService->list()
-            ->getCoreResponse()->getResponseData()->getResult()['ratios'];
-
-        if ($rawItems === []) {
-            $this->markTestSkipped('portal has no catalog ratios (catalog.ratio) configured to test annotations against');
-        }
-
-        return $rawItems[0];
+        return $this->ratioService->fields()->getFieldsDescription()['ratio'];
     }
 
     #[Test]
     #[TestDox('all fields in RatioItemResult are annotated in phpdoc and match with raw api response')]
     public function testAllSystemFieldsAnnotated(): void
     {
-        $rawItem = $this->getFirstRatioRawItem();
+        $propListFromApi = (new FieldsFilter())->filterSystemFields(array_keys($this->getRatioFieldsDescription()));
 
         $this->assertBitrix24AllResultItemFieldsAnnotated(
-            array_keys($rawItem),
+            $propListFromApi,
             RatioItemResult::class
         );
     }
@@ -74,11 +67,12 @@ class RatioItemResultAnnotationsTest extends TestCase
     #[TestDox('all fields in RatioItemResult have valid type casting in magic getters')]
     public function testAllSystemFieldsHasValidTypeAnnotation(): void
     {
-        $rawItem = $this->getFirstRatioRawItem();
-        $ratioItemResult = new RatioItemResult($rawItem);
+        $allFields = $this->getRatioFieldsDescription();
+        $systemFieldsCodes = (new FieldsFilter())->filterSystemFields(array_keys($allFields));
+        $systemFields = array_filter($allFields, static fn ($code): bool => in_array($code, $systemFieldsCodes, true), ARRAY_FILTER_USE_KEY);
 
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations(
-            $ratioItemResult,
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
+            $systemFields,
             RatioItemResult::class
         );
     }

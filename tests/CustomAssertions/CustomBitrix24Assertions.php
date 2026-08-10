@@ -22,8 +22,9 @@ use Bitrix24\SDK\Services\CRM\Activity\ActivityType;
 use Carbon\CarbonImmutable;
 use MoneyPHP\Percentage\Percentage;
 use Typhoon\Reflection\TyphoonReflector;
-use function Typhoon\Type\stringify;
 use Money\Currency;
+
+use function Typhoon\Type\stringify;
 
 trait CustomBitrix24Assertions
 {
@@ -221,6 +222,20 @@ trait CustomBitrix24Assertions
                                 $propsFromAnnotations[$fieldCode],
                                 $fieldData['type'],
                                 Percentage::class
+                            )
+                        );
+                        break;
+                    }
+                    if (str_contains(mb_strtoupper($fieldCode), 'RATIO')) {
+                        $this->assertTrue(
+                            str_contains($propsFromAnnotations[$fieldCode], 'float'),
+                            sprintf(
+                                'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                                $resultItemClassName,
+                                $fieldCode,
+                                $propsFromAnnotations[$fieldCode],
+                                $fieldData['type'],
+                                'float'
                             )
                         );
                         break;
