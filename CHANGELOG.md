@@ -4,6 +4,11 @@
 
 ### Added
 
+- Added service `Services\Catalog\Ratio` with support methods,
+  see [catalog.ratio.* methods](https://apidocs.bitrix24.com/api-reference/catalog/ratio/index.html) ([#570](https://github.com/bitrix24/b24phpsdk/issues/570)):
+    - `get` gets the values of a measurement unit ratio by identifier
+    - `list` gets the list of measurement unit ratios matching a filter
+    - `getFields` returns the description of measurement unit ratio fields
 - Added service `Services\Landing\Site\Service\Site` with support methods,
   see [landing.site.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
     - `add` adds a site

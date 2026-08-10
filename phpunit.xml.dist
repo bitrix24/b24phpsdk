@@ -262,6 +262,9 @@
         <testsuite name="integration_tests_landing_repowidget">
             <directory>./tests/Integration/Services/Landing/RepoWidget/</directory>
         </testsuite>
+        <testsuite name="integration_tests_catalog_ratio">
+            <directory>./tests/Integration/Services/Catalog/Ratio/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>
