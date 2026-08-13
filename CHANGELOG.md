@@ -4,6 +4,14 @@
 
 ### Added
 
+- Added service `Services\Catalog\RoundingRule` with support methods,
+  see [catalog.roundingRule.* methods](https://apidocs.bitrix24.com/api-reference/catalog/rounding-rule/index.html) ([#573](https://github.com/bitrix24/b24phpsdk/issues/573)):
+    - `add` creates a new price rounding rule, with batch calls support
+    - `update` updates an existing price rounding rule, with batch calls support
+    - `list` gets the list of price rounding rules
+    - `delete` deletes a price rounding rule, with batch calls support
+    - `get` gets information about a price rounding rule by its identifier
+    - `getFields` returns the description of price rounding rule fields
 - Added service `Services\Landing\Site\Service\Site` with support methods,
   see [landing.site.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
     - `add` adds a site
