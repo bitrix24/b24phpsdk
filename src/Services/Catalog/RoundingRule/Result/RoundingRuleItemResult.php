@@ -29,4 +29,16 @@ use Carbon\CarbonImmutable;
  */
 class RoundingRuleItemResult extends AbstractItem
 {
+    /**
+     * @param int|string $offset
+     *
+     * @return mixed
+     */
+    public function __get($offset)
+    {
+        return match ($offset) {
+            'price', 'roundPrecision' => $this->data[$offset] !== null ? (float)$this->data[$offset] : null,
+            default => parent::__get($offset),
+        };
+    }
 }
