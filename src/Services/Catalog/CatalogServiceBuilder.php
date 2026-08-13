@@ -290,4 +290,20 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    public function roundingRule(): Catalog\RoundingRule\Service\RoundingRule
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\RoundingRule\Service\RoundingRule(
+                new Catalog\RoundingRule\Service\Batch(
+                    new Catalog\RoundingRule\Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 }

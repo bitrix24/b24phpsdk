@@ -4,6 +4,14 @@
 
 ### Added
 
+- Added service `Services\Catalog\RoundingRule` with support methods,
+  see [catalog.roundingRule.* methods](https://apidocs.bitrix24.com/api-reference/catalog/rounding-rule/index.html) ([#573](https://github.com/bitrix24/b24phpsdk/issues/573)):
+    - `add` creates a new price rounding rule, with batch calls support
+    - `update` updates an existing price rounding rule, with batch calls support
+    - `list` gets the list of price rounding rules
+    - `delete` deletes a price rounding rule, with batch calls support
+    - `get` gets information about a price rounding rule by its identifier
+    - `getFields` returns the description of price rounding rule fields
 - Added service `Services\Catalog\Document` with support methods,
   see [catalog.document.* methods](https://apidocs.bitrix24.com/api-reference/catalog/document/index.html) ([#559](https://github.com/bitrix24/b24phpsdk/issues/559)):
     - `add` creates a new warehouse accounting document, with batch calls support
@@ -93,6 +101,19 @@
 
 ### Fixed
 
+- Fixed `make lint-rector` failing with `Undefined constant Rector\PHPUnit\Set\PHPUnitSetList::PHPUNIT_110`:
+  the versioned PHPUnit set constants (`PHPUNIT_60`, `PHPUNIT_90`, `PHPUNIT_110`, etc.) were removed
+  from `rector/rector-phpunit` in the installed Rector version and replaced with consolidated sets
+  (`PHPUNIT_CODE_QUALITY`, `PHPUNIT_MOCK_TO_STUB`, `PHPUNIT_NARROW_ASSERTS`, `ANNOTATIONS_TO_ATTRIBUTES`).
+  Compared the dry-run impact of each candidate: `PHPUNIT_CODE_QUALITY` would touch 477 files,
+  `PHPUNIT_NARROW_ASSERTS` 91 files — both unrelated repository-wide style changes out of scope here.
+  `ANNOTATIONS_TO_ATTRIBUTES` (migrates legacy `@annotation` docblocks to PHP 8 attributes, the closest
+  match to what `PHPUNIT_110` used to cover) touches 0 files, since the codebase already uses PHP 8
+  attributes everywhere; replaced the obsolete `PHPUnitSetList::PHPUNIT_110` reference in `rector.php`
+  with `PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES`
+- Removed the obsolete `Rector\Php84\Rector\Class_\DeprecatedAnnotationToDeprecatedAttributeRector`
+  entry from `rector.php` → `withSkip()`: the rule is deprecated and no longer registered in the
+  installed Rector version, so `make lint-rector` reported it as a dead skip entry
 - Fixed `make lint-rector` failing with `Unknown named parameter $strictBooleans`: the
   `strictBooleans` parameter was removed from `RectorConfigBuilder::withPreparedSets()`
   in the installed Rector version; removed the obsolete `strictBooleans: false` entry
