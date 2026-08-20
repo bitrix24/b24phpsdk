@@ -290,4 +290,20 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    public function section(): Catalog\Section\Service\Section
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\Section\Service\Section(
+                new Catalog\Section\Service\Batch(
+                    new Catalog\Section\Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 }
