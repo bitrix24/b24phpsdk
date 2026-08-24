@@ -584,6 +584,12 @@
         <testsuite name="integration_tests_catalog_document_element_annotations">
             <file>./tests/Integration/Services/Catalog/DocumentElement/Result/DocumentElementItemResultTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_catalog_section">
+            <directory>./tests/Integration/Services/Catalog/Section/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_section_annotations">
+            <file>./tests/Integration/Services/Catalog/Section/Result/SectionItemResultTest.php</file>
+        </testsuite>
     </testsuites>
     <source>
         <include>
