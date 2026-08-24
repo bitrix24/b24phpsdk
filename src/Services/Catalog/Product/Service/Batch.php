@@ -25,7 +25,7 @@ readonly class Batch
 {
     public function __construct(
         protected BatchOperationsInterface $batch,
-        protected LoggerInterface          $log)
-    {
+        protected LoggerInterface          $log
+    ) {
     }
 }
