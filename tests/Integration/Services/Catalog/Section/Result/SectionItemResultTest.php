@@ -61,10 +61,19 @@ class SectionItemResultTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('all fields in SectionItemResult have valid type casting in magic getters')]
-    public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
+    #[TestDox('all fields in SectionItemResult have valid type annotation in phpdoc')]
+    public function testAllFieldsHasValidTypeAnnotation(): void
     {
-        $sectionItemResult = $this->sectionService->get($this->sectionId)->section();
-        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($sectionItemResult, SectionItemResult::class);
+        $allFields = $this->sectionService->getFields()->getFieldsDescription();
+        foreach ($allFields as $field => $params) {
+            $newParams = [];
+            foreach ($params as $key => $value) {
+                $newParams[mb_strtolower((string)$key)] = $value;
+            }
+
+            $allFields[$field] = $newParams;
+        }
+
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation($allFields, SectionItemResult::class);
     }
 }

@@ -45,9 +45,9 @@ class SectionTest extends TestCase
     #[\Override]
     protected function tearDown(): void
     {
-        foreach ($this->createdSectionIds as $sectionId) {
+        foreach ($this->createdSectionIds as $createdSectionId) {
             try {
-                $this->sectionService->delete($sectionId);
+                $this->sectionService->delete($createdSectionId);
             } catch (\Throwable) {
                 // already removed, ignore
             }
@@ -62,15 +62,15 @@ class SectionTest extends TestCase
     public function testAddUpdateGetListDelete(): void
     {
         $name = sprintf('test section %s', time());
-        $addResult = $this->sectionService->add([
+        $sectionResult = $this->sectionService->add([
             'name' => $name,
             'iblockId' => $this->iblockId,
         ]);
-        $sectionId = $addResult->section()->id;
+        $sectionId = $sectionResult->section()->id;
         $this->createdSectionIds[] = $sectionId;
 
-        $this->assertSame($name, $addResult->section()->name);
-        $this->assertSame($this->iblockId, $addResult->section()->iblockId);
+        $this->assertSame($name, $sectionResult->section()->name);
+        $this->assertSame($this->iblockId, $sectionResult->section()->iblockId);
 
         $updatedName = sprintf('updated test section %s', time());
         $updateResult = $this->sectionService->update($sectionId, ['name' => $updatedName, 'iblockId' => $this->iblockId]);
@@ -79,8 +79,8 @@ class SectionTest extends TestCase
         $getResult = $this->sectionService->get($sectionId);
         $this->assertSame($updatedName, $getResult->section()->name);
 
-        $listResult = $this->sectionService->list([], ['iblockId' => $this->iblockId, 'id' => $sectionId]);
-        $this->assertCount(1, $listResult->getSections());
+        $sectionsResult = $this->sectionService->list([], ['iblockId' => $this->iblockId, 'id' => $sectionId]);
+        $this->assertCount(1, $sectionsResult->getSections());
 
         $this->assertTrue($this->sectionService->delete($sectionId)->isSuccess());
         $this->createdSectionIds = array_diff($this->createdSectionIds, [$sectionId]);

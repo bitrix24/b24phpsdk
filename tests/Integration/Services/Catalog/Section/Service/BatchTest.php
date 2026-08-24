@@ -55,8 +55,8 @@ class BatchTest extends TestCase
         $this->assertCount(1, $addedIds);
 
         $updatePayload = [];
-        foreach ($addedIds as $id) {
-            $updatePayload[$id] = ['name' => 'updated batch section', 'iblockId' => $this->iblockId];
+        foreach ($addedIds as $addedId) {
+            $updatePayload[$addedId] = ['name' => 'updated batch section', 'iblockId' => $this->iblockId];
         }
 
         $updatedCount = 0;
