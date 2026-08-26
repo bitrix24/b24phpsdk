@@ -584,6 +584,9 @@
         <testsuite name="integration_tests_catalog_document_element_annotations">
             <file>./tests/Integration/Services/Catalog/DocumentElement/Result/DocumentElementItemResultTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_catalog_store_product">
+            <directory>./tests/Integration/Services/Catalog/StoreProduct/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>
