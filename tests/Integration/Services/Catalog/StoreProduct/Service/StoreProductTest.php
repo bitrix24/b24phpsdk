@@ -67,11 +67,11 @@ class StoreProductTest extends TestCase
     public function testGet(): void
     {
         $listItem = $this->storeProductService->list()->getStoreProducts()[0];
-        $getItem = $this->storeProductService->get($listItem->id)->storeProduct();
+        $storeProductItemResult = $this->storeProductService->get($listItem->id)->storeProduct();
 
-        $this->assertEquals($listItem->id, $getItem->id);
-        $this->assertEquals($listItem->productId, $getItem->productId);
-        $this->assertEquals($listItem->storeId, $getItem->storeId);
+        $this->assertEquals($listItem->id, $storeProductItemResult->id);
+        $this->assertEquals($listItem->productId, $storeProductItemResult->productId);
+        $this->assertEquals($listItem->storeId, $storeProductItemResult->storeId);
     }
 
     /**
