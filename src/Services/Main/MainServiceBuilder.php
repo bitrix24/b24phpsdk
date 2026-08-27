@@ -30,66 +30,52 @@ class MainServiceBuilder extends AbstractServiceBuilder
 {
     public function main(): Main
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Main($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Main($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function documentation(): Documentation
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Documentation($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Documentation($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function event(): Event
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Event($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Event($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function offlineEvent(): OfflineEvent
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new OfflineEvent($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new OfflineEvent($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function eventLog(): EventLog
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new EventLog($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new EventLog($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function eventLogField(): EventLogField
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new EventLogField($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new EventLogField($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function eventManager(): EventManager
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new EventManager(
-                new Event($this->core, $this->log),
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new EventManager(
+            new Event($this->core, $this->log),
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }

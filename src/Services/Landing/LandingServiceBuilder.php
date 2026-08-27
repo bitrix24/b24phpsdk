@@ -30,12 +30,10 @@ class LandingServiceBuilder extends AbstractServiceBuilder
      */
     public function site(): Site\Service\Site
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Site\Service\Site(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Site\Service\Site(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -45,12 +43,10 @@ class LandingServiceBuilder extends AbstractServiceBuilder
      */
     public function page(): Page\Service\Page
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Page\Service\Page(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Page\Service\Page(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -60,12 +56,10 @@ class LandingServiceBuilder extends AbstractServiceBuilder
      */
     public function sysPage(): SysPage\Service\SysPage
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new SysPage\Service\SysPage(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new SysPage\Service\SysPage(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -75,12 +69,10 @@ class LandingServiceBuilder extends AbstractServiceBuilder
      */
     public function template(): Template\Service\Template
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Template\Service\Template(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Template\Service\Template(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -90,12 +82,10 @@ class LandingServiceBuilder extends AbstractServiceBuilder
      */
     public function block(): Block\Service\Block
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Block\Service\Block(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Block\Service\Block(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -105,12 +95,10 @@ class LandingServiceBuilder extends AbstractServiceBuilder
      */
     public function repo(): Repo\Service\Repo
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Repo\Service\Repo(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Repo\Service\Repo(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -120,12 +108,10 @@ class LandingServiceBuilder extends AbstractServiceBuilder
      */
     public function demos(): Demos\Service\Demos
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Demos\Service\Demos(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Demos\Service\Demos(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -135,12 +121,10 @@ class LandingServiceBuilder extends AbstractServiceBuilder
      */
     public function role(): Role\Service\Role
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Role\Service\Role(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Role\Service\Role(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -150,12 +134,10 @@ class LandingServiceBuilder extends AbstractServiceBuilder
      */
     public function repoWidget(): RepoWidget\Service\RepoWidget
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new RepoWidget\Service\RepoWidget(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new RepoWidget\Service\RepoWidget(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }

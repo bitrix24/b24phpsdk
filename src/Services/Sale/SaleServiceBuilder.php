@@ -53,12 +53,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
      */
     public function tradePlatform(): TradePlatform
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new TradePlatform(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new TradePlatform(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -68,24 +66,20 @@ class SaleServiceBuilder extends AbstractServiceBuilder
      */
     public function property(): Property
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Property(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Property(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function propertyGroup(): PropertyGroup\Service\PropertyGroup
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new PropertyGroup\Service\PropertyGroup(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new PropertyGroup\Service\PropertyGroup(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -112,36 +106,30 @@ class SaleServiceBuilder extends AbstractServiceBuilder
 
     public function status(): Status
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Status(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Status(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function personTypeStatus(): PersonTypeStatus
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new PersonTypeStatus(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new PersonTypeStatus(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function personType(): PersonType\Service\PersonType
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new PersonType\Service\PersonType(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new PersonType\Service\PersonType(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -151,12 +139,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
      */
     public function payment(): Payment\Service\Payment
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Payment\Service\Payment(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Payment\Service\Payment(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -166,12 +152,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
      */
     public function paymentItemBasket(): PaymentItemBasket\Service\PaymentItemBasket
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new PaymentItemBasket\Service\PaymentItemBasket(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new PaymentItemBasket\Service\PaymentItemBasket(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -181,36 +165,30 @@ class SaleServiceBuilder extends AbstractServiceBuilder
      */
     public function paymentItemShipment(): PaymentItemShipment\Service\PaymentItemShipment
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new PaymentItemShipment\Service\PaymentItemShipment(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new PaymentItemShipment\Service\PaymentItemShipment(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function propertyVariant(): PropertyVariant
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new PropertyVariant(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new PropertyVariant(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function statusLang(): StatusLang
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new StatusLang(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new StatusLang(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -220,12 +198,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
      */
     public function shipment(): Shipment\Service\Shipment
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Shipment\Service\Shipment(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Shipment\Service\Shipment(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -235,12 +211,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
      */
     public function shipmentProperty(): ShipmentProperty\Service\ShipmentProperty
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new ShipmentProperty\Service\ShipmentProperty(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new ShipmentProperty\Service\ShipmentProperty(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -270,12 +244,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
      */
     public function shipmentPropertyValue(): ShipmentPropertyValue
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new ShipmentPropertyValue(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new ShipmentPropertyValue(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -285,12 +257,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
      */
     public function shipmentItem(): ShipmentItem
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new ShipmentItem(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new ShipmentItem(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -300,12 +270,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
      */
     public function basketProperty(): BasketProperty
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new BasketProperty(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new BasketProperty(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -315,12 +283,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
      */
     public function cashboxHandler(): CashboxHandler
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new CashboxHandler(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new CashboxHandler(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -330,12 +296,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
      */
     public function deliveryHandler(): DeliveryHandler
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new DeliveryHandler(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new DeliveryHandler(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -345,12 +309,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
      */
     public function cashbox(): Cashbox
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Cashbox(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Cashbox(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -360,12 +322,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
      */
     public function delivery(): Delivery
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Delivery(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Delivery(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -375,12 +335,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
      */
     public function deliveryRequest(): DeliveryRequest
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new DeliveryRequest(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new DeliveryRequest(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -390,12 +348,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
      */
     public function deliveryExtraService(): DeliveryExtraService
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new DeliveryExtraService(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new DeliveryExtraService(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -405,12 +361,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
      */
     public function propertyRelation(): PropertyRelation\Service\PropertyRelation
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new PropertyRelation\Service\PropertyRelation(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new PropertyRelation\Service\PropertyRelation(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
