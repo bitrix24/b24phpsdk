@@ -584,6 +584,12 @@
         <testsuite name="integration_tests_catalog_document_element_annotations">
             <file>./tests/Integration/Services/Catalog/DocumentElement/Result/DocumentElementItemResultTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_catalog_userfield_document">
+            <directory>./tests/Integration/Services/Catalog/UserfieldDocument/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_userfield_document_annotations">
+            <file>./tests/Integration/Services/Catalog/UserfieldDocument/Result/UserfieldDocumentItemResultTest.php</file>
+        </testsuite>
     </testsuites>
     <source>
         <include>
