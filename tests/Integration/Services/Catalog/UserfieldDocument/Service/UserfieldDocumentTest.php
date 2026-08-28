@@ -40,13 +40,13 @@ class UserfieldDocumentTest extends TestCase
     #[TestDox('test UserfieldDocument::list')]
     public function testList(): void
     {
-        $listResult = $this->userfieldDocumentService->list(
+        $userfieldDocumentsResult = $this->userfieldDocumentService->list(
             ['documentType', 'documentId'],
             ['documentType' => 'A', 'documentId' => 0]
         );
 
-        $this->assertInstanceOf(UserfieldDocumentsResult::class, $listResult);
-        $this->assertCount(0, $listResult->getDocuments());
+        $this->assertInstanceOf(UserfieldDocumentsResult::class, $userfieldDocumentsResult);
+        $this->assertCount(0, $userfieldDocumentsResult->getDocuments());
     }
 
     /**

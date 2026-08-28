@@ -495,9 +495,6 @@ test-integration-landing-repowidget:
 .PHONY: test-integration-catalog-userfield-document
 test-integration-catalog-userfield-document:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_userfield_document
-.PHONY: test-integration-catalog-userfield-document-annotations
-test-integration-catalog-userfield-document-annotations:
-	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_userfield_document_annotations
 
 # work dev environment
 .PHONY: php-dev-server-up
