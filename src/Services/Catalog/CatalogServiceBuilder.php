@@ -17,6 +17,7 @@ use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\Catalog;
+
 #[ApiServiceBuilderMetadata(new Scope(['catalog']))]
 class CatalogServiceBuilder extends AbstractServiceBuilder
 {
@@ -41,6 +42,20 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
                 $this->log
             );
         }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function userfieldDocument(): Catalog\UserfieldDocument\Service\UserfieldDocument
+    {
+        $this->serviceCache[__METHOD__] ??= new Catalog\UserfieldDocument\Service\UserfieldDocument(
+            new Catalog\UserfieldDocument\Service\Batch(
+                new Catalog\UserfieldDocument\Batch($this->core, $this->log),
+                $this->log
+            ),
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
