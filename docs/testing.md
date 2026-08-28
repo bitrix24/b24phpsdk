@@ -302,6 +302,8 @@ skip_violations:
 | `make test-integration-catalog-document-annotations` | Warehouse accounting document result annotations |
 | `make test-integration-catalog-document-element` | Warehouse accounting document line items |
 | `make test-integration-catalog-document-element-annotations` | Warehouse accounting document line item result annotations |
+| `make test-integration-catalog-userfield-document` | Warehouse accounting document userfield values |
+| `make test-integration-catalog-userfield-document-annotations` | Warehouse accounting document userfield result annotations |
 
 ### Tests — integration (Tasks)
 

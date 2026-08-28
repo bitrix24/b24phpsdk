@@ -35,9 +35,7 @@ class BookingServiceBuilder extends AbstractServiceBuilder
      */
     public function booking(): Booking
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Booking($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Booking($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -47,9 +45,7 @@ class BookingServiceBuilder extends AbstractServiceBuilder
      */
     public function bookingClient(): BookingClient
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new BookingClient($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new BookingClient($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -59,9 +55,7 @@ class BookingServiceBuilder extends AbstractServiceBuilder
      */
     public function bookingExternalData(): BookingExternalData
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new BookingExternalData($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new BookingExternalData($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -71,9 +65,7 @@ class BookingServiceBuilder extends AbstractServiceBuilder
      */
     public function resource(): Resource
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Resource($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Resource($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -83,9 +75,7 @@ class BookingServiceBuilder extends AbstractServiceBuilder
      */
     public function resourceSlots(): ResourceSlots
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new ResourceSlots($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new ResourceSlots($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -95,9 +85,7 @@ class BookingServiceBuilder extends AbstractServiceBuilder
      */
     public function resourceType(): ResourceType
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new ResourceType($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new ResourceType($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -107,9 +95,7 @@ class BookingServiceBuilder extends AbstractServiceBuilder
      */
     public function clientType(): ClientType
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new ClientType($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new ClientType($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -119,9 +105,7 @@ class BookingServiceBuilder extends AbstractServiceBuilder
      */
     public function waitlist(): Waitlist
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Waitlist($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Waitlist($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -131,9 +115,7 @@ class BookingServiceBuilder extends AbstractServiceBuilder
      */
     public function waitlistClient(): WaitlistClient
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new WaitlistClient($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new WaitlistClient($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -143,9 +125,7 @@ class BookingServiceBuilder extends AbstractServiceBuilder
      */
     public function waitlistExternalData(): WaitlistExternalData
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new WaitlistExternalData($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new WaitlistExternalData($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }

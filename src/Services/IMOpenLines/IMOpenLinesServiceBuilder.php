@@ -30,72 +30,56 @@ class IMOpenLinesServiceBuilder extends AbstractServiceBuilder
 {
     public function bot(): Bot
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Bot($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Bot($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function config(): Config
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Config($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Config($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function crmChat(): Chat
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Chat($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Chat($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function message(): Message
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Message($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Message($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function Network(): Network
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Network($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Network($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function connector(): Connector
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Connector($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Connector($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function operator(): Operator
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Operator($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Operator($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function session(): Session
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Session($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Session($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }

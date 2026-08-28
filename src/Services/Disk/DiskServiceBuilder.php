@@ -30,12 +30,10 @@ class DiskServiceBuilder extends AbstractServiceBuilder
      */
     public function folder(): Folder\Service\Folder
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Folder\Service\Folder(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Folder\Service\Folder(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -45,12 +43,10 @@ class DiskServiceBuilder extends AbstractServiceBuilder
      */
     public function file(): File\Service\File
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new File\Service\File(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new File\Service\File(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -60,12 +56,10 @@ class DiskServiceBuilder extends AbstractServiceBuilder
      */
     public function storage(): Storage\Service\Storage
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Storage\Service\Storage(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Storage\Service\Storage(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -75,12 +69,10 @@ class DiskServiceBuilder extends AbstractServiceBuilder
      */
     public function disk(): Service\Disk
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Service\Disk(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Service\Disk(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }

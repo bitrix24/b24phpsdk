@@ -30,12 +30,10 @@ class SonetGroupServiceBuilder extends AbstractServiceBuilder
      */
     public function sonetGroup(): Service\SonetGroup
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Service\SonetGroup(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Service\SonetGroup(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }

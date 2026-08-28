@@ -24,13 +24,11 @@ class UserServiceBuilder extends AbstractServiceBuilder
 {
     public function user(): User
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new User(
-                new Batch($this->batch, $this->log),
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new User(
+            new Batch($this->batch, $this->log),
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
