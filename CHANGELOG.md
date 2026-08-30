@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 3.5.0
+
 ### Added
 
 - Added service `Services\Catalog\Document` with support methods,
