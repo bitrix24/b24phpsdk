@@ -13,6 +13,8 @@ The user narrowed the implementation scope to:
 - move the current changelog release notes under `## 3.5.0` and create a new top
   `## Unreleased` section
 - refresh the working branch from current `v3-dev`
+- pin the Rector/PHPStan dev-toolchain to the last verified stable combination so fresh
+  CI installs keep the existing Rector configuration working
 
 The API line is **v3**, so the work uses base branch `v3-dev`. Branch
 `feature/593-ship-3-5-0` was rebased onto current `origin/v3-dev` at commit `4298b37`,
@@ -22,6 +24,13 @@ untouched.
 Mandatory `make oa-schema-build` was run before implementation as required by `AGENTS.md`,
 but the generated OpenAPI diff is outside the narrowed user scope and will not be included
 in this PR.
+
+Fresh CI installs currently resolve `rector/rector 2.6.4`, where
+`PHPUnitSetList::PHPUNIT_110` is no longer available. Pinning only Rector to `2.5.2`
+still leaves `phpstan/phpstan 2.2.10`, which is incompatible with Rector 2.5.2 internals.
+This PR therefore pins both `rector/rector` to `2.5.2` and `phpstan/phpstan` to `2.2.2`.
+Upgrading Rector and PHPStan is tracked separately in
+[#595](https://github.com/bitrix24/b24phpsdk/issues/595).
 
 ---
 
@@ -91,12 +100,26 @@ Add or update a focused unit test that proves `ApiClient` sends SDK version `3.5
 the default request headers. The test must fail before the `SDK_VERSION` change and pass
 after it.
 
+### 5. `composer.json`
+
+Pin the current Rector-compatible static-analysis toolchain:
+
+```json
+"phpstan/phpstan": "2.2.2",
+"rector/rector": "2.5.2"
+```
+
+This keeps `make lint-rector` green on fresh CI installs until issue #595 upgrades the
+Rector configuration to the current stable API.
+
 ---
 
 ## Out of Scope
 
 - Committing `docs/open-api/openapi.json`; it was refreshed for pre-work compliance only.
 - Creating the git tag, GitHub Release, Packagist publication, or stable `v3` branch merge.
+- Upgrading Rector to 2.6.x or changing `rector.php`; this is tracked in
+  [#595](https://github.com/bitrix24/b24phpsdk/issues/595).
 - Committing ignored local setup files such as `vendor/`, `composer.lock`, or
   `tests/.env.local`.
 
@@ -116,6 +139,7 @@ Run the focused and required release-prep checks:
 
 ```bash
 make test-file path=tests/Unit/Core/ApiClientTest.php
+docker compose run --rm php-cli composer validate --strict
 make lint-cs-fixer
 make lint-rector
 make lint-phpstan
