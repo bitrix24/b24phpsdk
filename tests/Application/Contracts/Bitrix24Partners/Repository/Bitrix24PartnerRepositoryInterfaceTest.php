@@ -143,6 +143,66 @@ abstract class Bitrix24PartnerRepositoryInterfaceTest extends TestCase
         $this->assertNull($b24PartnerRepository->findByBitrix24PartnerNumber(0));
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
+    #[Test]
+    #[TestDox('findByBitrix24PartnerNumber ignores deleted partners by default')]
+    final public function testFindByBitrix24PartnerNumberIgnoresDeletedByDefault(): void
+    {
+        $b24Partner = $this->createBitrix24PartnerImplementation(
+            Uuid::v7(),
+            Bitrix24PartnerStatus::deleted,
+            'Deleted Bitrix24 Partner LLC',
+            16592200,
+            null,
+            null,
+            null,
+            null,
+            null
+        );
+        $b24PartnerRepository = $this->createBitrix24PartnerRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
+
+        $b24PartnerRepository->save($b24Partner);
+        $flusher->flush();
+
+        $this->assertNull($b24PartnerRepository->findByBitrix24PartnerNumber($b24Partner->getBitrix24PartnerNumber()));
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    #[Test]
+    #[TestDox('findByBitrix24PartnerNumber can include deleted partners')]
+    final public function testFindByBitrix24PartnerNumberCanIncludeDeleted(): void
+    {
+        $b24Partner = $this->createBitrix24PartnerImplementation(
+            Uuid::v7(),
+            Bitrix24PartnerStatus::deleted,
+            'Deleted Bitrix24 Partner LLC',
+            16592200,
+            null,
+            null,
+            null,
+            null,
+            null
+        );
+        $b24PartnerRepository = $this->createBitrix24PartnerRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
+
+        $b24PartnerRepository->save($b24Partner);
+        $flusher->flush();
+
+        $this->assertEquals(
+            $b24Partner,
+            $b24PartnerRepository->findByBitrix24PartnerNumber(
+                $b24Partner->getBitrix24PartnerNumber(),
+                withDeleted: true
+            )
+        );
+    }
+
     #[Test]
     #[DataProvider('bitrix24PartnerDataProvider')]
     #[TestDox('test findByTitle method')]

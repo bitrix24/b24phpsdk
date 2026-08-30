@@ -290,6 +290,19 @@ skip_violations:
 | `make test-integration-sale-payment-item-shipment` | Payment item shipment |
 | `make test-integration-sale-property-relation` | Property relation |
 
+### Tests — integration (Catalog)
+
+| Target | Suite |
+|---|---|
+| `make test-integration-catalog-price` | Price |
+| `make test-integration-catalog-price-type` | Price type |
+| `make test-integration-catalog-price-type-lang` | Price type language translations |
+| `make test-integration-catalog-price-type-group` | Price type ↔ purchasing group bindings |
+| `make test-integration-catalog-document` | Warehouse accounting documents |
+| `make test-integration-catalog-document-annotations` | Warehouse accounting document result annotations |
+| `make test-integration-catalog-document-element` | Warehouse accounting document line items |
+| `make test-integration-catalog-document-element-annotations` | Warehouse accounting document line item result annotations |
+
 ### Tests — integration (Tasks)
 
 | Target | Suite |
@@ -301,6 +314,16 @@ skip_violations:
 | Target | Suite |
 |---|---|
 | `make test-integration-main-eventlog` | Event log (`main.eventlog.*`) |
+
+### Tests — integration (Catalog)
+
+| Target | Suite |
+|---|---|
+| `make test-integration-scope-catalog` | Full Catalog scope |
+| `make test-integration-catalog-product` | Product |
+| `make test-integration-catalog-product-service` | Product Service (`catalog.product.service.*`) |
+| `make test-integration-catalog-product-sku` | Product Sku (`catalog.product.sku.*`) |
+| `make test-integration-catalog-product-offer` | Product Offer (`catalog.product.offer.*`) |
 
 ---
 

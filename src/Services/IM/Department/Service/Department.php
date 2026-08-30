@@ -67,7 +67,7 @@ class Department extends AbstractService
 
         return new DepartmentUsersResult($this->core->call('im.department.colleagues.list', array_filter(
             $payload,
-            static fn(mixed $value): bool => $value !== null
+            static fn (mixed $value): bool => $value !== null
         )));
     }
 

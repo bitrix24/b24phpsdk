@@ -57,9 +57,9 @@
     "monolog/monolog": "^3",
     "nyholm/psr7": "^1.8",
     "openai-php/client": "0.10.*",
-    "phpstan/phpstan": "^2",
+    "phpstan/phpstan": "2.2.2",
     "phpunit/phpunit": "^10 || ^11|| ^12",
-    "rector/rector": "^2",
+    "rector/rector": "2.5.2",
     "roave/security-advisories": "dev-master",
     "sentry/sentry": "^4",
     "symfony/debug-bundle": "^7||^8",
@@ -76,6 +76,11 @@
     "psr-4": {
       "Bitrix24\\SDK\\Tools\\": "tools",
       "Bitrix24\\SDK\\Tests\\": "tests"
+    }
+  },
+  "extra": {
+    "skills": {
+      "source": "resources/skills"
     }
   }
 }

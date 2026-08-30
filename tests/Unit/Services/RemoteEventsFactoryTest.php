@@ -31,6 +31,7 @@ use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\Request;
 
 #[CoversClass(RemoteEventsFactory::class)]
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class RemoteEventsFactoryTest extends TestCase
 {
     private RemoteEventsFactory $factory;

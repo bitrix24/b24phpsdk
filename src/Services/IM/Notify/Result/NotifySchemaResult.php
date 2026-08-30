@@ -27,7 +27,7 @@ class NotifySchemaResult extends AbstractResult
         $result = $this->getCoreResponse()->getResponseData()->getResult();
 
         return array_map(
-            static fn(array $module): NotifySchemaItemResult => new NotifySchemaItemResult($module),
+            static fn (array $module): NotifySchemaItemResult => new NotifySchemaItemResult($module),
             array_values(array_filter($result, 'is_array'))
         );
     }
