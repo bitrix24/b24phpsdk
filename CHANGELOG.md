@@ -442,6 +442,7 @@ Supported in bitrix24-php-sdk methods with batch wrapper count: 124
 
 ### Changed
 
+- Added optional `$withDeleted` flag to `Bitrix24PartnerRepositoryInterface::findByBitrix24PartnerNumber()` so import workflows can detect soft-deleted partners by partner number ([#490](https://github.com/bitrix24/b24phpsdk/issues/490))
 - Removed the duplicate `bitrix24PartnerNumber` uniqueness expectation from the `Bitrix24PartnerRepositoryInterface` contract so `save()` remains a persistence operation; uniqueness validation belongs in the use-case layer ([#468](https://github.com/bitrix24/b24phpsdk/issues/468))
 - Removed dead `delete(Uuid $uuid)` method from `Bitrix24PartnerRepositoryInterface`, its in-memory stub implementation, and the `testDelete` contract test — the soft-delete flow (`markAsDeleted()` + `save()`) makes this method redundant ([#471](https://github.com/bitrix24/b24phpsdk/issues/471))
 - Replaced `set*` prefix with `change*` in `Bitrix24PartnerInterface` mutator methods (`changeTitle`, `changeSite`, `changePhone`, `changeEmail`, `changeOpenLineId`, `changeExternalId`) to better express domain-level change operations ([#453](https://github.com/bitrix24/b24phpsdk/issues/453))
