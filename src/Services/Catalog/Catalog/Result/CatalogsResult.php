@@ -15,19 +15,18 @@ namespace Bitrix24\SDK\Services\Catalog\Catalog\Result;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
-use Bitrix24\SDK\Services\Catalog\Product\Result\ProductItemResult;
 
 class CatalogsResult extends AbstractResult
 {
     /**
-     * @return ProductItemResult[]
+     * @return CatalogItemResult[]
      * @throws BaseException
      */
     public function getCatalogs(): array
     {
         $res = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult()['catalogs'] as $product) {
-            $res[] = new ProductItemResult($product);
+        foreach ($this->getCoreResponse()->getResponseData()->getResult()['catalogs'] as $catalog) {
+            $res[] = new CatalogItemResult($catalog);
         }
 
         return $res;
