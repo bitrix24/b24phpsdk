@@ -4,6 +4,14 @@
 
 ### Added
 
+- Added service `Services\Messageservice\Sender` and `Services\Messageservice\Message\Status` with support for `messageservice.*` methods,
+  see [messageservice.* methods](https://apidocs.bitrix24.com/api-reference/messageservice/index.html) ([#498](https://github.com/bitrix24/b24phpsdk/issues/498)):
+    - `sender.add` — register a new SMS message service provider
+    - `sender.update` — update a registered message service provider
+    - `sender.list` — get list of sender codes registered by the current application
+    - `sender.delete` — delete a registered message service provider
+    - `message.status.update` — update delivery status of a message sent via a provider
+
 - Added service `Services\MailService` with support for `mailservice.*` methods,
   see [mailservice.* methods](https://apidocs.bitrix24.com/api-reference/mailservice/index.html) ([#495](https://github.com/bitrix24/b24phpsdk/issues/495)):
     - `add` creates a new mail service (IMAP integration), with batch calls support

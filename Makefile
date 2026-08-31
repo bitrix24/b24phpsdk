@@ -497,6 +497,17 @@ test-integration-landing-role:
 test-integration-landing-repowidget:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_repowidget
 
+.PHONY: test-integration-scope-messageservice
+test-integration-scope-messageservice:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_messageservice
+
+.PHONY: test-integration-messageservice-sender
+test-integration-messageservice-sender:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_messageservice_sender
+
+.PHONY: test-integration-messageservice-message-status
+test-integration-messageservice-message-status:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_messageservice_message_status
 .PHONY: test-integration-mailservice
 test-integration-mailservice:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_mailservice
