@@ -232,6 +232,8 @@
         <testsuite name="integration_tests_scope_sonet_group">
             <directory>./tests/Integration/Services/SonetGroup/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_booking">
+            <directory>./tests/Integration/Services/Booking/</directory>
         <testsuite name="integration_tests_scope_landing">
             <directory>./tests/Integration/Services/Landing/</directory>
         </testsuite>
