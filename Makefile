@@ -63,6 +63,13 @@ help:
 	@echo "test-integration-sale-payment-item-shipment - run PaymentItemShipment integration tests"
 	@echo "test-integration-sale-property-relation - run PropertyRelation integration tests"
 	@echo "test-integration-scope-booking - run Booking integration tests"
+	@echo "test-integration-landing-page - run Landing Page integration tests"
+	@echo "test-integration-landing-syspage - run Landing SysPage integration tests"
+	@echo "test-integration-landing-repo - run Landing Repo integration tests"
+	@echo "test-integration-landing-demos - run Landing Demos integration tests"
+	@echo "test-integration-landing-role - run Landing Role integration tests"
+	@echo "test-integration-landing-repowidget - run Landing RepoWidget integration tests"
+	@echo "test-integration-scope-landing-template - run Landing Template integration tests"
 
 
 .PHONY: docker-init
@@ -449,6 +456,46 @@ integration_tests_crm_documentgenerator_document:
 .PHONY: integration_tests_crm_documentgenerator_template
 integration_tests_crm_documentgenerator_template:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_documentgenerator_template
+
+.PHONY: test-integration-scope-landing
+test-integration-scope-landing:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_landing
+
+.PHONY: test-integration-scope-landing-template
+test-integration-scope-landing-template:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_landing_template
+
+.PHONY: test-integration-landing-block
+test-integration-landing-block:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_block
+
+.PHONY: test-integration-landing-site
+test-integration-landing-site:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_site
+
+.PHONY: test-integration-landing-page
+test-integration-landing-page:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_page
+
+.PHONY: test-integration-landing-syspage
+test-integration-landing-syspage:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_syspage
+
+.PHONY: test-integration-landing-repo
+test-integration-landing-repo:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_repo
+
+.PHONY: test-integration-landing-demos
+test-integration-landing-demos:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_demos
+
+.PHONY: test-integration-landing-role
+test-integration-landing-role:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_role
+
+.PHONY: test-integration-landing-repowidget
+test-integration-landing-repowidget:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_repowidget
 
 # work dev environment
 .PHONY: php-dev-server-up
