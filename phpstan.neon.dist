@@ -39,6 +39,7 @@ parameters:
     - tests/Integration/Services/CRM/Documentgenerator/Document
     - tests/Integration/Services/CRM/Documentgenerator/Template
     - tests/Integration/Services/Landing
+    - tests/Integration/Services/MailService
     - tests/Integration/Services/Documentgenerator
     - tests/Integration/Services/Timeman
   excludePaths:

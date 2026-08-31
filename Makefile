@@ -70,7 +70,7 @@ help:
 	@echo "test-integration-landing-role - run Landing Role integration tests"
 	@echo "test-integration-landing-repowidget - run Landing RepoWidget integration tests"
 	@echo "test-integration-scope-landing-template - run Landing Template integration tests"
-
+	@echo "test-integration-mailservice - run MailService integration tests"
 
 .PHONY: docker-init
 docker-init:
@@ -497,6 +497,9 @@ test-integration-landing-role:
 test-integration-landing-repowidget:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_repowidget
 
+.PHONY: test-integration-mailservice
+test-integration-mailservice:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_mailservice
 .PHONY: integration_tests_scope_documentgenerator
 integration_tests_scope_documentgenerator:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_documentgenerator
