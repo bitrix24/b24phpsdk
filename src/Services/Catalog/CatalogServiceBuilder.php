@@ -19,6 +19,7 @@ use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\Catalog;
 
 #[ApiServiceBuilderMetadata(new Scope(['catalog']))]
+
 class CatalogServiceBuilder extends AbstractServiceBuilder
 {
     public function catalog(): Catalog\Catalog\Service\Catalog
@@ -74,6 +75,42 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Catalog\Product\Offer\Service\Offer(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function catalogEnum(): Catalog\Enum\Service\CatalogEnum
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\Enum\Service\CatalogEnum(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function extra(): Catalog\Extra\Service\Extra
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\Extra\Service\Extra(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function measure(): Catalog\Measure\Service\Measure
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\Measure\Service\Measure(
                 $this->core,
                 $this->log
             );

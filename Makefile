@@ -529,6 +529,17 @@ test-integration-landing-role:
 test-integration-landing-repowidget:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_repowidget
 
+.PHONY: test-integration-catalog-enum
+test-integration-catalog-enum:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_enum
+
+.PHONY: test-integration-catalog-extra
+test-integration-catalog-extra:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_extra
+
+.PHONY: test-integration-catalog-measure
+test-integration-catalog-measure:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_measure
 .PHONY: test-integration-scope-catalog
 test-integration-scope-catalog:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_catalog

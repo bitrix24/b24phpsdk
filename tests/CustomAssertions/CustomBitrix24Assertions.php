@@ -288,6 +288,7 @@ trait CustomBitrix24Assertions
                         );
                         break;
                     }
+                    if (str_contains(mb_strtoupper($fieldCode), 'RATE') || str_contains(mb_strtoupper($fieldCode), 'PERCENTAGE')) {
 
                     if (str_contains(mb_strtoupper($fieldCode), 'RATE')) {
                         $this->assertTrue(

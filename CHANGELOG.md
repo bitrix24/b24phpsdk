@@ -4,6 +4,23 @@
 
 ### Added
 
+- Added services `Services\Catalog\Enum\Service\CatalogEnum`, `Services\Catalog\Extra\Service\Extra`
+  and `Services\Catalog\Measure\Service\Measure` with support for `catalog.enum.*`, `catalog.extra.*`
+  and `catalog.measure.*` methods,
+  see [catalog.enum.* methods](https://apidocs.bitrix24.com/api-reference/catalog/enum/index.html),
+  [catalog.extra.* methods](https://apidocs.bitrix24.com/api-reference/catalog/extra/index.html) and
+  [catalog.measure.* methods](https://apidocs.bitrix24.com/api-reference/catalog/measure/index.html) ([#530](https://github.com/bitrix24/b24phpsdk/issues/530)):
+    - `CatalogEnum::getRoundTypes` returns available catalog rounding types
+    - `CatalogEnum::getStoreDocumentTypes` returns available store accounting document types
+    - `Extra::get` gets information about a markup by its identifier
+    - `Extra::list` gets a list of markups by filter
+    - `Extra::fields` returns the description of markup fields
+    - `Measure::add` creates a new measurement unit
+    - `Measure::update` updates an existing measurement unit
+    - `Measure::get` gets information about a measurement unit by its identifier
+    - `Measure::list` gets the list of measurement units
+    - `Measure::delete` deletes a measurement unit
+    - `Measure::fields` returns the description of measurement unit fields
 - Added `update` and `download` methods to `Services\Catalog\Product\Service\Product` for
   `catalog.product.update` / `catalog.product.download`,
   see [catalog.product.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product/index.html) ([#527](https://github.com/bitrix24/b24phpsdk/issues/527))
