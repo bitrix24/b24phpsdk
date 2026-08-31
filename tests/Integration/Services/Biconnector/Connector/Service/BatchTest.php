@@ -19,14 +19,13 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Biconnector\Connector\Result\ConnectorItemResult;
 use Bitrix24\SDK\Services\Biconnector\Connector\Service\Batch;
 use Bitrix24\SDK\Services\Biconnector\Connector\Service\Connector;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Services\Biconnector\Support\BiconnectorScopeTestCase;
 use Faker\Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Faker;
 
 #[CoversClass(Batch::class)]
-class BatchTest extends TestCase
+class BatchTest extends BiconnectorScopeTestCase
 {
     private Connector $connectorService;
 
@@ -38,7 +37,7 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->connectorService = Fabric::getServiceBuilder(true)->getBiconnectorScope()->connector();
+        $this->connectorService = $this->getBiconnectorScope()->connector();
         $this->faker = Faker\Factory::create();
     }
 

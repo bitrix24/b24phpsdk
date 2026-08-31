@@ -19,6 +19,7 @@ use Carbon\CarbonImmutable;
 /**
  * Represents a single workday item returned by timeman.open, timeman.pause, timeman.close, timeman.status methods.
  *
+ * @property-read int|null $ID
  * @property-read string $STATUS
  * @property-read CarbonImmutable|null $TIME_START
  * @property-read CarbonImmutable|null $TIME_FINISH
@@ -41,7 +42,7 @@ class WorkdayItemResult extends AbstractItem
             'TIME_START', 'TIME_FINISH' => isset($this->data[$offset])
                 ? CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset])
                 : null,
-            'TZ_OFFSET' => isset($this->data[$offset]) ? (int)$this->data[$offset] : null,
+            'ID', 'TZ_OFFSET' => isset($this->data[$offset]) ? (int)$this->data[$offset] : null,
             'LAT_OPEN', 'LON_OPEN', 'LAT_CLOSE', 'LON_CLOSE' => isset($this->data[$offset]) ? (float)$this->data[$offset] : null,
             default => $this->data[$offset] ?? null,
         };

@@ -17,14 +17,13 @@ use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Services\Biconnector\Connector\Result\ConnectorItemResult;
 use Bitrix24\SDK\Services\Biconnector\Connector\Service\Connector;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Fabric;
+use Bitrix24\SDK\Tests\Integration\Services\Biconnector\Support\BiconnectorScopeTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ConnectorItemResult::class)]
-class ConnectorItemResultAnnotationsTest extends TestCase
+class ConnectorItemResultAnnotationsTest extends BiconnectorScopeTestCase
 {
     use CustomBitrix24Assertions;
 
@@ -36,7 +35,7 @@ class ConnectorItemResultAnnotationsTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->connectorService = Fabric::getServiceBuilder(true)->getBiconnectorScope()->connector();
+        $this->connectorService = $this->getBiconnectorScope()->connector();
     }
 
     #[Test]

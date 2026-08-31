@@ -82,12 +82,15 @@ class Batch
      * @link https://apidocs.bitrix24.com/api-reference/biconnector/connector/biconnector-connector-add.html
      *
      * @param array<int, array{
-     *     name: string,
-     *     code: string,
+     *     title: string,
+     *     logo: string,
+     *     urlCheck: string,
+     *     urlData: string,
+     *     urlTableList: string,
+     *     urlTableDescription: string,
+     *     settings: array,
      *     description?: string,
-     *     pictureUrl?: string,
-     *     settings?: array,
-     *     isEnabled?: bool
+     *     sort?: int
      * }> $connectors
      *
      * @return Generator<int, AddedConnectorBatchResult>
