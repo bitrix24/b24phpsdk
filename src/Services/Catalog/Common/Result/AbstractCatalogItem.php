@@ -39,15 +39,21 @@ abstract class AbstractCatalogItem extends AbstractItem
      * @return bool|CarbonImmutable|int|mixed|null
      */
 
+    #[\Override]
     public function __get($offset)
     {
         switch ($offset) {
             case 'active':
             case 'available':
             case 'bundle':
+            case 'vatIncluded':
+            case 'withoutOrder':
+            case 'subscribe':
+            case 'quantityTrace':
                 return $this->data[$offset] === 'Y';
             case 'barcodeMulti':
             case 'canBuyZero':
+            case 'recurSchemeType':
                 if ($this->data[$offset] !== null) {
                     return $this->data[$offset] === 'Y';
                 }
@@ -67,8 +73,7 @@ abstract class AbstractCatalogItem extends AbstractItem
             case 'id':
             case 'modifiedBy':
             case 'sort':
-            case 'height':
-            case 'length':
+            case 'vatId':
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                     return (int)$this->data[$offset];
                 }
@@ -78,7 +83,7 @@ abstract class AbstractCatalogItem extends AbstractItem
             case 'dateActiveTo':
             case 'dateCreate':
             case 'timestampX':
-                if ($this->data[$offset] !== '') {
+                if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                     return CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
                 }
 
