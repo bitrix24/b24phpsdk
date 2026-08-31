@@ -4,6 +4,14 @@
 
 ### Added
 
+- Added service `Services\Catalog\ProductPropertyEnum` with support methods,
+  see [catalog.productPropertyEnum.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product-property-enum/index.html) ([#549](https://github.com/bitrix24/b24phpsdk/issues/549)):
+    - `add` creates a new list-type property value
+    - `update` updates an existing list-type property value
+    - `get` gets a list-type property value by identifier
+    - `list` gets the list of list-type property values by filter
+    - `delete` deletes a list-type property value by identifier
+    - `getFields` returns the description of list-type property value fields
 - Added service `Services\Catalog\ProductPropertySection` with support for
   `catalog.productPropertySection.*` methods,
   see [catalog.productPropertySection.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product-property-section/index.html) ([#558](https://github.com/bitrix24/b24phpsdk/issues/558)):
@@ -425,6 +433,10 @@
 
 ### Fixed
 
+- Fixed batch operations for `Services\Catalog\Product` using the wrong-case `ID` key instead of
+  the lowercase `id` key expected by `catalog.product.list` and `catalog.product.delete`: added
+  `Services\Catalog\Product\Batch` overriding `determineKeyId()` and `deleteEntityItems()`,
+  registered in `CatalogServiceBuilder::product()` ([#549](https://github.com/bitrix24/b24phpsdk/issues/549))
 - Fixed `Services\Catalog\Catalog\Result\CatalogsResult::getCatalogs()` returning `ProductItemResult`
   instances instead of `CatalogItemResult` ([#527](https://github.com/bitrix24/b24phpsdk/issues/527))
 ### Changed
