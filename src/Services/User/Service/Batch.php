@@ -18,7 +18,7 @@ use Bitrix24\SDK\Attributes\ApiBatchServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
-use Bitrix24\SDK\Services\CRM\Deal\Result\DealItemResult;
+use Bitrix24\SDK\Services\User\Result\UserItemResult;
 use Generator;
 use Psr\Log\LoggerInterface;
 
@@ -80,7 +80,7 @@ class Batch
                 ]
             ) as $key => $value
         ) {
-            yield $key => new DealItemResult($value);
+            yield $key => new UserItemResult($value);
         }
     }
 }

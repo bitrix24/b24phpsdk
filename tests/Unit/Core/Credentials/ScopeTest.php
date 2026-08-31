@@ -104,6 +104,18 @@ class ScopeTest extends TestCase
         $this->assertFalse($scope->contains('user'));
     }
 
+    /**
+     * @throws UnknownScopeCodeException
+     */
+    public function testMainScopeCodeIsAvailable(): void
+    {
+        $scope = new Scope(['main']);
+
+        $this->assertContains('main', Scope::getAvailableScopeCodes());
+        $this->assertEquals(['main'], $scope->getScopeCodes());
+        $this->assertTrue($scope->contains('main'));
+    }
+
     public function testContainsWithUnknownScopeCode(): void
     {
         $scope = Scope::initFromString('crm,telephony');
