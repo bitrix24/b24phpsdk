@@ -497,6 +497,9 @@ test-integration-landing-role:
 test-integration-landing-repowidget:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_repowidget
 
+.PHONY: test-integration-scope-timeman
+test-integration-scope-timeman:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_timeman
 .PHONY: test-integration-scope-biconnector
 test-integration-scope-biconnector:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_biconnector

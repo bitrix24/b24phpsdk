@@ -39,6 +39,7 @@ use Bitrix24\SDK\Services\Calendar\CalendarServiceBuilder;
 use Bitrix24\SDK\Services\Paysystem\PaysystemServiceBuilder;
 use Bitrix24\SDK\Services\SonetGroup\SonetGroupServiceBuilder;
 use Bitrix24\SDK\Services\Landing\LandingServiceBuilder;
+use Bitrix24\SDK\Services\Timeman\TimemanServiceBuilder;
 use Psr\Log\LoggerInterface;
 
 class ServiceBuilder extends AbstractServiceBuilder
@@ -370,6 +371,20 @@ class ServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new LandingServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function getTimemanScope(): TimemanServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new TimemanServiceBuilder(
                 $this->core,
                 $this->batch,
                 $this->bulkItemsReader,
