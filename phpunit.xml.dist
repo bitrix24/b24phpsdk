@@ -307,6 +307,8 @@
         <testsuite name="integration_tests_landing_repowidget">
             <directory>./tests/Integration/Services/Landing/RepoWidget/</directory>
         </testsuite>
+        <testsuite name="integration_tests_catalog_product_property_feature">
+            <directory>./tests/Integration/Services/Catalog/ProductPropertyFeature/</directory>
         <testsuite name="integration_tests_catalog_product_property_enum">
             <directory>./tests/Integration/Services/Catalog/ProductPropertyEnum/Service/</directory>
         </testsuite>
