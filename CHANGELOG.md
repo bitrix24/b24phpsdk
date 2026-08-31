@@ -442,6 +442,8 @@
 
 ### Fixed
 
+- Fixed `Bitrix24\SDK\Core\Credentials\Scope` validation for the `main` scope code
+  ([#413](https://github.com/bitrix24/b24phpsdk/issues/413))
 - Fixed batch operations for `Services\Catalog\Product` using the wrong-case `ID` key instead of
   the lowercase `id` key expected by `catalog.product.list` and `catalog.product.delete`: added
   `Services\Catalog\Product\Batch` overriding `determineKeyId()` and `deleteEntityItems()`,
