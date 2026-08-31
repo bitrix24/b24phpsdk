@@ -77,6 +77,120 @@
 - Added `Bitrix24\SDK\Services\IM\User\Service\UserStatus` service wrapping `im.user.status.get`, `im.user.status.set`, `im.user.status.idle.start`, and `im.user.status.idle.end`, with `UserStatusType` enum and `UserStatusResult`; exposed via `IMServiceBuilder::userStatus()`
 - Extended `IM\Notify` service with `send` (`im.notify`), `getList` (`im.notify.get`), `historySearch` (`im.notify.history.search`), `markAllAsRead` (`im.notify.read.all`), `getSchema` (`im.notify.schema.get`) methods; refactored `markMessagesAsRead`/`markMessagesAsUnread` to call `im.notify.read.list` instead of `im.notify.read`; added `NotifyItemResult`, `NotifiesResult`, `NotifyHistorySearchResult`, `NotifyReadAllResult`, `NotifySchemaItemResult`, `NotifySchemaResult` result types
 
+- Added `Services\Sign\SignServiceBuilder` with support for `sign.b2e.*` methods and events,
+  see [sign.b2e.* methods](https://apidocs.bitrix24.com/api-reference/sign/index.html) ([#504](https://github.com/bitrix24/b24phpsdk/issues/504)):
+    - `document()->send()` — sends a document for company-side signing (КЭДО), application context only
+    - `document()->get()` — returns information about a document and its signing members
+    - `companyProvider()->list()` — returns the list of signature providers for a selected company
+    - `personalTail()->tail()` — returns the list of signed documents for the current user (КЭДО section), application context only
+    - `mySafeTail()->tail()` — returns the list of signed documents in the company safe, application context only
+- Added events support for `sign.b2e` scope via `SignB2eEventsFactory` ([#504](https://github.com/bitrix24/b24phpsdk/issues/504)):
+    - `OnSignB2eDocumentStatusChanged` — fires when document status changes
+    - `OnSignB2eMemberStatusChanged` — fires when member status changes
+- Added service `Services\Messageservice\Sender` and `Services\Messageservice\Message\Status` with support for `messageservice.*` methods,
+  see [messageservice.* methods](https://apidocs.bitrix24.com/api-reference/messageservice/index.html) ([#498](https://github.com/bitrix24/b24phpsdk/issues/498)):
+    - `sender.add` — register a new SMS message service provider
+    - `sender.update` — update a registered message service provider
+    - `sender.list` — get list of sender codes registered by the current application
+    - `sender.delete` — delete a registered message service provider
+    - `message.status.update` — update delivery status of a message sent via a provider
+
+- Added service `Services\MailService` with support for `mailservice.*` methods,
+  see [mailservice.* methods](https://apidocs.bitrix24.com/api-reference/mailservice/index.html) ([#495](https://github.com/bitrix24/b24phpsdk/issues/495)):
+    - `add` creates a new mail service (IMAP integration), with batch calls support
+    - `update` updates an existing mail service, with batch calls support
+    - `get` gets information about a mail service by its identifier
+    - `list` gets the list of active mail services, with batch calls support
+    - `delete` deletes a mail service, with batch calls support
+    - `fields` returns localized field labels of a mail service
+    - `count` counts active mail services
+
+- Added service `Services\Documentgenerator\Role` with support for `documentgenerator.role.*` methods,
+  see [documentgenerator.role.* methods](https://apidocs.bitrix24.com/api-reference/document-generator/role/index.html) ([#489](https://github.com/bitrix24/b24phpsdk/issues/489)):
+    - `add` creates a new role, with batch calls support
+    - `list` gets the list of roles, with batch calls support
+    - `update` updates an existing role, with batch calls support
+    - `delete` deletes a role, with batch calls support
+    - `get` gets information about the role by its identifier (includes permissions)
+    - `fillAccesses` completely replaces the role-to-access-code binding map
+    - `count` counts roles
+- Added service `Services\Documentgenerator\Region` with support for `documentgenerator.region.*` methods,
+  see [documentgenerator.region.* methods](https://apidocs.bitrix24.com/api-reference/document-generator/region/index.html) ([#489](https://github.com/bitrix24/b24phpsdk/issues/489)):
+    - `add` creates a new region, with batch calls support
+    - `list` gets the list of regions, with batch calls support
+    - `update` updates an existing region, with batch calls support
+    - `delete` deletes a region, with batch calls support
+    - `get` gets information about the region by its identifier
+    - `count` counts regions
+- Added service `Services\Documentgenerator\Numerator` with support for `documentgenerator.numerator.*` methods,
+  see [documentgenerator.numerator.* methods](https://apidocs.bitrix24.com/api-reference/document-generator/numerators/index.html) ([#489](https://github.com/bitrix24/b24phpsdk/issues/489)):
+    - `add` creates a new numerator, with batch calls support
+    - `list` gets the list of numerators, with batch calls support
+    - `update` updates an existing numerator, with batch calls support
+    - `delete` deletes a numerator, with batch calls support
+    - `get` gets information about the numerator by its identifier
+    - `count` counts numerators
+- Added service `Services\Documentgenerator\Template` with support for `documentgenerator.template.*` methods,
+  see [documentgenerator.template.* methods](https://apidocs.bitrix24.com/api-reference/document-generator/templates/index.html) ([#489](https://github.com/bitrix24/b24phpsdk/issues/489)):
+    - `add` creates a new template, with batch calls support
+    - `list` gets the list of templates, with batch calls support
+    - `update` updates an existing template, with batch calls support
+    - `delete` deletes a template, with batch calls support
+    - `get` gets information about the template by its identifier
+    - `getFields` returns the description of template fields
+    - `count` counts templates
+- Added service `Services\Documentgenerator\Document` with support for `documentgenerator.document.*` methods,
+  see [documentgenerator.document.* methods](https://apidocs.bitrix24.com/api-reference/document-generator/index.html) ([#489](https://github.com/bitrix24/b24phpsdk/issues/489)):
+    - `add` creates a new document based on a template and data provider, with batch calls support
+    - `list` gets the list of documents, with batch calls support
+    - `update` updates an existing document, with batch calls support
+    - `delete` deletes a document, with batch calls support
+    - `get` gets information about the document by its identifier
+    - `getFields` returns the description of document fields
+    - `enablePublicUrl` enables or disables public URL for a document
+    - `count` counts documents
+
+- Added `Services\Timeman` service with support for workday tracking methods,
+  see [timeman.* methods](https://apidocs.bitrix24.com/api-reference/timeman/index.html):
+    - `open` — starts a new workday or continues after pause/close
+    - `pause` — pauses the current workday
+    - `close` — closes the current workday
+    - `status` — gets current workday status
+    - `settings` — gets user's work time settings
+      ([#484](https://github.com/bitrix24/b24phpsdk/issues/484))
+
+- Added service `Services\Biconnector\Dataset` with support methods,
+  see [biconnector.dataset.* methods](https://apidocs.bitrix24.com/api-reference/biconnector/dataset/index.html) ([#469](https://github.com/bitrix24/b24phpsdk/issues/469)):
+    - `add` adds a new dataset, with batch calls support
+    - `update` updates an existing dataset description, with batch calls support
+    - `get` gets information about the dataset by its identifier
+    - `list` gets the list of datasets, with batch calls support
+    - `delete` deletes a dataset, with batch calls support
+    - `fields` returns the fields description
+    - `updateFields` adds, updates visibility of, or deletes individual dataset columns (`biconnector.dataset.fields.update`)
+    - `count` counts datasets
+- Added `dataset()` accessor to `BiconnectorServiceBuilder` ([#469](https://github.com/bitrix24/b24phpsdk/issues/469))
+- Added service `Services\Biconnector\Source` with support methods,
+  see [biconnector.source.* methods](https://apidocs.bitrix24.com/api-reference/biconnector/source/index.html) ([#469](https://github.com/bitrix24/b24phpsdk/issues/469)):
+    - `add` adds a new data source, with batch calls support
+    - `update` updates an existing data source, with batch calls support
+    - `get` gets information about the data source by its identifier
+    - `list` gets the list of data sources, with batch calls support
+    - `delete` deletes a data source, with batch calls support
+    - `fields` returns the fields description
+    - `count` counts data sources
+- Added `source()` accessor to `BiconnectorServiceBuilder` ([#469](https://github.com/bitrix24/b24phpsdk/issues/469))
+- Added service `Services\Biconnector\Connector` with support methods,
+  see [biconnector.connector.* methods](https://github.com/bitrix24/b24phpsdk/issues/469):
+    - `add` adds a new connector, with batch calls support
+    - `update` updates an existing connector, with batch calls support
+    - `get` gets information about the connector by its identifier
+    - `list` gets the list of connectors, with batch calls support
+    - `delete` deletes a connector, with batch calls support
+    - `fields` returns the fields description
+    - `count` counts connectors
+
+- Added `Services\Booking\BookingServiceBuilder` with Booking scope wrappers and integration coverage for `booking.v1.clienttype.*`, `booking.v1.resourceType.*`, `booking.v1.resource.*`, `booking.v1.resource.slots.*`, `booking.v1.waitlist.*`, `booking.v1.waitlist.client.*`, `booking.v1.waitlist.externalData.*`, `booking.v1.booking.*`, `booking.v1.booking.client.*`, and `booking.v1.booking.externalData.*` methods.
 - Added service `Services\Landing\Site\Service\Site` with support methods,
   see [landing.site.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
     - `add` adds a site
