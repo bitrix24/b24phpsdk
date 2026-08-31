@@ -62,6 +62,7 @@ help:
 	@echo "test-integration-sale-payment-item-basket - run PaymentItemBasket integration tests"
 	@echo "test-integration-sale-payment-item-shipment - run PaymentItemShipment integration tests"
 	@echo "test-integration-sale-property-relation - run PropertyRelation integration tests"
+	@echo "test-integration-scope-booking - run Booking integration tests"
 	@echo "test-integration-landing-page - run Landing Page integration tests"
 	@echo "test-integration-landing-syspage - run Landing SysPage integration tests"
 	@echo "test-integration-landing-repo - run Landing Repo integration tests"
@@ -69,7 +70,43 @@ help:
 	@echo "test-integration-landing-role - run Landing Role integration tests"
 	@echo "test-integration-landing-repowidget - run Landing RepoWidget integration tests"
 	@echo "test-integration-scope-landing-template - run Landing Template integration tests"
+	@echo "test-integration-scope-catalog - run Catalog scope integration tests"
+	@echo "test-integration-catalog-catalog - run Catalog Catalog integration tests"
+	@echo "test-integration-catalog-product - run Catalog Product integration tests"
+	@echo "test-integration-catalog-product-service - run Catalog ProductService integration tests"
+	@echo "test-integration-catalog-product-sku - run Catalog Product Sku integration tests"
+	@echo "test-integration-catalog-product-offer - run Catalog Product Offer integration tests"
 
+	@echo "test-integration-scope-imbot - run IMBot scope integration tests"
+	@echo "test-integration-imbot-bot - run IMBot Bot integration tests"
+	@echo "test-integration-imbot-chat - run IMBot Chat integration tests"
+	@echo "test-integration-imbot-command - run IMBot Command integration tests"
+	@echo "test-integration-imbot-revision - run IMBot Revision integration tests"
+	@echo "test-integration-imbot-chat-message - run IMBot ChatMessage integration tests (incl. batch)"
+	@echo "test-integration-imbot-event - run IMBot Event integration tests"
+	@echo "test-integration-imbot-file - run IMBot File integration tests"
+	@echo "test-integration-scope-im - run IM scope integration tests"
+	@echo "test-integration-im-disk - run IM Disk integration tests"
+	@echo "test-integration-im-message - run IM Message integration tests"
+	@echo "test-integration-im-dialog - run IM Dialog integration tests"
+	@echo "test-integration-im-department - run IM Department integration tests"
+	@echo "test-integration-im-user - run IM User integration tests"
+	@echo "test-integration-im-revision - run IM Revision integration tests"
+	@echo "test-integration-im-counters - run IM Counters integration tests"
+	@echo "test-integration-im-recent - run IM Recent integration tests"
+	@echo "test-integration-im-search - run IM Search integration tests"
+	@echo "test-integration-im-user-status - run IM UserStatus integration tests"
+	@echo "test-integration-im-chat - run IM Chat integration tests"
+	@echo "test-integration-im-chat-user - run IM Chat User integration tests"
+	@echo "test-integration-im-notify - run IM Notify integration tests"
+	@echo "test-integration-im-event-v2 - run IM EventV2 integration tests"
+	@echo "test-integration-im-file-v2 - run IM FileV2 integration tests"
+	@echo "test-integration-scope-sign - run Sign B2e integration tests"
+	@echo "test-integration-sign-document - run Sign Document integration tests"
+	@echo "test-integration-sign-company-provider - run Sign CompanyProvider integration tests"
+	@echo "test-integration-sign-personal-tail - run Sign PersonalTail integration tests"
+	@echo "test-integration-sign-mysafe-tail - run Sign MySafeTail integration tests"
+	@echo "test-integration-mailservice - run MailService integration tests"
 
 .PHONY: docker-init
 docker-init:
@@ -170,10 +207,6 @@ test-integration-scope-telephony:
 test-integration-scope-workflows:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_workflows
 
-.PHONY: test-integration-scope-im
-test-integration-scope-im:
-	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im
-
 .PHONY: test-integration-scope-placement
 test-integration-scope-placement:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_placement
@@ -249,6 +282,10 @@ test-integration-scope-sale:
 .PHONY: test-integration-scope-sonet-group
 test-integration-scope-sonet-group:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sonet_group
+
+.PHONY: test-integration-scope-booking
+test-integration-scope-booking:
+	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_booking
 
 .PHONY: test-integration-scope-disk
 test-integration-scope-disk:
@@ -503,6 +540,259 @@ integration-tests-catalog-product-property-service:
 .PHONY: integration-tests-catalog-product-property-annotations
 integration-tests-catalog-product-property-annotations:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_product_property_annotations
+.PHONY: test-integration-catalog-product-image
+test-integration-catalog-product-image:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_product_image
+.PHONY: test-integration-catalog-price
+test-integration-catalog-price:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_price
+
+.PHONY: test-integration-catalog-price-type
+test-integration-catalog-price-type:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_price_type
+
+.PHONY: test-integration-catalog-price-type-lang
+test-integration-catalog-price-type-lang:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_price_type_lang
+
+.PHONY: test-integration-catalog-price-type-group
+test-integration-catalog-price-type-group:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_price_type_group
+.PHONY: test-integration-catalog-enum
+test-integration-catalog-enum:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_enum
+
+.PHONY: test-integration-catalog-extra
+test-integration-catalog-extra:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_extra
+
+.PHONY: test-integration-catalog-measure
+test-integration-catalog-measure:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_measure
+.PHONY: test-integration-scope-catalog
+test-integration-scope-catalog:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_catalog
+
+.PHONY: test-integration-catalog-catalog
+test-integration-catalog-catalog:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_catalog
+
+.PHONY: test-integration-catalog-product
+test-integration-catalog-product:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_product
+
+.PHONY: test-integration-catalog-product-service
+test-integration-catalog-product-service:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_product_service
+
+.PHONY: test-integration-catalog-product-sku
+test-integration-catalog-product-sku:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_product_sku
+
+.PHONY: test-integration-catalog-product-offer
+test-integration-catalog-product-offer:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_product_offer
+.PHONY: test-integration-scope-imbot
+test-integration-scope-imbot:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_imbot
+
+.PHONY: test-integration-imbot-bot
+test-integration-imbot-bot:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_imbot_bot
+
+.PHONY: test-integration-imbot-chat
+test-integration-imbot-chat:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_imbot_chat
+
+.PHONY: test-integration-imbot-command
+test-integration-imbot-command:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_imbot_command
+
+.PHONY: test-integration-imbot-revision
+test-integration-imbot-revision:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_imbot_revision
+
+.PHONY: test-integration-imbot-chat-message
+test-integration-imbot-chat-message:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_imbot_chat_message
+
+.PHONY: test-integration-imbot-event
+test-integration-imbot-event:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_imbot_event
+
+.PHONY: test-integration-imbot-file
+test-integration-imbot-file:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_imbot_file
+
+.PHONY: test-integration-scope-im
+test-integration-scope-im:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im
+
+.PHONY: test-integration-im-disk
+test-integration-im-disk:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_disk
+
+.PHONY: test-integration-im-message
+test-integration-im-message:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_message
+
+.PHONY: test-integration-im-dialog
+test-integration-im-dialog:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_dialog
+
+.PHONY: test-integration-im-department
+test-integration-im-department:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_department
+
+.PHONY: test-integration-im-user
+test-integration-im-user:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_user
+
+.PHONY: test-integration-im-revision
+test-integration-im-revision:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_revision
+
+.PHONY: test-integration-im-counters
+test-integration-im-counters:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_counters
+
+.PHONY: test-integration-im-recent
+test-integration-im-recent:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_recent
+
+.PHONY: test-integration-im-search
+test-integration-im-search:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_search
+
+.PHONY: test-integration-im-user-status
+test-integration-im-user-status:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_user_status
+
+.PHONY: test-integration-im-chat
+test-integration-im-chat:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_chat
+
+.PHONY: test-integration-im-chat-user
+test-integration-im-chat-user:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_chat_user
+
+.PHONY: test-integration-im-notify
+test-integration-im-notify:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_notify
+
+.PHONY: test-integration-im-event-v2
+test-integration-im-event-v2:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_event_v2
+
+.PHONY: test-integration-im-file-v2
+test-integration-im-file-v2:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_file_v2
+.PHONY: test-integration-scope-sign
+test-integration-scope-sign:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sign
+
+.PHONY: test-integration-sign-document
+test-integration-sign-document:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sign_document
+
+.PHONY: test-integration-sign-company-provider
+test-integration-sign-company-provider:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sign_company_provider
+
+.PHONY: test-integration-sign-personal-tail
+test-integration-sign-personal-tail:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sign_personal_tail
+
+.PHONY: test-integration-sign-mysafe-tail
+test-integration-sign-mysafe-tail:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sign_mysafe_tail
+.PHONY: test-integration-scope-messageservice
+test-integration-scope-messageservice:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_messageservice
+
+.PHONY: test-integration-messageservice-sender
+test-integration-messageservice-sender:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_messageservice_sender
+
+.PHONY: test-integration-messageservice-message-status
+test-integration-messageservice-message-status:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_messageservice_message_status
+.PHONY: test-integration-mailservice
+test-integration-mailservice:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_mailservice
+.PHONY: integration_tests_scope_documentgenerator
+integration_tests_scope_documentgenerator:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_documentgenerator
+
+.PHONY: integration_tests_documentgenerator_document
+integration_tests_documentgenerator_document:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_documentgenerator_document
+
+.PHONY: integration_tests_documentgenerator_template
+integration_tests_documentgenerator_template:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_documentgenerator_template
+
+.PHONY: integration_tests_documentgenerator_template_service
+integration_tests_documentgenerator_template_service:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_documentgenerator_template_service
+
+.PHONY: integration_tests_documentgenerator_template_annotations
+integration_tests_documentgenerator_template_annotations:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_documentgenerator_template_annotations
+
+.PHONY: integration_tests_documentgenerator_numerator
+integration_tests_documentgenerator_numerator:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_documentgenerator_numerator
+
+.PHONY: integration_tests_documentgenerator_numerator_service
+integration_tests_documentgenerator_numerator_service:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_documentgenerator_numerator_service
+
+.PHONY: integration_tests_documentgenerator_numerator_annotations
+integration_tests_documentgenerator_numerator_annotations:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_documentgenerator_numerator_annotations
+
+.PHONY: integration_tests_documentgenerator_region
+integration_tests_documentgenerator_region:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_documentgenerator_region
+
+.PHONY: integration_tests_documentgenerator_region_service
+integration_tests_documentgenerator_region_service:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_documentgenerator_region_service
+
+.PHONY: integration_tests_documentgenerator_region_annotations
+integration_tests_documentgenerator_region_annotations:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_documentgenerator_region_annotations
+
+.PHONY: integration_tests_documentgenerator_role
+integration_tests_documentgenerator_role:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_documentgenerator_role
+
+.PHONY: integration_tests_documentgenerator_role_service
+integration_tests_documentgenerator_role_service:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_documentgenerator_role_service
+
+.PHONY: integration_tests_documentgenerator_role_annotations
+integration_tests_documentgenerator_role_annotations:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_documentgenerator_role_annotations
+.PHONY: test-integration-scope-timeman
+test-integration-scope-timeman:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_timeman
+.PHONY: test-integration-scope-biconnector
+test-integration-scope-biconnector:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_biconnector
+
+.PHONY: test-integration-biconnector-connector
+test-integration-biconnector-connector:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_biconnector_connector
+
+.PHONY: test-integration-biconnector-source
+test-integration-biconnector-source:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_biconnector_source
+
+.PHONY: test-integration-biconnector-dataset
+test-integration-biconnector-dataset:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_biconnector_dataset
 
 # work dev environment
 .PHONY: php-dev-server-up
