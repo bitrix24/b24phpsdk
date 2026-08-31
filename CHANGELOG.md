@@ -35,6 +35,7 @@
     - `fields` returns the fields description
     - `count` counts connectors
 
+- Added `Services\Booking\BookingServiceBuilder` with Booking scope wrappers and integration coverage for `booking.v1.clienttype.*`, `booking.v1.resourceType.*`, `booking.v1.resource.*`, `booking.v1.resource.slots.*`, `booking.v1.waitlist.*`, `booking.v1.waitlist.client.*`, `booking.v1.waitlist.externalData.*`, `booking.v1.booking.*`, `booking.v1.booking.client.*`, and `booking.v1.booking.externalData.*` methods.
 - Added service `Services\Landing\Site\Service\Site` with support methods,
   see [landing.site.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
     - `add` adds a site
