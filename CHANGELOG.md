@@ -4,6 +4,40 @@
 
 ### Added
 
+- Added `update` and `download` methods to `Services\Catalog\Product\Service\Product` for
+  `catalog.product.update` / `catalog.product.download`,
+  see [catalog.product.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product/index.html) ([#527](https://github.com/bitrix24/b24phpsdk/issues/527))
+- Added service `Services\Catalog\Product\ProductService\Service\ProductService` with support for
+  `catalog.product.service.*` methods,
+  see [catalog.product.service.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product/service/index.html) ([#527](https://github.com/bitrix24/b24phpsdk/issues/527)):
+    - `add` creates a new service
+    - `update` updates an existing service
+    - `get` gets information about the service by its identifier
+    - `list` gets the list of services by filter
+    - `delete` deletes a service
+    - `fieldsByFilter` returns service field descriptions by iblock filter (`catalog.product.service.getFieldsByFilter`)
+    - `download` downloads a service file
+- Added service `Services\Catalog\Product\Sku\Service\Sku` with support for `catalog.product.sku.*`
+  methods,
+  see [catalog.product.sku.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product/sku/index.html) ([#527](https://github.com/bitrix24/b24phpsdk/issues/527)):
+    - `add` creates a new parent (SKU) product
+    - `update` updates an existing parent product
+    - `get` gets information about the parent product by its identifier
+    - `list` gets the list of parent products by filter
+    - `delete` deletes a parent product
+    - `fieldsByFilter` returns parent product field descriptions by iblock filter (`catalog.product.sku.getFieldsByFilter`)
+    - `download` downloads a parent product file
+- Added service `Services\Catalog\Product\Offer\Service\Offer` with support for
+  `catalog.product.offer.*` methods,
+  see [catalog.product.offer.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product/offer/index.html) ([#527](https://github.com/bitrix24/b24phpsdk/issues/527)):
+    - `add` creates a new product variation (offer)
+    - `update` updates an existing product variation
+    - `get` gets information about the product variation by its identifier
+    - `list` gets the list of product variations by filter
+    - `delete` deletes a product variation
+    - `fieldsByFilter` returns product variation field descriptions by iblock filter (`catalog.product.offer.getFieldsByFilter`)
+    - `download` downloads a product variation file
+
 - Added `Bitrix24\SDK\Core\Contracts\LangCodes` backed enum with all Bitrix24-supported language codes (`ar`, `de`, `en`, `fr`, `id`, `it`, `ja`, `ko`, `ms`, `pl`, `pt`, `ru`, `sk`, `th`, `tr`, `ua`, `vi`, `zh`) for use in `LANG_ALL` sections of `placement.bind` and similar API calls
 - Added `Bitrix24\SDK\Services\Placement\PlacementOptionsInterface` — contract for typed placement OPTIONS builders exposing `build(): array`
 - Added `Bitrix24\SDK\Services\Placement\Role` backed enum (`USER`, `ADMIN`) representing user-role filter for IM placement widgets
@@ -343,6 +377,10 @@
   All classes under `Bitrix24\SDK\Legacy\` are marked `@deprecated` and will be removed
   once v3 reaches feature parity with v1.
 
+### Fixed
+
+- Fixed `Services\Catalog\Catalog\Result\CatalogsResult::getCatalogs()` returning `ProductItemResult`
+  instances instead of `CatalogItemResult` ([#527](https://github.com/bitrix24/b24phpsdk/issues/527))
 ### Changed
 
 - `Bitrix24\SDK\Services\Placement\Service\Placement::bind()` — `$options` parameter now accepts `PlacementOptionsInterface|array` (previously `array` only), enabling typed fluent options builders to be passed directly
