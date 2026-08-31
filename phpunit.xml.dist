@@ -541,9 +541,6 @@
         <testsuite name="integration_tests_catalog_price_type_lang">
             <directory>./tests/Integration/Services/Catalog/PriceTypeLang/</directory>
         </testsuite>
-        <testsuite name="integration_tests_catalog_vat">
-            <directory>./tests/Integration/Services/Catalog/Vat/</directory>
-        </testsuite>
         <testsuite name="integration_tests_catalog_price_type_group">
             <directory>./tests/Integration/Services/Catalog/PriceTypeGroup/</directory>
         </testsuite>
@@ -586,6 +583,9 @@
         </testsuite>
         <testsuite name="integration_tests_catalog_document_element_annotations">
             <file>./tests/Integration/Services/Catalog/DocumentElement/Result/DocumentElementItemResultTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_vat">
+            <directory>./tests/Integration/Services/Catalog/Vat/</directory>
         </testsuite>
     </testsuites>
     <source>
