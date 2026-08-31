@@ -290,4 +290,20 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    public function vat(): Catalog\Vat\Service\Vat
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\Vat\Service\Vat(
+                new Catalog\Vat\Service\Batch(
+                    new Catalog\Vat\Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 }

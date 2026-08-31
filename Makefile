@@ -897,6 +897,10 @@ test-integration-catalog-price-type:
 test-integration-catalog-price-type-lang:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_price_type_lang
 
+.PHONY: test-integration-catalog-vat
+test-integration-catalog-vat:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_vat
+
 .PHONY: test-integration-catalog-price-type-group
 test-integration-catalog-price-type-group:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_price_type_group
