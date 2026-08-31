@@ -229,8 +229,53 @@
         <testsuite name="integration_tests_crm_documentgenerator_template">
             <directory>./tests/Integration/Services/CRM/Documentgenerator/Template/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_documentgenerator">
+            <directory>./tests/Integration/Services/Documentgenerator/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_document">
+            <directory>./tests/Integration/Services/Documentgenerator/Document/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_template">
+            <directory>./tests/Integration/Services/Documentgenerator/Template/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_template_service">
+            <directory>./tests/Integration/Services/Documentgenerator/Template/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_template_annotations">
+            <file>./tests/Integration/Services/Documentgenerator/Template/Result/TemplateItemResultAnnotationsTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_numerator">
+            <directory>./tests/Integration/Services/Documentgenerator/Numerator/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_numerator_service">
+            <directory>./tests/Integration/Services/Documentgenerator/Numerator/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_numerator_annotations">
+            <file>./tests/Integration/Services/Documentgenerator/Numerator/Result/NumeratorItemResultAnnotationsTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_region">
+            <directory>./tests/Integration/Services/Documentgenerator/Region/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_region_service">
+            <directory>./tests/Integration/Services/Documentgenerator/Region/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_region_annotations">
+            <file>./tests/Integration/Services/Documentgenerator/Region/Result/RegionItemResultAnnotationsTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_role">
+            <directory>./tests/Integration/Services/Documentgenerator/Role/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_role_service">
+            <directory>./tests/Integration/Services/Documentgenerator/Role/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_documentgenerator_role_annotations">
+            <file>./tests/Integration/Services/Documentgenerator/Role/Result/RoleItemResultAnnotationsTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_scope_sonet_group">
             <directory>./tests/Integration/Services/SonetGroup/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_booking">
+            <directory>./tests/Integration/Services/Booking/</directory>
         </testsuite>
         <testsuite name="integration_tests_scope_landing">
             <directory>./tests/Integration/Services/Landing/</directory>
@@ -273,6 +318,150 @@
         </testsuite>
         <testsuite name="integration_tests_catalog_price_type_group">
             <directory>./tests/Integration/Services/Catalog/PriceTypeGroup/</directory>
+        <testsuite name="integration_tests_catalog_enum">
+            <directory>./tests/Integration/Services/Catalog/Enum/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_extra">
+            <directory>./tests/Integration/Services/Catalog/Extra/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_measure">
+            <directory>./tests/Integration/Services/Catalog/Measure/</directory>
+        <testsuite name="integration_tests_scope_catalog">
+            <directory>./tests/Integration/Services/Catalog/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_catalog">
+            <file>./tests/Integration/Services/Catalog/Catalog/Service/CatalogTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_product">
+            <file>./tests/Integration/Services/Catalog/Product/Service/ProductTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_product_service">
+            <file>./tests/Integration/Services/Catalog/Product/ProductService/Service/ProductServiceTest.php</file>
+            <file>./tests/Integration/Services/Catalog/Product/ProductService/Result/ProductServiceItemResultTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_product_sku">
+            <file>./tests/Integration/Services/Catalog/Product/Sku/Service/SkuTest.php</file>
+            <file>./tests/Integration/Services/Catalog/Product/Sku/Result/SkuItemResultTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_product_offer">
+            <file>./tests/Integration/Services/Catalog/Product/Offer/Service/OfferTest.php</file>
+            <file>./tests/Integration/Services/Catalog/Product/Offer/Result/OfferItemResultTest.php</file>
+        <testsuite name="integration_tests_scope_imbot">
+            <directory>./tests/Integration/Services/IMBot/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_imbot_bot">
+            <directory>./tests/Integration/Services/IMBot/Bot/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_imbot_chat">
+            <directory>./tests/Integration/Services/IMBot/Chat/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_imbot_command">
+            <directory>./tests/Integration/Services/IMBot/Command/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_imbot_revision">
+            <directory>./tests/Integration/Services/IMBot/Revision/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_imbot_chat_message">
+            <directory>./tests/Integration/Services/IMBot/ChatMessage/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_imbot_event">
+            <directory>./tests/Integration/Services/IMBot/Event/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_imbot_file">
+            <directory>./tests/Integration/Services/IMBot/File/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_im">
+            <directory>./tests/Integration/Services/IM/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_disk">
+            <directory>./tests/Integration/Services/IM/Disk/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_chat">
+            <directory>./tests/Integration/Services/IM/Chat/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_chat_user">
+            <file>./tests/Integration/Services/IM/Chat/Service/ChatUserTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_im_dialog">
+            <directory>./tests/Integration/Services/IM/Dialog/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_department">
+            <directory>./tests/Integration/Services/IM/Department/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_message">
+            <directory>./tests/Integration/Services/IM/Message/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_revision">
+            <directory>./tests/Integration/Services/IM/Revision/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_counters">
+            <directory>./tests/Integration/Services/IM/Counters/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_recent">
+            <directory>./tests/Integration/Services/IM/Recent/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_search">
+            <directory>./tests/Integration/Services/IM/Search/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_user_status">
+            <directory>./tests/Integration/Services/IM/User/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_user">
+            <directory>./tests/Integration/Services/IM/User/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_notify">
+            <directory>./tests/Integration/Services/IM/Notify/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_event_v2">
+            <directory>./tests/Integration/Services/IM/EventV2/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_im_file_v2">
+            <directory>./tests/Integration/Services/IM/FileV2/</directory>
+        <testsuite name="integration_tests_scope_sign">
+            <directory>./tests/Integration/Services/Sign/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sign_document">
+            <directory>./tests/Integration/Services/Sign/B2e/Document/Service/</directory>
+            <directory>./tests/Integration/Services/Sign/B2e/Document/Result/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sign_company_provider">
+            <directory>./tests/Integration/Services/Sign/B2e/CompanyProvider/Service/</directory>
+            <directory>./tests/Integration/Services/Sign/B2e/CompanyProvider/Result/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sign_personal_tail">
+            <directory>./tests/Integration/Services/Sign/B2e/PersonalTail/Service/</directory>
+            <directory>./tests/Integration/Services/Sign/B2e/PersonalTail/Result/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sign_mysafe_tail">
+            <directory>./tests/Integration/Services/Sign/B2e/MySafeTail/Service/</directory>
+            <directory>./tests/Integration/Services/Sign/B2e/MySafeTail/Result/</directory>
+        <testsuite name="integration_tests_scope_messageservice">
+            <directory>./tests/Integration/Services/Messageservice/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_messageservice_sender">
+            <directory>./tests/Integration/Services/Messageservice/Sender/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_messageservice_message_status">
+            <directory>./tests/Integration/Services/Messageservice/Message/Status/</directory>
+        <testsuite name="integration_tests_mailservice">
+            <directory>./tests/Integration/Services/MailService/</directory>
+        <testsuite name="integration_tests_scope_timeman">
+            <directory>./tests/Integration/Services/Timeman/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_biconnector">
+            <directory>./tests/Integration/Services/Biconnector/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_biconnector_connector">
+            <directory>./tests/Integration/Services/Biconnector/Connector/Service/</directory>
+            <directory>./tests/Integration/Services/Biconnector/Connector/Result/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_biconnector_source">
+            <directory>./tests/Integration/Services/Biconnector/Source/Service/</directory>
+            <directory>./tests/Integration/Services/Biconnector/Source/Result/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_biconnector_dataset">
+            <directory>./tests/Integration/Services/Biconnector/Dataset/Service/</directory>
+            <directory>./tests/Integration/Services/Biconnector/Dataset/Result/</directory>
         </testsuite>
     </testsuites>
     <source>
