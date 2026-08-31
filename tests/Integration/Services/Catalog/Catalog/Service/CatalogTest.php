@@ -57,6 +57,7 @@ class CatalogTest extends TestCase
         $this->assertEquals($catalog->id, $this->service->get($catalog->id)->catalog()->id);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->service = Fabric::getServiceBuilder()->getCatalogScope()->catalog();
