@@ -70,6 +70,30 @@ help:
 	@echo "test-integration-landing-role - run Landing Role integration tests"
 	@echo "test-integration-landing-repowidget - run Landing RepoWidget integration tests"
 	@echo "test-integration-scope-landing-template - run Landing Template integration tests"
+	@echo "test-integration-scope-imbot - run IMBot scope integration tests"
+	@echo "test-integration-imbot-bot - run IMBot Bot integration tests"
+	@echo "test-integration-imbot-chat - run IMBot Chat integration tests"
+	@echo "test-integration-imbot-command - run IMBot Command integration tests"
+	@echo "test-integration-imbot-revision - run IMBot Revision integration tests"
+	@echo "test-integration-imbot-chat-message - run IMBot ChatMessage integration tests (incl. batch)"
+	@echo "test-integration-imbot-event - run IMBot Event integration tests"
+	@echo "test-integration-imbot-file - run IMBot File integration tests"
+	@echo "test-integration-scope-im - run IM scope integration tests"
+	@echo "test-integration-im-disk - run IM Disk integration tests"
+	@echo "test-integration-im-message - run IM Message integration tests"
+	@echo "test-integration-im-dialog - run IM Dialog integration tests"
+	@echo "test-integration-im-department - run IM Department integration tests"
+	@echo "test-integration-im-user - run IM User integration tests"
+	@echo "test-integration-im-revision - run IM Revision integration tests"
+	@echo "test-integration-im-counters - run IM Counters integration tests"
+	@echo "test-integration-im-recent - run IM Recent integration tests"
+	@echo "test-integration-im-search - run IM Search integration tests"
+	@echo "test-integration-im-user-status - run IM UserStatus integration tests"
+	@echo "test-integration-im-chat - run IM Chat integration tests"
+	@echo "test-integration-im-chat-user - run IM Chat User integration tests"
+	@echo "test-integration-im-notify - run IM Notify integration tests"
+	@echo "test-integration-im-event-v2 - run IM EventV2 integration tests"
+	@echo "test-integration-im-file-v2 - run IM FileV2 integration tests"
 	@echo "test-integration-scope-sign - run Sign B2e integration tests"
 	@echo "test-integration-sign-document - run Sign Document integration tests"
 	@echo "test-integration-sign-company-provider - run Sign CompanyProvider integration tests"
@@ -175,10 +199,6 @@ test-integration-scope-telephony:
 .PHONY: test-integration-scope-workflows
 test-integration-scope-workflows:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_workflows
-
-.PHONY: test-integration-scope-im
-test-integration-scope-im:
-	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im
 
 .PHONY: test-integration-scope-placement
 test-integration-scope-placement:
@@ -502,6 +522,101 @@ test-integration-landing-role:
 test-integration-landing-repowidget:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_repowidget
 
+.PHONY: test-integration-scope-imbot
+test-integration-scope-imbot:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_imbot
+
+.PHONY: test-integration-imbot-bot
+test-integration-imbot-bot:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_imbot_bot
+
+.PHONY: test-integration-imbot-chat
+test-integration-imbot-chat:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_imbot_chat
+
+.PHONY: test-integration-imbot-command
+test-integration-imbot-command:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_imbot_command
+
+.PHONY: test-integration-imbot-revision
+test-integration-imbot-revision:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_imbot_revision
+
+.PHONY: test-integration-imbot-chat-message
+test-integration-imbot-chat-message:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_imbot_chat_message
+
+.PHONY: test-integration-imbot-event
+test-integration-imbot-event:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_imbot_event
+
+.PHONY: test-integration-imbot-file
+test-integration-imbot-file:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_imbot_file
+
+.PHONY: test-integration-scope-im
+test-integration-scope-im:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_im
+
+.PHONY: test-integration-im-disk
+test-integration-im-disk:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_disk
+
+.PHONY: test-integration-im-message
+test-integration-im-message:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_message
+
+.PHONY: test-integration-im-dialog
+test-integration-im-dialog:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_dialog
+
+.PHONY: test-integration-im-department
+test-integration-im-department:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_department
+
+.PHONY: test-integration-im-user
+test-integration-im-user:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_user
+
+.PHONY: test-integration-im-revision
+test-integration-im-revision:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_revision
+
+.PHONY: test-integration-im-counters
+test-integration-im-counters:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_counters
+
+.PHONY: test-integration-im-recent
+test-integration-im-recent:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_recent
+
+.PHONY: test-integration-im-search
+test-integration-im-search:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_search
+
+.PHONY: test-integration-im-user-status
+test-integration-im-user-status:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_user_status
+
+.PHONY: test-integration-im-chat
+test-integration-im-chat:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_chat
+
+.PHONY: test-integration-im-chat-user
+test-integration-im-chat-user:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_chat_user
+
+.PHONY: test-integration-im-notify
+test-integration-im-notify:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_notify
+
+.PHONY: test-integration-im-event-v2
+test-integration-im-event-v2:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_event_v2
+
+.PHONY: test-integration-im-file-v2
+test-integration-im-file-v2:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_file_v2
 .PHONY: test-integration-scope-sign
 test-integration-scope-sign:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sign

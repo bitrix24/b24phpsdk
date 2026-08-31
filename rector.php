@@ -80,6 +80,8 @@ return RectorConfig::configure()
         __DIR__ . '/tests/Integration/Services/CRM/Documentgenerator/Template',
         __DIR__ . '/src/Services/Landing',
         __DIR__ . '/tests/Integration/Services/Landing',
+        __DIR__ . '/src/Services/IMBot',
+        __DIR__ . '/tests/Integration/Services/IMBot',
         __DIR__ . '/src/Services/Sign',
         __DIR__ . '/tests/Integration/Services/Sign',
         __DIR__ . '/src/Services/Messageservice',

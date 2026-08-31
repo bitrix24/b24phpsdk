@@ -19,6 +19,7 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\AbstractService;
+use Bitrix24\SDK\Services\Placement\PlacementOptionsInterface;
 use Bitrix24\SDK\Services\Placement\Result\PlacementBindResult;
 use Bitrix24\SDK\Services\Placement\Result\PlacementLocationCodesResult;
 use Bitrix24\SDK\Services\Placement\Result\PlacementsLocationInformationResult;
@@ -44,7 +45,7 @@ class Placement extends AbstractService
         string $placementCode,
         string $handlerUrl,
         array $lang,
-        array $options = [],
+        PlacementOptionsInterface|array $options = [],
         ?int $b24UserId = null,
     ): PlacementBindResult {
         return new PlacementBindResult(
@@ -54,7 +55,7 @@ class Placement extends AbstractService
                     'PLACEMENT' => $placementCode,
                     'HANDLER' => $handlerUrl,
                     'LANG_ALL' => $lang,
-                    'OPTIONS' => $options,
+                    'OPTIONS' => $options instanceof PlacementOptionsInterface ? $options->build() : $options,
                     'USER_ID' => $b24UserId,
                 ]
             )

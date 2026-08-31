@@ -4,6 +4,79 @@
 
 ### Added
 
+- Added `Bitrix24\SDK\Core\Contracts\LangCodes` backed enum with all Bitrix24-supported language codes (`ar`, `de`, `en`, `fr`, `id`, `it`, `ja`, `ko`, `ms`, `pl`, `pt`, `ru`, `sk`, `th`, `tr`, `ua`, `vi`, `zh`) for use in `LANG_ALL` sections of `placement.bind` and similar API calls
+- Added `Bitrix24\SDK\Services\Placement\PlacementOptionsInterface` — contract for typed placement OPTIONS builders exposing `build(): array`
+- Added `Bitrix24\SDK\Services\Placement\Role` backed enum (`USER`, `ADMIN`) representing user-role filter for IM placement widgets
+- Added `Bitrix24\SDK\Services\Placement\ExtranetAvailability` backed enum (`No`/`Y`, `Yes`/`Y`) controlling extranet-user visibility of placement widgets
+
+- Added service `Services\IMBot` scope with support for `imbot.v2.*` methods,
+  see [imbot.v2.* methods](https://apidocs.bitrix24.com/api-reference/chat-bots/chat-bots-v2/index.html) ([#505](https://github.com/bitrix24/b24phpsdk/issues/505)):
+    - `Bot::register` registers a new chat-bot (`imbot.v2.Bot.register`)
+    - `Bot::update` updates an existing chat-bot (`imbot.v2.Bot.update`)
+    - `Bot::get` gets information about a chat-bot (`imbot.v2.Bot.get`)
+    - `Bot::list` gets the list of chat-bots for the current application (`imbot.v2.Bot.list`)
+    - `Bot::unregister` unregisters a chat-bot (`imbot.v2.Bot.unregister`)
+    - `Chat::add` creates a new group chat on behalf of the bot (`imbot.v2.Chat.add`)
+    - `Chat::get` gets chat information by chat ID (`imbot.v2.Chat.get`)
+    - `Chat::update` updates chat properties (`imbot.v2.Chat.update`)
+    - `Chat::leave` removes the bot from a chat (`imbot.v2.Chat.leave`)
+    - `Chat::setOwner` transfers chat ownership to another user (`imbot.v2.Chat.setOwner`)
+    - `ChatUser::add` adds users to a chat (`imbot.v2.Chat.User.add`)
+    - `ChatUser::delete` removes a user from a chat (`imbot.v2.Chat.User.delete`)
+    - `ChatUser::list` gets the list of users in a chat (`imbot.v2.Chat.User.list`)
+    - `ChatManager::add` assigns manager rights to a chat member (`imbot.v2.Chat.Manager.add`)
+    - `ChatManager::delete` revokes manager rights from a chat member (`imbot.v2.Chat.Manager.delete`)
+    - `ChatMessage::send` sends a message on behalf of the bot (`imbot.v2.Chat.Message.send`), with batch calls support
+    - `ChatMessage::update` updates a previously sent message (`imbot.v2.Chat.Message.update`), with batch calls support
+    - `ChatMessage::delete` deletes a message sent by the bot (`imbot.v2.Chat.Message.delete`), with batch calls support
+    - `ChatMessage::read` marks a message as read (`imbot.v2.Chat.Message.read`)
+    - `ChatMessage::get` gets a message by its ID (`imbot.v2.Chat.Message.get`)
+    - `ChatMessage::getContext` gets message context around a given message (`imbot.v2.Chat.Message.getContext`)
+    - `ChatMessageReaction::add` adds a reaction to a message (`imbot.v2.Chat.Message.Reaction.add`)
+    - `ChatMessageReaction::delete` removes a reaction from a message (`imbot.v2.Chat.Message.Reaction.delete`)
+    - `Command::register` registers a slash command for a bot (`imbot.v2.Command.register`)
+    - `Command::update` updates an existing slash command (`imbot.v2.Command.update`)
+    - `Command::list` gets the list of commands registered for a bot (`imbot.v2.Command.list`)
+    - `Command::unregister` unregisters a slash command (`imbot.v2.Command.unregister`)
+    - `Command::answer` answers a command invocation with a message (`imbot.v2.Command.answer`)
+    - `ChatInputAction::notify` sends a typing indicator in the chat (`imbot.v2.Chat.InputAction.notify`)
+    - `ChatTextField::enabled` enables or disables the text field in a chat (`imbot.v2.Chat.TextField.enabled`)
+    - `Event::get` polls pending events for the bot in fetch mode (`imbot.v2.Event.get`), returns typed `EventsResult` with `EventItemResult` items, `getNextOffset()`, and `isHasMore()`
+    - `File::upload` uploads a file to a chat on behalf of the bot (`imbot.v2.File.upload`)
+    - `File::download` gets a download URL for a file in a chat (`imbot.v2.File.download`), returns typed `FileDownloadResult`
+    - `Revision::get` gets REST API and client protocol revision numbers (`imbot.v2.Revision.get`)
+- Added services `Services\IM\EventV2` and `Services\IM\FileV2` with support for `im.v2.*` methods,
+  see [im.v2.* methods](https://apidocs.bitrix24.com/api-reference/chat-bots/chat-bots-v2/im.v2/) ([#505](https://github.com/bitrix24/b24phpsdk/issues/505)):
+    - `EventV2::subscribe` subscribes the current user to message event recording (`im.v2.Event.subscribe`)
+    - `EventV2::unsubscribe` unsubscribes the current user from message event recording (`im.v2.Event.unsubscribe`)
+    - `EventV2::get` polls pending message events for the current user (`im.v2.Event.get`), returns typed `EventsV2Result` with `EventV2ItemResult` items, `getNextOffset()`, and `isHasMore()`
+    - `FileV2::upload` uploads a file to a chat (`im.v2.File.upload`)
+    - `FileV2::download` gets a download URL for a file in a chat (`im.v2.File.download`), returns typed `FileV2DownloadResult`
+
+- Added `Bitrix24\SDK\Services\IM\Department\Service\Department` service wrapping `im.department.get`, `im.department.colleagues.list`, `im.department.employees.get`, and `im.department.managers.get`, with typed department/user result wrappers and `IMServiceBuilder::department()` accessor
+- Added `Bitrix24\SDK\Services\IM\Disk\Service\Disk` with `getFolderId(?int $chatId = null, ?string $dialogId = null)` for `im.disk.folder.get`, plus dedicated `FolderIdResult`, IM builder registration, and focused unit/integration coverage
+- Added IM Disk file operations to `Bitrix24\SDK\Services\IM\Disk\Service\Disk`: `commitFile`, `deleteFile`, `saveFile`, and `shareRecord`, with dedicated result wrappers and live IM Disk integration coverage
+- Added `Bitrix24\SDK\Services\IM\Chat\Service\ChatUser` service wrapping `im.chat.user.add`, `im.chat.user.delete`, `im.chat.user.list` for chat participant management, with `ChatUserListResult` and `IMServiceBuilder::chatUser()`
+- Added `Bitrix24\SDK\Services\IM\Search\Service\Search` service wrapping `im.search.chat.list`, `im.search.user.list`, `im.search.department.list`, and deprecated legacy `im.search.last.*` methods, with typed search result wrappers and `IMServiceBuilder::search()` accessor
+- Added `Bitrix24\SDK\Services\IM\Recent\Service\Recent` service wrapping `im.recent.get`, `im.recent.list`, `im.recent.pin`, `im.recent.unread`, and `im.recent.hide`, with `RecentItemResult`/`RecentsResult` and `IMServiceBuilder::recent()` accessor
+- Added `Bitrix24\SDK\Services\IM\Revision\Service\Revision` service wrapping `im.revision.get` for IM module API revision/compatibility checks, with `RevisionItemResult` (`rest`, `web`, `mobile`, `desktop`, `im_revision_mobile` fields) and `IMServiceBuilder::revision()` accessor
+- Added `IM\Counters` service with `im.counters.get` support for retrieving unread message and notification counters
+- Added typed fluent `Services\IM\Message\Attach` payload builders for `ATTACH` blocks in `im.message.add` and `im.message.update`, plus `RawAttach::fromArray()` as an object-based escape hatch for unsupported or vendor-extended payload shapes
+- Added `Bitrix24\SDK\Services\IM\Chat\Service\Chat` service wrapping `im.chat.add`, `im.chat.get`, `im.chat.leave`, `im.chat.mute`, `im.chat.setOwner`, `im.chat.updateAvatar`, `im.chat.updateColor`, `im.chat.updateTitle`, with enums `ChatType`, `ChatColor`, `ChatEntityType`, result types `ChatItemResult`/`ChatResult`, and `IMServiceBuilder::chat()` accessor
+- Added `Bitrix24\SDK\Services\IM\Dialog\Service\Dialog` service for `im.dialog.*` support, with typed result wrappers, `IMServiceBuilder::dialog()`, and dedicated unit/integration/annotation coverage
+- Added `Bitrix24\SDK\Services\IM\User\Service\User` service for `im.user.get` and `im.user.list.get` support, with typed result wrappers `UserResult`/`UsersResult`/`UserItemResult`, `IMServiceBuilder::user()` accessor, and unit/integration/annotation test coverage
+- Added `b24-dev:result-item-generator` developer command for staged ResultItem payload build, verification, apply, and generation workflows backed by OpenAPI, REST documentation, and live API metadata
+- Added `Services\IM\Message\Service\Message` service for `im.message.*` support:
+    - `add` — send a message (`im.message.add`)
+    - `update` — edit text and parameters (`im.message.update`)
+    - `delete` — delete a message (`im.message.delete`)
+    - `like` — toggle the Like mark (`im.message.like`), with typed `LikeAction` enum (`auto`/`plus`/`minus`)
+    - `share` — create an object from a message (`im.message.share`), with typed `ShareType` enum (`CHAT`/`TASK`/`POST`/`CALEND`)
+    - `command` — invoke a chat-bot command (`im.message.command`)
+- Added `IMServiceBuilder::message()` accessor and cached service instance
+- Added `Bitrix24\SDK\Services\IM\User\Service\UserStatus` service wrapping `im.user.status.get`, `im.user.status.set`, `im.user.status.idle.start`, and `im.user.status.idle.end`, with `UserStatusType` enum and `UserStatusResult`; exposed via `IMServiceBuilder::userStatus()`
+- Extended `IM\Notify` service with `send` (`im.notify`), `getList` (`im.notify.get`), `historySearch` (`im.notify.history.search`), `markAllAsRead` (`im.notify.read.all`), `getSchema` (`im.notify.schema.get`) methods; refactored `markMessagesAsRead`/`markMessagesAsUnread` to call `im.notify.read.list` instead of `im.notify.read`; added `NotifyItemResult`, `NotifiesResult`, `NotifyHistorySearchResult`, `NotifyReadAllResult`, `NotifySchemaItemResult`, `NotifySchemaResult` result types
+
 - Added `Services\Sign\SignServiceBuilder` with support for `sign.b2e.*` methods and events,
   see [sign.b2e.* methods](https://apidocs.bitrix24.com/api-reference/sign/index.html) ([#504](https://github.com/bitrix24/b24phpsdk/issues/504)):
     - `document()->send()` — sends a document for company-side signing (КЭДО), application context only
@@ -269,6 +342,10 @@
   `start`, `pause`, `defer`, `complete`, etc.) for users migrating to the v3 SDK.
   All classes under `Bitrix24\SDK\Legacy\` are marked `@deprecated` and will be removed
   once v3 reaches feature parity with v1.
+
+### Changed
+
+- `Bitrix24\SDK\Services\Placement\Service\Placement::bind()` — `$options` parameter now accepts `PlacementOptionsInterface|array` (previously `array` only), enabling typed fluent options builders to be passed directly
 
 ## 3.0.0 - 2026.01.01
 
