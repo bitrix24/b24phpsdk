@@ -309,14 +309,17 @@
         </testsuite>
         <testsuite name="integration_tests_catalog_product_property_feature">
             <directory>./tests/Integration/Services/Catalog/ProductPropertyFeature/</directory>
+        </testsuite>
         <testsuite name="integration_tests_catalog_product_property_enum">
             <directory>./tests/Integration/Services/Catalog/ProductPropertyEnum/Service/</directory>
         </testsuite>
         <testsuite name="integration_tests_catalog_product_property_enum_annotations">
             <file>./tests/Integration/Services/Catalog/ProductPropertyEnum/Result/ProductPropertyEnumItemResultTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_scope_catalog_product_property_section">
             <file>./tests/Integration/Services/Catalog/ProductPropertySection/Service/ProductPropertySectionTest.php</file>
             <file>./tests/Integration/Services/Catalog/ProductPropertySection/Result/ProductPropertySectionItemResultTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_catalog_product_property">
             <directory>./tests/Integration/Services/Catalog/ProductProperty/</directory>
         </testsuite>
@@ -325,11 +328,13 @@
         </testsuite>
         <testsuite name="integration_tests_catalog_product_property_annotations">
             <file>./tests/Integration/Services/Catalog/ProductProperty/Result/ProductPropertyItemResultAnnotationsTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_catalog_product_image">
             <directory>./tests/Integration/Services/Catalog/ProductImage/</directory>
         </testsuite>
         <testsuite name="integration_tests_catalog_product_image_annotations">
             <file>./tests/Integration/Services/Catalog/ProductImage/Result/ProductImageItemResultTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_catalog_price">
             <directory>./tests/Integration/Services/Catalog/Price/</directory>
         </testsuite>
@@ -341,6 +346,7 @@
         </testsuite>
         <testsuite name="integration_tests_catalog_price_type_group">
             <directory>./tests/Integration/Services/Catalog/PriceTypeGroup/</directory>
+        </testsuite>
         <testsuite name="integration_tests_catalog_enum">
             <directory>./tests/Integration/Services/Catalog/Enum/</directory>
         </testsuite>
@@ -349,6 +355,7 @@
         </testsuite>
         <testsuite name="integration_tests_catalog_measure">
             <directory>./tests/Integration/Services/Catalog/Measure/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_catalog">
             <directory>./tests/Integration/Services/Catalog/</directory>
         </testsuite>
@@ -369,6 +376,7 @@
         <testsuite name="integration_tests_catalog_product_offer">
             <file>./tests/Integration/Services/Catalog/Product/Offer/Service/OfferTest.php</file>
             <file>./tests/Integration/Services/Catalog/Product/Offer/Result/OfferItemResultTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_scope_imbot">
             <directory>./tests/Integration/Services/IMBot/</directory>
         </testsuite>
@@ -440,6 +448,7 @@
         </testsuite>
         <testsuite name="integration_tests_im_file_v2">
             <directory>./tests/Integration/Services/IM/FileV2/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_sign">
             <directory>./tests/Integration/Services/Sign/</directory>
         </testsuite>
@@ -458,6 +467,7 @@
         <testsuite name="integration_tests_sign_mysafe_tail">
             <directory>./tests/Integration/Services/Sign/B2e/MySafeTail/Service/</directory>
             <directory>./tests/Integration/Services/Sign/B2e/MySafeTail/Result/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_messageservice">
             <directory>./tests/Integration/Services/Messageservice/</directory>
         </testsuite>
@@ -466,8 +476,10 @@
         </testsuite>
         <testsuite name="integration_tests_messageservice_message_status">
             <directory>./tests/Integration/Services/Messageservice/Message/Status/</directory>
+        </testsuite>
         <testsuite name="integration_tests_mailservice">
             <directory>./tests/Integration/Services/MailService/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_timeman">
             <directory>./tests/Integration/Services/Timeman/</directory>
         </testsuite>
