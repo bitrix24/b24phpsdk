@@ -26,11 +26,11 @@ class BlogPostTest extends TestCase
     #[TestDox('Test BlogPost service can be instantiated')]
     public function testCanBeInstantiated(): void
     {
-        $core = $this->createMock(CoreInterface::class);
+        $core = $this->createStub(CoreInterface::class);
         $nullLogger = new NullLogger();
-        
+
         $blogPost = new BlogPost($core, $nullLogger);
-        
+
         $this->assertInstanceOf(BlogPost::class, $blogPost);
     }
 
@@ -38,9 +38,9 @@ class BlogPostTest extends TestCase
     public function testAddBuildsCorrectParameters(): void
     {
         $core = $this->createMock(CoreInterface::class);
-        $response = $this->createMock(Response::class);
+        $response = $this->createStub(Response::class);
         $nullLogger = new NullLogger();
-        
+
         $core->expects($this->once())
             ->method('call')
             ->with(
@@ -50,11 +50,11 @@ class BlogPostTest extends TestCase
                     'POST_TITLE' => 'Test title',
                     'IMPORTANT' => 'Y',
                     'IMPORTANT_DATE_END' => '2025-08-15T00:00:00+00:00',
-                    'DEST' => ['UA']
+                    'DEST' => ['UA'],
                 ]
             )
             ->willReturn($response);
-        
+
         $blogPost = new BlogPost($core, $nullLogger);
         $blogPostAddResult = $blogPost->add(
             postMessage: 'Test message',
@@ -63,7 +63,7 @@ class BlogPostTest extends TestCase
             importantDateEnd: '2025-08-15T00:00:00+00:00',
             dest: ['UA']
         );
-        
+
         $this->assertInstanceOf(BlogPostAddResult::class, $blogPostAddResult);
     }
 }

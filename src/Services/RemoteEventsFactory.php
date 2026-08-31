@@ -30,6 +30,7 @@ use Bitrix24\SDK\Services\Telephony\Events\TelephonyEventsFactory;
 use Bitrix24\SDK\Services\IMOpenLines\Connector\Events\ImConnectorEventsFactory;
 use Bitrix24\SDK\Services\Task\Events\TaskEventsFactory;
 use Bitrix24\SDK\Services\Sale\Events\SaleEventsFactory;
+use Bitrix24\SDK\Services\Sign\Events\SignB2eEventsFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -159,6 +160,7 @@ readonly class RemoteEventsFactory
             ]);
             throw new InvalidArgumentException('key «event» not found in request payload');
         }
+
         if ($applicationToken !== null && trim($applicationToken) === '') {
             throw new InvalidArgumentException('application token cannot be empty');
         }
@@ -230,6 +232,7 @@ readonly class RemoteEventsFactory
                 new SaleEventsFactory(),
                 new ImConnectorEventsFactory(),
                 new TaskEventsFactory(),
+                new SignB2eEventsFactory(),
             ],
             $logger
         );

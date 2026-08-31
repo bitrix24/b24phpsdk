@@ -20,4 +20,6 @@ enum ProductType: int
     case SKU = 3;
     case productOffer = 4;
     case genericOffer = 5;
+    case skuMaster = 6;
+    case service = 7;
 }
