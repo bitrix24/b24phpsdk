@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\CustomAssertions;
 
+use Bitrix24\SDK\Core\Result\AbstractItem;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityContentType;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityDirectionType;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityNotifyType;
@@ -29,6 +30,57 @@ use function Typhoon\Type\stringify;
 
 trait CustomBitrix24Assertions
 {
+    /**
+     * Assert that every property-read field of $resultItemClassName, when accessed via magic getter on $item,
+     * returns a value whose PHP type matches the PHPDoc annotation.
+     *
+     * @param class-string $resultItemClassName
+     */
+    protected function assertBitrix24ResultItemFieldsTypeCastMatchAnnotations(
+        AbstractItem $item,
+        string $resultItemClassName
+    ): void {
+        $props = TyphoonReflector::build()->reflectClass($resultItemClassName)->properties();
+
+        foreach ($props as $meta) {
+            if (!$meta->isAnnotated() || $meta->isNative()) {
+                continue;
+            }
+
+            $propName = $meta->id->name;
+            $typeStr = stringify($meta->type());
+            $value = $item->$propName;
+
+            // null is always valid for nullable types
+            if (str_contains($typeStr, 'null') && $value === null) {
+                continue;
+            }
+
+            $message = sprintf(
+                'field «%s» in «%s» annotated as «%s» but actual PHP type is «%s»',
+                $propName,
+                $resultItemClassName,
+                $typeStr,
+                get_debug_type($value)
+            );
+
+            // For nullable union types like "Carbon\CarbonImmutable|null", strip null before assertInstanceOf
+            $classStr = implode('|', array_values(array_filter(
+                explode('|', $typeStr),
+                static fn (string $t): bool => $t !== 'null'
+            )));
+
+            match (true) {
+                str_contains($typeStr, 'array')  => $this->assertIsArray($value, $message),
+                str_contains($typeStr, 'bool')   => $this->assertIsBool($value, $message),
+                str_contains($typeStr, 'int')    => $this->assertIsInt($value, $message),
+                str_contains($typeStr, 'float')  => $this->assertIsFloat($value, $message),
+                str_contains($typeStr, 'string') => $this->assertIsString($value, $message),
+                default                          => $this->assertInstanceOf($classStr, $value, $message),
+            };
+        }
+    }
+
     /**
      * @param array<int, non-empty-string> $fieldCodesFromApi
      * @param class-string $resultItemClassName
@@ -530,6 +582,136 @@ trait CustomBitrix24Assertions
                         )
                     );
             }
+        }
+    }
+
+    /**
+     * Assert that for each annotated property of a result item the actual PHP value
+     * returned via the magic getter is compatible with the phpdoc type annotation.
+     *
+     * Note: Bitrix24 REST API may return integer fields as strings,
+     * so a string value is considered compatible with an «int» annotation.
+     * Raw datetime strings are considered compatible with «CarbonImmutable» annotations
+     * because AbstractItem does not perform any type casting.
+     *
+     * @param class-string $resultItemClassName
+     */
+    protected function assertBitrix24ResultItemFieldsTypeCastMatchAnnotations(
+        AbstractItem $resultItem,
+        string $resultItemClassName
+    ): void {
+        $props = TyphoonReflector::build()->reflectClass($resultItemClassName)->properties();
+
+        foreach ($props as $meta) {
+            if (!$meta->isAnnotated() || $meta->isNative()) {
+                continue;
+            }
+
+            $propName = $meta->id->name;
+            $annotatedType = stringify($meta->type());
+
+            /** @var mixed $actualValue */
+            $actualValue = $resultItem->$propName;
+
+            if ($actualValue === null) {
+                $this->assertStringContainsString(
+                    'null',
+                    $annotatedType,
+                    sprintf(
+                        'class «%s» field «%s» returned null but annotation «%s» does not allow null',
+                        $resultItemClassName,
+                        $propName,
+                        $annotatedType
+                    )
+                );
+                continue;
+            }
+
+            $actualPhpType = get_debug_type($actualValue);
+
+            if (is_array($actualValue)) {
+                $this->assertStringContainsString(
+                    'array',
+                    $annotatedType,
+                    sprintf(
+                        'class «%s» field «%s» annotation «%s» does not match actual PHP type «array»',
+                        $resultItemClassName,
+                        $propName,
+                        $annotatedType
+                    )
+                );
+                continue;
+            }
+
+            if (is_bool($actualValue)) {
+                $this->assertTrue(
+                    str_contains($annotatedType, 'bool'),
+                    sprintf(
+                        'class «%s» field «%s» annotation «%s» does not match actual PHP type «bool»',
+                        $resultItemClassName,
+                        $propName,
+                        $annotatedType
+                    )
+                );
+                continue;
+            }
+
+            if ($actualValue instanceof CarbonImmutable) {
+                $this->assertStringContainsString(
+                    'CarbonImmutable',
+                    $annotatedType,
+                    sprintf(
+                        'class «%s» field «%s» annotation «%s» does not match actual PHP type «CarbonImmutable»',
+                        $resultItemClassName,
+                        $propName,
+                        $annotatedType
+                    )
+                );
+                continue;
+            }
+
+            if (is_int($actualValue)) {
+                $this->assertTrue(
+                    str_contains($annotatedType, 'int'),
+                    sprintf(
+                        'class «%s» field «%s» annotation «%s» does not match actual PHP type «int»',
+                        $resultItemClassName,
+                        $propName,
+                        $annotatedType
+                    )
+                );
+                continue;
+            }
+
+            if (is_string($actualValue)) {
+                // Bitrix24 REST API often returns integer IDs as strings;
+                // raw datetime values are also returned as strings before casting.
+                $this->assertTrue(
+                    str_contains($annotatedType, 'string')
+                    || str_contains($annotatedType, 'int')
+                    || str_contains($annotatedType, 'CarbonImmutable'),
+                    sprintf(
+                        'class «%s» field «%s» annotation «%s» does not cover actual PHP type «string»',
+                        $resultItemClassName,
+                        $propName,
+                        $annotatedType
+                    )
+                );
+                continue;
+            }
+
+            // Fallback for other types: the debug type name must appear in the annotation string.
+            $this->assertStringContainsString(
+                $actualPhpType,
+                $annotatedType,
+                sprintf(
+                    'class «%s» field «%s» annotation «%s» does not match actual PHP type «%s»',
+                    $resultItemClassName,
+                    $propName,
+                    $annotatedType,
+                    $actualPhpType
+                )
+            );
         }
     }
 }
