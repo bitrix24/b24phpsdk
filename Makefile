@@ -529,6 +529,21 @@ test-integration-landing-role:
 test-integration-landing-repowidget:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_repowidget
 
+.PHONY: test-integration-catalog-price
+test-integration-catalog-price:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_price
+
+.PHONY: test-integration-catalog-price-type
+test-integration-catalog-price-type:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_price_type
+
+.PHONY: test-integration-catalog-price-type-lang
+test-integration-catalog-price-type-lang:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_price_type_lang
+
+.PHONY: test-integration-catalog-price-type-group
+test-integration-catalog-price-type-group:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_price_type_group
 .PHONY: test-integration-catalog-enum
 test-integration-catalog-enum:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_enum

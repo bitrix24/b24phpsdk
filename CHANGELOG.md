@@ -4,6 +4,15 @@
 
 ### Added
 
+- Added services `Services\Catalog\Price\Service\Price`, `Services\Catalog\PriceType\Service\PriceType`,
+  `Services\Catalog\PriceTypeLang\Service\PriceTypeLang`, `Services\Catalog\PriceTypeGroup\Service\PriceTypeGroup`
+  with support methods, see [catalog.price.* methods](https://apidocs.bitrix24.com/api-reference/catalog/price/index.html)
+  and [catalog.priceType.* methods](https://apidocs.bitrix24.com/api-reference/catalog/price-type/index.html)
+  ([#536](https://github.com/bitrix24/b24phpsdk/issues/536)):
+    - `Price::add` / `update` / `modify` / `get` / `list` / `delete` / `getFields`, with batch calls support
+    - `PriceType::add` / `update` / `get` / `list` / `delete` / `getFields`, with batch calls support
+    - `PriceTypeLang::add` / `update` / `get` / `list` / `delete` / `getLanguages` / `getFields`, with batch calls support
+    - `PriceTypeGroup::add` / `list` / `delete` / `getFields`, with batch calls support
 - Added services `Services\Catalog\Enum\Service\CatalogEnum`, `Services\Catalog\Extra\Service\Extra`
   and `Services\Catalog\Measure\Service\Measure` with support for `catalog.enum.*`, `catalog.extra.*`
   and `catalog.measure.*` methods,

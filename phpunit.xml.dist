@@ -307,6 +307,17 @@
         <testsuite name="integration_tests_landing_repowidget">
             <directory>./tests/Integration/Services/Landing/RepoWidget/</directory>
         </testsuite>
+        <testsuite name="integration_tests_catalog_price">
+            <directory>./tests/Integration/Services/Catalog/Price/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_price_type">
+            <directory>./tests/Integration/Services/Catalog/PriceType/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_price_type_lang">
+            <directory>./tests/Integration/Services/Catalog/PriceTypeLang/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_price_type_group">
+            <directory>./tests/Integration/Services/Catalog/PriceTypeGroup/</directory>
         <testsuite name="integration_tests_catalog_enum">
             <directory>./tests/Integration/Services/Catalog/Enum/</directory>
         </testsuite>
