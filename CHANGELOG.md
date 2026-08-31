@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.11.0 - 2026.08.31
+
 ### Added
 
 - Added service `Services\Catalog\ProductPropertyFeature` with support for `catalog.productPropertyFeature.*`
@@ -452,6 +454,7 @@
   instances instead of `CatalogItemResult` ([#527](https://github.com/bitrix24/b24phpsdk/issues/527))
 ### Changed
 
+- Added PHP 8.5 to supported versions in `composer.json` (`php` requirement updated to `8.2.* || 8.3.* || 8.4.* || 8.5.*`)
 - `Bitrix24\SDK\Services\Placement\Service\Placement::bind()` — `$options` parameter now accepts `PlacementOptionsInterface|array` (previously `array` only), enabling typed fluent options builders to be passed directly
 
 ## 3.0.0 - 2026.01.01
@@ -732,12 +735,6 @@ Supported in bitrix24-php-sdk methods count: 697
 Coverage percentage: 59.83% 🚀
 Supported in bitrix24-php-sdk methods with batch wrapper count: 91
 ```
-## 1.11.0 - upcoming
-
-### Changed
-
-- Added PHP 8.5 to supported versions in `composer.json` (`php` requirement updated to `8.2.* || 8.3.* || 8.4.* || 8.5.*`)
-
 ## 1.10.1 - 2026.02.25
 ### Fixed
 
