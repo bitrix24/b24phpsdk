@@ -39,6 +39,7 @@ use Bitrix24\SDK\Services\Calendar\CalendarServiceBuilder;
 use Bitrix24\SDK\Services\Paysystem\PaysystemServiceBuilder;
 use Bitrix24\SDK\Services\SonetGroup\SonetGroupServiceBuilder;
 use Bitrix24\SDK\Services\Landing\LandingServiceBuilder;
+use Bitrix24\SDK\Services\Sign\SignServiceBuilder;
 use Bitrix24\SDK\Services\Messageservice\MessageserviceServiceBuilder;
 use Bitrix24\SDK\Services\MailService\MailServiceServiceBuilder;
 use Bitrix24\SDK\Services\Documentgenerator\DocumentgeneratorServiceBuilder;
@@ -384,6 +385,20 @@ class ServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    public function getSignScope(): SignServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new SignServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function getMessageserviceScope(): MessageserviceServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -440,5 +455,5 @@ class ServiceBuilder extends AbstractServiceBuilder
         }
 
         return $this->serviceCache[__METHOD__];
-    }
+    }  
 }
