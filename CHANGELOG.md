@@ -49,6 +49,47 @@
     - `enablePublicUrl` enables or disables public URL for a document
     - `count` counts documents
 
+- Added `Services\Timeman` service with support for workday tracking methods,
+  see [timeman.* methods](https://apidocs.bitrix24.com/api-reference/timeman/index.html):
+    - `open` — starts a new workday or continues after pause/close
+    - `pause` — pauses the current workday
+    - `close` — closes the current workday
+    - `status` — gets current workday status
+    - `settings` — gets user's work time settings
+      ([#484](https://github.com/bitrix24/b24phpsdk/issues/484))
+
+- Added service `Services\Biconnector\Dataset` with support methods,
+  see [biconnector.dataset.* methods](https://apidocs.bitrix24.com/api-reference/biconnector/dataset/index.html) ([#469](https://github.com/bitrix24/b24phpsdk/issues/469)):
+    - `add` adds a new dataset, with batch calls support
+    - `update` updates an existing dataset description, with batch calls support
+    - `get` gets information about the dataset by its identifier
+    - `list` gets the list of datasets, with batch calls support
+    - `delete` deletes a dataset, with batch calls support
+    - `fields` returns the fields description
+    - `updateFields` adds, updates visibility of, or deletes individual dataset columns (`biconnector.dataset.fields.update`)
+    - `count` counts datasets
+- Added `dataset()` accessor to `BiconnectorServiceBuilder` ([#469](https://github.com/bitrix24/b24phpsdk/issues/469))
+- Added service `Services\Biconnector\Source` with support methods,
+  see [biconnector.source.* methods](https://apidocs.bitrix24.com/api-reference/biconnector/source/index.html) ([#469](https://github.com/bitrix24/b24phpsdk/issues/469)):
+    - `add` adds a new data source, with batch calls support
+    - `update` updates an existing data source, with batch calls support
+    - `get` gets information about the data source by its identifier
+    - `list` gets the list of data sources, with batch calls support
+    - `delete` deletes a data source, with batch calls support
+    - `fields` returns the fields description
+    - `count` counts data sources
+- Added `source()` accessor to `BiconnectorServiceBuilder` ([#469](https://github.com/bitrix24/b24phpsdk/issues/469))
+- Added service `Services\Biconnector\Connector` with support methods,
+  see [biconnector.connector.* methods](https://github.com/bitrix24/b24phpsdk/issues/469):
+    - `add` adds a new connector, with batch calls support
+    - `update` updates an existing connector, with batch calls support
+    - `get` gets information about the connector by its identifier
+    - `list` gets the list of connectors, with batch calls support
+    - `delete` deletes a connector, with batch calls support
+    - `fields` returns the fields description
+    - `count` counts connectors
+
+- Added `Services\Booking\BookingServiceBuilder` with Booking scope wrappers and integration coverage for `booking.v1.clienttype.*`, `booking.v1.resourceType.*`, `booking.v1.resource.*`, `booking.v1.resource.slots.*`, `booking.v1.waitlist.*`, `booking.v1.waitlist.client.*`, `booking.v1.waitlist.externalData.*`, `booking.v1.booking.*`, `booking.v1.booking.client.*`, and `booking.v1.booking.externalData.*` methods.
 - Added service `Services\Landing\Site\Service\Site` with support methods,
   see [landing.site.* methods](https://github.com/bitrix24/b24phpsdk/issues/267):
     - `add` adds a site

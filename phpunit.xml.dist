@@ -274,6 +274,9 @@
         <testsuite name="integration_tests_scope_sonet_group">
             <directory>./tests/Integration/Services/SonetGroup/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_booking">
+            <directory>./tests/Integration/Services/Booking/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_landing">
             <directory>./tests/Integration/Services/Landing/</directory>
         </testsuite>
@@ -303,6 +306,23 @@
         </testsuite>
         <testsuite name="integration_tests_landing_repowidget">
             <directory>./tests/Integration/Services/Landing/RepoWidget/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_timeman">
+            <directory>./tests/Integration/Services/Timeman/</directory>
+        <testsuite name="integration_tests_scope_biconnector">
+            <directory>./tests/Integration/Services/Biconnector/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_biconnector_connector">
+            <directory>./tests/Integration/Services/Biconnector/Connector/Service/</directory>
+            <directory>./tests/Integration/Services/Biconnector/Connector/Result/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_biconnector_source">
+            <directory>./tests/Integration/Services/Biconnector/Source/Service/</directory>
+            <directory>./tests/Integration/Services/Biconnector/Source/Result/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_biconnector_dataset">
+            <directory>./tests/Integration/Services/Biconnector/Dataset/Service/</directory>
+            <directory>./tests/Integration/Services/Biconnector/Dataset/Result/</directory>
         </testsuite>
     </testsuites>
     <source>
