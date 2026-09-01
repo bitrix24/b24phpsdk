@@ -40,15 +40,15 @@ class VatTest extends TestCase
     public function testAddGetDelete(): void
     {
         $name = sprintf('test vat %s', time());
-        $addResult = $this->vatService->add([
+        $vatResult = $this->vatService->add([
             'name' => $name,
             'rate' => 13,
             'sort' => 50,
             'active' => 'Y',
         ]);
-        $vatId = $addResult->vat()->id;
-        $this->assertSame($name, $addResult->vat()->name);
-        $this->assertSame(13.0, $addResult->vat()->rate);
+        $vatId = $vatResult->vat()->id;
+        $this->assertSame($name, $vatResult->vat()->name);
+        $this->assertSame(13.0, $vatResult->vat()->rate);
 
         $getResult = $this->vatService->get($vatId);
         $this->assertSame($vatId, $getResult->vat()->id);
@@ -70,9 +70,9 @@ class VatTest extends TestCase
         ])->vat()->id;
 
         $updatedName = sprintf('updated vat %s', time());
-        $updateResult = $this->vatService->update($vatId, ['name' => $updatedName, 'rate' => 20]);
-        $this->assertSame($updatedName, $updateResult->vat()->name);
-        $this->assertSame(20.0, $updateResult->vat()->rate);
+        $vatResult = $this->vatService->update($vatId, ['name' => $updatedName, 'rate' => 20]);
+        $this->assertSame($updatedName, $vatResult->vat()->name);
+        $this->assertSame(20.0, $vatResult->vat()->rate);
 
         $this->vatService->delete($vatId);
     }
@@ -90,8 +90,8 @@ class VatTest extends TestCase
             'sort' => 50,
         ])->vat()->id;
 
-        $listResult = $this->vatService->list([], ['id' => $vatId]);
-        $this->assertCount(1, $listResult->getVats());
+        $vatsResult = $this->vatService->list([], ['id' => $vatId]);
+        $this->assertCount(1, $vatsResult->getVats());
 
         $this->vatService->delete($vatId);
     }

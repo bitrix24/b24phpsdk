@@ -50,8 +50,8 @@ class BatchTest extends TestCase
         $this->assertCount(1, $addedIds);
 
         $updatePayload = [];
-        foreach ($addedIds as $id) {
-            $updatePayload[$id] = ['name' => sprintf('batch vat updated %s', time()), 'rate' => 13, 'sort' => 70];
+        foreach ($addedIds as $addedId) {
+            $updatePayload[$addedId] = ['name' => sprintf('batch vat updated %s', time()), 'rate' => 13, 'sort' => 70];
         }
 
         $updatedCount = 0;
