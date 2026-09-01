@@ -807,6 +807,10 @@ test-integration-biconnector-source:
 test-integration-biconnector-dataset:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_biconnector_dataset
 
+.PHONY: test-integration-catalog-vat
+test-integration-catalog-vat:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_vat
+
 # work dev environment
 .PHONY: php-dev-server-up
 php-dev-server-up:

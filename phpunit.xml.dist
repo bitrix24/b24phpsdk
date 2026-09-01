@@ -498,6 +498,9 @@
             <directory>./tests/Integration/Services/Biconnector/Dataset/Service/</directory>
             <directory>./tests/Integration/Services/Biconnector/Dataset/Result/</directory>
         </testsuite>
+        <testsuite name="integration_tests_catalog_vat">
+            <directory>./tests/Integration/Services/Catalog/Vat/</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>
