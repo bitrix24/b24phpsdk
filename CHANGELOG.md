@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+### Added
+
+- Added service `Services\Catalog\Vat\Service\Vat` with support methods,
+  see [catalog.vat.* methods](https://apidocs.bitrix24.com/api-reference/catalog/vat/index.html) ([#590](https://github.com/bitrix24/b24phpsdk/issues/590)):
+    - `add` creates a new VAT rate, with batch calls support
+    - `update` updates an existing VAT rate by its identifier, with batch calls support
+    - `get` returns VAT rate information by identifier
+    - `list` returns a list of VAT rates by filter
+    - `delete` deletes a VAT rate by identifier, with batch calls support
+    - `getFields` returns the description of VAT rate fields
+
 ## 1.11.0 - 2026.08.31
 
 ### Added
