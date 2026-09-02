@@ -26,4 +26,20 @@ use Carbon\CarbonImmutable;
  */
 class VatItemResult extends AbstractItem
 {
+    /**
+     * @param int|string $offset
+     *
+     * @return bool|CarbonImmutable|float|mixed|null
+     */
+    public function __get($offset)
+    {
+        return match ($offset) {
+            'active' => $this->data[$offset] === 'Y',
+            'rate' => (float)$this->data[$offset],
+            'timestampX' => $this->data[$offset] !== null && $this->data[$offset] !== ''
+                ? CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset])
+                : null,
+            default => $this->data[$offset] ?? null,
+        };
+    }
 }
