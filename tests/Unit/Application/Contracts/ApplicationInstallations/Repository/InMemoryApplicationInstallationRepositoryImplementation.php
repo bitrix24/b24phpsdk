@@ -140,6 +140,23 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
         return $result;
     }
 
+    #[\Override]
+    public function findStaleInstallations(ApplicationInstallationStatus $status, CarbonImmutable $olderThan): array
+    {
+        $matches = array_filter(
+            $this->items,
+            static fn (ApplicationInstallationInterface $installation): bool => $installation->getStatus() === $status
+                && $installation->getCreatedAt()->lessThan($olderThan)
+        );
+        usort(
+            $matches,
+            static fn (ApplicationInstallationInterface $left, ApplicationInstallationInterface $right): int =>
+                $left->getCreatedAt() <=> $right->getCreatedAt()
+        );
+
+        return $matches;
+    }
+
     /**
      * @throws InvalidArgumentException
      */

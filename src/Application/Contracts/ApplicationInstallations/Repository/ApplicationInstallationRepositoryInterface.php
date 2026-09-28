@@ -76,6 +76,16 @@ interface ApplicationInstallationRepositoryInterface
     public function findByExternalId(string $externalId): array;
 
     /**
+     * Find installations with the given status AND createdAt strictly before olderThan.
+     *
+     * Return matches ordered by createdAt ascending. The threshold is exclusive and
+     * applies to creation time, not updatedAt. Return an empty array if nothing matches.
+     *
+     * @return ApplicationInstallationInterface[]
+     */
+    public function findStaleInstallations(ApplicationInstallationStatus $status, CarbonImmutable $olderThan): array;
+
+    /**
      * Find application installation by application token
      *
      * @param non-empty-string $applicationToken
