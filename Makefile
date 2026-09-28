@@ -885,6 +885,7 @@ test-integration-catalog-extra:
 .PHONY: test-integration-catalog-measure
 test-integration-catalog-measure:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_measure
+
 .PHONY: test-integration-catalog-price
 test-integration-catalog-price:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_price
@@ -949,6 +950,18 @@ test-integration-catalog-section:
 .PHONY: test-integration-catalog-section-annotations
 test-integration-catalog-section-annotations:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_section_annotations
+.PHONY: test-integration-catalog-rounding-rule
+test-integration-catalog-rounding-rule:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_rounding_rule
+.PHONY: test-integration-catalog-ratio
+test-integration-catalog-ratio:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_ratio
+.PHONY: test-integration-catalog-document-contractor
+test-integration-catalog-document-contractor:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_document_contractor
+.PHONY: test-integration-catalog-document-contractor-annotations
+test-integration-catalog-document-contractor-annotations:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_document_contractor_annotations
 
 # work dev environment
 .PHONY: php-dev-server-up

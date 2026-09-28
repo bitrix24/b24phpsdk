@@ -304,6 +304,8 @@ skip_violations:
 | `make test-integration-catalog-document-element-annotations` | Warehouse accounting document line item result annotations |
 | `make test-integration-catalog-section` | Trade-catalog sections |
 | `make test-integration-catalog-section-annotations` | Trade-catalog section result annotations |
+| `make test-integration-catalog-rounding-rule` | Price rounding rules |
+| `make test-integration-catalog-ratio` | Measurement unit ratio |
 
 ### Tests — integration (Tasks)
 
