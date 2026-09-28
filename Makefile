@@ -944,6 +944,9 @@ test-integration-catalog-document-element:
 test-integration-catalog-document-element-annotations:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_document_element_annotations
 
+.PHONY: test-integration-catalog-rounding-rule
+test-integration-catalog-rounding-rule:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_rounding_rule
 .PHONY: test-integration-catalog-ratio
 test-integration-catalog-ratio:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_ratio
