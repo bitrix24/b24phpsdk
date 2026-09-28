@@ -570,6 +570,56 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
         $appInstallationRepo->findByApplicationToken('');
     }
 
+    #[Test]
+    #[TestDox('findStaleInstallations filters by status and exclusive creation time in ascending order')]
+    final public function testFindStaleInstallations(): void
+    {
+        $repository = $this->createApplicationInstallationRepositoryImplementation();
+        $flusher = $this->createRepositoryFlusherImplementation();
+        $installation = $this->createApplicationInstallationImplementation(
+            Uuid::v7(),
+            ApplicationInstallationStatus::new,
+            Uuid::v7(),
+            ApplicationStatus::subscription(),
+            PortalLicenseFamily::nfr,
+            null,
+            null,
+            null,
+            null,
+            null
+        );
+        $repository->save($installation);
+        $flusher->flush();
+        $createdAt = $installation->getCreatedAt();
+
+        foreach ($repository->findStaleInstallations(ApplicationInstallationStatus::new, $createdAt) as $item) {
+            self::assertFalse($installation->getId()->equals($item->getId()));
+            self::assertTrue($item->getCreatedAt()->lessThan($createdAt));
+        }
+
+        $olderThan = $createdAt->addSecond();
+        $found = false;
+        $previousCreatedAt = null;
+        foreach ($repository->findStaleInstallations(ApplicationInstallationStatus::new, $olderThan) as $item) {
+            self::assertInstanceOf(ApplicationInstallationInterface::class, $item);
+            self::assertSame(ApplicationInstallationStatus::new, $item->getStatus());
+            self::assertTrue($item->getCreatedAt()->lessThan($olderThan));
+            if ($previousCreatedAt instanceof CarbonImmutable) {
+                self::assertTrue($previousCreatedAt->lessThanOrEqualTo($item->getCreatedAt()));
+            }
+
+            $previousCreatedAt = $item->getCreatedAt();
+            $found = $found || $installation->getId()->equals($item->getId());
+        }
+
+        self::assertTrue($found, 'The saved installation must be returned when created before the threshold.');
+
+        foreach ($repository->findStaleInstallations(ApplicationInstallationStatus::active, $olderThan) as $item) {
+            self::assertSame(ApplicationInstallationStatus::active, $item->getStatus());
+            self::assertFalse($installation->getId()->equals($item->getId()));
+        }
+    }
+
     public static function applicationInstallationDataProvider(): Generator
     {
         yield 'status-new-all-fields' => [

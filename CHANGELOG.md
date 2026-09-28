@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Added `ApplicationInstallationRepositoryInterface::findStaleInstallations()` to find installations by status and exclusive creation-time threshold in oldest-first order; existing repository implementations must add this method ([#579](https://github.com/bitrix24/b24phpsdk/issues/579))
+
 ## 3.6.0
 
 ### Added
