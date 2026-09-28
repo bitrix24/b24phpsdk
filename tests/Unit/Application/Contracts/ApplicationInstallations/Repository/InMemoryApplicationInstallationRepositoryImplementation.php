@@ -102,27 +102,6 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
     }
 
     #[\Override]
-    public function findStaleInstallations(
-        ApplicationInstallationStatus $status,
-        CarbonImmutable $olderThan
-    ): array {
-        $result = [];
-        foreach ($this->items as $item) {
-            if ($item->getStatus() === $status && $item->getCreatedAt()->lessThan($olderThan)) {
-                $result[] = $item;
-            }
-        }
-
-        usort(
-            $result,
-            static fn (ApplicationInstallationInterface $left, ApplicationInstallationInterface $right): int =>
-                $left->getCreatedAt() <=> $right->getCreatedAt()
-        );
-
-        return $result;
-    }
-
-    #[\Override]
     public function findByExternalId(string $externalId): array
     {
         $this->logger->debug('InMemoryApplicationInstallationRepositoryImplementation.findByExternalId', ['externalId' => $externalId]);
@@ -138,6 +117,23 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
         }
 
         return $result;
+    }
+
+    #[\Override]
+    public function findStaleInstallations(ApplicationInstallationStatus $status, CarbonImmutable $olderThan): array
+    {
+        $matches = array_filter(
+            $this->items,
+            static fn (ApplicationInstallationInterface $installation): bool => $installation->getStatus() === $status
+                && $installation->getCreatedAt()->lessThan($olderThan)
+        );
+        usort(
+            $matches,
+            static fn (ApplicationInstallationInterface $left, ApplicationInstallationInterface $right): int =>
+                $left->getCreatedAt() <=> $right->getCreatedAt()
+        );
+
+        return $matches;
     }
 
     /**
