@@ -30,12 +30,10 @@ class CalendarServiceBuilder extends AbstractServiceBuilder
      */
     public function calendar(): Service\Calendar
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Service\Calendar(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Service\Calendar(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -65,12 +63,10 @@ class CalendarServiceBuilder extends AbstractServiceBuilder
      */
     public function resource(): Resource\Service\Resource
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Resource\Service\Resource(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Resource\Service\Resource(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }

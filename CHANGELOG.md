@@ -2,24 +2,67 @@
 
 ## Unreleased
 
-### Added
+## 3.6.0
 
+### Added
 - Added `ApplicationInstallationRepositoryInterface::getCurrent()` to retrieve the explicitly selected current application installation; existing repository implementations must add this method ([#356](https://github.com/bitrix24/b24phpsdk/issues/356))
-
-### Fixed
-
-- Fixed the Catalog Ratio testsuite closing tag and `CatalogServiceBuilder` indentation that blocked PR quality checks ([#356](https://github.com/bitrix24/b24phpsdk/issues/356))
-
-## 3.5.0
-
-### Added
-
+- Added service `Services\Catalog\RoundingRule` with support methods,
+  see [catalog.roundingRule.* methods](https://apidocs.bitrix24.com/api-reference/catalog/rounding-rule/index.html) ([#573](https://github.com/bitrix24/b24phpsdk/issues/573)):
+    - `add` creates a new price rounding rule, with batch calls support
+    - `update` updates an existing price rounding rule, with batch calls support
+    - `list` gets the list of price rounding rules
+    - `delete` deletes a price rounding rule, with batch calls support
+    - `get` gets information about a price rounding rule by its identifier
+    - `getFields` returns the description of price rounding rule fields
+- Added service `Services\Catalog\Ratio` with support methods,
+  see [catalog.ratio.* methods](https://apidocs.bitrix24.com/api-reference/catalog/ratio/index.html) ([#570](https://github.com/bitrix24/b24phpsdk/issues/570)):
+    - `get` returns the measurement unit ratio by identifier
+    - `list` gets the list of measurement unit ratios by filter
+    - `fields` returns the description of measurement unit ratio fields
 - Added service `Services\Catalog\DocumentContractor` with support methods,
   see [catalog.documentcontractor.* methods](https://apidocs.bitrix24.com/api-reference/catalog/documentcontractor/index.html) ([#565](https://github.com/bitrix24/b24phpsdk/issues/565)):
     - `add` binds a CRM contractor (contact or company) to a warehouse accounting receipt document, with batch calls support
     - `list` gets the list of contractor bindings by filter
     - `delete` deletes a contractor binding, with batch calls support
     - `getFields` returns the description of contractor binding fields
+- Added service `Services\Catalog\Section` with support methods,
+  see [catalog.section.* methods](https://apidocs.bitrix24.com/api-reference/catalog/section/index.html) ([#583](https://github.com/bitrix24/b24phpsdk/issues/583)):
+    - `add` creates a new trade-catalog section, with batch calls support
+    - `update` updates an existing trade-catalog section, with batch calls support
+    - `get` gets a trade-catalog section by its identifier
+    - `list` gets the list of trade-catalog sections by filter
+    - `delete` deletes a trade-catalog section, with batch calls support
+    - `getFields` returns the description of trade-catalog section fields
+- Added service `Services\Catalog\RoundingRule` with support methods,
+  see [catalog.roundingRule.* methods](https://apidocs.bitrix24.com/api-reference/catalog/rounding-rule/index.html) ([#573](https://github.com/bitrix24/b24phpsdk/issues/573)):
+    - `add` creates a new price rounding rule, with batch calls support
+    - `update` updates an existing price rounding rule, with batch calls support
+    - `list` gets the list of price rounding rules
+    - `delete` deletes a price rounding rule, with batch calls support
+    - `get` gets information about a price rounding rule by its identifier
+    - `getFields` returns the description of price rounding rule fields
+- Added service `Services\Catalog\UserfieldDocument` with support methods,
+  see [catalog.userfield.document.* methods](https://apidocs.bitrix24.com/api-reference/catalog/userfield-document/index.html) ([#589](https://github.com/bitrix24/b24phpsdk/issues/589)):
+    - `list` gets a paginated list of userfield values for warehouse accounting documents
+    - `update` updates userfield values of a warehouse accounting document, with batch calls support
+- Added service `Services\Catalog\StoreProduct` with support methods,
+  see [catalog.storeproduct.* methods](https://apidocs.bitrix24.com/api-reference/catalog/store-product/index.html) ([#584](https://github.com/bitrix24/b24phpsdk/issues/584)):
+    - `get` returns product stock information by record identifier
+    - `list` returns a list of product stock records by filter
+    - `getFields` returns the description of product stock fields
+### Fixed
+
+- Fixed the Catalog Ratio testsuite closing tag and `CatalogServiceBuilder` indentation that blocked PR quality checks ([#356](https://github.com/bitrix24/b24phpsdk/issues/356))
+
+
+## 3.5.0
+
+### Added
+
+- Added service `Services\Catalog\UserfieldDocument` with support methods,
+  see [catalog.userfield.document.* methods](https://apidocs.bitrix24.com/api-reference/catalog/userfield-document/index.html) ([#589](https://github.com/bitrix24/b24phpsdk/issues/589)):
+    - `list` gets a paginated list of userfield values for warehouse accounting documents
+    - `update` updates userfield values of a warehouse accounting document, with batch calls support
 - Added service `Services\Catalog\Document` with support methods,
   see [catalog.document.* methods](https://apidocs.bitrix24.com/api-reference/catalog/document/index.html) ([#559](https://github.com/bitrix24/b24phpsdk/issues/559)):
     - `add` creates a new warehouse accounting document, with batch calls support

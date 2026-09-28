@@ -46,9 +46,7 @@ class IMBotServiceBuilder extends AbstractServiceBuilder
      */
     public function bot(): Bot
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Bot($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Bot($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -59,9 +57,7 @@ class IMBotServiceBuilder extends AbstractServiceBuilder
      */
     public function chat(): Chat
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Chat($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Chat($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -71,9 +67,7 @@ class IMBotServiceBuilder extends AbstractServiceBuilder
      */
     public function chatUser(): ChatUser
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new ChatUser($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new ChatUser($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -83,9 +77,7 @@ class IMBotServiceBuilder extends AbstractServiceBuilder
      */
     public function chatManager(): ChatManager
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new ChatManager($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new ChatManager($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -98,13 +90,11 @@ class IMBotServiceBuilder extends AbstractServiceBuilder
      */
     public function chatMessage(): ChatMessage
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new ChatMessage(
-                new ChatMessageBatch($this->batch, $this->log),
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new ChatMessage(
+            new ChatMessageBatch($this->batch, $this->log),
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -114,9 +104,7 @@ class IMBotServiceBuilder extends AbstractServiceBuilder
      */
     public function chatMessageReaction(): ChatMessageReaction
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new ChatMessageReaction($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new ChatMessageReaction($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -126,9 +114,7 @@ class IMBotServiceBuilder extends AbstractServiceBuilder
      */
     public function chatInputAction(): ChatInputAction
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new ChatInputAction($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new ChatInputAction($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -138,9 +124,7 @@ class IMBotServiceBuilder extends AbstractServiceBuilder
      */
     public function chatTextField(): ChatTextField
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new ChatTextField($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new ChatTextField($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -151,9 +135,7 @@ class IMBotServiceBuilder extends AbstractServiceBuilder
      */
     public function command(): Command
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Command($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Command($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -163,9 +145,7 @@ class IMBotServiceBuilder extends AbstractServiceBuilder
      */
     public function event(): Event
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Event($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Event($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -175,9 +155,7 @@ class IMBotServiceBuilder extends AbstractServiceBuilder
      */
     public function file(): File
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new File($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new File($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -187,9 +165,7 @@ class IMBotServiceBuilder extends AbstractServiceBuilder
      */
     public function revision(): Revision
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Revision($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Revision($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }

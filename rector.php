@@ -100,7 +100,7 @@ return RectorConfig::configure()
     ->withSets(
         [
             LevelSetList::UP_TO_PHP_84,
-            PHPUnitSetList::PHPUNIT_110
+            PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES
         ]
     )
     ->withImportNames(
@@ -142,7 +142,6 @@ return RectorConfig::configure()
         \Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector::class,
         \Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class,
         \Rector\Php83\Rector\ClassConst\AddTypeToConstRector::class,
-        \Rector\Php84\Rector\Class_\DeprecatedAnnotationToDeprecatedAttributeRector::class,
         \Rector\Php84\Rector\Foreach_\ForeachToArrayAnyRector::class,
         \Rector\Php84\Rector\Foreach_\ForeachToArrayFindRector::class,
         \Rector\Php84\Rector\MethodCall\NewMethodCallWithoutParenthesesRector::class,
