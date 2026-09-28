@@ -41,16 +41,23 @@
     - `delete` deletes a price rounding rule, with batch calls support
     - `get` gets information about a price rounding rule by its identifier
     - `getFields` returns the description of price rounding rule fields
-
-## 3.5.0
-
-### Added
-
+- Added service `Services\Catalog\UserfieldDocument` with support methods,
+  see [catalog.userfield.document.* methods](https://apidocs.bitrix24.com/api-reference/catalog/userfield-document/index.html) ([#589](https://github.com/bitrix24/b24phpsdk/issues/589)):
+    - `list` gets a paginated list of userfield values for warehouse accounting documents
+    - `update` updates userfield values of a warehouse accounting document, with batch calls support
 - Added service `Services\Catalog\StoreProduct` with support methods,
   see [catalog.storeproduct.* methods](https://apidocs.bitrix24.com/api-reference/catalog/store-product/index.html) ([#584](https://github.com/bitrix24/b24phpsdk/issues/584)):
     - `get` returns product stock information by record identifier
     - `list` returns a list of product stock records by filter
     - `getFields` returns the description of product stock fields
+## 3.5.0
+
+### Added
+
+- Added service `Services\Catalog\UserfieldDocument` with support methods,
+  see [catalog.userfield.document.* methods](https://apidocs.bitrix24.com/api-reference/catalog/userfield-document/index.html) ([#589](https://github.com/bitrix24/b24phpsdk/issues/589)):
+    - `list` gets a paginated list of userfield values for warehouse accounting documents
+    - `update` updates userfield values of a warehouse accounting document, with batch calls support
 - Added service `Services\Catalog\Document` with support methods,
   see [catalog.document.* methods](https://apidocs.bitrix24.com/api-reference/catalog/document/index.html) ([#559](https://github.com/bitrix24/b24phpsdk/issues/559)):
     - `add` creates a new warehouse accounting document, with batch calls support

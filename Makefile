@@ -944,6 +944,12 @@ test-integration-catalog-document-element:
 test-integration-catalog-document-element-annotations:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_document_element_annotations
 
+.PHONY: test-integration-catalog-userfield-document
+test-integration-catalog-userfield-document:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_userfield_document
+.PHONY: test-integration-catalog-userfield-document-annotations
+test-integration-catalog-userfield-document-annotations:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_userfield_document_annotations
 .PHONY: test-integration-catalog-store-product
 test-integration-catalog-store-product:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_store_product

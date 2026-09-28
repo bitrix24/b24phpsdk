@@ -29,9 +29,7 @@ class SignServiceBuilder extends AbstractServiceBuilder
      */
     public function document(): Document
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Document($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Document($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -41,9 +39,7 @@ class SignServiceBuilder extends AbstractServiceBuilder
      */
     public function companyProvider(): CompanyProvider
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new CompanyProvider($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new CompanyProvider($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -53,9 +49,7 @@ class SignServiceBuilder extends AbstractServiceBuilder
      */
     public function personalTail(): PersonalTail
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new PersonalTail($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new PersonalTail($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -65,9 +59,7 @@ class SignServiceBuilder extends AbstractServiceBuilder
      */
     public function mySafeTail(): MySafeTail
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new MySafeTail($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new MySafeTail($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
