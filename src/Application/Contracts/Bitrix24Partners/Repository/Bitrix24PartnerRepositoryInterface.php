@@ -35,11 +35,13 @@ interface Bitrix24PartnerRepositoryInterface
     public function getById(Uuid $uuid): Bitrix24PartnerInterface;
 
     /**
-     * Find bitrix24 partner with bitrix24 partner number
+     * Find bitrix24 partner with bitrix24 partner number.
+     *
+     * By default soft-deleted partners are excluded. Pass `$withDeleted = true` to include them.
      *
      * @param non-negative-int $bitrix24PartnerNumber
      */
-    public function findByBitrix24PartnerNumber(int $bitrix24PartnerNumber): ?Bitrix24PartnerInterface;
+    public function findByBitrix24PartnerNumber(int $bitrix24PartnerNumber, bool $withDeleted = false): ?Bitrix24PartnerInterface;
 
     /**
      * Find bitrix24 partner by title
