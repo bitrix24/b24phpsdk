@@ -130,7 +130,7 @@ interface ApplicationInstallationInterface
      * Get application installation status
      *
      * new - started the installation procedure, but have not yet finalized, there is no “installation completed”
-     * needReinstall - installation timed out while waiting for the ONAPPINSTALL event and requires reinstallation
+     * needReinstall - installation timed out waiting for ONAPPINSTALL and requires reinstallation
      * active - installation finished, active portal, there is a connection to B24
      * deleted - application has been removed from the portal
      * blocked - lost connection with the portal or the developer forcibly deactivated the account
@@ -154,11 +154,11 @@ interface ApplicationInstallationInterface
      *
      * Application can be uninstalled by:
      * - admin on portal active → deleted statuses
-     * - if installation will not complete new → blocked → deleted by background task
-     * - if installation requires reinstallation, a background task can uninstall it directly:
-     *   needReinstall → deleted, without an intermediate blocked state
+     * - background task: new → needReinstall → deleted for an incomplete installation
+     * - blocked installation: blocked → deleted
      * @param string|null $applicationToken Application uninstalled from portal, set status «deleted»
      * @throws InvalidArgumentException
+     * @throws LogicException When the installation is not active, blocked, or needReinstall.
      */
     public function applicationUninstalled(?string $applicationToken = null): void;
 
@@ -196,6 +196,8 @@ interface ApplicationInstallationInterface
      *
      * A background TTL cleanup task calls this method when the ONAPPINSTALL event never arrived.
      * Only the new → needReinstall transition is allowed.
+     * Update the comment and updatedAt, and emit ApplicationInstallationMarkedNeedReinstallEvent
+     * with the same timestamp. Rejected transitions must not change state or emit an event.
      *
      * @param non-empty-string|null $comment
      * @throws LogicException if the installation is in any status other than new

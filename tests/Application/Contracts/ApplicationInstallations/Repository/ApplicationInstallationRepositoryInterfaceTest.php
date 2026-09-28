@@ -52,6 +52,99 @@ abstract class ApplicationInstallationRepositoryInterfaceTest extends TestCase
 
     abstract protected function createRepositoryFlusherImplementation(): TestRepositoryFlusherInterface;
 
+    #[Test]
+    final public function testFindStaleInstallationsReturnsEmptyArrayWhenNothingMatches(): void
+    {
+        $repository = $this->createApplicationInstallationRepositoryImplementation();
+        $this->assertSame([], $repository->findStaleInstallations(
+            ApplicationInstallationStatus::new,
+            CarbonImmutable::parse('2026-01-02 10:00:00')
+        ));
+    }
+
+    #[Test]
+    final public function testFindStaleInstallationsMatchesStatusAndStrictCreationThresholdInAscendingOrder(): void
+    {
+        $previousTestNow = CarbonImmutable::getTestNow();
+        try {
+            $repository = $this->createApplicationInstallationRepositoryImplementation();
+            $flusher = $this->createRepositoryFlusherImplementation();
+            $threshold = CarbonImmutable::parse('2026-01-03 10:00:00');
+            $newerMatch = $this->createStaleInstallationFixture(ApplicationInstallationStatus::new, $threshold->subDay());
+            $oldestMatch = $this->createStaleInstallationFixture(ApplicationInstallationStatus::new, $threshold->subDays(2));
+            $equalBoundary = $this->createStaleInstallationFixture(ApplicationInstallationStatus::new, $threshold);
+            $tooRecent = $this->createStaleInstallationFixture(ApplicationInstallationStatus::new, $threshold->addDay());
+            $otherStatus = $this->createStaleInstallationFixture(ApplicationInstallationStatus::active, $threshold->subDays(3));
+            $needsReinstall = $this->createStaleInstallationFixture(ApplicationInstallationStatus::needReinstall, $threshold->subDays(4));
+            CarbonImmutable::setTestNow($threshold->addDays(2));
+            $oldestMatch->setExternalId('Updated after the threshold');
+            $this->assertTrue($oldestMatch->getUpdatedAt()->greaterThan($threshold));
+
+            foreach ([$newerMatch, $equalBoundary, $otherStatus, $tooRecent, $oldestMatch, $needsReinstall] as $installation) {
+                $repository->save($installation);
+            }
+            $flusher->flush();
+
+            $snapshots = [];
+            foreach ([$newerMatch, $equalBoundary, $otherStatus, $tooRecent, $oldestMatch, $needsReinstall] as $installation) {
+                $stored = $repository->getById($installation->getId());
+                $snapshots[$stored->getId()->toRfc4122()] = [
+                    'status' => $stored->getStatus(),
+                    'createdAt' => $stored->getCreatedAt(),
+                    'updatedAt' => $stored->getUpdatedAt(),
+                    'comment' => $stored->getComment(),
+                    'externalId' => $stored->getExternalId(),
+                ];
+            }
+
+            $matches = $repository->findStaleInstallations(ApplicationInstallationStatus::new, $threshold);
+            $this->assertSame([0, 1], array_keys($matches));
+            $this->assertEquals([$oldestMatch->getId(), $newerMatch->getId()], array_map(
+                static fn (ApplicationInstallationInterface $installation): Uuid => $installation->getId(),
+                $matches
+            ));
+            $this->assertEquals([$needsReinstall->getId()], array_map(
+                static fn (ApplicationInstallationInterface $installation): Uuid => $installation->getId(),
+                $repository->findStaleInstallations(ApplicationInstallationStatus::needReinstall, $threshold)
+            ));
+            $this->assertSame([], $repository->findStaleInstallations(ApplicationInstallationStatus::blocked, $threshold));
+            $this->assertSame([], $repository->findStaleInstallations(ApplicationInstallationStatus::new, $oldestMatch->getCreatedAt()));
+
+            // Searching must not remove or change either matching or excluded installations.
+            foreach ($snapshots as $id => $snapshot) {
+                $stored = $repository->getById(Uuid::fromString($id));
+                $this->assertSame($id, $stored->getId()->toRfc4122());
+                $this->assertSame($snapshot['status'], $stored->getStatus());
+                $this->assertEquals($snapshot['createdAt'], $stored->getCreatedAt());
+                $this->assertEquals($snapshot['updatedAt'], $stored->getUpdatedAt());
+                $this->assertSame($snapshot['comment'], $stored->getComment());
+                $this->assertSame($snapshot['externalId'], $stored->getExternalId());
+            }
+        } finally {
+            CarbonImmutable::setTestNow($previousTestNow);
+        }
+    }
+
+    private function createStaleInstallationFixture(
+        ApplicationInstallationStatus $status,
+        CarbonImmutable $createdAt
+    ): ApplicationInstallationInterface {
+        CarbonImmutable::setTestNow($createdAt);
+
+        return $this->createApplicationInstallationImplementation(
+            Uuid::v7(),
+            $status,
+            Uuid::v7(),
+            ApplicationStatus::subscription(),
+            PortalLicenseFamily::nfr,
+            null,
+            null,
+            null,
+            null,
+            null
+        );
+    }
+
     /**
      * @throws ApplicationInstallationNotFoundException
      */

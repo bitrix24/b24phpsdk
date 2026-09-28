@@ -16,11 +16,14 @@ namespace Bitrix24\SDK\Tests\Unit\Application\Contracts\ApplicationInstallations
 use Bitrix24\SDK\Application\ApplicationStatus;
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationInterface;
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationStatus;
+use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Events\ApplicationInstallationMarkedNeedReinstallEvent;
+use Bitrix24\SDK\Application\Contracts\Events\AggregateRootEventsEmitterInterface;
 use Bitrix24\SDK\Application\PortalLicenseFamily;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\LogicException;
 use Carbon\CarbonImmutable;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Class ApplicationInstallationReferenceEntityImplementation
@@ -28,8 +31,13 @@ use Symfony\Component\Uid\Uuid;
  * This class uses ONLY for demonstration and tests interface, use cases for work with ApplicationInstallationInterface methods
  *
  */
-final class ApplicationInstallationReferenceEntityImplementation implements ApplicationInstallationInterface
+final class ApplicationInstallationReferenceEntityImplementation implements ApplicationInstallationInterface, AggregateRootEventsEmitterInterface
 {
+    /**
+     * @var Event[]
+     */
+    private array $events = [];
+
     private ?string $comment = null;
 
     private ?string $applicationToken = null;
@@ -52,6 +60,15 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     ) {
         $this->createdAt = new CarbonImmutable();
         $this->updatedAt = new CarbonImmutable();
+    }
+
+    #[\Override]
+    public function emitEvents(): array
+    {
+        $events = $this->events;
+        $this->events = [];
+
+        return $events;
     }
 
     #[\Override]
@@ -209,7 +226,11 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     #[\Override]
     public function applicationUninstalled(?string $applicationToken = null): void
     {
-        if ($this->applicationInstallationStatus === ApplicationInstallationStatus::new || $this->applicationInstallationStatus === ApplicationInstallationStatus::deleted) {
+        if (!in_array($this->applicationInstallationStatus, [
+            ApplicationInstallationStatus::active,
+            ApplicationInstallationStatus::blocked,
+            ApplicationInstallationStatus::needReinstall,
+        ], true)) {
             throw new LogicException(
                 sprintf(
                     'application installation must be in status «%s», «%s» or «%s», current state «%s»',
@@ -263,6 +284,7 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
         $this->applicationInstallationStatus = ApplicationInstallationStatus::needReinstall;
         $this->comment = $comment;
         $this->updatedAt = new CarbonImmutable();
+        $this->events[] = new ApplicationInstallationMarkedNeedReinstallEvent($this->id, $this->updatedAt, $comment);
     }
 
     #[\Override]

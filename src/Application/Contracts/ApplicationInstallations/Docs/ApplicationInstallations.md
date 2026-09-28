@@ -45,13 +45,33 @@ Optional can store links to:
 stateDiagram-v2
     [*] --> New: New installation started
     New --> Active : Installation completed successfully
-    New --> Blocked : Installation aborted 
+    New --> Blocked : Installation aborted
+    New --> NeedReinstall : Timed out waiting for ONAPPINSTALL
+    NeedReinstall --> Deleted : Uninstall stale installation
     Active --> Blocked : Connection lost or\nforcibly deactivated
     Active --> Deleted : Application\n uninstalled
     Blocked --> Active : Reconnected or\nreactivated
     Blocked --> Deleted : Delete blocked installation 
     Deleted --> [*]: Installation can be removed\n from persistence storage
 ```
+
+## Stale installations
+
+A background cleanup worker can mark an installation that timed out waiting for
+`ONAPPINSTALL` with `markAsNeedReinstall(?string $comment): void`. Only the transition
+`new → needReinstall` is allowed; any other source status raises `LogicException`.
+The operation stores the comment, updates `updatedAt`, and emits
+`ApplicationInstallationMarkedNeedReinstallEvent` with the installation UUID,
+transition timestamp, and comment. It does not decide the TTL or run a worker.
+
+A stale installation can then transition directly to `deleted` through
+`applicationUninstalled(null)`, without an intermediate blocked status. Delete it
+from persistence only after that transition, following the existing repository contract.
+
+Existing entity implementations must add `markAsNeedReinstall()` and handle the new
+status in their uninstall logic and any exhaustive status handling. The reference
+entity buffers the new event and exposes it through
+`AggregateRootEventsEmitterInterface::emitEvents()`, which drains the buffer.
 
 ## Repository methods
 
@@ -96,6 +116,11 @@ stateDiagram-v2
 - `public function findByExternalId(string $externalId): array;`
     - use case LinkToExternalEntity
 
+- `public function findStaleInstallations(ApplicationInstallationStatus $status, CarbonImmutable $olderThan): array;`
+    - Returns installations with the requested status and `createdAt < $olderThan`, ordered by `createdAt ASC`.
+    - Excludes installations created exactly at the threshold; compares creation time, not update time.
+    - Returns an empty array when nothing matches; does not modify installation state.
+
 ### Migration for existing repository implementations
 
 Implementations of `ApplicationInstallationRepositoryInterface` must add
@@ -105,8 +130,14 @@ selected installation using the existing lookup methods. Raise
 The in-memory reference implementation demonstrates UUID selection through an optional
 third constructor argument.
 
+Existing repositories must also implement `findStaleInstallations()`. For a database
+repository, apply both predicates and ordering in the query:
+`WHERE status = :status AND created_at < :olderThan ORDER BY created_at ASC`.
+The caller supplies the cutoff timestamp and chooses how to process the results.
+
 ## Events
 
+- `ApplicationInstallationMarkedNeedReinstallEvent` — Event emitted when a stale new installation is marked as needing reinstall
 - `ApplicationInstallationCreatedEvent` – Event triggered when a new installation flow was started
 - `ApplicationInstallationFinishedEvent` – Event triggered when application installation flow is finished
 - `ApplicationInstallationBlockedEvent` — Event triggered when application installation entity mark as blocked for
