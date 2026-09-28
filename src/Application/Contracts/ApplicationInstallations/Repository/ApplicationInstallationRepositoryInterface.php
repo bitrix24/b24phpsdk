@@ -35,6 +35,15 @@ interface ApplicationInstallationRepositoryInterface
     public function getById(Uuid $uuid): ApplicationInstallationInterface;
 
     /**
+     * Get the installation selected by the application's current execution context.
+     *
+     * The implementation must supply the current installation context explicitly.
+     *
+     * @throws ApplicationInstallationNotFoundException When no installation is selected or the selected installation does not exist.
+     */
+    public function getCurrent(): ApplicationInstallationInterface;
+
+    /**
      * Delete application installation from persistence storage
      *
      * @throws ApplicationInstallationNotFoundException
