@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Added
+
+- Added the `needReinstall` application installation status for installations that timed out waiting for `ONAPPINSTALL` ([#576](https://github.com/bitrix24/b24phpsdk/issues/576))
+- Added `ApplicationInstallationInterface::markAsNeedReinstall()` and the direct `needReinstall` to `deleted` transition; existing entity implementations must add the new method ([#577](https://github.com/bitrix24/b24phpsdk/issues/577))
+- Added `ApplicationInstallationMarkedNeedReinstallEvent` with installation ID, transition timestamp, and comment ([#578](https://github.com/bitrix24/b24phpsdk/issues/578))
+- Added `ApplicationInstallationRepositoryInterface::findStaleInstallations()` to find installations by status and exclusive creation-time cutoff, ordered oldest first; existing repository implementations must add the new method ([#579](https://github.com/bitrix24/b24phpsdk/issues/579))
+- Added stale-installation reference behavior, event emission, reusable transition and repository tests, and migration documentation ([#580](https://github.com/bitrix24/b24phpsdk/issues/580))
+
 ## 3.6.0
 
 ### Added

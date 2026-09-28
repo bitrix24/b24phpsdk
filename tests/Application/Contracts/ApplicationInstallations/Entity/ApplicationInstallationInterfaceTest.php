@@ -16,6 +16,8 @@ namespace Bitrix24\SDK\Tests\Application\Contracts\ApplicationInstallations\Enti
 use Bitrix24\SDK\Application\ApplicationStatus;
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationInterface;
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationStatus;
+use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Events\ApplicationInstallationMarkedNeedReinstallEvent;
+use Bitrix24\SDK\Application\Contracts\Events\AggregateRootEventsEmitterInterface;
 use Bitrix24\SDK\Application\PortalLicenseFamily;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\LogicException;
@@ -45,6 +47,181 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         ?Uuid $partnerUuid,
         ?string $externalId,
     ): ApplicationInstallationInterface;
+
+    /**
+     * @param non-empty-string|null $comment
+     */
+    #[Test]
+    #[DataProvider('needReinstallCommentDataProvider')]
+    final public function testMarkAsNeedReinstall(?string $comment): void
+    {
+        $previousTestNow = CarbonImmutable::getTestNow();
+        try {
+            CarbonImmutable::setTestNow('2026-01-01 10:00:00');
+            $installation = $this->createInstallationForStaleTransition();
+            $this->assertInstanceOf(AggregateRootEventsEmitterInterface::class, $installation);
+            $installation->emitEvents();
+            $id = $installation->getId();
+            $accountId = $installation->getBitrix24AccountId();
+            $createdAt = $installation->getCreatedAt();
+            $updatedAt = $installation->getUpdatedAt();
+            $transitionTime = CarbonImmutable::parse('2026-01-02 10:00:00');
+            CarbonImmutable::setTestNow($transitionTime);
+
+            $installation->markAsNeedReinstall($comment);
+
+            $this->assertSame(ApplicationInstallationStatus::needReinstall, $installation->getStatus());
+            $this->assertSame('needReinstall', $installation->getStatus()->value);
+            $this->assertSame($comment, $installation->getComment());
+            $this->assertEquals($id, $installation->getId());
+            $this->assertEquals($accountId, $installation->getBitrix24AccountId());
+            $this->assertEquals($createdAt, $installation->getCreatedAt());
+            $this->assertTrue($installation->getUpdatedAt()->greaterThan($updatedAt));
+            $this->assertEquals($transitionTime, $installation->getUpdatedAt());
+
+            $events = $installation->emitEvents();
+            $this->assertCount(1, $events);
+            $event = array_values($events)[0];
+            $this->assertInstanceOf(ApplicationInstallationMarkedNeedReinstallEvent::class, $event);
+            $this->assertEquals($id, $event->applicationInstallationId);
+            $this->assertEquals($installation->getUpdatedAt(), $event->timestamp);
+            $this->assertSame($comment, $event->comment);
+            $this->assertSame([], $installation->emitEvents());
+        } finally {
+            CarbonImmutable::setTestNow($previousTestNow);
+        }
+    }
+
+    public static function needReinstallCommentDataProvider(): Generator
+    {
+        yield 'without comment' => [null];
+        yield 'with comment' => ['Timed out waiting for ONAPPINSTALL'];
+    }
+
+    #[Test]
+    #[DataProvider('rejectedNeedReinstallStatusDataProvider')]
+    final public function testMarkAsNeedReinstallRejectsOtherStatusesWithoutMutation(string $status): void
+    {
+        $previousTestNow = CarbonImmutable::getTestNow();
+        try {
+            CarbonImmutable::setTestNow('2026-01-01 10:00:00');
+            $installation = $this->createInstallationForStaleTransition();
+            $this->assertInstanceOf(AggregateRootEventsEmitterInterface::class, $installation);
+            if ($status === 'needReinstall') {
+                $installation->markAsNeedReinstall('Original comment');
+            } else {
+                $installation->markAsBlocked('Original comment');
+                if ($status === 'active') {
+                    $installation->markAsActive('Original comment');
+                } elseif ($status === 'deleted') {
+                    $installation->applicationUninstalled(null);
+                }
+            }
+
+            $installation->setApplicationToken('preserved-token');
+            $installation->emitEvents();
+            $before = $this->installationState($installation);
+            CarbonImmutable::setTestNow('2026-01-02 10:00:00');
+            try {
+                $installation->markAsNeedReinstall('Rejected comment');
+                $this->fail('Only new installations may require reinstallation.');
+            } catch (LogicException) {
+                $this->assertEquals($before, $this->installationState($installation));
+                $this->assertTrue($installation->isApplicationTokenValid('preserved-token'));
+                $this->assertSame([], $installation->emitEvents());
+            }
+        } finally {
+            CarbonImmutable::setTestNow($previousTestNow);
+        }
+    }
+
+    public static function rejectedNeedReinstallStatusDataProvider(): Generator
+    {
+        yield 'active' => ['active'];
+        yield 'blocked' => ['blocked'];
+        yield 'deleted' => ['deleted'];
+        yield 'needReinstall' => ['needReinstall'];
+    }
+
+    #[Test]
+    final public function testNeedReinstallCanBeUninstalledWithoutToken(): void
+    {
+        $previousTestNow = CarbonImmutable::getTestNow();
+        try {
+            CarbonImmutable::setTestNow('2026-01-01 10:00:00');
+            $installation = $this->createInstallationForStaleTransition();
+            $installation->markAsNeedReinstall(null);
+            $id = $installation->getId();
+            $createdAt = $installation->getCreatedAt();
+            $updatedAt = $installation->getUpdatedAt();
+            CarbonImmutable::setTestNow('2026-01-02 10:00:00');
+
+            $installation->applicationUninstalled(null);
+
+            $this->assertSame(ApplicationInstallationStatus::deleted, $installation->getStatus());
+            $this->assertEquals($id, $installation->getId());
+            $this->assertEquals($createdAt, $installation->getCreatedAt());
+            $this->assertTrue($installation->getUpdatedAt()->greaterThan($updatedAt));
+        } finally {
+            CarbonImmutable::setTestNow($previousTestNow);
+        }
+    }
+
+    #[Test]
+    final public function testNeedReinstallCannotBeBlocked(): void
+    {
+        $installation = $this->createInstallationForStaleTransition();
+        $this->assertInstanceOf(AggregateRootEventsEmitterInterface::class, $installation);
+        $installation->markAsNeedReinstall('Original comment');
+        $installation->emitEvents();
+        $before = $this->installationState($installation);
+
+        try {
+            $installation->markAsBlocked('Rejected comment');
+            $this->fail('Only new and active installations may be blocked.');
+        } catch (LogicException) {
+            $this->assertEquals($before, $this->installationState($installation));
+            $this->assertSame([], $installation->emitEvents());
+        }
+    }
+
+    private function createInstallationForStaleTransition(): ApplicationInstallationInterface
+    {
+        return $this->createApplicationInstallationImplementation(
+            Uuid::v7(),
+            ApplicationInstallationStatus::new,
+            Uuid::v7(),
+            ApplicationStatus::subscription(),
+            PortalLicenseFamily::nfr,
+            42,
+            Uuid::v7(),
+            Uuid::v7(),
+            Uuid::v7(),
+            'stale-installation-test'
+        );
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    private function installationState(ApplicationInstallationInterface $installation): array
+    {
+        return [
+            $installation->getId(),
+            $installation->getStatus(),
+            $installation->getComment(),
+            $installation->getCreatedAt(),
+            $installation->getUpdatedAt(),
+            $installation->getBitrix24AccountId(),
+            $installation->getApplicationStatus(),
+            $installation->getPortalLicenseFamily(),
+            $installation->getPortalUsersCount(),
+            $installation->getContactPersonId(),
+            $installation->getBitrix24PartnerContactPersonId(),
+            $installation->getBitrix24PartnerId(),
+            $installation->getExternalId(),
+        ];
+    }
 
     #[Test]
     #[DataProvider('applicationInstallationDataProvider')]

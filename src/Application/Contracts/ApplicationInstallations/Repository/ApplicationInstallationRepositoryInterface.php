@@ -14,9 +14,11 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Repository;
 
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationInterface;
+use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationStatus;
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Exceptions\ApplicationInstallationNotFoundException;
 use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Carbon\CarbonImmutable;
 use Symfony\Component\Uid\Uuid;
 
 interface ApplicationInstallationRepositoryInterface
@@ -59,6 +61,16 @@ interface ApplicationInstallationRepositoryInterface
      * @throws InvalidArgumentException
      */
     public function findByExternalId(string $externalId): array;
+
+    /**
+     * Find installations with the given status AND createdAt strictly before olderThan.
+     *
+     * Return matches ordered by createdAt ascending. The threshold is exclusive and
+     * applies to creation time, not updatedAt. Return an empty array if nothing matches.
+     *
+     * @return ApplicationInstallationInterface[]
+     */
+    public function findStaleInstallations(ApplicationInstallationStatus $status, CarbonImmutable $olderThan): array;
 
     /**
      * Find application installation by application token

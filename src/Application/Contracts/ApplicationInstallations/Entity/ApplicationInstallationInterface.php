@@ -130,6 +130,7 @@ interface ApplicationInstallationInterface
      * Get application installation status
      *
      * new - started the installation procedure, but have not yet finalized, there is no “installation completed”
+     * needReinstall - installation timed out waiting for ONAPPINSTALL and requires reinstallation
      * active - installation finished, active portal, there is a connection to B24
      * deleted - application has been removed from the portal
      * blocked - lost connection with the portal or the developer forcibly deactivated the account
@@ -153,9 +154,11 @@ interface ApplicationInstallationInterface
      *
      * Application can be uninstalled by:
      * - admin on portal active → deleted statuses
-     * - if installation will not complete new → blocked → deleted by background task
+     * - background task: new → needReinstall → deleted for an incomplete installation
+     * - blocked installation: blocked → deleted
      * @param string|null $applicationToken Application uninstalled from portal, set status «deleted»
      * @throws InvalidArgumentException
+     * @throws LogicException When the installation is not active, blocked, or needReinstall.
      */
     public function applicationUninstalled(?string $applicationToken = null): void;
 
@@ -197,6 +200,18 @@ interface ApplicationInstallationInterface
      * @throws LogicException
      */
     public function markAsBlocked(?string $comment): void;
+
+    /**
+     * Mark an incomplete installation as requiring reinstallation after an ONAPPINSTALL timeout.
+     *
+     * Only the new status may transition to needReinstall. Update the comment and updatedAt,
+     * and emit ApplicationInstallationMarkedNeedReinstallEvent with the same timestamp.
+     * Rejected transitions must not change state or emit an event.
+     *
+     * @param non-empty-string|null $comment
+     * @throws LogicException When the installation is not new.
+     */
+    public function markAsNeedReinstall(?string $comment): void;
 
     /**
      * Get application status
