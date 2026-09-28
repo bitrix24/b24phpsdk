@@ -90,6 +90,7 @@ class CurrentApplicationInstallationRepositoryTest extends TestCase
         $id = Uuid::v7();
         $repository = $this->createRepository($id);
         $repository->save($this->createInstallation($id));
+
         $replacement = $this->createInstallation($id);
         $repository->save($replacement);
 
@@ -168,7 +169,7 @@ Add the reference implementation after `getById()`:
 #[\Override]
 public function getCurrent(): ApplicationInstallationInterface
 {
-    if ($this->currentInstallationId === null) {
+    if (!$this->currentInstallationId instanceof Uuid) {
         throw new ApplicationInstallationNotFoundException('current application installation is not selected');
     }
 

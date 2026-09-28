@@ -32,7 +32,8 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
 
     public function __construct(
         private readonly Bitrix24AccountRepositoryInterface $bitrix24AccountRepository,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
+        private readonly ?Uuid $currentInstallationId = null
     ) {
     }
 
@@ -73,6 +74,16 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
         }
 
         return $this->items[$uuid->toRfc4122()];
+    }
+
+    #[\Override]
+    public function getCurrent(): ApplicationInstallationInterface
+    {
+        if (!$this->currentInstallationId instanceof Uuid) {
+            throw new ApplicationInstallationNotFoundException('current application installation is not selected');
+        }
+
+        return $this->getById($this->currentInstallationId);
     }
 
     #[\Override]
