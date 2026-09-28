@@ -15,8 +15,10 @@ namespace Bitrix24\SDK\Tests\Unit\Services\Landing\RepoWidget\Service;
 
 use Bitrix24\SDK\Core\Result\AddedItemResult;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
+use Bitrix24\SDK\Services\Landing\Batch as LandingBatch;
 use Bitrix24\SDK\Services\Landing\RepoWidget\Result\RepoWidgetDebugResult;
 use Bitrix24\SDK\Services\Landing\RepoWidget\Result\RepoWidgetGetListResult;
+use Bitrix24\SDK\Services\Landing\RepoWidget\Service\Batch;
 use Bitrix24\SDK\Services\Landing\RepoWidget\Service\RepoWidget;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullCore;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -32,7 +34,12 @@ class RepoWidgetTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->service = new RepoWidget(new NullCore(), new NullLogger());
+        $nullCore = new NullCore();
+        $this->service = new RepoWidget(
+            new Batch(new LandingBatch($nullCore, new NullLogger()), new NullLogger()),
+            $nullCore,
+            new NullLogger()
+        );
     }
 
     #[Test]

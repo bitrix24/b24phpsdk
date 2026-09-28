@@ -2,6 +2,35 @@
 
 ## Unreleased
 
+### Added
+
+- Added batch calls support for `Services\Landing` scope,
+  see [landing.* methods](https://apidocs.bitrix24.com/api-reference/landing/index.html) ([#616](https://github.com/bitrix24/b24phpsdk/issues/616)):
+    - `Site\Service\Batch`: `list` (`landing.site.getList`), `add` (`landing.site.add`),
+      `update` (`landing.site.update`), `delete` (`landing.site.delete`)
+    - `Page\Service\Batch`: `list` (`landing.landing.getList`), `add` (`landing.landing.add`),
+      `update` (`landing.landing.update`), `delete` (`landing.landing.delete`)
+    - `Block\Service\Batch`: `list` gets blocks of several pages (`landing.block.getlist`)
+    - `Demos\Service\Batch`: `list` (`landing.demos.getList`), `register` (`landing.demos.register`),
+      `unregister` (`landing.demos.unregister`)
+    - `Repo\Service\Batch`: `list` (`landing.repo.getList`), `register` (`landing.repo.register`),
+      `unregister` (`landing.repo.unregister`)
+    - `RepoWidget\Service\Batch`: `list` (`landing.repowidget.getlist`), `register` (`landing.repowidget.register`),
+      `unregister` (`landing.repowidget.unregister`)
+    - `Role\Service\Batch`: `list` gets roles for several site types (`landing.role.getList`)
+    - `SysPage\Service\Batch`: `set` (`landing.syspage.set`)
+    - `Template\Service\Batch`: `list` (`landing.template.getlist`)
+- Added `Services\Landing\Batch` extending `Core\Batch`: offset pagination via `params.limit` / `params.offset`
+  for landing `*.getList` methods, `lid` key for `landing.landing.update|delete`, `id` key for
+  `landing.site.update|delete`, `code` key for `*.unregister` methods ([#616](https://github.com/bitrix24/b24phpsdk/issues/616))
+
+### Changed
+
+- Landing services `Site`, `Page`, `Block`, `Demos`, `Repo`, `RepoWidget`, `Role`, `SysPage`, `Template`
+  now receive their batch service as the first constructor argument and expose it via the public `$batch`
+  property; code that instantiates these services directly must pass the batch service
+  ([#616](https://github.com/bitrix24/b24phpsdk/issues/616))
+
 ## 3.5.0
 
 ### Added
