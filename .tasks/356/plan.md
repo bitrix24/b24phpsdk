@@ -2,7 +2,7 @@
 
 > Execute this plan in the current session after explicit user approval, using `superpowers:executing-plans` and `superpowers:test-driven-development`.
 
-**Status:** Approved by the user; implementation in progress.
+**Status:** Implementation complete; local quality gates passed. Delivery is tracked in PR #619.
 
 **Goal:** Expose `getCurrent(): ApplicationInstallationInterface` on the application installation repository and provide a tested reference implementation with explicit context.
 
@@ -214,18 +214,20 @@ The production declaration uses the existing Application entity and exception im
 - [x] Obtain explicit approval of this plan and its compatibility impact.
 - [x] Invoke `superpowers:executing-plans` and `superpowers:test-driven-development`.
 - [x] Finish worktree dependency setup, run `make oa-schema-build`, and rerun the 38-test baseline (38 tests, 38 assertions, exit 0).
-- [ ] Add only `testGetCurrentReturnsSelectedInstallationAmongSeveral()` and its helpers first. Run `make test-file path=tests/Unit/Application/Contracts/ApplicationInstallations/Repository/CurrentApplicationInstallationRepositoryTest.php` and confirm failure for the missing `getCurrent()` method.
-- [ ] Add the interface declaration, optional reference-context parameter, and minimal successful lookup. Rerun the focused test and confirm it passes.
-- [ ] Add the absent-context test, observe its failure, then implement the explicit not-found guard. Rerun and confirm it passes.
-- [ ] Add the unknown-ID, replacement, and removal regression scenarios one at a time. Their behavior delegates to the existing repository lookup/storage operations; retain the tests even when existing behavior immediately satisfies them.
-- [ ] Run the whole repository test directory and verify all existing 38 tests and the five new scenarios pass.
-- [ ] Add the repository contract and migration documentation.
-- [ ] Run the five phase-1 quality gates below in order. Diagnose any failure before fixing it.
-- [ ] Record phase 2 as not applicable: this change only affects the application persistence contract and its local reference adapter; no live REST behavior changes.
-- [ ] Add the changelog entry, update task status/evidence, and run `git diff --check`.
-- [ ] Invoke `superpowers:verification-before-completion`, inspect fresh gate evidence, commit the feature files with `Add current application installation repository lookup (#356)`.
-- [ ] Read `.github/PULL_REQUEST_TEMPLATE.md` fresh, push the branch, create a PR against `v3-dev` using the template and `Closes #356`, attach it to this chat, and wait for terminal CI results after each push.
-- [ ] Report the PR URL and actual final CI state. Merging and a v1 backport are outside the approved v3 feature scope.
+- [x] Add only `testGetCurrentReturnsSelectedInstallationAmongSeveral()` and its helpers first. Run `make test-file path=tests/Unit/Application/Contracts/ApplicationInstallations/Repository/CurrentApplicationInstallationRepositoryTest.php` and confirm failure for the missing `getCurrent()` method.
+- [x] Add the interface declaration, optional reference-context parameter, and minimal successful lookup. Rerun the focused test and confirm it passes.
+- [x] Add the absent-context test, observe its failure, then implement the explicit not-found guard. Rerun and confirm it passes.
+- [x] Add the unknown-ID, replacement, and removal regression scenarios one at a time. Their behavior delegates to the existing repository lookup/storage operations; retain the tests even when existing behavior immediately satisfies them.
+- [x] Run the whole repository test directory and verify all existing 38 tests and the five new scenarios pass.
+- [x] Add the repository contract and migration documentation.
+- [x] Run the five phase-1 quality gates below in order. Diagnose any failure before fixing it.
+- [x] Record phase 2 as not applicable: this change only affects the application persistence contract and its local reference adapter; no live REST behavior changes.
+- [x] Add the changelog entry, update task status/evidence, and run `git diff --check`.
+- [x] Invoke `superpowers:verification-before-completion`, inspect fresh gate evidence, and publish the feature files with `Add current application installation repository lookup (#356)` (commit `3b9945b1`).
+- [x] Read `.github/PULL_REQUEST_TEMPLATE.md` fresh, publish the approved plan, create draft PR #619 against `v3-dev`, and attach it to this chat. All ten CI check runs on the plan commit passed.
+
+Implementation publication and its terminal CI result are recorded in the PR checks and the final task report.
+Report the PR URL and actual final CI state after implementation publication. Merging and a v1 backport are outside the approved v3 feature scope.
 
 ## Verification
 
@@ -269,3 +271,20 @@ git status --short
 - Worktree repository baseline: exit 0; 38 tests, 38 assertions.
 - Plan self-review found no unspecified signatures, mismatched test/helper types, or missing applicable gates.
 - The user approved the plan and requested a draft PR before implementation. Publish the approved plan first, then update that PR with verified implementation and CI results.
+
+## Implementation evidence
+
+- Selection RED: missing `getCurrent()` caused the first test to fail. Selection GREEN: 1 test, 1 assertion.
+- Missing-context RED: TypeError did not match the required not-found exception. GREEN after the explicit guard: 2 tests, 2 assertions.
+- Unknown selected ID, replacement, and removal tests passed against existing storage operations without additional feature code.
+- Repository tests: 43 tests, 43 assertions.
+- Code review: no actionable findings; the reviewer inspected source, reference implementation, tests, and migration documentation.
+- `make lint-cs-fixer`: passed on first run.
+- `make lint-rector`: initially required `instanceof Uuid` narrowing and a newline before assigning the replacement fixture; passed after these two changes.
+- `make lint-phpstan`: passed on first run after Rector was green.
+- `make lint-deptrac`: passed on first run; 0 violations, 0 warnings, 0 errors.
+- `make test-unit`: passed on first run; 1250 tests, 3428 assertions.
+- Phase 2: not applicable to this internal persistence contract.
+- Unreleased changelog entry added with the issue link in a follow-up documentation commit. The initial insertion was blocked by a duplicate heading inside a historical HTML comment; the top active section was selected explicitly.
+- Draft PR: https://github.com/bitrix24/b24phpsdk/pull/619, base `v3-dev`, milestone `3.6.0`, assignee `mesilov`.
+- Final CI evidence for the implementation and documentation commits is provided by the PR checks and the final task report after publication.

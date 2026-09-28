@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Added `ApplicationInstallationRepositoryInterface::getCurrent()` to retrieve the explicitly selected current application installation; existing repository implementations must add this method ([#356](https://github.com/bitrix24/b24phpsdk/issues/356))
+
 ## 3.5.0
 
 ### Added
