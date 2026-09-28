@@ -25,6 +25,22 @@
     - `list` gets the list of contractor bindings by filter
     - `delete` deletes a contractor binding, with batch calls support
     - `getFields` returns the description of contractor binding fields
+- Added service `Services\Catalog\Section` with support methods,
+  see [catalog.section.* methods](https://apidocs.bitrix24.com/api-reference/catalog/section/index.html) ([#583](https://github.com/bitrix24/b24phpsdk/issues/583)):
+    - `add` creates a new trade-catalog section, with batch calls support
+    - `update` updates an existing trade-catalog section, with batch calls support
+    - `get` gets a trade-catalog section by its identifier
+    - `list` gets the list of trade-catalog sections by filter
+    - `delete` deletes a trade-catalog section, with batch calls support
+    - `getFields` returns the description of trade-catalog section fields
+- Added service `Services\Catalog\RoundingRule` with support methods,
+  see [catalog.roundingRule.* methods](https://apidocs.bitrix24.com/api-reference/catalog/rounding-rule/index.html) ([#573](https://github.com/bitrix24/b24phpsdk/issues/573)):
+    - `add` creates a new price rounding rule, with batch calls support
+    - `update` updates an existing price rounding rule, with batch calls support
+    - `list` gets the list of price rounding rules
+    - `delete` deletes a price rounding rule, with batch calls support
+    - `get` gets information about a price rounding rule by its identifier
+    - `getFields` returns the description of price rounding rule fields
 
 ## 3.5.0
 
