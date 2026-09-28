@@ -586,6 +586,7 @@
         </testsuite>
         <testsuite name="integration_tests_catalog_rounding_rule">
             <directory>./tests/Integration/Services/Catalog/RoundingRule/</directory>
+        </testsuite>
         <testsuite name="integration_tests_catalog_ratio">
             <directory>./tests/Integration/Services/Catalog/Ratio/</directory>
         </testsuite>
