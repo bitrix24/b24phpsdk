@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\IM\Placements;
 
+use Bitrix24\SDK\Core\ValueObjects\Url;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Placement\Result\PlacementBindResult;
@@ -21,6 +22,7 @@ use Bitrix24\SDK\Services\Placement\Service\Placement;
 
 /**
  * Typed placement registration helpers for IM widgets.
+ * String handler URLs are deprecated; pass Url instead. Null and empty unbind handlers remain supported.
  *
  * @link https://apidocs.bitrix24.com/api-reference/widgets/im/index.html
  */
@@ -38,7 +40,7 @@ final readonly class Placements
      * @link https://apidocs.bitrix24.com/api-reference/widgets/im/sidebar.html
      */
     public function bindSidebar(
-        string $handlerUrl,
+        string|Url $handlerUrl,
         PlacementLangMap $placementLangMap,
         ImSidebarPlacementOptions $imSidebarPlacementOptions,
         ?int $b24UserId = null,
@@ -60,7 +62,7 @@ final readonly class Placements
      * @link https://apidocs.bitrix24.com/api-reference/widgets/im/index.html
      */
     public function bindNavigation(
-        string $handlerUrl,
+        string|Url $handlerUrl,
         PlacementLangMap $placementLangMap,
         ImNavigationPlacementOptions $imNavigationPlacementOptions,
         ?int $b24UserId = null,
@@ -82,7 +84,7 @@ final readonly class Placements
      * @link https://apidocs.bitrix24.com/api-reference/widgets/im/context-menu.html
      */
     public function bindContextMenu(
-        string $handlerUrl,
+        string|Url $handlerUrl,
         PlacementLangMap $placementLangMap,
         ImContextMenuPlacementOptions $imContextMenuPlacementOptions,
         ?int $b24UserId = null,
@@ -104,7 +106,7 @@ final readonly class Placements
      * @link https://apidocs.bitrix24.com/api-reference/widgets/im/textarea.html
      */
     public function bindTextarea(
-        string $handlerUrl,
+        string|Url $handlerUrl,
         PlacementLangMap $placementLangMap,
         ImTextareaPlacementOptions $imTextareaPlacementOptions,
         ?int $b24UserId = null,
@@ -127,7 +129,7 @@ final readonly class Placements
      * @link https://apidocs.bitrix24.com/api-reference/widgets/im/smile-selector.html
      */
     public function bindSmilesSelector(
-        string $handlerUrl,
+        string|Url $handlerUrl,
         PlacementLangMap $placementLangMap,
         array $imSmilesSelectorPlacementOptions = [],
         ?int $b24UserId = null,
@@ -148,7 +150,7 @@ final readonly class Placements
      * @throws TransportException
      * @link https://apidocs.bitrix24.com/api-reference/widgets/im/sidebar.html
      */
-    public function unbindSidebar(?string $handlerUrl = null): PlacementUnbindResult
+    public function unbindSidebar(string|Url|null $handlerUrl = null): PlacementUnbindResult
     {
         return $this->placementService->unbind(PlacementLocationCodes::IM_SIDEBAR, $handlerUrl);
     }
@@ -160,7 +162,7 @@ final readonly class Placements
      * @throws TransportException
      * @link https://apidocs.bitrix24.com/api-reference/widgets/im/index.html
      */
-    public function unbindNavigation(?string $handlerUrl = null): PlacementUnbindResult
+    public function unbindNavigation(string|Url|null $handlerUrl = null): PlacementUnbindResult
     {
         return $this->placementService->unbind(PlacementLocationCodes::IM_NAVIGATION, $handlerUrl);
     }
@@ -172,7 +174,7 @@ final readonly class Placements
      * @throws TransportException
      * @link https://apidocs.bitrix24.com/api-reference/widgets/im/context-menu.html
      */
-    public function unbindContextMenu(?string $handlerUrl = null): PlacementUnbindResult
+    public function unbindContextMenu(string|Url|null $handlerUrl = null): PlacementUnbindResult
     {
         return $this->placementService->unbind(PlacementLocationCodes::IM_CONTEXT_MENU, $handlerUrl);
     }
@@ -184,7 +186,7 @@ final readonly class Placements
      * @throws TransportException
      * @link https://apidocs.bitrix24.com/api-reference/widgets/im/textarea.html
      */
-    public function unbindTextarea(?string $handlerUrl = null): PlacementUnbindResult
+    public function unbindTextarea(string|Url|null $handlerUrl = null): PlacementUnbindResult
     {
         return $this->placementService->unbind(PlacementLocationCodes::IM_TEXTAREA, $handlerUrl);
     }
@@ -197,7 +199,7 @@ final readonly class Placements
      * @throws TransportException
      * @link https://apidocs.bitrix24.com/api-reference/widgets/im/smile-selector.html
      */
-    public function unbindSmilesSelector(?string $handlerUrl = null): PlacementUnbindResult
+    public function unbindSmilesSelector(string|Url|null $handlerUrl = null): PlacementUnbindResult
     {
         return $this->placementService->unbind(PlacementLocationCodes::IM_SMILES_SELECTOR, $handlerUrl);
     }

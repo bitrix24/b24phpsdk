@@ -386,6 +386,7 @@
             <file>./tests/Integration/Services/Main/EventLogField/Result/EventLogFieldItemResultTest.php</file>
         </testsuite>
         <testsuite name="integration_tests_scope_main_event">
+            <file>./tests/Integration/Services/Main/Service/EventTest.php</file>
             <file>./tests/Integration/Services/Main/Service/OfflineEventTest.php</file>
             <file>./tests/Integration/Services/Main/Result/OfflineEventItemResultTest.php</file>
         </testsuite>
@@ -589,13 +590,16 @@
         </testsuite>
         <testsuite name="integration_tests_catalog_userfield_document_annotations">
             <file>./tests/Integration/Services/Catalog/UserfieldDocument/Result/UserfieldDocumentItemResultTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_catalog_store_product">
             <directory>./tests/Integration/Services/Catalog/StoreProduct/</directory>
+        </testsuite>
         <testsuite name="integration_tests_catalog_section">
             <directory>./tests/Integration/Services/Catalog/Section/Service/</directory>
         </testsuite>
         <testsuite name="integration_tests_catalog_section_annotations">
             <file>./tests/Integration/Services/Catalog/Section/Result/SectionItemResultTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_catalog_rounding_rule">
             <directory>./tests/Integration/Services/Catalog/RoundingRule/</directory>
         </testsuite>

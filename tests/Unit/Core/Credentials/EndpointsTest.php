@@ -421,4 +421,15 @@ class EndpointsTest extends TestCase
             new InvalidArgumentException(),
         ];
     }
+
+    public function testValueObjectEndpointsKeepStringGetters(): void
+    {
+        $endpoints = new Endpoints(new \Bitrix24\SDK\Core\ValueObjects\Url('https://example.com'), new \Bitrix24\SDK\Core\ValueObjects\Url('https://oauth.example.com'));
+        self::assertSame('https://example.com', $endpoints->getClientUrl());
+        self::assertSame('https://oauth.example.com', $endpoints->getAuthServerUrl());
+        $changed = $endpoints->changeClientUrl(new \Bitrix24\SDK\Core\ValueObjects\Url('https://new.example.com'));
+        self::assertSame('https://new.example.com', $changed->getClientUrl());
+        self::assertSame('https://example.com', $endpoints->getClientUrl());
+        self::assertSame('https://example.com', Endpoints::initByDefault(new \Bitrix24\SDK\Core\ValueObjects\Url('https://example.com'))->getClientUrl());
+    }
 }

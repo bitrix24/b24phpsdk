@@ -123,6 +123,8 @@ return RectorConfig::configure()
         earlyReturn: true,
     )
     ->withSkip([
+        // Keep documentation-only deprecations from becoming runtime warnings in a minor release.
+        \Rector\Php84\Rector\Class_\DeprecatedAnnotationToDeprecatedAttributeRector::class,
         RenamePropertyToMatchTypeRector::class,
         \Rector\CodeQuality\Rector\BooleanOr\RepeatedOrEqualToInArrayRector::class,
         \Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector::class,

@@ -72,7 +72,8 @@ class BotTest extends TestCase
             code: $code,
             properties: ['name' => 'Test Bot'],
             type: BotType::bot,
-            eventMode: BotEventMode::fetch
+            eventMode: BotEventMode::fetch,
+            webhookUrl: new \Bitrix24\SDK\Core\ValueObjects\Url(rtrim((string) $_ENV['BITRIX24_PHP_SDK_APPLICATION_DOMAIN_URL'], '/') . '/sdk533-inert')
         );
 
         $bot = $result->bot();

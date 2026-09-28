@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\Credentials;
 
+use Bitrix24\SDK\Core\ValueObjects\Url;
+use Bitrix24\SDK\Core\ValueObjects\ValueObjectResolver;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 
 /**
@@ -27,13 +29,13 @@ class WebhookUrl
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      */
-    public function __construct(string $webhookUrl)
+    public function __construct(string|Url $webhookUrl)
     {
-        if (filter_var($webhookUrl, FILTER_VALIDATE_URL) === false) {
-            throw new InvalidArgumentException(sprintf('webhook URL %s is invalid', $webhookUrl));
+        try {
+            $this->url = ValueObjectResolver::resolveUrl($webhookUrl);
+        } catch (InvalidArgumentException $exception) {
+            throw new InvalidArgumentException('webhook URL is invalid', 0, $exception);
         }
-
-        $this->url = $webhookUrl;
     }
 
     public function getUrl(): string

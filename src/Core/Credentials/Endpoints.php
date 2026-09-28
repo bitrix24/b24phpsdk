@@ -11,30 +11,34 @@
 
 namespace Bitrix24\SDK\Core\Credentials;
 
+use Bitrix24\SDK\Core\ValueObjects\Url;
+use Bitrix24\SDK\Core\ValueObjects\ValueObjectResolver;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 
 class Endpoints
 {
     private readonly string $clientUrl;
+    private readonly string $authServerUrl;
 
     /**
      * @throws InvalidArgumentException
      */
     public function __construct(
         /**
-         * @phpstan-param non-empty-string $clientUrl
+         * @phpstan-param non-empty-string|Url $clientUrl
          */
-        string $clientUrl,
+        string|Url $clientUrl,
         /**
-         * @phpstan-param non-empty-string $authServerUrl
+         * @phpstan-param non-empty-string|Url $authServerUrl
          */
-        private readonly string $authServerUrl
+        string|Url $authServerUrl
     ) {
         // Normalize client URL - add https:// protocol if not present
-        $this->clientUrl = $this->normalizeUrl($clientUrl);
+        $this->clientUrl = $this->normalizeUrl($clientUrl instanceof Url ? $clientUrl->getUrl() : $clientUrl);
         $this->validateUrl('clientUrl', $this->clientUrl);
       
-        $this->validateUrl('BITRIX24_PHP_SDK_DEFAULT_AUTH_SERVER_URL', $authServerUrl);
+        $this->authServerUrl = $authServerUrl instanceof Url ? $authServerUrl->getUrl() : $authServerUrl;
+        $this->validateUrl('BITRIX24_PHP_SDK_DEFAULT_AUTH_SERVER_URL', $this->authServerUrl);
     }
 
     /**
@@ -43,7 +47,7 @@ class Endpoints
     private function normalizeUrl(string $url): string
     {
         $parseResult = parse_url($url);
-        if (!array_key_exists('scheme', $parseResult)) {
+        if ($parseResult !== false && !array_key_exists('scheme', $parseResult)) {
             return 'https://' . $url;
         }
 
@@ -53,7 +57,7 @@ class Endpoints
     /**
      * @throws InvalidArgumentException
      */
-    public function changeClientUrl(string $clientUrl): self
+    public function changeClientUrl(string|Url $clientUrl): self
     {
         return new self($clientUrl, $this->authServerUrl);
     }
@@ -69,10 +73,10 @@ class Endpoints
     }
 
     /**
-     * @param non-empty-string $clientUrl
+     * @param non-empty-string|Url $clientUrl
      * @throws InvalidArgumentException
      */
-    public static function initByDefault(string $clientUrl): self
+    public static function initByDefault(string|Url $clientUrl): self
     {
         return new self($clientUrl, DefaultOAuthServerUrl::default());
     }
@@ -99,10 +103,12 @@ class Endpoints
     /**
      * @throws InvalidArgumentException
      */
-    private function validateUrl(string $variableName, mixed $urlValue): void
+    private function validateUrl(string $variableName, string $urlValue): void
     {
-        if (filter_var($urlValue, FILTER_VALIDATE_URL) === false) {
-            throw new InvalidArgumentException(sprintf('%s endpoint URL «%s» is invalid', $variableName, $urlValue));
+        try {
+            ValueObjectResolver::resolveUrl($urlValue);
+        } catch (InvalidArgumentException $exception) {
+            throw new InvalidArgumentException(sprintf('%s endpoint URL «%s» is invalid', $variableName, $urlValue), 0, $exception);
         }
     }
 }

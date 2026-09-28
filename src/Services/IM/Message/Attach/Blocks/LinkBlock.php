@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\IM\Message\Attach\Blocks;
 
+use Bitrix24\SDK\Core\ValueObjects\Url;
 use Bitrix24\SDK\Services\IM\Message\Attach\Contracts\AttachBlockInterface;
 
 final class LinkBlock implements AttachBlockInterface
@@ -47,12 +48,12 @@ final class LinkBlock implements AttachBlockInterface
 
     private ?string $networkId = null;
 
-    public static function url(string $link): self
+    public static function url(string|Url $link): self
     {
         $block = new self();
         $block->setTargetMode(self::TARGET_URL);
 
-        $block->link = self::requireNonEmptyString($link, 'LINK');
+        $block->link = self::requireNonEmptyString($link instanceof Url ? $link->getUrl() : $link, 'LINK');
 
         return $block;
     }
@@ -117,9 +118,9 @@ final class LinkBlock implements AttachBlockInterface
         return $this;
     }
 
-    public function preview(string $url): self
+    public function preview(string|Url $url): self
     {
-        $this->preview = self::requireNonEmptyString($url, 'PREVIEW');
+        $this->preview = self::requireNonEmptyString($url instanceof Url ? $url->getUrl() : $url, 'PREVIEW');
 
         return $this;
     }

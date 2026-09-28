@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+
+- Added `Url`, `LocalizedString`, `ActivityCode` and `RobotCode` inputs across services and credential factories while retaining legacy inputs; documented primitive removal for SDK 4.0 ([#533](https://github.com/bitrix24/b24phpsdk/issues/533))
+
 ## 3.6.0
 
 ### Added

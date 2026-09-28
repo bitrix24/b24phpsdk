@@ -34,55 +34,29 @@ class PlacementTest extends TestCase
     private Placement $placementService;
 
     #[Test]
-    #[TestDox('Test method bind')]
     public function testBind(): void
     {
-        /**
-         * @var PlacementLocationItemResult[] $placements
-         */
-        $placements = $this->placementService->get()->getPlacementsLocationInformation();
-        foreach ($placements as $placement) {
-            $this->assertGreaterThanOrEqual(0, $this->placementService->unbind($placement->placement)->getDeletedPlacementHandlersCount());
-        }
-
-        $placementBindResult = $this->placementService->bind(
-            PlacementLocationCode::CRM_CONTACT_DETAIL_TAB,
-            'https://bitrix24test.com', [
-            'en' => [
-                'TITLE' => 'test app'
-            ]
-        ]);
-        $this->assertTrue($placementBindResult->isSuccess());
-        $placement = $this->placementService->get()->getPlacementsLocationInformation()[0];
-        $this->assertEquals(PlacementLocationCode::CRM_CONTACT_DETAIL_TAB, $placement->placement);
-        $this->placementService->unbind(PlacementLocationCode::CRM_CONTACT_DETAIL_TAB)->getDeletedPlacementHandlersCount();
+        $this->assertHandlerLifecycle(false);
     }
 
     #[Test]
-    #[TestDox('Test method unbind')]
     public function testUnbind(): void
     {
-        /**
-         * @var PlacementLocationItemResult[] $placements
-         */
-        $placements = $this->placementService->get()->getPlacementsLocationInformation();
-        foreach ($placements as $placement) {
-            $this->assertGreaterThanOrEqual(0, $this->placementService->unbind($placement->placement)->getDeletedPlacementHandlersCount());
+        $this->assertHandlerLifecycle(true);
+    }
+
+    private function assertHandlerLifecycle(bool $useValueObject): void
+    {
+        $url = rtrim((string) $_ENV['BITRIX24_PHP_SDK_APPLICATION_DOMAIN_URL'], '/') . '/sdk533-' . bin2hex(random_bytes(6));
+        $handler = $useValueObject ? new \Bitrix24\SDK\Core\ValueObjects\Url($url) : $url;
+        $result = $this->placementService->bind(PlacementLocationCode::CRM_CONTACT_DETAIL_TAB, $handler, ['en' => ['TITLE' => 'SDK 533 test']]);
+        try {
+            self::assertTrue($result->isSuccess());
+            $matching = array_filter($this->placementService->get()->getPlacementsLocationInformation(), static fn ($item): bool => $item->handler === $url);
+            self::assertCount(1, $matching);
+        } finally {
+            self::assertSame(1, $this->placementService->unbind(PlacementLocationCode::CRM_CONTACT_DETAIL_TAB, $handler)->getDeletedPlacementHandlersCount());
         }
-
-        $placementBindResult = $this->placementService->bind(
-            PlacementLocationCode::CRM_CONTACT_DETAIL_TAB,
-            'https://bitrix24test.com', [
-            'en' => [
-                'TITLE' => 'test app'
-            ]
-        ]);
-        $this->assertTrue($placementBindResult->isSuccess());
-        $placement = $this->placementService->get()->getPlacementsLocationInformation()[0];
-        $this->assertEquals(PlacementLocationCode::CRM_CONTACT_DETAIL_TAB, $placement->placement);
-
-        $this->placementService->unbind(PlacementLocationCode::CRM_CONTACT_DETAIL_TAB)->getDeletedPlacementHandlersCount();
-
     }
 
     #[Test]
