@@ -21,6 +21,4 @@ enum ApplicationInstallationStatus: string
     case active = 'active'; // active portal, there is a connection to B24
     case deleted = 'deleted'; // the app has been removed from the portal
     case blocked = 'blocked'; // lost connection with the portal or the developer forcibly deactivated the account
-    // Timed out waiting for ONAPPINSTALL; marked by a TTL-based cleanup worker and requires reinstallation.
-    case needReinstall = 'needReinstall';
 }

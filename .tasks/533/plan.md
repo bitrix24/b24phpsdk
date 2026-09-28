@@ -239,3 +239,5 @@ Use the configured application bridge for methods requiring application authoriz
 - Public migration guide and changelog are ready. The user explicitly requested opening the PR despite the disclosed OAuth blocker; this overrides the default requirement to wait for all live suites before publication. OAuth-dependent tests remain incomplete and must not be described as passing.
 
 - Before PR publication, merged current `origin/v3-dev` (2f9b6ed9). Its baseline XML/Catalog repairs and Rector deprecated-attribute exclusion supersede those prerequisites here; the final PR diff only adds the Event test entry to PHPUnit configuration and contains no Catalog or Rector change. The changelog conflict was resolved by preserving all entries.
+
+- The refreshed base contains duplicate `ApplicationInstallationStatus::needReinstall` enum declarations, confirmed in `origin/v3-dev`. Post-merge PHPStan failed with `enum.duplicateValue` and `enum.duplicateEnumCase`. Removed only the redundant declaration; existing installation tests and PHPStan verify the prerequisite repair.
