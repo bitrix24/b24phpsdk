@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\IM\Message\Attach\Blocks;
 
+use Bitrix24\SDK\Core\ValueObjects\Url;
 use Bitrix24\SDK\Services\IM\Message\Attach\Enums\AttachAvatarType;
 use Bitrix24\SDK\Services\IM\Message\Attach\Contracts\AttachBlockInterface;
 
@@ -82,16 +83,16 @@ final class UserBlock implements AttachBlockInterface
         return $this;
     }
 
-    public function avatar(string $url): self
+    public function avatar(string|Url $url): self
     {
-        $this->avatar = self::requireNonEmptyString($url, 'AVATAR');
+        $this->avatar = self::requireNonEmptyString($url instanceof Url ? $url->getUrl() : $url, 'AVATAR');
 
         return $this;
     }
 
-    public function link(string $url): self
+    public function link(string|Url $url): self
     {
-        $this->link = self::requireNonEmptyString($url, 'LINK');
+        $this->link = self::requireNonEmptyString($url instanceof Url ? $url->getUrl() : $url, 'LINK');
 
         return $this;
     }

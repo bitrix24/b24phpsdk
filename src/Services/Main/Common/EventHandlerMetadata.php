@@ -11,17 +11,24 @@
 
 namespace Bitrix24\SDK\Services\Main\Common;
 
+use Bitrix24\SDK\Core\ValueObjects\Url;
 use Bitrix24\SDK\Services\Main\Result\EventHandlerItemResult;
 
+/**
+ * String constructor handler URLs are deprecated; pass Url instead. The public handlerUrl remains a string.
+ * Legacy strings are preserved; Event::bind validates the effective handler after applying options.
+ */
 readonly class EventHandlerMetadata
 {
+    public string $handlerUrl;
+
     public function __construct(
         public string $code,
-        public string $handlerUrl,
+        string|Url $handlerUrl,
         public int    $userId,
         public ?array $options = null
-    )
-    {
+    ) {
+        $this->handlerUrl = $handlerUrl instanceof Url ? $handlerUrl->getUrl() : $handlerUrl;
     }
 
     public function isInstalled(EventHandlerItemResult $eventHandlerItemResult): bool

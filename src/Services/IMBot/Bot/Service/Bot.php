@@ -19,6 +19,8 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\EmptyResult;
+use Bitrix24\SDK\Core\ValueObjects\Url;
+use Bitrix24\SDK\Core\ValueObjects\ValueObjectResolver;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\IMBot\Bot\BotBackground;
 use Bitrix24\SDK\Services\IMBot\Bot\BotEventMode;
@@ -26,6 +28,9 @@ use Bitrix24\SDK\Services\IMBot\Bot\BotType;
 use Bitrix24\SDK\Services\IMBot\Bot\Result\BotResult;
 use Bitrix24\SDK\Services\IMBot\Bot\Result\BotsResult;
 
+/**
+ * String register webhook URLs are deprecated; pass Url instead. URLs are validated before transport.
+ */
 #[ApiServiceMetadata(new Scope(['imbot']))]
 class Bot extends AbstractService
 {
@@ -52,7 +57,7 @@ class Bot extends AbstractService
         ?string $botToken = null,
         BotType $type = BotType::bot,
         BotEventMode $eventMode = BotEventMode::fetch,
-        ?string $webhookUrl = null,
+        string|Url|null $webhookUrl = null,
         bool $isHidden = false,
         bool $isReactionsEnabled = true,
         bool $isSupportOpenline = false,
@@ -73,7 +78,7 @@ class Bot extends AbstractService
         }
 
         if ($webhookUrl !== null) {
-            $fields['webhookUrl'] = $webhookUrl;
+            $fields['webhookUrl'] = ValueObjectResolver::resolveUrl($webhookUrl);
         }
 
         if ($backgroundId instanceof BotBackground) {

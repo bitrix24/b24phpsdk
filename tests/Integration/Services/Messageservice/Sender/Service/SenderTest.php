@@ -25,23 +25,22 @@ class SenderTest extends TestCase
 {
     private Sender $sender;
 
-    private string $testSenderCode = 'test_sdk_sender_1';
+    private string $testSenderCode;
 
     #[\Override]
     protected function setUp(): void
     {
         $this->sender = Factory::getServiceBuilder(true)->getMessageserviceScope()->sender();
-        // Ensure cleanup before each test
-        try {
-            $this->sender->delete($this->testSenderCode);
-        } catch (\Throwable) {
-            // Ignore if sender does not exist
-        }
+        $this->testSenderCode = 'sdk533_sender_' . bin2hex(random_bytes(6));
     }
 
     #[\Override]
     protected function tearDown(): void
     {
+        if (!isset($this->sender, $this->testSenderCode)) {
+            return;
+        }
+
         // Cleanup after each test
         try {
             $this->sender->delete($this->testSenderCode);
@@ -57,8 +56,8 @@ class SenderTest extends TestCase
         $senderAddResult = $this->sender->add(
             code: $this->testSenderCode,
             type: 'SMS',
-            handler: 'https://provider.example/api/handler',
-            name: 'Test SDK Sender'
+            handler: new \Bitrix24\SDK\Core\ValueObjects\Url('https://provider.example/api/handler'),
+            name: new \Bitrix24\SDK\Core\ValueObjects\LocalizedString(\Bitrix24\SDK\Core\Contracts\LangCodes::EN, 'Test SDK Sender')
         );
 
         $this->assertTrue($senderAddResult->isSuccess());
@@ -97,8 +96,8 @@ class SenderTest extends TestCase
 
         $senderUpdateResult = $this->sender->update(
             code: $this->testSenderCode,
-            handler: 'https://provider.example/api/new-handler',
-            name: 'Test SDK Sender Updated'
+            handler: new \Bitrix24\SDK\Core\ValueObjects\Url('https://provider.example/api/new-handler'),
+            name: new \Bitrix24\SDK\Core\ValueObjects\LocalizedString(\Bitrix24\SDK\Core\Contracts\LangCodes::EN, 'Test SDK Sender Updated')
         );
 
         $this->assertTrue($senderUpdateResult->isSuccess());

@@ -11,6 +11,10 @@
 - Added `ApplicationInstallationStatus::needReinstall` for installations that timed out waiting for `ONAPPINSTALL` and require reinstallation ([#576](https://github.com/bitrix24/b24phpsdk/issues/576))
 - Added `ApplicationInstallationInterface::markAsNeedReinstall()` and documented direct uninstall of stale installations; existing implementations must add the new method ([#577](https://github.com/bitrix24/b24phpsdk/issues/577))
 
+### Changed
+
+- Added `Url`, `LocalizedString`, `ActivityCode` and `RobotCode` inputs across services and credential factories while retaining legacy inputs; documented primitive removal for SDK 4.0 ([#533](https://github.com/bitrix24/b24phpsdk/issues/533))
+
 ### Fixed
 
 - Removed the duplicate `needReinstall` enum case introduced when the prerequisite status and transition branches were merged ([#580](https://github.com/bitrix24/b24phpsdk/issues/580))

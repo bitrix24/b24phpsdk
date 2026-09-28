@@ -13,17 +13,24 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Application\Local\Entity;
 
+use Bitrix24\SDK\Core\ValueObjects\Url;
+use Bitrix24\SDK\Core\ValueObjects\ValueObjectResolver;
 use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\DefaultOAuthServerUrl;
 
 final class LocalAppAuth
 {
+    private readonly string $domainUrl;
+    private readonly string $oauthServerUrl;
+
     public function __construct(
         private AuthToken        $authToken,
-        private readonly string  $domainUrl,
+        string|Url $domainUrl,
         private readonly ?string $applicationToken,
-        private readonly string  $oauthServerUrl)
+        string|Url $oauthServerUrl)
     {
+        $this->domainUrl = $domainUrl instanceof Url ? $domainUrl->getUrl() : $domainUrl;
+        $this->oauthServerUrl = ValueObjectResolver::resolveUrl($oauthServerUrl);
     }
 
     public function updateAuthToken(AuthToken $authToken): void

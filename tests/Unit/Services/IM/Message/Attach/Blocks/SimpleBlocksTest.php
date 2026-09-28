@@ -304,4 +304,22 @@ final class SimpleBlocksTest extends TestCase
 
         DelimiterBlock::create()->color('29619b');
     }
+
+    public function testLinkAndUserBlocksAcceptUrlObjects(): void
+    {
+        $link = 'https://example.com/link';
+        $image = 'https://example.com/image.png';
+        self::assertSame(
+            \Bitrix24\SDK\Services\IM\Message\Attach\Blocks\LinkBlock::url($link)->preview($image)->build(),
+            \Bitrix24\SDK\Services\IM\Message\Attach\Blocks\LinkBlock::url(new \Bitrix24\SDK\Core\ValueObjects\Url($link))->preview(new \Bitrix24\SDK\Core\ValueObjects\Url($image))->build()
+        );
+        self::assertSame(
+            \Bitrix24\SDK\Services\IM\Message\Attach\Blocks\UserBlock::name('Name')->link($link)->avatar($image)->build(),
+            \Bitrix24\SDK\Services\IM\Message\Attach\Blocks\UserBlock::name('Name')->link(new \Bitrix24\SDK\Core\ValueObjects\Url($link))->avatar(new \Bitrix24\SDK\Core\ValueObjects\Url($image))->build()
+        );
+    }
+    public function testRelativeAttachmentLinksRemainSupported(): void
+    {
+        self::assertSame('/page/', \Bitrix24\SDK\Services\IM\Message\Attach\Blocks\LinkBlock::url('/page/')->build()['LINK']['LINK']);
+    }
 }

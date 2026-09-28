@@ -16,6 +16,10 @@ namespace Bitrix24\SDK\Tests\Unit\Services\Main\Service;
 use Bitrix24\SDK\Core\ApiLevelErrorHandler;
 use Bitrix24\SDK\Core\Commands\Command;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\ValueObjects\Url;
+use Bitrix24\SDK\Tests\Unit\Stubs\NullCore;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Services\Main\Service\Event;
 use Bitrix24\SDK\Services\Main\Service\EventType;
@@ -85,6 +89,49 @@ class EventTest extends TestCase
         $this->assertArrayHasKey('event_type', $captured);
         $this->assertArrayNotHasKey("event_type\t", $captured);
         $this->assertSame('offline', $captured['event_type']);
+    }
+
+    #[DataProvider('effectiveHandlerCases')]
+    public function testFinalHandlerRespectsOfflineSentinelAndOptionsPrecedence(string $method, array $arguments, array $payload): void
+    {
+        $core = $this->createMock(CoreInterface::class);
+        $core->expects($this->once())->method('call')->with('event.'.$method, $payload)
+            ->willReturn((new NullCore())->call('event.'.$method));
+        (new Event($core, new NullLogger()))->$method(...$arguments);
+    }
+
+    public static function effectiveHandlerCases(): iterable
+    {
+        $url = 'https://example.com/handler';
+        foreach (['bind', 'unbind'] as $method) {
+            yield $method.' offline empty' => [$method, ['eventCode' => 'ONCRMDEALADD', 'handlerUrl' => '', 'eventType' => EventType::offline], ['event' => 'ONCRMDEALADD', 'handler' => '', 'event_type' => 'offline']];
+            yield $method.' offline nonempty' => [$method, ['eventCode' => 'ONCRMDEALADD', 'handlerUrl' => new Url($url), 'eventType' => EventType::offline], ['event' => 'ONCRMDEALADD', 'handler' => $url, 'event_type' => 'offline']];
+        }
+
+        yield 'options switch to offline' => ['bind', ['ONCRMDEALADD', '', null, ['event_type' => 'offline']], ['event' => 'ONCRMDEALADD', 'handler' => '', 'event_type' => 'offline']];
+        yield 'options replace handler with empty offline' => ['bind', ['ONCRMDEALADD', $url, null, ['handler' => '', 'event_type' => 'offline']], ['event' => 'ONCRMDEALADD', 'handler' => '', 'event_type' => 'offline']];
+        yield 'options replace empty with URL object' => ['bind', ['ONCRMDEALADD', '', null, ['handler' => new Url($url)]], ['event' => 'ONCRMDEALADD', 'handler' => $url, 'event_type' => 'online']];
+        yield 'options replace invalid string with valid URL' => ['bind', ['ONCRMDEALADD', 'invalid', null, ['handler' => $url]], ['event' => 'ONCRMDEALADD', 'handler' => $url, 'event_type' => 'online']];
+    }
+
+    #[DataProvider('invalidEffectiveHandlerCases')]
+    public function testInvalidFinalHandlerFailsBeforeTransport(string $method, array $arguments): void
+    {
+        $core = $this->createMock(CoreInterface::class);
+        $core->expects($this->never())->method('call');
+        $this->expectException(InvalidArgumentException::class);
+        (new Event($core, new NullLogger()))->$method(...$arguments);
+    }
+
+    public static function invalidEffectiveHandlerCases(): iterable
+    {
+        foreach (['bind', 'unbind'] as $method) {
+            yield $method.' online empty' => [$method, ['ONCRMDEALADD', '']];
+            yield $method.' offline invalid nonempty' => [$method, ['eventCode' => 'ONCRMDEALADD', 'handlerUrl' => 'invalid', 'eventType' => EventType::offline]];
+        }
+
+        yield 'options switch to online with empty handler' => ['bind', ['eventCode' => 'ONCRMDEALADD', 'handlerUrl' => 'https://example.com/handler', 'eventType' => EventType::offline, 'options' => ['event_type' => 'online', 'handler' => '']]];
+        yield 'options override with invalid URL' => ['bind', ['ONCRMDEALADD', 'https://example.com/handler', null, ['handler' => 'invalid']]];
     }
 
     /**

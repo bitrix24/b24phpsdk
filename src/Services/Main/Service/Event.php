@@ -20,12 +20,18 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException;
 use Bitrix24\SDK\Core\Response\Response;
+use Bitrix24\SDK\Core\ValueObjects\Url;
+use Bitrix24\SDK\Core\ValueObjects\ValueObjectResolver;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Main\Result\EventHandlerBindResult;
 use Bitrix24\SDK\Services\Main\Result\EventHandlersResult;
 use Bitrix24\SDK\Services\Main\Result\EventHandlerUnbindResult;
 use Bitrix24\SDK\Services\Main\Result\EventListResult;
 
+/**
+ * String handler URLs are deprecated; pass Url instead. URLs are validated before transport.
+ * An empty handler remains supported for offline events.
+ */
 #[ApiServiceMetadata(new Scope([]))]
 class Event extends AbstractService
 {
@@ -70,7 +76,7 @@ class Event extends AbstractService
     )]
     public function bind(
         string $eventCode,
-        string $handlerUrl,
+        string|Url $handlerUrl,
         ?int $userId = null,
         ?array $options = null,
         EventType $eventType = EventType::online,
@@ -93,6 +99,10 @@ class Event extends AbstractService
             $params = array_merge($params, $options);
         }
 
+        $params['handler'] = $params['handler'] === '' && $params['event_type'] === EventType::offline->value
+            ? ''
+            : ValueObjectResolver::resolveUrl($params['handler']);
+
         return new EventHandlerBindResult($this->core->call('event.bind', $params));
     }
 
@@ -112,13 +122,15 @@ class Event extends AbstractService
     )]
     public function unbind(
         string $eventCode,
-        string $handlerUrl,
+        string|Url $handlerUrl,
         ?int $userId = null,
         EventType $eventType = EventType::online
     ): EventHandlerUnbindResult {
         $params = [
             'event' => $eventCode,
-            'handler' => $handlerUrl,
+            'handler' => $handlerUrl === '' && $eventType === EventType::offline
+                ? ''
+                : ValueObjectResolver::resolveUrl($handlerUrl),
             'event_type' => $eventType->value,
         ];
         if ($userId !== null) {
