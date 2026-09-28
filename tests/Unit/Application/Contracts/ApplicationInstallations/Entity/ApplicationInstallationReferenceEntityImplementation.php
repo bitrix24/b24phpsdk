@@ -269,6 +269,25 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     }
 
     #[\Override]
+    public function markAsNeedReinstall(?string $comment): void
+    {
+        if ($this->applicationInstallationStatus !== ApplicationInstallationStatus::new) {
+            throw new LogicException(
+                sprintf(
+                    'you can mark application install as needing reinstallation only in state «%s», current state «%s»',
+                    ApplicationInstallationStatus::new->name,
+                    $this->applicationInstallationStatus->name
+                )
+            );
+        }
+
+        $this->applicationInstallationStatus = ApplicationInstallationStatus::needReinstall;
+        $this->comment = $comment;
+        $this->updatedAt = new CarbonImmutable();
+        $this->events[] = new ApplicationInstallationMarkedNeedReinstallEvent($this->id, $this->updatedAt, $comment);
+    }
+
+    #[\Override]
     public function markAsBlocked(?string $comment): void
     {
         if ($this->applicationInstallationStatus !== ApplicationInstallationStatus::new && $this->applicationInstallationStatus !== ApplicationInstallationStatus::active) {
@@ -285,25 +304,6 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
         $this->applicationInstallationStatus = ApplicationInstallationStatus::blocked;
         $this->comment = $comment;
         $this->updatedAt = new CarbonImmutable();
-    }
-
-    #[\Override]
-    public function markAsNeedReinstall(?string $comment): void
-    {
-        if ($this->applicationInstallationStatus !== ApplicationInstallationStatus::new) {
-            throw new LogicException(
-                sprintf(
-                    'you can mark application installation as requiring reinstallation only in state «%s», current state «%s»',
-                    ApplicationInstallationStatus::new->name,
-                    $this->applicationInstallationStatus->name
-                )
-            );
-        }
-
-        $this->applicationInstallationStatus = ApplicationInstallationStatus::needReinstall;
-        $this->comment = $comment;
-        $this->updatedAt = new CarbonImmutable();
-        $this->events[] = new ApplicationInstallationMarkedNeedReinstallEvent($this->id, $this->updatedAt, $comment);
     }
 
     #[\Override]

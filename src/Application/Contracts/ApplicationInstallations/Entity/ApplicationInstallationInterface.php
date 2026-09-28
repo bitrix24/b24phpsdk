@@ -192,6 +192,19 @@ interface ApplicationInstallationInterface
     public function markAsActive(?string $comment): void;
 
     /**
+     * Mark an unfinished installation as requiring reinstallation
+     *
+     * A background TTL cleanup task calls this method when the ONAPPINSTALL event never arrived.
+     * Only the new → needReinstall transition is allowed.
+     * Update the comment and updatedAt, and emit ApplicationInstallationMarkedNeedReinstallEvent
+     * with the same timestamp. Rejected transitions must not change state or emit an event.
+     *
+     * @param non-empty-string|null $comment
+     * @throws LogicException if the installation is in any status other than new
+     */
+    public function markAsNeedReinstall(?string $comment): void;
+
+    /**
      * Change status to blocked for application installation accounts in state new or active
      *
      *  You can block installation account if you need temporally  stop installation work
@@ -200,18 +213,6 @@ interface ApplicationInstallationInterface
      * @throws LogicException
      */
     public function markAsBlocked(?string $comment): void;
-
-    /**
-     * Mark an incomplete installation as requiring reinstallation after an ONAPPINSTALL timeout.
-     *
-     * Only the new status may transition to needReinstall. Update the comment and updatedAt,
-     * and emit ApplicationInstallationMarkedNeedReinstallEvent with the same timestamp.
-     * Rejected transitions must not change state or emit an event.
-     *
-     * @param non-empty-string|null $comment
-     * @throws LogicException When the installation is not new.
-     */
-    public function markAsNeedReinstall(?string $comment): void;
 
     /**
      * Get application status

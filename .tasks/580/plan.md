@@ -144,3 +144,20 @@ that limit explicitly; do not claim that all live SDK suites were run.
 The plan covers every #580 acceptance criterion, dependency delivery, strict date
 boundary, event observability, rejected-transition atomicity, and consumer impact.
 No unrelated changes to the #577 plan, agent configuration, or live portal data.
+
+## Integration with concurrent prerequisite changes
+
+After initial PR #622 checks passed (10/10), `origin/v3-dev` advanced to
+`2f9b6ed9` with PRs #620 (#576) and #621 (#577). Merge reconciliation preserves
+the upstream contracts/tests and adds the event/repository behavior from this task.
+The new base contains two `needReinstall` enum declarations; keep one declaration
+and remove the duplicate changelog entry. Duplicate auto-merged methods and test
+names must be consolidated before repeating the full quality gate and CI.
+
+Integration result: duplicate enum failure reproduced from the upstream source
+with PHP lint (exit 255), then fixed by retaining one case. Existing upstream tests
+were preserved; our event-specific test/provider names are distinct. Review approved.
+Final focused suite: 115 tests, 271 assertions. Full unit suite: 1291 tests,
+3629 assertions. CS Fixer, Rector, PHPStan, Deptrac, and license checks all pass
+after reconciliation. PR #622 targets v3-dev; refreshed remote CI is required after
+pushing the merge commit.
