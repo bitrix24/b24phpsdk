@@ -348,14 +348,19 @@ class RepoTest extends TestCase
         $dangerousContent = '<div onclick="alert(\'danger\')" style="color: red"><iframe src="//evil.com"></iframe></div>';
         
         $repoCheckContentResult = $this->repoService->checkContent($dangerousContent);
-        
-        self::assertTrue($repoCheckContentResult->isBad(), 'Dangerous content should be marked as bad');
-        
+
         $processedContent = $repoCheckContentResult->getContent();
         self::assertNotNull($processedContent);
-        
-        // The processed content should contain the sanitization markers
-        self::assertStringContainsString('#SANITIZE#', $processedContent);
+
+        // Dangerous substrings must be broken regardless of the sanitizer mode
+        self::assertStringNotContainsString('onclick=', $processedContent);
+        self::assertStringNotContainsString('<iframe', $processedContent);
+
+        // Depending on the portal sanitizer mode, dangerous substrings are either marked with the splitter
+        // and reported with is_bad = true, or neutralized with a space and reported with is_bad = false
+        if ($repoCheckContentResult->isBad()) {
+            self::assertStringContainsString('#SANITIZE#', $processedContent);
+        }
     }
 
     /**
@@ -368,17 +373,18 @@ class RepoTest extends TestCase
         $customSplitter = '#CUSTOM_SPLITTER#';
         
         $repoCheckContentResult = $this->repoService->checkContent($dangerousContent, $customSplitter);
-        
+
+        $processedContent = $repoCheckContentResult->getContent();
+        self::assertNotNull($processedContent);
+
+        // Dangerous substrings must be broken regardless of the sanitizer mode
+        self::assertStringNotContainsString('onclick=', $processedContent);
+        self::assertStringNotContainsString('#SANITIZE#', $processedContent);
+
+        // The custom splitter is used only when the portal sanitizer marks content as bad,
+        // otherwise dangerous substrings are neutralized with a space
         if ($repoCheckContentResult->isBad()) {
-            $processedContent = $repoCheckContentResult->getContent();
-            self::assertNotNull($processedContent);
-            
-            // The processed content should contain the custom sanitization markers
             self::assertStringContainsString($customSplitter, $processedContent);
-            self::assertStringNotContainsString('#SANITIZE#', $processedContent);
-        } else {
-            // If content is not marked as bad, it should be unchanged
-            self::assertEquals($dangerousContent, $repoCheckContentResult->getContent());
         }
     }
 
