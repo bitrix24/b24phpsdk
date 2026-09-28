@@ -20,6 +20,7 @@ use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\Endpoints;
 use Bitrix24\SDK\Core\Credentials\Scope;
+use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\EndpointUrlFormatter;
 use Bitrix24\SDK\Core\Exceptions\InvalidGrantException;
 use Bitrix24\SDK\Core\Exceptions\PortalDomainNotFoundException;
@@ -236,6 +237,77 @@ class ApiClientTest extends TestCase
         $this->assertEquals('new-access-token', $renewedAuthToken->authToken->accessToken);
         $this->assertEquals('new-refresh-token', $renewedAuthToken->authToken->refreshToken);
         $this->assertEquals($expiresTimestamp, $renewedAuthToken->authToken->expires);
+    }
+
+    #[Test]
+    #[TestDox('getResponse sends current SDK version in default request headers')]
+    public function testGetResponseSendsCurrentSdkVersionHeaders(): void
+    {
+        $mockHttpClient = new MockHttpClient(
+            static function (string $method, string $_url, array $options): MockResponse {
+                $headers = self::normalizeHeaders($options['headers'] ?? []);
+
+                self::assertSame('POST', $method);
+                self::assertSame('3.5.0', $headers['x-bitrix24-php-sdk-version'] ?? null);
+                self::assertStringStartsWith(
+                    'b24-php-sdk-vendor-v-3.5.0-php-',
+                    $headers['user-agent'] ?? ''
+                );
+
+                return new MockResponse(
+                    json_encode(['result' => true]),
+                    ['http_code' => StatusCodeInterface::STATUS_OK]
+                );
+            }
+        );
+
+        $apiClient = new ApiClient(
+            Credentials::createFromWebhook(
+                new WebhookUrl('https://test.bitrix24.com/rest/1/test-token/')
+            ),
+            $mockHttpClient,
+            new DefaultRequestIdGenerator(),
+            new ApiLevelErrorHandler(new NullLogger()),
+            new EndpointUrlFormatter(new DefaultRequestIdGenerator(), new NullLogger()),
+            new NullLogger()
+        );
+
+        $apiClient->getResponse('profile');
+    }
+
+    /**
+     * @param array<array-key, mixed> $rawHeaders
+     *
+     * @return array<string, string>
+     */
+    private static function normalizeHeaders(array $rawHeaders): array
+    {
+        $headers = [];
+        foreach ($rawHeaders as $name => $value) {
+            if (is_string($name)) {
+                if (is_array($value)) {
+                    $firstValue = reset($value);
+                    $headers[strtolower($name)] = is_scalar($firstValue) ? (string)$firstValue : '';
+                    continue;
+                }
+
+                $headers[strtolower($name)] = is_scalar($value) ? (string)$value : '';
+                continue;
+            }
+
+            if (!is_string($value)) {
+                continue;
+            }
+
+            $headerParts = explode(':', $value, 2);
+            if (count($headerParts) !== 2) {
+                continue;
+            }
+
+            $headers[strtolower($headerParts[0])] = ltrim($headerParts[1]);
+        }
+
+        return $headers;
     }
 
     #[\Override]
