@@ -212,9 +212,10 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
         if ($this->applicationInstallationStatus === ApplicationInstallationStatus::new || $this->applicationInstallationStatus === ApplicationInstallationStatus::deleted) {
             throw new LogicException(
                 sprintf(
-                    'application installation must be in status «%s» or «%s», current state «%s»',
+                    'application installation must be in status «%s», «%s» or «%s», current state «%s»',
                     ApplicationInstallationStatus::active->name,
                     ApplicationInstallationStatus::blocked->name,
+                    ApplicationInstallationStatus::needReinstall->name,
                     $this->applicationInstallationStatus->name
                 )
             );
@@ -247,9 +248,27 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     }
 
     #[\Override]
+    public function markAsNeedReinstall(?string $comment): void
+    {
+        if ($this->applicationInstallationStatus !== ApplicationInstallationStatus::new) {
+            throw new LogicException(
+                sprintf(
+                    'you can mark application install as needing reinstallation only in state «%s», current state «%s»',
+                    ApplicationInstallationStatus::new->name,
+                    $this->applicationInstallationStatus->name
+                )
+            );
+        }
+
+        $this->applicationInstallationStatus = ApplicationInstallationStatus::needReinstall;
+        $this->comment = $comment;
+        $this->updatedAt = new CarbonImmutable();
+    }
+
+    #[\Override]
     public function markAsBlocked(?string $comment): void
     {
-        if ($this->applicationInstallationStatus === ApplicationInstallationStatus::blocked || $this->applicationInstallationStatus === ApplicationInstallationStatus::deleted) {
+        if ($this->applicationInstallationStatus !== ApplicationInstallationStatus::new && $this->applicationInstallationStatus !== ApplicationInstallationStatus::active) {
             throw new LogicException(
                 sprintf(
                     'you can block application install only in state «%s» or «%s», current state «%s»',
