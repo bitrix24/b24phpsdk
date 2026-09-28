@@ -2,6 +2,48 @@
 
 ## Unreleased
 
+## 3.6.0
+
+### Added
+
+- Added service `Services\Catalog\RoundingRule` with support methods,
+  see [catalog.roundingRule.* methods](https://apidocs.bitrix24.com/api-reference/catalog/rounding-rule/index.html) ([#573](https://github.com/bitrix24/b24phpsdk/issues/573)):
+    - `add` creates a new price rounding rule, with batch calls support
+    - `update` updates an existing price rounding rule, with batch calls support
+    - `list` gets the list of price rounding rules
+    - `delete` deletes a price rounding rule, with batch calls support
+    - `get` gets information about a price rounding rule by its identifier
+    - `getFields` returns the description of price rounding rule fields
+- Added service `Services\Catalog\Ratio` with support methods,
+  see [catalog.ratio.* methods](https://apidocs.bitrix24.com/api-reference/catalog/ratio/index.html) ([#570](https://github.com/bitrix24/b24phpsdk/issues/570)):
+    - `get` returns the measurement unit ratio by identifier
+    - `list` gets the list of measurement unit ratios by filter
+    - `fields` returns the description of measurement unit ratio fields
+- Added service `Services\Catalog\DocumentContractor` with support methods,
+  see [catalog.documentcontractor.* methods](https://apidocs.bitrix24.com/api-reference/catalog/documentcontractor/index.html) ([#565](https://github.com/bitrix24/b24phpsdk/issues/565)):
+    - `add` binds a CRM contractor (contact or company) to a warehouse accounting receipt document, with batch calls support
+    - `list` gets the list of contractor bindings by filter
+    - `delete` deletes a contractor binding, with batch calls support
+    - `getFields` returns the description of contractor binding fields
+- Added service `Services\Catalog\Section` with support methods,
+  see [catalog.section.* methods](https://apidocs.bitrix24.com/api-reference/catalog/section/index.html) ([#583](https://github.com/bitrix24/b24phpsdk/issues/583)):
+    - `add` creates a new trade-catalog section, with batch calls support
+    - `update` updates an existing trade-catalog section, with batch calls support
+    - `get` gets a trade-catalog section by its identifier
+    - `list` gets the list of trade-catalog sections by filter
+    - `delete` deletes a trade-catalog section, with batch calls support
+    - `getFields` returns the description of trade-catalog section fields
+- Added service `Services\Catalog\RoundingRule` with support methods,
+  see [catalog.roundingRule.* methods](https://apidocs.bitrix24.com/api-reference/catalog/rounding-rule/index.html) ([#573](https://github.com/bitrix24/b24phpsdk/issues/573)):
+    - `add` creates a new price rounding rule, with batch calls support
+    - `update` updates an existing price rounding rule, with batch calls support
+    - `list` gets the list of price rounding rules
+    - `delete` deletes a price rounding rule, with batch calls support
+    - `get` gets information about a price rounding rule by its identifier
+    - `getFields` returns the description of price rounding rule fields
+
+## 3.5.0
+
 ### Added
 
 - Added service `Services\Catalog\StoreProduct` with support methods,
@@ -447,6 +489,7 @@ Supported in bitrix24-php-sdk methods with batch wrapper count: 124
 
 ### Changed
 
+- Added optional `$withDeleted` flag to `Bitrix24PartnerRepositoryInterface::findByBitrix24PartnerNumber()` so import workflows can detect soft-deleted partners by partner number ([#490](https://github.com/bitrix24/b24phpsdk/issues/490))
 - Removed the duplicate `bitrix24PartnerNumber` uniqueness expectation from the `Bitrix24PartnerRepositoryInterface` contract so `save()` remains a persistence operation; uniqueness validation belongs in the use-case layer ([#468](https://github.com/bitrix24/b24phpsdk/issues/468))
 - Removed dead `delete(Uuid $uuid)` method from `Bitrix24PartnerRepositoryInterface`, its in-memory stub implementation, and the `testDelete` contract test — the soft-delete flow (`markAsDeleted()` + `save()`) makes this method redundant ([#471](https://github.com/bitrix24/b24phpsdk/issues/471))
 - Replaced `set*` prefix with `change*` in `Bitrix24PartnerInterface` mutator methods (`changeTitle`, `changeSite`, `changePhone`, `changeEmail`, `changeOpenLineId`, `changeExternalId`) to better express domain-level change operations ([#453](https://github.com/bitrix24/b24phpsdk/issues/453))
