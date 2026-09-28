@@ -323,6 +323,18 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+                  
+    public function storeProduct(): Catalog\StoreProduct\Service\StoreProduct
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\StoreProduct\Service\StoreProduct(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }                  
     public function roundingRule(): Catalog\RoundingRule\Service\RoundingRule
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -338,6 +350,7 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+                  
 
 
 }
