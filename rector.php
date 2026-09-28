@@ -100,7 +100,7 @@ return RectorConfig::configure()
     ->withSets(
         [
             LevelSetList::UP_TO_PHP_84,
-            PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES
+            PHPUnitSetList::PHPUNIT_110
         ]
     )
     ->withImportNames(
@@ -123,8 +123,6 @@ return RectorConfig::configure()
         earlyReturn: true,
     )
     ->withSkip([
-        // Keep documentation-only deprecations from becoming runtime warnings in a minor release.
-        \Rector\Php84\Rector\Class_\DeprecatedAnnotationToDeprecatedAttributeRector::class,
         RenamePropertyToMatchTypeRector::class,
         \Rector\CodeQuality\Rector\BooleanOr\RepeatedOrEqualToInArrayRector::class,
         \Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector::class,
@@ -144,6 +142,7 @@ return RectorConfig::configure()
         \Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector::class,
         \Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class,
         \Rector\Php83\Rector\ClassConst\AddTypeToConstRector::class,
+        \Rector\Php84\Rector\Class_\DeprecatedAnnotationToDeprecatedAttributeRector::class,
         \Rector\Php84\Rector\Foreach_\ForeachToArrayAnyRector::class,
         \Rector\Php84\Rector\Foreach_\ForeachToArrayFindRector::class,
         \Rector\Php84\Rector\MethodCall\NewMethodCallWithoutParenthesesRector::class,

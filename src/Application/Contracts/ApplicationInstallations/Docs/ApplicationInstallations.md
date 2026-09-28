@@ -80,6 +80,11 @@ stateDiagram-v2
     - use case ChangeApplicationStatus
     - use case ChangePortalLicenseFamily
     - use case ChangePortalUsersCount
+- `public function getCurrent(): ApplicationInstallationInterface;`
+    - Returns the installation selected by the application's current execution context.
+    - Implementations must provide this context explicitly, for example by receiving its UUID or a context provider through dependency injection.
+    - Throws `ApplicationInstallationNotFoundException` when no current installation is selected or the selected installation does not exist.
+    - The method does not select an arbitrary installation from storage.
 - `public function delete(Uuid $uuid): void;`
     - use case Uninstall
 - `public function findByBitrix24AccountId(Uuid $uuid): array;`
@@ -90,6 +95,15 @@ stateDiagram-v2
     - use case ChangePortalUsersCount
 - `public function findByExternalId(string $externalId): array;`
     - use case LinkToExternalEntity
+
+### Migration for existing repository implementations
+
+Implementations of `ApplicationInstallationRepositoryInterface` must add
+`getCurrent(): ApplicationInstallationInterface`. Resolve the application's explicitly
+selected installation using the existing lookup methods. Raise
+`ApplicationInstallationNotFoundException` when the context is missing or cannot be resolved.
+The in-memory reference implementation demonstrates UUID selection through an optional
+third constructor argument.
 
 ## Events
 
