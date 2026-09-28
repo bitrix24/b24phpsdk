@@ -4,6 +4,7 @@
 
 ### Added
 
+- Added `ApplicationInstallationStatus::needReinstall` for installations that timed out waiting for `ONAPPINSTALL` and require reinstallation ([#576](https://github.com/bitrix24/b24phpsdk/issues/576))
 - Added the `needReinstall` application installation status for installations that timed out waiting for `ONAPPINSTALL` ([#576](https://github.com/bitrix24/b24phpsdk/issues/576))
 - Added `ApplicationInstallationInterface::markAsNeedReinstall()` and documented direct uninstall of stale installations; existing implementations must add the new method ([#577](https://github.com/bitrix24/b24phpsdk/issues/577))
 
