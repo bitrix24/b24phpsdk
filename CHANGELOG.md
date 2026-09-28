@@ -19,6 +19,10 @@
 
 - Removed the duplicate `needReinstall` enum case introduced when the prerequisite status and transition branches were merged ([#580](https://github.com/bitrix24/b24phpsdk/issues/580))
 
+### Changed
+
+- Expanded `findStaleInstallations()` regression coverage to every installation status and equivalent cutoff instants in different time zones ([#579](https://github.com/bitrix24/b24phpsdk/issues/579))
+
 ## 3.6.0
 
 ### Added
