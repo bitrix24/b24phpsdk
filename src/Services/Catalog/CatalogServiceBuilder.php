@@ -279,70 +279,60 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
     public function section(): Catalog\Section\Service\Section
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Catalog\Section\Service\Section(
-                new Catalog\Section\Service\Batch(
-                    new Catalog\Section\Batch($this->core, $this->log),
-                    $this->log
-                ),
-                $this->core,
+        $this->serviceCache[__METHOD__] ??= new Catalog\Section\Service\Section(
+            new Catalog\Section\Service\Batch(
+                new Catalog\Section\Batch($this->core, $this->log),
                 $this->log
-            );
-        }
+            ),
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function ratio(): Catalog\Ratio\Service\Ratio
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Catalog\Ratio\Service\Ratio(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Catalog\Ratio\Service\Ratio(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
     public function documentContractor(): Catalog\DocumentContractor\Service\DocumentContractor
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Catalog\DocumentContractor\Service\DocumentContractor(
-                new Catalog\DocumentContractor\Service\Batch(
-                    new Catalog\DocumentContractor\Batch($this->core, $this->log),
-                    $this->log
-                ),
-                $this->core,
+        $this->serviceCache[__METHOD__] ??= new Catalog\DocumentContractor\Service\DocumentContractor(
+            new Catalog\DocumentContractor\Service\Batch(
+                new Catalog\DocumentContractor\Batch($this->core, $this->log),
                 $this->log
-            );
-        }
+            ),
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function storeProduct(): Catalog\StoreProduct\Service\StoreProduct
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Catalog\StoreProduct\Service\StoreProduct(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Catalog\StoreProduct\Service\StoreProduct(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
     public function roundingRule(): Catalog\RoundingRule\Service\RoundingRule
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Catalog\RoundingRule\Service\RoundingRule(
-                new Catalog\RoundingRule\Service\Batch(
-                    new Catalog\RoundingRule\Batch($this->core, $this->log),
-                    $this->log
-                ),
-                $this->core,
+        $this->serviceCache[__METHOD__] ??= new Catalog\RoundingRule\Service\RoundingRule(
+            new Catalog\RoundingRule\Service\Batch(
+                new Catalog\RoundingRule\Batch($this->core, $this->log),
                 $this->log
-            );
-        }
+            ),
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }

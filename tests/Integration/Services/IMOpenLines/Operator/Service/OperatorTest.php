@@ -166,6 +166,7 @@ class OperatorTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      */
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testWithRealChatIfAvailable(): void
     {
         // Try to get some existing open line configs to test with
