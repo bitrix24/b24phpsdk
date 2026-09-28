@@ -203,7 +203,7 @@ After all applicable gates pass, add under the existing `## Unreleased` heading:
 - Added `ApplicationInstallationRepositoryInterface::getCurrent()` to retrieve the explicitly selected current application installation; existing repository implementations must add this method ([#356](https://github.com/bitrix24/b24phpsdk/issues/356))
 ```
 
-`Makefile`, `phpunit.xml.dist`, service builders, and shared abstract contract-test factories need no changes: this feature adds no REST service or suite, and the existing unit suite discovers the new file. No agent configuration file is being modified.
+The feature itself adds no REST service or suite, and the existing unit suite discovers the new test file. `Makefile` and shared abstract contract-test factories need no changes. After the base advanced during development, `phpunit.xml.dist` and `src/Services/Catalog/CatalogServiceBuilder.php` needed the two integration repairs recorded below. No agent configuration file is being modified.
 
 ## Deptrac compliance
 
@@ -288,3 +288,14 @@ git status --short
 - Unreleased changelog entry added with the issue link in a follow-up documentation commit. The initial insertion was blocked by a duplicate heading inside a historical HTML comment; the top active section was selected explicitly.
 - Draft PR: https://github.com/bitrix24/b24phpsdk/pull/619, base `v3-dev`, milestone `3.6.0`, assignee `mesilov`.
 - Final CI evidence for the implementation and documentation commits is provided by the PR checks and the final task report after publication.
+
+## Base update and CI repair
+
+During implementation, PR #574 merged Catalog Ratio into `v3-dev`, advancing the base from `1f2894e5` to `ce584f73`. Push checks on the implementation commit passed, but PR merge checks failed:
+
+- PHPUnit could not parse `phpunit.xml.dist`: the newly added `integration_tests_catalog_ratio` suite lacked its closing `</testsuite>` tag.
+- CS Fixer rejected the six-space indentation of `CatalogServiceBuilder::documentContractor()` introduced alongside the Ratio accessor.
+
+The GitHub Actions logs and fetched `refs/pull/619/merge` confirmed the failures were in the advanced base. Merge `origin/v3-dev` into the feature branch, preserve the Ratio implementation, add the missing XML closing tag, and correct the accessor indentation to four spaces. No new Ratio functionality or live API behavior is added by this repair. Repeat all five local gates on the integrated branch, then publish and inspect terminal CI results.
+
+Integrated branch verification: all five local gates passed; full unit suite 1254 tests, 3432 assertions; Deptrac 0 violations, 0 warnings, 0 errors.
