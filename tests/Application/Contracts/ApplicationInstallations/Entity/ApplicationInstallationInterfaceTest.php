@@ -634,6 +634,137 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
     }
 
     #[Test]
+    #[DataProvider('needReinstallCommentDataProvider')]
+    final public function testMarkAsNeedReinstall(?string $comment): void
+    {
+        $previousTestNow = CarbonImmutable::getTestNow();
+
+        try {
+            $installation = $this->createInstallationForStatusTransition(ApplicationInstallationStatus::new);
+            $id = $installation->getId();
+            $accountId = $installation->getBitrix24AccountId();
+            $createdAt = $installation->getCreatedAt();
+            $updatedAt = $installation->getUpdatedAt();
+            CarbonImmutable::setTestNow($updatedAt->addMinute());
+
+            $installation->markAsNeedReinstall($comment);
+
+            $this->assertSame(ApplicationInstallationStatus::needReinstall, $installation->getStatus());
+            $this->assertSame($comment, $installation->getComment());
+            $this->assertEquals($id, $installation->getId());
+            $this->assertEquals($accountId, $installation->getBitrix24AccountId());
+            $this->assertEquals($createdAt, $installation->getCreatedAt());
+            $this->assertTrue($installation->getUpdatedAt()->greaterThan($updatedAt));
+        } finally {
+            CarbonImmutable::setTestNow($previousTestNow);
+        }
+    }
+
+    public static function needReinstallCommentDataProvider(): Generator
+    {
+        yield 'without comment' => [null];
+        yield 'with comment' => ['ONAPPINSTALL was not received before the installation TTL expired'];
+    }
+
+    #[Test]
+    #[DataProvider('nonNewInstallationStatusDataProvider')]
+    final public function testMarkAsNeedReinstallRejectsNonNewStatusWithoutMutation(string $status): void
+    {
+        $previousTestNow = CarbonImmutable::getTestNow();
+
+        try {
+            $installation = $this->createInstallationForStatusTransition(ApplicationInstallationStatus::new);
+            if ($status === 'needReinstall') {
+                $installation->markAsNeedReinstall('Original timeout comment');
+            } else {
+                $installation->markAsBlocked('Original block comment');
+                if ($status === 'active') {
+                    $installation->markAsActive('Original activation comment');
+                } elseif ($status === 'deleted') {
+                    $installation->applicationUninstalled();
+                }
+            }
+
+            $initialStatus = $installation->getStatus();
+            $this->assertSame($status, $initialStatus->value);
+            $comment = $installation->getComment();
+            $updatedAt = $installation->getUpdatedAt();
+            CarbonImmutable::setTestNow($updatedAt->addMinute());
+
+            try {
+                $installation->markAsNeedReinstall('Must not replace the original comment');
+                $this->fail('Only new installations can be marked as needing reinstallation.');
+            } catch (LogicException) {
+                $this->assertSame($initialStatus, $installation->getStatus());
+                $this->assertSame($comment, $installation->getComment());
+                $this->assertEquals($updatedAt, $installation->getUpdatedAt());
+            }
+        } finally {
+            CarbonImmutable::setTestNow($previousTestNow);
+        }
+    }
+
+    public static function nonNewInstallationStatusDataProvider(): Generator
+    {
+        yield 'active' => ['active'];
+        yield 'blocked' => ['blocked'];
+        yield 'deleted' => ['deleted'];
+        yield 'needReinstall' => ['needReinstall'];
+    }
+
+    #[Test]
+    final public function testApplicationUninstalledDirectlyFromNeedReinstall(): void
+    {
+        $installation = $this->createInstallationForStatusTransition(ApplicationInstallationStatus::new);
+        $installation->markAsNeedReinstall('Installation TTL expired');
+
+        $installation->applicationUninstalled();
+
+        $this->assertSame(ApplicationInstallationStatus::deleted, $installation->getStatus());
+    }
+
+    #[Test]
+    final public function testMarkAsBlockedRejectsNeedReinstallWithoutMutation(): void
+    {
+        $previousTestNow = CarbonImmutable::getTestNow();
+
+        try {
+            $installation = $this->createInstallationForStatusTransition(ApplicationInstallationStatus::new);
+            $installation->markAsNeedReinstall('Installation TTL expired');
+            $comment = $installation->getComment();
+            $updatedAt = $installation->getUpdatedAt();
+            CarbonImmutable::setTestNow($updatedAt->addMinute());
+
+            try {
+                $installation->markAsBlocked('Must not replace the timeout comment');
+                $this->fail('Installations needing reinstallation cannot be blocked.');
+            } catch (LogicException) {
+                $this->assertSame(ApplicationInstallationStatus::needReinstall, $installation->getStatus());
+                $this->assertSame($comment, $installation->getComment());
+                $this->assertEquals($updatedAt, $installation->getUpdatedAt());
+            }
+        } finally {
+            CarbonImmutable::setTestNow($previousTestNow);
+        }
+    }
+
+    private function createInstallationForStatusTransition(ApplicationInstallationStatus $status): ApplicationInstallationInterface
+    {
+        return $this->createApplicationInstallationImplementation(
+            Uuid::v7(),
+            $status,
+            Uuid::v7(),
+            ApplicationStatus::subscription(),
+            PortalLicenseFamily::nfr,
+            null,
+            null,
+            null,
+            null,
+            null
+        );
+    }
+
+    #[Test]
     #[DataProvider('applicationInstallationDataProvider')]
     #[TestDox('test getApplicationStatus method')]
     final public function testGetApplicationStatus(
