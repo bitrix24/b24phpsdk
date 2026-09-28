@@ -2,13 +2,16 @@
 
 ## Unreleased
 
+## 3.5.0
+
 ### Added
 
-- Added service `Services\Catalog\Ratio` with support methods,
-  see [catalog.ratio.* methods](https://apidocs.bitrix24.com/api-reference/catalog/ratio/index.html) ([#570](https://github.com/bitrix24/b24phpsdk/issues/570)):
-    - `get` gets the values of a measurement unit ratio by identifier
-    - `list` gets the list of measurement unit ratios matching a filter
-    - `getFields` returns the description of measurement unit ratio fields
+- Added service `Services\Catalog\DocumentContractor` with support methods,
+  see [catalog.documentcontractor.* methods](https://apidocs.bitrix24.com/api-reference/catalog/documentcontractor/index.html) ([#565](https://github.com/bitrix24/b24phpsdk/issues/565)):
+    - `add` binds a CRM contractor (contact or company) to a warehouse accounting receipt document, with batch calls support
+    - `list` gets the list of contractor bindings by filter
+    - `delete` deletes a contractor binding, with batch calls support
+    - `getFields` returns the description of contractor binding fields
 - Added service `Services\Catalog\Document` with support methods,
   see [catalog.document.* methods](https://apidocs.bitrix24.com/api-reference/catalog/document/index.html) ([#559](https://github.com/bitrix24/b24phpsdk/issues/559)):
     - `add` creates a new warehouse accounting document, with batch calls support
@@ -447,6 +450,7 @@ Supported in bitrix24-php-sdk methods with batch wrapper count: 124
 
 ### Changed
 
+- Added optional `$withDeleted` flag to `Bitrix24PartnerRepositoryInterface::findByBitrix24PartnerNumber()` so import workflows can detect soft-deleted partners by partner number ([#490](https://github.com/bitrix24/b24phpsdk/issues/490))
 - Removed the duplicate `bitrix24PartnerNumber` uniqueness expectation from the `Bitrix24PartnerRepositoryInterface` contract so `save()` remains a persistence operation; uniqueness validation belongs in the use-case layer ([#468](https://github.com/bitrix24/b24phpsdk/issues/468))
 - Removed dead `delete(Uuid $uuid)` method from `Bitrix24PartnerRepositoryInterface`, its in-memory stub implementation, and the `testDelete` contract test — the soft-delete flow (`markAsDeleted()` + `save()`) makes this method redundant ([#471](https://github.com/bitrix24/b24phpsdk/issues/471))
 - Replaced `set*` prefix with `change*` in `Bitrix24PartnerInterface` mutator methods (`changeTitle`, `changeSite`, `changePhone`, `changeEmail`, `changeOpenLineId`, `changeExternalId`) to better express domain-level change operations ([#453](https://github.com/bitrix24/b24phpsdk/issues/453))
