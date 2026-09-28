@@ -20,6 +20,7 @@ use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Repository\Appli
 use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountStatus;
 use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Repository\Bitrix24AccountRepositoryInterface;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Carbon\CarbonImmutable;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
 
@@ -116,6 +117,23 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
         }
 
         return $result;
+    }
+
+    #[\Override]
+    public function findStaleInstallations(ApplicationInstallationStatus $status, CarbonImmutable $olderThan): array
+    {
+        $matches = array_filter(
+            $this->items,
+            static fn (ApplicationInstallationInterface $installation): bool => $installation->getStatus() === $status
+                && $installation->getCreatedAt()->lessThan($olderThan)
+        );
+        usort(
+            $matches,
+            static fn (ApplicationInstallationInterface $left, ApplicationInstallationInterface $right): int =>
+                $left->getCreatedAt() <=> $right->getCreatedAt()
+        );
+
+        return $matches;
     }
 
     /**

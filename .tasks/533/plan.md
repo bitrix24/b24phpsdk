@@ -241,3 +241,5 @@ Use the configured application bridge for methods requiring application authoriz
 - Before PR publication, merged current `origin/v3-dev` (2f9b6ed9). Its baseline XML/Catalog repairs and Rector deprecated-attribute exclusion supersede those prerequisites here; the final PR diff only adds the Event test entry to PHPUnit configuration and contains no Catalog or Rector change. The changelog conflict was resolved by preserving all entries.
 
 - The refreshed base contains duplicate `ApplicationInstallationStatus::needReinstall` enum declarations, confirmed in `origin/v3-dev`. Post-merge PHPStan failed with `enum.duplicateValue` and `enum.duplicateEnumCase`. Removed only the redundant declaration; existing installation tests and PHPStan verify the prerequisite repair.
+
+- While PR CI was running, #622 merged into v3-dev (8f97c997), including the duplicate enum fix. Merged that base and retained its single needReinstall declaration, so the final PR no longer changes the installation enum or its changelog entry. Re-ran local checks before repushing.

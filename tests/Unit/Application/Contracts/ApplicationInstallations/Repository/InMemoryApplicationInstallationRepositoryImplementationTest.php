@@ -36,7 +36,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Log\NullLogger;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(ApplicationInstallationRepositoryInterface::class)]
+#[CoversClass(InMemoryApplicationInstallationRepositoryImplementation::class)]
 class InMemoryApplicationInstallationRepositoryImplementationTest extends ApplicationInstallationRepositoryInterfaceTest
 {
     private ?InMemoryBitrix24AccountRepositoryImplementation $bitrix24AccountRepository = null;
