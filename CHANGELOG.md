@@ -53,17 +53,6 @@
     - `TradePlatform` - `list`,
       see [sale.tradePlatform.* methods](https://apidocs.bitrix24.com/api-reference/sale/trade-platform/index.html)
 
-### Changed
-
-- Constructors of the `Services\Sale` services listed above now accept the service `Batch` as the first argument,
-  services created by `SaleServiceBuilder` are not affected ([#614](https://github.com/bitrix24/b24phpsdk/issues/614))
-
-### Fixed
-
-- Fixed `Services\Sale\Delivery\Service\Delivery::update()` sending the fields to update in the `FIELDS` parameter:
-  `sale.delivery.update` expects them as top-level parameters and silently ignored the update
-  ([#614](https://github.com/bitrix24/b24phpsdk/issues/614))
-
 - Added batch calls support for `Services\Catalog` scope
   ([#611](https://github.com/bitrix24/b24phpsdk/issues/611)):
     - `Catalog\Catalog\Service\Catalog::batch->list` gets the list of commercial catalogs,
@@ -131,6 +120,17 @@
     - `list` returns a list of VAT rates by filter
     - `delete` deletes a VAT rate by identifier, with batch calls support
     - `getFields` returns the description of VAT rate fields
+
+### Changed
+
+- Constructors of the `Services\Sale` services listed above now accept the service `Batch` as the first argument,
+  services created by `SaleServiceBuilder` are not affected ([#614](https://github.com/bitrix24/b24phpsdk/issues/614))
+
+### Fixed
+
+- Fixed `Services\Sale\Delivery\Service\Delivery::update()` sending the fields to update in the `FIELDS` parameter:
+  `sale.delivery.update` expects them as top-level parameters and silently ignored the update
+  ([#614](https://github.com/bitrix24/b24phpsdk/issues/614))
 
 ## 3.6.0
 

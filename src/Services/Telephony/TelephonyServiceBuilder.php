@@ -75,24 +75,20 @@ class TelephonyServiceBuilder extends AbstractServiceBuilder
 
     public function followUp(): Telephony\FollowUp\Service\FollowUp
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Telephony\FollowUp\Service\FollowUp(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Telephony\FollowUp\Service\FollowUp(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function followUpField(): Telephony\FollowUpField\Service\FollowUpField
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Telephony\FollowUpField\Service\FollowUpField(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Telephony\FollowUpField\Service\FollowUpField(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
