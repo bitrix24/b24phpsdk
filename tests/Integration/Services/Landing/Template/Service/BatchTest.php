@@ -31,7 +31,7 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->templateService = Factory::getServiceBuilder()->getLandingScope()->template();
+        $this->templateService = Factory::getServiceBuilder(true)->getLandingScope()->template();
     }
 
     /**

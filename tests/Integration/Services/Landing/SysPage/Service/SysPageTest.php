@@ -52,7 +52,7 @@ class SysPageTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $serviceBuilder = Fabric::getServiceBuilder();
+        $serviceBuilder = Factory::getServiceBuilder(true);
         $this->sysPageService = $serviceBuilder->getLandingScope()->sysPage();
         $this->siteService = $serviceBuilder->getLandingScope()->site();
         $this->pageService = $serviceBuilder->getLandingScope()->page();
