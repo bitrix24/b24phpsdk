@@ -154,6 +154,8 @@
 
 ### Fixed
 
+- Fixed legacy REST API coverage on the SDK v3 line by matching unique v1 methods against portal availability, including legacy services ([#637](https://github.com/bitrix24/b24phpsdk/issues/637)).
+
 - Fixed the Deptrac GitHub Actions workflow YAML so architecture checks run for the 3.7.0 release candidate.
 
 - Fixed `Services\Sale\Delivery\Service\Delivery::update()` sending the fields to update in the `FIELDS` parameter:
