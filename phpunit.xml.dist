@@ -118,6 +118,12 @@
         <testsuite name="integration_tests_scope_crm_currency">
             <directory>./tests/Integration/Services/CRM/Currency/</directory>
         </testsuite>
+        <testsuite name="integration_tests_crm_type">
+            <directory>./tests/Integration/Services/CRM/Type/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_crm_userfieldconfig">
+            <directory>./tests/Integration/Services/CRM/Userfieldconfig/</directory>
+        </testsuite>
         <testsuite name="integration_tests_deal_recurring">
             <file>./tests/Integration/Services/CRM/Deal/Service/DealRecurringTest.php</file>
         </testsuite>

@@ -35,7 +35,6 @@ class Type extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/universal/user-defined-object-types/crm-type-fields.html
      *
-     * @return FieldsResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -54,10 +53,6 @@ class Type extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/universal/user-defined-object-types/crm-type-add.html
      *
-     * @param string $title
-     * @param int|null $entityTypeId
-     * @param array $parameters
-     * @return AddedTypeItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -104,7 +99,6 @@ class Type extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/universal/user-defined-object-types/crm-type-get.html
      *
-     * @return TypeResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -123,8 +117,6 @@ class Type extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/universal/user-defined-object-types/crm-type-get-by-entity-type-id.html
      *
-     * @param int $entityTypeId
-     * @return TypeResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -143,10 +135,6 @@ class Type extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/universal/user-defined-object-types/crm-type-get-by-entity-type-id.html
      *
-     * @param array $order
-     * @param array $filter
-     * @param int $start
-     * @return TypesResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -169,8 +157,6 @@ class Type extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/universal/user-defined-object-types/crm-type-delete.html
      *
-     * @param int $entityTypeId
-     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      */

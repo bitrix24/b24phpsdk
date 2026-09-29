@@ -4,6 +4,21 @@
 
 ### Added
 
+- Added service `Services\CRM\Userfieldconfig` with support methods,
+  see [userfieldconfig.* methods](https://apidocs.bitrix24.com/api-reference/crm/universal/userfieldconfig/index.html) ([#605](https://github.com/bitrix24/b24phpsdk/issues/605)):
+    - `add` adds a new custom field for a CRM smart-process type, the new invoice or the sign document entity, with batch calls support
+    - `update` updates the settings of an existing custom field, with batch calls support
+    - `get` returns the settings of a custom field by its identifier
+    - `list` returns a list of custom field settings matching the filter
+    - `delete` deletes a custom field, with batch calls support
+    - `getTypes` returns the set of custom field types available for the specified module
+- Added support for events
+  see [userfieldconfig events](https://apidocs.bitrix24.com/api-reference/crm/universal/userfieldconfig/events/index.html) ([#605](https://github.com/bitrix24/b24phpsdk/issues/605)):
+    - `onCrmTypeUserFieldAdd`
+    - `onCrmTypeUserFieldUpdate`
+    - `onCrmTypeUserFieldDelete`
+    - `onCrmTypeUserFieldSetEnumValues`
+
 - Added service `Services\Catalog\Vat\Service\Vat` with support methods,
   see [catalog.vat.* methods](https://apidocs.bitrix24.com/api-reference/catalog/vat/index.html) ([#590](https://github.com/bitrix24/b24phpsdk/issues/590)):
     - `add` creates a new VAT rate, with batch calls support

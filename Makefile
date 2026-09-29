@@ -373,6 +373,14 @@ test-integration-sale-property-relation:
 .PHONY: test-integration-scope-crm
 test-integration-scope-crm:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm
+
+.PHONY: test-integration-crm-type
+test-integration-crm-type:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_type
+
+.PHONY: test-integration-crm-userfieldconfig
+test-integration-crm-userfieldconfig:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_userfieldconfig
   
 .PHONY: integration_tests_scope_crm_address
 integration_tests_scope_crm_address:
