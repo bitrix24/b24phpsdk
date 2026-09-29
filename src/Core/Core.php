@@ -239,31 +239,36 @@ class Core implements CoreInterface
             }
         } catch (TransportExceptionInterface|JsonException $exception) {
             // catch symfony http client transport exception
+            $message = ExceptionContextSanitizer::redactMessage($exception->getMessage());
             $this->logger->error(
                 'call.transportException',
                 [
-                    'trace' => $exception->getTrace(),
-                    'message' => $exception->getMessage(),
+                    'class' => $exception::class,
+                    'trace' => ExceptionContextSanitizer::sanitizeTrace($exception->getTrace()),
+                    'message' => $message,
                 ]
             );
+            // The original cause may contain credentials in its message, trace args or previous chain.
             throw new TransportException(
-                sprintf('transport error - %s, type %s', $exception->getMessage(), $exception::class),
+                sprintf('transport error - %s, type %s', $message, $exception::class),
                 $exception->getCode(),
-                $exception
+                previous: null
             );
         } catch (BaseException $exception) {
             // rethrow known bitrix24 php sdk exception
             throw $exception;
         } catch (\Throwable $exception) {
+            $message = ExceptionContextSanitizer::redactMessage($exception->getMessage());
             $this->logger->error(
                 'call.unknownException',
                 [
-                    'message' => $exception->getMessage(),
+                    'message' => $message,
                     'class' => $exception::class,
-                    'trace' => $exception->getTrace(),
+                    'trace' => ExceptionContextSanitizer::sanitizeTrace($exception->getTrace()),
                 ]
             );
-            throw new BaseException(sprintf('unknown error - %s', $exception->getMessage()), $exception->getCode(), $exception);
+            // Do not reintroduce the unsafe cause through exception chaining.
+            throw new BaseException(sprintf('unknown error - %s', $message), $exception->getCode(), previous: null);
         }
 
         $this->logger->debug('call.finish');
