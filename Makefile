@@ -832,6 +832,10 @@ test-integration-catalog-document-contractor-annotations:
 test-integration-catalog-ratio:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_ratio
 
+.PHONY: test-integration-catalog-rounding-rule
+test-integration-catalog-rounding-rule:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_rounding_rule
+
 # work dev environment
 .PHONY: php-dev-server-up
 php-dev-server-up:
