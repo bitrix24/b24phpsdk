@@ -248,9 +248,9 @@ class ApiClientTest extends TestCase
                 $headers = self::normalizeHeaders($options['headers'] ?? []);
 
                 self::assertSame('POST', $method);
-                self::assertSame('3.5.0', $headers['x-bitrix24-php-sdk-version'] ?? null);
+                self::assertSame('3.6.0', $headers['x-bitrix24-php-sdk-version'] ?? null);
                 self::assertStringStartsWith(
-                    'b24-php-sdk-vendor-v-3.5.0-php-',
+                    'b24-php-sdk-vendor-v-3.6.0-php-',
                     $headers['user-agent'] ?? ''
                 );
 

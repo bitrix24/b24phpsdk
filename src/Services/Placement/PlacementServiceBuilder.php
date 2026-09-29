@@ -23,18 +23,14 @@ class PlacementServiceBuilder extends AbstractServiceBuilder
 {
     public function placement(): Placement
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Placement($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Placement($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function userfieldtype(): UserFieldType
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new UserFieldType($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new UserFieldType($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }

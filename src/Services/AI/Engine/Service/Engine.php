@@ -20,11 +20,16 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\AddedItemResult;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
+use Bitrix24\SDK\Core\ValueObjects\Url;
+use Bitrix24\SDK\Core\ValueObjects\ValueObjectResolver;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\AI\Engine\EngineCategory;
 use Bitrix24\SDK\Services\AI\Engine\EngineSettings;
 use Bitrix24\SDK\Services\AI\Engine\Result\EnginesResult;
 
+/**
+ * String completion URLs are deprecated; pass Url instead. URLs are validated before transport.
+ */
 #[ApiServiceMetadata(new Scope(['ai_admin']))]
 class Engine extends AbstractService
 {
@@ -44,14 +49,14 @@ class Engine extends AbstractService
         string $name,
         string $code,
         EngineCategory $category,
-        string $completionsUrl,
+        string|Url $completionsUrl,
         EngineSettings $settings,
     ): AddedItemResult {
         return new AddedItemResult($this->core->call('ai.engine.register', [
             'name' => $name,
             'code' => $code,
             'category' => $category->value,
-            'completions_url' => $completionsUrl,
+            'completions_url' => ValueObjectResolver::resolveUrl($completionsUrl),
             'settings' => $settings->toArray(),
         ]));
     }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\IM\Message\Attach\Items;
 
+use Bitrix24\SDK\Core\ValueObjects\Url;
 use Bitrix24\SDK\Services\IM\Message\Attach\Contracts\AttachItemInterface;
 use Bitrix24\SDK\Services\IM\Message\Attach\Enums\AttachColorToken;
 
@@ -53,9 +54,9 @@ final class GridItem implements AttachItemInterface
         return $this;
     }
 
-    public function link(string $url): self
+    public function link(string|Url $url): self
     {
-        $this->link = $this->requireNonEmptyString($url, 'LINK');
+        $this->link = $this->requireNonEmptyString($url instanceof Url ? $url->getUrl() : $url, 'LINK');
 
         return $this;
     }

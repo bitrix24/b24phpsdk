@@ -19,19 +19,23 @@ use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Core\ValueObjects\Url;
+use Bitrix24\SDK\Core\ValueObjects\ValueObjectResolver;
 use Bitrix24\SDK\Services\AbstractService;
-
 use Bitrix24\SDK\Services\Telephony\Voximplant\InfoCall\Result\VoximplantInfoCallResult;
 use Psr\Log\LoggerInterface;
+
+/**
+ * String recording URLs are deprecated; pass Url instead. URLs are validated before transport.
+ */
 #[ApiServiceMetadata(new Scope(['telephony']))]
 class InfoCall extends AbstractService
 {
     public function __construct(
-        readonly public Batch $batch,
+        public readonly Batch $batch,
         CoreInterface         $core,
         LoggerInterface       $logger
-    )
-    {
+    ) {
         parent::__construct($core, $logger);
     }
 
@@ -68,12 +72,12 @@ class InfoCall extends AbstractService
         'https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_infocall_startwithsound.php',
         'Makes a call to the specified number with playback of .mp3 format file by URL.'
     )]
-    public function startWithSound(string $lineId, string $toNumber, string $recordUrl): VoximplantInfoCallResult
+    public function startWithSound(string $lineId, string $toNumber, string|Url $recordUrl): VoximplantInfoCallResult
     {
         return new VoximplantInfoCallResult($this->core->call('voximplant.infocall.startwithsound', [
             'FROM_LINE' => $lineId,
             'TO_NUMBER' => $toNumber,
-            'URL' => $recordUrl
+            'URL' => ValueObjectResolver::resolveUrl($recordUrl)
         ]));
     }
 }

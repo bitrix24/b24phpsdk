@@ -47,7 +47,7 @@ composer require bitrix24/b24phpsdk:"^1.0"
 Install the new v3 version (PHP 8.4+, breaking changes):
 
 ```bash
-composer require bitrix24/b24phpsdk:"^3.5"
+composer require bitrix24/b24phpsdk:"^3.6"
 ```
 
 If you work on Windows:

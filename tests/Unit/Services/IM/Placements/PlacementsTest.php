@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Unit\Services\IM\Placements;
 
 use Bitrix24\SDK\Core\Contracts\LangCodes;
+use Bitrix24\SDK\Core\ValueObjects\Url;
+use Bitrix24\SDK\Services\Placement\Result\PlacementUnbindResult;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Bitrix24\SDK\Services\IM\Placements\ImContextMenuPlacementOptions;
 use Bitrix24\SDK\Services\IM\Placements\ImNavigationPlacementOptions;
 use Bitrix24\SDK\Services\IM\Placements\ImSidebarPlacementOptions;
@@ -202,4 +205,46 @@ class PlacementsTest extends TestCase
             ),
         );
     }
+    #[DataProvider('placementHelpers')]
+    public function testAllBindHelpersForwardUrlObjects(string $suffix, string $placementCode, mixed $options): void
+    {
+        $url = new Url('https://example.test/widget');
+        $placement = $this->createMock(Placement::class);
+        $bindResult = $this->createStub(PlacementBindResult::class);
+        $lang = PlacementLangMap::empty()->with(LangCodes::EN, new PlacementLangItem('Widget'));
+        $placement->expects($this->once())->method('bind')->with($placementCode, $url, $lang->toArray(), $options, 7)->willReturn($bindResult);
+        $placements = new Placements($placement);
+        self::assertSame($bindResult, $placements->{'bind'.$suffix}($url, $lang, $options, 7));
+    }
+
+    #[DataProvider('placementHelpers')]
+    public function testAllUnbindHelpersForwardUrlObjects(string $suffix, string $placementCode, mixed $options): void
+    {
+        $url = new Url('https://example.test/widget');
+        $placement = $this->createMock(Placement::class);
+        $result = $this->createStub(PlacementUnbindResult::class);
+        $placement->expects($this->once())->method('unbind')->with($placementCode, $url)->willReturn($result);
+        self::assertSame($result, (new Placements($placement))->{'unbind'.$suffix}($url));
+    }
+
+    #[DataProvider('placementHelpers')]
+    public function testAllUnbindHelpersPreserveNullAndEmpty(string $suffix, string $placementCode, mixed $options): void
+    {
+        foreach ([null, ''] as $handler) {
+            $placement = $this->createMock(Placement::class);
+            $result = $this->createStub(PlacementUnbindResult::class);
+            $placement->expects($this->once())->method('unbind')->with($placementCode, $handler)->willReturn($result);
+            self::assertSame($result, (new Placements($placement))->{'unbind'.$suffix}($handler));
+        }
+    }
+
+    public static function placementHelpers(): iterable
+    {
+        yield 'sidebar' => ['Sidebar', PlacementLocationCodes::IM_SIDEBAR, new ImSidebarPlacementOptions('fa-bug')];
+        yield 'navigation' => ['Navigation', PlacementLocationCodes::IM_NAVIGATION, new ImNavigationPlacementOptions('fa-compass')];
+        yield 'context menu' => ['ContextMenu', PlacementLocationCodes::IM_CONTEXT_MENU, new ImContextMenuPlacementOptions()];
+        yield 'textarea' => ['Textarea', PlacementLocationCodes::IM_TEXTAREA, new ImTextareaPlacementOptions('fa-comment')];
+        yield 'smiles' => ['SmilesSelector', PlacementLocationCodes::IM_SMILES_SELECTOR, []];
+    }
+
 }

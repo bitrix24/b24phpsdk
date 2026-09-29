@@ -165,7 +165,6 @@ class Main extends AbstractService
      *
      * @throws BaseException
      * @throws TransportException
-     * @deprecated use method.get
      * @link       https://training.bitrix24.com/rest_help/general/methods.php
      */
     #[ApiEndpointMetadata(
@@ -173,6 +172,7 @@ class Main extends AbstractService
         'https://training.bitrix24.com/rest_help/general/methods.php',
         'Returns the methods available to the current application'
     )]
+    #[\Deprecated(message: 'use method.get')]
     public function getAvailableMethods(): Response
     {
         return $this->core->call('methods', []);
@@ -183,7 +183,6 @@ class Main extends AbstractService
      *
      * @throws BaseException
      * @throws TransportException
-     * @deprecated use method.get
      * @link       https://training.bitrix24.com/rest_help/general/methods.php
      */
     #[ApiEndpointMetadata(
@@ -191,6 +190,7 @@ class Main extends AbstractService
         'https://training.bitrix24.com/rest_help/general/methods.php',
         'Returns the methods available to the current application'
     )]
+    #[\Deprecated(message: 'use method.get')]
     public function getAllMethods(): Response
     {
         return $this->core->call('methods', ['full' => true]);
@@ -202,7 +202,6 @@ class Main extends AbstractService
      *
      * @throws BaseException
      * @throws TransportException
-     * @deprecated use method.get
      * @link       https://training.bitrix24.com/rest_help/general/methods.php
      */
     #[ApiEndpointMetadata(
@@ -210,6 +209,7 @@ class Main extends AbstractService
         'https://training.bitrix24.com/rest_help/general/methods.php',
         'Returns the methods available to the current application'
     )]
+    #[\Deprecated(message: 'use method.get')]
     public function getMethodsByScope(string $scope): Response
     {
         return $this->core->call('methods', ['scope' => $scope]);

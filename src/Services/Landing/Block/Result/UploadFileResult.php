@@ -48,20 +48,20 @@ class UploadFileResult extends AbstractResult
     }
 
     /**
-     * @deprecated Use getId() instead
      * @return int|null File ID
      * @throws BaseException
      */
+    #[\Deprecated(message: 'Use getId() instead')]
     public function getFileId(): ?int
     {
         return $this->getId();
     }
 
     /**
-     * @deprecated Use getUrl() instead
      * @return string Direct path to uploaded file
      * @throws BaseException
      */
+    #[\Deprecated(message: 'Use getUrl() instead')]
     public function getFilePath(): string
     {
         return $this->getUrl();

@@ -20,6 +20,7 @@ use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Repository\Appli
 use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountStatus;
 use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Repository\Bitrix24AccountRepositoryInterface;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Carbon\CarbonImmutable;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
 
@@ -32,7 +33,8 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
 
     public function __construct(
         private readonly Bitrix24AccountRepositoryInterface $bitrix24AccountRepository,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
+        private readonly ?Uuid $currentInstallationId = null
     ) {
     }
 
@@ -76,6 +78,16 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
     }
 
     #[\Override]
+    public function getCurrent(): ApplicationInstallationInterface
+    {
+        if (!$this->currentInstallationId instanceof Uuid) {
+            throw new ApplicationInstallationNotFoundException('current application installation is not selected');
+        }
+
+        return $this->getById($this->currentInstallationId);
+    }
+
+    #[\Override]
     public function findByBitrix24AccountId(Uuid $uuid): ?ApplicationInstallationInterface
     {
         $this->logger->debug('InMemoryApplicationInstallationRepositoryImplementation.findByBitrix24AccountId', ['id' => $uuid->toRfc4122()]);
@@ -105,6 +117,23 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
         }
 
         return $result;
+    }
+
+    #[\Override]
+    public function findStaleInstallations(ApplicationInstallationStatus $status, CarbonImmutable $olderThan): array
+    {
+        $matches = array_filter(
+            $this->items,
+            static fn (ApplicationInstallationInterface $installation): bool => $installation->getStatus() === $status
+                && $installation->getCreatedAt()->lessThan($olderThan)
+        );
+        usort(
+            $matches,
+            static fn (ApplicationInstallationInterface $left, ApplicationInstallationInterface $right): int =>
+                $left->getCreatedAt() <=> $right->getCreatedAt()
+        );
+
+        return $matches;
     }
 
     /**

@@ -40,117 +40,91 @@ class IMServiceBuilder extends AbstractServiceBuilder
 {
     public function recent(): Recent
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Recent($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Recent($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function search(): Search
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Search($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Search($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function disk(): Disk
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Disk($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Disk($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function notify(): Notify
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Notify($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Notify($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function chat(): Chat
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Chat($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Chat($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function chatUser(): ChatUser
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new ChatUser($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new ChatUser($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function message(): Message
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Message($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Message($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function dialog(): Dialog
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Dialog($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Dialog($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function revision(): Revision
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Revision($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Revision($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function counters(): Counters
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Counters($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Counters($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function department(): Department
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Department($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new Department($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function userStatus(): UserStatus
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new UserStatus($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new UserStatus($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function user(): User
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new User($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new User($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -162,27 +136,21 @@ class IMServiceBuilder extends AbstractServiceBuilder
 
     public function placements(): Placements
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Placements(new Placement($this->core, $this->log));
-        }
+        $this->serviceCache[__METHOD__] ??= new Placements(new Placement($this->core, $this->log));
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function eventV2(): EventV2
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new EventV2($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new EventV2($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
 
     public function fileV2(): FileV2
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new FileV2($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new FileV2($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }

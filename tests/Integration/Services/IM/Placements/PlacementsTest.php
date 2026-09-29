@@ -38,69 +38,68 @@ class PlacementsTest extends TestCase
     {
         $placements = $this->sb->getIMScope()->placements();
 
-        $placements->unbindSidebar();
-        $placements->unbindNavigation();
-        $placements->unbindContextMenu();
-        $placements->unbindTextarea();
-        $placements->unbindSmilesSelector();
-
+        $suffix = '/sdk533-' . bin2hex(random_bytes(6));
+        $base = rtrim((string) $_ENV['BITRIX24_PHP_SDK_APPLICATION_DOMAIN_URL'], '/');
         $placementLangMap = PlacementLangMap::empty()
             ->with(LangCodes::EN, new PlacementLangItem('Sidebar'))
             ->with(LangCodes::RU, new PlacementLangItem('Сайдбар'));
 
-        self::assertTrue(
-            $placements->bindSidebar(
-                'https://bitrix24test.com/im-sidebar',
-                $placementLangMap,
-                (new ImSidebarPlacementOptions('fa-bug'))
-                    ->color(PlacementColor::Green),
-            )->isSuccess()
-        );
+        try {
+            self::assertTrue(
+                $placements->bindSidebar(
+                    new \Bitrix24\SDK\Core\ValueObjects\Url($base . '/im-sidebar' . $suffix),
+                    $placementLangMap,
+                    (new ImSidebarPlacementOptions('fa-bug'))
+                        ->color(PlacementColor::Green),
+                )->isSuccess()
+            );
 
-        self::assertTrue(
-            $placements->bindNavigation(
-                'https://bitrix24test.com/im-navigation',
-                PlacementLangMap::empty()
-                    ->with(LangCodes::EN, new PlacementLangItem('Navigation')),
-                new ImNavigationPlacementOptions('fa-compass'),
-            )->isSuccess()
-        );
+            self::assertTrue(
+                $placements->bindNavigation(
+                    $base . '/im-navigation' . $suffix,
+                    PlacementLangMap::empty()
+                        ->with(LangCodes::EN, new PlacementLangItem('Navigation')),
+                    new ImNavigationPlacementOptions('fa-compass'),
+                )->isSuccess()
+            );
 
-        self::assertTrue(
-            $placements->bindContextMenu(
-                'https://bitrix24test.com/im-context-menu',
-                PlacementLangMap::empty()
-                    ->with(LangCodes::EN, new PlacementLangItem('Context menu')),
-                new ImContextMenuPlacementOptions(),
-            )->isSuccess()
-        );
+            self::assertTrue(
+                $placements->bindContextMenu(
+                    $base . '/im-context-menu' . $suffix,
+                    PlacementLangMap::empty()
+                        ->with(LangCodes::EN, new PlacementLangItem('Context menu')),
+                    new ImContextMenuPlacementOptions(),
+                )->isSuccess()
+            );
 
-        self::assertTrue(
-            $placements->bindTextarea(
-                'https://bitrix24test.com/im-textarea',
-                PlacementLangMap::empty()
-                    ->with(LangCodes::EN, new PlacementLangItem('Textarea')),
-                (new ImTextareaPlacementOptions('fa-comment'))
-                    ->width(400)
-                    ->height(160)
-                    ->color(PlacementColor::Brown),
-            )->isSuccess()
-        );
+            self::assertTrue(
+                $placements->bindTextarea(
+                    $base . '/im-textarea' . $suffix,
+                    PlacementLangMap::empty()
+                        ->with(LangCodes::EN, new PlacementLangItem('Textarea')),
+                    (new ImTextareaPlacementOptions('fa-comment'))
+                        ->width(400)
+                        ->height(160)
+                        ->color(PlacementColor::Brown),
+                )->isSuccess()
+            );
 
-        self::assertTrue(
-            $placements->bindSmilesSelector(
-                'https://bitrix24test.com/im-smiles-selector',
-                PlacementLangMap::empty()
-                    ->with(LangCodes::EN, new PlacementLangItem('Smiles selector')),
-                ['name' => 'fa-face-smile'],
-            )->isSuccess()
-        );
+            self::assertTrue(
+                $placements->bindSmilesSelector(
+                    $base . '/im-smiles-selector' . $suffix,
+                    PlacementLangMap::empty()
+                        ->with(LangCodes::EN, new PlacementLangItem('Smiles selector')),
+                    ['name' => 'fa-face-smile'],
+                )->isSuccess()
+            );
 
-        self::assertGreaterThanOrEqual(0, $placements->unbindSidebar()->getDeletedPlacementHandlersCount());
-        self::assertGreaterThanOrEqual(0, $placements->unbindNavigation()->getDeletedPlacementHandlersCount());
-        self::assertGreaterThanOrEqual(0, $placements->unbindContextMenu()->getDeletedPlacementHandlersCount());
-        self::assertGreaterThanOrEqual(0, $placements->unbindTextarea()->getDeletedPlacementHandlersCount());
-        self::assertGreaterThanOrEqual(0, $placements->unbindSmilesSelector()->getDeletedPlacementHandlersCount());
+        } finally {
+            self::assertGreaterThanOrEqual(0, $placements->unbindSidebar(new \Bitrix24\SDK\Core\ValueObjects\Url($base . '/im-sidebar' . $suffix))->getDeletedPlacementHandlersCount());
+            self::assertGreaterThanOrEqual(0, $placements->unbindNavigation(new \Bitrix24\SDK\Core\ValueObjects\Url($base . '/im-navigation' . $suffix))->getDeletedPlacementHandlersCount());
+            self::assertGreaterThanOrEqual(0, $placements->unbindContextMenu(new \Bitrix24\SDK\Core\ValueObjects\Url($base . '/im-context-menu' . $suffix))->getDeletedPlacementHandlersCount());
+            self::assertGreaterThanOrEqual(0, $placements->unbindTextarea(new \Bitrix24\SDK\Core\ValueObjects\Url($base . '/im-textarea' . $suffix))->getDeletedPlacementHandlersCount());
+            self::assertGreaterThanOrEqual(0, $placements->unbindSmilesSelector(new \Bitrix24\SDK\Core\ValueObjects\Url($base . '/im-smiles-selector' . $suffix))->getDeletedPlacementHandlersCount());
+        }
     }
 
     #[\Override]

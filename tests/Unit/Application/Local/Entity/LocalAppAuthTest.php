@@ -16,6 +16,7 @@ namespace Bitrix24\SDK\Tests\Unit\Application\Local\Entity;
 use Bitrix24\SDK\Application\Local\Entity\LocalAppAuth;
 use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\DefaultOAuthServerUrl;
+use Bitrix24\SDK\Core\ValueObjects\Url;
 use Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -134,5 +135,17 @@ class LocalAppAuthTest extends TestCase
         yield 'east region' => [DefaultOAuthServerUrl::east()];
         yield 'west region' => [DefaultOAuthServerUrl::west()];
         yield 'custom server' => ['https://oauth.my-custom-server.com/'];
+    }
+    public function testUrlObjectsAreSerializedAsPrimitives(): void
+    {
+        $localAppAuth = new LocalAppAuth(new AuthToken('access', 'refresh', 123), new Url('https://example.com'), null, new Url('https://oauth.example.com'));
+        self::assertSame('https://example.com', $localAppAuth->getDomainUrl());
+        self::assertSame('https://oauth.example.com', $localAppAuth->getOAuthServerUrl());
+        self::assertSame($localAppAuth->toArray(), LocalAppAuth::initFromArray($localAppAuth->toArray())->toArray());
+    }
+    public function testDomainOnlyLegacyInputRemainsUnchanged(): void
+    {
+        $localAppAuth = new LocalAppAuth(new AuthToken('access', null, 123), 'example.com', null, 'https://oauth.example.com');
+        self::assertSame('example.com', $localAppAuth->getDomainUrl());
     }
 }

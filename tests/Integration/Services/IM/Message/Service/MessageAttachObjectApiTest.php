@@ -15,7 +15,9 @@ namespace Bitrix24\SDK\Tests\Integration\Services\IM\Message\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Core\ValueObjects\Url;
 use Bitrix24\SDK\Services\IM\Message\Attach\Attach;
+use Bitrix24\SDK\Services\IM\Message\Attach\Blocks\LinkBlock;
 use Bitrix24\SDK\Services\IM\Message\Attach\Enums\AttachColorToken;
 use Bitrix24\SDK\Services\IM\Message\Service\Message;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -54,7 +56,8 @@ class MessageAttachObjectApiTest extends MessageChatTestCase
             attach: Attach::create()
                 ->id(1)
                 ->colorToken(AttachColorToken::primary)
-                ->message('Full object payload'),
+                ->message('Full object payload')
+                ->add(LinkBlock::url(new Url('https://bitrix24.com/'))->name('Bitrix24')),
         );
 
         $this->assertGreaterThan(0, $messageId);
