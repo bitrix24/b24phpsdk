@@ -3,7 +3,7 @@
 /**
  * This file is part of the bitrix24-php-sdk package.
  *
- * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ * © Veronica Akhmetova <264936994+fatestr1ngs@users.noreply.github.com>
  *
  * For the full copyright and license information, please view the MIT-LICENSE.txt
  * file that was distributed with this source code.
@@ -16,15 +16,25 @@ namespace Bitrix24\SDK\Services\Booking;
 use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
+use Bitrix24\SDK\Services\Booking\Booking\Service\Batch as BookingBatch;
 use Bitrix24\SDK\Services\Booking\Booking\Service\Booking;
+use Bitrix24\SDK\Services\Booking\BookingClient\Service\Batch as BookingClientBatch;
 use Bitrix24\SDK\Services\Booking\BookingClient\Service\BookingClient;
+use Bitrix24\SDK\Services\Booking\BookingExternalData\Service\Batch as BookingExternalDataBatch;
 use Bitrix24\SDK\Services\Booking\BookingExternalData\Service\BookingExternalData;
+use Bitrix24\SDK\Services\Booking\ClientType\Service\Batch as ClientTypeBatch;
 use Bitrix24\SDK\Services\Booking\ClientType\Service\ClientType;
+use Bitrix24\SDK\Services\Booking\Resource\Service\Batch as ResourceBatch;
 use Bitrix24\SDK\Services\Booking\Resource\Service\Resource;
+use Bitrix24\SDK\Services\Booking\ResourceSlots\Service\Batch as ResourceSlotsBatch;
 use Bitrix24\SDK\Services\Booking\ResourceSlots\Service\ResourceSlots;
+use Bitrix24\SDK\Services\Booking\ResourceType\Service\Batch as ResourceTypeBatch;
 use Bitrix24\SDK\Services\Booking\ResourceType\Service\ResourceType;
+use Bitrix24\SDK\Services\Booking\WaitlistClient\Service\Batch as WaitlistClientBatch;
 use Bitrix24\SDK\Services\Booking\WaitlistClient\Service\WaitlistClient;
+use Bitrix24\SDK\Services\Booking\WaitlistExternalData\Service\Batch as WaitlistExternalDataBatch;
 use Bitrix24\SDK\Services\Booking\WaitlistExternalData\Service\WaitlistExternalData;
+use Bitrix24\SDK\Services\Booking\Waitlist\Service\Batch as WaitlistBatch;
 use Bitrix24\SDK\Services\Booking\Waitlist\Service\Waitlist;
 
 #[ApiServiceBuilderMetadata(new Scope(['booking']))]
@@ -36,7 +46,14 @@ class BookingServiceBuilder extends AbstractServiceBuilder
     public function booking(): Booking
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Booking($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new Booking(
+                new BookingBatch(
+                    new Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
         }
 
         return $this->serviceCache[__METHOD__];
@@ -48,7 +65,14 @@ class BookingServiceBuilder extends AbstractServiceBuilder
     public function bookingClient(): BookingClient
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new BookingClient($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new BookingClient(
+                new BookingClientBatch(
+                    new Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
         }
 
         return $this->serviceCache[__METHOD__];
@@ -60,7 +84,14 @@ class BookingServiceBuilder extends AbstractServiceBuilder
     public function bookingExternalData(): BookingExternalData
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new BookingExternalData($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new BookingExternalData(
+                new BookingExternalDataBatch(
+                    new Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
         }
 
         return $this->serviceCache[__METHOD__];
@@ -72,7 +103,14 @@ class BookingServiceBuilder extends AbstractServiceBuilder
     public function resource(): Resource
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Resource($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new Resource(
+                new ResourceBatch(
+                    new Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
         }
 
         return $this->serviceCache[__METHOD__];
@@ -84,7 +122,14 @@ class BookingServiceBuilder extends AbstractServiceBuilder
     public function resourceSlots(): ResourceSlots
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new ResourceSlots($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new ResourceSlots(
+                new ResourceSlotsBatch(
+                    new Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
         }
 
         return $this->serviceCache[__METHOD__];
@@ -96,7 +141,14 @@ class BookingServiceBuilder extends AbstractServiceBuilder
     public function resourceType(): ResourceType
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new ResourceType($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new ResourceType(
+                new ResourceTypeBatch(
+                    new Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
         }
 
         return $this->serviceCache[__METHOD__];
@@ -108,7 +160,14 @@ class BookingServiceBuilder extends AbstractServiceBuilder
     public function clientType(): ClientType
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new ClientType($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new ClientType(
+                new ClientTypeBatch(
+                    new Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
         }
 
         return $this->serviceCache[__METHOD__];
@@ -120,7 +179,14 @@ class BookingServiceBuilder extends AbstractServiceBuilder
     public function waitlist(): Waitlist
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Waitlist($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new Waitlist(
+                new WaitlistBatch(
+                    new Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
         }
 
         return $this->serviceCache[__METHOD__];
@@ -132,7 +198,14 @@ class BookingServiceBuilder extends AbstractServiceBuilder
     public function waitlistClient(): WaitlistClient
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new WaitlistClient($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new WaitlistClient(
+                new WaitlistClientBatch(
+                    new Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
         }
 
         return $this->serviceCache[__METHOD__];
@@ -144,7 +217,14 @@ class BookingServiceBuilder extends AbstractServiceBuilder
     public function waitlistExternalData(): WaitlistExternalData
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new WaitlistExternalData($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new WaitlistExternalData(
+                new WaitlistExternalDataBatch(
+                    new Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
         }
 
         return $this->serviceCache[__METHOD__];
