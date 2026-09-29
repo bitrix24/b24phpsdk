@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Landing\Template\Result\TemplateItemResult;
 use Bitrix24\SDK\Services\Landing\Template\Service\Batch;
 use Bitrix24\SDK\Services\Landing\Template\Service\Template;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -31,7 +31,7 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->templateService = Factory::getServiceBuilder(true)->getLandingScope()->template();
+        $this->templateService = Fabric::getServiceBuilder(true)->getLandingScope()->template();
     }
 
     /**

@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Landing\Role\Result\RoleItemResult;
 use Bitrix24\SDK\Services\Landing\Role\Service\Batch;
 use Bitrix24\SDK\Services\Landing\Role\Service\Role;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -31,7 +31,7 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->roleService = Factory::getServiceBuilder(true)->getLandingScope()->role();
+        $this->roleService = Fabric::getServiceBuilder(true)->getLandingScope()->role();
     }
 
     /**

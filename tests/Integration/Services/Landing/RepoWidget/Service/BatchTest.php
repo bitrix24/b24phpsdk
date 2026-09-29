@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Landing\RepoWidget\Result\RepoWidgetItemResult;
 use Bitrix24\SDK\Services\Landing\RepoWidget\Service\Batch;
 use Bitrix24\SDK\Services\Landing\RepoWidget\Service\RepoWidget;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -34,7 +34,7 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->repoWidgetService = Factory::getServiceBuilder(true)->getLandingScope()->repoWidget();
+        $this->repoWidgetService = Fabric::getServiceBuilder(true)->getLandingScope()->repoWidget();
     }
 
     #[\Override]

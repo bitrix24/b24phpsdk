@@ -19,7 +19,7 @@ use Bitrix24\SDK\Services\Landing\Demos\Result\DemoRegisteredBatchResult;
 use Bitrix24\SDK\Services\Landing\Demos\Result\DemosItemResult;
 use Bitrix24\SDK\Services\Landing\Demos\Service\Batch;
 use Bitrix24\SDK\Services\Landing\Demos\Service\Demos;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -36,7 +36,7 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->demosService = Factory::getServiceBuilder()->getLandingScope()->demos();
+        $this->demosService = Fabric::getServiceBuilder()->getLandingScope()->demos();
     }
 
     #[\Override]

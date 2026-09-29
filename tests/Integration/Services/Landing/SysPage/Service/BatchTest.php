@@ -21,7 +21,7 @@ use Bitrix24\SDK\Services\Landing\Site\Service\Site;
 use Bitrix24\SDK\Services\Landing\SysPage\Service\Batch;
 use Bitrix24\SDK\Services\Landing\SysPage\Service\SysPage;
 use Bitrix24\SDK\Services\Landing\SysPage\SysPageType;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -43,7 +43,7 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $landingServiceBuilder = Factory::getServiceBuilder(true)->getLandingScope();
+        $landingServiceBuilder = Fabric::getServiceBuilder(true)->getLandingScope();
         $this->sysPageService = $landingServiceBuilder->sysPage();
         $this->pageService = $landingServiceBuilder->page();
         $this->siteService = $landingServiceBuilder->site();

@@ -43,7 +43,7 @@ class RoleTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $serviceBuilder = Factory::getServiceBuilder(true);
+        $serviceBuilder = Fabric::getServiceBuilder(true);
         $this->roleService = $serviceBuilder->getLandingScope()->role();
     }
 
