@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.12.0 - 2026.09.29
+
 ### Added
 
 - Added service `Services\Catalog\UserfieldDocument` with support methods,
