@@ -30,9 +30,12 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['sale']))]
 class Delivery extends AbstractService
 {
-    public function __construct(public Batch $batch, CoreInterface $core, LoggerInterface $logger)
+    public Batch $batch;
+
+    public function __construct(CoreInterface $core, LoggerInterface $logger, ?Batch $batch = null)
     {
         parent::__construct($core, $logger);
+        $this->batch = $batch ?? new Batch(new \Bitrix24\SDK\Services\Sale\Delivery\Batch($core, $logger), $logger);
     }
 
     /**

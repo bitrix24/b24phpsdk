@@ -38,9 +38,9 @@ class MeasureTest extends TestCase
     protected function setUp(): void
     {
         $this->service = new Measure(
-            new Batch(new MeasureEntityBatch(new NullCore(), new NullLogger()), new NullLogger()),
             new NullCore(),
-            new NullLogger()
+            new NullLogger(),
+            new Batch(new MeasureEntityBatch(new NullCore(), new NullLogger()), new NullLogger())
         );
     }
 

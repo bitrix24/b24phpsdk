@@ -36,9 +36,9 @@ class ProductServiceTest extends TestCase
     protected function setUp(): void
     {
         $this->service = new ProductService(
-            new Batch(new ProductServiceEntityBatch(new NullCore(), new NullLogger()), new NullLogger()),
             new NullCore(),
-            new NullLogger()
+            new NullLogger(),
+            new Batch(new ProductServiceEntityBatch(new NullCore(), new NullLogger()), new NullLogger())
         );
     }
 

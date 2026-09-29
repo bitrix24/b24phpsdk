@@ -31,12 +31,12 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['catalog']))]
 class Measure extends AbstractService
 {
-    public function __construct(
-        public Batch $batch,
-        CoreInterface $core,
-        LoggerInterface $logger
-    ) {
-        parent::__construct($core, $logger);
+    public Batch $batch;
+
+    public function __construct(CoreInterface $core, LoggerInterface $log, ?Batch $batch = null)
+    {
+        parent::__construct($core, $log);
+        $this->batch = $batch ?? new Batch(new \Bitrix24\SDK\Services\Catalog\Measure\Batch($core, $log), $log);
     }
 
     /**

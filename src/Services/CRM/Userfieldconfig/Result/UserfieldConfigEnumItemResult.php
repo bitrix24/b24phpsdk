@@ -25,4 +25,12 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  */
 class UserfieldConfigEnumItemResult extends AbstractItem
 {
+    #[\Override]
+    public function __get($offset)
+    {
+        return match ($offset) {
+            'def' => $this->data[$offset] === 'Y',
+            default => parent::__get($offset),
+        };
+    }
 }

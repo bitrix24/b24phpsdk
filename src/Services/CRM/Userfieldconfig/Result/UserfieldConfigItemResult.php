@@ -49,6 +49,9 @@ class UserfieldConfigItemResult extends AbstractItem
     {
         return match ($offset) {
             'multiple', 'mandatory', 'showInList', 'editInList', 'isSearchable' => $this->data[$offset] === 'Y',
+            'enum' => isset($this->data['enum'])
+                ? array_map(static fn (array $item): UserfieldConfigEnumItemResult => new UserfieldConfigEnumItemResult($item), $this->data['enum'])
+                : null,
             default => parent::__get($offset),
         };
     }

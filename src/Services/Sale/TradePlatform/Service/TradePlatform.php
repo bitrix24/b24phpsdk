@@ -27,9 +27,12 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['sale']))]
 class TradePlatform extends AbstractService
 {
-    public function __construct(public Batch $batch, CoreInterface $core, LoggerInterface $logger)
+    public Batch $batch;
+
+    public function __construct(CoreInterface $core, LoggerInterface $log, ?Batch $batch = null)
     {
-        parent::__construct($core, $logger);
+        parent::__construct($core, $log);
+        $this->batch = $batch ?? new Batch(new \Bitrix24\SDK\Services\Sale\TradePlatform\Batch($core, $log), $log);
     }
 
     /**

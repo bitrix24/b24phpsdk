@@ -90,9 +90,9 @@ class ProductPropertySectionTest extends TestCase
     private function makeService(CoreInterface $core): ProductPropertySection
     {
         return new ProductPropertySection(
-            new Batch(new ProductPropertySectionEntityBatch($core, new NullLogger()), new NullLogger()),
             $core,
-            new NullLogger()
+            new NullLogger(),
+            new Batch(new ProductPropertySectionEntityBatch($core, new NullLogger()), new NullLogger())
         );
     }
 }

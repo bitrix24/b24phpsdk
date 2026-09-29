@@ -118,10 +118,12 @@
 
 ### Changed
 
-- Constructors of the `Services\Sale` services listed above now accept the service `Batch` as the first argument,
-  services created by `SaleServiceBuilder` are not affected ([#614](https://github.com/bitrix24/b24phpsdk/issues/614))
+- Existing Booking, Catalog and Sale service constructors keep their original `($core, $log)` arguments;
+  batch services can optionally be injected as the third argument.
 
 ### Fixed
+
+- Userfield configuration enum values return typed result objects with boolean default flags.
 
 - Fixed `Services\Sale\Delivery\Service\Delivery::update()` sending the fields to update in the `FIELDS` parameter:
   `sale.delivery.update` expects them as top-level parameters and silently ignored the update

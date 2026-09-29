@@ -126,5 +126,14 @@ return RectorConfig::configure()
         strictBooleans: true
     )
     ->withSkip([
-        RenamePropertyToMatchTypeRector::class
+        RenamePropertyToMatchTypeRector::class,
+        // Preserve inherited constructor parameter names for existing named-argument callers.
+        \Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector::class => [
+            __DIR__ . '/src/Services/Catalog/Catalog/Service/Catalog.php',
+            __DIR__ . '/src/Services/Catalog/Extra/Service/Extra.php',
+            __DIR__ . '/src/Services/Catalog/Measure/Service/Measure.php',
+            __DIR__ . '/src/Services/Catalog/ProductPropertySection/Service/ProductPropertySection.php',
+            __DIR__ . '/src/Services/Sale/PersonType/Service/PersonType.php',
+            __DIR__ . '/src/Services/Sale/TradePlatform/Service/TradePlatform.php',
+        ],
     ]);

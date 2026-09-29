@@ -35,9 +35,9 @@ class ExtraTest extends TestCase
     protected function setUp(): void
     {
         $this->service = new Extra(
-            new Batch(new ExtraEntityBatch(new NullCore(), new NullLogger()), new NullLogger()),
             new NullCore(),
-            new NullLogger()
+            new NullLogger(),
+            new Batch(new ExtraEntityBatch(new NullCore(), new NullLogger()), new NullLogger())
         );
     }
 

@@ -36,9 +36,9 @@ class SkuTest extends TestCase
     protected function setUp(): void
     {
         $this->service = new Sku(
-            new Batch(new SkuEntityBatch(new NullCore(), new NullLogger()), new NullLogger()),
             new NullCore(),
-            new NullLogger()
+            new NullLogger(),
+            new Batch(new SkuEntityBatch(new NullCore(), new NullLogger()), new NullLogger())
         );
     }
 

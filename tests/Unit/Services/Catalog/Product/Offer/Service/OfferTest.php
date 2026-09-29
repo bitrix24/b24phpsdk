@@ -36,9 +36,9 @@ class OfferTest extends TestCase
     protected function setUp(): void
     {
         $this->service = new Offer(
-            new Batch(new OfferEntityBatch(new NullCore(), new NullLogger()), new NullLogger()),
             new NullCore(),
-            new NullLogger()
+            new NullLogger(),
+            new Batch(new OfferEntityBatch(new NullCore(), new NullLogger()), new NullLogger())
         );
     }
 

@@ -47,12 +47,12 @@ class BookingServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Booking(
+                $this->core,
+                $this->log,
                 new BookingBatch(
                     new Batch($this->core, $this->log),
                     $this->log
-                ),
-                $this->core,
-                $this->log
+                )
             );
         }
 
@@ -66,12 +66,12 @@ class BookingServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new BookingClient(
+                $this->core,
+                $this->log,
                 new BookingClientBatch(
                     new Batch($this->core, $this->log),
                     $this->log
-                ),
-                $this->core,
-                $this->log
+                )
             );
         }
 
@@ -85,12 +85,12 @@ class BookingServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new BookingExternalData(
+                $this->core,
+                $this->log,
                 new BookingExternalDataBatch(
                     new Batch($this->core, $this->log),
                     $this->log
-                ),
-                $this->core,
-                $this->log
+                )
             );
         }
 
@@ -104,12 +104,12 @@ class BookingServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Resource(
+                $this->core,
+                $this->log,
                 new ResourceBatch(
                     new Batch($this->core, $this->log),
                     $this->log
-                ),
-                $this->core,
-                $this->log
+                )
             );
         }
 
@@ -123,12 +123,12 @@ class BookingServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new ResourceSlots(
+                $this->core,
+                $this->log,
                 new ResourceSlotsBatch(
                     new Batch($this->core, $this->log),
                     $this->log
-                ),
-                $this->core,
-                $this->log
+                )
             );
         }
 
@@ -142,12 +142,12 @@ class BookingServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new ResourceType(
+                $this->core,
+                $this->log,
                 new ResourceTypeBatch(
                     new Batch($this->core, $this->log),
                     $this->log
-                ),
-                $this->core,
-                $this->log
+                )
             );
         }
 
@@ -161,12 +161,12 @@ class BookingServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new ClientType(
+                $this->core,
+                $this->log,
                 new ClientTypeBatch(
                     new Batch($this->core, $this->log),
                     $this->log
-                ),
-                $this->core,
-                $this->log
+                )
             );
         }
 
@@ -180,12 +180,12 @@ class BookingServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Waitlist(
+                $this->core,
+                $this->log,
                 new WaitlistBatch(
                     new Batch($this->core, $this->log),
                     $this->log
-                ),
-                $this->core,
-                $this->log
+                )
             );
         }
 
@@ -199,12 +199,12 @@ class BookingServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new WaitlistClient(
+                $this->core,
+                $this->log,
                 new WaitlistClientBatch(
                     new Batch($this->core, $this->log),
                     $this->log
-                ),
-                $this->core,
-                $this->log
+                )
             );
         }
 
@@ -218,12 +218,12 @@ class BookingServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new WaitlistExternalData(
+                $this->core,
+                $this->log,
                 new WaitlistExternalDataBatch(
                     new Batch($this->core, $this->log),
                     $this->log
-                ),
-                $this->core,
-                $this->log
+                )
             );
         }
 
