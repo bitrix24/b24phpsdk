@@ -21,8 +21,10 @@ use Generator;
 /**
  * Class Batch
  *
- * Overrides base Batch to handle the lowercase 'id' key used by catalog.productPropertyEnum.* REST methods
- * instead of the uppercase 'ID' key used by default in the base Batch class.
+ * Overrides base Batch to handle differences in catalog.productPropertyEnum.* REST methods:
+ * - the id key is lowercase 'id', not 'ID' as assumed by the base class default
+ * - catalog.productPropertyEnum.list wraps list items under the 'productPropertyEnums' key
+ *   instead of returning a flat array in 'result', as the base class assumes for non-CRM methods
  *
  * @see https://apidocs.bitrix24.com/api-reference/catalog/product-property-enum/catalog-product-property-enum-list.html
  * @see https://apidocs.bitrix24.com/api-reference/catalog/product-property-enum/catalog-product-property-enum-delete.html
@@ -36,6 +38,15 @@ class Batch extends \Bitrix24\SDK\Core\Batch
     protected function determineKeyId(string $apiMethod, ?array $additionalParameters): string
     {
         return 'id';
+    }
+
+    /**
+     * Extracts list items from the 'productPropertyEnums' key of the batch/list result
+     */
+    #[\Override]
+    protected function extractElementsFromBatchResult(ResponseData $responseData, bool $isCrmItemsInBatch): array
+    {
+        return $responseData->getResult()['productPropertyEnums'] ?? [];
     }
 
     /**

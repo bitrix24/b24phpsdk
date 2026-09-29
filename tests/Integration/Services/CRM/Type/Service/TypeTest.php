@@ -38,63 +38,63 @@ class TypeTest extends TestCase
     public function testAdd(): void
     {
         $title = sprintf('%s test SPA type', time());
-        $result = $this->typeService->add($title);
-        $this->assertEquals($title, $result->type()->title);
-        $this->assertTrue($this->typeService->delete($result->getId())->isSuccess());
+        $addedTypeItemResult = $this->typeService->add($title);
+        $this->assertEquals($title, $addedTypeItemResult->type()->title);
+        $this->assertTrue($this->typeService->delete($addedTypeItemResult->getId())->isSuccess());
     }
 
     public function testUpdate(): void
     {
         $title = sprintf('%s test SPA type', time());
-        $result = $this->typeService->add($title);
-        $this->assertEquals($title, $result->type()->title);
+        $addedTypeItemResult = $this->typeService->add($title);
+        $this->assertEquals($title, $addedTypeItemResult->type()->title);
 
         $title = sprintf('%s updated SPA type', time());
-        $updatedResult = $this->typeService->update($result->getId(), ['title' => $title]);
-        $this->assertEquals($title, $updatedResult->type()->title);
+        $updatedTypeItemResult = $this->typeService->update($addedTypeItemResult->getId(), ['title' => $title]);
+        $this->assertEquals($title, $updatedTypeItemResult->type()->title);
 
-        $this->assertTrue($this->typeService->delete($result->getId())->isSuccess());
+        $this->assertTrue($this->typeService->delete($addedTypeItemResult->getId())->isSuccess());
     }
 
     public function testGet(): void
     {
         $title = sprintf('%s test SPA type', time());
-        $addResult = $this->typeService->add($title);
+        $addedTypeItemResult = $this->typeService->add($title);
 
-        $result = $this->typeService->get($addResult->getId());
-        $this->assertEquals($title, $addResult->type()->title);
-        $this->assertEquals($result->type()->id, $addResult->type()->id);
-        $this->assertTrue($this->typeService->delete($addResult->getId())->isSuccess());
+        $typeResult = $this->typeService->get($addedTypeItemResult->getId());
+        $this->assertEquals($title, $addedTypeItemResult->type()->title);
+        $this->assertEquals($typeResult->type()->id, $addedTypeItemResult->type()->id);
+        $this->assertTrue($this->typeService->delete($addedTypeItemResult->getId())->isSuccess());
     }
 
     public function testList(): void
     {
         $title = sprintf('%s test SPA type', time());
-        $addResult = $this->typeService->add($title);
-        $result = $this->typeService->list([], ['id' => $addResult->getId()])->getTypes()[0];
-        $this->assertEquals($title, $addResult->type()->title);
-        $this->assertEquals($result->id, $addResult->type()->id);
-        $this->assertTrue($this->typeService->delete($addResult->getId())->isSuccess());
+        $addedTypeItemResult = $this->typeService->add($title);
+        $result = $this->typeService->list([], ['id' => $addedTypeItemResult->getId()])->getTypes()[0];
+        $this->assertEquals($title, $addedTypeItemResult->type()->title);
+        $this->assertEquals($result->id, $addedTypeItemResult->type()->id);
+        $this->assertTrue($this->typeService->delete($addedTypeItemResult->getId())->isSuccess());
     }
 
     public function testGetByEntityTypeId(): void
     {
         $title = sprintf('%s test SPA type', time());
-        $result = $this->typeService->add($title);
-        $this->assertEquals($title, $result->type()->title);
+        $addedTypeItemResult = $this->typeService->add($title);
+        $this->assertEquals($title, $addedTypeItemResult->type()->title);
 
-        $resultTypeId = $this->typeService->getByEntityTypeId($result->type()->entityTypeId);
-        $this->assertEquals($title, $resultTypeId->type()->title);
-        $this->assertEquals($result->type()->id, $resultTypeId->type()->id);
-        $this->assertTrue($this->typeService->delete($result->getId())->isSuccess());
+        $typeResult = $this->typeService->getByEntityTypeId($addedTypeItemResult->type()->entityTypeId);
+        $this->assertEquals($title, $typeResult->type()->title);
+        $this->assertEquals($addedTypeItemResult->type()->id, $typeResult->type()->id);
+        $this->assertTrue($this->typeService->delete($addedTypeItemResult->getId())->isSuccess());
     }
 
     public function testDelete(): void
     {
         $title = sprintf('%s test SPA type', time());
-        $result = $this->typeService->add($title);
-        $this->assertEquals($title, $result->type()->title);
-        $this->assertTrue($this->typeService->delete($result->getId())->isSuccess());
+        $addedTypeItemResult = $this->typeService->add($title);
+        $this->assertEquals($title, $addedTypeItemResult->type()->title);
+        $this->assertTrue($this->typeService->delete($addedTypeItemResult->getId())->isSuccess());
     }
 
     protected function setUp(): void

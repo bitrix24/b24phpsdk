@@ -30,9 +30,12 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['catalog']))]
 class Sku extends AbstractService
 {
-    public function __construct(CoreInterface $core, LoggerInterface $logger)
+    public Batch $batch;
+
+    public function __construct(CoreInterface $core, LoggerInterface $logger, ?Batch $batch = null)
     {
         parent::__construct($core, $logger);
+        $this->batch = $batch ?? new Batch(new \Bitrix24\SDK\Services\Catalog\Product\Sku\Batch($core, $logger), $logger);
     }
 
     /**

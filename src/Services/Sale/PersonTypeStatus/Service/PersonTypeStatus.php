@@ -24,9 +24,12 @@ use Psr\Log\LoggerInterface;
 
 class PersonTypeStatus extends AbstractService
 {
-    public function __construct(CoreInterface $core, LoggerInterface $logger)
+    public Batch $batch;
+
+    public function __construct(CoreInterface $core, LoggerInterface $logger, ?Batch $batch = null)
     {
         parent::__construct($core, $logger);
+        $this->batch = $batch ?? new Batch(new \Bitrix24\SDK\Services\Sale\PersonTypeStatus\Batch($core, $logger), $logger);
     }
 
     /**

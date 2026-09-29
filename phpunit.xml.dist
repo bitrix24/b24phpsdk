@@ -118,6 +118,12 @@
         <testsuite name="integration_tests_scope_crm_currency">
             <directory>./tests/Integration/Services/CRM/Currency/</directory>
         </testsuite>
+        <testsuite name="integration_tests_crm_type">
+            <directory>./tests/Integration/Services/CRM/Type/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_crm_userfieldconfig">
+            <directory>./tests/Integration/Services/CRM/Userfieldconfig/</directory>
+        </testsuite>
         <testsuite name="integration_tests_deal_recurring">
             <file>./tests/Integration/Services/CRM/Deal/Service/DealRecurringTest.php</file>
         </testsuite>
@@ -220,6 +226,28 @@
         <testsuite name="integration_tests_sale_shipment_item">
             <directory>./tests/Integration/Services/Sale/ShipmentItem/</directory>
         </testsuite>
+        <testsuite name="integration_tests_sale_delivery_request">
+            <directory>./tests/Integration/Services/Sale/DeliveryRequest/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_person_type">
+            <directory>./tests/Integration/Services/Sale/PersonType/</directory>
+            <file>./tests/Integration/Services/Sale/Service/PersonTypeTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_sale_person_type_status">
+            <directory>./tests/Integration/Services/Sale/PersonTypeStatus/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_property">
+            <directory>./tests/Integration/Services/Sale/Property/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_property_group">
+            <directory>./tests/Integration/Services/Sale/PropertyGroup/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_property_variant">
+            <directory>./tests/Integration/Services/Sale/PropertyVariant/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_trade_platform">
+            <directory>./tests/Integration/Services/Sale/TradePlatform/</directory>
+        </testsuite>
         <testsuite name="integration_tests_crm_documentgenerator_numerator">
             <directory>./tests/Integration/Services/CRM/Documentgenerator/Numerator/</directory>
         </testsuite>
@@ -277,6 +305,18 @@
         <testsuite name="integration_tests_scope_booking">
             <directory>./tests/Integration/Services/Booking/</directory>
         </testsuite>
+        <testsuite name="integration_tests_booking_batch">
+            <file>./tests/Integration/Services/Booking/Booking/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/Booking/BookingClient/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/Booking/BookingExternalData/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/Booking/ClientType/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/Booking/Resource/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/Booking/ResourceSlots/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/Booking/ResourceType/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/Booking/Waitlist/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/Booking/WaitlistClient/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/Booking/WaitlistExternalData/Service/BatchTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_scope_landing">
             <directory>./tests/Integration/Services/Landing/</directory>
         </testsuite>
@@ -330,6 +370,7 @@
         </testsuite>
         <testsuite name="integration_tests_scope_catalog_product_property_section">
             <file>./tests/Integration/Services/Catalog/ProductPropertySection/Service/ProductPropertySectionTest.php</file>
+            <file>./tests/Integration/Services/Catalog/ProductPropertySection/Service/BatchTest.php</file>
             <file>./tests/Integration/Services/Catalog/ProductPropertySection/Result/ProductPropertySectionItemResultTest.php</file>
         </testsuite>
         <testsuite name="integration_tests_catalog_product_property">
@@ -373,21 +414,26 @@
         </testsuite>
         <testsuite name="integration_tests_catalog_catalog">
             <file>./tests/Integration/Services/Catalog/Catalog/Service/CatalogTest.php</file>
+            <file>./tests/Integration/Services/Catalog/Catalog/Service/BatchTest.php</file>
         </testsuite>
         <testsuite name="integration_tests_catalog_product">
             <file>./tests/Integration/Services/Catalog/Product/Service/ProductTest.php</file>
+            <file>./tests/Integration/Services/Catalog/Product/Service/BatchTest.php</file>
         </testsuite>
         <testsuite name="integration_tests_catalog_product_service">
             <file>./tests/Integration/Services/Catalog/Product/ProductService/Service/ProductServiceTest.php</file>
             <file>./tests/Integration/Services/Catalog/Product/ProductService/Result/ProductServiceItemResultTest.php</file>
+            <file>./tests/Integration/Services/Catalog/Product/ProductService/Service/BatchTest.php</file>
         </testsuite>
         <testsuite name="integration_tests_catalog_product_sku">
             <file>./tests/Integration/Services/Catalog/Product/Sku/Service/SkuTest.php</file>
             <file>./tests/Integration/Services/Catalog/Product/Sku/Result/SkuItemResultTest.php</file>
+            <file>./tests/Integration/Services/Catalog/Product/Sku/Service/BatchTest.php</file>
         </testsuite>
         <testsuite name="integration_tests_catalog_product_offer">
             <file>./tests/Integration/Services/Catalog/Product/Offer/Service/OfferTest.php</file>
             <file>./tests/Integration/Services/Catalog/Product/Offer/Result/OfferItemResultTest.php</file>
+            <file>./tests/Integration/Services/Catalog/Product/Offer/Service/BatchTest.php</file>
         </testsuite>
         <testsuite name="integration_tests_scope_imbot">
             <directory>./tests/Integration/Services/IMBot/</directory>
@@ -533,6 +579,9 @@
         </testsuite>
         <testsuite name="integration_tests_catalog_userfield_document">
             <directory>./tests/Integration/Services/Catalog/UserfieldDocument/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_vat">
+            <directory>./tests/Integration/Services/Catalog/Vat/</directory>
         </testsuite>
     </testsuites>
     <source>
