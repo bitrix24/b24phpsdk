@@ -21,6 +21,7 @@ use Bitrix24\SDK\Services\CRM\Activity\ActivityPriority;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityStatus;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityType;
 use Bitrix24\SDK\Services\Catalog\Common\ProductType;
+use Bitrix24\SDK\Services\Catalog\RoundingRule\Result\RoundingRuleItemResult;
 use Carbon\CarbonImmutable;
 use MoneyPHP\Percentage\Percentage;
 use Typhoon\Reflection\TyphoonReflector;
@@ -252,7 +253,52 @@ trait CustomBitrix24Assertions
                         );
                         break;
                     }
+                    // catalog.roundingRule fields are numeric values without a currency in the api response, not money amounts
+                    if ($resultItemClassName === RoundingRuleItemResult::class && ($fieldCode === 'price' || $fieldCode === 'roundPrecision')) {
+                        $this->assertTrue(
+                            str_contains($propsFromAnnotations[$fieldCode], 'float'),
+                            sprintf(
+                                'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                                $resultItemClassName,
+                                $fieldCode,
+                                $propsFromAnnotations[$fieldCode],
+                                $fieldData['type'],
+                                'float'
+                            )
+                        );
+                        break;
+                    }
 
+                    if (str_contains(mb_strtoupper($fieldCode), 'RATIO')) {
+                        $this->assertTrue(
+                            str_contains($propsFromAnnotations[$fieldCode], 'float'),
+                            sprintf(
+                                'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                                $resultItemClassName,
+                                $fieldCode,
+                                $propsFromAnnotations[$fieldCode],
+                                $fieldData['type'],
+                                'float'
+                            )
+                        );
+                        break;
+                    }
+
+                    // catalog.document.element field «amount» is a stock quantity, not a monetary amount
+                    if ($fieldCode === 'amount') {
+                        $this->assertTrue(
+                            str_contains($propsFromAnnotations[$fieldCode], 'float'),
+                            sprintf(
+                                'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                                $resultItemClassName,
+                                $fieldCode,
+                                $propsFromAnnotations[$fieldCode],
+                                $fieldData['type'],
+                                'float'
+                            )
+                        );
+                        break;
+                    }
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], \Money\Money::class),
                         sprintf(
@@ -280,7 +326,8 @@ trait CustomBitrix24Assertions
                     );
                     break;
                 case 'char':
-                    if ($fieldCode === 'listType') {
+                    // catalog.document(.element) fields use «char» for plain strings, not Y/N flags
+                    if (in_array($fieldCode, ['listType', 'commentary', 'currency', 'docType', 'siteId', 'status'], true)) {
                         $this->assertTrue(
                             str_contains($propsFromAnnotations[$fieldCode], 'string'),
                             sprintf(
@@ -294,6 +341,7 @@ trait CustomBitrix24Assertions
                         );
                         break;
                     }
+
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'bool'),
                         sprintf(

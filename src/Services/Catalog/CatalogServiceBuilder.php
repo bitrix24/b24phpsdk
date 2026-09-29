@@ -266,4 +266,122 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    public function document(): Catalog\Document\Service\Document
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\Document\Service\Document(
+                new Catalog\Document\Service\Batch(
+                    new Catalog\Document\Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function documentElement(): Catalog\DocumentElement\Service\DocumentElement
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\DocumentElement\Service\DocumentElement(
+                new Catalog\DocumentElement\Service\Batch(
+                    new Catalog\DocumentElement\Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function documentContractor(): Catalog\DocumentContractor\Service\DocumentContractor
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\DocumentContractor\Service\DocumentContractor(
+                new Catalog\DocumentContractor\Service\Batch(
+                    new Catalog\DocumentContractor\Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function ratio(): Catalog\Ratio\Service\Ratio
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\Ratio\Service\Ratio(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function roundingRule(): Catalog\RoundingRule\Service\RoundingRule
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\RoundingRule\Service\RoundingRule(
+                new Catalog\RoundingRule\Service\Batch(
+                    new Catalog\RoundingRule\Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function section(): Catalog\Section\Service\Section
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\Section\Service\Section(
+                new Catalog\Section\Service\Batch(
+                    new Catalog\Section\Batch($this->core, $this->log),
+                    $this->log
+                ),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function storeProduct(): Catalog\StoreProduct\Service\StoreProduct
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Catalog\StoreProduct\Service\StoreProduct(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function userfieldDocument(): Catalog\UserfieldDocument\Service\UserfieldDocument
+    {
+        $this->serviceCache[__METHOD__] ??= new Catalog\UserfieldDocument\Service\UserfieldDocument(
+            new Catalog\UserfieldDocument\Service\Batch(
+                new Catalog\UserfieldDocument\Batch($this->core, $this->log),
+                $this->log
+            ),
+            $this->core,
+            $this->log
+        );
+
+        return $this->serviceCache[__METHOD__];
+    }
 }

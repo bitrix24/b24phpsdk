@@ -307,6 +307,18 @@
         <testsuite name="integration_tests_landing_repowidget">
             <directory>./tests/Integration/Services/Landing/RepoWidget/</directory>
         </testsuite>
+        <testsuite name="integration_tests_catalog_document">
+            <directory>./tests/Integration/Services/Catalog/Document/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_document_annotations">
+            <file>./tests/Integration/Services/Catalog/Document/Result/DocumentItemResultAnnotationsTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_document_element">
+            <directory>./tests/Integration/Services/Catalog/DocumentElement/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_document_element_annotations">
+            <file>./tests/Integration/Services/Catalog/DocumentElement/Result/DocumentElementItemResultAnnotationsTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_catalog_product_property_feature">
             <directory>./tests/Integration/Services/Catalog/ProductPropertyFeature/</directory>
         </testsuite>
@@ -497,6 +509,30 @@
         <testsuite name="integration_tests_biconnector_dataset">
             <directory>./tests/Integration/Services/Biconnector/Dataset/Service/</directory>
             <directory>./tests/Integration/Services/Biconnector/Dataset/Result/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_document_contractor">
+            <directory>./tests/Integration/Services/Catalog/DocumentContractor/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_document_contractor_annotations">
+            <file>./tests/Integration/Services/Catalog/DocumentContractor/Result/DocumentContractorItemResultTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_ratio">
+            <directory>./tests/Integration/Services/Catalog/Ratio/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_rounding_rule">
+            <directory>./tests/Integration/Services/Catalog/RoundingRule/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_section">
+            <directory>./tests/Integration/Services/Catalog/Section/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_section_annotations">
+            <file>./tests/Integration/Services/Catalog/Section/Result/SectionItemResultTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_store_product">
+            <directory>./tests/Integration/Services/Catalog/StoreProduct/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_userfield_document">
+            <directory>./tests/Integration/Services/Catalog/UserfieldDocument/Service/</directory>
         </testsuite>
     </testsuites>
     <source>

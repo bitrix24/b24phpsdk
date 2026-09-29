@@ -529,6 +529,20 @@ test-integration-landing-role:
 test-integration-landing-repowidget:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_landing_repowidget
 
+.PHONY: test-integration-catalog-document
+test-integration-catalog-document:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_document
+.PHONY: test-integration-catalog-document-annotations
+test-integration-catalog-document-annotations:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_document_annotations
+
+.PHONY: test-integration-catalog-document-element
+test-integration-catalog-document-element:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_document_element
+.PHONY: test-integration-catalog-document-element-annotations
+test-integration-catalog-document-element-annotations:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_document_element_annotations
+
 .PHONY: test-integration-catalog-product-property-feature
 test-integration-catalog-product-property-feature:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_product_property_feature
@@ -806,6 +820,36 @@ test-integration-biconnector-source:
 .PHONY: test-integration-biconnector-dataset
 test-integration-biconnector-dataset:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_biconnector_dataset
+
+.PHONY: test-integration-catalog-document-contractor
+test-integration-catalog-document-contractor:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_document_contractor
+.PHONY: test-integration-catalog-document-contractor-annotations
+test-integration-catalog-document-contractor-annotations:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_document_contractor_annotations
+
+.PHONY: test-integration-catalog-ratio
+test-integration-catalog-ratio:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_ratio
+
+.PHONY: test-integration-catalog-rounding-rule
+test-integration-catalog-rounding-rule:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_rounding_rule
+
+.PHONY: test-integration-catalog-section
+test-integration-catalog-section:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_section
+.PHONY: test-integration-catalog-section-annotations
+test-integration-catalog-section-annotations:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_section_annotations
+
+.PHONY: test-integration-catalog-store-product
+test-integration-catalog-store-product:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_store_product
+
+.PHONY: test-integration-catalog-userfield-document
+test-integration-catalog-userfield-document:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_userfield_document
 
 # work dev environment
 .PHONY: php-dev-server-up

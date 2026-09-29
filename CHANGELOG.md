@@ -2,6 +2,67 @@
 
 ## Unreleased
 
+## 1.12.0 - 2026.09.29
+
+### Added
+
+- Added service `Services\Catalog\UserfieldDocument` with support methods,
+  see [catalog.userfield.document.* methods](https://apidocs.bitrix24.com/api-reference/catalog/userfield-document/index.html) ([#589](https://github.com/bitrix24/b24phpsdk/issues/589)):
+    - `list` gets a paginated list of userfield values for warehouse accounting documents
+    - `update` updates userfield values of a warehouse accounting document, with batch calls support
+- Added service `Services\Catalog\StoreProduct` with support methods,
+  see [catalog.storeproduct.* methods](https://apidocs.bitrix24.com/api-reference/catalog/store-product/index.html) ([#584](https://github.com/bitrix24/b24phpsdk/issues/584)):
+    - `get` returns product stock information by record identifier
+    - `list` returns a list of product stock records by filter
+    - `getFields` returns the description of product stock fields
+- Added service `Services\Catalog\Section` with support methods,
+  see [catalog.section.* methods](https://apidocs.bitrix24.com/api-reference/catalog/section/index.html) ([#583](https://github.com/bitrix24/b24phpsdk/issues/583)):
+    - `add` creates a new trade-catalog section, with batch calls support
+    - `update` updates an existing trade-catalog section, with batch calls support
+    - `get` gets a trade-catalog section by its identifier
+    - `list` gets the list of trade-catalog sections by filter
+    - `delete` deletes a trade-catalog section, with batch calls support
+    - `getFields` returns the description of trade-catalog section fields
+- Added service `Services\Catalog\RoundingRule` with support methods,
+  see [catalog.roundingRule.* methods](https://apidocs.bitrix24.com/api-reference/catalog/rounding-rule/index.html) ([#573](https://github.com/bitrix24/b24phpsdk/issues/573)):
+    - `add` creates a new price rounding rule, with batch calls support
+    - `update` updates an existing price rounding rule, with batch calls support
+    - `list` gets the list of price rounding rules
+    - `delete` deletes a price rounding rule, with batch calls support
+    - `get` gets information about a price rounding rule by its identifier
+    - `getFields` returns the description of price rounding rule fields
+- Added service `Services\Catalog\Ratio` with support methods,
+  see [catalog.ratio.* methods](https://apidocs.bitrix24.com/api-reference/catalog/ratio/index.html) ([#570](https://github.com/bitrix24/b24phpsdk/issues/570)):
+    - `get` gets the values of a measurement unit ratio by identifier
+    - `list` gets the list of measurement unit ratios matching a filter
+    - `getFields` returns the description of measurement unit ratio fields
+- Added service `Services\Catalog\DocumentContractor` with support methods,
+  see [catalog.documentcontractor.* methods](https://apidocs.bitrix24.com/api-reference/catalog/documentcontractor/index.html) ([#565](https://github.com/bitrix24/b24phpsdk/issues/565)):
+    - `add` binds a CRM contractor (contact or company) to a warehouse accounting receipt document, with batch calls support
+    - `list` gets the list of contractor bindings by filter
+    - `delete` deletes a contractor binding, with batch calls support
+    - `getFields` returns the description of contractor binding fields
+- Added service `Services\Catalog\Document` with support methods,
+  see [catalog.document.* methods](https://apidocs.bitrix24.com/api-reference/catalog/document/index.html) ([#559](https://github.com/bitrix24/b24phpsdk/issues/559)):
+    - `add` creates a new warehouse accounting document, with batch calls support
+    - `update` updates an existing document, with batch calls support
+    - `list` gets the list of documents
+    - `delete` deletes a document, with batch calls support
+    - `deleteList` deletes a group of documents
+    - `conduct` conducts (activates) a document
+    - `conductList` conducts a group of documents
+    - `cancel` cancels conducting of a document
+    - `cancelList` cancels conducting of a group of documents
+    - `getFields` returns the description of document fields
+    - `modeStatus` checks whether warehouse accounting mode is enabled
+- Added service `Services\Catalog\DocumentElement` with support methods,
+  see [catalog.document.element.* methods](https://apidocs.bitrix24.com/api-reference/catalog/document/document-element/index.html) ([#559](https://github.com/bitrix24/b24phpsdk/issues/559)):
+    - `add` adds a product line item to a warehouse accounting document, with batch calls support
+    - `update` updates a document line item, with batch calls support
+    - `list` gets the list of document line items
+    - `delete` deletes a document line item, with batch calls support
+    - `getFields` returns the description of document element fields
+
 ## 1.11.0 - 2026.08.31
 
 ### Added
