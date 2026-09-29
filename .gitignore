@@ -1,5 +1,6 @@
 /.vscode
 /.idea*
+/.worktrees/
 /app
 vendor
 composer.phar
