@@ -117,4 +117,18 @@ class CredentialsTest extends TestCase
             'https://bitrix24-php-sdk-playground.bitrix24.ru',
         ];
     }
+
+    public function testChangeDomainPersistsForBothInputForms(): void
+    {
+        $credentials = \Bitrix24\SDK\Core\Credentials\Credentials::createFromOAuth(
+            new \Bitrix24\SDK\Core\Credentials\AuthToken('access', 'refresh', 123),
+            new \Bitrix24\SDK\Core\Credentials\ApplicationProfile('client', 'secret', new \Bitrix24\SDK\Core\Credentials\Scope(['crm'])),
+            new \Bitrix24\SDK\Core\Credentials\Endpoints('https://old.example.com', 'https://oauth.example.com')
+        );
+        $credentials->changeDomainUrl(new \Bitrix24\SDK\Core\ValueObjects\Url('https://new.example.com'));
+        self::assertSame('https://new.example.com', $credentials->getDomainUrl());
+        $credentials->changeDomainUrl('next.example.com');
+        self::assertSame('https://next.example.com', $credentials->getDomainUrl());
+        self::assertSame('https://oauth.example.com', $credentials->getEndpoints()->getAuthServerUrl());
+    }
 }

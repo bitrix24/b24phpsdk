@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\Credentials;
 
+use Bitrix24\SDK\Core\ValueObjects\Url;
+use Bitrix24\SDK\Core\ValueObjects\ValueObjectResolver;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Application\Requests\Placement\PlacementRequest;
 
@@ -47,26 +49,29 @@ class Credentials
 
     /**
      * Set domain url
-     * @param non-empty-string $domainUrl
+     * @param non-empty-string|Url $domainUrl
      *
      * @throws InvalidArgumentException
      */
-    public function changeDomainUrl(string $domainUrl): void
+    public function changeDomainUrl(string|Url $domainUrl): void
     {
+        $domainUrl = $domainUrl instanceof Url ? $domainUrl->getUrl() : $domainUrl;
         $parseResult = parse_url($domainUrl);
-        if (!array_key_exists('scheme', $parseResult)) {
+        if ($parseResult !== false && !array_key_exists('scheme', $parseResult)) {
             $domainUrl = 'https://' . $domainUrl;
         }
 
-        if (filter_var($domainUrl, FILTER_VALIDATE_URL) === false) {
-            throw new InvalidArgumentException(sprintf('domain URL %s is invalid', $domainUrl));
+        try {
+            ValueObjectResolver::resolveUrl($domainUrl);
+        } catch (InvalidArgumentException $exception) {
+            throw new InvalidArgumentException(sprintf('domain URL %s is invalid', $domainUrl), 0, $exception);
         }
 
         if ($this->webhookUrl instanceof WebhookUrl) {
             throw new InvalidArgumentException('you cannot change domain url for webhook context');
         }
 
-        $this->endpoints->changeClientUrl($domainUrl);
+        $this->endpoints = $this->endpoints->changeClientUrl($domainUrl);
     }
 
     public function isWebhookContext(): bool
@@ -103,9 +108,9 @@ class Credentials
 
     /**
      * Get OAuth server URL
-     * @deprecated
      * @todo remove on v1.9.0
      */
+    #[\Deprecated]
     public function getOauthServerUrl(): string
     {
         return $this->endpoints->getAuthServerUrl();
@@ -150,7 +155,7 @@ class Credentials
         PlacementRequest $placementRequest,
         ApplicationProfile $applicationProfile,
         // todo make it required in v2
-        ?string $oauthServerUrl = null
+        string|Url|null $oauthServerUrl = null
     ): self {
         return self::createFromOAuth(
             $placementRequest->getAccessToken(),

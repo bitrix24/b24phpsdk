@@ -28,7 +28,7 @@ use Carbon\CarbonImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(Bitrix24AccountInterface::class)]
+#[CoversClass(ApplicationInstallationReferenceEntityImplementation::class)]
 class ApplicationInstallationInterfaceReferenceImplementationTest extends ApplicationInstallationInterfaceTest
 {
     #[\Override]

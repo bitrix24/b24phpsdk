@@ -24,6 +24,7 @@ use Bitrix24\SDK\Core\Credentials\DefaultOAuthServerUrl;
 use Bitrix24\SDK\Core\Credentials\Endpoints;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\ValueObjects\Url;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -50,7 +51,7 @@ class ServiceBuilderFactory
      *
      * @param ApplicationProfile $applicationProfile
      * @param Bitrix24AccountInterface $bitrix24Account
-     * @param non-empty-string|null $oauthServerUrl
+     * @param non-empty-string|Url|null $oauthServerUrl
      * @return ServiceBuilder
      * @throws InvalidArgumentException
      */
@@ -58,7 +59,7 @@ class ServiceBuilderFactory
         ApplicationProfile $applicationProfile,
         Bitrix24AccountInterface $bitrix24Account,
         // todo make it required in v2
-        ?string $oauthServerUrl = null
+        string|Url|null $oauthServerUrl = null
     ): ServiceBuilder {
         if ($oauthServerUrl === null) {
             $this->log->warning('oauthServerUrl not set, you must set it manually or use DefaultOAuthServerUrl presets');
@@ -81,16 +82,16 @@ class ServiceBuilderFactory
      *
      * @param ApplicationProfile $applicationProfile
      * @param AuthToken $authToken
-     * @param non-empty-string $bitrix24DomainUrl
-     * @param string $oauthServerUrl
+     * @param non-empty-string|Url $bitrix24DomainUrl
+     * @param string|Url $oauthServerUrl
      * @return ServiceBuilder
      * @throws InvalidArgumentException
      */
     public function init(
         ApplicationProfile $applicationProfile,
         AuthToken $authToken,
-        string $bitrix24DomainUrl,
-        string $oauthServerUrl
+        string|Url $bitrix24DomainUrl,
+        string|Url $oauthServerUrl
     ): ServiceBuilder {
         return $this->getServiceBuilder(
             Credentials::createFromOAuth(
@@ -104,12 +105,12 @@ class ServiceBuilderFactory
     /**
      * Init service builder from webhook
      *
-     * @param string $webhookUrl
+     * @param string|Url $webhookUrl
      *
      * @return ServiceBuilder
      * @throws InvalidArgumentException
      */
-    public function initFromWebhook(string $webhookUrl): ServiceBuilder
+    public function initFromWebhook(string|Url $webhookUrl): ServiceBuilder
     {
         return $this->getServiceBuilder(Credentials::createFromWebhook(new WebhookUrl($webhookUrl)));
     }
@@ -144,13 +145,13 @@ class ServiceBuilderFactory
     /**
      * Create service builder from incoming webhook
      *
-     * @param non-empty-string $webhookUrl incoming webhook url from your bitrix24 portal
+     * @param non-empty-string|Url $webhookUrl incoming webhook url from your bitrix24 portal
      * @param EventDispatcherInterface|null $eventDispatcher optional event dispatcher for subscribe some domain events if need
      * @param LoggerInterface|null $logger optional logger for debug logs
      * @throws InvalidArgumentException
      */
     public static function createServiceBuilderFromWebhook(
-        string $webhookUrl,
+        string|Url $webhookUrl,
         ?EventDispatcherInterface $eventDispatcher = null,
         ?LoggerInterface $logger = null
     ): ServiceBuilder {
@@ -178,7 +179,7 @@ class ServiceBuilderFactory
         ApplicationProfile $applicationProfile,
         ?EventDispatcherInterface $eventDispatcher = null,
         ?LoggerInterface $logger = null,
-        ?string $oauthServerUrl = null
+        string|Url|null $oauthServerUrl = null
     ): ServiceBuilder {
         if (!in_array('DOMAIN', $placementRequest->query->keys(), true)) {
             throw new InvalidArgumentException('key «DOMAIN» not found in GET request arguments');

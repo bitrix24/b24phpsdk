@@ -26,9 +26,7 @@ class UserConsentServiceBuilder extends AbstractServiceBuilder
      */
     public function UserConsentAgreement(): UserConsentAgreement
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new UserConsentAgreement($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new UserConsentAgreement($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }
@@ -38,9 +36,7 @@ class UserConsentServiceBuilder extends AbstractServiceBuilder
      */
     public function UserConsent(): UserConsent
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new UserConsent($this->core, $this->log);
-        }
+        $this->serviceCache[__METHOD__] ??= new UserConsent($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }

@@ -31,6 +31,72 @@
   property; code that instantiates these services directly must pass the batch service
   ([#616](https://github.com/bitrix24/b24phpsdk/issues/616))
 
+## 3.6.0
+
+### Added
+
+- Added `ApplicationInstallationMarkedNeedReinstallEvent` with installation ID, transition timestamp, and comment ([#578](https://github.com/bitrix24/b24phpsdk/issues/578))
+- Added `ApplicationInstallationRepositoryInterface::findStaleInstallations()` to find installations by status and exclusive creation-time cutoff, ordered oldest first; existing repository implementations must add the new method ([#579](https://github.com/bitrix24/b24phpsdk/issues/579))
+- Added stale-installation reference behavior, event emission, reusable transition and repository tests, and migration documentation ([#580](https://github.com/bitrix24/b24phpsdk/issues/580))
+- Added `ApplicationInstallationStatus::needReinstall` for installations that timed out waiting for `ONAPPINSTALL` and require reinstallation ([#576](https://github.com/bitrix24/b24phpsdk/issues/576))
+- Added `ApplicationInstallationInterface::markAsNeedReinstall()` and documented direct uninstall of stale installations; existing implementations must add the new method ([#577](https://github.com/bitrix24/b24phpsdk/issues/577))
+- Added `ApplicationInstallationRepositoryInterface::getCurrent()` to retrieve the explicitly selected current application installation; existing repository implementations must add this method ([#356](https://github.com/bitrix24/b24phpsdk/issues/356))
+- Added service `Services\Catalog\RoundingRule` with support methods,
+  see [catalog.roundingRule.* methods](https://apidocs.bitrix24.com/api-reference/catalog/rounding-rule/index.html) ([#573](https://github.com/bitrix24/b24phpsdk/issues/573)):
+    - `add` creates a new price rounding rule, with batch calls support
+    - `update` updates an existing price rounding rule, with batch calls support
+    - `list` gets the list of price rounding rules
+    - `delete` deletes a price rounding rule, with batch calls support
+    - `get` gets information about a price rounding rule by its identifier
+    - `getFields` returns the description of price rounding rule fields
+- Added service `Services\Catalog\Ratio` with support methods,
+  see [catalog.ratio.* methods](https://apidocs.bitrix24.com/api-reference/catalog/ratio/index.html) ([#570](https://github.com/bitrix24/b24phpsdk/issues/570)):
+    - `get` returns the measurement unit ratio by identifier
+    - `list` gets the list of measurement unit ratios by filter
+    - `fields` returns the description of measurement unit ratio fields
+- Added service `Services\Catalog\DocumentContractor` with support methods,
+  see [catalog.documentcontractor.* methods](https://apidocs.bitrix24.com/api-reference/catalog/documentcontractor/index.html) ([#565](https://github.com/bitrix24/b24phpsdk/issues/565)):
+    - `add` binds a CRM contractor (contact or company) to a warehouse accounting receipt document, with batch calls support
+    - `list` gets the list of contractor bindings by filter
+    - `delete` deletes a contractor binding, with batch calls support
+    - `getFields` returns the description of contractor binding fields
+- Added service `Services\Catalog\Section` with support methods,
+  see [catalog.section.* methods](https://apidocs.bitrix24.com/api-reference/catalog/section/index.html) ([#583](https://github.com/bitrix24/b24phpsdk/issues/583)):
+    - `add` creates a new trade-catalog section, with batch calls support
+    - `update` updates an existing trade-catalog section, with batch calls support
+    - `get` gets a trade-catalog section by its identifier
+    - `list` gets the list of trade-catalog sections by filter
+    - `delete` deletes a trade-catalog section, with batch calls support
+    - `getFields` returns the description of trade-catalog section fields
+- Added service `Services\Catalog\UserfieldDocument` with support methods,
+  see [catalog.userfield.document.* methods](https://apidocs.bitrix24.com/api-reference/catalog/userfield-document/index.html) ([#589](https://github.com/bitrix24/b24phpsdk/issues/589)):
+    - `list` gets a paginated list of userfield values for warehouse accounting documents
+    - `update` updates userfield values of a warehouse accounting document, with batch calls support
+- Added service `Services\Catalog\StoreProduct` with support methods,
+  see [catalog.storeproduct.* methods](https://apidocs.bitrix24.com/api-reference/catalog/store-product/index.html) ([#584](https://github.com/bitrix24/b24phpsdk/issues/584)):
+    - `get` returns product stock information by record identifier
+    - `list` returns a list of product stock records by filter
+    - `getFields` returns the description of product stock fields
+
+### Changed
+
+- Updated Rector and PHPStan to compatible stable 2.x release ranges and migrated PHPUnit rules to Composer-based set selection ([#595](https://github.com/bitrix24/b24phpsdk/issues/595))
+- Migrated every remaining `@deprecated` docblock to the PHP 8.4 `#[\Deprecated]` attribute ([#595](https://github.com/bitrix24/b24phpsdk/issues/595)).
+  **Runtime impact:** these symbols now raise `E_USER_DEPRECATED` when used, where previously the marker was documentation-only:
+    - `Core\Credentials\Credentials::getOauthServerUrl()`
+    - `Services\Main\Service\Main::getAvailableMethods()`, `::getAllMethods()`, `::getMethodsByScope()`
+    - `Services\IM\Placements\Placements::bindSmilesSelector()`, `::unbindSmilesSelector()`
+    - `Services\IM\Placements\PlacementLocationCodes::IM_SMILES_SELECTOR`
+    - `Services\IM\Search\Service\Search::lastAdd()`, `::lastGet()`, `::lastDelete()`
+    - `Services\Landing\Block\Result\UploadFileResult::getFileId()`, `::getFilePath()`
+- Expanded `findStaleInstallations()` regression coverage to every installation status and equivalent cutoff instants in different time zones ([#579](https://github.com/bitrix24/b24phpsdk/issues/579))
+- Added `Url`, `LocalizedString`, `ActivityCode` and `RobotCode` inputs across services and credential factories while retaining legacy inputs; documented primitive removal for SDK 4.0 ([#533](https://github.com/bitrix24/b24phpsdk/issues/533))
+
+### Fixed
+
+- Removed the duplicate `needReinstall` enum case introduced when the prerequisite status and transition branches were merged ([#580](https://github.com/bitrix24/b24phpsdk/issues/580))
+- Fixed the Catalog Ratio testsuite closing tag and `CatalogServiceBuilder` indentation that blocked PR quality checks ([#356](https://github.com/bitrix24/b24phpsdk/issues/356))
+
 ## 3.5.0
 
 ### Added

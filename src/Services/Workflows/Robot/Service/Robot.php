@@ -23,14 +23,19 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Core\ValueObjects\LocalizedString;
 use Bitrix24\SDK\Core\ValueObjects\Url;
+use Bitrix24\SDK\Core\ValueObjects\ValueObjectResolver;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Workflows;
 use Bitrix24\SDK\Services\Workflows\Robot\Result\AddedRobotResult;
 use Bitrix24\SDK\Services\Workflows\Robot\Result\UpdateRobotResult;
 use Bitrix24\SDK\Services\Workflows\Template\Service\Batch;
 use Bitrix24\SDK\Services\Workflows\ValueObjects\RobotCode;
+use Bitrix24\SDK\Services\Workflows\ValueObjects\WorkflowCodeResolver;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Primitive code, handler URL and localization arguments are deprecated; prefer RobotCode, Url and LocalizedString.
+ */
 #[ApiServiceMetadata(new Scope(['bizproc']))]
 class Robot extends AbstractService
 {
@@ -38,8 +43,7 @@ class Robot extends AbstractService
         public Batch           $batch,
         CoreInterface   $core,
         LoggerInterface $log
-    )
-    {
+    ) {
         parent::__construct($core, $log);
     }
 
@@ -70,24 +74,23 @@ class Robot extends AbstractService
         array                 $documentType = [],
         array                 $filter = [],
         ?Url                  $placementHandlerUrl = null
-    ): Workflows\Robot\Result\AddedRobotResult
-    {
+    ): Workflows\Robot\Result\AddedRobotResult {
         if ($isUsePlacement && $placementHandlerUrl === null) {
             throw new InvalidArgumentException('placementHandlerUrl is required when isUsePlacement is true');
         }
 
         $payload = [
-            'CODE' => $this->resolveRobotCode($code),
-            'HANDLER' => $this->resolveUrl($handlerUrl),
+            'CODE' => WorkflowCodeResolver::resolveRobotCode($code),
+            'HANDLER' => ValueObjectResolver::resolveUrl($handlerUrl),
             'AUTH_USER_ID' => $b24AuthUserId,
-            'NAME' => $this->resolveLocalizedString($localizedRobotName),
+            'NAME' => ValueObjectResolver::resolveLocalizedString($localizedRobotName),
             'USE_SUBSCRIPTION' => $isUseSubscription ? 'Y' : 'N',
             'PROPERTIES' => $properties,
             'USE_PLACEMENT' => $isUsePlacement ? 'Y' : 'N',
             'RETURN_PROPERTIES' => $returnProperties,
         ];
 
-        $description = $this->resolveLocalizedString($localizedRobotDescription);
+        $description = ValueObjectResolver::resolveLocalizedString($localizedRobotDescription);
         if ($description !== []) {
             $payload['DESCRIPTION'] = $description;
         }
@@ -139,12 +142,13 @@ class Robot extends AbstractService
         'https://training.bitrix24.com/rest_help/workflows/app_automation_rules/bizproc_robot_delete.php',
         'This method deletes registered automation rule.'
     )]
-    public function delete(string $robotCode): DeletedItemResult
+    public function delete(string|RobotCode $robotCode): DeletedItemResult
     {
         return new DeletedItemResult(
             $this->core->call('bizproc.robot.delete', [
-                'CODE' => $robotCode
-            ]));
+                'CODE' => WorkflowCodeResolver::resolveRobotCode($robotCode)
+            ])
+        );
     }
 
     /**
@@ -171,17 +175,16 @@ class Robot extends AbstractService
         ?array                     $properties = null,
         ?bool                      $isUsePlacement = null,
         ?array                     $returnProperties = null
-    ): Workflows\Robot\Result\UpdateRobotResult
-    {
+    ): Workflows\Robot\Result\UpdateRobotResult {
         $fieldsToUpdate = [];
         if ($handlerUrl !== null) {
-            $fieldsToUpdate['HANDLER'] = $this->resolveUrl($handlerUrl);
+            $fieldsToUpdate['HANDLER'] = ValueObjectResolver::resolveUrl($handlerUrl);
         }
         if ($b24AuthUserId !== null) {
             $fieldsToUpdate['AUTH_USER_ID'] = $b24AuthUserId;
         }
         if ($localizedRobotName !== null) {
-            $fieldsToUpdate['NAME'] = $this->resolveLocalizedString($localizedRobotName);
+            $fieldsToUpdate['NAME'] = ValueObjectResolver::resolveLocalizedString($localizedRobotName);
         }
         if ($isUseSubscription !== null) {
             $fieldsToUpdate['USE_SUBSCRIPTION'] = $isUseSubscription ? 'Y' : 'N';
@@ -201,33 +204,9 @@ class Robot extends AbstractService
         return new Workflows\Robot\Result\UpdateRobotResult($this->core->call(
             'bizproc.robot.update',
             [
-                'CODE' => $this->resolveRobotCode($code),
+                'CODE' => WorkflowCodeResolver::resolveRobotCode($code),
                 'FIELDS' => $fieldsToUpdate
-            ]));
-    }
-
-    /**
-     * @throws InvalidArgumentException
-     */
-    private function resolveUrl(string|Url $url): string
-    {
-        return $url instanceof Url ? $url->getUrl() : (new Url($url))->getUrl();
-    }
-
-    /**
-     * @throws InvalidArgumentException
-     */
-    private function resolveRobotCode(string|RobotCode $code): string
-    {
-        return $code instanceof RobotCode ? $code->getCode() : (new RobotCode($code))->getCode();
-    }
-
-    /**
-     * @param array<string, string>|LocalizedString $value
-     * @return array<string, string>
-     */
-    private function resolveLocalizedString(array|LocalizedString $value): array
-    {
-        return $value instanceof LocalizedString ? $value->toArray() : $value;
+            ]
+        ));
     }
 }

@@ -192,4 +192,22 @@ final class CollectionBlocksTest extends TestCase
 
         GridItem::name('Priority')->color('ff0000');
     }
+
+    public function testAttachmentItemsAcceptUrlObjects(): void
+    {
+        $link = 'https://example.com/link';
+        $url = new \Bitrix24\SDK\Core\ValueObjects\Url($link);
+        self::assertSame(
+            \Bitrix24\SDK\Services\IM\Message\Attach\Items\FileItem::link($link)->build(),
+            \Bitrix24\SDK\Services\IM\Message\Attach\Items\FileItem::link($url)->build()
+        );
+        self::assertSame(
+            \Bitrix24\SDK\Services\IM\Message\Attach\Items\ImageItem::link($link)->preview($link)->build(),
+            \Bitrix24\SDK\Services\IM\Message\Attach\Items\ImageItem::link($url)->preview($url)->build()
+        );
+        self::assertSame(
+            \Bitrix24\SDK\Services\IM\Message\Attach\Items\GridItem::name('Name')->link($link)->build(),
+            \Bitrix24\SDK\Services\IM\Message\Attach\Items\GridItem::name('Name')->link($url)->build()
+        );
+    }
 }

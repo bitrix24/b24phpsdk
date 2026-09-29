@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\IM\Message\Attach\Items;
 
+use Bitrix24\SDK\Core\ValueObjects\Url;
 use Bitrix24\SDK\Services\IM\Message\Attach\Contracts\AttachItemInterface;
 
 final class ImageItem implements AttachItemInterface
@@ -32,9 +33,9 @@ final class ImageItem implements AttachItemInterface
         $this->link = $this->requireNonEmptyString($link, 'LINK');
     }
 
-    public static function link(string $link): self
+    public static function link(string|Url $link): self
     {
-        return new self($link);
+        return new self($link instanceof Url ? $link->getUrl() : $link);
     }
 
     public function name(string $name): self
@@ -44,9 +45,9 @@ final class ImageItem implements AttachItemInterface
         return $this;
     }
 
-    public function preview(string $url): self
+    public function preview(string|Url $url): self
     {
-        $this->preview = $this->requireNonEmptyString($url, 'PREVIEW');
+        $this->preview = $this->requireNonEmptyString($url instanceof Url ? $url->getUrl() : $url, 'PREVIEW');
 
         return $this;
     }

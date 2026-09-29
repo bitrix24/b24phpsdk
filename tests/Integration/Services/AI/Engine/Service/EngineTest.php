@@ -58,7 +58,7 @@ class EngineTest extends TestCase
             'test-llm-1',
             $engineCode,
             EngineCategory::text,
-            'https://bitrix24.com/',
+            new \Bitrix24\SDK\Core\ValueObjects\Url('https://bitrix24.com/'),
             new EngineSettings(
                 'custom llm'
             )

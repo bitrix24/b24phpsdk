@@ -18,6 +18,8 @@ use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Core\ValueObjects\Url;
+use Bitrix24\SDK\Core\ValueObjects\ValueObjectResolver;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Placement\PlacementOptionsInterface;
 use Bitrix24\SDK\Services\Placement\Result\PlacementBindResult;
@@ -25,6 +27,9 @@ use Bitrix24\SDK\Services\Placement\Result\PlacementLocationCodesResult;
 use Bitrix24\SDK\Services\Placement\Result\PlacementsLocationInformationResult;
 use Bitrix24\SDK\Services\Placement\Result\PlacementUnbindResult;
 
+/**
+ * String handler URLs are deprecated; pass Url instead. Null and empty unbind handlers remain supported.
+ */
 #[ApiServiceMetadata(new Scope(['placement']))]
 class Placement extends AbstractService
 {
@@ -32,7 +37,7 @@ class Placement extends AbstractService
      * Installs the embedding location handler
      *
      * @param non-empty-string $placementCode,
-     * @param non-empty-string $handlerUrl,
+     * @param non-empty-string|Url $handlerUrl,
      * @throws BaseException
      * @throws TransportException
      * @link https://apidocs.bitrix24.com/api-reference/widgets/placement-bind.html
@@ -44,7 +49,7 @@ class Placement extends AbstractService
     )]
     public function bind(
         string $placementCode,
-        string $handlerUrl,
+        string|Url $handlerUrl,
         array $lang,
         PlacementOptionsInterface|array $options = [],
         ?int $b24UserId = null,
@@ -58,7 +63,7 @@ class Placement extends AbstractService
                 'placement.bind',
                 [
                     'PLACEMENT' => $placementCode,
-                    'HANDLER' => $handlerUrl,
+                    'HANDLER' => ValueObjectResolver::resolveUrl($handlerUrl),
                     'LANG_ALL' => $lang,
                     'OPTIONS' => $options,
                     'USER_ID' => $b24UserId,
@@ -79,14 +84,14 @@ class Placement extends AbstractService
         'https://training.bitrix24.com/rest_help/application_embedding/metods/placement_unbind.php',
         'Deletes the registered embedding location handler. Shall be executed with the available account administrative privileges.'
     )]
-    public function unbind(string $placementCode, ?string $handlerUrl = null): PlacementUnbindResult
+    public function unbind(string $placementCode, string|Url|null $handlerUrl = null): PlacementUnbindResult
     {
         return new PlacementUnbindResult(
             $this->core->call(
                 'placement.unbind',
                 [
                     'PLACEMENT' => $placementCode,
-                    'HANDLER' => $handlerUrl,
+                    'HANDLER' => $handlerUrl === null || $handlerUrl === '' ? $handlerUrl : ValueObjectResolver::resolveUrl($handlerUrl),
                 ]
             )
         );

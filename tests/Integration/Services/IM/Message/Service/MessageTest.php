@@ -108,6 +108,7 @@ class MessageTest extends TestCase
 
     #[Test]
     #[TestDox('command executes a chat-bot command')]
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testCommand(): void
     {
         $this->markTestSkipped(
@@ -119,6 +120,7 @@ class MessageTest extends TestCase
 
     #[Test]
     #[TestDox('share creates an object based on a message')]
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testShare(): void
     {
         $this->markTestSkipped(

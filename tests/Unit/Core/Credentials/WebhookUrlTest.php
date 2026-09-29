@@ -38,4 +38,9 @@ class WebhookUrlTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         new WebhookUrl('qqqq');
     }
+
+    public function testAcceptsUrlAndPreservesStringGetter(): void
+    {
+        self::assertSame('https://example.com/rest/1/test/', (new WebhookUrl(new \Bitrix24\SDK\Core\ValueObjects\Url('https://example.com/rest/1/test/')))->getUrl());
+    }
 }
