@@ -14,16 +14,21 @@
 ### Changed
 
 - Updated Rector and PHPStan to compatible stable 2.x release ranges and migrated PHPUnit rules to Composer-based set selection ([#595](https://github.com/bitrix24/b24phpsdk/issues/595))
+- Migrated every remaining `@deprecated` docblock to the PHP 8.4 `#[\Deprecated]` attribute ([#595](https://github.com/bitrix24/b24phpsdk/issues/595)).
+  **Runtime impact:** these symbols now raise `E_USER_DEPRECATED` when used, where previously the marker was documentation-only:
+    - `Core\Credentials\Credentials::getOauthServerUrl()`
+    - `Services\Main\Service\Main::getAvailableMethods()`, `::getAllMethods()`, `::getMethodsByScope()`
+    - `Services\IM\Placements\Placements::bindSmilesSelector()`, `::unbindSmilesSelector()`
+    - `Services\IM\Placements\PlacementLocationCodes::IM_SMILES_SELECTOR`
+    - `Services\IM\Search\Service\Search::lastAdd()`, `::lastGet()`, `::lastDelete()`
+    - `Services\Landing\Block\Result\UploadFileResult::getFileId()`, `::getFilePath()`
+- Expanded `findStaleInstallations()` regression coverage to every installation status and equivalent cutoff instants in different time zones ([#579](https://github.com/bitrix24/b24phpsdk/issues/579))
 
 - Added `Url`, `LocalizedString`, `ActivityCode` and `RobotCode` inputs across services and credential factories while retaining legacy inputs; documented primitive removal for SDK 4.0 ([#533](https://github.com/bitrix24/b24phpsdk/issues/533))
 
 ### Fixed
 
 - Removed the duplicate `needReinstall` enum case introduced when the prerequisite status and transition branches were merged ([#580](https://github.com/bitrix24/b24phpsdk/issues/580))
-
-### Changed
-
-- Expanded `findStaleInstallations()` regression coverage to every installation status and equivalent cutoff instants in different time zones ([#579](https://github.com/bitrix24/b24phpsdk/issues/579))
 
 ## 3.6.0
 

@@ -31,6 +31,7 @@ use Psr\Log\NullLogger;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 #[CoversClass(Event::class)]
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class EventTest extends TestCase
 {
     #[Test]

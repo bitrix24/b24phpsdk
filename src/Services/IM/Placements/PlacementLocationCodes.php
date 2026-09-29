@@ -38,10 +38,7 @@ class PlacementLocationCodes
 
     /**
      * Smiles / Giphy selector pop-up.
-     *
-     * @deprecated No longer works since module `im 25.1600.0` — smiles were
-     *             replaced by stickers. See
-     *             https://apidocs.bitrix24.com/api-reference/widgets/im/smile-selector.html
      */
+    #[\Deprecated(message: 'No longer works since module `im 25.1600.0` — smiles were replaced by stickers. See https://apidocs.bitrix24.com/api-reference/widgets/im/smile-selector.html')]
     public const string IM_SMILES_SELECTOR = 'IM_SMILES_SELECTOR';
 }

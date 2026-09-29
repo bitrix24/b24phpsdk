@@ -108,9 +108,9 @@ class Credentials
 
     /**
      * Get OAuth server URL
-     * @deprecated
      * @todo remove on v1.9.0
      */
+    #[\Deprecated]
     public function getOauthServerUrl(): string
     {
         return $this->endpoints->getAuthServerUrl();

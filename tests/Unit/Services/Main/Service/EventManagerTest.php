@@ -19,6 +19,7 @@ use Psr\Log\NullLogger;
 #[CoversClass(EventManager::class)]
 #[CoversClass(EventHandlerMetadata::class)]
 #[CoversClass(Event::class)]
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class EventManagerTest extends TestCase
 {
     #[DataProvider('metadataOptionsCases')]
