@@ -309,6 +309,7 @@ skip_violations:
 | `make test-integration-catalog-section-annotations` | Trade-catalog section result annotations |
 | `make test-integration-catalog-rounding-rule` | Price rounding rules |
 | `make test-integration-catalog-ratio` | Measurement unit ratio |
+| `make test-integration-catalog-vat` | VAT rates |
 
 ### Tests — integration (Tasks)
 

@@ -971,6 +971,9 @@ test-integration-catalog-document-contractor:
 .PHONY: test-integration-catalog-document-contractor-annotations
 test-integration-catalog-document-contractor-annotations:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_document_contractor_annotations
+.PHONY: test-integration-catalog-vat
+test-integration-catalog-vat:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_vat
 
 # work dev environment
 .PHONY: php-dev-server-up
