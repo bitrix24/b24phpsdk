@@ -20,6 +20,8 @@ use Bitrix24\SDK\Services\Catalog\Measure\Result\DeletedMeasureResult;
 use Bitrix24\SDK\Services\Catalog\Measure\Result\MeasureResult;
 use Bitrix24\SDK\Services\Catalog\Measure\Result\MeasuresResult;
 use Bitrix24\SDK\Services\Catalog\Measure\Result\UpdatedMeasureResult;
+use Bitrix24\SDK\Services\Catalog\Measure\Batch as MeasureEntityBatch;
+use Bitrix24\SDK\Services\Catalog\Measure\Service\Batch;
 use Bitrix24\SDK\Services\Catalog\Measure\Service\Measure;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullCore;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -35,7 +37,11 @@ class MeasureTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->service = new Measure(new NullCore(), new NullLogger());
+        $this->service = new Measure(
+            new Batch(new MeasureEntityBatch(new NullCore(), new NullLogger()), new NullLogger()),
+            new NullCore(),
+            new NullLogger()
+        );
     }
 
     #[Test]

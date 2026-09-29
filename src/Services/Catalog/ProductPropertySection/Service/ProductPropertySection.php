@@ -15,16 +15,26 @@ namespace Bitrix24\SDK\Services\Catalog\ProductPropertySection\Service;
 
 use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Catalog\ProductPropertySection\Result\ProductPropertySectionResult;
 use Bitrix24\SDK\Services\Catalog\ProductPropertySection\Result\ProductPropertySectionsResult;
+use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['catalog']))]
 class ProductPropertySection extends AbstractService
 {
+    public function __construct(
+        public Batch $batch,
+        CoreInterface $core,
+        LoggerInterface $logger
+    ) {
+        parent::__construct($core, $logger);
+    }
+
     /**
      * Returns the section settings of a product property or variation by the property ID.
      *

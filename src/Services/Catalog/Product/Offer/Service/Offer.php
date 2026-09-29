@@ -30,8 +30,11 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['catalog']))]
 class Offer extends AbstractService
 {
-    public function __construct(CoreInterface $core, LoggerInterface $logger)
-    {
+    public function __construct(
+        public Batch $batch,
+        CoreInterface $core,
+        LoggerInterface $logger
+    ) {
         parent::__construct($core, $logger);
     }
 
