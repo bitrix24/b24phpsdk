@@ -36,7 +36,7 @@ class ApiClient implements ApiClientInterface
     /**
      * @const string
      */
-    protected const SDK_VERSION = '1.10.0';
+    protected const SDK_VERSION = '1.11.0';
 
     protected const SDK_USER_AGENT = 'b24-php-sdk-vendor';
 
@@ -176,6 +176,58 @@ class ApiClient implements ApiClientInterface
             'tasks.flow.Flow.isExists',
             'tasks.flow.Flow.activate',
             'tasks.flow.Flow.pin',
+            // imbot.v2.* — case-sensitive on the Bitrix24 server side
+            'imbot.v2.Bot.get',
+            'imbot.v2.Bot.list',
+            'imbot.v2.Bot.register',
+            'imbot.v2.Bot.unregister',
+            'imbot.v2.Bot.update',
+            'imbot.v2.Chat.add',
+            'imbot.v2.Chat.get',
+            'imbot.v2.Chat.leave',
+            'imbot.v2.Chat.setOwner',
+            'imbot.v2.Chat.update',
+            'imbot.v2.Chat.InputAction.notify',
+            'imbot.v2.Chat.Manager.add',
+            'imbot.v2.Chat.Manager.delete',
+            'imbot.v2.Chat.Message.delete',
+            'imbot.v2.Chat.Message.get',
+            'imbot.v2.Chat.Message.getContext',
+            'imbot.v2.Chat.Message.read',
+            'imbot.v2.Chat.Message.send',
+            'imbot.v2.Chat.Message.update',
+            'imbot.v2.Chat.Message.Reaction.add',
+            'imbot.v2.Chat.Message.Reaction.delete',
+            'imbot.v2.Chat.TextField.enabled',
+            'imbot.v2.Chat.User.add',
+            'imbot.v2.Chat.User.delete',
+            'imbot.v2.Chat.User.list',
+            'imbot.v2.Command.answer',
+            'imbot.v2.Command.list',
+            'imbot.v2.Command.register',
+            'imbot.v2.Command.unregister',
+            'imbot.v2.Command.update',
+            'imbot.v2.Event.get',
+            'imbot.v2.File.download',
+            'imbot.v2.File.upload',
+            'imbot.v2.Revision.get',
+            // im.v2.* — case-sensitive on the Bitrix24 server side
+            'im.v2.Event.get',
+            'im.v2.Event.subscribe',
+            'im.v2.Event.unsubscribe',
+            'im.v2.File.download',
+            'im.v2.File.upload',
+            'booking.v1.resourceType.add',
+            'booking.v1.resourceType.update',
+            'booking.v1.resourceType.get',
+            'booking.v1.resourceType.list',
+            'booking.v1.resourceType.delete',
+            'booking.v1.waitlist.externalData.list',
+            'booking.v1.waitlist.externalData.set',
+            'booking.v1.waitlist.externalData.unset',
+            'booking.v1.booking.externalData.list',
+            'booking.v1.booking.externalData.set',
+            'booking.v1.booking.externalData.unset',
         ];
         if (!in_array($apiMethod, $caseSensitiveMethods, true)) {
             $apiMethod = strtolower($apiMethod);

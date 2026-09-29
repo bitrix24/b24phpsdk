@@ -123,7 +123,7 @@ class ProductTest extends TestCase
      * @throws TransportException If there is a transport exception thrown during the process of listing products.
      */
     #[TestDox('test Product::list')]
-    public function testList():void
+    public function testList(): void
     {
         $iblockId = $this->catalogService->list([], [], [], 1)->getCatalogs()[0]->iblockId;
         $fields = [
@@ -150,6 +150,7 @@ class ProductTest extends TestCase
         $this->assertCount(1, $productsResult->getProducts());
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->productService = Fabric::getServiceBuilder()->getCatalogScope()->product();
