@@ -352,17 +352,14 @@ class RepoTest extends TestCase
         $processedContent = $repoCheckContentResult->getContent();
         self::assertNotNull($processedContent);
 
+        // Dangerous substrings must be broken regardless of the sanitizer mode
+        self::assertStringNotContainsString('onclick=', $processedContent);
+        self::assertStringNotContainsString('<iframe', $processedContent);
+
+        // Depending on the portal sanitizer mode, dangerous substrings are either marked with the splitter
+        // and reported with is_bad = true, or neutralized with a space and reported with is_bad = false
         if ($repoCheckContentResult->isBad()) {
-            // API marked content as bad — the default splitter (#SANITIZE#) should be present in content
             self::assertStringContainsString('#SANITIZE#', $processedContent);
-        } else {
-            // API may sanitize dangerous content without marking it as bad (e.g. splits dangerous
-            // words with a space). Either way the returned content must differ from the original.
-            self::assertNotEquals(
-                $dangerousContent,
-                $processedContent,
-                'Dangerous content should be sanitized even if not explicitly marked as bad'
-            );
         }
     }
 
@@ -380,10 +377,14 @@ class RepoTest extends TestCase
         $processedContent = $repoCheckContentResult->getContent();
         self::assertNotNull($processedContent);
 
+        // Dangerous substrings must be broken regardless of the sanitizer mode
+        self::assertStringNotContainsString('onclick=', $processedContent);
+        self::assertStringNotContainsString('#SANITIZE#', $processedContent);
+
+        // The custom splitter is used only when the portal sanitizer marks content as bad,
+        // otherwise dangerous substrings are neutralized with a space
         if ($repoCheckContentResult->isBad()) {
-            // The processed content should contain the custom sanitization markers
             self::assertStringContainsString($customSplitter, $processedContent);
-            self::assertStringNotContainsString('#SANITIZE#', $processedContent);
         }
 
         // When not marked as bad the API may still sanitize content (e.g. split dangerous words
