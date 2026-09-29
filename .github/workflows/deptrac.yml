@@ -39,4 +39,5 @@ jobs:
 
       - name: "is Deptrac check failed"
         if: ${{ failure() }}
-        run: echo '::error:: ❗️ Deptrac check failed (╯°益°)╯彡┻━┻'
+        run: |
+          echo '::error:: ❗️ Deptrac check failed (╯°益°)╯彡┻━┻'
