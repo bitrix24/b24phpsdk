@@ -188,7 +188,9 @@ class ShowCoverageStatisticsCommand extends Command
                                 Scope::initFromString($scopeCode),
                             );
 
-                            $scopeCoverage = $this->coverageCalculator->calculate($apiMethods, $sdkMethods);
+                            // Portal membership determines coverage; SDK scope metadata only determines its own inventory.
+                            $scopeCoverage = $this->coverageCalculator->calculate($apiMethods, $supportedInSdkMethods);
+                            $scopeInventory = $this->coverageCalculator->calculate($apiMethods, $sdkMethods);
                             $totalMethodsCnt += $scopeCoverage->totalPortalMethods;
                             $supportedInSdkMethodsCnt += count($scopeCoverage->coveredMethods);
 
@@ -197,7 +199,7 @@ class ShowCoverageStatisticsCommand extends Command
                                 $scopeCoverage->totalPortalMethods,
                                 count($scopeCoverage->coveredMethods),
                                 count($scopeCoverage->uncoveredMethods),
-                                count($scopeCoverage->sdkOnlyMethods),
+                                count($scopeInventory->sdkOnlyMethods),
                                 $this->formatCoverage($scopeCoverage),
                             ];
                         }
@@ -241,7 +243,9 @@ class ShowCoverageStatisticsCommand extends Command
                             $sdkBasePath,
                             Scope::initFromString($menuItem),
                         );
-                        $scopeCoverage = $this->coverageCalculator->calculate($apiMethods, $sdkMethods);
+                        // Portal membership determines coverage; SDK scope metadata only determines its own inventory.
+                        $scopeCoverage = $this->coverageCalculator->calculate($apiMethods, $supportedInSdkMethods);
+                        $scopeInventory = $this->coverageCalculator->calculate($apiMethods, $sdkMethods);
 
                         $io->info(sprintf('Unsupported in SDK methods (with deprecated): %d', count($scopeCoverage->uncoveredMethods)));
                         $output->writeln($scopeCoverage->uncoveredMethods);
@@ -253,8 +257,8 @@ class ShowCoverageStatisticsCommand extends Command
                         $io->info(sprintf('Unsupported in SDK methods: %d', count($unsupportedMethods)));
                         $output->writeln($unsupportedMethods);
 
-                        $io->info(sprintf('SDK-only methods in scope: %d', count($scopeCoverage->sdkOnlyMethods)));
-                        $output->writeln($scopeCoverage->sdkOnlyMethods);
+                        $io->info(sprintf('SDK-only methods in scope: %d', count($scopeInventory->sdkOnlyMethods)));
+                        $output->writeln($scopeInventory->sdkOnlyMethods);
                         $output->writeln('--------');
 
                         break;

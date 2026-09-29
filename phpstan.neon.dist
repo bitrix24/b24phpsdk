@@ -3,6 +3,7 @@ parameters:
   paths:
     - src/
     - tests/Unit/
+    - tests/Integration/Services/Pull
     - tests/Integration/Services/Telephony
     - tests/Integration/Services/User
     - tests/Integration/Services/UserConsent

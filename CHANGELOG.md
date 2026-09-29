@@ -4,6 +4,9 @@
 
 ### Added
 
+- Added legacy Pull channel/configuration services with typed public channel results and `getPullScope()` facade ([#647](https://github.com/bitrix24/b24phpsdk/issues/647)).
+- Added legacy Pull application configuration, event, push and watch extension wrappers with preserved recipient and payload types ([#645](https://github.com/bitrix24/b24phpsdk/issues/645)).
+- Added `voximplant.callback.start` through the cached Voximplant callback service ([#646](https://github.com/bitrix24/b24phpsdk/issues/646)).
 - Added batch calls support for `Services\Landing` scope,
   see [landing.* methods](https://apidocs.bitrix24.com/api-reference/landing/index.html) ([#616](https://github.com/bitrix24/b24phpsdk/issues/616)):
     - `Site\Service\Batch`: `list` (`landing.site.getList`), `add` (`landing.site.add`),
@@ -153,6 +156,8 @@
   services created by `SaleServiceBuilder` are not affected ([#614](https://github.com/bitrix24/b24phpsdk/issues/614))
 
 ### Fixed
+
+- Fixed legacy per-scope coverage to match portal method names against all SDK wrappers while keeping SDK-only inventory scoped ([#646](https://github.com/bitrix24/b24phpsdk/issues/646)).
 
 - Fixed legacy REST API coverage on the SDK v3 line by matching unique v1 methods against portal availability, including legacy services ([#637](https://github.com/bitrix24/b24phpsdk/issues/637)).
 - Redacted OAuth credential query parameters from Core transport/unknown exception logs and SDK exception messages,

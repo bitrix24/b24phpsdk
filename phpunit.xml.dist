@@ -16,6 +16,16 @@
         <testsuite name="integration_tests_core">
             <directory>./tests/Integration/Core/</directory>
         </testsuite>
+        <testsuite name="integration_tests_pull_channel">
+            <directory>tests/Integration/Services/Pull/Channel</directory>
+            <directory>tests/Integration/Services/Pull/Configuration</directory>
+        </testsuite>
+        <testsuite name="integration_tests_pull">
+            <directory>tests/Integration/Services/Pull/Application</directory>
+        </testsuite>
+        <testsuite name="integration_tests_voximplant_callback">
+            <directory>tests/Integration/Services/Telephony/Voximplant/Callback</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_telephony">
             <directory>./tests/Integration/Services/Telephony/</directory>
         </testsuite>

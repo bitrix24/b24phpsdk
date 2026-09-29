@@ -246,6 +246,10 @@ endif
 	docker compose run --rm php-cli $(PHPUNIT) $(path) --display-warnings
 
 # integration tests with granularity by api-scope
+.PHONY: test-integration-voximplant-callback
+test-integration-voximplant-callback:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_voximplant_callback
+
 .PHONY: test-integration-scope-telephony
 test-integration-scope-telephony:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_telephony
@@ -1097,3 +1101,12 @@ build-examples-for-documentation:
 	--example-template=docs/api/file-templates/examples/master-example.php \
 	--openai-api-key=$(DOCUMENTATION_OPEN_AI_API_KEY) \
 	--docs-repo-folder=$(DOCUMENTATION_REPOSITORY_FOLDER)
+
+# Safe Pull integration suites: no events, notifications or watch mutations.
+.PHONY: test-integration-pull-channel
+test-integration-pull-channel:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_pull_channel
+
+.PHONY: test-integration-pull
+test-integration-pull:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_pull
