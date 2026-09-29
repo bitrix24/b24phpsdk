@@ -847,6 +847,10 @@ test-integration-catalog-section-annotations:
 test-integration-catalog-store-product:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_store_product
 
+.PHONY: test-integration-catalog-userfield-document
+test-integration-catalog-userfield-document:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_userfield_document
+
 # work dev environment
 .PHONY: php-dev-server-up
 php-dev-server-up:

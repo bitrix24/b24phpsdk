@@ -4,6 +4,10 @@
 
 ### Added
 
+- Added service `Services\Catalog\UserfieldDocument` with support methods,
+  see [catalog.userfield.document.* methods](https://apidocs.bitrix24.com/api-reference/catalog/userfield-document/index.html) ([#589](https://github.com/bitrix24/b24phpsdk/issues/589)):
+    - `list` gets a paginated list of userfield values for warehouse accounting documents
+    - `update` updates userfield values of a warehouse accounting document, with batch calls support
 - Added service `Services\Catalog\StoreProduct` with support methods,
   see [catalog.storeproduct.* methods](https://apidocs.bitrix24.com/api-reference/catalog/store-product/index.html) ([#584](https://github.com/bitrix24/b24phpsdk/issues/584)):
     - `get` returns product stock information by record identifier

@@ -370,4 +370,18 @@ class CatalogServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    public function userfieldDocument(): Catalog\UserfieldDocument\Service\UserfieldDocument
+    {
+        $this->serviceCache[__METHOD__] ??= new Catalog\UserfieldDocument\Service\UserfieldDocument(
+            new Catalog\UserfieldDocument\Service\Batch(
+                new Catalog\UserfieldDocument\Batch($this->core, $this->log),
+                $this->log
+            ),
+            $this->core,
+            $this->log
+        );
+
+        return $this->serviceCache[__METHOD__];
+    }
 }
