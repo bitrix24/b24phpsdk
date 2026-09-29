@@ -25,6 +25,7 @@ use Bitrix24\SDK\Services\Calendar\Events\CalendarEventsFactory;
 use Bitrix24\SDK\Services\CRM\Company\Events\CrmCompanyEventsFactory;
 use Bitrix24\SDK\Services\CRM\Contact\Events\CrmContactEventsFactory;
 use Bitrix24\SDK\Services\CRM\Documentgenerator\Document\Events\CrmDocumentGeneratorDocumentEventsFactory;
+use Bitrix24\SDK\Services\CRM\Type\Events\CrmTypeEventsFactory;
 use Bitrix24\SDK\Services\SonetGroup\Events\SonetGroupEventsFactory;
 use Bitrix24\SDK\Services\Telephony\Events\TelephonyEventsFactory;
 use Bitrix24\SDK\Services\IMOpenLines\Connector\Events\ImConnectorEventsFactory;
@@ -227,6 +228,7 @@ readonly class RemoteEventsFactory
                 new CalendarEventsFactory(),
                 new CrmCompanyEventsFactory(),
                 new CrmContactEventsFactory(),
+                new CrmTypeEventsFactory(),
                 new CrmDocumentGeneratorDocumentEventsFactory(),
                 new SonetGroupEventsFactory(),
                 new SaleEventsFactory(),

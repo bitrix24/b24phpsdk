@@ -234,7 +234,7 @@ class StatusLangTest extends TestCase
         $this->createStatusLang($statusId, 'en', 'English Test Status');
         $this->createStatusLang($statusId, 'de', 'German Test Status');
 
-        // Get list 
+        // Get list
         $statusLangsResult = $this->statusLangService->list();
 
         $statusLangs = $statusLangsResult->getStatusLangs();

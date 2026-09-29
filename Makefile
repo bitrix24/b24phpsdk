@@ -62,7 +62,16 @@ help:
 	@echo "test-integration-sale-payment-item-basket - run PaymentItemBasket integration tests"
 	@echo "test-integration-sale-payment-item-shipment - run PaymentItemShipment integration tests"
 	@echo "test-integration-sale-property-relation - run PropertyRelation integration tests"
+	@echo "test-integration-sale-delivery-request - run DeliveryRequest integration tests"
+	@echo "test-integration-sale-person-type - run PersonType integration tests"
+	@echo "test-integration-sale-person-type-status - run PersonTypeStatus integration tests"
+	@echo "test-integration-sale-property - run Property integration tests"
+	@echo "test-integration-sale-property-group - run PropertyGroup integration tests"
+	@echo "test-integration-sale-property-variant - run PropertyVariant integration tests"
+	@echo "test-integration-sale-trade-platform - run TradePlatform integration tests"
+	@echo "test-integration-catalog-product-property-feature - run ProductPropertyFeature integration tests"
 	@echo "test-integration-scope-booking - run Booking integration tests"
+	@echo "test-integration-booking-batch - run Booking batch integration tests"
 	@echo "test-integration-landing-page - run Landing Page integration tests"
 	@echo "test-integration-landing-syspage - run Landing SysPage integration tests"
 	@echo "test-integration-landing-repo - run Landing Repo integration tests"
@@ -287,6 +296,10 @@ test-integration-scope-sonet-group:
 test-integration-scope-booking:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_booking
 
+.PHONY: test-integration-booking-batch
+test-integration-booking-batch:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_booking_batch
+
 .PHONY: test-integration-scope-disk
 test-integration-scope-disk:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_disk
@@ -370,9 +383,45 @@ test-integration-sale-payment-item-shipment:
 test-integration-sale-property-relation:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_property_relation
 
+.PHONY: test-integration-sale-delivery-request
+test-integration-sale-delivery-request:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_delivery_request
+
+.PHONY: test-integration-sale-person-type
+test-integration-sale-person-type:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_person_type
+
+.PHONY: test-integration-sale-person-type-status
+test-integration-sale-person-type-status:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_person_type_status
+
+.PHONY: test-integration-sale-property
+test-integration-sale-property:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_property
+
+.PHONY: test-integration-sale-property-group
+test-integration-sale-property-group:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_property_group
+
+.PHONY: test-integration-sale-property-variant
+test-integration-sale-property-variant:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_property_variant
+
+.PHONY: test-integration-sale-trade-platform
+test-integration-sale-trade-platform:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_sale_trade_platform
+
 .PHONY: test-integration-scope-crm
 test-integration-scope-crm:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_crm
+
+.PHONY: test-integration-crm-type
+test-integration-crm-type:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_type
+
+.PHONY: test-integration-crm-userfieldconfig
+test-integration-crm-userfieldconfig:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_crm_userfieldconfig
   
 .PHONY: integration_tests_scope_crm_address
 integration_tests_scope_crm_address:
@@ -850,6 +899,9 @@ test-integration-catalog-store-product:
 .PHONY: test-integration-catalog-userfield-document
 test-integration-catalog-userfield-document:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_userfield_document
+.PHONY: test-integration-catalog-vat
+test-integration-catalog-vat:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_catalog_vat
 
 # work dev environment
 .PHONY: php-dev-server-up
