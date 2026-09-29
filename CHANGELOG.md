@@ -4,6 +4,12 @@
 
 ### Added
 
+- Added service `Services\Catalog\DocumentContractor` with support methods,
+  see [catalog.documentcontractor.* methods](https://apidocs.bitrix24.com/api-reference/catalog/documentcontractor/index.html) ([#565](https://github.com/bitrix24/b24phpsdk/issues/565)):
+    - `add` binds a CRM contractor (contact or company) to a warehouse accounting receipt document, with batch calls support
+    - `list` gets the list of contractor bindings by filter
+    - `delete` deletes a contractor binding, with batch calls support
+    - `getFields` returns the description of contractor binding fields
 - Added service `Services\Catalog\Document` with support methods,
   see [catalog.document.* methods](https://apidocs.bitrix24.com/api-reference/catalog/document/index.html) ([#559](https://github.com/bitrix24/b24phpsdk/issues/559)):
     - `add` creates a new warehouse accounting document, with batch calls support
