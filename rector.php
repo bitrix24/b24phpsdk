@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
-use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
 
 return RectorConfig::configure()
@@ -99,10 +98,10 @@ return RectorConfig::configure()
     ->withCache(cacheDirectory: __DIR__ . '/var/.cache/rector')
     ->withSets(
         [
-            LevelSetList::UP_TO_PHP_84,
-            PHPUnitSetList::PHPUNIT_110
+            LevelSetList::UP_TO_PHP_84
         ]
     )
+    ->withComposerBased(phpunit: true)
     ->withImportNames(
         importNames: false,
         importDocBlockNames: false,
@@ -123,6 +122,10 @@ return RectorConfig::configure()
         earlyReturn: true,
     )
     ->withSkip([
+        // Assertions are executed by the data-provider callback in testAudit().
+        \Rector\PHPUnit\PHPUnit60\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector::class => [
+            __DIR__ . '/tests/Unit/OpenApi/Domain/V3BuilderCoverageAuditorTest.php',
+        ],
         RenamePropertyToMatchTypeRector::class,
         \Rector\CodeQuality\Rector\BooleanOr\RepeatedOrEqualToInArrayRector::class,
         \Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector::class,
@@ -142,7 +145,6 @@ return RectorConfig::configure()
         \Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector::class,
         \Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class,
         \Rector\Php83\Rector\ClassConst\AddTypeToConstRector::class,
-        \Rector\Php84\Rector\Class_\DeprecatedAnnotationToDeprecatedAttributeRector::class,
         \Rector\Php84\Rector\Foreach_\ForeachToArrayAnyRector::class,
         \Rector\Php84\Rector\Foreach_\ForeachToArrayFindRector::class,
         \Rector\Php84\Rector\MethodCall\NewMethodCallWithoutParenthesesRector::class,
