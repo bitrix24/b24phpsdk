@@ -30,6 +30,135 @@
   now receive their batch service as the first constructor argument and expose it via the public `$batch`
   property; code that instantiates these services directly must pass the batch service
   ([#616](https://github.com/bitrix24/b24phpsdk/issues/616))
+- Added batch calls support for services of the `Services\Sale` scope, available through the `batch` property
+  of each service ([#614](https://github.com/bitrix24/b24phpsdk/issues/614)):
+    - `BasketProperty` - `add`, `update`, `list`, `delete`,
+      see [sale.basketproperties.* methods](https://apidocs.bitrix24.com/api-reference/sale/basket-properties/index.html)
+    - `Cashbox` - `add`, `update`, `list`, `delete`,
+      see [sale.cashbox.* methods](https://apidocs.bitrix24.com/api-reference/sale/cashbox/index.html)
+    - `CashboxHandler` - `add`, `update`, `list`, `delete`,
+      see [sale.cashbox.handler.* methods](https://apidocs.bitrix24.com/api-reference/sale/cashbox/index.html)
+    - `Delivery` - `add`, `update`, `configUpdate`, `getlist`, `delete`,
+      see [sale.delivery.* methods](https://apidocs.bitrix24.com/api-reference/sale/delivery/delivery/index.html)
+    - `DeliveryExtraService` - `add`, `update`, `delete`,
+      see [sale.delivery.extra.service.* methods](https://apidocs.bitrix24.com/api-reference/sale/delivery/extra-service/index.html)
+    - `DeliveryHandler` - `add`, `update`, `list`, `delete`,
+      see [sale.delivery.handler.* methods](https://apidocs.bitrix24.com/api-reference/sale/delivery/handler/index.html)
+    - `DeliveryRequest` - `update`, `delete`,
+      see [sale.delivery.request.* methods](https://apidocs.bitrix24.com/api-reference/sale/delivery/delivery-request/index.html)
+    - `Payment` - `add`, `update`, `list`, `delete`,
+      see [sale.payment.* methods](https://apidocs.bitrix24.com/api-reference/sale/payment/index.html)
+    - `PaymentItemBasket` - `add`, `update`, `list`, `delete`,
+      see [sale.paymentitembasket.* methods](https://apidocs.bitrix24.com/api-reference/sale/payment-item-basket/index.html)
+    - `PaymentItemShipment` - `add`, `update`, `list`, `delete`,
+      see [sale.paymentitemshipment.* methods](https://apidocs.bitrix24.com/api-reference/sale/payment-item-shipment/index.html)
+    - `PersonType` - `add`, `update`, `list`, `delete`,
+      see [sale.persontype.* methods](https://apidocs.bitrix24.com/api-reference/sale/person-type/index.html)
+    - `PersonTypeStatus` - `add`, `list`,
+      see [sale.businessValuePersonDomain.* methods](https://apidocs.bitrix24.com/api-reference/sale/business-value-person-domain/index.html)
+    - `Property` - `add`, `update`, `list`, `delete`,
+      see [sale.property.* methods](https://apidocs.bitrix24.com/api-reference/sale/property/index.html)
+    - `PropertyGroup` - `add`, `update`, `list`, `delete`,
+      see [sale.propertygroup.* methods](https://apidocs.bitrix24.com/api-reference/sale/property-group/index.html)
+    - `PropertyRelation` - `add`, `list`,
+      see [sale.propertyRelation.* methods](https://apidocs.bitrix24.com/api-reference/sale/property-relation/index.html)
+    - `PropertyVariant` - `add`, `update`, `list`, `delete`,
+      see [sale.propertyvariant.* methods](https://apidocs.bitrix24.com/api-reference/sale/property-variant/index.html)
+    - `Shipment` - `add`, `update`, `list`, `delete`,
+      see [sale.shipment.* methods](https://apidocs.bitrix24.com/api-reference/sale/shipment/index.html)
+    - `ShipmentItem` - `add`, `update`, `list`, `delete`,
+      see [sale.shipmentitem.* methods](https://apidocs.bitrix24.com/api-reference/sale/shipment-item/index.html)
+    - `ShipmentProperty` - `add`, `update`, `list`, `delete`,
+      see [sale.shipmentproperty.* methods](https://apidocs.bitrix24.com/api-reference/sale/shipment-property/index.html)
+    - `ShipmentPropertyValue` - `list`, `delete`,
+      see [sale.shipmentpropertyvalue.* methods](https://apidocs.bitrix24.com/api-reference/sale/shipment-property-value/index.html)
+    - `Status` - `add`, `update`, `list`, `delete`,
+      see [sale.status.* methods](https://apidocs.bitrix24.com/api-reference/sale/status/index.html)
+    - `StatusLang` - `add`, `list`,
+      see [sale.statusLang.* methods](https://apidocs.bitrix24.com/api-reference/sale/status-lang/index.html)
+    - `TradePlatform` - `list`,
+      see [sale.tradePlatform.* methods](https://apidocs.bitrix24.com/api-reference/sale/trade-platform/index.html)
+
+- Added batch calls support for `Services\Catalog` scope
+  ([#611](https://github.com/bitrix24/b24phpsdk/issues/611)):
+    - `Catalog\Catalog\Service\Catalog::batch->list` gets the list of commercial catalogs,
+      see [catalog.catalog.list](https://apidocs.bitrix24.com/api-reference/catalog/catalog/catalog-catalog-list.html)
+    - `Catalog\Extra\Service\Extra::batch->list` gets the list of markups,
+      see [catalog.extra.list](https://apidocs.bitrix24.com/api-reference/catalog/extra/catalog-extra-list.html)
+    - `Catalog\Measure\Service\Measure::batch` supports `add`, `update`, `list` and `delete`,
+      see [catalog.measure.* methods](https://apidocs.bitrix24.com/api-reference/catalog/measure/index.html)
+    - `Catalog\Product\Service\Product::batch` supports `add`, `update`, `list` and `delete`,
+      see [catalog.product.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product/index.html)
+    - `Catalog\Product\Offer\Service\Offer::batch` supports `add`, `update`, `list` and `delete`,
+      see [catalog.product.offer.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product/offer/index.html)
+    - `Catalog\Product\ProductService\Service\ProductService::batch` supports `add`, `update`, `list` and `delete`,
+      see [catalog.product.service.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product/service/index.html)
+    - `Catalog\Product\Sku\Service\Sku::batch` supports `add`, `update`, `list` and `delete`,
+      see [catalog.product.sku.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product/sku/index.html)
+    - `Catalog\ProductPropertyEnum\Service\ProductPropertyEnum::batch` supports `add`, `update`, `list` and `delete`,
+      see [catalog.productPropertyEnum.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product-property-enum/index.html)
+    - `Catalog\ProductPropertySection\Service\ProductPropertySection::batch` supports `set` and `list`,
+      see [catalog.productPropertySection.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product-property-section/index.html)
+
+- Added batch calls support for `Services\Booking` scope,
+  see [booking.* methods](https://apidocs.bitrix24.com/api-reference/booking/index.html) ([#608](https://github.com/bitrix24/b24phpsdk/issues/608)):
+    - `Booking::batch->add` / `list` / `update` / `delete` (`booking.v1.booking.*`)
+    - `BookingClient::batch->list` / `set` (`booking.v1.booking.client.*`)
+    - `BookingExternalData::batch->list` / `set` (`booking.v1.booking.externalData.*`)
+    - `ClientType::batch->list` (`booking.v1.clienttype.list`)
+    - `Resource::batch->add` / `list` / `update` / `delete` (`booking.v1.resource.*`)
+    - `ResourceSlots::batch->list` / `set` (`booking.v1.resource.slots.*`)
+    - `ResourceType::batch->add` / `list` / `update` / `delete` (`booking.v1.resourceType.*`)
+    - `Waitlist::batch->add` / `list` / `update` / `delete` (`booking.v1.waitlist.*`)
+    - `WaitlistClient::batch->list` / `set` (`booking.v1.waitlist.client.*`)
+    - `WaitlistExternalData::batch->list` / `set` (`booking.v1.waitlist.externalData.*`)
+- Added `Services\Booking\Batch` — a scope level batch implementation that handles the
+  booking specific REST conventions: the lowercase `id` parameter, list payloads wrapped in a
+  single entity key and offset based paging for list methods that always answer with `total: 0`
+  and do not support the `>id` / `<id` filter operators ([#608](https://github.com/bitrix24/b24phpsdk/issues/608))
+
+- Added service `Services\CRM\Userfieldconfig` with support methods,
+  see [userfieldconfig.* methods](https://apidocs.bitrix24.com/api-reference/crm/universal/userfieldconfig/index.html) ([#605](https://github.com/bitrix24/b24phpsdk/issues/605)):
+    - `add` adds a new custom field for a CRM smart-process type, the new invoice or the sign document entity, with batch calls support
+    - `update` updates the settings of an existing custom field, with batch calls support
+    - `get` returns the settings of a custom field by its identifier
+    - `list` returns a list of custom field settings matching the filter
+    - `delete` deletes a custom field, with batch calls support
+    - `getTypes` returns the set of custom field types available for the specified module
+- Added support for events
+  see [userfieldconfig events](https://apidocs.bitrix24.com/api-reference/crm/universal/userfieldconfig/events/index.html) ([#605](https://github.com/bitrix24/b24phpsdk/issues/605)):
+    - `onCrmTypeUserFieldAdd`
+    - `onCrmTypeUserFieldUpdate`
+    - `onCrmTypeUserFieldDelete`
+    - `onCrmTypeUserFieldSetEnumValues`
+- Added services `Services\Telephony\FollowUp` and `Services\Telephony\FollowUpField` with support for
+  `call.followup.*` methods, see [call.followup.* methods](https://apidocs.bitrix24.com/api-reference/telephony/follow-up/index.html) ([#603](https://github.com/bitrix24/b24phpsdk/issues/603)):
+    - `call.followup.list` gets a cursor-paginated list of Follow-ups for a period/filter
+    - `call.followup.get` gets a single Follow-up by `callId`
+    - `call.followup.field.list` gets the list of available Follow-up fields
+    - `call.followup.field.get` gets the description of a single Follow-up field by name
+
+- Added service `Services\Catalog\Vat\Service\Vat` with support methods,
+  see [catalog.vat.* methods](https://apidocs.bitrix24.com/api-reference/catalog/vat/index.html) ([#590](https://github.com/bitrix24/b24phpsdk/issues/590)):
+    - `add` creates a new VAT rate, with batch calls support
+    - `update` updates an existing VAT rate by its identifier, with batch calls support
+    - `get` returns VAT rate information by identifier
+    - `list` returns a list of VAT rates by filter
+    - `delete` deletes a VAT rate by identifier, with batch calls support
+    - `getFields` returns the description of VAT rate fields
+
+### Changed
+
+- Constructors of the `Services\Sale` services listed above now accept the service `Batch` as the first argument,
+  services created by `SaleServiceBuilder` are not affected ([#614](https://github.com/bitrix24/b24phpsdk/issues/614))
+
+### Fixed
+
+- Fixed the Deptrac GitHub Actions workflow YAML so architecture checks run for the 3.7.0 release candidate.
+
+- Fixed `Services\Sale\Delivery\Service\Delivery::update()` sending the fields to update in the `FIELDS` parameter:
+  `sale.delivery.update` expects them as top-level parameters and silently ignored the update
+  ([#614](https://github.com/bitrix24/b24phpsdk/issues/614))
 
 ## 3.6.0
 

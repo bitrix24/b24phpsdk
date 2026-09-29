@@ -17,6 +17,8 @@ use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Result\FieldsResult;
 use Bitrix24\SDK\Services\Catalog\Extra\Result\ExtraResult;
 use Bitrix24\SDK\Services\Catalog\Extra\Result\ExtrasResult;
+use Bitrix24\SDK\Services\Catalog\Extra\Batch as ExtraEntityBatch;
+use Bitrix24\SDK\Services\Catalog\Extra\Service\Batch;
 use Bitrix24\SDK\Services\Catalog\Extra\Service\Extra;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullCore;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -32,7 +34,11 @@ class ExtraTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->service = new Extra(new NullCore(), new NullLogger());
+        $this->service = new Extra(
+            new Batch(new ExtraEntityBatch(new NullCore(), new NullLogger()), new NullLogger()),
+            new NullCore(),
+            new NullLogger()
+        );
     }
 
     #[Test]

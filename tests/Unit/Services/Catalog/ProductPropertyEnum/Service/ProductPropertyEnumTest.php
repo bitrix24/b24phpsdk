@@ -19,9 +19,9 @@ use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Services\Catalog\ProductPropertyEnum\Result\ProductPropertyEnumFieldsResult;
 use Bitrix24\SDK\Services\Catalog\ProductPropertyEnum\Result\ProductPropertyEnumResult;
 use Bitrix24\SDK\Services\Catalog\ProductPropertyEnum\Result\ProductPropertyEnumsResult;
+use Bitrix24\SDK\Services\Catalog\ProductPropertyEnum\Batch as ProductPropertyEnumEntityBatch;
 use Bitrix24\SDK\Services\Catalog\ProductPropertyEnum\Service\Batch;
 use Bitrix24\SDK\Services\Catalog\ProductPropertyEnum\Service\ProductPropertyEnum;
-use Bitrix24\SDK\Tests\Unit\Stubs\NullBatch;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -32,7 +32,11 @@ class ProductPropertyEnumTest extends TestCase
 {
     private function createService(CoreInterface $core): ProductPropertyEnum
     {
-        return new ProductPropertyEnum(new Batch(new NullBatch(), new NullLogger()), $core, new NullLogger());
+        return new ProductPropertyEnum(
+            new Batch(new ProductPropertyEnumEntityBatch($core, new NullLogger()), new NullLogger()),
+            $core,
+            new NullLogger()
+        );
     }
 
     #[Test]

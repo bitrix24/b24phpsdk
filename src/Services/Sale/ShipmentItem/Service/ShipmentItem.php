@@ -29,6 +29,7 @@ use Psr\Log\LoggerInterface;
 class ShipmentItem extends AbstractService
 {
     public function __construct(
+        public Batch $batch,
         CoreInterface $core,
         LoggerInterface $logger
     ) {
