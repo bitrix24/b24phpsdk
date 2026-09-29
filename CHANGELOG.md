@@ -4,6 +4,11 @@
 
 ### Added
 
+- Added service `Services\Catalog\StoreProduct` with support methods,
+  see [catalog.storeproduct.* methods](https://apidocs.bitrix24.com/api-reference/catalog/store-product/index.html) ([#584](https://github.com/bitrix24/b24phpsdk/issues/584)):
+    - `get` returns product stock information by record identifier
+    - `list` returns a list of product stock records by filter
+    - `getFields` returns the description of product stock fields
 - Added service `Services\Catalog\Section` with support methods,
   see [catalog.section.* methods](https://apidocs.bitrix24.com/api-reference/catalog/section/index.html) ([#583](https://github.com/bitrix24/b24phpsdk/issues/583)):
     - `add` creates a new trade-catalog section, with batch calls support
