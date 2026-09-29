@@ -125,9 +125,9 @@ final readonly class Placements
      *
      * @throws BaseException
      * @throws TransportException
-     * @deprecated
      * @link https://apidocs.bitrix24.com/api-reference/widgets/im/smile-selector.html
      */
+    #[\Deprecated]
     public function bindSmilesSelector(
         string|Url $handlerUrl,
         PlacementLangMap $placementLangMap,
@@ -194,11 +194,11 @@ final readonly class Placements
     /**
      * Unregister the deprecated `IM_SMILES_SELECTOR` placement handler.
      *
-     * @deprecated
      * @throws BaseException
      * @throws TransportException
      * @link https://apidocs.bitrix24.com/api-reference/widgets/im/smile-selector.html
      */
+    #[\Deprecated]
     public function unbindSmilesSelector(string|Url|null $handlerUrl = null): PlacementUnbindResult
     {
         return $this->placementService->unbind(PlacementLocationCodes::IM_SMILES_SELECTOR, $handlerUrl);

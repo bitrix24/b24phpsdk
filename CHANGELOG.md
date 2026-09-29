@@ -2,33 +2,15 @@
 
 ## Unreleased
 
+## 3.6.0
+
 ### Added
 
 - Added `ApplicationInstallationMarkedNeedReinstallEvent` with installation ID, transition timestamp, and comment ([#578](https://github.com/bitrix24/b24phpsdk/issues/578))
 - Added `ApplicationInstallationRepositoryInterface::findStaleInstallations()` to find installations by status and exclusive creation-time cutoff, ordered oldest first; existing repository implementations must add the new method ([#579](https://github.com/bitrix24/b24phpsdk/issues/579))
 - Added stale-installation reference behavior, event emission, reusable transition and repository tests, and migration documentation ([#580](https://github.com/bitrix24/b24phpsdk/issues/580))
-
 - Added `ApplicationInstallationStatus::needReinstall` for installations that timed out waiting for `ONAPPINSTALL` and require reinstallation ([#576](https://github.com/bitrix24/b24phpsdk/issues/576))
 - Added `ApplicationInstallationInterface::markAsNeedReinstall()` and documented direct uninstall of stale installations; existing implementations must add the new method ([#577](https://github.com/bitrix24/b24phpsdk/issues/577))
-
-### Changed
-
-- Updated Rector and PHPStan to compatible stable 2.x release ranges and migrated PHPUnit rules to Composer-based set selection ([#595](https://github.com/bitrix24/b24phpsdk/issues/595))
-
-- Added `Url`, `LocalizedString`, `ActivityCode` and `RobotCode` inputs across services and credential factories while retaining legacy inputs; documented primitive removal for SDK 4.0 ([#533](https://github.com/bitrix24/b24phpsdk/issues/533))
-
-### Fixed
-
-- Removed the duplicate `needReinstall` enum case introduced when the prerequisite status and transition branches were merged ([#580](https://github.com/bitrix24/b24phpsdk/issues/580))
-
-### Changed
-
-- Expanded `findStaleInstallations()` regression coverage to every installation status and equivalent cutoff instants in different time zones ([#579](https://github.com/bitrix24/b24phpsdk/issues/579))
-
-## 3.6.0
-
-### Added
-
 - Added `ApplicationInstallationRepositoryInterface::getCurrent()` to retrieve the explicitly selected current application installation; existing repository implementations must add this method ([#356](https://github.com/bitrix24/b24phpsdk/issues/356))
 - Added service `Services\Catalog\RoundingRule` with support methods,
   see [catalog.roundingRule.* methods](https://apidocs.bitrix24.com/api-reference/catalog/rounding-rule/index.html) ([#573](https://github.com/bitrix24/b24phpsdk/issues/573)):
@@ -67,10 +49,24 @@
     - `list` returns a list of product stock records by filter
     - `getFields` returns the description of product stock fields
 
+### Changed
+
+- Updated Rector and PHPStan to compatible stable 2.x release ranges and migrated PHPUnit rules to Composer-based set selection ([#595](https://github.com/bitrix24/b24phpsdk/issues/595))
+- Migrated every remaining `@deprecated` docblock to the PHP 8.4 `#[\Deprecated]` attribute ([#595](https://github.com/bitrix24/b24phpsdk/issues/595)).
+  **Runtime impact:** these symbols now raise `E_USER_DEPRECATED` when used, where previously the marker was documentation-only:
+    - `Core\Credentials\Credentials::getOauthServerUrl()`
+    - `Services\Main\Service\Main::getAvailableMethods()`, `::getAllMethods()`, `::getMethodsByScope()`
+    - `Services\IM\Placements\Placements::bindSmilesSelector()`, `::unbindSmilesSelector()`
+    - `Services\IM\Placements\PlacementLocationCodes::IM_SMILES_SELECTOR`
+    - `Services\IM\Search\Service\Search::lastAdd()`, `::lastGet()`, `::lastDelete()`
+    - `Services\Landing\Block\Result\UploadFileResult::getFileId()`, `::getFilePath()`
+- Expanded `findStaleInstallations()` regression coverage to every installation status and equivalent cutoff instants in different time zones ([#579](https://github.com/bitrix24/b24phpsdk/issues/579))
+- Added `Url`, `LocalizedString`, `ActivityCode` and `RobotCode` inputs across services and credential factories while retaining legacy inputs; documented primitive removal for SDK 4.0 ([#533](https://github.com/bitrix24/b24phpsdk/issues/533))
+
 ### Fixed
 
+- Removed the duplicate `needReinstall` enum case introduced when the prerequisite status and transition branches were merged ([#580](https://github.com/bitrix24/b24phpsdk/issues/580))
 - Fixed the Catalog Ratio testsuite closing tag and `CatalogServiceBuilder` indentation that blocked PR quality checks ([#356](https://github.com/bitrix24/b24phpsdk/issues/356))
-
 
 ## 3.5.0
 

@@ -110,7 +110,6 @@ class Search extends AbstractService
     /**
      * @throws BaseException
      * @throws TransportException
-     * @deprecated Developed for the previous chat UI; results are not shown in the current M1 chat interface.
      */
     #[ApiEndpointMetadata(
         'im.search.last.add',
@@ -119,6 +118,7 @@ class Search extends AbstractService
         isDeprecated: true,
         deprecationMessage: 'Developed for the previous chat UI; results are not shown in the current M1 chat interface.'
     )]
+    #[\Deprecated(message: 'Developed for the previous chat UI; results are not shown in the current M1 chat interface.')]
     public function lastAdd(string $dialogId): UpdatedItemResult
     {
         return new UpdatedItemResult($this->core->call('im.search.last.add', [
@@ -129,7 +129,6 @@ class Search extends AbstractService
     /**
      * @throws BaseException
      * @throws TransportException
-     * @deprecated Developed for the previous chat UI; results are not shown in the current M1 chat interface.
      */
     #[ApiEndpointMetadata(
         'im.search.last.get',
@@ -138,6 +137,7 @@ class Search extends AbstractService
         isDeprecated: true,
         deprecationMessage: 'Developed for the previous chat UI; results are not shown in the current M1 chat interface.'
     )]
+    #[\Deprecated(message: 'Developed for the previous chat UI; results are not shown in the current M1 chat interface.')]
     public function lastGet(
         bool $skipOpenLines = false,
         bool $skipChat = false,
@@ -153,7 +153,6 @@ class Search extends AbstractService
     /**
      * @throws BaseException
      * @throws TransportException
-     * @deprecated Developed for the previous chat UI; results are not shown in the current M1 chat interface.
      */
     #[ApiEndpointMetadata(
         'im.search.last.delete',
@@ -162,6 +161,7 @@ class Search extends AbstractService
         isDeprecated: true,
         deprecationMessage: 'Developed for the previous chat UI; results are not shown in the current M1 chat interface.'
     )]
+    #[\Deprecated(message: 'Developed for the previous chat UI; results are not shown in the current M1 chat interface.')]
     public function lastDelete(string $dialogId): UpdatedItemResult
     {
         return new UpdatedItemResult($this->core->call('im.search.last.delete', [
