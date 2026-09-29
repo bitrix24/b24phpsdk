@@ -30,13 +30,11 @@ class LandingServiceBuilder extends AbstractServiceBuilder
      */
     public function site(): Site\Service\Site
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Site\Service\Site(
-                new Site\Service\Batch($this->createBatch(), $this->log),
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Site\Service\Site(
+            new Site\Service\Batch($this->createBatch(), $this->log),
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -46,13 +44,11 @@ class LandingServiceBuilder extends AbstractServiceBuilder
      */
     public function page(): Page\Service\Page
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Page\Service\Page(
-                new Page\Service\Batch($this->createBatch(), $this->log),
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Page\Service\Page(
+            new Page\Service\Batch($this->createBatch(), $this->log),
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -62,13 +58,11 @@ class LandingServiceBuilder extends AbstractServiceBuilder
      */
     public function sysPage(): SysPage\Service\SysPage
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new SysPage\Service\SysPage(
-                new SysPage\Service\Batch($this->createBatch(), $this->log),
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new SysPage\Service\SysPage(
+            new SysPage\Service\Batch($this->createBatch(), $this->log),
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -78,13 +72,11 @@ class LandingServiceBuilder extends AbstractServiceBuilder
      */
     public function template(): Template\Service\Template
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Template\Service\Template(
-                new Template\Service\Batch($this->createBatch(), $this->log),
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Template\Service\Template(
+            new Template\Service\Batch($this->createBatch(), $this->log),
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -94,13 +86,11 @@ class LandingServiceBuilder extends AbstractServiceBuilder
      */
     public function block(): Block\Service\Block
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Block\Service\Block(
-                new Block\Service\Batch($this->createBatch(), $this->log),
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Block\Service\Block(
+            new Block\Service\Batch($this->createBatch(), $this->log),
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -110,13 +100,11 @@ class LandingServiceBuilder extends AbstractServiceBuilder
      */
     public function repo(): Repo\Service\Repo
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Repo\Service\Repo(
-                new Repo\Service\Batch($this->createBatch(), $this->log),
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Repo\Service\Repo(
+            new Repo\Service\Batch($this->createBatch(), $this->log),
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -126,13 +114,11 @@ class LandingServiceBuilder extends AbstractServiceBuilder
      */
     public function demos(): Demos\Service\Demos
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Demos\Service\Demos(
-                new Demos\Service\Batch($this->createBatch(), $this->log),
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Demos\Service\Demos(
+            new Demos\Service\Batch($this->createBatch(), $this->log),
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -142,13 +128,11 @@ class LandingServiceBuilder extends AbstractServiceBuilder
      */
     public function role(): Role\Service\Role
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Role\Service\Role(
-                new Role\Service\Batch($this->createBatch(), $this->log),
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new Role\Service\Role(
+            new Role\Service\Batch($this->createBatch(), $this->log),
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
@@ -158,13 +142,11 @@ class LandingServiceBuilder extends AbstractServiceBuilder
      */
     public function repoWidget(): RepoWidget\Service\RepoWidget
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new RepoWidget\Service\RepoWidget(
-                new RepoWidget\Service\Batch($this->createBatch(), $this->log),
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new RepoWidget\Service\RepoWidget(
+            new RepoWidget\Service\Batch($this->createBatch(), $this->log),
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
