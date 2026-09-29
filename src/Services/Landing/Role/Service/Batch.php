@@ -59,8 +59,8 @@ class Batch
             $commandsParameters[] = $scope === '' ? [] : ['scope' => $scope];
         }
 
-        foreach ($this->batch->getTraversableListByCommands('landing.role.getList', $commandsParameters) as $key => $value) {
-            yield $key => new RoleItemResult($value);
+        foreach ($this->batch->getTraversableListByCommands('landing.role.getList', $commandsParameters) as $key => $traversableListByCommand) {
+            yield $key => new RoleItemResult($traversableListByCommand);
         }
     }
 }

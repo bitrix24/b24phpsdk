@@ -367,7 +367,7 @@ class BlockTest extends TestCase
                 }
                 
                 // Use found selector or fallback to common ones
-                $updateData = $nodeSelector ? [$nodeSelector => 'Test content'] : ['.landing-block-node-title' => 'Test title'];
+                $updateData = is_string($nodeSelector) && $nodeSelector !== '' ? [$nodeSelector => 'Test content'] : ['.landing-block-node-title' => 'Test title'];
                 
                 $result = $this->blockService->updateNodes($pageId, (int)$firstBlock->id, $updateData);
                 $this->assertNotNull($result);

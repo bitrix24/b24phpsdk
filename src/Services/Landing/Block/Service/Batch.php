@@ -78,8 +78,8 @@ class Batch
             $commandsParameters[] = $commandParameters;
         }
 
-        foreach ($this->batch->getTraversableListByCommands('landing.block.getlist', $commandsParameters) as $key => $value) {
-            yield $key => new BlockItemResult($value);
+        foreach ($this->batch->getTraversableListByCommands('landing.block.getlist', $commandsParameters) as $key => $traversableListByCommand) {
+            yield $key => new BlockItemResult($traversableListByCommand);
         }
     }
 }
