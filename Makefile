@@ -74,6 +74,7 @@ help:
 	@echo "test-integration-sale-property-relation - run PropertyRelation integration tests"
 	@echo "test-integration-catalog-product-property-feature - run ProductPropertyFeature integration tests"
 	@echo "test-integration-scope-booking - run Booking integration tests"
+	@echo "test-integration-booking-batch - run Booking batch integration tests"
 	@echo "test-integration-landing-page - run Landing Page integration tests"
 	@echo "test-integration-landing-syspage - run Landing SysPage integration tests"
 	@echo "test-integration-landing-repo - run Landing Repo integration tests"
@@ -445,6 +446,10 @@ test-integration-scope-sonet-group:
 .PHONY: test-integration-scope-booking
 test-integration-scope-booking:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_booking
+
+.PHONY: test-integration-booking-batch
+test-integration-booking-batch:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_booking_batch
 
 .PHONY: test-integration-scope-disk
 test-integration-scope-disk:

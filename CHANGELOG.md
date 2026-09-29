@@ -4,6 +4,23 @@
 
 ### Added
 
+- Added batch calls support for `Services\Booking` scope,
+  see [booking.* methods](https://apidocs.bitrix24.com/api-reference/booking/index.html) ([#608](https://github.com/bitrix24/b24phpsdk/issues/608)):
+    - `Booking::batch->add` / `list` / `update` / `delete` (`booking.v1.booking.*`)
+    - `BookingClient::batch->list` / `set` (`booking.v1.booking.client.*`)
+    - `BookingExternalData::batch->list` / `set` (`booking.v1.booking.externalData.*`)
+    - `ClientType::batch->list` (`booking.v1.clienttype.list`)
+    - `Resource::batch->add` / `list` / `update` / `delete` (`booking.v1.resource.*`)
+    - `ResourceSlots::batch->list` / `set` (`booking.v1.resource.slots.*`)
+    - `ResourceType::batch->add` / `list` / `update` / `delete` (`booking.v1.resourceType.*`)
+    - `Waitlist::batch->add` / `list` / `update` / `delete` (`booking.v1.waitlist.*`)
+    - `WaitlistClient::batch->list` / `set` (`booking.v1.waitlist.client.*`)
+    - `WaitlistExternalData::batch->list` / `set` (`booking.v1.waitlist.externalData.*`)
+- Added `Services\Booking\Batch` — a scope level batch implementation that handles the
+  booking specific REST conventions: the lowercase `id` parameter, list payloads wrapped in a
+  single entity key and offset based paging for list methods that always answer with `total: 0`
+  and do not support the `>id` / `<id` filter operators ([#608](https://github.com/bitrix24/b24phpsdk/issues/608))
+
 - Added service `Services\CRM\Userfieldconfig` with support methods,
   see [userfieldconfig.* methods](https://apidocs.bitrix24.com/api-reference/crm/universal/userfieldconfig/index.html) ([#605](https://github.com/bitrix24/b24phpsdk/issues/605)):
     - `add` adds a new custom field for a CRM smart-process type, the new invoice or the sign document entity, with batch calls support

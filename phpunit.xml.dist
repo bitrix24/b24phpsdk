@@ -392,6 +392,18 @@
         <testsuite name="integration_tests_scope_booking">
             <directory>./tests/Integration/Services/Booking/</directory>
         </testsuite>
+        <testsuite name="integration_tests_booking_batch">
+            <file>./tests/Integration/Services/Booking/Booking/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/Booking/BookingClient/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/Booking/BookingExternalData/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/Booking/ClientType/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/Booking/Resource/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/Booking/ResourceSlots/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/Booking/ResourceType/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/Booking/Waitlist/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/Booking/WaitlistClient/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/Booking/WaitlistExternalData/Service/BatchTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_scope_main_eventlog">
             <file>./tests/Integration/Services/Main/Service/EventLogTest.php</file>
             <file>./tests/Integration/Services/Main/EventLogField/Service/EventLogFieldTest.php</file>
