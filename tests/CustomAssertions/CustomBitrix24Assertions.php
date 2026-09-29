@@ -539,6 +539,19 @@ trait CustomBitrix24Assertions
                         )
                     );
                     break;
+                case 'any':
+                    $this->assertTrue(
+                        str_contains($propsFromAnnotations[$fieldCode], 'mixed'),
+                        sprintf(
+                            'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                            $resultItemClassName,
+                            $fieldCode,
+                            $propsFromAnnotations[$fieldCode],
+                            $fieldData['type'],
+                            'mixed'
+                        )
+                    );
+                    break;
                 default:
                     $this->assertFalse(
                         true,
@@ -553,6 +566,4 @@ trait CustomBitrix24Assertions
             }
         }
     }
-
-
 }

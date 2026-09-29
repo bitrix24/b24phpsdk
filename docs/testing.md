@@ -77,6 +77,13 @@ make test-integration-sale-delivery-extra-service
 make test-integration-sale-payment-item-basket
 make test-integration-sale-payment-item-shipment
 make test-integration-sale-property-relation
+make test-integration-sale-delivery-request
+make test-integration-sale-person-type
+make test-integration-sale-person-type-status
+make test-integration-sale-property
+make test-integration-sale-property-group
+make test-integration-sale-property-variant
+make test-integration-sale-trade-platform
 make test-integration-legacy-task
 make test-integration-main-eventlog
 ```
@@ -289,6 +296,13 @@ skip_violations:
 | `make test-integration-sale-payment-item-basket` | Payment item basket |
 | `make test-integration-sale-payment-item-shipment` | Payment item shipment |
 | `make test-integration-sale-property-relation` | Property relation |
+| `make test-integration-sale-delivery-request` | Delivery request |
+| `make test-integration-sale-person-type` | Person type |
+| `make test-integration-sale-person-type-status` | Person type status (business value person domain) |
+| `make test-integration-sale-property` | Order property |
+| `make test-integration-sale-property-group` | Property group |
+| `make test-integration-sale-property-variant` | Property variant |
+| `make test-integration-sale-trade-platform` | Trade platform |
 
 ### Tests — integration (Catalog)
 

@@ -27,6 +27,11 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['sale']))]
 class TradePlatform extends AbstractService
 {
+    public function __construct(public Batch $batch, CoreInterface $core, LoggerInterface $logger)
+    {
+        parent::__construct($core, $logger);
+    }
+
     /**
      * Get a list of order sources
      *

@@ -323,6 +323,28 @@
         <testsuite name="integration_tests_sale_shipment_item">
             <directory>./tests/Integration/Services/Sale/ShipmentItem/</directory>
         </testsuite>
+        <testsuite name="integration_tests_sale_delivery_request">
+            <directory>./tests/Integration/Services/Sale/DeliveryRequest/Service/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_person_type">
+            <directory>./tests/Integration/Services/Sale/PersonType/</directory>
+            <file>./tests/Integration/Services/Sale/Service/PersonTypeTest.php</file>
+        </testsuite>
+        <testsuite name="integration_tests_sale_person_type_status">
+            <directory>./tests/Integration/Services/Sale/PersonTypeStatus/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_property">
+            <directory>./tests/Integration/Services/Sale/Property/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_property_group">
+            <directory>./tests/Integration/Services/Sale/PropertyGroup/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_property_variant">
+            <directory>./tests/Integration/Services/Sale/PropertyVariant/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_sale_trade_platform">
+            <directory>./tests/Integration/Services/Sale/TradePlatform/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_landing_template">
             <directory>./tests/Integration/Services/Landing/Template/</directory>
         </testsuite>
