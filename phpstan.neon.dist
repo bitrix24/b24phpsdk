@@ -33,10 +33,18 @@ parameters:
     - tests/Integration/Services/Sale
     - tests/Integration/Services/Disk
     - tests/Integration/Services/Calendar
+    - tests/Integration/Services/Booking
+    - tests/Integration/Services/Biconnector
     - tests/Integration/Services/CRM/Documentgenerator/Numerator
     - tests/Integration/Services/CRM/Documentgenerator/Document
     - tests/Integration/Services/CRM/Documentgenerator/Template
     - tests/Integration/Services/Landing
+    - tests/Integration/Services/IMBot
+    - tests/Integration/Services/Sign
+    - tests/Integration/Services/Messageservice
+    - tests/Integration/Services/MailService
+    - tests/Integration/Services/Documentgenerator
+    - tests/Integration/Services/Timeman
   excludePaths:
     - tests/Integration/Services/CRM/Requisites/Service/RequisiteUserfieldUseCaseTest.php
     - tests/Integration/Services/CRM/Status
