@@ -23,7 +23,7 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  * @property-read int|null $id
  * @property-read bool|null $active
  * @property-read string|null $code
- * @property-read string|null $defaultValue
+ * @property-read mixed $defaultValue
  * @property-read string|null $description
  * @property-read bool|null $isAddress
  * @property-read bool|null $isEmail

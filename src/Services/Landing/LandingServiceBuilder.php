@@ -32,6 +32,7 @@ class LandingServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Site\Service\Site(
+                new Site\Service\Batch($this->createBatch(), $this->log),
                 $this->core,
                 $this->log
             );
@@ -47,6 +48,7 @@ class LandingServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Page\Service\Page(
+                new Page\Service\Batch($this->createBatch(), $this->log),
                 $this->core,
                 $this->log
             );
@@ -62,6 +64,7 @@ class LandingServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new SysPage\Service\SysPage(
+                new SysPage\Service\Batch($this->createBatch(), $this->log),
                 $this->core,
                 $this->log
             );
@@ -77,6 +80,7 @@ class LandingServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Template\Service\Template(
+                new Template\Service\Batch($this->createBatch(), $this->log),
                 $this->core,
                 $this->log
             );
@@ -92,6 +96,7 @@ class LandingServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Block\Service\Block(
+                new Block\Service\Batch($this->createBatch(), $this->log),
                 $this->core,
                 $this->log
             );
@@ -107,6 +112,7 @@ class LandingServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Repo\Service\Repo(
+                new Repo\Service\Batch($this->createBatch(), $this->log),
                 $this->core,
                 $this->log
             );
@@ -122,6 +128,7 @@ class LandingServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Demos\Service\Demos(
+                new Demos\Service\Batch($this->createBatch(), $this->log),
                 $this->core,
                 $this->log
             );
@@ -137,6 +144,7 @@ class LandingServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Role\Service\Role(
+                new Role\Service\Batch($this->createBatch(), $this->log),
                 $this->core,
                 $this->log
             );
@@ -152,11 +160,20 @@ class LandingServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new RepoWidget\Service\RepoWidget(
+                new RepoWidget\Service\Batch($this->createBatch(), $this->log),
                 $this->core,
                 $this->log
             );
         }
 
         return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * Creates a dedicated landing batch instance, batch commands state must not be shared between services
+     */
+    private function createBatch(): Batch
+    {
+        return new Batch($this->core, $this->log);
     }
 }

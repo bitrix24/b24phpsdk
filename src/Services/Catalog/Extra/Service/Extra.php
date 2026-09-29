@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Services\Catalog\Extra\Service;
 
 use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
@@ -22,10 +23,19 @@ use Bitrix24\SDK\Core\Result\FieldsResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Catalog\Extra\Result\ExtraResult;
 use Bitrix24\SDK\Services\Catalog\Extra\Result\ExtrasResult;
+use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['catalog']))]
 class Extra extends AbstractService
 {
+    public Batch $batch;
+
+    public function __construct(CoreInterface $core, LoggerInterface $log, ?Batch $batch = null)
+    {
+        parent::__construct($core, $log);
+        $this->batch = $batch ?? new Batch(new \Bitrix24\SDK\Services\Catalog\Extra\Batch($core, $log), $log);
+    }
+
     /**
      * Returns information about a markup by its identifier.
      *

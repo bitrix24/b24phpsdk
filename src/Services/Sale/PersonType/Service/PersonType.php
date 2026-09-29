@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Services\Sale\PersonType\Service;
 
 use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
@@ -25,10 +26,19 @@ use Bitrix24\SDK\Services\Sale\PersonType\Result\PersonTypeResult;
 use Bitrix24\SDK\Services\Sale\PersonType\Result\PersonTypesResult;
 use Bitrix24\SDK\Services\Sale\PersonType\Result\AddedPersonTypeResult;
 use Bitrix24\SDK\Services\Sale\PersonType\Result\UpdatedPersonTypeResult;
+use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['sale']))]
 class PersonType extends AbstractService
 {
+    public Batch $batch;
+
+    public function __construct(CoreInterface $core, LoggerInterface $log, ?Batch $batch = null)
+    {
+        parent::__construct($core, $log);
+        $this->batch = $batch ?? new Batch(new \Bitrix24\SDK\Services\Sale\PersonType\Batch($core, $log), $log);
+    }
+
     /**
      * Adds a payer type
      *

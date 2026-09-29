@@ -51,7 +51,7 @@ class TemplateTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $serviceBuilder = Fabric::getServiceBuilder();
+        $serviceBuilder = Fabric::getServiceBuilder(true);
         $this->templateService = $serviceBuilder->getLandingScope()->template();
         $this->siteService = $serviceBuilder->getLandingScope()->site();
         $this->pageService = $serviceBuilder->getLandingScope()->page();
