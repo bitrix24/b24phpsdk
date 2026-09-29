@@ -62,7 +62,7 @@ class SiteTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $serviceBuilder = Factory::getServiceBuilder();
+        $serviceBuilder = Factory::getServiceBuilder(true);
         $this->siteService = $serviceBuilder->getLandingScope()->site();
     }
 
