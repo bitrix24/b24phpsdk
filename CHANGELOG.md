@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.13.0 - 2026.09.30
+
 ### Added
 
 - Added batch calls support for services of the `Services\Sale` scope, available through the `batch` property
