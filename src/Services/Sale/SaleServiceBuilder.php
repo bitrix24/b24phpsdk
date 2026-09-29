@@ -16,29 +16,6 @@ namespace Bitrix24\SDK\Services\Sale;
 use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
-use Bitrix24\SDK\Services\Sale\TradePlatform\Service\TradePlatform;
-use Bitrix24\SDK\Services\Sale\Property\Service\Property;
-use Bitrix24\SDK\Services\Sale\PropertyVariant\Service\PropertyVariant;
-use Bitrix24\SDK\Services\Sale\Status\Service\Status;
-use Bitrix24\SDK\Services\Sale\StatusLang\Service\StatusLang;
-use Bitrix24\SDK\Services\Sale\PersonTypeStatus\Service\PersonTypeStatus;
-use Bitrix24\SDK\Services\Sale\ShipmentPropertyValue\Service\ShipmentPropertyValue;
-use Bitrix24\SDK\Services\Sale\ShipmentItem\Service\ShipmentItem;
-use Bitrix24\SDK\Services\Sale\BasketProperty\Service\BasketProperty;
-use Bitrix24\SDK\Services\Sale\CashboxHandler\Service\CashboxHandler;
-use Bitrix24\SDK\Services\Sale\Cashbox\Service\Cashbox;
-use Bitrix24\SDK\Services\Sale\DeliveryHandler\Service\DeliveryHandler;
-use Bitrix24\SDK\Services\Sale\Delivery\Service\Delivery;
-use Bitrix24\SDK\Services\Sale\DeliveryRequest\Service\DeliveryRequest;
-use Bitrix24\SDK\Services\Sale\DeliveryExtraService\Service\DeliveryExtraService;
-use Bitrix24\SDK\Services\Sale\Payment;
-use Bitrix24\SDK\Services\Sale\PaymentItemBasket;
-use Bitrix24\SDK\Services\Sale\PaymentItemShipment;
-use Bitrix24\SDK\Services\Sale\PersonType;
-use Bitrix24\SDK\Services\Sale\PropertyGroup;
-use Bitrix24\SDK\Services\Sale\Order;
-use Bitrix24\SDK\Services\Sale\BasketItem;
-use Bitrix24\SDK\Services\Sale\PropertyRelation;
 
 /**
  * Class SaleServiceBuilder
@@ -51,10 +28,14 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     /**
      * Get TradePlatform service
      */
-    public function tradePlatform(): TradePlatform
+    public function tradePlatform(): TradePlatform\Service\TradePlatform
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new TradePlatform(
+            $this->serviceCache[__METHOD__] = new TradePlatform\Service\TradePlatform(
+                new TradePlatform\Service\Batch(
+                    new TradePlatform\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -66,10 +47,14 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     /**
      * Order properties service (sale.property.*)
      */
-    public function property(): Property
+    public function property(): Property\Service\Property
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Property(
+            $this->serviceCache[__METHOD__] = new Property\Service\Property(
+                new Property\Service\Batch(
+                    new Property\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -82,6 +67,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new PropertyGroup\Service\PropertyGroup(
+                new PropertyGroup\Service\Batch(
+                    new PropertyGroup\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -110,10 +99,14 @@ class SaleServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    public function status(): Status
+    public function status(): Status\Service\Status
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Status(
+            $this->serviceCache[__METHOD__] = new Status\Service\Status(
+                new Status\Service\Batch(
+                    new Status\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -122,10 +115,14 @@ class SaleServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    public function personTypeStatus(): PersonTypeStatus
+    public function personTypeStatus(): PersonTypeStatus\Service\PersonTypeStatus
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new PersonTypeStatus(
+            $this->serviceCache[__METHOD__] = new PersonTypeStatus\Service\PersonTypeStatus(
+                new PersonTypeStatus\Service\Batch(
+                    new PersonTypeStatus\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -138,6 +135,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new PersonType\Service\PersonType(
+                new PersonType\Service\Batch(
+                    new PersonType\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -153,6 +154,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Payment\Service\Payment(
+                new Payment\Service\Batch(
+                    new Payment\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -168,6 +173,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new PaymentItemBasket\Service\PaymentItemBasket(
+                new PaymentItemBasket\Service\Batch(
+                    new PaymentItemBasket\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -183,6 +192,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new PaymentItemShipment\Service\PaymentItemShipment(
+                new PaymentItemShipment\Service\Batch(
+                    new PaymentItemShipment\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -191,10 +204,14 @@ class SaleServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    public function propertyVariant(): PropertyVariant
+    public function propertyVariant(): PropertyVariant\Service\PropertyVariant
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new PropertyVariant(
+            $this->serviceCache[__METHOD__] = new PropertyVariant\Service\PropertyVariant(
+                new PropertyVariant\Service\Batch(
+                    new PropertyVariant\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -203,10 +220,14 @@ class SaleServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    public function statusLang(): StatusLang
+    public function statusLang(): StatusLang\Service\StatusLang
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new StatusLang(
+            $this->serviceCache[__METHOD__] = new StatusLang\Service\StatusLang(
+                new StatusLang\Service\Batch(
+                    new StatusLang\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -222,6 +243,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Shipment\Service\Shipment(
+                new Shipment\Service\Batch(
+                    new Shipment\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -237,6 +262,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new ShipmentProperty\Service\ShipmentProperty(
+                new ShipmentProperty\Service\Batch(
+                    new ShipmentProperty\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -268,10 +297,14 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     /**
      * ShipmentPropertyValue service (sale.shipmentpropertyvalue.*)
      */
-    public function shipmentPropertyValue(): ShipmentPropertyValue
+    public function shipmentPropertyValue(): ShipmentPropertyValue\Service\ShipmentPropertyValue
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new ShipmentPropertyValue(
+            $this->serviceCache[__METHOD__] = new ShipmentPropertyValue\Service\ShipmentPropertyValue(
+                new ShipmentPropertyValue\Service\Batch(
+                    new ShipmentPropertyValue\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -283,10 +316,14 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     /**
      * ShipmentItem service (sale.shipmentitem.*)
      */
-    public function shipmentItem(): ShipmentItem
+    public function shipmentItem(): ShipmentItem\Service\ShipmentItem
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new ShipmentItem(
+            $this->serviceCache[__METHOD__] = new ShipmentItem\Service\ShipmentItem(
+                new ShipmentItem\Service\Batch(
+                    new ShipmentItem\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -298,10 +335,14 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     /**
      * BasketProperty service (sale.basketproperties.*)
      */
-    public function basketProperty(): BasketProperty
+    public function basketProperty(): BasketProperty\Service\BasketProperty
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new BasketProperty(
+            $this->serviceCache[__METHOD__] = new BasketProperty\Service\BasketProperty(
+                new BasketProperty\Service\Batch(
+                    new BasketProperty\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -313,10 +354,14 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     /**
      * Cash register handlers service (sale.cashbox.handler.*)
      */
-    public function cashboxHandler(): CashboxHandler
+    public function cashboxHandler(): CashboxHandler\Service\CashboxHandler
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new CashboxHandler(
+            $this->serviceCache[__METHOD__] = new CashboxHandler\Service\CashboxHandler(
+                new CashboxHandler\Service\Batch(
+                    new CashboxHandler\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -328,10 +373,14 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     /**
      * DeliveryHandler service (sale.delivery.handler.*)
      */
-    public function deliveryHandler(): DeliveryHandler
+    public function deliveryHandler(): DeliveryHandler\Service\DeliveryHandler
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new DeliveryHandler(
+            $this->serviceCache[__METHOD__] = new DeliveryHandler\Service\DeliveryHandler(
+                new DeliveryHandler\Service\Batch(
+                    new DeliveryHandler\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -343,10 +392,14 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     /**
      * Cash registers service (sale.cashbox.*)
      */
-    public function cashbox(): Cashbox
+    public function cashbox(): Cashbox\Service\Cashbox
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Cashbox(
+            $this->serviceCache[__METHOD__] = new Cashbox\Service\Cashbox(
+                new Cashbox\Service\Batch(
+                    new Cashbox\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -358,10 +411,14 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     /**
      * Delivery service (sale.delivery.*)
      */
-    public function delivery(): Delivery
+    public function delivery(): Delivery\Service\Delivery
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Delivery(
+            $this->serviceCache[__METHOD__] = new Delivery\Service\Delivery(
+                new Delivery\Service\Batch(
+                    new Delivery\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -373,10 +430,14 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     /**
      * Delivery request service (sale.delivery.request.*)
      */
-    public function deliveryRequest(): DeliveryRequest
+    public function deliveryRequest(): DeliveryRequest\Service\DeliveryRequest
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new DeliveryRequest(
+            $this->serviceCache[__METHOD__] = new DeliveryRequest\Service\DeliveryRequest(
+                new DeliveryRequest\Service\Batch(
+                    new DeliveryRequest\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -388,10 +449,14 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     /**
      * Delivery extra service (sale.delivery.extra.service.*)
      */
-    public function deliveryExtraService(): DeliveryExtraService
+    public function deliveryExtraService(): DeliveryExtraService\Service\DeliveryExtraService
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new DeliveryExtraService(
+            $this->serviceCache[__METHOD__] = new DeliveryExtraService\Service\DeliveryExtraService(
+                new DeliveryExtraService\Service\Batch(
+                    new DeliveryExtraService\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );
@@ -407,6 +472,10 @@ class SaleServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new PropertyRelation\Service\PropertyRelation(
+                new PropertyRelation\Service\Batch(
+                    new PropertyRelation\Batch($this->core, $this->log),
+                    $this->log
+                ),
                 $this->core,
                 $this->log
             );

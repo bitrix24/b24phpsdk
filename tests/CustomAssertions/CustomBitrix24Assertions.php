@@ -163,7 +163,8 @@ trait CustomBitrix24Assertions
                 case 'integer':
                 case 'int':
                 case 'mail_message':
-                    if ($fieldCode === 'type') {
+                    // catalog product type, other scopes (e.g. sale basket item) use own integer codes
+                    if ($fieldCode === 'type' && str_starts_with($resultItemClassName, 'Bitrix24\SDK\Services\Catalog\\')) {
                         $this->assertTrue(
                             str_contains($propsFromAnnotations[$fieldCode], ProductType::class),
                             sprintf(
@@ -579,6 +580,19 @@ trait CustomBitrix24Assertions
                             $propsFromAnnotations[$fieldCode],
                             $fieldData['type'],
                             'array'
+                        )
+                    );
+                    break;
+                case 'any':
+                    $this->assertTrue(
+                        str_contains($propsFromAnnotations[$fieldCode], 'mixed'),
+                        sprintf(
+                            'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                            $resultItemClassName,
+                            $fieldCode,
+                            $propsFromAnnotations[$fieldCode],
+                            $fieldData['type'],
+                            'mixed'
                         )
                     );
                     break;
