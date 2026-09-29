@@ -4,6 +4,13 @@
 
 ### Added
 
+- Added services `Services\Telephony\FollowUp` and `Services\Telephony\FollowUpField` with support for
+  `call.followup.*` methods, see [call.followup.* methods](https://apidocs.bitrix24.com/api-reference/telephony/follow-up/index.html) ([#603](https://github.com/bitrix24/b24phpsdk/issues/603)):
+    - `call.followup.list` gets a cursor-paginated list of Follow-ups for a period/filter
+    - `call.followup.get` gets a single Follow-up by `callId`
+    - `call.followup.field.list` gets the list of available Follow-up fields
+    - `call.followup.field.get` gets the description of a single Follow-up field by name
+
 - Added service `Services\Catalog\Vat\Service\Vat` with support methods,
   see [catalog.vat.* methods](https://apidocs.bitrix24.com/api-reference/catalog/vat/index.html) ([#590](https://github.com/bitrix24/b24phpsdk/issues/590)):
     - `add` creates a new VAT rate, with batch calls support

@@ -242,6 +242,10 @@ endif
 test-integration-scope-telephony:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_telephony
 
+.PHONY: test-integration-telephony-followup
+test-integration-telephony-followup:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_telephony_followup
+
 .PHONY: test-integration-scope-workflows
 test-integration-scope-workflows:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_workflows

@@ -19,6 +19,12 @@
         <testsuite name="integration_tests_scope_telephony">
             <directory>./tests/Integration/Services/Telephony/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_telephony_followup">
+            <directory>./tests/Integration/Services/Telephony/FollowUp/Service/</directory>
+            <directory>./tests/Integration/Services/Telephony/FollowUp/Result/</directory>
+            <directory>./tests/Integration/Services/Telephony/FollowUpField/Service/</directory>
+            <directory>./tests/Integration/Services/Telephony/FollowUpField/Result/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_im">
             <directory>./tests/Integration/Services/IM/</directory>
         </testsuite>
