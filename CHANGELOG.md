@@ -4,6 +4,11 @@
 
 ### Added
 
+- Added service `Services\Catalog\Ratio` with support methods,
+  see [catalog.ratio.* methods](https://apidocs.bitrix24.com/api-reference/catalog/ratio/index.html) ([#570](https://github.com/bitrix24/b24phpsdk/issues/570)):
+    - `get` gets the values of a measurement unit ratio by identifier
+    - `list` gets the list of measurement unit ratios matching a filter
+    - `getFields` returns the description of measurement unit ratio fields
 - Added service `Services\Catalog\DocumentContractor` with support methods,
   see [catalog.documentcontractor.* methods](https://apidocs.bitrix24.com/api-reference/catalog/documentcontractor/index.html) ([#565](https://github.com/bitrix24/b24phpsdk/issues/565)):
     - `add` binds a CRM contractor (contact or company) to a warehouse accounting receipt document, with batch calls support

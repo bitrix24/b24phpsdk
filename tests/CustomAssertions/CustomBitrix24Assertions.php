@@ -252,6 +252,21 @@ trait CustomBitrix24Assertions
                         );
                         break;
                     }
+                    if (str_contains(mb_strtoupper($fieldCode), 'RATIO')) {
+                        $this->assertTrue(
+                            str_contains($propsFromAnnotations[$fieldCode], 'float'),
+                            sprintf(
+                                'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                                $resultItemClassName,
+                                $fieldCode,
+                                $propsFromAnnotations[$fieldCode],
+                                $fieldData['type'],
+                                'float'
+                            )
+                        );
+                        break;
+                    }
+
                     // catalog.document.element field «amount» is a stock quantity, not a monetary amount
                     if ($fieldCode === 'amount') {
                         $this->assertTrue(
