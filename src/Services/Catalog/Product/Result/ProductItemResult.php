@@ -37,8 +37,8 @@ use Money\Money;
  * @property-read int $iblockId
  * @property-read int $iblockSectionId
  * @property-read int $modifiedBy
- * @property-read ?int $height
- * @property-read ?int $length
+ * @property-read ?string $height
+ * @property-read ?string $length
  * @property-read mixed $measure
  * @property-read string $name
  * @property-read array|null $previewPicture

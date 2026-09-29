@@ -30,7 +30,7 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->documentService = Fabric::getServiceBuilder(true)->getCatalogScope()->document();
+        $this->documentService = Fabric::getServiceBuilder()->getCatalogScope()->document();
     }
 
     /**

@@ -45,7 +45,7 @@ class DocumentTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $serviceBuilder = Fabric::getServiceBuilder(true);
+        $serviceBuilder = Fabric::getServiceBuilder();
         $this->documentService = $serviceBuilder->getCatalogScope()->document();
         $this->documentElementService = $serviceBuilder->getCatalogScope()->documentElement();
         $this->productService = $serviceBuilder->getCatalogScope()->product();
@@ -189,10 +189,10 @@ class DocumentTest extends TestCase
      */
     private function createDocumentWithElement(string $title): int
     {
-        $iblockId = Fabric::getServiceBuilder(true)->getCatalogScope()->catalog()
+        $iblockId = Fabric::getServiceBuilder()->getCatalogScope()->catalog()
             ->list([], [], [], 1)->getCatalogs()[0]->iblockId;
 
-        $stores = Fabric::getCore(true)->call('catalog.store.list', ['select' => ['id'], 'filter' => ['active' => 'Y']])
+        $stores = Fabric::getCore()->call('catalog.store.list', ['select' => ['id'], 'filter' => ['active' => 'Y']])
             ->getResponseData()->getResult();
         $storeId = $stores['stores'][0]['id'];
 
