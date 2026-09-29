@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Services\Catalog\Measure\Service;
 
 use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
@@ -25,10 +26,19 @@ use Bitrix24\SDK\Services\Catalog\Measure\Result\DeletedMeasureResult;
 use Bitrix24\SDK\Services\Catalog\Measure\Result\MeasureResult;
 use Bitrix24\SDK\Services\Catalog\Measure\Result\MeasuresResult;
 use Bitrix24\SDK\Services\Catalog\Measure\Result\UpdatedMeasureResult;
+use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['catalog']))]
 class Measure extends AbstractService
 {
+    public function __construct(
+        public Batch $batch,
+        CoreInterface $core,
+        LoggerInterface $logger
+    ) {
+        parent::__construct($core, $logger);
+    }
+
     /**
      * Creates a new measurement unit in the catalog.
      *

@@ -4,6 +4,27 @@
 
 ### Added
 
+- Added batch calls support for `Services\Catalog` scope
+  ([#611](https://github.com/bitrix24/b24phpsdk/issues/611)):
+    - `Catalog\Catalog\Service\Catalog::batch->list` gets the list of commercial catalogs,
+      see [catalog.catalog.list](https://apidocs.bitrix24.com/api-reference/catalog/catalog/catalog-catalog-list.html)
+    - `Catalog\Extra\Service\Extra::batch->list` gets the list of markups,
+      see [catalog.extra.list](https://apidocs.bitrix24.com/api-reference/catalog/extra/catalog-extra-list.html)
+    - `Catalog\Measure\Service\Measure::batch` supports `add`, `update`, `list` and `delete`,
+      see [catalog.measure.* methods](https://apidocs.bitrix24.com/api-reference/catalog/measure/index.html)
+    - `Catalog\Product\Service\Product::batch` supports `add`, `update`, `list` and `delete`,
+      see [catalog.product.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product/index.html)
+    - `Catalog\Product\Offer\Service\Offer::batch` supports `add`, `update`, `list` and `delete`,
+      see [catalog.product.offer.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product/offer/index.html)
+    - `Catalog\Product\ProductService\Service\ProductService::batch` supports `add`, `update`, `list` and `delete`,
+      see [catalog.product.service.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product/service/index.html)
+    - `Catalog\Product\Sku\Service\Sku::batch` supports `add`, `update`, `list` and `delete`,
+      see [catalog.product.sku.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product/sku/index.html)
+    - `Catalog\ProductPropertyEnum\Service\ProductPropertyEnum::batch` supports `add`, `update`, `list` and `delete`,
+      see [catalog.productPropertyEnum.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product-property-enum/index.html)
+    - `Catalog\ProductPropertySection\Service\ProductPropertySection::batch` supports `set` and `list`,
+      see [catalog.productPropertySection.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product-property-section/index.html)
+
 - Added batch calls support for `Services\Booking` scope,
   see [booking.* methods](https://apidocs.bitrix24.com/api-reference/booking/index.html) ([#608](https://github.com/bitrix24/b24phpsdk/issues/608)):
     - `Booking::batch->add` / `list` / `update` / `delete` (`booking.v1.booking.*`)

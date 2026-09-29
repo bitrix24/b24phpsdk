@@ -18,6 +18,8 @@ use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Core\Result\FieldsResult;
 use Bitrix24\SDK\Services\Catalog\Product\Sku\Result\SkuResult;
 use Bitrix24\SDK\Services\Catalog\Product\Sku\Result\SkusResult;
+use Bitrix24\SDK\Services\Catalog\Product\Sku\Batch as SkuEntityBatch;
+use Bitrix24\SDK\Services\Catalog\Product\Sku\Service\Batch;
 use Bitrix24\SDK\Services\Catalog\Product\Sku\Service\Sku;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullCore;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -33,7 +35,11 @@ class SkuTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->service = new Sku(new NullCore(), new NullLogger());
+        $this->service = new Sku(
+            new Batch(new SkuEntityBatch(new NullCore(), new NullLogger()), new NullLogger()),
+            new NullCore(),
+            new NullLogger()
+        );
     }
 
     #[Test]

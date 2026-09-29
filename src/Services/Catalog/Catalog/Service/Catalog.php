@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Services\Catalog\Catalog\Service;
 
 use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
@@ -22,10 +23,19 @@ use Bitrix24\SDK\Core\Result\FieldsResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Catalog\Catalog\Result\CatalogResult;
 use Bitrix24\SDK\Services\Catalog\Catalog\Result\CatalogsResult;
+use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['catalog']))]
 class Catalog extends AbstractService
 {
+    public function __construct(
+        public Batch $batch,
+        CoreInterface $core,
+        LoggerInterface $logger
+    ) {
+        parent::__construct($core, $logger);
+    }
+
     /**
      * The method gets field values of commercial catalog by ID.
      *

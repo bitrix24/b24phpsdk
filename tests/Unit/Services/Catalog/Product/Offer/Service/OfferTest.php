@@ -18,6 +18,8 @@ use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Core\Result\FieldsResult;
 use Bitrix24\SDK\Services\Catalog\Product\Offer\Result\OfferResult;
 use Bitrix24\SDK\Services\Catalog\Product\Offer\Result\OffersResult;
+use Bitrix24\SDK\Services\Catalog\Product\Offer\Batch as OfferEntityBatch;
+use Bitrix24\SDK\Services\Catalog\Product\Offer\Service\Batch;
 use Bitrix24\SDK\Services\Catalog\Product\Offer\Service\Offer;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullCore;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -33,7 +35,11 @@ class OfferTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->service = new Offer(new NullCore(), new NullLogger());
+        $this->service = new Offer(
+            new Batch(new OfferEntityBatch(new NullCore(), new NullLogger()), new NullLogger()),
+            new NullCore(),
+            new NullLogger()
+        );
     }
 
     #[Test]
