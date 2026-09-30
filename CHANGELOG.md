@@ -32,6 +32,7 @@
 
 ### Changed
 
+- Added `MemberRole` enum casting for SonetGroup participant roles and `Feature|string` / `FeatureOperation|string` arguments for access checks, preserving custom codes ([#331](https://github.com/bitrix24/b24phpsdk/issues/331)).
 - Updated `b24phpsdk-maintainer` skill: define contract-based reuse of core result classes, compatibility subclasses and annotated entity items ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
 - Reused `AddedItemResult` in `BlogPostAddResult`, preserving `isSuccess()` and the public return type while inheriting ID access and its interface ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
 

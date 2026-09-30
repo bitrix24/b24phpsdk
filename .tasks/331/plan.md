@@ -42,3 +42,40 @@ SonetGroupTest::cleanupTestGroups currently searches all portal groups with NAME
 
 ## Coverage evidence
 `make sdk-coverage-v1-show` with menu input `1`, `2`, `sonet_group`, `0` measured **13/17 (76.47%)**, four uncovered methods: sonet_group_subject.add/delete/get/update. Corrected baseline was 8/17. Both measurements depend on the scope-attribution reporting fix from PR #648: only ShowCoverageStatisticsCommand.php from codex/646-small-legacy-scopes was temporarily substituted, then restored byte-for-byte before commit. No reporting code or other scope implementation is included in this branch. Initial CLI invocation without menu input aborted; rerun with explicit input exited 0.
+
+
+## PR #655 review 5361876030 follow-up (2026-09-30)
+
+The user explicitly requested implementing the two review comments: migrate the membership ROLE to an enum, and expose extensible feature/operation arguments. This section supersedes the original string-only ROLE design.
+
+Design: use string-backed `Common\MemberRole` (owner A, moderator E, member K), `Common\Feature` (photo, calendar, tasks, files, blog), and `Common\FeatureOperation` (all documented operation codes). `featureAccess()` accepts each enum or a string independently and serializes enums to their backing values at the REST boundary. Existing strings and module-specific codes pass through unchanged. Feature/operation compatibility remains server-validated, as before. No changes to unrelated membership mutation methods.
+
+Generator prerequisite: reran `make -s oa-schema-build` successfully in the PR worktree. Reran `docker compose run --rm php-cli php bin/console b24-dev:result-item-generator sonet_group.user.get --stage=all`; it failed with `Unable to determine the current git branch`. The managed worktree Git directory is outside the container mount. Manually update the existing result annotation/import, relying on the existing AbstractAnnotatedItem enum casting. No new result class or manual getter is needed.
+
+Files to create: `src/Services/SonetGroup/Common/{MemberRole,Feature,FeatureOperation}.php`.
+Files to modify: SonetGroupUserItemResult.php, SonetGroup.php, SonetGroup unit tests, the existing membership annotation and service integration tests, CHANGELOG.md, and this plan. All enum dependencies stay inside Services; no Deptrac changes.
+
+Steps:
+1. Add regression coverage for all member roles and enum/string/mixed/custom feature access arguments; observe failures before production edits.
+2. Add documented enums, annotate ROLE as MemberRole, normalize feature/operation enums to wire strings.
+3. Adapt live membership tests to assert enum casting against the uncast live ROLE. The legacy endpoint has no fields metadata endpoint; remove the fabricated metadata literal and retain explicit live-response contract checks and shared annotation/casting assertions. Do not claim live field-metadata validation.
+4. Run ordered `make lint-cs-fixer`, `make lint-rector`, `make lint-phpstan`, `make lint-deptrac`, `make test-unit`; then `make test-integration-scope-sonet-group` with exact-ID fixture cleanup.
+5. Update CHANGELOG, inspect the final diff, commit and push the existing PR branch; await terminal CI.
+
+Plan review: scope and wire-value contracts are explicit; enum types and imports agree across production/tests; regression, integration, changelog and remote-CI verification cover both requested comments.
+
+
+Follow-up evidence before remote-base synchronization:
+- RED: 61 service tests, 27 expected failures for missing enums. GREEN: complete SonetGroup unit directory, 65 tests / 311 assertions.
+- All five ordered phase-one commands passed on their first run: CS Fixer, Rector, PHPStan, Deptrac, and 1655 unit tests / 5345 assertions (11 existing deprecations).
+- Live SonetGroup suite passed: 13 tests / 86 assertions, including enum input serialization and ROLE casting; exact-ID fixture cleanup succeeded.
+- Independent read-only review found no actionable issues.
+- Before pushing, the remote PR branch advanced to 85981bf7 via a merge of v3-dev. Fast-forwarded safely with local fixes intact. Because this updates lint configuration and shared baseline, rerun the ordered gates and integration on the combined state before delivery.
+
+
+Final verification and recovery:
+- The combined branch passed all ordered phase-one gates: 1742 unit tests / 5597 assertions, with the same 11 existing deprecations.
+- An external archive removed the original worktree during the subsequent integration run, causing missing source/vendor class errors. The archive retained all 10 edited files in Git snapshot 01256eea152c40148b2c65261c62eb13024247e7.
+- Recovered those files byte-for-byte into the managed `pr655-review` worktree attached to the review-fix chat. Restored local ignored dependencies/test environment and refreshed OpenAPI successfully.
+- On the recovered final state, all ordered gates passed again: CS Fixer, Rector, PHPStan, Deptrac, 1742 unit tests / 5597 assertions (11 existing deprecations), then 13 integration tests / 86 assertions. No test or production workaround for the archive failure was needed.
+- CHANGELOG records MemberRole casting and extensible feature/operation enums. Both requested review comments are implemented; remote delivery must use a normal push and await terminal CI.

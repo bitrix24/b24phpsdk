@@ -15,6 +15,9 @@ namespace Bitrix24\SDK\Tests\Integration\Services\SonetGroup\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Services\SonetGroup\Common\Feature;
+use Bitrix24\SDK\Services\SonetGroup\Common\FeatureOperation;
+use Bitrix24\SDK\Services\SonetGroup\Common\MemberRole;
 use Bitrix24\SDK\Services\SonetGroup\Result\SonetGroupGetItemResult;
 use Bitrix24\SDK\Services\SonetGroup\Result\SonetGroupListItemResult;
 use Bitrix24\SDK\Services\SonetGroup\Service\SonetGroup;
@@ -409,7 +412,7 @@ class SonetGroupTest extends TestCase
         $members = $this->sonetGroupService->getUsers($groupId)->getUsers();
         self::assertCount(1, $members);
         self::assertSame($this->getCurrentUserId(), $members[0]->USER_ID);
-        self::assertSame('A', $members[0]->ROLE);
-        self::assertTrue($this->sonetGroupService->featureAccess($groupId, 'tasks', 'view')->isSuccess());
+        self::assertSame(MemberRole::owner, $members[0]->ROLE);
+        self::assertTrue($this->sonetGroupService->featureAccess($groupId, Feature::tasks, FeatureOperation::view)->isSuccess());
     }
 }

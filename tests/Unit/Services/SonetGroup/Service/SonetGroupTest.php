@@ -19,6 +19,9 @@ use Bitrix24\SDK\Core\Response\DTO\Pagination;
 use Bitrix24\SDK\Core\Response\DTO\ResponseData;
 use Bitrix24\SDK\Core\Response\DTO\Time;
 use Bitrix24\SDK\Core\Response\Response;
+use Bitrix24\SDK\Services\SonetGroup\Common\Feature;
+use Bitrix24\SDK\Services\SonetGroup\Common\FeatureOperation;
+use Bitrix24\SDK\Services\SonetGroup\Common\MemberRole;
 use Bitrix24\SDK\Services\SonetGroup\Service\SonetGroup;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -74,14 +77,68 @@ final class SonetGroupTest extends TestCase
     public function testMembersAreTypedAndPreserveRoles(): void
     {
         $response = $this->createStub(Response::class);
-        $response->method('getResponseData')->willReturn(new ResponseData([['USER_ID' => '21', 'ROLE' => 'A'], ['USER_ID' => 22, 'ROLE' => 'K']], Time::initWithZeroValues(), new Pagination()));
+        $response->method('getResponseData')->willReturn(new ResponseData([['USER_ID' => '21', 'ROLE' => 'A'], ['USER_ID' => 22, 'ROLE' => 'K'], ['USER_ID' => '23', 'ROLE' => 'E']], Time::initWithZeroValues(), new Pagination()));
         $core = $this->createMock(CoreInterface::class);
         $core->expects($this->once())->method('call')->with('sonet_group.user.get', $this->identicalTo(['ID' => 17]))->willReturn($response);
         $users = (new SonetGroup($core, new NullLogger()))->getUsers(17)->getUsers();
         self::assertSame(21, $users[0]->USER_ID);
-        self::assertSame('A', $users[0]->ROLE);
+        self::assertTrue(enum_exists(MemberRole::class), 'Member roles must have an enum.');
+        self::assertInstanceOf(MemberRole::class, $users[0]->ROLE);
+        self::assertSame(MemberRole::owner, $users[0]->ROLE);
         self::assertSame(22, $users[1]->USER_ID);
-        self::assertSame('K', $users[1]->ROLE);
+        self::assertSame(MemberRole::member, $users[1]->ROLE);
+        self::assertSame(23, $users[2]->USER_ID);
+        self::assertSame(MemberRole::moderator, $users[2]->ROLE);
+    }
+
+    #[DataProvider('featureAccessArguments')]
+    public function testFeatureAccessAcceptsEnumsAndStrings(string $feature, string $operation, bool $useFeatureEnum, bool $useOperationEnum, bool $allowed): void
+    {
+        $featureArgument = $feature;
+        $operationArgument = $operation;
+        if ($useFeatureEnum) {
+            self::assertTrue(enum_exists(Feature::class), 'Documented features must have an enum.');
+            $featureArgument = Feature::from($feature);
+        }
+
+        if ($useOperationEnum) {
+            self::assertTrue(enum_exists(FeatureOperation::class), 'Documented operations must have an enum.');
+            $operationArgument = FeatureOperation::from($operation);
+        }
+
+        $response = $this->createStub(Response::class);
+        $response->method('getResponseData')->willReturn(new ResponseData([$allowed], Time::initWithZeroValues(), new Pagination()));
+        $core = $this->createMock(CoreInterface::class);
+        $core->expects($this->once())->method('call')->with('sonet_group.feature.access', $this->identicalTo([
+            'GROUP_ID' => 17,
+            'FEATURE' => $feature,
+            'OPERATION' => $operation,
+        ]))->willReturn($response);
+
+        $result = (new SonetGroup($core, new NullLogger()))->featureAccess(17, $featureArgument, $operationArgument);
+        self::assertSame($allowed, $result->isSuccess());
+    }
+
+    public static function featureAccessArguments(): iterable
+    {
+        $operationsByFeature = [
+            'photo' => ['view', 'write'],
+            'calendar' => ['view', 'write'],
+            'tasks' => ['view', 'view_all', 'sort', 'create_tasks', 'edit_tasks', 'delete_tasks'],
+            'files' => ['view', 'write'],
+            'blog' => ['view_post', 'premoderate_post', 'write_post', 'moderate_post', 'full_post', 'view_comment', 'premoderate_comment', 'write_comment', 'moderate_comment', 'full_comment'],
+        ];
+        foreach ($operationsByFeature as $feature => $operations) {
+            foreach ($operations as $operation) {
+                yield $feature . ':' . $operation => [$feature, $operation, true, true, true];
+            }
+        }
+
+        yield 'enum feature, string operation, denied' => ['tasks', 'view', true, false, false];
+        yield 'string feature, enum operation' => ['tasks', 'view', false, true, true];
+        yield 'custom feature and operation' => ['custom_module', 'custom_operation', false, false, true];
+        yield 'enum feature, custom operation' => ['tasks', 'custom_operation', true, false, true];
+        yield 'custom feature, enum operation' => ['custom_module', 'view', false, true, false];
     }
 
     #[DataProvider('errorContracts')]

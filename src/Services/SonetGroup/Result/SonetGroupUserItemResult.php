@@ -14,10 +14,11 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\SonetGroup\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Bitrix24\SDK\Services\SonetGroup\Common\MemberRole;
 
 /**
  * @property-read int $USER_ID Member identifier.
- * @property-read string $ROLE A: owner, E: moderator, K: member.
+ * @property-read MemberRole $ROLE A: owner, E: moderator, K: member.
  */
 class SonetGroupUserItemResult extends AbstractAnnotatedItem
 {

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Services\SonetGroup\Result;
 
+use Bitrix24\SDK\Services\SonetGroup\Common\MemberRole;
 use Bitrix24\SDK\Services\SonetGroup\Result\SonetGroupUserItemResult;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 use Bitrix24\SDK\Tests\Integration\Services\SonetGroup\SonetGroupFixture;
@@ -37,15 +38,16 @@ final class SonetGroupUserItemResultAnnotationsTest extends TestCase
     public function testAllSystemFieldsHasValidTypeAnnotation(): void
     {
         $groupId = $this->createTestGroup()->getId();
-        $member = $this->sonetGroupService->getUsers($groupId)->getUsers()[0];
-        // Documented Bitrix24 field types; there is no live fields metadata endpoint.
-        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation([
-            'USER_ID' => ['type' => 'integer'],
-            'ROLE' => ['type' => 'string'],
-        ], SonetGroupUserItemResult::class);
+        $result = $this->sonetGroupService->getUsers($groupId);
+        $rawMembers = $result->getCoreResponse()->getResponseData()->getResult();
+        self::assertNotEmpty($rawMembers);
+        $member = $result->getUsers()[0];
+        // No field metadata endpoint exists: validate the uncast live response and its SDK conversion.
+        self::assertIsNumeric($rawMembers[0]['USER_ID']);
+        self::assertIsString($rawMembers[0]['ROLE']);
         $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($member, SonetGroupUserItemResult::class);
-        self::assertIsInt($member->USER_ID);
-        self::assertIsString($member->ROLE);
-        self::assertSame('A', $member->ROLE);
+        self::assertSame((int)$rawMembers[0]['USER_ID'], $member->USER_ID);
+        self::assertSame(MemberRole::owner, $member->ROLE);
+        self::assertSame($rawMembers[0]['ROLE'], $member->ROLE->value);
     }
 }

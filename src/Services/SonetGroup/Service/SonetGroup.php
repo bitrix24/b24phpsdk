@@ -23,6 +23,8 @@ use Bitrix24\SDK\Core\Result\AddedItemResult;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
+use Bitrix24\SDK\Services\SonetGroup\Common\Feature;
+use Bitrix24\SDK\Services\SonetGroup\Common\FeatureOperation;
 use Bitrix24\SDK\Services\SonetGroup\Result\SonetGroupGetItemResult;
 use Bitrix24\SDK\Services\SonetGroup\Result\SonetGetGroupsResult;
 use Bitrix24\SDK\Services\SonetGroup\Result\SonetGroupsResult;
@@ -326,6 +328,8 @@ class SonetGroup extends AbstractService
     /**
      * Checks whether the current user can perform a feature operation.
      *
+     * Use strings for additional feature and operation codes supplied by installed modules.
+     *
      * @throws BaseException
      * @throws TransportException
      */
@@ -334,12 +338,12 @@ class SonetGroup extends AbstractService
         'https://apidocs.bitrix24.com/api-reference/sonet-group/sonet-group-feature-access.html',
         'Checks current user access to a group feature operation.'
     )]
-    public function featureAccess(int $groupId, string $feature, string $operation): UpdatedItemResult
+    public function featureAccess(int $groupId, Feature|string $feature, FeatureOperation|string $operation): UpdatedItemResult
     {
         return new UpdatedItemResult($this->core->call('sonet_group.feature.access', [
             'GROUP_ID' => $groupId,
-            'FEATURE' => $feature,
-            'OPERATION' => $operation,
+            'FEATURE' => $feature instanceof Feature ? $feature->value : $feature,
+            'OPERATION' => $operation instanceof FeatureOperation ? $operation->value : $operation,
         ]));
     }
 
