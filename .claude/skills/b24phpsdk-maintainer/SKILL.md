@@ -4,6 +4,7 @@ description: |
   Use this skill whenever working with GitHub issues in the bitrix24/b24phpsdk repository:
   creating new issues, reading existing ones, planning implementation from an issue,
   referencing an issue in commits, branches, or CHANGELOG,
+  preparing or updating a release pull request (MR) or release changelog,
   or discovering unsupported Bitrix24 REST API methods and filing tracking issues.
   IMPORTANT: this skill MUST be invoked before doing any issue-related work.
 user-invocable: true
@@ -885,6 +886,72 @@ Report the status to the user:
 
 ---
 
+## Release PR/MR: mandatory API coverage in CHANGELOG
+
+When preparing or updating a **release** pull request (MR), append `### API coverage`
+as the **last subsection of the target release entry** in `CHANGELOG.md`, immediately
+before the next release heading (or end of file). This requirement applies to both SDK
+release lines: always report **REST API v3 (new)** and **REST API v1 (legacy)** separately.
+Ordinary feature PRs do not need a release coverage block.
+
+### Measure the release candidate
+
+Verify that all three targets below exist in the candidate's `Makefile`. From that same
+checkout, after the release changes are finalized, run these commands in order:
+
+```bash
+make -s oa-schema-build
+make -s sdk-coverage-v3-show
+printf '0\n' | make -s sdk-coverage-v1-show
+```
+
+`0` exits the v1 command's menu after printing the overall statistics. `-s` suppresses
+Make's command echo, which can contain the webhook URL. Keep credentials and unredacted
+logs out of the changelog, issue, and PR.
+
+Use the **overall summary** fields, not per-scope sums, batch-wrapper inventory, or
+SDK-only methods (which are outside the coverage denominator):
+
+| API | Total methods | Covered methods | Uncovered methods | Coverage |
+|---|---|---|---|---|
+| v3 | `OpenAPI methods count` | `Covered SDK v3 methods count` | `Uncovered OpenAPI methods count` | `Coverage percentage` |
+| v1 | `Portal methods` | `Covered by SDK` | `Not covered by SDK` | `Coverage` |
+
+Both commands must succeed and produce complete summaries. Check that total > 0,
+0 <= covered <= total, covered + uncovered = total, and the percentage matches
+covered / total * 100 rounded to two decimal places. A missing target, failed schema
+refresh, unavailable portal, missing summary, or inconsistent counts **blocks release
+readiness**: report the cause and rerun after resolving it. Do not omit an API row,
+invent zero coverage, or reuse numbers from another checkout or an earlier release.
+
+### Write and verify the release entry
+
+Replace every placeholder in this format with the measured values; use the measurement
+date in UTC and keep the distinct coverage baselines visible:
+
+```markdown
+### API coverage
+
+Measured on <YYYY-MM-DD> (UTC) from the release candidate.
+
+| REST API | Covered methods | Total methods | Uncovered methods | Coverage | Basis |
+|---|---:|---:|---:|---:|---|
+| v3 (new) | <covered> | <total> | <uncovered> | <percent>% | OpenAPI snapshot: `docs/open-api/openapi.json` |
+| v1 (legacy) | <covered> | <total> | <uncovered> | <percent>% | Methods available on the configured portal |
+
+These figures describe SDK method coverage against each baseline, not test coverage
+or proof that every method was exercised against a live portal. The v1 baseline is
+portal-specific, not the entire Bitrix24 REST API catalog.
+```
+
+On reruns, update the existing subsection for this release instead of appending another
+one; preserve all historical release entries. Before every release PR push, refresh the
+measurements and verify that exactly one final coverage subsection contains both API
+rows, the date, valid counts, percentages, and baselines. Keep the PR draft or report it
+as blocked until this check passes; green CI alone does not satisfy this requirement.
+
+---
+
 ## Creating a Pull Request after a green quality gate
 
 Run this step **only after both phases of the quality gate are fully green and CHANGELOG is updated**.
@@ -905,6 +972,7 @@ Run this step **only after both phases of the quality gate are fully green and C
 **Required before starting:**
 1. Invoke `superpowers:verification-before-completion` — run all quality gate commands again, capture actual output, confirm every command passes. Do not create the PR based on remembered results.
 2. Read the PR template from disk: `cat .github/PULL_REQUEST_TEMPLATE.md` — the PR body MUST follow this template. Do not use a memorised or hardcoded structure.
+3. For a release PR/MR, complete **Release PR/MR: mandatory API coverage in CHANGELOG** before pushing or marking the PR ready.
 
 ### Step 1 — Push the branch
 

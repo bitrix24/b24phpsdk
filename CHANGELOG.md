@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### Added
+- Documented legacy IMBot method deprecations, existing replacements and unresolved public contracts ([#270](https://github.com/bitrix24/b24phpsdk/issues/270)).
 
 - Added seven documented legacy log endpoints for feed posts and comments, typed post results and private lifecycle integration coverage; undocumented `log.comment.delete` remains excluded ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
 
@@ -31,6 +32,7 @@
 - Updated `b24phpsdk-maintainer` skill: define contract-based reuse of core result classes, compatibility subclasses and annotated entity items ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
 - Reused `AddedItemResult` in `BlogPostAddResult`, preserving `isSuccess()` and the public return type while inheriting ID access and its interface ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
 
+- Updated `b24phpsdk-maintainer` skill: require fresh REST API v3 and v1 coverage statistics at the bottom of each release changelog entry before the release PR is ready ([#650](https://github.com/bitrix24/b24phpsdk/issues/650))
 - Landing services `Site`, `Page`, `Block`, `Demos`, `Repo`, `RepoWidget`, `Role`, `SysPage`, `Template`
   now receive their batch service as the first constructor argument and expose it via the public `$batch`
   property; code that instantiates these services directly must pass the batch service

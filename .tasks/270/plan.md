@@ -1,0 +1,6 @@
+# Audit legacy imbot contracts for SDK v3
+
+The user requested a separate PR per remaining scope and Deprecated attributes only for officially deprecated methods. Audit all 37 methods against current official documentation before implementation. Evidence: 28 documented deprecated methods and 9 undocumented unresolved endpoints. Existing v2 replacements are implemented. There are no existing legacy wrappers to annotate; adding deprecated wrappers solely to raise coverage conflicts with the maintainer workflow. Deliver a standalone evidence and replacement map under docs/coverage/legacy-imbot.md, leaving #270 open. Do not invent contracts or call message/feedback APIs. Documentation-only; no product PHP changes and no integration calls required. Refresh OpenAPI, validate endpoint inventory and SDK references, run Rector and document verification, then publish separate PR to v3-dev and wait for terminal CI.
+
+## Verification evidence
+OpenAPI refresh passed. Independent spec and factual review approved all37rows and replacement metadata. Ordered CS Fixer, Rector, PHPStan, Deptrac and unit gates passed; unit baseline1592tests5036assertions with11existing deprecations. No PHP or runtime behavior changed; integration mutation calls are not applicable.
