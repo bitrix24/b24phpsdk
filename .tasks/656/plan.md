@@ -259,3 +259,11 @@ make test-unit
 - `make -s sdk-coverage-v3-show`: 105 of 314 methods covered (33.44%); 209 uncovered; Main scope 12 of 39 (30.77%). All seven implemented methods are absent from the CLI-generated uncovered report.
 - Independent specification and code-quality reviews approved the final implementation after O1 and O2 were fixed and rechecked.
 - CHANGELOG updated after both quality-gate phases passed. No tracked OpenAPI snapshot changes were produced by the refresh.
+
+## Verification after updating the PR base
+
+- Updated the feature branch with `origin/v3-dev` at `2b491902` after concurrent PRs made the initial PR conflict. Preserved both user-history and upstream EventLog regression tests in the two conflicting test files.
+- Rebuilt the OpenAPI snapshot and repeated all four static/style gates, the full unit suite, and the live user-history suite on the merged candidate; all passed.
+- Final unit result: 1,960 tests, 6,459 assertions, the same 11 existing deprecations. Live result: 26 tests, 167 assertions, zero skips.
+- Refreshed CLI coverage remains 105/314 (33.44%), with Main at 12/39 (30.77%).
+- All six GitHub checks passed for the initial commit; PR CI must run again after pushing the base update.

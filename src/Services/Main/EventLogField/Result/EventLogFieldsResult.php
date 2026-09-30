@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\Main\EventLogField\Result;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\LogicException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
 class EventLogFieldsResult extends AbstractResult
@@ -30,5 +31,26 @@ class EventLogFieldsResult extends AbstractResult
         }
 
         return $items;
+    }
+
+    /**
+     * Requires the name field in each descriptor; include name when using a custom select.
+     *
+     * @return array<string, array<string, mixed>>
+     * @throws LogicException
+     * @throws BaseException
+     */
+    public function getFieldsDescription(): array
+    {
+        $fields = [];
+        foreach ($this->getCoreResponse()->getResponseData()->getResult()['items'] as $item) {
+            if (!isset($item['name']) || !is_string($item['name']) || $item['name'] === '') {
+                throw new LogicException('Select the name field to index event log field descriptions.');
+            }
+
+            $fields[$item['name']] = $item;
+        }
+
+        return $fields;
     }
 }

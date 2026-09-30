@@ -9,8 +9,12 @@
 
 - Added seven documented legacy log endpoints for feed posts and comments, typed post results and private lifecycle integration coverage; undocumented `log.comment.delete` remains excluded ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
 
+- Added legacy Pull channel/configuration services with typed public channel results and `getPullScope()` facade ([#647](https://github.com/bitrix24/b24phpsdk/issues/647)).
+- Added legacy Pull application configuration, event, push and watch extension wrappers with preserved recipient and payload types ([#645](https://github.com/bitrix24/b24phpsdk/issues/645)).
+- Added `voximplant.callback.start` through the cached Voximplant callback service ([#646](https://github.com/bitrix24/b24phpsdk/issues/646)).
 - Added all nine remaining legacy `timeman` methods through `networkRange()` and `timeControl()`, with typed results, report settings, office-network checks, and safe `ACTIVE=false` serialization ([#642](https://github.com/bitrix24/b24phpsdk/issues/642))
 
+- Added SonetGroup feature access, active member lookup, invitations, membership requests, and role updates, with typed member results and successful user-ID lists ([#331](https://github.com/bitrix24/b24phpsdk/issues/331)).
 - Added batch calls support for `Services\Landing` scope,
   see [landing.* methods](https://apidocs.bitrix24.com/api-reference/landing/index.html) ([#616](https://github.com/bitrix24/b24phpsdk/issues/616)):
     - `Site\Service\Batch`: `list` (`landing.site.getList`), `add` (`landing.site.add`),
@@ -33,6 +37,9 @@
 
 ### Changed
 
+- Date-time filters now accept immutable dates, including `CarbonImmutable`, while preserving mutable dates and strings ([#653](https://github.com/bitrix24/b24phpsdk/issues/653))
+
+- Added `MemberRole` enum casting for SonetGroup participant roles and `Feature|string` / `FeatureOperation|string` arguments for access checks, preserving custom codes ([#331](https://github.com/bitrix24/b24phpsdk/issues/331)).
 - Updated `b24phpsdk-maintainer` skill: define contract-based reuse of core result classes, compatibility subclasses and annotated entity items ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
 - Reused `AddedItemResult` in `BlogPostAddResult`, preserving `isSuccess()` and the public return type while inheriting ID access and its interface ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
 
@@ -165,6 +172,9 @@
 
 ### Fixed
 
+- Fixed legacy per-scope coverage to match portal method names against all SDK wrappers while keeping SDK-only inventory scoped ([#646](https://github.com/bitrix24/b24phpsdk/issues/646)).
+- Fixed REST v3 event-log partial-result casting, preserved typed IP addresses, completed field metadata, and added request and live annotation validation ([#653](https://github.com/bitrix24/b24phpsdk/issues/653))
+- Restricted SonetGroup integration cleanup to exact IDs created by each test and made fixtures hidden, preserving unrelated portal groups ([#331](https://github.com/bitrix24/b24phpsdk/issues/331)).
 - Corrected `BlogPostItemResult` HAS flags to boolean getters, preserving nullable flags and validating raw API Y/N values ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
 
 - Fixed legacy REST API coverage on the SDK v3 line by matching unique v1 methods against portal availability, including legacy services ([#637](https://github.com/bitrix24/b24phpsdk/issues/637)).
