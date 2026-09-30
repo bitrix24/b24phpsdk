@@ -51,6 +51,7 @@ use Bitrix24\SDK\Services\Note\NoteServiceBuilder;
 use Bitrix24\SDK\Services\Rest\RestServiceBuilder;
 use Bitrix24\SDK\Services\Sign\SignServiceBuilder;
 use Bitrix24\SDK\Services\Timeman\TimemanServiceBuilder;
+use Bitrix24\SDK\Services\Pull\PullServiceBuilder;
 use Psr\Log\LoggerInterface;
 
 class ServiceBuilder extends AbstractServiceBuilder
@@ -556,6 +557,12 @@ class ServiceBuilder extends AbstractServiceBuilder
                 $this->log
             );
         }
+
+        return $this->serviceCache[__METHOD__];
+    }
+    public function getPullScope(): PullServiceBuilder
+    {
+        $this->serviceCache[__METHOD__] ??= new PullServiceBuilder($this->core, $this->batch, $this->bulkItemsReader, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }

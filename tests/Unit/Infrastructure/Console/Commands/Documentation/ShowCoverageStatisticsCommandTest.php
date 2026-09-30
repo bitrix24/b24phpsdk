@@ -85,6 +85,40 @@ class ShowCoverageStatisticsCommandTest extends TestCase
         self::assertStringContainsString('tasks.sdkonly', $tester->getDisplay());
     }
 
+    public function testScopeTableCountsWrappersWithDifferentScopeMetadata(): void
+    {
+        $tester = $this->runCommand(['tasks.a'], ['1', '0'], $this->parserWithDifferentScopeMetadata());
+
+        self::assertSame(Command::SUCCESS, $tester->getStatusCode(), $tester->getDisplay());
+        self::assertMatchesRegularExpression('/\| task\s+\| 1\s+\| 1\s+\| 0\s+\| 1\s+\| 100\.00%\s+\|/', $tester->getDisplay());
+    }
+
+    public function testUncoveredListCountsWrappersWithDifferentScopeMetadata(): void
+    {
+        $scopeIndex = (string)(array_search('task', Scope::getAvailableScopeCodes(), true) + 1);
+        $tester = $this->runCommand(['tasks.a'], ['2', $scopeIndex, '0'], $this->parserWithDifferentScopeMetadata());
+
+        self::assertSame(Command::SUCCESS, $tester->getStatusCode(), $tester->getDisplay());
+        self::assertStringContainsString('Unsupported in SDK methods (with deprecated): 0', $tester->getDisplay());
+        self::assertStringContainsString('SDK-only methods in scope: 1', $tester->getDisplay());
+        self::assertStringContainsString('tasks.sdkonly', $tester->getDisplay());
+        self::assertStringNotContainsString('crm.unrelated', $tester->getDisplay());
+    }
+
+    private function parserWithDifferentScopeMetadata(): AttributesParser
+    {
+        $methods = [];
+        foreach ([['telephony', 'tasks.a'], ['task', 'tasks.sdkonly'], ['crm', 'crm.unrelated']] as [$scope, $name]) {
+            $methods[] = new SupportedInSdkApiMethod($scope, $name, null, null, false, null, 'method', 'test.php', 1, 2, 'Example', ApiVersion::v1, null, null, null);
+        }
+
+        $parser = $this->createStub(AttributesParser::class);
+        $parser->method('getSupportedInSdkApiMethods')->willReturnCallback(static fn (array $classes, string $base, ?Scope $scope = null): array => $scope instanceof \Bitrix24\SDK\Core\Credentials\Scope ? array_values(array_filter($methods, static fn (SupportedInSdkApiMethod $method): bool => $scope->contains($method->sdkScope))) : $methods);
+        $parser->method('getSupportedInSdkBatchMethods')->willReturn([]);
+
+        return $parser;
+    }
+
     #[RunInSeparateProcess]
     #[PreserveGlobalState(false)]
     public function testDiscoveryIncludesLegacyTaskService(): void
