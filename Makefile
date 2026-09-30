@@ -1110,3 +1110,6 @@ test-integration-pull-channel:
 .PHONY: test-integration-pull
 test-integration-pull:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_pull
+.PHONY: test-integration-scope-timeman-readonly
+test-integration-scope-timeman-readonly:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration-scope-timeman-readonly --display-warnings

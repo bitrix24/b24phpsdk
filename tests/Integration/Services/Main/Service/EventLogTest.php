@@ -24,6 +24,7 @@ use Bitrix24\SDK\Tests\Integration\Factory;
 use Carbon\CarbonImmutable;
 use Darsyn\IP\Version\Multi;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
@@ -47,7 +48,7 @@ class EventLogTest extends TestCase
                 ->moduleId()
                 ->userId(),
             (new EventLogFilter())
-                ->timestampX()->gte(new \DateTime('-1 day')),
+                ->timestampX()->gte(new CarbonImmutable('-1 day')),
             ['timestampX' => SortOrder::Descending],
             ['limit' => 5]
         );
@@ -55,11 +56,13 @@ class EventLogTest extends TestCase
         $items = $eventLogsResult->getEventLogItems();
         $this->assertIsArray($items);
 
-        if ($items !== []) {
-            $item = $items[0];
-            $this->assertGreaterThan(0, $item->id);
-            $this->assertInstanceOf(CarbonImmutable::class, $item->timestampX);
+        if ($items === []) {
+            self::markTestSkipped('No event log entries available to validate returned records.');
         }
+
+        $item = $items[0];
+        $this->assertGreaterThan(0, $item->id);
+        $this->assertInstanceOf(CarbonImmutable::class, $item->timestampX);
     }
 
     /**
@@ -99,20 +102,21 @@ class EventLogTest extends TestCase
         $items = $eventLogsResult->getEventLogItems();
         $this->assertIsArray($items);
 
-        if ($items !== []) {
-            $firstItem = $items[0];
-            $this->assertGreaterThan(0, $firstItem->id);
-            $this->assertInstanceOf(CarbonImmutable::class, $firstItem->timestampX);
-
-            // fetch next page using the last item's ID as cursor
-            $lastId = $items[count($items) - 1]->id;
-            $nextResult = $this->eventLog->tail(
-                (new EventLogSelectBuilder())->timestampX()->severity(),
-                new EventLogFilter(),
-                new EventLogTailCursor(value: $lastId, order: SortOrder::Ascending, limit: 10)
-            );
-            $this->assertIsArray($nextResult->getEventLogItems());
+        if ($items === []) {
+            self::markTestSkipped('No event log entries available to validate returned records.');
         }
+
+        $firstItem = $items[0];
+        $this->assertGreaterThan(0, $firstItem->id);
+        $this->assertInstanceOf(CarbonImmutable::class, $firstItem->timestampX);
+        // fetch next page using the last item's ID as cursor
+        $lastId = $items[count($items) - 1]->id;
+        $nextResult = $this->eventLog->tail(
+            (new EventLogSelectBuilder())->timestampX()->severity(),
+            new EventLogFilter(),
+            new EventLogTailCursor(value: $lastId, order: SortOrder::Ascending, limit: 10)
+        );
+        $this->assertIsArray($nextResult->getEventLogItems());
     }
 
     /**
@@ -155,6 +159,54 @@ class EventLogTest extends TestCase
         if ($eventLogItemResult->remoteAddr !== null) {
             $this->assertInstanceOf(Multi::class, $eventLogItemResult->remoteAddr);
         }
+    }
+
+    public function testPartialSelectionMatchesGetAndReturnsNullForUnselectedFields(): void
+    {
+        $items = $this->eventLog->list(['id', 'severity'], pagination: ['limit' => 1])->getEventLogItems();
+        if ($items === []) {
+            self::markTestSkipped('No event log entries available for partial-selection validation.');
+        }
+
+        $listed = $items[0];
+        $fetched = $this->eventLog->get($listed->id, ['id', 'severity'])->eventLogItem();
+        self::assertSame($listed->id, $fetched->id);
+        self::assertSame($listed->severity, $fetched->severity);
+        foreach ([$listed, $fetched] as $item) {
+            self::assertNull($item->timestampX);
+            self::assertNull($item->remoteAddr);
+            self::assertNull($item->userId);
+            self::assertNull($item->guestId);
+        }
+    }
+
+    #[DataProvider('cursorOrders')]
+    public function testCursorContinuationIsExclusiveAndOrdered(SortOrder $order): void
+    {
+        $items = $this->eventLog->list(['id'], order: ['id' => $order], pagination: ['limit' => 2])->getEventLogItems();
+        if (count($items) < 2) {
+            self::markTestSkipped('At least two event log entries are required to validate cursor continuation.');
+        }
+
+        $cursor = $items[0]->id;
+        $nextItems = $this->eventLog->tail(['id'], [], new EventLogTailCursor($cursor, order: $order, limit: 2))->getEventLogItems();
+        self::assertNotEmpty($nextItems);
+        self::assertLessThanOrEqual(2, count($nextItems));
+        foreach ($nextItems as $item) {
+            if ($order === SortOrder::Ascending) {
+                self::assertGreaterThan($cursor, $item->id);
+            } else {
+                self::assertLessThan($cursor, $item->id);
+            }
+
+            $cursor = $item->id;
+        }
+    }
+
+    public static function cursorOrders(): iterable
+    {
+        yield 'ascending' => [SortOrder::Ascending];
+        yield 'descending' => [SortOrder::Descending];
     }
 
     #[\Override]

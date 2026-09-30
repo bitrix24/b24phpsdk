@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\Main\Result;
 
 use Bitrix24\SDK\Attributes\OpenApiEntity;
-use Bitrix24\SDK\Core\Result\AbstractItem;
+use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
 use Bitrix24\SDK\Services\Main\Service\EventLogSelectBuilder;
 use Carbon\CarbonImmutable;
 use Darsyn\IP\Version\Multi;
@@ -38,28 +38,6 @@ use Darsyn\IP\Version\Multi;
     entityKey:     'bitrix.main.eventlogdto',
     selectBuilder: EventLogSelectBuilder::class,
 )]
-class EventLogItemResult extends AbstractItem
+class EventLogItemResult extends AbstractAnnotatedItem
 {
-    /**
-     * @param int|string $offset
-     *
-     * @return int|CarbonImmutable|mixed|null
-     */
-    #[\Override]
-    public function __get($offset)
-    {
-        return match ($offset) {
-            'id' => (int)$this->data[$offset],
-            'userId', 'guestId' => ($this->data[$offset] !== null && $this->data[$offset] !== '')
-                ? (int)$this->data[$offset]
-                : null,
-            'timestampX' => ($this->data[$offset] !== '' && $this->data[$offset] !== null)
-                ? CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset])
-                : null,
-            'remoteAddr' => ($this->data[$offset] !== '' && $this->data[$offset] !== null)
-                ? Multi::factory($this->data[$offset])
-                : null,
-            default => $this->data[$offset] ?? null,
-        };
-    }
 }

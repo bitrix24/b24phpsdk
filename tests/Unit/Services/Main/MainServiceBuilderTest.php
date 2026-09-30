@@ -32,6 +32,14 @@ class MainServiceBuilderTest extends TestCase
         $this::assertSame($this->serviceBuilder->main(), $this->serviceBuilder->main());
     }
 
+    public function testEventLogServicesAreRegisteredAndCached(): void
+    {
+        self::assertInstanceOf(\Bitrix24\SDK\Services\Main\Service\EventLog::class, $this->serviceBuilder->eventLog());
+        self::assertSame($this->serviceBuilder->eventLog(), $this->serviceBuilder->eventLog());
+        self::assertInstanceOf(\Bitrix24\SDK\Services\Main\EventLogField\Service\EventLogField::class, $this->serviceBuilder->eventLogField());
+        self::assertSame($this->serviceBuilder->eventLogField(), $this->serviceBuilder->eventLogField());
+    }
+
     #[\Override]
     protected function setUp(): void
     {

@@ -29,7 +29,7 @@ class EventLogField extends AbstractService
     /**
      * Get metadata for a single event log field by name.
      *
-     * @link https://apidocs.bitrix24.ru/api-reference/rest-v3/main/main-eventlog-field-get.html
+     * @link https://apidocs.bitrix24.com/api-reference/event-log/main-eventlog-field-get.html
      *
      * @param non-empty-string $name   Field code, e.g. 'timestampX'
      * @param string[]         $select Fields to return. Available: name, type, title, description,
@@ -41,7 +41,7 @@ class EventLogField extends AbstractService
      */
     #[ApiEndpointMetadata(
         'main.eventlog.field.get',
-        'https://apidocs.bitrix24.ru/api-reference/rest-v3/main/main-eventlog-field-get.html',
+        'https://apidocs.bitrix24.com/api-reference/event-log/main-eventlog-field-get.html',
         'Get metadata for a single event log field by name',
         ApiVersion::v3
     )]
@@ -62,7 +62,7 @@ class EventLogField extends AbstractService
     /**
      * Get list of all available event log field descriptors.
      *
-     * @link https://apidocs.bitrix24.ru/api-reference/rest-v3/main/main-eventlog-field-list.html
+     * @link https://apidocs.bitrix24.com/api-reference/event-log/main-eventlog-field-list.html
      *
      * @param string[] $select Fields to return. Available: name, type, title, description,
      *                         validationRules, requiredGroups, filterable, sortable,
@@ -73,7 +73,7 @@ class EventLogField extends AbstractService
      */
     #[ApiEndpointMetadata(
         'main.eventlog.field.list',
-        'https://apidocs.bitrix24.ru/api-reference/rest-v3/main/main-eventlog-field-list.html',
+        'https://apidocs.bitrix24.com/api-reference/event-log/main-eventlog-field-list.html',
         'Get list of all available event log field descriptors',
         ApiVersion::v3
     )]
