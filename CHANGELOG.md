@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### Added
+- Documented legacy IMBot method deprecations, existing replacements and unresolved public contracts ([#270](https://github.com/bitrix24/b24phpsdk/issues/270)).
 
 - Added batch calls support for `Services\Landing` scope,
   see [landing.* methods](https://apidocs.bitrix24.com/api-reference/landing/index.html) ([#616](https://github.com/bitrix24/b24phpsdk/issues/616)):
