@@ -131,6 +131,8 @@ Performance improvements 🚀
 
 ## Documentation
 
+- [Controlling portal domain changes](docs/portal-domain-redirects.md)
+
 - [Bitrix24 API documentation - English](https://apidocs.bitrix24.com/)
 
 ## Requirements
