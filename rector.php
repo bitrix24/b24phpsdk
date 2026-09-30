@@ -15,6 +15,8 @@ use Rector\Set\ValueObject\LevelSetList;
 
 return RectorConfig::configure()
     ->withPaths([
+        __DIR__ . '/src/Services/Log',
+        __DIR__ . '/tests/Integration/Services/Log',
         __DIR__ . '/src/Core/',
         __DIR__ . '/src/Application/',
         __DIR__ . '/src/Services/Telephony',
@@ -53,6 +55,10 @@ return RectorConfig::configure()
         __DIR__ . '/tests/Integration/Services/CRM/Quote/Service',
         __DIR__ . '/src/Services/CRM/Currency',
         __DIR__ . '/tests/Integration/Services/CRM/Currency',
+        __DIR__ . '/src/Services/CRM/Type',
+        __DIR__ . '/tests/Integration/Services/CRM/Type',
+        __DIR__ . '/src/Services/CRM/Userfieldconfig',
+        __DIR__ . '/tests/Integration/Services/CRM/Userfieldconfig',
         __DIR__ . '/src/Services/CRM/Requisites',
         __DIR__ . '/tests/Integration/Services/CRM/Requisites',
         __DIR__ . '/src/Services/CRM/Timeline',
@@ -91,6 +97,8 @@ return RectorConfig::configure()
         __DIR__ . '/src/Services/Timeman',
         __DIR__ . '/tests/Integration/Services/Timeman',
         __DIR__ . '/src/Services/Sign',
+        __DIR__ . '/src/Services/Pull',
+        __DIR__ . '/tests/Integration/Services/Pull',
         __DIR__ . '/tests/Integration/Services/Sign',
         __DIR__ . '/src/Services/IMBot',
         __DIR__ . '/tests/Integration/Services/IMBot',

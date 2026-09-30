@@ -45,6 +45,13 @@ class VoximplantServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    public function callback(): Telephony\Voximplant\Callback\Service\Callback
+    {
+        $this->serviceCache[__METHOD__] ??= new Telephony\Voximplant\Callback\Service\Callback($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function infoCall(): Telephony\Voximplant\InfoCall\Service\InfoCall
     {
         $this->serviceCache[__METHOD__] ??= new Telephony\Voximplant\InfoCall\Service\InfoCall(

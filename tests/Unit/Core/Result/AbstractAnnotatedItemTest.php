@@ -17,6 +17,9 @@ use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Darsyn\IP\Version\Multi;
+use Darsyn\IP\Exception\InvalidIpAddressException;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 #[CoversClass(AbstractAnnotatedItem::class)]
 final class AbstractAnnotatedItemTest extends TestCase
@@ -50,6 +53,37 @@ final class AbstractAnnotatedItemTest extends TestCase
 
         self::assertNull($annotatedEnumItemStub->STATUS);
     }
+    #[DataProvider('ipAddresses')]
+    public function testCastsIpAddresses(string $address): void
+    {
+        $annotatedIpItemStub = new AnnotatedIpItemStub(['address' => $address, 'text' => $address]);
+        self::assertInstanceOf(Multi::class, $annotatedIpItemStub->address);
+        self::assertSame($address, $annotatedIpItemStub->address->getProtocolAppropriateAddress());
+        self::assertSame($address, $annotatedIpItemStub->text);
+        self::assertSame($address, iterator_to_array($annotatedIpItemStub)['address']);
+    }
+
+    public static function ipAddresses(): iterable
+    {
+        yield ['192.0.2.1'];
+        yield ['2001:db8::1'];
+    }
+
+    public function testNullableAndAlreadyTypedIpAddresses(): void
+    {
+        self::assertNull((new AnnotatedIpItemStub([]))->address);
+        self::assertNull((new AnnotatedIpItemStub(['address' => null]))->address);
+        self::assertNull((new AnnotatedIpItemStub(['address' => '']))->address);
+        $address = Multi::factory('192.0.2.1');
+        self::assertSame($address, (new AnnotatedIpItemStub(['address' => $address]))->address);
+    }
+
+    public function testRejectsInvalidIpAddress(): void
+    {
+        $this->expectException(InvalidIpAddressException::class);
+        (new AnnotatedIpItemStub(['address' => 'invalid']))->address;
+    }
+
 }
 
 /**
@@ -68,4 +102,12 @@ enum StringStatusStub: string
 enum IntStatusStub: int
 {
     case Open = 1;
+}
+
+/**
+ * @property-read Multi|null $address
+ * @property-read string $text
+ */
+final class AnnotatedIpItemStub extends AbstractAnnotatedItem
+{
 }

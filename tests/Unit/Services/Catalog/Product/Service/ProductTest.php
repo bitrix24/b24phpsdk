@@ -15,9 +15,9 @@ namespace Bitrix24\SDK\Tests\Unit\Services\Catalog\Product\Service;
 
 use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Services\Catalog\Product\Result\ProductResult;
+use Bitrix24\SDK\Services\Catalog\Product\Batch as ProductEntityBatch;
 use Bitrix24\SDK\Services\Catalog\Product\Service\Batch;
 use Bitrix24\SDK\Services\Catalog\Product\Service\Product;
-use Bitrix24\SDK\Tests\Unit\Stubs\NullBatch;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullCore;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -32,7 +32,11 @@ class ProductTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->service = new Product(new Batch(new NullBatch(), new NullLogger()), new NullCore(), new NullLogger());
+        $this->service = new Product(
+            new Batch(new ProductEntityBatch(new NullCore(), new NullLogger()), new NullLogger()),
+            new NullCore(),
+            new NullLogger()
+        );
     }
 
     #[Test]

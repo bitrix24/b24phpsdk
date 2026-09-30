@@ -19,8 +19,8 @@ use Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\Telephony;
 use Symfony\Component\Filesystem\Filesystem;
-#[ApiServiceBuilderMetadata(new Scope(['telephony']))]
 
+#[ApiServiceBuilderMetadata(new Scope(['telephony']))]
 class TelephonyServiceBuilder extends AbstractServiceBuilder
 {
     public function externalCall(): Telephony\ExternalCall\Service\ExternalCall
@@ -67,6 +67,26 @@ class TelephonyServiceBuilder extends AbstractServiceBuilder
             $this->core,
             $this->batch,
             $this->bulkItemsReader,
+            $this->log
+        );
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function followUp(): Telephony\FollowUp\Service\FollowUp
+    {
+        $this->serviceCache[__METHOD__] ??= new Telephony\FollowUp\Service\FollowUp(
+            $this->core,
+            $this->log
+        );
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function followUpField(): Telephony\FollowUpField\Service\FollowUpField
+    {
+        $this->serviceCache[__METHOD__] ??= new Telephony\FollowUpField\Service\FollowUpField(
+            $this->core,
             $this->log
         );
 

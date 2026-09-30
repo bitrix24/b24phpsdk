@@ -13,50 +13,70 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Services\Main\EventLogField\Service;
 
+use Bitrix24\SDK\Core\ApiLevelErrorHandler;
+use Bitrix24\SDK\Core\Commands\Command;
+use Bitrix24\SDK\Core\Contracts\ApiVersion;
+use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
-use Bitrix24\SDK\Services\Main\EventLogField\Result\EventLogFieldResult;
-use Bitrix24\SDK\Services\Main\EventLogField\Result\EventLogFieldsResult;
+use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Services\Main\EventLogField\Service\EventLogField;
-use Bitrix24\SDK\Tests\Unit\Stubs\NullCore;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\JsonMockResponse;
 
 #[CoversClass(EventLogField::class)]
 class EventLogFieldTest extends TestCase
 {
-    private EventLogField $service;
-
-    #[\Override]
-    protected function setUp(): void
+    #[DataProvider('selections')]
+    public function testGetMapsArguments(array $select): void
     {
-        $this->service = new EventLogField(new NullCore(), new NullLogger());
+        $params = ['name' => 'timestampX'];
+        if ($select !== []) {
+            $params['select'] = $select;
+        }
+
+        $service = $this->service('main.eventlog.field.get', $params, ['item' => ['name' => 'timestampX', 'type' => 'datetime']]);
+        self::assertSame('timestampX', $service->get('timestampX', $select)->eventLogField()->name);
     }
 
-    #[Test]
-    public function testGetReturnsEventLogFieldResult(): void
+    #[DataProvider('selections')]
+    public function testListMapsArguments(array $select): void
     {
-        $this->assertInstanceOf(
-            EventLogFieldResult::class,
-            $this->service->get('timestampX')
-        );
+        $service = $this->service('main.eventlog.field.list', $select === [] ? [] : ['select' => $select], ['items' => [['name' => 'id', 'type' => 'int']]]);
+        self::assertSame('id', $service->list($select)->getEventLogFields()[0]->name);
     }
 
-    #[Test]
-    public function testListReturnsEventLogFieldsResult(): void
+    public function testListDecodesEmptyItems(): void
     {
-        $this->assertInstanceOf(
-            EventLogFieldsResult::class,
-            $this->service->list()
-        );
+        self::assertSame([], $this->service('main.eventlog.field.list', [], ['items' => []])->list()->getEventLogFields());
     }
 
-    #[Test]
-    public function testGetThrowsOnEmptyName(): void
+    public function testGetRejectsEmptyNameWithoutCallingCore(): void
     {
+        $core = $this->createMock(CoreInterface::class);
+        $core->expects(self::never())->method('call');
         $this->expectException(InvalidArgumentException::class);
-        /** @phpstan-ignore argument.type */
-        $this->service->get('');
+        /** @phpstan-ignore argument.type (intentionally exercise the runtime guard) */
+        (new EventLogField($core, new NullLogger()))->get('');
+    }
+
+    public static function selections(): iterable
+    {
+        yield 'default' => [[]];
+        yield 'selected' => [['name', 'type']];
+    }
+
+    private function service(string $method, array $parameters, array $result): EventLogField
+    {
+        $response = new Response(
+            (new MockHttpClient(new JsonMockResponse(['result' => $result])))->request('POST', 'https://example.test'),
+            new Command($method, $parameters), new ApiLevelErrorHandler(new NullLogger()), new NullLogger()
+        );
+        $core = $this->createMock(CoreInterface::class);
+        $core->expects(self::once())->method('call')->with($method, $parameters, ApiVersion::v3)->willReturn($response);
+        return new EventLogField($core, new NullLogger());
     }
 }

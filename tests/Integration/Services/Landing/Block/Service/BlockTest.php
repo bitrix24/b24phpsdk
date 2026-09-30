@@ -268,7 +268,8 @@ class BlockTest extends TestCase
             
             if ($blocks->getBlocks() !== []) {
                 $firstBlock = $blocks->getBlocks()[0];
-                $content = $this->blockService->getContent($pageId, (int)$firstBlock->id);
+                // The test page is not published, so the block content is read in edit mode
+                $content = $this->blockService->getContent($pageId, (int)$firstBlock->id, 1);
                 $this->assertNotNull($content);
             } else {
                 $this->markTestSkipped('No blocks found to test getContent method');
@@ -358,11 +359,11 @@ class BlockTest extends TestCase
                 $manifest = $this->blockService->getManifest($pageId, (int)$firstBlock->id, ['edit_mode' => 1]);
                 $manifestData = $manifest->getManifest();
                 
-                // Find first available node from manifest
+                // Find first available node from manifest, nodes are keyed by selector
                 $nodeSelector = null;
-                if ($manifestData->nodes !== null && is_array($manifestData->nodes) && $manifestData->nodes !== []) {
-                    $firstNode = reset($manifestData->nodes);
-                    $nodeSelector = $firstNode->selector ?? null;
+                $nodes = $manifestData->nodes;
+                if (is_array($nodes) && $nodes !== []) {
+                    $nodeSelector = array_key_first($nodes);
                 }
                 
                 // Use found selector or fallback to common ones

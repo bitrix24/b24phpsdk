@@ -21,12 +21,17 @@ class LogServiceBuilder extends AbstractServiceBuilder
 {
     public function blogPost(): BlogPost\Service\BlogPost
     {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new BlogPost\Service\BlogPost(
-                $this->core,
-                $this->log
-            );
-        }
+        $this->serviceCache[__METHOD__] ??= new BlogPost\Service\BlogPost(
+            $this->core,
+            $this->log
+        );
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function blogComment(): \Bitrix24\SDK\Services\Log\BlogComment\Service\BlogComment
+    {
+        $this->serviceCache[__METHOD__] ??= new \Bitrix24\SDK\Services\Log\BlogComment\Service\BlogComment($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }

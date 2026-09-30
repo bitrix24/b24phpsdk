@@ -21,6 +21,8 @@ use Bitrix24\SDK\Services\CRM\Activity\ActivityPriority;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityStatus;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityType;
 use Carbon\CarbonImmutable;
+use Bitrix24\SDK\Services\Main\Result\EventLogItemResult;
+use Darsyn\IP\Version\Multi;
 use MoneyPHP\Percentage\Percentage;
 use Typhoon\Reflection\TyphoonReflector;
 use Money\Currency;
@@ -70,6 +72,7 @@ trait CustomBitrix24Assertions
             )));
 
             match (true) {
+                $typeStr === 'mixed'           => $this->addToAssertionCount(1),
                 str_contains($typeStr, 'array')  => $this->assertIsArray($value, $message),
                 str_contains($typeStr, 'bool')   => $this->assertIsBool($value, $message),
                 str_contains($typeStr, 'int')    => $this->assertIsInt($value, $message),
@@ -142,6 +145,12 @@ trait CustomBitrix24Assertions
         asort($propsFromAnnotations);
         asort($fieldCodesFromApi);
         foreach ($fieldCodesFromApi as $fieldCode => $fieldData) {
+            if ($resultItemClassName === EventLogItemResult::class && $fieldCode === 'remoteAddr') {
+                $this->assertSame('string', $fieldData['type'], 'Event log IP addresses must be strings in REST metadata.');
+                $this->assertSame(Multi::class . '|null', $propsFromAnnotations[$fieldCode]);
+                continue;
+            }
+
             // mapping internal bitrix24 types to bitrix24 sdk types
             switch ($fieldData['type']) {
                 case 'string':
@@ -539,6 +548,19 @@ trait CustomBitrix24Assertions
                         )
                     );
                     break;
+                case 'any':
+                    $this->assertTrue(
+                        str_contains($propsFromAnnotations[$fieldCode], 'mixed'),
+                        sprintf(
+                            'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                            $resultItemClassName,
+                            $fieldCode,
+                            $propsFromAnnotations[$fieldCode],
+                            $fieldData['type'],
+                            'mixed'
+                        )
+                    );
+                    break;
                 default:
                     $this->assertFalse(
                         true,
@@ -553,6 +575,4 @@ trait CustomBitrix24Assertions
             }
         }
     }
-
-
 }

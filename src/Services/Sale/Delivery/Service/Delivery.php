@@ -30,7 +30,7 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['sale']))]
 class Delivery extends AbstractService
 {
-    public function __construct(CoreInterface $core, LoggerInterface $logger)
+    public function __construct(public Batch $batch, CoreInterface $core, LoggerInterface $logger)
     {
         parent::__construct($core, $logger);
     }
@@ -76,10 +76,7 @@ class Delivery extends AbstractService
     public function update(int $id, array $fields): UpdatedItemResult
     {
         return new UpdatedItemResult(
-            $this->core->call('sale.delivery.update', [
-                'ID' => $id,
-                'FIELDS' => $fields,
-            ])
+            $this->core->call('sale.delivery.update', array_merge(['ID' => $id], $fields))
         );
     }
 

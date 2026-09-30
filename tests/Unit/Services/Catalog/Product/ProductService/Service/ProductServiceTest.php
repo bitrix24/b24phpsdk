@@ -18,6 +18,8 @@ use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Core\Result\FieldsResult;
 use Bitrix24\SDK\Services\Catalog\Product\ProductService\Result\ProductServiceResult;
 use Bitrix24\SDK\Services\Catalog\Product\ProductService\Result\ProductServicesResult;
+use Bitrix24\SDK\Services\Catalog\Product\ProductService\Batch as ProductServiceEntityBatch;
+use Bitrix24\SDK\Services\Catalog\Product\ProductService\Service\Batch;
 use Bitrix24\SDK\Services\Catalog\Product\ProductService\Service\ProductService;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullCore;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -33,7 +35,11 @@ class ProductServiceTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->service = new ProductService(new NullCore(), new NullLogger());
+        $this->service = new ProductService(
+            new Batch(new ProductServiceEntityBatch(new NullCore(), new NullLogger()), new NullLogger()),
+            new NullCore(),
+            new NullLogger()
+        );
     }
 
     #[Test]

@@ -15,6 +15,8 @@ namespace Bitrix24\SDK\Tests\Unit\Services\Catalog\ProductPropertySection\Servic
 
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Response\Response;
+use Bitrix24\SDK\Services\Catalog\ProductPropertySection\Batch as ProductPropertySectionEntityBatch;
+use Bitrix24\SDK\Services\Catalog\ProductPropertySection\Service\Batch;
 use Bitrix24\SDK\Services\Catalog\ProductPropertySection\Service\ProductPropertySection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -33,7 +35,7 @@ class ProductPropertySectionTest extends TestCase
             ->with('catalog.productPropertySection.get', ['propertyId' => 901])
             ->willReturn($this->createStub(Response::class));
 
-        (new ProductPropertySection($core, new NullLogger()))->get(901);
+        ($this->makeService($core))->get(901);
     }
 
     #[Test]
@@ -49,7 +51,7 @@ class ProductPropertySectionTest extends TestCase
             ])
             ->willReturn($this->createStub(Response::class));
 
-        (new ProductPropertySection($core, new NullLogger()))->list(
+        ($this->makeService($core))->list(
             ['propertyId'],
             ['propertyId' => 901],
             ['propertyId' => 'ASC']
@@ -69,7 +71,7 @@ class ProductPropertySectionTest extends TestCase
             ])
             ->willReturn($this->createStub(Response::class));
 
-        (new ProductPropertySection($core, new NullLogger()))->list();
+        ($this->makeService($core))->list();
     }
 
     #[Test]
@@ -82,6 +84,15 @@ class ProductPropertySectionTest extends TestCase
             ->with('catalog.productPropertySection.set', ['propertyId' => 901, 'fields' => $fields])
             ->willReturn($this->createStub(Response::class));
 
-        (new ProductPropertySection($core, new NullLogger()))->set(901, $fields);
+        ($this->makeService($core))->set(901, $fields);
+    }
+
+    private function makeService(CoreInterface $core): ProductPropertySection
+    {
+        return new ProductPropertySection(
+            new Batch(new ProductPropertySectionEntityBatch($core, new NullLogger()), new NullLogger()),
+            $core,
+            new NullLogger()
+        );
     }
 }

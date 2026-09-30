@@ -1,8 +1,10 @@
 parameters:
   level: 5
   paths:
+    - tests/Integration/Services/Log
     - src/
     - tests/Unit/
+    - tests/Integration/Services/Pull
     - tests/Integration/Services/Telephony
     - tests/Integration/Services/User
     - tests/Integration/Services/UserConsent
@@ -28,6 +30,8 @@ parameters:
     - tests/Integration/Services/CRM/Quote/Service/QuoteProductRowsTest.php
     - tests/Integration/Services/CRM/Lead/Service/LeadUserfieldTest.php
     - tests/Integration/Services/CRM/Currency
+    - tests/Integration/Services/CRM/Type
+    - tests/Integration/Services/CRM/Userfieldconfig
     - tests/Integration/Services/CRM/Requisites
     - tests/Integration/Services/Task
     - tests/Integration/Services/Sale

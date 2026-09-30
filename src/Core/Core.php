@@ -21,11 +21,13 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\MethodConfirmWaitingException;
 use Bitrix24\SDK\Core\Exceptions\PortalUnavailableException;
+use Bitrix24\SDK\Core\Exceptions\PortalDomainChangeRejectedException;
 use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Events\AuthTokenRenewedEvent;
 use Bitrix24\SDK\Events\PortalDomainUrlChangedEvent;
+use Bitrix24\SDK\Events\PortalDomainUrlChangingEvent;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpClient\Exception\JsonException;
@@ -118,6 +120,16 @@ class Core implements CoreInterface
                                 $portalOldDomainUrlHost,
                                 $apiCallResponse->getHeaders(false)['location'][0]
                             )
+                        );
+                    }
+
+                    $portalDomainUrlChangingEvent = new PortalDomainUrlChangingEvent($portalOldDomainUrlHost, $portalNewDomainUrlHost);
+                    $this->eventDispatcher->dispatch($portalDomainUrlChangingEvent);
+                    if ($portalDomainUrlChangingEvent->isDenied()) {
+                        throw new PortalDomainChangeRejectedException(
+                            $portalOldDomainUrlHost,
+                            $portalNewDomainUrlHost,
+                            $portalDomainUrlChangingEvent->getDenialReason()
                         );
                     }
 
@@ -239,31 +251,36 @@ class Core implements CoreInterface
             }
         } catch (TransportExceptionInterface|JsonException $exception) {
             // catch symfony http client transport exception
+            $message = ExceptionContextSanitizer::redactMessage($exception->getMessage());
             $this->logger->error(
                 'call.transportException',
                 [
-                    'trace' => $exception->getTrace(),
-                    'message' => $exception->getMessage(),
+                    'class' => $exception::class,
+                    'trace' => ExceptionContextSanitizer::sanitizeTrace($exception->getTrace()),
+                    'message' => $message,
                 ]
             );
+            // The original cause may contain credentials in its message, trace args or previous chain.
             throw new TransportException(
-                sprintf('transport error - %s, type %s', $exception->getMessage(), $exception::class),
+                sprintf('transport error - %s, type %s', $message, $exception::class),
                 $exception->getCode(),
-                $exception
+                previous: null
             );
         } catch (BaseException $exception) {
             // rethrow known bitrix24 php sdk exception
             throw $exception;
         } catch (\Throwable $exception) {
+            $message = ExceptionContextSanitizer::redactMessage($exception->getMessage());
             $this->logger->error(
                 'call.unknownException',
                 [
-                    'message' => $exception->getMessage(),
+                    'message' => $message,
                     'class' => $exception::class,
-                    'trace' => $exception->getTrace(),
+                    'trace' => ExceptionContextSanitizer::sanitizeTrace($exception->getTrace()),
                 ]
             );
-            throw new BaseException(sprintf('unknown error - %s', $exception->getMessage()), $exception->getCode(), $exception);
+            // Do not reintroduce the unsafe cause through exception chaining.
+            throw new BaseException(sprintf('unknown error - %s', $message), $exception->getCode(), previous: null);
         }
 
         $this->logger->debug('call.finish');

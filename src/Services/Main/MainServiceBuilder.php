@@ -23,6 +23,10 @@ use Bitrix24\SDK\Services\Main\Service\EventManager;
 use Bitrix24\SDK\Services\Main\Service\Main;
 use Bitrix24\SDK\Services\Main\Service\Event;
 use Bitrix24\SDK\Services\Main\Service\OfflineEvent;
+use Bitrix24\SDK\Services\Main\UserHistory\Service\UserHistory;
+use Bitrix24\SDK\Services\Main\UserHistoryChange\Service\UserHistoryChange;
+use Bitrix24\SDK\Services\Main\UserHistoryField\Service\UserHistoryField;
+use Bitrix24\SDK\Services\Main\UserHistoryChangeField\Service\UserHistoryChangeField;
 
 #[ApiServiceBuilderMetadata(new Scope([]))]
 
@@ -76,6 +80,34 @@ class MainServiceBuilder extends AbstractServiceBuilder
             new Event($this->core, $this->log),
             $this->log
         );
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function userHistory(): UserHistory
+    {
+        $this->serviceCache[__METHOD__] ??= new UserHistory($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function userHistoryChange(): UserHistoryChange
+    {
+        $this->serviceCache[__METHOD__] ??= new UserHistoryChange($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function userHistoryField(): UserHistoryField
+    {
+        $this->serviceCache[__METHOD__] ??= new UserHistoryField($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function userHistoryChangeField(): UserHistoryChangeField
+    {
+        $this->serviceCache[__METHOD__] ??= new UserHistoryChangeField($this->core, $this->log);
 
         return $this->serviceCache[__METHOD__];
     }

@@ -58,6 +58,7 @@ help:
 	@echo "lint-rector-fix           - fix source code with rector"
 	@echo "lint-deptrac              - lint source code with deptrac (architecture checks)"
 	@echo ""
+	@echo "test-integration-main-user-history - run REST v3 user history tests"
 	@echo "test-unit                 - run unit tests"
 	@echo "test-file path=<path>     - run PHPUnit for a specific test file or directory"
 	@echo "test-integration-calendar-event - run Calendar Event integration tests"
@@ -72,8 +73,16 @@ help:
 	@echo "test-integration-sale-payment-item-basket - run PaymentItemBasket integration tests"
 	@echo "test-integration-sale-payment-item-shipment - run PaymentItemShipment integration tests"
 	@echo "test-integration-sale-property-relation - run PropertyRelation integration tests"
+	@echo "test-integration-sale-delivery-request - run DeliveryRequest integration tests"
+	@echo "test-integration-sale-person-type - run PersonType integration tests"
+	@echo "test-integration-sale-person-type-status - run PersonTypeStatus integration tests"
+	@echo "test-integration-sale-property - run Property integration tests"
+	@echo "test-integration-sale-property-group - run PropertyGroup integration tests"
+	@echo "test-integration-sale-property-variant - run PropertyVariant integration tests"
+	@echo "test-integration-sale-trade-platform - run TradePlatform integration tests"
 	@echo "test-integration-catalog-product-property-feature - run ProductPropertyFeature integration tests"
 	@echo "test-integration-scope-booking - run Booking integration tests"
+	@echo "test-integration-booking-batch - run Booking batch integration tests"
 	@echo "test-integration-landing-page - run Landing Page integration tests"
 	@echo "test-integration-landing-syspage - run Landing SysPage integration tests"
 	@echo "test-integration-landing-repo - run Landing Repo integration tests"
@@ -238,9 +247,17 @@ endif
 	docker compose run --rm php-cli $(PHPUNIT) $(path) --display-warnings
 
 # integration tests with granularity by api-scope
+.PHONY: test-integration-voximplant-callback
+test-integration-voximplant-callback:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_voximplant_callback
+
 .PHONY: test-integration-scope-telephony
 test-integration-scope-telephony:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_telephony
+
+.PHONY: test-integration-telephony-followup
+test-integration-telephony-followup:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_telephony_followup
 
 .PHONY: test-integration-scope-workflows
 test-integration-scope-workflows:
@@ -442,6 +459,10 @@ test-integration-scope-sonet-group:
 test-integration-scope-booking:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_booking
 
+.PHONY: test-integration-booking-batch
+test-integration-booking-batch:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_booking_batch
+
 .PHONY: test-integration-scope-disk
 test-integration-scope-disk:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_disk
@@ -453,6 +474,10 @@ test-integration-disk-service:
 .PHONY: test-integration-disk-file
 test-integration-disk-file:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_disk_file
+
+.PHONY: test-integration-disk-folder
+test-integration-disk-folder:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_disk_folder
 
 .PHONY: test-integration-disk-storage
 test-integration-disk-storage:
@@ -525,10 +550,46 @@ test-integration-sale-payment-item-shipment:
 test-integration-sale-property-relation:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_property_relation
 
+.PHONY: test-integration-sale-delivery-request
+test-integration-sale-delivery-request:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_delivery_request
+
+.PHONY: test-integration-sale-person-type
+test-integration-sale-person-type:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_person_type
+
+.PHONY: test-integration-sale-person-type-status
+test-integration-sale-person-type-status:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_person_type_status
+
+.PHONY: test-integration-sale-property
+test-integration-sale-property:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_property
+
+.PHONY: test-integration-sale-property-group
+test-integration-sale-property-group:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_property_group
+
+.PHONY: test-integration-sale-property-variant
+test-integration-sale-property-variant:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_property_variant
+
+.PHONY: test-integration-sale-trade-platform
+test-integration-sale-trade-platform:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_sale_trade_platform
+
 .PHONY: test-integration-scope-crm
 test-integration-scope-crm:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_crm
-  
+
+.PHONY: test-integration-crm-type
+test-integration-crm-type:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_type
+
+.PHONY: test-integration-crm-userfieldconfig
+test-integration-crm-userfieldconfig:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_userfieldconfig
+
 .PHONY: integration_tests_scope_crm_address
 integration_tests_scope_crm_address:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_crm_address
@@ -628,6 +689,10 @@ test-integration-task-field:
 .PHONY: test-integration-legacy-task
 test-integration-legacy-task:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_legacy_task
+
+.PHONY: test-integration-main-user-history
+test-integration-main-user-history:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_main_user_history
 
 .PHONY: test-integration-main-eventlog
 test-integration-main-eventlog:
@@ -971,6 +1036,9 @@ test-integration-catalog-document-contractor:
 .PHONY: test-integration-catalog-document-contractor-annotations
 test-integration-catalog-document-contractor-annotations:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_document_contractor_annotations
+.PHONY: test-integration-catalog-vat
+test-integration-catalog-vat:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_vat
 
 # work dev environment
 .PHONY: php-dev-server-up
@@ -1042,3 +1110,15 @@ build-examples-for-documentation:
 	--example-template=docs/api/file-templates/examples/master-example.php \
 	--openai-api-key=$(DOCUMENTATION_OPEN_AI_API_KEY) \
 	--docs-repo-folder=$(DOCUMENTATION_REPOSITORY_FOLDER)
+
+# Safe Pull integration suites: no events, notifications or watch mutations.
+.PHONY: test-integration-pull-channel
+test-integration-pull-channel:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_pull_channel
+
+.PHONY: test-integration-pull
+test-integration-pull:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_pull
+.PHONY: test-integration-scope-timeman-readonly
+test-integration-scope-timeman-readonly:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration-scope-timeman-readonly --display-warnings
