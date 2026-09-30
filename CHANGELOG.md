@@ -32,6 +32,8 @@
 
 ### Changed
 
+- Date-time filters now accept immutable dates, including `CarbonImmutable`, while preserving mutable dates and strings ([#653](https://github.com/bitrix24/b24phpsdk/issues/653))
+
 - Added `MemberRole` enum casting for SonetGroup participant roles and `Feature|string` / `FeatureOperation|string` arguments for access checks, preserving custom codes ([#331](https://github.com/bitrix24/b24phpsdk/issues/331)).
 - Updated `b24phpsdk-maintainer` skill: define contract-based reuse of core result classes, compatibility subclasses and annotated entity items ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
 - Reused `AddedItemResult` in `BlogPostAddResult`, preserving `isSuccess()` and the public return type while inheriting ID access and its interface ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
@@ -165,6 +167,7 @@
 
 ### Fixed
 
+- Fixed REST v3 event-log partial-result casting, preserved typed IP addresses, completed field metadata, and added request and live annotation validation ([#653](https://github.com/bitrix24/b24phpsdk/issues/653))
 - Restricted SonetGroup integration cleanup to exact IDs created by each test and made fixtures hidden, preserving unrelated portal groups ([#331](https://github.com/bitrix24/b24phpsdk/issues/331)).
 - Corrected `BlogPostItemResult` HAS flags to boolean getters, preserving nullable flags and validating raw API Y/N values ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
 

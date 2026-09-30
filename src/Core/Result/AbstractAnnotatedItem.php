@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Core\Result;
 
 use BackedEnum;
 use Carbon\CarbonImmutable;
+use Darsyn\IP\Version\Multi;
 use Typhoon\Reflection\TyphoonReflector;
 
 use function Typhoon\Type\stringify;
@@ -72,6 +73,18 @@ abstract class AbstractAnnotatedItem extends AbstractItem
     {
         if ($type === null) {
             return $value;
+        }
+
+        if (in_array(Multi::class, explode('|', $type), true)) {
+            if ($value instanceof Multi) {
+                return $value;
+            }
+
+            if ($value === '' && $this->isNullableType($type)) {
+                return null;
+            }
+
+            return Multi::factory($value);
         }
 
         if (str_contains($type, CarbonImmutable::class)) {

@@ -58,4 +58,16 @@ class EventLogFieldTest extends TestCase
         $this->assertNotEmpty($rawItems);
         $this->assertBitrix24AllResultItemFieldsAnnotated(array_keys($rawItems[0]), EventLogFieldItemResult::class);
     }
+    public function testSelectedGetMatchesListMetadata(): void
+    {
+        $fields = $this->service->list(['name', 'type'])->getFieldsDescription();
+        self::assertArrayHasKey('id', $fields);
+        self::assertArrayHasKey('timestampX', $fields);
+        $field = $this->service->get('timestampX', ['name', 'type'])->eventLogField();
+        self::assertSame($fields['timestampX']['name'], $field->name);
+        self::assertSame($fields['timestampX']['type'], $field->type);
+        self::assertNull($field->description);
+        self::assertNull($field->editableGroups);
+    }
+
 }

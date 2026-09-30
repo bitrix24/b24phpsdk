@@ -16,6 +16,7 @@ namespace Bitrix24\SDK\Tests\Unit\CustomAssertions;
 use Bitrix24\SDK\Core\Result\AbstractItem;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 use Generator;
+use Bitrix24\SDK\Services\Main\Result\EventLogItemResult;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -62,6 +63,40 @@ class CustomBitrix24AssertionsTest extends TestCase
         $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($allTypesStubItem, AllTypesStubItem::class);
     }
 
+    public function testEventLogIpAnnotationMatchesApiString(): void
+    {
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
+            ['remoteAddr' => ['type' => 'string']], EventLogItemResult::class
+        );
+    }
+
+    public function testEventLogIpAnnotationRejectsWrongApiType(): void
+    {
+        $this->expectException(AssertionFailedError::class);
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
+            ['remoteAddr' => ['type' => 'integer']], EventLogItemResult::class
+        );
+    }
+
+    public function testStringMetadataDoesNotAcceptArbitraryIpAnnotations(): void
+    {
+        $this->expectException(AssertionFailedError::class);
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
+            ['remoteAddr' => ['type' => 'string']], WrongStringAnnotationItem::class
+        );
+    }
+
+    public function testOrdinaryStringMetadataStillRequiresStringAnnotation(): void
+    {
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
+            ['stringField' => ['type' => 'string']], AllTypesStubItem::class
+        );
+        $this->expectException(AssertionFailedError::class);
+        $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
+            ['intField' => ['type' => 'string']], AllTypesStubItem::class
+        );
+    }
+
     public static function wrongTypesDataProvider(): Generator
     {
         yield 'string where bool expected'         => [array_merge(self::VALID_DATA, ['boolField'     => 'true'])];
@@ -85,3 +120,8 @@ class CustomBitrix24AssertionsTest extends TestCase
  * @property-read array|null  $nullableArray
  */
 class AllTypesStubItem extends AbstractItem {}
+
+/**
+ * @property-read \Darsyn\IP\Version\Multi|null $remoteAddr
+ */
+class WrongStringAnnotationItem extends AbstractItem {}
