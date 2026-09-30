@@ -13,15 +13,25 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Services\IM;
 
+use Bitrix24\SDK\Services\IM\Chat\Service\Batch as ChatBatch;
+use Bitrix24\SDK\Services\IM\Chat\Service\ChatUserBatch;
 use Bitrix24\SDK\Services\IM\Counters\Service\Counters;
+use Bitrix24\SDK\Services\IM\Department\Service\Batch as DepartmentBatch;
 use Bitrix24\SDK\Services\IM\Department\Service\Department;
+use Bitrix24\SDK\Services\IM\Dialog\Service\Batch as DialogBatch;
 use Bitrix24\SDK\Services\IM\Dialog\Service\Dialog;
+use Bitrix24\SDK\Services\IM\Disk\Service\Batch as DiskBatch;
 use Bitrix24\SDK\Services\IM\Disk\Service\Disk;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
+use Bitrix24\SDK\Services\IM\Message\Service\Batch as MessageBatch;
+use Bitrix24\SDK\Services\IM\Notify\Service\Batch as NotifyBatch;
+use Bitrix24\SDK\Services\IM\Recent\Service\Batch as RecentBatch;
 use Bitrix24\SDK\Services\IM\Recent\Service\Recent;
+use Bitrix24\SDK\Services\IM\Search\Service\Batch as SearchBatch;
 use Bitrix24\SDK\Services\IM\User\Service\User;
 use Bitrix24\SDK\Services\IM\Placements\Placements;
 use Bitrix24\SDK\Services\IM\User\Service\UserStatus;
+use Bitrix24\SDK\Services\IM\User\Service\UserStatusBatch;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBatch;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBulkItemsReader;
@@ -101,6 +111,20 @@ class IMServiceBuilderTest extends TestCase
     {
         $this->assertInstanceOf(Placements::class, $this->serviceBuilder->placements());
         $this->assertSame($this->serviceBuilder->placements(), $this->serviceBuilder->placements());
+    }
+
+    public function testServicesExposeBatch(): void
+    {
+        $this->assertInstanceOf(ChatBatch::class, $this->serviceBuilder->chat()->batch);
+        $this->assertInstanceOf(ChatUserBatch::class, $this->serviceBuilder->chatUser()->batch);
+        $this->assertInstanceOf(DepartmentBatch::class, $this->serviceBuilder->department()->batch);
+        $this->assertInstanceOf(DialogBatch::class, $this->serviceBuilder->dialog()->batch);
+        $this->assertInstanceOf(DiskBatch::class, $this->serviceBuilder->disk()->batch);
+        $this->assertInstanceOf(MessageBatch::class, $this->serviceBuilder->message()->batch);
+        $this->assertInstanceOf(NotifyBatch::class, $this->serviceBuilder->notify()->batch);
+        $this->assertInstanceOf(RecentBatch::class, $this->serviceBuilder->recent()->batch);
+        $this->assertInstanceOf(SearchBatch::class, $this->serviceBuilder->search()->batch);
+        $this->assertInstanceOf(UserStatusBatch::class, $this->serviceBuilder->userStatus()->batch);
     }
 
     #[\Override]

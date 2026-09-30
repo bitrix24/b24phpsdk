@@ -107,6 +107,7 @@ help:
 	@echo "test-integration-im-chat - run IM Chat integration tests"
 	@echo "test-integration-im-chat-user - run IM Chat User integration tests"
 	@echo "test-integration-im-notify - run IM Notify integration tests"
+	@echo "test-integration-im-batch - run IM batch integration tests"
 	@echo "test-integration-scope-humanresources - run HumanResources integration tests"
 	@echo "test-integration-scope-lists - run Lists integration tests"
 	@echo "test-integration-lists-service - run Lists Service integration tests"
@@ -318,6 +319,10 @@ test-integration-im-chat-user:
 .PHONY: test-integration-im-notify
 test-integration-im-notify:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_notify
+
+.PHONY: test-integration-im-batch
+test-integration-im-batch:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_batch
 
 .PHONY: test-integration-scope-placement
 test-integration-scope-placement:
