@@ -3,7 +3,13 @@
 ## Unreleased
 
 ### Added
+- Documented legacy IMBot method deprecations, existing replacements and unresolved public contracts ([#270](https://github.com/bitrix24/b24phpsdk/issues/270)).
 
+- Added seven documented legacy log endpoints for feed posts and comments, typed post results and private lifecycle integration coverage; undocumented `log.comment.delete` remains excluded ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
+
+- Added all nine remaining legacy `timeman` methods through `networkRange()` and `timeControl()`, with typed results, report settings, office-network checks, and safe `ACTIVE=false` serialization ([#642](https://github.com/bitrix24/b24phpsdk/issues/642))
+
+- Added SonetGroup feature access, active member lookup, invitations, membership requests, and role updates, with typed member results and successful user-ID lists ([#331](https://github.com/bitrix24/b24phpsdk/issues/331)).
 - Added batch calls support for `Services\Landing` scope,
   see [landing.* methods](https://apidocs.bitrix24.com/api-reference/landing/index.html) ([#616](https://github.com/bitrix24/b24phpsdk/issues/616)):
     - `Site\Service\Batch`: `list` (`landing.site.getList`), `add` (`landing.site.add`),
@@ -28,6 +34,11 @@
 
 - Date-time filters now accept immutable dates, including `CarbonImmutable`, while preserving mutable dates and strings ([#653](https://github.com/bitrix24/b24phpsdk/issues/653))
 
+- Added `MemberRole` enum casting for SonetGroup participant roles and `Feature|string` / `FeatureOperation|string` arguments for access checks, preserving custom codes ([#331](https://github.com/bitrix24/b24phpsdk/issues/331)).
+- Updated `b24phpsdk-maintainer` skill: define contract-based reuse of core result classes, compatibility subclasses and annotated entity items ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
+- Reused `AddedItemResult` in `BlogPostAddResult`, preserving `isSuccess()` and the public return type while inheriting ID access and its interface ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
+
+- Updated `b24phpsdk-maintainer` skill: require fresh REST API v3 and v1 coverage statistics at the bottom of each release changelog entry before the release PR is ready ([#650](https://github.com/bitrix24/b24phpsdk/issues/650))
 - Landing services `Site`, `Page`, `Block`, `Demos`, `Repo`, `RepoWidget`, `Role`, `SysPage`, `Template`
   now receive their batch service as the first constructor argument and expose it via the public `$batch`
   property; code that instantiates these services directly must pass the batch service
@@ -157,6 +168,8 @@
 ### Fixed
 
 - Fixed REST v3 event-log partial-result casting, preserved typed IP addresses, completed field metadata, and added request and live annotation validation ([#653](https://github.com/bitrix24/b24phpsdk/issues/653))
+- Restricted SonetGroup integration cleanup to exact IDs created by each test and made fixtures hidden, preserving unrelated portal groups ([#331](https://github.com/bitrix24/b24phpsdk/issues/331)).
+- Corrected `BlogPostItemResult` HAS flags to boolean getters, preserving nullable flags and validating raw API Y/N values ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
 
 - Fixed legacy REST API coverage on the SDK v3 line by matching unique v1 methods against portal availability, including legacy services ([#637](https://github.com/bitrix24/b24phpsdk/issues/637)).
 - Redacted OAuth credential query parameters from Core transport/unknown exception logs and SDK exception messages,

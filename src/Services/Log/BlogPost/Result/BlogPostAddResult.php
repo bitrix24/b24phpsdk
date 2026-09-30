@@ -11,9 +11,9 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Log\BlogPost\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractResult;
+use Bitrix24\SDK\Core\Result\AddedItemResult;
 
-class BlogPostAddResult extends AbstractResult
+class BlogPostAddResult extends AddedItemResult
 {
     /**
      * Check if blog post was added successfully

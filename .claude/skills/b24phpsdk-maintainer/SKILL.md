@@ -4,6 +4,7 @@ description: |
   Use this skill whenever working with GitHub issues in the bitrix24/b24phpsdk repository:
   creating new issues, reading existing ones, planning implementation from an issue,
   referencing an issue in commits, branches, or CHANGELOG,
+  preparing or updating a release pull request (MR) or release changelog,
   or discovering unsupported Bitrix24 REST API methods and filing tracking issues.
   IMPORTANT: this skill MUST be invoked before doing any issue-related work.
 user-invocable: true
@@ -51,9 +52,39 @@ Generator usage rules:
 - After generating a `*ItemResult.php`, keep the mandatory live annotation/type-casting
   integration test described below.
 
+### Choosing result classes: reuse the response contract
+
+**Rule**: choose a result class by the verified response envelope and semantics, not by
+an endpoint's name or scope. Before introducing a service-specific result, inspect
+`src/Core/Result/` and document why an existing result does or does not fit.
+
+| Situation | Choice |
+|---|---|
+| The endpoint returns a single integer ID (including a numeric string), normalized by the core to `getResult()[0]`, and callers only need `getId()` | Return `Core\Result\AddedItemResult` directly; do not create an empty service-specific class or copy `getId()` |
+| That same ID contract has an existing public result class/accessor to preserve, or needs additional meaningful behavior | Extend `AddedItemResult`, inherit `getId()` and `AddedItemIdResultInterface`, and add only the required behavior |
+| The response has a different envelope or semantics (for example `result.item`, a string identifier, multiple IDs, or nested status/error fields) | Use an existing matching result if available; otherwise create a dedicated response wrapper, normally extending `AbstractResult`, with appropriate accessors |
+| The result represents one entity record with named fields | Use a service-specific `*ItemResult` extending `AbstractAnnotatedItem`, returned by the response wrapper; follow generator and annotation-test rules below |
+
+- Do not infer a boolean result from an `update`/`delete` method name or an ID result
+  from `add`. Verify the actual API contract and the core's normalization first.
+- A subclass must preserve the parent's result contract; do not inherit `AddedItemResult`
+  merely to reuse a few lines when `getId(): int` is not valid for that response.
+- Preserve released return types and public accessors when refactoring. For example,
+  `BlogPostAddResult extends AddedItemResult` keeps its existing `isSuccess()` while
+  inheriting `getId()`; changing the service to return the bare core class would remove
+  that public accessor. Preserve existing accessor semantics unless a separate change
+  explicitly addresses them.
+- Apply the same contract-first reuse decision to other core operation results such as
+  `UpdatedItemResult` and `DeletedItemResult`; do not duplicate their compatible logic.
+- Response wrappers and lists of scalar IDs are not annotated entity items. The entity
+  item inheritance rule does not apply to core operation wrappers just because their
+  names contain `ItemResult`.
+- Verify ID normalization, preserved public methods/interfaces, and meaningful custom
+  behavior with regression tests. Do not add a class solely to mirror an endpoint name.
+
 ### Result-item base class
 
-**Rule**: every `*ItemResult.php` class MUST extend
+**Rule**: every service entity `*ItemResult.php` class with `@property-read` fields MUST extend
 `Bitrix24\SDK\Core\Result\AbstractAnnotatedItem` — never the plain `AbstractItem`.
 
 `AbstractAnnotatedItem` reads the `@property-read` PHPDoc annotations and automatically casts each
@@ -855,6 +886,72 @@ Report the status to the user:
 
 ---
 
+## Release PR/MR: mandatory API coverage in CHANGELOG
+
+When preparing or updating a **release** pull request (MR), append `### API coverage`
+as the **last subsection of the target release entry** in `CHANGELOG.md`, immediately
+before the next release heading (or end of file). This requirement applies to both SDK
+release lines: always report **REST API v3 (new)** and **REST API v1 (legacy)** separately.
+Ordinary feature PRs do not need a release coverage block.
+
+### Measure the release candidate
+
+Verify that all three targets below exist in the candidate's `Makefile`. From that same
+checkout, after the release changes are finalized, run these commands in order:
+
+```bash
+make -s oa-schema-build
+make -s sdk-coverage-v3-show
+printf '0\n' | make -s sdk-coverage-v1-show
+```
+
+`0` exits the v1 command's menu after printing the overall statistics. `-s` suppresses
+Make's command echo, which can contain the webhook URL. Keep credentials and unredacted
+logs out of the changelog, issue, and PR.
+
+Use the **overall summary** fields, not per-scope sums, batch-wrapper inventory, or
+SDK-only methods (which are outside the coverage denominator):
+
+| API | Total methods | Covered methods | Uncovered methods | Coverage |
+|---|---|---|---|---|
+| v3 | `OpenAPI methods count` | `Covered SDK v3 methods count` | `Uncovered OpenAPI methods count` | `Coverage percentage` |
+| v1 | `Portal methods` | `Covered by SDK` | `Not covered by SDK` | `Coverage` |
+
+Both commands must succeed and produce complete summaries. Check that total > 0,
+0 <= covered <= total, covered + uncovered = total, and the percentage matches
+covered / total * 100 rounded to two decimal places. A missing target, failed schema
+refresh, unavailable portal, missing summary, or inconsistent counts **blocks release
+readiness**: report the cause and rerun after resolving it. Do not omit an API row,
+invent zero coverage, or reuse numbers from another checkout or an earlier release.
+
+### Write and verify the release entry
+
+Replace every placeholder in this format with the measured values; use the measurement
+date in UTC and keep the distinct coverage baselines visible:
+
+```markdown
+### API coverage
+
+Measured on <YYYY-MM-DD> (UTC) from the release candidate.
+
+| REST API | Covered methods | Total methods | Uncovered methods | Coverage | Basis |
+|---|---:|---:|---:|---:|---|
+| v3 (new) | <covered> | <total> | <uncovered> | <percent>% | OpenAPI snapshot: `docs/open-api/openapi.json` |
+| v1 (legacy) | <covered> | <total> | <uncovered> | <percent>% | Methods available on the configured portal |
+
+These figures describe SDK method coverage against each baseline, not test coverage
+or proof that every method was exercised against a live portal. The v1 baseline is
+portal-specific, not the entire Bitrix24 REST API catalog.
+```
+
+On reruns, update the existing subsection for this release instead of appending another
+one; preserve all historical release entries. Before every release PR push, refresh the
+measurements and verify that exactly one final coverage subsection contains both API
+rows, the date, valid counts, percentages, and baselines. Keep the PR draft or report it
+as blocked until this check passes; green CI alone does not satisfy this requirement.
+
+---
+
 ## Creating a Pull Request after a green quality gate
 
 Run this step **only after both phases of the quality gate are fully green and CHANGELOG is updated**.
@@ -875,6 +972,7 @@ Run this step **only after both phases of the quality gate are fully green and C
 **Required before starting:**
 1. Invoke `superpowers:verification-before-completion` — run all quality gate commands again, capture actual output, confirm every command passes. Do not create the PR based on remembered results.
 2. Read the PR template from disk: `cat .github/PULL_REQUEST_TEMPLATE.md` — the PR body MUST follow this template. Do not use a memorised or hardcoded structure.
+3. For a release PR/MR, complete **Release PR/MR: mandatory API coverage in CHANGELOG** before pushing or marking the PR ready.
 
 ### Step 1 — Push the branch
 

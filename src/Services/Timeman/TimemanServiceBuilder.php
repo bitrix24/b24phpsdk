@@ -19,6 +19,8 @@ use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\Timeman\Record\Service\Record;
 use Bitrix24\SDK\Services\Timeman\RecordField\Service\RecordField;
 use Bitrix24\SDK\Services\Timeman\Service\Timeman;
+use Bitrix24\SDK\Services\Timeman\NetworkRange\Service\NetworkRange;
+use Bitrix24\SDK\Services\Timeman\TimeControl\Service\TimeControl;
 
 #[ApiServiceBuilderMetadata(new Scope(['timeman']))]
 class TimemanServiceBuilder extends AbstractServiceBuilder
@@ -52,5 +54,16 @@ class TimemanServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
-}
+    public function networkRange(): NetworkRange
+    {
+        $this->serviceCache[__METHOD__] ??= new NetworkRange($this->core, $this->log);
+        return $this->serviceCache[__METHOD__];
+    }
 
+    public function timeControl(): TimeControl
+    {
+        $this->serviceCache[__METHOD__] ??= new TimeControl($this->core, $this->log);
+        return $this->serviceCache[__METHOD__];
+    }
+
+}

@@ -15,11 +15,14 @@ namespace Bitrix24\SDK\Tests\Integration\Services\SonetGroup\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Services\SonetGroup\Common\Feature;
+use Bitrix24\SDK\Services\SonetGroup\Common\FeatureOperation;
+use Bitrix24\SDK\Services\SonetGroup\Common\MemberRole;
 use Bitrix24\SDK\Services\SonetGroup\Result\SonetGroupGetItemResult;
 use Bitrix24\SDK\Services\SonetGroup\Result\SonetGroupListItemResult;
 use Bitrix24\SDK\Services\SonetGroup\Service\SonetGroup;
 use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Services\SonetGroup\SonetGroupFixture;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
@@ -46,7 +49,7 @@ class SonetGroupTest extends TestCase
 {
     use CustomBitrix24Assertions;
 
-    private SonetGroup $sonetGroupService;
+    use SonetGroupFixture;
 
     /**
      * Helper method to get current user ID
@@ -56,22 +59,7 @@ class SonetGroupTest extends TestCase
      */
     private function getCurrentUserId(): int
     {
-        $userService = Factory::getServiceBuilder()->getUserScope()->user();
-        $userResult = $userService->current();
-        
-        return $userResult->user()->ID;
-    }
-
-    /**
-     * Helper method to delete a test group
-     */
-    private function deleteTestGroup(int $id): void
-    {
-        try {
-            $this->sonetGroupService->delete($id);
-        } catch (\Exception) {
-            // Ignore if group doesn't exist
-        }
+        return (int)$this->core->call('user.current')->getResponseData()->getResult()['ID'];
     }
 
     /**
@@ -84,10 +72,10 @@ class SonetGroupTest extends TestCase
     {
         $groupName = 'Test SonetGroup ' . time();
         
-        $addedItemResult = $this->sonetGroupService->create([
+        $addedItemResult = $this->createTestGroup([
             'NAME' => $groupName,
             'DESCRIPTION' => 'Test social network group description',
-            'VISIBLE' => 'Y',
+            'VISIBLE' => 'N',
             'OPENED' => 'N',
             'INITIATE_PERMS' => 'K',
             'SPAM_PERMS' => 'K'
@@ -109,10 +97,10 @@ class SonetGroupTest extends TestCase
     {
         $projectName = 'Test Project ' . time();
         
-        $addedItemResult = $this->sonetGroupService->create([
+        $addedItemResult = $this->createTestGroup([
             'NAME' => $projectName,
             'DESCRIPTION' => 'Test project description',
-            'VISIBLE' => 'Y',
+            'VISIBLE' => 'N',
             'OPENED' => 'N',
             'INITIATE_PERMS' => 'K',
             'SPAM_PERMS' => 'K',
@@ -137,17 +125,16 @@ class SonetGroupTest extends TestCase
     {
         $groupName = 'Test Group to Delete ' . time();
         
-        $addedItemResult = $this->sonetGroupService->create([
+        $addedItemResult = $this->createTestGroup([
             'NAME' => $groupName,
             'DESCRIPTION' => 'Test group for deletion',
-            'VISIBLE' => 'Y',
+            'VISIBLE' => 'N',
             'OPENED' => 'N',
             'INITIATE_PERMS' => 'K',
             'SPAM_PERMS' => 'K'
         ]);
 
-        $deletedItemResult = $this->sonetGroupService->delete($addedItemResult->getId());
-        self::assertTrue($deletedItemResult->isSuccess());
+        $this->deleteTestGroup($addedItemResult->getId());
     }
 
     /**
@@ -161,10 +148,10 @@ class SonetGroupTest extends TestCase
         // Create a test group first
         $groupName = 'Test Group for Get ' . time();
         
-        $addedItemResult = $this->sonetGroupService->create([
+        $addedItemResult = $this->createTestGroup([
             'NAME' => $groupName,
             'DESCRIPTION' => 'Test group for getting detailed info',
-            'VISIBLE' => 'Y',
+            'VISIBLE' => 'N',
             'OPENED' => 'N',
             'INITIATE_PERMS' => 'K',
             'SPAM_PERMS' => 'K'
@@ -200,10 +187,10 @@ class SonetGroupTest extends TestCase
         // Create a test group first
         $groupName = 'Test Group for List ' . time();
         
-        $addedItemResult = $this->sonetGroupService->create([
+        $addedItemResult = $this->createTestGroup([
             'NAME' => $groupName,
             'DESCRIPTION' => 'Test group for listing',
-            'VISIBLE' => 'Y',
+            'VISIBLE' => 'N',
             'OPENED' => 'N',
             'INITIATE_PERMS' => 'K',
             'SPAM_PERMS' => 'K'
@@ -241,10 +228,10 @@ class SonetGroupTest extends TestCase
         // Create a test group first
         $groupName = 'Test Group for GetGroups ' . time();
         
-        $addedItemResult = $this->sonetGroupService->create([
+        $addedItemResult = $this->createTestGroup([
             'NAME' => $groupName,
             'DESCRIPTION' => 'Test group for getting groups',
-            'VISIBLE' => 'Y',
+            'VISIBLE' => 'N',
             'OPENED' => 'N',
             'INITIATE_PERMS' => 'K',
             'SPAM_PERMS' => 'K'
@@ -279,10 +266,10 @@ class SonetGroupTest extends TestCase
     public function testUpdate(): void
     {
         // Create a group first
-        $addedItemResult = $this->sonetGroupService->create([
+        $addedItemResult = $this->createTestGroup([
             'NAME' => 'Group for Update Test ' . time(),
             'DESCRIPTION' => 'Original description',
-            'VISIBLE' => 'Y',
+            'VISIBLE' => 'N',
             'OPENED' => 'N',
             'INITIATE_PERMS' => 'K',
             'SPAM_PERMS' => 'K'
@@ -319,10 +306,10 @@ class SonetGroupTest extends TestCase
         // Create a test group first
         $groupName = 'Test Group for User Groups ' . time();
         
-        $addedItemResult = $this->sonetGroupService->create([
+        $addedItemResult = $this->createTestGroup([
             'NAME' => $groupName,
             'DESCRIPTION' => 'Test group for user groups',
-            'VISIBLE' => 'Y',
+            'VISIBLE' => 'N',
             'OPENED' => 'N',
             'INITIATE_PERMS' => 'K',
             'SPAM_PERMS' => 'K'
@@ -365,10 +352,10 @@ class SonetGroupTest extends TestCase
         // Create a test group first
         $groupName = 'Test Group for Add User ' . time();
         
-        $addedItemResult = $this->sonetGroupService->create([
+        $addedItemResult = $this->createTestGroup([
             'NAME' => $groupName,
             'DESCRIPTION' => 'Test group for adding users',
-            'VISIBLE' => 'Y',
+            'VISIBLE' => 'N',
             'OPENED' => 'N',
             'INITIATE_PERMS' => 'K',
             'SPAM_PERMS' => 'K'
@@ -399,10 +386,10 @@ class SonetGroupTest extends TestCase
         // Create a test group first
         $groupName = 'Test Group for Set Owner ' . time();
         
-        $addedItemResult = $this->sonetGroupService->create([
+        $addedItemResult = $this->createTestGroup([
             'NAME' => $groupName,
             'DESCRIPTION' => 'Test group for setting owner',
-            'VISIBLE' => 'Y',
+            'VISIBLE' => 'N',
             'OPENED' => 'N',
             'INITIATE_PERMS' => 'K',
             'SPAM_PERMS' => 'K'
@@ -419,44 +406,13 @@ class SonetGroupTest extends TestCase
         $this->deleteTestGroup($groupId);
     }
 
-    #[\Override]
-    protected function setUp(): void
+    public function testActiveMembersAndFeatureAccess(): void
     {
-        $this->sonetGroupService = Factory::getServiceBuilder()->getSonetGroupScope()->sonetGroup();
-    }
-
-    #[\Override]
-    protected function tearDown(): void
-    {
-        // Additional cleanup: remove any remaining test groups that might have been left
-        $this->cleanupTestGroups();
-    }
-
-    /**
-     * Clean up any test groups that might be left over
-     */
-    private function cleanupTestGroups(): void
-    {
-        try {
-            $groupsResult = $this->sonetGroupService->getGroups(
-                [],
-                ['%NAME' => 'Test'],
-                false
-            );
-            
-            foreach ($groupsResult->getGroups() as $sonetGroupGetItemResult) {
-                if (str_contains($sonetGroupGetItemResult->NAME, 'Test')) {
-                    try {
-                        $this->sonetGroupService->delete(intval($sonetGroupGetItemResult->ID));
-                    } catch (BaseException $e) {
-                        // Ignore individual deletion errors
-                        error_log(sprintf('Warning: Failed to cleanup test group %s: ', $sonetGroupGetItemResult->NAME) . $e->getMessage());
-                    }
-                }
-            }
-        } catch (BaseException $baseException) {
-            // Ignore general cleanup errors
-            error_log("Warning: Failed to list groups during cleanup: " . $baseException->getMessage());
-        }
+        $groupId = $this->createTestGroup()->getId();
+        $members = $this->sonetGroupService->getUsers($groupId)->getUsers();
+        self::assertCount(1, $members);
+        self::assertSame($this->getCurrentUserId(), $members[0]->USER_ID);
+        self::assertSame(MemberRole::owner, $members[0]->ROLE);
+        self::assertTrue($this->sonetGroupService->featureAccess($groupId, Feature::tasks, FeatureOperation::view)->isSuccess());
     }
 }
