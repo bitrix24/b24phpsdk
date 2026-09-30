@@ -70,6 +70,7 @@ trait CustomBitrix24Assertions
             )));
 
             match (true) {
+                $typeStr === 'mixed'           => $this->addToAssertionCount(1),
                 str_contains($typeStr, 'array')  => $this->assertIsArray($value, $message),
                 str_contains($typeStr, 'bool')   => $this->assertIsBool($value, $message),
                 str_contains($typeStr, 'int')    => $this->assertIsInt($value, $message),

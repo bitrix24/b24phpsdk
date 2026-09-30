@@ -34,6 +34,7 @@ class CustomBitrix24AssertionsTest extends TestCase
         'arrayField'    => ['a', 'b'],
         'nullableString' => null,
         'nullableArray'  => null,
+        'mixedField' => null,
     ];
 
     #[Test]
@@ -62,6 +63,18 @@ class CustomBitrix24AssertionsTest extends TestCase
         $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($allTypesStubItem, AllTypesStubItem::class);
     }
 
+    #[DataProvider('mixedValues')]
+    public function testMixedAnnotationAcceptsAnyValue(mixed $value): void
+    {
+        $allTypesStubItem = new AllTypesStubItem(array_merge(self::VALID_DATA, ['mixedField' => $value]));
+        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($allTypesStubItem, AllTypesStubItem::class);
+    }
+
+    public static function mixedValues(): array
+    {
+        return [[null], [false], [42], [1.5], ['raw'], [['before' => null, 'after' => ['nested' => true]]]];
+    }
+
     public static function wrongTypesDataProvider(): Generator
     {
         yield 'string where bool expected'         => [array_merge(self::VALID_DATA, ['boolField'     => 'true'])];
@@ -82,6 +95,9 @@ class CustomBitrix24AssertionsTest extends TestCase
  * @property-read int         $intField
  * @property-read array       $arrayField
  * @property-read string|null $nullableString
+ * @property-read mixed       $mixedField
  * @property-read array|null  $nullableArray
  */
-class AllTypesStubItem extends AbstractItem {}
+class AllTypesStubItem extends AbstractItem
+{
+}

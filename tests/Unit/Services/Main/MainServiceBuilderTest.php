@@ -32,6 +32,14 @@ class MainServiceBuilderTest extends TestCase
         $this::assertSame($this->serviceBuilder->main(), $this->serviceBuilder->main());
     }
 
+    public function testUserHistoryServicesAreCached(): void
+    {
+        foreach (['userHistory', 'userHistoryChange', 'userHistoryField', 'userHistoryChangeField'] as $accessor) {
+            self::assertTrue(method_exists($this->serviceBuilder, $accessor));
+            self::assertSame($this->serviceBuilder->{$accessor}(), $this->serviceBuilder->{$accessor}());
+        }
+    }
+
     #[\Override]
     protected function setUp(): void
     {

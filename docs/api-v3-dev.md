@@ -1,5 +1,7 @@
 # Technical documentation for v3 API
 
+- [User history, field changes and incremental reads](main-user-history.md)
+
 ## Development workflow
 
 ## Related entities for the new entity
