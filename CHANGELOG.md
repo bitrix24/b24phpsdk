@@ -3,6 +3,8 @@
 ## Unreleased
 
 ### Added
+- Added REST v3 user history, field-change and metadata services with cursor-based incremental reads ([#656](https://github.com/bitrix24/b24phpsdk/issues/656))
+
 - Documented legacy IMBot method deprecations, existing replacements and unresolved public contracts ([#270](https://github.com/bitrix24/b24phpsdk/issues/270)).
 
 - Added seven documented legacy log endpoints for feed posts and comments, typed post results and private lifecycle integration coverage; undocumented `log.comment.delete` remains excluded ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
