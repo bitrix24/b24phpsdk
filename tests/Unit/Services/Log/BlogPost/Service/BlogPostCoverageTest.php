@@ -125,4 +125,23 @@ class BlogPostCoverageTest extends TestCase
         self::assertSame(7, $result->getId());
         self::assertTrue($result->isSuccess());
     }
+    #[\PHPUnit\Framework\Attributes\DataProvider('hasFlagValues')]
+    public function testHasFlagsCastToBoolean(string $field, mixed $raw, ?bool $expected): void
+    {
+        $blogPostItemResult = new \Bitrix24\SDK\Services\Log\BlogPost\Result\BlogPostItemResult([$field => $raw]);
+        self::assertSame($expected, $blogPostItemResult->$field);
+    }
+
+    public static function hasFlagValues(): iterable
+    {
+        foreach (['HAS_SOCNET_ALL', 'HAS_TAGS', 'HAS_IMAGES', 'HAS_PROPS', 'HAS_COMMENT_IMAGES'] as $field) {
+            foreach ([['Y', true], ['N', false], [true, true], [false, false], [1, true], [0, false], ['1', true], ['0', false]] as $index => [$raw, $expected]) {
+                yield $field . '-' . $index => [$field, $raw, $expected];
+            }
+        }
+
+        yield 'nullable props' => ['HAS_PROPS', null, null];
+        yield 'nullable comment images' => ['HAS_COMMENT_IMAGES', null, null];
+    }
+
 }

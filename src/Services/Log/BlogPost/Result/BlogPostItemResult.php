@@ -23,13 +23,13 @@ use Carbon\CarbonImmutable;
  * @property-read string $ENABLE_COMMENTS
  * @property-read string $MICRO
  * @property-read string $DETAIL_TEXT
- * @property-read string $HAS_SOCNET_ALL
- * @property-read string $HAS_TAGS
- * @property-read string $HAS_IMAGES
- * @property-read string|null $HAS_PROPS
+ * @property-read bool $HAS_SOCNET_ALL
+ * @property-read bool $HAS_TAGS
+ * @property-read bool $HAS_IMAGES
+ * @property-read bool|null $HAS_PROPS
  * @property-read string|null $CODE
  * @property-read string|null $CATEGORY_ID
- * @property-read string|null $HAS_COMMENT_IMAGES
+ * @property-read bool|null $HAS_COMMENT_IMAGES
  * @property-read CarbonImmutable|null $DATE_PUBLISH
  * @property-read array|null $FILES
  * @property-read array|null $UF_BLOG_POST_DOC
