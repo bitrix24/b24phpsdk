@@ -2,19 +2,19 @@
 
 ## Unreleased
 
+## 3.7.0
+
 ### Added
 - Added `PortalDomainUrlChangingEvent` with irreversible `deny()` and `PortalDomainChangeRejectedException` to veto portal redirects before credentials change or tokens are sent to the destination ([#632](https://github.com/bitrix24/b24phpsdk/issues/632)).
 - Added REST v3 user history, field-change and metadata services with cursor-based incremental reads ([#656](https://github.com/bitrix24/b24phpsdk/issues/656))
-
 - Documented legacy IMBot method deprecations, existing replacements and unresolved public contracts ([#270](https://github.com/bitrix24/b24phpsdk/issues/270)).
-
-- Added seven documented legacy log endpoints for feed posts and comments, typed post results and private lifecycle integration coverage; undocumented `log.comment.delete` remains excluded ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
-
+- Added Disk file/folder search and folder sharing to users; undocumented allowed-operation endpoints remain unresolved ([#659](https://github.com/bitrix24/b24phpsdk/issues/659)).
+- Added REST v3 user history, field-change and metadata services with cursor-based incremental reads ([#656](https://github.com/bitrix24/b24phpsdk/issues/656)).
+- Added seven documented legacy log endpoints for feed posts and comments, typed post results and private lifecycle integration coverage; undocumented `log.comment.delete` remains excluded ([#643](https://github.com/bitrix24/b24phpsdk/issues/643)).
 - Added legacy Pull channel/configuration services with typed public channel results and `getPullScope()` facade ([#647](https://github.com/bitrix24/b24phpsdk/issues/647)).
 - Added legacy Pull application configuration, event, push and watch extension wrappers with preserved recipient and payload types ([#645](https://github.com/bitrix24/b24phpsdk/issues/645)).
 - Added `voximplant.callback.start` through the cached Voximplant callback service ([#646](https://github.com/bitrix24/b24phpsdk/issues/646)).
-- Added all nine remaining legacy `timeman` methods through `networkRange()` and `timeControl()`, with typed results, report settings, office-network checks, and safe `ACTIVE=false` serialization ([#642](https://github.com/bitrix24/b24phpsdk/issues/642))
-
+- Added all nine remaining legacy `timeman` methods through `networkRange()` and `timeControl()`, with typed results, report settings, office-network checks, and safe `ACTIVE=false` serialization ([#642](https://github.com/bitrix24/b24phpsdk/issues/642)).
 - Added SonetGroup feature access, active member lookup, invitations, membership requests, and role updates, with typed member results and successful user-ID lists ([#331](https://github.com/bitrix24/b24phpsdk/issues/331)).
 - Added batch calls support for `Services\Landing` scope,
   see [landing.* methods](https://apidocs.bitrix24.com/api-reference/landing/index.html) ([#616](https://github.com/bitrix24/b24phpsdk/issues/616)):
@@ -34,21 +34,7 @@
     - `Template\Service\Batch`: `list` (`landing.template.getlist`)
 - Added `Services\Landing\Batch` extending `Core\Batch`: offset pagination via `params.limit` / `params.offset`
   for landing `*.getList` methods, `lid` key for `landing.landing.update|delete`, `id` key for
-  `landing.site.update|delete`, `code` key for `*.unregister` methods ([#616](https://github.com/bitrix24/b24phpsdk/issues/616))
-
-### Changed
-
-- Date-time filters now accept immutable dates, including `CarbonImmutable`, while preserving mutable dates and strings ([#653](https://github.com/bitrix24/b24phpsdk/issues/653))
-
-- Added `MemberRole` enum casting for SonetGroup participant roles and `Feature|string` / `FeatureOperation|string` arguments for access checks, preserving custom codes ([#331](https://github.com/bitrix24/b24phpsdk/issues/331)).
-- Updated `b24phpsdk-maintainer` skill: define contract-based reuse of core result classes, compatibility subclasses and annotated entity items ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
-- Reused `AddedItemResult` in `BlogPostAddResult`, preserving `isSuccess()` and the public return type while inheriting ID access and its interface ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
-
-- Updated `b24phpsdk-maintainer` skill: require fresh REST API v3 and v1 coverage statistics at the bottom of each release changelog entry before the release PR is ready ([#650](https://github.com/bitrix24/b24phpsdk/issues/650))
-- Landing services `Site`, `Page`, `Block`, `Demos`, `Repo`, `RepoWidget`, `Role`, `SysPage`, `Template`
-  now receive their batch service as the first constructor argument and expose it via the public `$batch`
-  property; code that instantiates these services directly must pass the batch service
-  ([#616](https://github.com/bitrix24/b24phpsdk/issues/616))
+  `landing.site.update|delete`, `code` key for `*.unregister` methods ([#616](https://github.com/bitrix24/b24phpsdk/issues/616)).
 - Added batch calls support for services of the `Services\Sale` scope, available through the `batch` property
   of each service ([#614](https://github.com/bitrix24/b24phpsdk/issues/614)):
     - `BasketProperty` - `add`, `update`, `list`, `delete`,
@@ -97,7 +83,6 @@
       see [sale.statusLang.* methods](https://apidocs.bitrix24.com/api-reference/sale/status-lang/index.html)
     - `TradePlatform` - `list`,
       see [sale.tradePlatform.* methods](https://apidocs.bitrix24.com/api-reference/sale/trade-platform/index.html)
-
 - Added batch calls support for `Services\Catalog` scope
   ([#611](https://github.com/bitrix24/b24phpsdk/issues/611)):
     - `Catalog\Catalog\Service\Catalog::batch->list` gets the list of commercial catalogs,
@@ -118,7 +103,6 @@
       see [catalog.productPropertyEnum.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product-property-enum/index.html)
     - `Catalog\ProductPropertySection\Service\ProductPropertySection::batch` supports `set` and `list`,
       see [catalog.productPropertySection.* methods](https://apidocs.bitrix24.com/api-reference/catalog/product-property-section/index.html)
-
 - Added batch calls support for `Services\Booking` scope,
   see [booking.* methods](https://apidocs.bitrix24.com/api-reference/booking/index.html) ([#608](https://github.com/bitrix24/b24phpsdk/issues/608)):
     - `Booking::batch->add` / `list` / `update` / `delete` (`booking.v1.booking.*`)
@@ -134,8 +118,7 @@
 - Added `Services\Booking\Batch` — a scope level batch implementation that handles the
   booking specific REST conventions: the lowercase `id` parameter, list payloads wrapped in a
   single entity key and offset based paging for list methods that always answer with `total: 0`
-  and do not support the `>id` / `<id` filter operators ([#608](https://github.com/bitrix24/b24phpsdk/issues/608))
-
+  and do not support the `>id` / `<id` filter operators ([#608](https://github.com/bitrix24/b24phpsdk/issues/608)).
 - Added service `Services\CRM\Userfieldconfig` with support methods,
   see [userfieldconfig.* methods](https://apidocs.bitrix24.com/api-reference/crm/universal/userfieldconfig/index.html) ([#605](https://github.com/bitrix24/b24phpsdk/issues/605)):
     - `add` adds a new custom field for a CRM smart-process type, the new invoice or the sign document entity, with batch calls support
@@ -156,7 +139,6 @@
     - `call.followup.get` gets a single Follow-up by `callId`
     - `call.followup.field.list` gets the list of available Follow-up fields
     - `call.followup.field.get` gets the description of a single Follow-up field by name
-
 - Added service `Services\Catalog\Vat\Service\Vat` with support methods,
   see [catalog.vat.* methods](https://apidocs.bitrix24.com/api-reference/catalog/vat/index.html) ([#590](https://github.com/bitrix24/b24phpsdk/issues/590)):
     - `add` creates a new VAT rate, with batch calls support
@@ -168,26 +150,47 @@
 
 ### Changed
 
+- Documented legacy IMBot method deprecations, existing replacements and unresolved public contracts ([#270](https://github.com/bitrix24/b24phpsdk/issues/270)).
+- Date-time filters now accept immutable dates, including `CarbonImmutable`, while preserving mutable dates and strings ([#653](https://github.com/bitrix24/b24phpsdk/issues/653)).
+- Added `MemberRole` enum casting for SonetGroup participant roles and `Feature|string` / `FeatureOperation|string` arguments for access checks, preserving custom codes ([#331](https://github.com/bitrix24/b24phpsdk/issues/331)).
+- Updated `b24phpsdk-maintainer` skill: define contract-based reuse of core result classes, compatibility subclasses and annotated entity items ([#643](https://github.com/bitrix24/b24phpsdk/issues/643)).
+- Reused `AddedItemResult` in `BlogPostAddResult`, preserving `isSuccess()` and the public return type while inheriting ID access and its interface ([#643](https://github.com/bitrix24/b24phpsdk/issues/643)).
+- Updated `b24phpsdk-maintainer` skill: require fresh REST API v3 and v1 coverage statistics at the bottom of each release changelog entry before the release PR is ready ([#650](https://github.com/bitrix24/b24phpsdk/issues/650)).
+- Landing services `Site`, `Page`, `Block`, `Demos`, `Repo`, `RepoWidget`, `Role`, `SysPage`, `Template`
+  now receive their batch service as the first constructor argument and expose it via the public `$batch`
+  property; code that instantiates these services directly must pass the batch service
+  ([#616](https://github.com/bitrix24/b24phpsdk/issues/616)).
 - Constructors of the `Services\Sale` services listed above now accept the service `Batch` as the first argument,
-  services created by `SaleServiceBuilder` are not affected ([#614](https://github.com/bitrix24/b24phpsdk/issues/614))
+  services created by `SaleServiceBuilder` are not affected ([#614](https://github.com/bitrix24/b24phpsdk/issues/614)).
+- Updated SDK version headers to `3.7.0` and the README installation constraint to `^3.7` ([#664](https://github.com/bitrix24/b24phpsdk/issues/664)).
 
 ### Fixed
 
 - Fixed legacy per-scope coverage to match portal method names against all SDK wrappers while keeping SDK-only inventory scoped ([#646](https://github.com/bitrix24/b24phpsdk/issues/646)).
-- Fixed REST v3 event-log partial-result casting, preserved typed IP addresses, completed field metadata, and added request and live annotation validation ([#653](https://github.com/bitrix24/b24phpsdk/issues/653))
+- Fixed REST v3 event-log partial-result casting, preserved typed IP addresses, completed field metadata, and added request and live annotation validation ([#653](https://github.com/bitrix24/b24phpsdk/issues/653)).
 - Restricted SonetGroup integration cleanup to exact IDs created by each test and made fixtures hidden, preserving unrelated portal groups ([#331](https://github.com/bitrix24/b24phpsdk/issues/331)).
-- Corrected `BlogPostItemResult` HAS flags to boolean getters, preserving nullable flags and validating raw API Y/N values ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
-
+- Corrected `BlogPostItemResult` HAS flags to boolean getters, preserving nullable flags and validating raw API Y/N values ([#643](https://github.com/bitrix24/b24phpsdk/issues/643)).
 - Fixed legacy REST API coverage on the SDK v3 line by matching unique v1 methods against portal availability, including legacy services ([#637](https://github.com/bitrix24/b24phpsdk/issues/637)).
 - Redacted OAuth credential query parameters from Core transport/unknown exception logs and SDK exception messages,
   removed trace argument payloads from these logs, and stopped retaining unsafe original exceptions as previous causes
   ([#552](https://github.com/bitrix24/b24phpsdk/issues/552)).
-
-- Fixed the Deptrac GitHub Actions workflow YAML so architecture checks run for the 3.7.0 release candidate.
-
+- Fixed the Deptrac GitHub Actions workflow YAML so architecture checks run for the 3.7.0 release candidate ([#664](https://github.com/bitrix24/b24phpsdk/issues/664)).
 - Fixed `Services\Sale\Delivery\Service\Delivery::update()` sending the fields to update in the `FIELDS` parameter:
   `sale.delivery.update` expects them as top-level parameters and silently ignored the update
-  ([#614](https://github.com/bitrix24/b24phpsdk/issues/614))
+  ([#614](https://github.com/bitrix24/b24phpsdk/issues/614)).
+
+### API coverage
+
+Measured on 2026-09-30 (UTC) from the release candidate.
+
+| REST API | Covered methods | Total methods | Uncovered methods | Coverage | Basis |
+|---|---:|---:|---:|---:|---|
+| v3 (new) | 105 | 314 | 209 | 33.44% | OpenAPI snapshot: `docs/open-api/openapi.json` |
+| v1 (legacy) | 762 | 1160 | 398 | 65.69% | Methods available on the configured portal |
+
+These figures describe SDK method coverage against each baseline, not test coverage
+or proof that every method was exercised against a live portal. The v1 baseline is
+portal-specific, not the entire Bitrix24 REST API catalog.
 
 ## 3.6.0
 

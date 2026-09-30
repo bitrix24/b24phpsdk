@@ -30,6 +30,7 @@ use Bitrix24\SDK\Services\Disk\File\Result\FileRenamedResult;
 use Bitrix24\SDK\Services\Disk\File\Result\FileRestoredFromVersionResult;
 use Bitrix24\SDK\Services\Disk\File\Result\FileRestoredResult;
 use Bitrix24\SDK\Services\Disk\File\Result\FileResult;
+use Bitrix24\SDK\Services\Disk\File\Result\FileSearchResult;
 use Bitrix24\SDK\Services\Disk\File\Result\FileVersionsResult;
 use Bitrix24\SDK\Services\Disk\File\Result\FileVersionUploadedResult;
 use Psr\Log\LoggerInterface;
@@ -338,5 +339,30 @@ class File extends AbstractService
                 'id' => $id
             ])
         );
+    }
+
+    /**
+     * Search readable files and folders by indexed names and document content.
+     *
+     * @param string $query Search text, 3 to 255 characters after API normalization
+     * @param 'file'|'folder'|'all' $type Object kinds to include
+     * @param array{STORAGE_ID?: int, FOLDER_ID?: int} $filter Optional search scope
+     * @param int $start Number of objects to skip; the API caps this at 1000
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'disk.file.search',
+        'https://apidocs.bitrix24.com/api-reference/disk/file/disk-file-search.html',
+        'Searches readable files and folders on Drive.'
+    )]
+    public function search(string $query, string $type = 'file', array $filter = [], int $start = 0): FileSearchResult
+    {
+        $parameters = ['QUERY' => $query, 'TYPE' => $type, 'start' => $start];
+        if ($filter !== []) {
+            $parameters['FILTER'] = $filter;
+        }
+
+        return new FileSearchResult($this->core->call('disk.file.search', $parameters));
     }
 }
