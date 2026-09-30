@@ -180,7 +180,9 @@ class ChatTest extends TestCase
     #[TestDox('im.chat.updateColor returns success for every supported chat color')]
     public function testUpdateColor(): void
     {
-        $chatId = $this->createChat();
+        // an explicit initial color is set, because a random one may match the first updated color
+        // and im.chat.updateColor rejects the currently set color
+        $chatId = $this->createChat(chatColor: ChatColor::Green);
 
         foreach ([ChatColor::Red, ChatColor::Graphite] as $chatColor) {
             $this->assertTrue($this->chatService->updateColor($chatId, $chatColor)->isSuccess());
@@ -233,11 +235,13 @@ class ChatTest extends TestCase
         ?array $users = null,
         ?ChatEntityType $chatEntityType = null,
         ?string $entityId = null,
+        ?ChatColor $chatColor = null,
     ): int {
         $chatId = $this->chatService->add(
             users: $users ?? [$this->currentUserId],
             chatType: ChatType::Closed,
             title: sprintf('IT chat %s', uniqid('', true)),
+            chatColor: $chatColor,
             chatEntityType: $chatEntityType,
             entityId: $entityId,
         )->getId();

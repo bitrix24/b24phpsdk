@@ -38,7 +38,7 @@ class UserStatusBatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->userStatusService = Factory::getServiceBuilder()->getIMScope()->userStatus();
+        $this->userStatusService = Factory::getServiceBuilder(true)->getIMScope()->userStatus();
         $this->initialStatus = $this->userStatusService->get()->status()->STATUS;
     }
 

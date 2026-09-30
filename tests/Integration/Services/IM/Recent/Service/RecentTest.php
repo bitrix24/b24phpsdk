@@ -30,7 +30,7 @@ class RecentTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->recentService = Fabric::getServiceBuilder()->getIMScope()->recent();
+        $this->recentService = Factory::getServiceBuilder(true)->getIMScope()->recent();
     }
 
     /**
