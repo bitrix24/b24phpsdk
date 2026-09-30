@@ -4,6 +4,7 @@
 
 ### Added
 
+- Added SonetGroup feature access, active member lookup, invitations, membership requests, and role updates, with typed member results and successful user-ID lists ([#331](https://github.com/bitrix24/b24phpsdk/issues/331)).
 - Added batch calls support for `Services\Landing` scope,
   see [landing.* methods](https://apidocs.bitrix24.com/api-reference/landing/index.html) ([#616](https://github.com/bitrix24/b24phpsdk/issues/616)):
     - `Site\Service\Batch`: `list` (`landing.site.getList`), `add` (`landing.site.add`),
@@ -154,6 +155,7 @@
 
 ### Fixed
 
+- Restricted SonetGroup integration cleanup to exact IDs created by each test and made fixtures hidden, preserving unrelated portal groups ([#331](https://github.com/bitrix24/b24phpsdk/issues/331)).
 - Fixed legacy REST API coverage on the SDK v3 line by matching unique v1 methods against portal availability, including legacy services ([#637](https://github.com/bitrix24/b24phpsdk/issues/637)).
 - Redacted OAuth credential query parameters from Core transport/unknown exception logs and SDK exception messages,
   removed trace argument payloads from these logs, and stopped retaining unsafe original exceptions as previous causes
