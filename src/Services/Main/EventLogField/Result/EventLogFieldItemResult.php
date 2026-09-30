@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Main\EventLogField\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractItem;
+use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
 
 /**
  * @property-read string      $name
@@ -25,9 +25,10 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  * @property-read bool        $filterable
  * @property-read bool        $sortable
  * @property-read bool        $editable
+ * @property-read array|null  $editableGroups
  * @property-read bool        $multiple
  * @property-read string|null $elementType
  */
-class EventLogFieldItemResult extends AbstractItem
+class EventLogFieldItemResult extends AbstractAnnotatedItem
 {
 }

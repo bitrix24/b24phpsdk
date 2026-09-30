@@ -21,6 +21,8 @@ use Bitrix24\SDK\Services\CRM\Activity\ActivityPriority;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityStatus;
 use Bitrix24\SDK\Services\CRM\Activity\ActivityType;
 use Carbon\CarbonImmutable;
+use Bitrix24\SDK\Services\Main\Result\EventLogItemResult;
+use Darsyn\IP\Version\Multi;
 use MoneyPHP\Percentage\Percentage;
 use Typhoon\Reflection\TyphoonReflector;
 use Money\Currency;
@@ -142,6 +144,12 @@ trait CustomBitrix24Assertions
         asort($propsFromAnnotations);
         asort($fieldCodesFromApi);
         foreach ($fieldCodesFromApi as $fieldCode => $fieldData) {
+            if ($resultItemClassName === EventLogItemResult::class && $fieldCode === 'remoteAddr') {
+                $this->assertSame('string', $fieldData['type'], 'Event log IP addresses must be strings in REST metadata.');
+                $this->assertSame(Multi::class . '|null', $propsFromAnnotations[$fieldCode]);
+                continue;
+            }
+
             // mapping internal bitrix24 types to bitrix24 sdk types
             switch ($fieldData['type']) {
                 case 'string':

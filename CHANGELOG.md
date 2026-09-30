@@ -26,6 +26,8 @@
 
 ### Changed
 
+- Date-time filters now accept immutable dates, including `CarbonImmutable`, while preserving mutable dates and strings ([#653](https://github.com/bitrix24/b24phpsdk/issues/653))
+
 - Landing services `Site`, `Page`, `Block`, `Demos`, `Repo`, `RepoWidget`, `Role`, `SysPage`, `Template`
   now receive their batch service as the first constructor argument and expose it via the public `$batch`
   property; code that instantiates these services directly must pass the batch service
@@ -153,6 +155,8 @@
   services created by `SaleServiceBuilder` are not affected ([#614](https://github.com/bitrix24/b24phpsdk/issues/614))
 
 ### Fixed
+
+- Fixed REST v3 event-log partial-result casting, preserved typed IP addresses, completed field metadata, and added request and live annotation validation ([#653](https://github.com/bitrix24/b24phpsdk/issues/653))
 
 - Fixed legacy REST API coverage on the SDK v3 line by matching unique v1 methods against portal availability, including legacy services ([#637](https://github.com/bitrix24/b24phpsdk/issues/637)).
 - Redacted OAuth credential query parameters from Core transport/unknown exception logs and SDK exception messages,

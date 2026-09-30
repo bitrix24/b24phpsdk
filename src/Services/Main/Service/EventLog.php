@@ -32,7 +32,7 @@ class EventLog extends AbstractService
     /**
      * Returns a single event log entry by identifier.
      *
-     * @see https://apidocs.bitrix24.com/api-reference/rest-v3/main/main-eventlog-get.html
+     * @see https://apidocs.bitrix24.com/api-reference/event-log/main-eventlog-get.html
      *
      * @param positive-int                            $id
      * @param array<int,string>|EventLogSelectBuilder $select
@@ -41,7 +41,7 @@ class EventLog extends AbstractService
      */
     #[ApiEndpointMetadata(
         'main.eventlog.get',
-        'https://apidocs.bitrix24.com/api-reference/rest-v3/main/main-eventlog-get.html',
+        'https://apidocs.bitrix24.com/api-reference/event-log/main-eventlog-get.html',
         'Returns a single event log entry by identifier.',
         ApiVersion::v3
     )]
@@ -68,18 +68,18 @@ class EventLog extends AbstractService
     /**
      * Returns a list of event log entries by filter conditions.
      *
-     * @see https://apidocs.bitrix24.com/api-reference/rest-v3/main/main-eventlog-list.html
+     * @see https://apidocs.bitrix24.com/api-reference/event-log/main-eventlog-list.html
      *
      * @param array<int,string>|EventLogSelectBuilder  $select
      * @param array|FilterBuilderInterface             $filter     Filter conditions (REST 3.0 format)
-     * @param array<string,SortOrder>                  $order      ["field" => SortOrder::Ascending]
+     * @param array<string,SortOrder|string>                  $order      ["field" => SortOrder::Ascending]
      * @param array                                    $pagination ["page" => int, "limit" => int, "offset" => int]
      * @throws BaseException
      * @throws TransportException
      */
     #[ApiEndpointMetadata(
         'main.eventlog.list',
-        'https://apidocs.bitrix24.com/api-reference/rest-v3/main/main-eventlog-list.html',
+        'https://apidocs.bitrix24.com/api-reference/event-log/main-eventlog-list.html',
         'Returns a list of event log entries by filter conditions.',
         ApiVersion::v3
     )]
@@ -122,7 +122,7 @@ class EventLog extends AbstractService
     /**
      * Returns new event log entries after a reference cursor point.
      *
-     * @see https://apidocs.bitrix24.com/api-reference/rest-v3/main/main-eventlog-tail.html
+     * @see https://apidocs.bitrix24.com/api-reference/event-log/main-eventlog-tail.html
      *
      * @param array<int,string>|EventLogSelectBuilder  $select (required)
      * @param array|FilterBuilderInterface             $filter (required, pass [] or new EventLogFilter() for no filter)
@@ -132,7 +132,7 @@ class EventLog extends AbstractService
      */
     #[ApiEndpointMetadata(
         'main.eventlog.tail',
-        'https://apidocs.bitrix24.com/api-reference/rest-v3/main/main-eventlog-tail.html',
+        'https://apidocs.bitrix24.com/api-reference/event-log/main-eventlog-tail.html',
         'Returns new event log entries after a reference cursor point.',
         ApiVersion::v3
     )]
