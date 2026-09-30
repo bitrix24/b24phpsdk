@@ -3,6 +3,9 @@
 ## Unreleased
 
 ### Added
+- Documented legacy IMBot method deprecations, existing replacements and unresolved public contracts ([#270](https://github.com/bitrix24/b24phpsdk/issues/270)).
+
+- Added seven documented legacy log endpoints for feed posts and comments, typed post results and private lifecycle integration coverage; undocumented `log.comment.delete` remains excluded ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
 
 - Added legacy Pull channel/configuration services with typed public channel results and `getPullScope()` facade ([#647](https://github.com/bitrix24/b24phpsdk/issues/647)).
 - Added legacy Pull application configuration, event, push and watch extension wrappers with preserved recipient and payload types ([#645](https://github.com/bitrix24/b24phpsdk/issues/645)).
@@ -29,6 +32,10 @@
 
 ### Changed
 
+- Updated `b24phpsdk-maintainer` skill: define contract-based reuse of core result classes, compatibility subclasses and annotated entity items ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
+- Reused `AddedItemResult` in `BlogPostAddResult`, preserving `isSuccess()` and the public return type while inheriting ID access and its interface ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
+
+- Updated `b24phpsdk-maintainer` skill: require fresh REST API v3 and v1 coverage statistics at the bottom of each release changelog entry before the release PR is ready ([#650](https://github.com/bitrix24/b24phpsdk/issues/650))
 - Landing services `Site`, `Page`, `Block`, `Demos`, `Repo`, `RepoWidget`, `Role`, `SysPage`, `Template`
   now receive their batch service as the first constructor argument and expose it via the public `$batch`
   property; code that instantiates these services directly must pass the batch service
@@ -158,6 +165,7 @@
 ### Fixed
 
 - Fixed legacy per-scope coverage to match portal method names against all SDK wrappers while keeping SDK-only inventory scoped ([#646](https://github.com/bitrix24/b24phpsdk/issues/646)).
+- Corrected `BlogPostItemResult` HAS flags to boolean getters, preserving nullable flags and validating raw API Y/N values ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
 
 - Fixed legacy REST API coverage on the SDK v3 line by matching unique v1 methods against portal availability, including legacy services ([#637](https://github.com/bitrix24/b24phpsdk/issues/637)).
 - Redacted OAuth credential query parameters from Core transport/unknown exception logs and SDK exception messages,

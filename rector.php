@@ -15,6 +15,8 @@ use Rector\Set\ValueObject\LevelSetList;
 
 return RectorConfig::configure()
     ->withPaths([
+        __DIR__ . '/src/Services/Log',
+        __DIR__ . '/tests/Integration/Services/Log',
         __DIR__ . '/src/Core/',
         __DIR__ . '/src/Application/',
         __DIR__ . '/src/Services/Telephony',

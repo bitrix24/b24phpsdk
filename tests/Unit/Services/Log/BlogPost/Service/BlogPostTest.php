@@ -28,9 +28,9 @@ class BlogPostTest extends TestCase
     {
         $core = $this->createStub(CoreInterface::class);
         $nullLogger = new NullLogger();
-        
+
         $blogPost = new BlogPost($core, $nullLogger);
-        
+
         $this->assertInstanceOf(BlogPost::class, $blogPost);
     }
 
@@ -40,7 +40,7 @@ class BlogPostTest extends TestCase
         $core = $this->createMock(CoreInterface::class);
         $response = $this->createStub(Response::class);
         $nullLogger = new NullLogger();
-        
+
         $core->expects($this->once())
             ->method('call')
             ->with(
@@ -54,7 +54,7 @@ class BlogPostTest extends TestCase
                 ]
             )
             ->willReturn($response);
-        
+
         $blogPost = new BlogPost($core, $nullLogger);
         $blogPostAddResult = $blogPost->add(
             postMessage: 'Test message',
@@ -63,7 +63,7 @@ class BlogPostTest extends TestCase
             importantDateEnd: '2025-08-15T00:00:00+00:00',
             dest: ['UA']
         );
-        
+
         $this->assertInstanceOf(BlogPostAddResult::class, $blogPostAddResult);
     }
 }
