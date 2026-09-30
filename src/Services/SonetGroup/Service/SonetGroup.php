@@ -23,12 +23,16 @@ use Bitrix24\SDK\Core\Result\AddedItemResult;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
+use Bitrix24\SDK\Services\SonetGroup\Common\Feature;
+use Bitrix24\SDK\Services\SonetGroup\Common\FeatureOperation;
 use Bitrix24\SDK\Services\SonetGroup\Result\SonetGroupGetItemResult;
 use Bitrix24\SDK\Services\SonetGroup\Result\SonetGetGroupsResult;
 use Bitrix24\SDK\Services\SonetGroup\Result\SonetGroupsResult;
 use Bitrix24\SDK\Services\SonetGroup\Result\SonetGroupResult;
 use Bitrix24\SDK\Services\SonetGroup\Result\SonetGroupUserOperationResult;
 use Bitrix24\SDK\Services\SonetGroup\Result\UserGroupsResult;
+use Bitrix24\SDK\Services\SonetGroup\Result\SonetGroupUsersResult;
+use Bitrix24\SDK\Services\SonetGroup\Result\SonetGroupUserIdsResult;
 use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['sonet_group', 'socialnetwork']))]
@@ -319,5 +323,108 @@ class SonetGroup extends AbstractService
                 'USER_ID' => $userId,
             ])
         );
+    }
+
+    /**
+     * Checks whether the current user can perform a feature operation.
+     *
+     * Use strings for additional feature and operation codes supplied by installed modules.
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'sonet_group.feature.access',
+        'https://apidocs.bitrix24.com/api-reference/sonet-group/sonet-group-feature-access.html',
+        'Checks current user access to a group feature operation.'
+    )]
+    public function featureAccess(int $groupId, Feature|string $feature, FeatureOperation|string $operation): UpdatedItemResult
+    {
+        return new UpdatedItemResult($this->core->call('sonet_group.feature.access', [
+            'GROUP_ID' => $groupId,
+            'FEATURE' => $feature instanceof Feature ? $feature->value : $feature,
+            'OPERATION' => $operation instanceof FeatureOperation ? $operation->value : $operation,
+        ]));
+    }
+
+    /**
+     * Returns active group members and their roles.
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'sonet_group.user.get',
+        'https://apidocs.bitrix24.com/api-reference/sonet-group/members/sonet-group-user-get.html',
+        'Returns active group members and their roles.'
+    )]
+    public function getUsers(int $groupId): SonetGroupUsersResult
+    {
+        return new SonetGroupUsersResult($this->core->call('sonet_group.user.get', ['ID' => $groupId]));
+    }
+
+    /**
+     * Sends invitations and returns successfully invited user IDs.
+     *
+     * @param int|int[] $userId
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'sonet_group.user.invite',
+        'https://apidocs.bitrix24.com/api-reference/sonet-group/members/sonet-group-user-invite.html',
+        'Invites users to a group.'
+    )]
+    public function inviteUser(int $groupId, int|array $userId, ?string $message = null): SonetGroupUserIdsResult
+    {
+        $parameters = ['GROUP_ID' => $groupId, 'USER_ID' => $userId];
+        if ($message !== null) {
+            $parameters['MESSAGE'] = $message;
+        }
+
+        return new SonetGroupUserIdsResult($this->core->call('sonet_group.user.invite', $parameters));
+    }
+
+    /**
+     * Requests membership for the current user.
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'sonet_group.user.request',
+        'https://apidocs.bitrix24.com/api-reference/sonet-group/members/sonet-group-user-request.html',
+        'Requests group membership for the current user.'
+    )]
+    public function requestUser(int $groupId, ?string $message = null): UpdatedItemResult
+    {
+        $parameters = ['GROUP_ID' => $groupId];
+        if ($message !== null) {
+            $parameters['MESSAGE'] = $message;
+        }
+
+        return new UpdatedItemResult($this->core->call('sonet_group.user.request', $parameters));
+    }
+
+    /**
+     * Changes member roles and returns successfully updated user IDs.
+     *
+     * @param int|int[] $userId
+     * @param 'E'|'K' $role Moderator (E) or member (K).
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'sonet_group.user.update',
+        'https://apidocs.bitrix24.com/api-reference/sonet-group/members/sonet-group-user-update.html',
+        'Changes roles of group members.'
+    )]
+    public function updateUser(int $groupId, int|array $userId, string $role): SonetGroupUserIdsResult
+    {
+        return new SonetGroupUserIdsResult($this->core->call('sonet_group.user.update', [
+            'GROUP_ID' => $groupId,
+            'USER_ID' => $userId,
+            'ROLE' => $role,
+        ]));
     }
 }
