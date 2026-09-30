@@ -11,15 +11,10 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Log\BlogPost\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractResult;
+use Bitrix24\SDK\Core\Result\AddedItemResult;
 
-class BlogPostAddResult extends AbstractResult
+class BlogPostAddResult extends AddedItemResult
 {
-    public function getId(): int
-    {
-        return (int)$this->getCoreResponse()->getResponseData()->getResult()[0];
-    }
-
     /**
      * Check if blog post was added successfully
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException

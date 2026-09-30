@@ -118,7 +118,11 @@ class BlogPostCoverageTest extends TestCase
 
     public function testAddResultExposesIdentifier(): void
     {
-        $blogPost = new BlogPost($this->core('log.blogpost.add', ['POST_MESSAGE' => 'private','DEST' => ['U1']], [7]), new NullLogger());
-        self::assertSame(7, $blogPost->add('private', dest:['U1'])->getId());
+        $blogPost = new BlogPost($this->core('log.blogpost.add', ['POST_MESSAGE' => 'private','DEST' => ['U1']], ['7']), new NullLogger());
+        $result = $blogPost->add('private', dest:['U1']);
+        self::assertInstanceOf(\Bitrix24\SDK\Core\Result\AddedItemResult::class, $result);
+        self::assertInstanceOf(\Bitrix24\SDK\Core\Contracts\AddedItemIdResultInterface::class, $result);
+        self::assertSame(7, $result->getId());
+        self::assertTrue($result->isSuccess());
     }
 }
