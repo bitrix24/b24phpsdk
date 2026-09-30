@@ -15,6 +15,11 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 
 class BlogPostAddResult extends AbstractResult
 {
+    public function getId(): int
+    {
+        return (int)$this->getCoreResponse()->getResponseData()->getResult()[0];
+    }
+
     /**
      * Check if blog post was added successfully
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException

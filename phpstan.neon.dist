@@ -1,6 +1,7 @@
 parameters:
   level: 5
   paths:
+    - tests/Integration/Services/Log
     - src/
     - tests/Unit/
     - tests/Integration/Services/Telephony
