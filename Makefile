@@ -1097,3 +1097,7 @@ build-examples-for-documentation:
 	--example-template=docs/api/file-templates/examples/master-example.php \
 	--openai-api-key=$(DOCUMENTATION_OPEN_AI_API_KEY) \
 	--docs-repo-folder=$(DOCUMENTATION_REPOSITORY_FOLDER)
+
+.PHONY: test-integration-scope-timeman-readonly
+test-integration-scope-timeman-readonly:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration-scope-timeman-readonly --display-warnings

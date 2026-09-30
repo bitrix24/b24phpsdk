@@ -4,6 +4,8 @@
 
 ### Added
 
+- Added all nine remaining legacy `timeman` methods through `networkRange()` and `timeControl()`, with typed results, report settings, office-network checks, and safe `ACTIVE=false` serialization ([#642](https://github.com/bitrix24/b24phpsdk/issues/642))
+
 - Added batch calls support for `Services\Landing` scope,
   see [landing.* methods](https://apidocs.bitrix24.com/api-reference/landing/index.html) ([#616](https://github.com/bitrix24/b24phpsdk/issues/616)):
     - `Site\Service\Batch`: `list` (`landing.site.getList`), `add` (`landing.site.add`),
