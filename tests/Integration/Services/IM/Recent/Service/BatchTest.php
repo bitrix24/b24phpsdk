@@ -34,7 +34,7 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->recentService = Factory::getServiceBuilder()->getIMScope()->recent();
+        $this->recentService = Factory::getServiceBuilder(true)->getIMScope()->recent();
     }
 
     #[\Override]
