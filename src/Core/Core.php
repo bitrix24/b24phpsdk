@@ -21,11 +21,13 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\MethodConfirmWaitingException;
 use Bitrix24\SDK\Core\Exceptions\PortalUnavailableException;
+use Bitrix24\SDK\Core\Exceptions\PortalDomainChangeRejectedException;
 use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Events\AuthTokenRenewedEvent;
 use Bitrix24\SDK\Events\PortalDomainUrlChangedEvent;
+use Bitrix24\SDK\Events\PortalDomainUrlChangingEvent;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpClient\Exception\JsonException;
@@ -118,6 +120,16 @@ class Core implements CoreInterface
                                 $portalOldDomainUrlHost,
                                 $apiCallResponse->getHeaders(false)['location'][0]
                             )
+                        );
+                    }
+
+                    $portalDomainUrlChangingEvent = new PortalDomainUrlChangingEvent($portalOldDomainUrlHost, $portalNewDomainUrlHost);
+                    $this->eventDispatcher->dispatch($portalDomainUrlChangingEvent);
+                    if ($portalDomainUrlChangingEvent->isDenied()) {
+                        throw new PortalDomainChangeRejectedException(
+                            $portalOldDomainUrlHost,
+                            $portalNewDomainUrlHost,
+                            $portalDomainUrlChangingEvent->getDenialReason()
                         );
                     }
 
