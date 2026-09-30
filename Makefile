@@ -58,6 +58,7 @@ help:
 	@echo "lint-rector-fix           - fix source code with rector"
 	@echo "lint-deptrac              - lint source code with deptrac (architecture checks)"
 	@echo ""
+	@echo "test-integration-main-user-history - run REST v3 user history tests"
 	@echo "test-unit                 - run unit tests"
 	@echo "test-file path=<path>     - run PHPUnit for a specific test file or directory"
 	@echo "test-integration-calendar-event - run Calendar Event integration tests"
@@ -688,6 +689,10 @@ test-integration-task-field:
 .PHONY: test-integration-legacy-task
 test-integration-legacy-task:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_legacy_task
+
+.PHONY: test-integration-main-user-history
+test-integration-main-user-history:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_main_user_history
 
 .PHONY: test-integration-main-eventlog
 test-integration-main-eventlog:

@@ -35,6 +35,7 @@ class CustomBitrix24AssertionsTest extends TestCase
         'arrayField'    => ['a', 'b'],
         'nullableString' => null,
         'nullableArray'  => null,
+        'mixedField' => null,
     ];
 
     #[Test]
@@ -66,7 +67,8 @@ class CustomBitrix24AssertionsTest extends TestCase
     public function testEventLogIpAnnotationMatchesApiString(): void
     {
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
-            ['remoteAddr' => ['type' => 'string']], EventLogItemResult::class
+            ['remoteAddr' => ['type' => 'string']],
+            EventLogItemResult::class
         );
     }
 
@@ -74,7 +76,8 @@ class CustomBitrix24AssertionsTest extends TestCase
     {
         $this->expectException(AssertionFailedError::class);
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
-            ['remoteAddr' => ['type' => 'integer']], EventLogItemResult::class
+            ['remoteAddr' => ['type' => 'integer']],
+            EventLogItemResult::class
         );
     }
 
@@ -82,19 +85,34 @@ class CustomBitrix24AssertionsTest extends TestCase
     {
         $this->expectException(AssertionFailedError::class);
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
-            ['remoteAddr' => ['type' => 'string']], WrongStringAnnotationItem::class
+            ['remoteAddr' => ['type' => 'string']],
+            WrongStringAnnotationItem::class
         );
     }
 
     public function testOrdinaryStringMetadataStillRequiresStringAnnotation(): void
     {
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
-            ['stringField' => ['type' => 'string']], AllTypesStubItem::class
+            ['stringField' => ['type' => 'string']],
+            AllTypesStubItem::class
         );
         $this->expectException(AssertionFailedError::class);
         $this->assertBitrix24AllResultItemFieldsHasValidTypeAnnotation(
-            ['intField' => ['type' => 'string']], AllTypesStubItem::class
+            ['intField' => ['type' => 'string']],
+            AllTypesStubItem::class
         );
+    }
+
+    #[DataProvider('mixedValues')]
+    public function testMixedAnnotationAcceptsAnyValue(mixed $value): void
+    {
+        $allTypesStubItem = new AllTypesStubItem(array_merge(self::VALID_DATA, ['mixedField' => $value]));
+        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($allTypesStubItem, AllTypesStubItem::class);
+    }
+
+    public static function mixedValues(): array
+    {
+        return [[null], [false], [42], [1.5], ['raw'], [['before' => null, 'after' => ['nested' => true]]]];
     }
 
     public static function wrongTypesDataProvider(): Generator
@@ -117,11 +135,16 @@ class CustomBitrix24AssertionsTest extends TestCase
  * @property-read int         $intField
  * @property-read array       $arrayField
  * @property-read string|null $nullableString
+ * @property-read mixed       $mixedField
  * @property-read array|null  $nullableArray
  */
-class AllTypesStubItem extends AbstractItem {}
+class AllTypesStubItem extends AbstractItem
+{
+}
 
 /**
  * @property-read \Darsyn\IP\Version\Multi|null $remoteAddr
  */
-class WrongStringAnnotationItem extends AbstractItem {}
+class WrongStringAnnotationItem extends AbstractItem
+{
+}

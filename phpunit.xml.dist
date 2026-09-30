@@ -439,6 +439,12 @@
             <file>./tests/Integration/Services/Booking/WaitlistClient/Service/BatchTest.php</file>
             <file>./tests/Integration/Services/Booking/WaitlistExternalData/Service/BatchTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_scope_main_user_history">
+            <directory>./tests/Integration/Services/Main/UserHistory</directory>
+            <directory>./tests/Integration/Services/Main/UserHistoryChange</directory>
+            <directory>./tests/Integration/Services/Main/UserHistoryField</directory>
+            <directory>./tests/Integration/Services/Main/UserHistoryChangeField</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_main_eventlog">
             <file>./tests/Integration/Services/Main/Service/EventLogTest.php</file>
             <file>./tests/Integration/Services/Main/Result/EventLogItemResultAnnotationsTest.php</file>
