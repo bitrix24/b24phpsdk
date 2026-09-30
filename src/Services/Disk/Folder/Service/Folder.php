@@ -16,6 +16,7 @@ namespace Bitrix24\SDK\Services\Disk\Folder\Service;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Core\Result\FieldsResult;
+use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\Disk\Folder\Result\FolderAddedResult;
 use Bitrix24\SDK\Services\Disk\Folder\Result\FolderChildrenResult;
 use Bitrix24\SDK\Services\Disk\Folder\Result\FolderOperationResult;
@@ -262,5 +263,27 @@ class Folder extends \Bitrix24\SDK\Services\AbstractService
         return new UploadedFileResult(
             $this->core->call('disk.folder.uploadfile', $params)
         );
+    }
+
+    /**
+     * Assign folder permissions to a user. The caller must have Share permission
+     * and cannot grant a higher access level than their own.
+     *
+     * @param 'disk_access_read'|'disk_access_add'|'disk_access_edit'|'disk_access_full' $taskName
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     */
+    #[ApiEndpointMetadata(
+        'disk.folder.sharetouser',
+        'https://apidocs.bitrix24.com/api-reference/disk/folder/disk-folder-share-to-user.html',
+        'Assigns folder access permissions to a user.'
+    )]
+    public function shareToUser(int $id, int $userId, string $taskName): UpdatedItemResult
+    {
+        return new UpdatedItemResult($this->core->call('disk.folder.sharetouser', [
+            'id' => $id,
+            'userId' => $userId,
+            'taskName' => $taskName,
+        ]));
     }
 }

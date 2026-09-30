@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### Added
+- Added Disk file/folder search and folder sharing to users; undocumented allowed-operation endpoints remain unresolved ([#659](https://github.com/bitrix24/b24phpsdk/issues/659)).
 - Documented legacy IMBot method deprecations, existing replacements and unresolved public contracts ([#270](https://github.com/bitrix24/b24phpsdk/issues/270)).
 
 - Added seven documented legacy log endpoints for feed posts and comments, typed post results and private lifecycle integration coverage; undocumented `log.comment.delete` remains excluded ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))

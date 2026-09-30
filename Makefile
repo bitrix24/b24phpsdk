@@ -474,6 +474,10 @@ test-integration-disk-service:
 test-integration-disk-file:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_disk_file
 
+.PHONY: test-integration-disk-folder
+test-integration-disk-folder:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_disk_folder
+
 .PHONY: test-integration-disk-storage
 test-integration-disk-storage:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_disk_storage
