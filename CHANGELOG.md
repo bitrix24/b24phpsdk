@@ -5,6 +5,8 @@
 ### Added
 - Documented legacy IMBot method deprecations, existing replacements and unresolved public contracts ([#270](https://github.com/bitrix24/b24phpsdk/issues/270)).
 
+- Added seven documented legacy log endpoints for feed posts and comments, typed post results and private lifecycle integration coverage; undocumented `log.comment.delete` remains excluded ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
+
 - Added batch calls support for `Services\Landing` scope,
   see [landing.* methods](https://apidocs.bitrix24.com/api-reference/landing/index.html) ([#616](https://github.com/bitrix24/b24phpsdk/issues/616)):
     - `Site\Service\Batch`: `list` (`landing.site.getList`), `add` (`landing.site.add`),
@@ -26,6 +28,9 @@
   `landing.site.update|delete`, `code` key for `*.unregister` methods ([#616](https://github.com/bitrix24/b24phpsdk/issues/616))
 
 ### Changed
+
+- Updated `b24phpsdk-maintainer` skill: define contract-based reuse of core result classes, compatibility subclasses and annotated entity items ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
+- Reused `AddedItemResult` in `BlogPostAddResult`, preserving `isSuccess()` and the public return type while inheriting ID access and its interface ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
 
 - Updated `b24phpsdk-maintainer` skill: require fresh REST API v3 and v1 coverage statistics at the bottom of each release changelog entry before the release PR is ready ([#650](https://github.com/bitrix24/b24phpsdk/issues/650))
 - Landing services `Site`, `Page`, `Block`, `Demos`, `Repo`, `RepoWidget`, `Role`, `SysPage`, `Template`
@@ -155,6 +160,8 @@
   services created by `SaleServiceBuilder` are not affected ([#614](https://github.com/bitrix24/b24phpsdk/issues/614))
 
 ### Fixed
+
+- Corrected `BlogPostItemResult` HAS flags to boolean getters, preserving nullable flags and validating raw API Y/N values ([#643](https://github.com/bitrix24/b24phpsdk/issues/643))
 
 - Fixed legacy REST API coverage on the SDK v3 line by matching unique v1 methods against portal availability, including legacy services ([#637](https://github.com/bitrix24/b24phpsdk/issues/637)).
 - Redacted OAuth credential query parameters from Core transport/unknown exception logs and SDK exception messages,

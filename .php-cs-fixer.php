@@ -5,6 +5,9 @@ use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 
 $finder = Finder::create()
+    ->in(__DIR__ . '/src/Services/Log/')
+    ->in(__DIR__ . '/tests/Unit/Services/Log/')
+    ->in(__DIR__ . '/tests/Integration/Services/Log/')
     ->in(__DIR__ . '/src/Infrastructure/Console/Commands/')
     ->in(__DIR__ . '/src/Services/CRM/Address/')
     ->in(__DIR__ . '/src/Services/CRM/Item/')

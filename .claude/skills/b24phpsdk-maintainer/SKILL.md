@@ -52,9 +52,39 @@ Generator usage rules:
 - After generating a `*ItemResult.php`, keep the mandatory live annotation/type-casting
   integration test described below.
 
+### Choosing result classes: reuse the response contract
+
+**Rule**: choose a result class by the verified response envelope and semantics, not by
+an endpoint's name or scope. Before introducing a service-specific result, inspect
+`src/Core/Result/` and document why an existing result does or does not fit.
+
+| Situation | Choice |
+|---|---|
+| The endpoint returns a single integer ID (including a numeric string), normalized by the core to `getResult()[0]`, and callers only need `getId()` | Return `Core\Result\AddedItemResult` directly; do not create an empty service-specific class or copy `getId()` |
+| That same ID contract has an existing public result class/accessor to preserve, or needs additional meaningful behavior | Extend `AddedItemResult`, inherit `getId()` and `AddedItemIdResultInterface`, and add only the required behavior |
+| The response has a different envelope or semantics (for example `result.item`, a string identifier, multiple IDs, or nested status/error fields) | Use an existing matching result if available; otherwise create a dedicated response wrapper, normally extending `AbstractResult`, with appropriate accessors |
+| The result represents one entity record with named fields | Use a service-specific `*ItemResult` extending `AbstractAnnotatedItem`, returned by the response wrapper; follow generator and annotation-test rules below |
+
+- Do not infer a boolean result from an `update`/`delete` method name or an ID result
+  from `add`. Verify the actual API contract and the core's normalization first.
+- A subclass must preserve the parent's result contract; do not inherit `AddedItemResult`
+  merely to reuse a few lines when `getId(): int` is not valid for that response.
+- Preserve released return types and public accessors when refactoring. For example,
+  `BlogPostAddResult extends AddedItemResult` keeps its existing `isSuccess()` while
+  inheriting `getId()`; changing the service to return the bare core class would remove
+  that public accessor. Preserve existing accessor semantics unless a separate change
+  explicitly addresses them.
+- Apply the same contract-first reuse decision to other core operation results such as
+  `UpdatedItemResult` and `DeletedItemResult`; do not duplicate their compatible logic.
+- Response wrappers and lists of scalar IDs are not annotated entity items. The entity
+  item inheritance rule does not apply to core operation wrappers just because their
+  names contain `ItemResult`.
+- Verify ID normalization, preserved public methods/interfaces, and meaningful custom
+  behavior with regression tests. Do not add a class solely to mirror an endpoint name.
+
 ### Result-item base class
 
-**Rule**: every `*ItemResult.php` class MUST extend
+**Rule**: every service entity `*ItemResult.php` class with `@property-read` fields MUST extend
 `Bitrix24\SDK\Core\Result\AbstractAnnotatedItem` — never the plain `AbstractItem`.
 
 `AbstractAnnotatedItem` reads the `@property-read` PHPDoc annotations and automatically casts each
