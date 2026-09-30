@@ -1,6 +1,6 @@
 # Plan: Complete main.eventlog.* implementation and validation for REST v3 (issue #653)
 
-Status: implementation complete; local quality gates and live validation passed on 2026-09-30; PR delivery pending.
+Status: implementation delivered in PR #657; local quality gates, live validation, and initial PR CI passed on 2026-09-30.
 
 **Goal:** Complete the existing event-log implementation and validate all five REST v3 contracts without adding duplicate services.
 **Architecture:** Keep `MainServiceBuilder::eventLog()` and `eventLogField()`. Move event-log result casting into `AbstractAnnotatedItem`, preserve typed IP addresses, and use the existing field service for metadata-driven contract tests.
@@ -176,7 +176,7 @@ The current command cannot directly regenerate the existing classes correctly: `
 - [x] Run the five light gates in order; diagnose each failure using systematic-debugging before fixing.
 - [x] Run the existing event-log integration target; investigate real failures; explicitly record environmental errors and skips.
 - [x] Update CHANGELOG and verify the final diff and new files; commit only issue-owned paths.
-- [ ] Create PR against `v3-dev` using the current template, attach it to this chat, and wait for terminal CI after every push.
+- [x] Create PR against `v3-dev` using the current template, attach it to this chat, and wait for terminal CI after every push.
 
 Use RED/GREEN/REFACTOR for actual behavior changes. Preserve passing existing behavior with characterization tests; do not manufacture failures by breaking working service methods.
 
@@ -247,3 +247,12 @@ First live suite: 17 tests, 73 assertions, 1 failure, no skips. The metadata ass
 - Independent review: O1 addressed and re-reviewed; no other actionable findings.
 - No new service methods or duplicate services were introduced; existing event-log signatures and builder registration remain intact.
 - CHANGELOG updated under Unreleased. Logs are local, ignored, and excluded from the commit.
+
+## Delivery
+
+- Pull request: https://github.com/bitrix24/b24phpsdk/pull/657
+- Base: `v3-dev`; head: `codex/653-eventlog-validation`; milestone: `3.7.0`; assignee: `mesilov`.
+- Implementation commit: `d1d27ff9eafd34c042722a77954e58f9e890e4f1`; verified identical locally and on origin.
+- Initial terminal CI: all 6 checks passed — Rector lint checks, PHPStan, PHPUnit tests, PhpCsFixer, Deptrac, composer-license-checker.
+- This documentation-only completion record is pushed separately; the agent must also await its terminal CI before the final report. Current authoritative check state is attached to the PR.
+- PR remains open for review; no merge performed. The original checkout and `.tasks/578/` were preserved.
