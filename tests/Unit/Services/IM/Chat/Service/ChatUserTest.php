@@ -17,6 +17,8 @@ use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\IM\Chat\Service\ChatUser;
+use Bitrix24\SDK\Services\IM\Batch as IMBatch;
+use Bitrix24\SDK\Services\IM\Chat\Service\ChatUserBatch;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -34,7 +36,7 @@ class ChatUserTest extends TestCase
     protected function setUp(): void
     {
         $this->coreMock = $this->createMock(CoreInterface::class);
-        $this->service = new ChatUser($this->coreMock, new NullLogger());
+        $this->service = new ChatUser(new ChatUserBatch(new IMBatch($this->coreMock, new NullLogger()), new NullLogger()), $this->coreMock, new NullLogger());
     }
 
     #[Test]

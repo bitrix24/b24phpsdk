@@ -21,6 +21,8 @@ use Bitrix24\SDK\Services\IM\Search\Result\SearchDepartmentsResult;
 use Bitrix24\SDK\Services\IM\Search\Result\SearchLastItemsResult;
 use Bitrix24\SDK\Services\IM\Search\Result\SearchUsersResult;
 use Bitrix24\SDK\Services\IM\Search\Service\Search;
+use Bitrix24\SDK\Services\IM\Batch as IMBatch;
+use Bitrix24\SDK\Services\IM\Search\Service\Batch;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -38,7 +40,7 @@ final class SearchTest extends TestCase
     protected function setUp(): void
     {
         $this->coreMock = $this->createMock(CoreInterface::class);
-        $this->service = new Search($this->coreMock, new NullLogger());
+        $this->service = new Search(new Batch(new IMBatch($this->coreMock, new NullLogger()), new NullLogger()), $this->coreMock, new NullLogger());
     }
 
     #[Test]

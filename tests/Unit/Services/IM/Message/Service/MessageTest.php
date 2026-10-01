@@ -17,6 +17,8 @@ use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Services\IM\Message\Attach\RawAttach;
 use Bitrix24\SDK\Services\IM\Message\Service\Message;
+use Bitrix24\SDK\Services\IM\Batch as IMBatch;
+use Bitrix24\SDK\Services\IM\Message\Service\Batch;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -34,7 +36,7 @@ final class MessageTest extends TestCase
         ];
         $response = $this->createStub(Response::class);
         $coreMock = $this->createMock(CoreInterface::class);
-        $message = new Message($coreMock, new NullLogger());
+        $message = new Message(new Batch(new IMBatch($coreMock, new NullLogger()), new NullLogger()), $coreMock, new NullLogger());
 
         $coreMock
             ->expects($this->once())

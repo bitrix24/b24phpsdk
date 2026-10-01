@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Services\IM\Search\Service;
 
 use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
@@ -24,10 +25,16 @@ use Bitrix24\SDK\Services\IM\Search\Result\SearchChatsResult;
 use Bitrix24\SDK\Services\IM\Search\Result\SearchDepartmentsResult;
 use Bitrix24\SDK\Services\IM\Search\Result\SearchLastItemsResult;
 use Bitrix24\SDK\Services\IM\Search\Result\SearchUsersResult;
+use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['im']))]
 class Search extends AbstractService
 {
+    public function __construct(public readonly Batch $batch, CoreInterface $core, LoggerInterface $logger)
+    {
+        parent::__construct($core, $logger);
+    }
+
     /**
      * @throws BaseException
      * @throws TransportException
