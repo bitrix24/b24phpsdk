@@ -33,7 +33,7 @@ class SearchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->searchService = Fabric::getServiceBuilder()->getIMScope()->search();
+        $this->searchService = Fabric::getServiceBuilder(true)->getIMScope()->search();
     }
 
     /**

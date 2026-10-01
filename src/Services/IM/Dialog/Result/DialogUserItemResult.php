@@ -46,6 +46,8 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  * @property-read string $type
  * @property-read string $website
  * @property-read string $email
+ * @property-read bool $internal_account
+ * @property-read bool $intranet_user
  */
 class DialogUserItemResult extends AbstractItem
 {

@@ -507,6 +507,18 @@
         <testsuite name="integration_tests_im_file_v2">
             <directory>./tests/Integration/Services/IM/FileV2/</directory>
         </testsuite>
+        <testsuite name="integration_tests_im_batch">
+            <file>./tests/Integration/Services/IM/Chat/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/IM/Chat/Service/ChatUserBatchTest.php</file>
+            <file>./tests/Integration/Services/IM/Department/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/IM/Dialog/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/IM/Disk/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/IM/Message/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/IM/Notify/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/IM/Recent/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/IM/Search/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/IM/User/Service/UserStatusBatchTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_scope_sign">
             <directory>./tests/Integration/Services/Sign/</directory>
         </testsuite>

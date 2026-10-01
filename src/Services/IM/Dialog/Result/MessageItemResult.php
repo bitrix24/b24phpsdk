@@ -35,7 +35,9 @@ use Carbon\CarbonImmutable;
  * @property-read array $params
  * @property-read bool|null $viewedByOthers
  * @property-read bool|null $viewed
+ * @property-read int|null $viewedCount
  * @property-read CarbonImmutable|null $disappearing_date
+ * @property-read array|null $block
  */
 class MessageItemResult extends AbstractItem
 {
