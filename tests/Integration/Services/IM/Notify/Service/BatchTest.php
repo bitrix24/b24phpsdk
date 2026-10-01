@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\IM\Notify\Service\Batch;
 use Bitrix24\SDK\Services\IM\Notify\Service\Notify;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -42,7 +42,7 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->notifyService = Factory::getServiceBuilder()->getIMScope()->notify();
+        $this->notifyService = Fabric::getServiceBuilder()->getIMScope()->notify();
         $this->currentUserId = (int)$this->notifyService->core
             ->call('PROFILE')->getResponseData()->getResult()['ID'];
     }

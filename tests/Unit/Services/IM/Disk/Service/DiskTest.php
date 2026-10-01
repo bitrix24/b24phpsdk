@@ -26,6 +26,7 @@ use Bitrix24\SDK\Services\IM\Disk\Result\RecordShareResult;
 use Bitrix24\SDK\Services\IM\Disk\Service\Disk;
 use Bitrix24\SDK\Services\IM\Batch as IMBatch;
 use Bitrix24\SDK\Services\IM\Disk\Service\Batch;
+use Carbon\CarbonImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -38,7 +39,7 @@ final class DiskTest extends TestCase
         $response = $this->createStub(Response::class);
         $response
             ->method('getResponseData')
-            ->willReturn(new ResponseData(['ID' => 5153], Time::initWithZeroValues(), new Pagination()));
+            ->willReturn(new ResponseData(['ID' => 5153], new Time(0, 0, 0, 0, 0, new CarbonImmutable(), new CarbonImmutable(), 0), new Pagination()));
 
         $core = $this->createMock(CoreInterface::class);
         $core

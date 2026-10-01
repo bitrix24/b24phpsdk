@@ -125,11 +125,11 @@ class IMServiceBuilderTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->serviceBuilder = new ServiceBuilder(
+        $this->serviceBuilder = (new ServiceBuilder(
             new NullCore(),
             new NullBatch(),
             new NullBulkItemsReader(),
             new NullLogger()
-        )->getIMScope();
+        ))->getIMScope();
     }
 }

@@ -34,7 +34,7 @@ class SearchUserItemResultAnnotationsTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->searchService = Factory::getServiceBuilder(true)->getIMScope()->search();
+        $this->searchService = Fabric::getServiceBuilder(true)->getIMScope()->search();
     }
 
     /**

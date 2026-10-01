@@ -20,7 +20,7 @@ use Bitrix24\SDK\Services\IM\Search\Result\SearchDepartmentItemResult;
 use Bitrix24\SDK\Services\IM\Search\Result\SearchUserItemResult;
 use Bitrix24\SDK\Services\IM\Search\Service\Batch;
 use Bitrix24\SDK\Services\IM\Search\Service\Search;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -39,7 +39,7 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->searchService = Factory::getServiceBuilder(true)->getIMScope()->search();
+        $this->searchService = Fabric::getServiceBuilder(true)->getIMScope()->search();
     }
 
     #[\Override]

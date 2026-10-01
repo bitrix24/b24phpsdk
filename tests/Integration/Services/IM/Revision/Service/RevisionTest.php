@@ -30,7 +30,7 @@ class RevisionTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->revisionService = Factory::getServiceBuilder(true)->getIMScope()->revision();
+        $this->revisionService = Fabric::getServiceBuilder(true)->getIMScope()->revision();
     }
 
     /**

@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\IM\Department\Service\Batch;
 use Bitrix24\SDK\Services\IM\Department\Service\Department;
 use Bitrix24\SDK\Services\IM\User\Result\UserItemResult;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -32,7 +32,7 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->departmentService = Factory::getServiceBuilder()->getIMScope()->department();
+        $this->departmentService = Fabric::getServiceBuilder()->getIMScope()->department();
     }
 
     /**

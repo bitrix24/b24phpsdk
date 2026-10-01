@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\IM\Chat\ChatType;
 use Bitrix24\SDK\Services\IM\Chat\Service\Batch;
 use Bitrix24\SDK\Services\IM\Chat\Service\Chat;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -43,7 +43,7 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->chatService = Factory::getServiceBuilder()->getIMScope()->chat();
+        $this->chatService = Fabric::getServiceBuilder()->getIMScope()->chat();
         $this->currentUserId = (int)$this->chatService->core
             ->call('PROFILE')->getResponseData()->getResult()['ID'];
     }

@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\IM\Dialog\Result\DialogUserItemResult;
 use Bitrix24\SDK\Services\IM\Dialog\Service\Batch;
 use Bitrix24\SDK\Services\IM\Dialog\Service\Dialog;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -40,7 +40,7 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->dialogService = Factory::getServiceBuilder()->getIMScope()->dialog();
+        $this->dialogService = Fabric::getServiceBuilder()->getIMScope()->dialog();
         $this->currentUserId = (int)$this->dialogService->core
             ->call('PROFILE')->getResponseData()->getResult()['ID'];
     }

@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\IM\Recent\Result\RecentItemResult;
 use Bitrix24\SDK\Services\IM\Recent\Service\Batch;
 use Bitrix24\SDK\Services\IM\Recent\Service\Recent;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -34,7 +34,7 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->recentService = Factory::getServiceBuilder(true)->getIMScope()->recent();
+        $this->recentService = Fabric::getServiceBuilder(true)->getIMScope()->recent();
     }
 
     #[\Override]

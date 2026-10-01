@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\IM\User\Service\UserStatus;
 use Bitrix24\SDK\Services\IM\User\Service\UserStatusBatch;
 use Bitrix24\SDK\Services\IM\User\UserStatusType;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -38,7 +38,7 @@ class UserStatusBatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->userStatusService = Factory::getServiceBuilder(true)->getIMScope()->userStatus();
+        $this->userStatusService = Fabric::getServiceBuilder(true)->getIMScope()->userStatus();
         $this->initialStatus = $this->userStatusService->get()->status()->STATUS;
     }
 

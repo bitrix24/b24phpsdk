@@ -34,7 +34,7 @@ class RecentItemResultAnnotationsTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->recentService = Factory::getServiceBuilder(true)->getIMScope()->recent();
+        $this->recentService = Fabric::getServiceBuilder(true)->getIMScope()->recent();
     }
 
     /**

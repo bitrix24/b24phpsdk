@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Disk\Folder\Service\Folder;
 use Bitrix24\SDK\Services\IM\Disk\Service\Batch;
 use Bitrix24\SDK\Services\IM\Disk\Service\Disk;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -36,8 +36,8 @@ class BatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->diskService = Factory::getServiceBuilder()->getIMScope()->disk();
-        $this->folderService = Factory::getServiceBuilder()->getDiskScope()->folder();
+        $this->diskService = Fabric::getServiceBuilder()->getIMScope()->disk();
+        $this->folderService = Fabric::getServiceBuilder()->getDiskScope()->folder();
     }
 
     #[\Override]

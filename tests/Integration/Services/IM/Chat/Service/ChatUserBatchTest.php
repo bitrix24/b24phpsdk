@@ -19,7 +19,7 @@ use Bitrix24\SDK\Services\IM\Chat\ChatType;
 use Bitrix24\SDK\Services\IM\Chat\Service\Chat;
 use Bitrix24\SDK\Services\IM\Chat\Service\ChatUser;
 use Bitrix24\SDK\Services\IM\Chat\Service\ChatUserBatch;
-use Bitrix24\SDK\Tests\Integration\Factory;
+use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -46,7 +46,7 @@ class ChatUserBatchTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $imServiceBuilder = Factory::getServiceBuilder()->getIMScope();
+        $imServiceBuilder = Fabric::getServiceBuilder()->getIMScope();
         $this->chatService = $imServiceBuilder->chat();
         $this->chatUserService = $imServiceBuilder->chatUser();
         $this->currentUserId = (int)$this->chatUserService->core
@@ -80,8 +80,8 @@ class ChatUserBatchTest extends TestCase
         $participants = iterator_to_array($this->chatUserService->batch->list($chatIds));
 
         $this->assertSame($chatIds, array_keys($participants));
-        foreach ($participants as $userIds) {
-            $this->assertContains($this->currentUserId, $userIds);
+        foreach ($participants as $participant) {
+            $this->assertContains($this->currentUserId, $participant);
         }
     }
 
