@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
 use Carbon\CarbonImmutable;
 
 /**
- * @property-read string $id
+ * @property-read int|string $id
  * @property-read string $type
  * @property-read array $avatar
  * @property-read string $title

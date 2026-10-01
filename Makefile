@@ -764,7 +764,7 @@ test-integration-im-file-v2:
 
 .PHONY: test-integration-im-batch
 test-integration-im-batch:
-	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_batch
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_batch
 
 .PHONY: test-integration-scope-sign
 test-integration-scope-sign:
