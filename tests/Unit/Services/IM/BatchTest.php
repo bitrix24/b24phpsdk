@@ -185,7 +185,6 @@ class BatchTest extends TestCase
         $this->batchCommands = [];
 
         $core = $this->createStub(CoreInterface::class);
-        $core->method('getAuthConnector')->willReturn(null);
         $core->method('call')->willReturnCallback(
             function (string $apiMethod, array $parameters = []) use ($totalItems): Response {
                 if ($apiMethod !== 'batch') {
