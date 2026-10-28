@@ -42,7 +42,7 @@ RUN <<EOF
   rm -rf /var/lib/apt/lists/*
 EOF
 
-RUN install-php-extensions bcmath excimer intl pcntl opcache yaml zip
+RUN install-php-extensions bcmath excimer intl pcntl opcache pcov yaml zip
 
 WORKDIR /var/www/html
 

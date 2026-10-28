@@ -16,7 +16,6 @@ namespace Bitrix24\SDK\Tests\Unit\Application\Contracts\ApplicationInstallations
 use Bitrix24\SDK\Application\ApplicationStatus;
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationInterface;
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationStatus;
-use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface;
 use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountStatus;
 use Bitrix24\SDK\Application\PortalLicenseFamily;
 use Bitrix24\SDK\Core\Credentials\AuthToken;
@@ -25,10 +24,8 @@ use Bitrix24\SDK\Tests\Application\Contracts\ApplicationInstallations\Entity\App
 use Bitrix24\SDK\Tests\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterfaceTest;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountReferenceEntityImplementation;
 use Carbon\CarbonImmutable;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(Bitrix24AccountInterface::class)]
 class ApplicationInstallationInterfaceReferenceImplementationTest extends ApplicationInstallationInterfaceTest
 {
     protected function createApplicationInstallationImplementation(

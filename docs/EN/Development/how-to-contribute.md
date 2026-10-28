@@ -567,6 +567,10 @@ API-method and documentation, and not use the call `make dev-show-fields-descrip
     ```shell
     make test-unit
     ```
+    - Check unit tests code coverage for new code, reports in `var/coverage`
+    ```shell
+    make test-unit-coverage
+    ```
     - Run integration tests, scope by scope and core
     - if all checks passed you can commit changes.
 

@@ -6,6 +6,18 @@
 - Added CI check for leaked secrets (API keys, tokens, webhooks) in the codebase and git history with
   [gitleaks](https://github.com/gitleaks/gitleaks): workflow `.github/workflows/gitleaks.yml`, config `.gitleaks.toml`
   and `make lint-secrets` target, included in `make lint-all` ([#38](https://github.com/bitrix24/b24phpsdk/issues/38))
+- Added code coverage metrics for unit tests: line coverage, function and method coverage, class and trait coverage
+  ([#307](https://github.com/bitrix24/b24phpsdk/issues/307)):
+    - `pcov` extension in `docker/php-cli` image
+    - `make test-unit-coverage` target and `composer phpunit-run-unit-tests-coverage` script, reports are saved to
+      `var/coverage`: `coverage-summary.txt`, `html/`, `clover.xml`
+    - `PHPUnit code coverage` job in `.github/workflows/phpunit.yml` publishes coverage summary to the job summary
+      and uploads reports as `code-coverage-report` artifact
+
+### Fixed
+- Removed `#[CoversClass]` attributes that point to interfaces or test classes from `Application\Contracts` unit tests:
+  they are not valid code coverage targets and produce PHPUnit warnings when coverage is collected
+  ([#307](https://github.com/bitrix24/b24phpsdk/issues/307))
 
 ## 1.13.0 - 2026.09.30
 

@@ -81,6 +81,9 @@
     "phpunit-run-unit-tests": [
       "phpunit --testsuite unit_tests"
     ],
+    "phpunit-run-unit-tests-coverage": [
+      "@php -d memory_limit=-1 vendor/bin/phpunit --testsuite unit_tests --coverage-text=var/coverage/coverage-summary.txt --only-summary-for-coverage-text --coverage-html var/coverage/html --coverage-clover var/coverage/clover.xml"
+    ],
     "phpunit-run-integration-tests": [
       "phpunit --testsuite integration_tests"
     ],

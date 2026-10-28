@@ -19,10 +19,8 @@ use Bitrix24\SDK\Tests\Application\Contracts\ContactPersons\Entity\ContactPerson
 use Carbon\CarbonImmutable;
 use Darsyn\IP\Version\Multi as IP;
 use libphonenumber\PhoneNumber;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(ContactPersonReferenceEntityImplementation::class)]
 class ContactPersonInterfaceReferenceImplementationTest extends ContactPersonInterfaceTest
 {
     protected function createContactPersonImplementation(

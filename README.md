@@ -280,6 +280,26 @@ make lint-rector-fix
 make test-unit
 ```
 
+### Code coverage
+
+Unit tests code coverage collected with [pcov](https://github.com/krakjoe/pcov) and counts software metrics:
+
+- **Line Coverage** — whether each executable line was executed.
+- **Function and Method Coverage** — whether each function or method has been invoked; a function or method is
+  covered only when all of its executable lines are covered.
+- **Class and Trait Coverage** — whether each method of a class or trait is covered; a class or trait is covered only
+  when all of its methods are covered.
+
+For collect code coverage you must call in command line
+
+```shell
+make test-unit-coverage
+```
+
+Reports are saved to `var/coverage`: summary in `coverage-summary.txt`, HTML report in `html/index.html` and Clover
+XML in `clover.xml`. In CI the `PHPUnit code coverage` job publishes the summary to the job summary and uploads reports
+as the `code-coverage-report` artifact.
+
 ### Integration tests
 
 **Slow** tests with full lifecycle with your **test** Bitrix24 account via webhook.

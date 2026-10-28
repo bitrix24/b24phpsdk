@@ -34,11 +34,9 @@ use Bitrix24\SDK\Tests\Unit\Application\Contracts\ContactPersons\Repository\InMe
 use Carbon\CarbonImmutable;
 use Darsyn\IP\Version\Multi as IP;
 use libphonenumber\PhoneNumber;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Log\NullLogger;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(Bitrix24PartnerRepositoryInterface::class)]
 class InMemoryBitrix24PartnerRepositoryImplementationTest extends Bitrix24PartnerRepositoryInterfaceTest
 {
     protected function createBitrix24PartnerImplementation(

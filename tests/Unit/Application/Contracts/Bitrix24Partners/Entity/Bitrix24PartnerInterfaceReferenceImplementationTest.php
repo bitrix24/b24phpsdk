@@ -18,10 +18,8 @@ use Bitrix24\SDK\Application\Contracts\Bitrix24Partners\Entity\Bitrix24PartnerSt
 use Bitrix24\SDK\Tests\Application\Contracts\Bitrix24Partners\Entity\Bitrix24PartnerInterfaceTest;
 use Carbon\CarbonImmutable;
 use libphonenumber\PhoneNumber;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(Bitrix24PartnerInterface::class)]
 class Bitrix24PartnerInterfaceReferenceImplementationTest extends Bitrix24PartnerInterfaceTest
 {
     protected function createBitrix24PartnerImplementation(

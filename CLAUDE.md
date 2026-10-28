@@ -45,6 +45,7 @@ make lint-secrets             # Scan git history for leaked secrets (gitleaks, v
 
 # Testing
 make test-unit                # Fast in-memory unit tests
+make test-unit-coverage       # Unit tests with code coverage (line, method, class), reports in var/coverage
 
 # Integration tests (require real Bitrix24 portal - see below)
 make test-integration-core

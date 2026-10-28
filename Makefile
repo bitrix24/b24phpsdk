@@ -51,6 +51,7 @@ help:
 	@echo "lint-secrets              - scan git history for leaked secrets with gitleaks"
 	@echo ""
 	@echo "test-unit                 - run unit tests"
+	@echo "test-unit-coverage        - run unit tests with code coverage report (var/coverage)"
 	@echo "test-integration-calendar-event - run Calendar Event integration tests"
 	@echo "test-integration-calendar-resource - run Calendar Resource integration tests"
 	@echo "test-integration-sale-basket-property - run BasketProperty integration tests"
@@ -212,6 +213,13 @@ lint-all: lint-allowed-licenses lint-secrets lint-cs-fixer lint-phpstan lint-rec
 .PHONY: test-unit
 test-unit:
 	docker-compose run --rm php-cli vendor/bin/phpunit --testsuite unit_tests --display-warnings
+
+# unit tests with code coverage: line, function and method, class and trait coverage
+# reports: summary in var/coverage/coverage-summary.txt, html in var/coverage/html, clover in var/coverage/clover.xml
+.PHONY: test-unit-coverage
+test-unit-coverage:
+	docker-compose run --rm php-cli composer phpunit-run-unit-tests-coverage
+	@cat var/coverage/coverage-summary.txt
 
 # integration tests with granularity by api-scope
 .PHONY: test-integration-scope-telephony
