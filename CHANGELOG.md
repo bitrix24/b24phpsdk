@@ -4,11 +4,16 @@
 
 ### Added
 - Added REST v3 `note.file.list` with typed file results, attachment dates, and opaque cursor pagination; added dedicated file field metadata access while preserving existing methods ([#688](https://github.com/bitrix24/b24phpsdk/issues/688))
+- Added an eager `Core\Credentials\RenewedAuthToken` compatibility alias preserving legacy constructors, signatures and serialized tokens ([#117](https://github.com/bitrix24/b24phpsdk/issues/117))
 
 ### Changed
 - CI quality checks now build the PHP runtime from the current Dockerfile with fresh base images, avoiding dependency-install failures from an outdated shared PHP image ([#688](https://github.com/bitrix24/b24phpsdk/issues/688))
 
+### Deprecated
+- Deprecated the `Core\Response\DTO\RenewedAuthToken` name in favor of `Core\Credentials\RenewedAuthToken` ([#117](https://github.com/bitrix24/b24phpsdk/issues/117))
+
 ### Fixed
+- Recognized four current portal scopes and validated portal-scope containment without requiring every SDK scope to be installed on a test portal ([#117](https://github.com/bitrix24/b24phpsdk/issues/117))
 - Corrected `InstantMessenger::VALUE_TYPE` conversion and PHPDoc to use `InstantMessengerValueType` ([#156](https://github.com/bitrix24/b24phpsdk/issues/156))
 
 ## 3.7.0
