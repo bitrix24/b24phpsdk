@@ -27,6 +27,7 @@ use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
  * @property-read bool        $filterable
  * @property-read bool        $sortable
  * @property-read bool        $editable
+ * @property-read array|null  $editableGroups
  * @property-read bool        $multiple
  * @property-read string|null $elementType
  */

@@ -19,6 +19,7 @@ use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\Note\Collection\Service\Collection;
 use Bitrix24\SDK\Services\Note\Document\Service\Document;
 use Bitrix24\SDK\Services\Note\File\Service\File;
+use Bitrix24\SDK\Services\Note\FileField\Service\FileField;
 
 #[ApiServiceBuilderMetadata(new Scope(['note']))]
 class NoteServiceBuilder extends AbstractServiceBuilder
@@ -55,6 +56,16 @@ class NoteServiceBuilder extends AbstractServiceBuilder
                 $this->log
             );
         }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function fileField(): FileField
+    {
+        $this->serviceCache[__METHOD__] ??= new FileField(
+            $this->core,
+            $this->log
+        );
 
         return $this->serviceCache[__METHOD__];
     }
