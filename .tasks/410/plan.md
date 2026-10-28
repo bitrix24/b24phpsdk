@@ -74,4 +74,4 @@ For raw JSON, use direct `docker compose run --rm --no-TTY` with `--no-interacti
 
 ## Implementation verification outcome
 
-The command/calculator unit suites, live JSON report consistency test and non-TTY Make coverage target pass. The legacy menu remains covered. All shared light gates are run on the combined candidate; PR CI verifies each isolated branch. Broader scope-catalog readiness is recorded separately and PRs remain drafts.
+The command/calculator unit suites, live JSON report consistency test and non-TTY Make coverage target pass. The legacy menu remains covered. All shared light gates are run on the combined candidate; PR CI verifies each isolated branch. Broader scope-catalog readiness is recorded separately and PR readiness is tracked by CI.
