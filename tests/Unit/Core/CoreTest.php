@@ -22,12 +22,15 @@ use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
 use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\Endpoints;
+use Bitrix24\SDK\Core\Credentials\RenewedAuthToken as CredentialsRenewedAuthToken;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Exceptions\AuthForbiddenException;
 use Bitrix24\SDK\Core\Exceptions\PortalUnavailableException;
 use Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken;
+use Bitrix24\SDK\Events\AuthTokenRenewedEvent;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -141,9 +144,13 @@ class CoreTest extends TestCase
         $core->call('documentation', apiVersion: ApiVersion::v3);
     }
 
+    /**
+     * @param class-string<RenewedAuthToken> $tokenClass
+     */
+    #[DataProvider('renewedAuthTokenClassProvider')]
     #[Test]
     #[TestDox('call() preserves API version when repeating a request after expired_token renewal')]
-    public function testCallPreservesApiVersionAfterExpiredTokenRenewal(): void
+    public function testCallPreservesApiVersionAfterExpiredTokenRenewal(string $tokenClass): void
     {
         $expiredTokenResponse = $this->createStub(ResponseInterface::class);
         $expiredTokenResponse->method('getStatusCode')->willReturn(401);
@@ -157,7 +164,7 @@ class CoreTest extends TestCase
             new ApplicationProfile('client-id', 'client-secret', new Scope(['tasks'])),
             new Endpoints('https://myportal.example.com', 'https://oauth.bitrix.info/')
         );
-        $renewedAuthToken = new RenewedAuthToken(
+        $renewedAuthToken = new $tokenClass(
             new AuthToken('new-access-token', 'new-refresh-token', time() + 3600),
             'member-id',
             'https://myportal.example.com',
@@ -183,16 +190,38 @@ class CoreTest extends TestCase
                 }
             );
 
+        $dispatchedTokens = [];
+        $eventDispatcher = new EventDispatcher();
+        $eventDispatcher->addListener(
+            AuthTokenRenewedEvent::class,
+            static function (AuthTokenRenewedEvent $event) use (&$dispatchedTokens): void {
+                $dispatchedTokens[] = $event->getRenewedToken();
+            }
+        );
+
         $core = new Core(
             $apiClient,
             new ApiLevelErrorHandler(new NullLogger()),
-            new EventDispatcher(),
+            $eventDispatcher,
             new NullLogger()
         );
 
         $core->call('tasks.task.get', ['id' => 1], ApiVersion::v3);
 
         $this->assertSame([ApiVersion::v3, ApiVersion::v3], $capturedApiVersions);
+        $this->assertSame([$renewedAuthToken], $dispatchedTokens);
+        $this->assertSame($renewedAuthToken->authToken, $credentials->getAuthToken());
+    }
+
+    /**
+     * @return array<string, array{class-string<RenewedAuthToken>}>
+     */
+    public static function renewedAuthTokenClassProvider(): array
+    {
+        return [
+            'legacy DTO' => [RenewedAuthToken::class],
+            'credentials' => [CredentialsRenewedAuthToken::class],
+        ];
     }
 
     #[Test]
