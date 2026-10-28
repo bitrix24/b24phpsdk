@@ -7,6 +7,7 @@
 - Added REST v3 `note.collection.move`, `note.collection.restore` and `note.collection.unarchive` to the Note `Collection` service; added `accessLevel`, `state` (`CollectionState` enum), `isArchived` and `markdownDescription` to `CollectionItemResult`, matching selectors to `CollectionSelectBuilder`, `editableGroups` to `CollectionFieldItemResult` and `getFieldsDescription()` to `CollectionFieldsResult` ([#687](https://github.com/bitrix24/b24phpsdk/issues/687))
 - Added an eager `Core\Credentials\RenewedAuthToken` compatibility alias preserving legacy constructors, signatures and serialized tokens ([#117](https://github.com/bitrix24/b24phpsdk/issues/117))
 - Added non-interactive legacy API coverage reporting with `--show`, `--scope` and `--format=json` options ([#410](https://github.com/bitrix24/b24phpsdk/issues/410))
+- Added REST v3 `note.document.list` with typed `DocumentFilter` and opaque cursor pagination, `note.document.move`, `note.document.restore` and `note.document.unarchive`; added `contentUpdatedAt`, `state` (`DocumentState` enum), `isArchived`, `isTrashed` and `isOrphan` to `DocumentItemResult` and `getFieldsDescription()` to `DocumentFieldsResult` ([#686](https://github.com/bitrix24/b24phpsdk/issues/686))
 
 ### Changed
 - CI quality checks now build the PHP runtime from the current Dockerfile with fresh base images, avoiding dependency-install failures from an outdated shared PHP image ([#688](https://github.com/bitrix24/b24phpsdk/issues/688))

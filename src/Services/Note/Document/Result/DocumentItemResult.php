@@ -31,6 +31,11 @@ use Carbon\CarbonImmutable;
  * @property-read int|null        $updatedBy
  * @property-read CarbonImmutable $createdAt
  * @property-read CarbonImmutable $updatedAt
+ * @property-read CarbonImmutable|null $contentUpdatedAt
+ * @property-read DocumentState   $state
+ * @property-read bool            $isArchived
+ * @property-read bool            $isTrashed
+ * @property-read bool            $isOrphan
  */
 #[OpenApiEntity(
     entityKey:     'bitrix.note.documentitemdto',
