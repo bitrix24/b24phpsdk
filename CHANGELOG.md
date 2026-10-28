@@ -8,6 +8,9 @@
 ### Changed
 - CI quality checks now build the PHP runtime from the current Dockerfile with fresh base images, avoiding dependency-install failures from an outdated shared PHP image ([#688](https://github.com/bitrix24/b24phpsdk/issues/688))
 
+### Fixed
+- Distinguished response decoding failures with `ResponseDecodingException` while preserving sanitized diagnostics and excluding unsafe exception chains ([#667](https://github.com/bitrix24/b24phpsdk/issues/667))
+
 ## 3.7.0
 
 ### Added
