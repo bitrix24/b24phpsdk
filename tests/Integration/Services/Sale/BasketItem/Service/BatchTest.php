@@ -64,6 +64,46 @@ class BatchTest extends TestCase
         $this->orderId = $serviceBuilder->getSaleScope()->order()->add($orderFields)->getId();
     }
 
+    public function testOwnedBasketItemsKeepUppercaseAndNameOrderAcrossPages(): void
+    {
+        $ids = [];
+        $names = [];
+        try {
+            $fields = [];
+            for ($i = 0; $i < 105; ++$i) {
+                $fields[] = ['orderId' => $this->orderId, 'productId' => 0, 'currency' => 'USD', 'quantity' => 1.0, 'name' => sprintf('sdk-363-%03d', 105 - $i)];
+            }
+
+            foreach ($this->basketItemService->batch->add($fields) as $position => $result) {
+                $id = $result->getId();
+                $ids[] = $id;
+                $names[$id] = $fields[$position]['name'];
+            }
+
+            self::assertCount(105, $ids);
+            $filter = ['orderId' => $this->orderId];
+            $expected = $ids;
+            sort($expected, SORT_NUMERIC);
+            $actual = [];
+            foreach ($this->basketItemService->batch->list($filter, ['id' => 'ASC'], ['id']) as $item) {
+                $actual[] = $item->id;
+            }
+
+            self::assertSame($expected, $actual);
+            asort($names, SORT_STRING);
+            $actual = [];
+            foreach ($this->basketItemService->batch->list($filter, ['name' => 'ASC'], ['id', 'name'], 51) as $item) {
+                $actual[] = $item->id;
+            }
+
+            self::assertSame(array_slice(array_keys($names), 0, 51), $actual);
+        } finally {
+            foreach ($ids as $id) {
+                $this->basketItemService->delete($id);
+            }
+        }
+    }
+
     /**
      * @throws BaseException
      * @throws TransportException

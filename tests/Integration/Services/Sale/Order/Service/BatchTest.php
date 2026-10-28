@@ -28,11 +28,56 @@ use PHPUnit\Framework\TestCase;
 class BatchTest extends TestCase
 {
     protected Order $orderService;
-    
+
     #[\Override]
     protected function setUp(): void
     {
         $this->orderService = Factory::getServiceBuilder()->getSaleScope()->order();
+    }
+
+    public function testOwnedOrdersKeepDescendingAndPriceOrderAcrossPages(): void
+    {
+        $personTypeId = $this->getPersonTypeId();
+        $ids = [];
+        $prices = [];
+        try {
+            $fields = [];
+            for ($i = 0; $i < 105; ++$i) {
+                $fields[] = ['lid' => 's1', 'personTypeId' => $personTypeId, 'currency' => 'USD', 'price' => (105 - $i) * 10];
+            }
+
+            foreach ($this->orderService->batch->add($fields) as $position => $result) {
+                $id = $result->getId();
+                $ids[] = $id;
+                $prices[$id] = $fields[$position]['price'];
+            }
+
+            self::assertCount(105, $ids);
+            $filter = ['personTypeId' => $personTypeId];
+            $expected = $ids;
+            rsort($expected, SORT_NUMERIC);
+            $actual = [];
+            foreach ($this->orderService->batch->list($filter, ['id' => 'DESC'], ['id']) as $order) {
+                $actual[] = $order->id;
+            }
+
+            self::assertSame($expected, $actual);
+            asort($prices, SORT_NUMERIC);
+            $actual = [];
+            foreach ($this->orderService->batch->list($filter, ['price' => 'ASC'], ['id', 'price'], 51) as $order) {
+                $actual[] = $order->id;
+            }
+
+            self::assertSame(array_slice(array_keys($prices), 0, 51), $actual);
+        } finally {
+            try {
+                foreach ($ids as $id) {
+                    $this->orderService->delete($id);
+                }
+            } finally {
+                $this->deletePersonType($personTypeId);
+            }
+        }
     }
 
     /**
@@ -48,7 +93,7 @@ class BatchTest extends TestCase
             $items[] = [
                 'lid' => 's1',
                 'personTypeId' => $personTypeId,
-                'currency' => 'USD', 
+                'currency' => 'USD',
                 'price' => 100 * ($i + 1)
             ];
         }
@@ -83,7 +128,7 @@ class BatchTest extends TestCase
             $items[] = [
                 'lid' => 's1',
                 'personTypeId' => $personTypeId,
-                'currency' => 'USD', 
+                'currency' => 'USD',
                 'price' => 100 * ($i + 1)
             ];
         }
@@ -132,7 +177,7 @@ class BatchTest extends TestCase
             $items[] = [
                 'lid' => 's1',
                 'personTypeId' => $personTypeId,
-                'currency' => 'USD', 
+                'currency' => 'USD',
                 'price' => 100 * ($i + 1),
                 'comments' => 'Test order'.$i,
             ];
@@ -166,7 +211,7 @@ class BatchTest extends TestCase
 
         $this->deletePersonType($personTypeId);
     }
-    
+
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
@@ -180,7 +225,7 @@ class BatchTest extends TestCase
             $items[] = [
                 'lid' => 's1',
                 'personTypeId' => $personTypeId,
-                'currency' => 'USD', 
+                'currency' => 'USD',
                 'price' => 100 * ($i + 1),
                 'comments' => 'Test order'.$i,
             ];
@@ -203,7 +248,7 @@ class BatchTest extends TestCase
         self::assertEquals(count($items), $cnt);
         $this->deletePersonType($personTypeId);
     }
-    
+
     protected function getPersonTypeId(): int
     {
         $core = Factory::getCore();

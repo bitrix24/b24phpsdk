@@ -70,7 +70,10 @@
   "autoload": {
     "psr-4": {
       "Bitrix24\\SDK\\": "src"
-    }
+    },
+    "files": [
+      "src/Core/Credentials/RenewedAuthToken.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {

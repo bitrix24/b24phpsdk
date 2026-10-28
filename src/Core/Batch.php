@@ -614,14 +614,12 @@ class Batch implements BatchOperationsInterface
                 // Extract elements from the result
                 $resultElements = $this->extractElementsFromBatchResult($batchResult, $isCrmItemsInBatch);
 
-                // For each result element, return it and track the last element ID
-                // The lastElementId will be used for the next batch if using ASC sort
-                foreach ($resultElements as $resultElement) {
-                    // Update lastElementId properly depending on sort order
-                    if (isset($resultElement[$keyId])) {
-                        $lastElementId = (int)$resultElement[$keyId];
-                    }
+                // Reuse the response-ID hook on every page, including entity-specific envelopes.
+                if ($resultElements !== []) {
+                    $lastElementId = $this->getLastElementId($resultElements, $keyId, $isAscendingSort);
+                }
 
+                foreach ($resultElements as $resultElement) {
                     yield $resultElement;
                     $elementsCounter++;
                     if ($limit !== null && $elementsCounter >= $limit) {
