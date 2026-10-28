@@ -203,6 +203,14 @@ trait CustomBitrix24Assertions
                         break;
                     }
 
+                    // string values may be exposed as a string-backed enum
+                    $annotatedType = ltrim(str_replace('|null', '', $propsFromAnnotations[$fieldCode]), '\\');
+                    if (enum_exists($annotatedType)
+                        && (new \ReflectionEnum($annotatedType))->getBackingType()?->getName() === 'string'
+                    ) {
+                        break;
+                    }
+
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'string'),
                         sprintf(
@@ -316,6 +324,7 @@ trait CustomBitrix24Assertions
                     );
                     break;
                 case 'char':
+                case 'bool':
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'bool'),
                         sprintf(
