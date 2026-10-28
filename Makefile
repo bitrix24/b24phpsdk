@@ -48,6 +48,7 @@ help:
 	@echo "lint-phpstan              - lint source code with phpstan"
 	@echo "lint-rector               - lint source code with rector"
 	@echo "lint-rector-fix           - fix source code with rector"
+	@echo "lint-secrets              - scan git history for leaked secrets with gitleaks"
 	@echo ""
 	@echo "test-unit                 - run unit tests"
 	@echo "test-unit-coverage        - run unit tests with code coverage report (text, html, clover in var/coverage)"
@@ -201,8 +202,13 @@ lint-rector:
 lint-rector-fix:
 	docker-compose run --rm php-cli vendor/bin/rector process
 
+.PHONY: lint-secrets
+lint-secrets:
+	docker run --rm -v $(PWD):/repo -w /repo --entrypoint sh ghcr.io/gitleaks/gitleaks:v8.30.1 \
+		-c 'git config --global --add safe.directory /repo && gitleaks git --no-banner --redact --verbose --config .gitleaks.toml .'
+
 .PHONY: lint-all
-lint-all: lint-allowed-licenses lint-cs-fixer lint-phpstan lint-rector
+lint-all: lint-allowed-licenses lint-secrets lint-cs-fixer lint-phpstan lint-rector
 
 # unit tests
 .PHONY: test-unit

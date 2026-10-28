@@ -3,6 +3,9 @@
 ## Unreleased
 
 ### Added
+- Added CI check for leaked secrets (API keys, tokens, webhooks) in the codebase and git history with
+  [gitleaks](https://github.com/gitleaks/gitleaks): workflow `.github/workflows/gitleaks.yml`, config `.gitleaks.toml`
+  and `make lint-secrets` target, included in `make lint-all` ([#38](https://github.com/bitrix24/b24phpsdk/issues/38))
 - Added code coverage metrics for unit tests: line, function and method, class and trait coverage
   ([#307](https://github.com/bitrix24/b24phpsdk/issues/307)):
     - `pcov` extension in the `php-cli` docker container (disabled by default, enabled only for coverage runs)
