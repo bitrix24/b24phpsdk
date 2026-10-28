@@ -95,6 +95,9 @@
         <testsuite name="integration_tests_im_open_lines_operator">
             <directory>./tests/Integration/Services/IMOpenLines/Operator/</directory>
         </testsuite>
+        <testsuite name="integration_tests_placement_registrar">
+            <file>./tests/Integration/Services/Placement/Service/PlacementRegistrarTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_scope_placement">
             <directory>./tests/Integration/Services/Placement/</directory>
         </testsuite>

@@ -319,6 +319,10 @@ test-integration-im-chat-user:
 test-integration-im-notify:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_notify
 
+.PHONY: test-integration-placement-registrar
+test-integration-placement-registrar:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_placement_registrar
+
 .PHONY: test-integration-scope-placement
 test-integration-scope-placement:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_placement
