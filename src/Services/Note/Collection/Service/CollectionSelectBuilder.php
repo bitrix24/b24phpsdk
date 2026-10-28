@@ -26,6 +26,12 @@ class CollectionSelectBuilder extends AbstractSelectBuilder
         $this->select[] = 'id';
     }
 
+    public function accessLevel(): self
+    {
+        $this->select[] = 'accessLevel';
+        return $this;
+    }
+
     public function createdAt(): self
     {
         $this->select[] = 'createdAt';
@@ -35,6 +41,18 @@ class CollectionSelectBuilder extends AbstractSelectBuilder
     public function createdBy(): self
     {
         $this->select[] = 'createdBy';
+        return $this;
+    }
+
+    public function isArchived(): self
+    {
+        $this->select[] = 'isArchived';
+        return $this;
+    }
+
+    public function markdownDescription(): self
+    {
+        $this->select[] = 'markdownDescription';
         return $this;
     }
 
@@ -53,6 +71,12 @@ class CollectionSelectBuilder extends AbstractSelectBuilder
     public function position(): self
     {
         $this->select[] = 'position';
+        return $this;
+    }
+
+    public function state(): self
+    {
+        $this->select[] = 'state';
         return $this;
     }
 

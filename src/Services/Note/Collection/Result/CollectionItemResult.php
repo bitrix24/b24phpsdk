@@ -25,10 +25,14 @@ use Carbon\CarbonImmutable;
  * @property-read string          $name
  * @property-read int|null        $position
  * @property-read string|null     $policyLevel
+ * @property-read string|null     $accessLevel
+ * @property-read CollectionState $state
+ * @property-read bool            $isArchived
  * @property-read int|null        $createdBy
  * @property-read CarbonImmutable $createdAt
  * @property-read int|null        $updatedBy
  * @property-read CarbonImmutable $updatedAt
+ * @property-read string|null     $markdownDescription
  */
 #[OpenApiEntity(
     entityKey:     'bitrix.note.collectionitemdto',

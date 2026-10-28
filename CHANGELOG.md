@@ -4,6 +4,7 @@
 
 ### Added
 - Added REST v3 `note.file.list` with typed file results, attachment dates, and opaque cursor pagination; added dedicated file field metadata access while preserving existing methods ([#688](https://github.com/bitrix24/b24phpsdk/issues/688))
+- Added REST v3 `note.collection.move`, `note.collection.restore` and `note.collection.unarchive` to the Note `Collection` service; added `accessLevel`, `state` (`CollectionState` enum), `isArchived` and `markdownDescription` to `CollectionItemResult`, matching selectors to `CollectionSelectBuilder`, `editableGroups` to `CollectionFieldItemResult` and `getFieldsDescription()` to `CollectionFieldsResult` ([#687](https://github.com/bitrix24/b24phpsdk/issues/687))
 - Added an eager `Core\Credentials\RenewedAuthToken` compatibility alias preserving legacy constructors, signatures and serialized tokens ([#117](https://github.com/bitrix24/b24phpsdk/issues/117))
 - Added non-interactive legacy API coverage reporting with `--show`, `--scope` and `--format=json` options ([#410](https://github.com/bitrix24/b24phpsdk/issues/410))
 
@@ -19,6 +20,7 @@
 - Corrected `InstantMessenger::VALUE_TYPE` conversion and PHPDoc to use `InstantMessengerValueType` ([#156](https://github.com/bitrix24/b24phpsdk/issues/156))
 - Distinguished response decoding failures with `ResponseDecodingException` while preserving sanitized diagnostics and excluding unsafe exception chains ([#667](https://github.com/bitrix24/b24phpsdk/issues/667))
 - Reused core pagination for Task, Sale Order and BasketItem batches, preserving requested sorting, nested result references, filters and limits ([#363](https://github.com/bitrix24/b24phpsdk/issues/363))
+- Fixed dead REST v3 documentation links in the Note `Collection` service metadata; they now point to `https://apidocs.bitrix24.com/api-reference/note/collection/` ([#687](https://github.com/bitrix24/b24phpsdk/issues/687))
 
 ## 3.7.0
 
