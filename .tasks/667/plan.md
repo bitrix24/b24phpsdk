@@ -67,4 +67,4 @@ The malformed-response regression uses deterministic local doubles; live portal 
 
 ## Implementation verification outcome
 
-The decoding/security unit suites and focused live Core calls pass. The broad Core suite fails only the unchanged ScopeTest; the same failure reproduces on clean original v3-dev. All shared light gates are run on the combined candidate; PR CI verifies each isolated branch. Broader scope-catalog readiness is recorded separately and PRs remain drafts.
+The decoding/security unit suites and focused live Core calls pass. The initial broad Core suite failed only ScopeTest; the user-authorized credentials follow-up now corrects its catalog and per-portal subset contract. All shared light gates are run on the combined candidate; PR CI verifies each isolated branch. Broader scope-catalog readiness is recorded separately and PR readiness is tracked by CI.
