@@ -25,11 +25,11 @@ use Bitrix24\SDK\Tests\Integration\Fabric;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationReferenceEntityImplementation;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\Bitrix24Accounts\Repository\InMemoryBitrix24AccountRepositoryImplementation;
 use Carbon\CarbonImmutable;
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Psr\Log\NullLogger;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(ApplicationInstallationRepositoryInterface::class)]
+#[CoversNothing]
 class InMemoryApplicationInstallationRepositoryImplementationTest extends ApplicationInstallationRepositoryInterfaceTest
 {
     protected function createApplicationInstallationImplementation(
