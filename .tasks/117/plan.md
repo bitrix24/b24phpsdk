@@ -66,4 +66,23 @@ make test-integration-core
 
 ## Implementation verification outcome
 
-Constructor/factory/interface/subclass/serialization and fresh-process eager-alias tests pass. Focused live Core calls pass. The broad ScopeTest failure reproduces on clean original v3-dev. All shared light gates are run on the combined candidate; PR CI verifies each isolated branch. Broader scope-catalog readiness is recorded separately and PRs remain drafts.
+Constructor/factory/interface/subclass/serialization and fresh-process eager-alias tests pass. Focused live Core calls pass. The initial broad ScopeTest failure was reproduced on clean original v3-dev and is corrected in the credentials follow-up. All shared light gates are run on the combined candidate; PR CI verifies each isolated branch. Broader scope-catalog readiness is recorded separately and PR readiness is tracked by CI.
+
+## User-expanded ScopeTest follow-up
+
+The user explicitly requested fixing ScopeTest and completing all five PRs as ready
+with green CI. The official scope method with full=true returns all scopes of the
+current portal, rather than every scope supported across every Bitrix24 edition.
+The integration test now requires the SDK catalog to contain every returned scope,
+while permitting additional SDK scopes not installed on that portal. The strict
+constructor still rejects genuinely unknown codes.
+
+Add the four observed missing registered codes (aiassistant, biconnectormobile,
+bizprocdesigner, mailsender) to Scope's catalog. Unit cases first reproduced four
+UnknownScopeCodeException errors; the updated catalog and live ScopeTest pass.
+These bounded credentials-related changes are included as a separate commit in
+the #117 PR, preserving the requested five-PR structure.
+
+Additional files: src/Core/Credentials/Scope.php,
+tests/Unit/Core/Credentials/ScopeTest.php, and
+tests/Integration/Core/Credentials/ScopeTest.php.

@@ -12,6 +12,9 @@
 ### Deprecated
 - Deprecated the `Core\Response\DTO\RenewedAuthToken` name in favor of `Core\Credentials\RenewedAuthToken` ([#117](https://github.com/bitrix24/b24phpsdk/issues/117))
 
+### Fixed
+- Recognized four current portal scopes and validated portal-scope containment without requiring every SDK scope to be installed on a test portal ([#117](https://github.com/bitrix24/b24phpsdk/issues/117))
+
 ## 3.7.0
 
 ### Added

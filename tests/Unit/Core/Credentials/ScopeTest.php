@@ -130,6 +130,24 @@ class ScopeTest extends TestCase
         $this->assertEquals(['call', 'crm', 'im'], $scope->getScopeCodes());
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('recentPortalScopes')]
+    public function testRecognizesCurrentPortalScopes(string $code): void
+    {
+        $scope = Scope::initFromString(strtoupper($code));
+        self::assertSame([$code], $scope->getScopeCodes());
+        self::assertTrue($scope->contains($code));
+    }
+
+    public static function recentPortalScopes(): array
+    {
+        return [
+            ['aiassistant'],
+            ['biconnectormobile'],
+            ['bizprocdesigner'],
+            ['mailsender'],
+        ];
+    }
+
     public function testGetAvailableScopes(): void
     {
         $this->assertGreaterThan(1, count(Scope::getAvailableScopeCodes()));
