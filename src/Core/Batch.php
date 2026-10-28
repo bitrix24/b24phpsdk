@@ -927,11 +927,31 @@ class Batch implements BatchOperationsInterface
             $apiCommands[$command->getId()] = sprintf(
                 '%s?%s',
                 $command->getApiMethod(),
-                http_build_query($parameters)
+                http_build_query($this->replaceNullWithEmptyString($parameters))
             );
         }
 
         return $apiCommands;
+    }
+
+    /**
+     * http_build_query() silently drops null values, so filters like ['parentId150' => null] would vanish
+     * from batch sub-commands; an empty value is what Bitrix24 treats as null in a query string
+     *
+     * @param array<array-key, mixed> $parameters
+     * @return array<array-key, mixed>
+     */
+    private function replaceNullWithEmptyString(array $parameters): array
+    {
+        foreach ($parameters as $key => $value) {
+            if ($value === null) {
+                $parameters[$key] = '';
+            } elseif (is_array($value)) {
+                $parameters[$key] = $this->replaceNullWithEmptyString($value);
+            }
+        }
+
+        return $parameters;
     }
 
 

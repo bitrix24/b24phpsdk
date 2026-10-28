@@ -7,3 +7,10 @@ updates:
     labels:
       - "dependencies"
       - "github-actions"
+  - package-ecosystem: "docker"
+    directory: "/docker/php-cli"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "docker"

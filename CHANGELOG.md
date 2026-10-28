@@ -4,6 +4,7 @@
 
 ### Added
 - Added an installer-oriented placement registrar with idempotent registration, explicit replacement policy and per-handler results ([#446](https://github.com/bitrix24/b24phpsdk/issues/446))
+- Added OpenSSF Scorecard workflow that analyses the default branch weekly and on push, uploading SARIF results to GitHub code scanning without publishing the score yet ([#95](https://github.com/bitrix24/b24phpsdk/issues/95))
 - Added typed CRM call-list services for all six `crm.calllist.*` methods and batch add/update/list support ([#208](https://github.com/bitrix24/b24phpsdk/issues/208))
 - Added REST v3 `note.file.list` with typed file results, attachment dates, and opaque cursor pagination; added dedicated file field metadata access while preserving existing methods ([#688](https://github.com/bitrix24/b24phpsdk/issues/688))
 - Added REST v3 `note.collection.move`, `note.collection.restore` and `note.collection.unarchive` to the Note `Collection` service; added `accessLevel`, `state` (`CollectionState` enum), `isArchived` and `markdownDescription` to `CollectionItemResult`, matching selectors to `CollectionSelectBuilder`, `editableGroups` to `CollectionFieldItemResult` and `getFieldsDescription()` to `CollectionFieldsResult` ([#687](https://github.com/bitrix24/b24phpsdk/issues/687))
@@ -12,6 +13,7 @@
 - Added REST v3 `note.document.list` with typed `DocumentFilter` and opaque cursor pagination, `note.document.move`, `note.document.restore` and `note.document.unarchive`; added `contentUpdatedAt`, `state` (`DocumentState` enum), `isArchived`, `isTrashed` and `isOrphan` to `DocumentItemResult` and `getFieldsDescription()` to `DocumentFieldsResult` ([#686](https://github.com/bitrix24/b24phpsdk/issues/686))
 
 ### Changed
+- Hardened CI workflows for OpenSSF Scorecard: added least-privilege `GITHUB_TOKEN` permissions to every workflow, pinned all GitHub Actions to full commit SHAs and enabled Dependabot updates for the `docker/php-cli` base images ([#95](https://github.com/bitrix24/b24phpsdk/issues/95))
 - CI quality checks now build the PHP runtime from the current Dockerfile with fresh base images, avoiding dependency-install failures from an outdated shared PHP image ([#688](https://github.com/bitrix24/b24phpsdk/issues/688))
 - Updated `b24phpsdk-maintainer` skill: documented non-interactive legacy coverage commands, JSON output and verification ([#410](https://github.com/bitrix24/b24phpsdk/issues/410))
 
@@ -24,6 +26,7 @@
 - Distinguished response decoding failures with `ResponseDecodingException` while preserving sanitized diagnostics and excluding unsafe exception chains ([#667](https://github.com/bitrix24/b24phpsdk/issues/667))
 - Reused core pagination for Task, Sale Order and BasketItem batches, preserving requested sorting, nested result references, filters and limits ([#363](https://github.com/bitrix24/b24phpsdk/issues/363))
 - Fixed dead REST v3 documentation links in the Note `Collection` service metadata; they now point to `https://apidocs.bitrix24.com/api-reference/note/collection/` ([#687](https://github.com/bitrix24/b24phpsdk/issues/687))
+- Fixed `Core\Batch` dropping `null` parameters from batch sub-commands, so filters like `['parentId150' => null]` were silently ignored; `null` values are now sent as empty values, matching non-batch calls ([#319](https://github.com/bitrix24/b24phpsdk/issues/319))
 
 ## 3.7.0
 

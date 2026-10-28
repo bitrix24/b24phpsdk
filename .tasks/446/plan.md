@@ -273,3 +273,9 @@ Review corrections are complete: all optional localization fields are validated,
 - Focused live test command was attempted: two prerequisite errors in Factory, zero assertions, no portal calls/writes. OAuth `auth.json` is absent. The broader existing Placement live suite is pending the same prerequisite. No skipped or incomplete test is counted as a successful live verification.
 
 Publish only as a draft under the user's explicit instruction. Before ready/merge: authorize the test app, run the focused registrar and existing Placement suites, confirm real OPTIONS/LANG_ALL round trips and repeat skipping, verify global USER_ID=0 versus user-specific isolation (PAGE_BACKGROUND_WORKER), and resolve any portal discrepancies. Replacement remains non-atomic and restoration best effort as documented. No release or merge is authorized by draft publication.
+
+## Synchronization with current v3-dev
+
+Draft PR creation detected a conflict because v3-dev advanced during implementation to `96a8fdf3`. Merged that base into the feature branch without rewriting published history. The only conflict was adjacent Added entries in CHANGELOG; retained both the placement registrar entry and the incoming OpenSSF Scorecard entry. Incoming shared CI workflow and Core Batch changes remain intact. Repeat the full light gate on the merged tree before pushing the resolution.
+
+Post-merge full light gate passed: 2,255 unit tests / 12,151 assertions, unchanged 11 pre-existing deprecations; CS Fixer, Rector, PHPStan and Deptrac all passed. The extra baseline test comes from the incoming Core Batch work. Draft PR: https://github.com/bitrix24/b24phpsdk/pull/702. Live OAuth prerequisites remain unchanged.
