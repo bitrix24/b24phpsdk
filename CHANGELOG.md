@@ -11,6 +11,7 @@
 - Added REST v3 `note.document.list` with typed `DocumentFilter` and opaque cursor pagination, `note.document.move`, `note.document.restore` and `note.document.unarchive`; added `contentUpdatedAt`, `state` (`DocumentState` enum), `isArchived`, `isTrashed` and `isOrphan` to `DocumentItemResult` and `getFieldsDescription()` to `DocumentFieldsResult` ([#686](https://github.com/bitrix24/b24phpsdk/issues/686))
 
 ### Changed
+- Hardened CI workflows for OpenSSF Scorecard: added least-privilege `GITHUB_TOKEN` permissions to every workflow, pinned all GitHub Actions to full commit SHAs and enabled Dependabot updates for the `docker/php-cli` base images ([#95](https://github.com/bitrix24/b24phpsdk/issues/95))
 - CI quality checks now build the PHP runtime from the current Dockerfile with fresh base images, avoiding dependency-install failures from an outdated shared PHP image ([#688](https://github.com/bitrix24/b24phpsdk/issues/688))
 - Updated `b24phpsdk-maintainer` skill: documented non-interactive legacy coverage commands, JSON output and verification ([#410](https://github.com/bitrix24/b24phpsdk/issues/410))
 
