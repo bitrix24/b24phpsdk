@@ -23,6 +23,7 @@
 - Distinguished response decoding failures with `ResponseDecodingException` while preserving sanitized diagnostics and excluding unsafe exception chains ([#667](https://github.com/bitrix24/b24phpsdk/issues/667))
 - Reused core pagination for Task, Sale Order and BasketItem batches, preserving requested sorting, nested result references, filters and limits ([#363](https://github.com/bitrix24/b24phpsdk/issues/363))
 - Fixed dead REST v3 documentation links in the Note `Collection` service metadata; they now point to `https://apidocs.bitrix24.com/api-reference/note/collection/` ([#687](https://github.com/bitrix24/b24phpsdk/issues/687))
+- Fixed `Core\Batch` dropping `null` parameters from batch sub-commands, so filters like `['parentId150' => null]` were silently ignored; `null` values are now sent as empty values, matching non-batch calls ([#319](https://github.com/bitrix24/b24phpsdk/issues/319))
 
 ## 3.7.0
 

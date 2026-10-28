@@ -65,6 +65,26 @@ class BatchTest extends TestCase
         }
     }
 
+    #[Test]
+    #[TestDox('batch sub-commands keep null parameters as empty values instead of dropping them')]
+    public function testBatchSubCommandsKeepNullParameters(): void
+    {
+        $capturedCommands = [];
+        $batch = new Batch($this->makeCoreCapturingBatchCommands(null, $capturedCommands), new NullLogger());
+
+        try {
+            iterator_to_array($batch->addEntityItems('crm.item.list', [
+                ['entityTypeId' => 2, 'filter' => ['companyId' => null, 'nested' => ['value' => null]], 'select' => ['id']],
+            ]));
+        } catch (\Throwable) {
+        }
+
+        $this->assertNotEmpty($capturedCommands);
+        $capturedCommand = urldecode((string)array_shift($capturedCommands));
+        $this->assertStringContainsString('filter[companyId]=&', $capturedCommand);
+        $this->assertStringContainsString('filter[nested][value]=&', $capturedCommand);
+    }
+
     /**
      * Builds a CoreInterface stub that records the cmd payload passed to the «batch» call.
      *
