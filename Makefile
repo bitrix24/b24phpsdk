@@ -1081,8 +1081,12 @@ build-documentation:
 	--file=docs/EN/Services/bitrix24-php-sdk-methods.md
 
 sdk-coverage-v1-show:
-	docker compose run --rm php-cli php bin/console b24-dev:show-sdk-coverage-statistics \
-	--webhook=$(BITRIX24_WEBHOOK)
+	docker compose run --rm -T php-cli php bin/console b24-dev:show-sdk-coverage-statistics \
+	--webhook=$(BITRIX24_WEBHOOK) --show=scope-stat $(ARGS)
+
+.PHONY: test-integration-coverage-command
+test-integration-coverage-command:
+	docker compose run --rm -T php-cli $(PHPUNIT) tests/Integration/Infrastructure/Console/ShowCoverageStatisticsCommandTest.php
 
 sdk-coverage-v3-show:
 	docker compose run --rm php-cli php bin/console b24-dev:show-oa-sdk-coverage \
