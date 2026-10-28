@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### Added
+- Added typed CRM call-list services for all six `crm.calllist.*` methods and batch add/update/list support ([#208](https://github.com/bitrix24/b24phpsdk/issues/208))
 - Added REST v3 `note.file.list` with typed file results, attachment dates, and opaque cursor pagination; added dedicated file field metadata access while preserving existing methods ([#688](https://github.com/bitrix24/b24phpsdk/issues/688))
 - Added an eager `Core\Credentials\RenewedAuthToken` compatibility alias preserving legacy constructors, signatures and serialized tokens ([#117](https://github.com/bitrix24/b24phpsdk/issues/117))
 - Added non-interactive legacy API coverage reporting with `--show`, `--scope` and `--format=json` options ([#410](https://github.com/bitrix24/b24phpsdk/issues/410))

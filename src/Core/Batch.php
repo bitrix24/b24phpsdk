@@ -401,7 +401,7 @@ class Batch implements BatchOperationsInterface
      *
      * @param array<string,string> $order
      * @param array<string,mixed> $filter
-     * @param array<string,mixed> $select
+     * @param array<array-key, mixed> $select
      *
      * @return \Generator<mixed>
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
@@ -654,7 +654,7 @@ class Batch implements BatchOperationsInterface
      *
      * @param array<string,string> $order
      * @param array<string,mixed> $filter
-     * @param array<string,mixed> $select
+     * @param array<array-key, mixed> $select
      *
      * @return Generator<mixed>
      * @throws BaseException
