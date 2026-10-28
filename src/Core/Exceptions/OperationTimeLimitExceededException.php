@@ -13,11 +13,28 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\Exceptions;
 
+use Throwable;
+
 /**
- * Class OperationTimeLimitExceededException
+ * Method is blocked because its operating time exceeded the limit
  *
- * @package Bitrix24\SDK\Core\Exceptions
+ * @see https://apidocs.bitrix24.com/limits.html
  */
 class OperationTimeLimitExceededException extends BaseException
 {
+    /**
+     * @param string|null $apiMethod blocked api method, if known
+     * @param string|null $batchCommandId command id if the error came from a batch request
+     * @param int|null $operatingResetAt unix timestamp from the last successful response of this method, if seen
+     */
+    public function __construct(
+        string $message = '',
+        int $code = 0,
+        ?Throwable $previous = null,
+        public readonly ?string $apiMethod = null,
+        public readonly ?string $batchCommandId = null,
+        public readonly ?int $operatingResetAt = null
+    ) {
+        parent::__construct($message, $code, $previous);
+    }
 }
