@@ -113,7 +113,7 @@ class OperatingTracker
             $isFired = array_key_exists($threshold, $this->firedThresholds[$apiMethod] ?? []);
             $firedResetAt = $this->firedThresholds[$apiMethod][$threshold] ?? null;
             // fire on crossing, or again when the window moved but load is still above the threshold
-            if (!$isFired || ($resetAt !== null && $firedResetAt !== null && $resetAt > $firedResetAt)) {
+            if (!$isFired || ($resetAt !== null && ($firedResetAt === null || $resetAt > $firedResetAt))) {
                 $this->firedThresholds[$apiMethod][$threshold] = $resetAt;
                 $this->eventDispatcher->dispatch(new OperatingThresholdCrossedEvent(
                     $apiMethod,

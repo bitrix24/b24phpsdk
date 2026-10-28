@@ -90,6 +90,18 @@ class OperatingTrackerTest extends TestCase
     }
 
     #[Test]
+    public function testRefiresWhenFirstEventHadNoResetAt(): void
+    {
+        $command = new Command('crm.deal.update', []);
+        $this->tracker->observeResponse($command, $this->single(15, null));
+        $this->tracker->observeResponse($command, $this->single(15, 1000));
+        $this->tracker->observeResponse($command, $this->single(15, 1000));
+        $this->tracker->observeResponse($command, $this->single(15, 1060));
+
+        $this->assertSame([10, 10, 10], $this->thresholds());
+    }
+
+    #[Test]
     public function testRearmsAfterDrop(): void
     {
         $command = new Command('crm.deal.update', []);
@@ -201,7 +213,7 @@ class OperatingTrackerTest extends TestCase
         $this->assertSame(480.0, (new OperatingLimitConfig())->limitSeconds);
         $this->assertSame([10, 20, 30, 40, 50, 60, 70, 80, 90], (new OperatingLimitConfig())->thresholds);
 
-        foreach ([[100.0, [0]], [100.0, [100]], [100.0, []], [0.0, [10]]] as [$limit, $thresholds]) {
+        foreach ([[100.0, [0]], [100.0, [100]], [100.0, []], [0.0, [10]], [100.0, [12.5]], [100.0, ['50']]] as [$limit, $thresholds]) {
             try {
                 new OperatingLimitConfig($limit, $thresholds);
                 $this->fail(sprintf('expected exception for limit %s thresholds %s', $limit, json_encode($thresholds)));

@@ -45,6 +45,10 @@ final readonly class OperatingLimitConfig
         }
 
         foreach ($thresholds as $threshold) {
+            if (!is_int($threshold)) {
+                throw new InvalidArgumentException(sprintf('operating threshold must be integer, %s given', get_debug_type($threshold)));
+            }
+
             if ($threshold <= 0 || $threshold >= 100) {
                 throw new InvalidArgumentException(sprintf('operating threshold must be in range 1..99, %s given', $threshold));
             }
