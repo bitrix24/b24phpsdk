@@ -80,4 +80,16 @@ class CollectionItemResultTest extends TestCase
         $collection = $this->collectionService->get($this->collectionId)->collection();
         $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($collection, CollectionItemResult::class);
     }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[Test]
+    #[TestDox('CollectionItemResult from note.collection.move has valid type casting in magic getters')]
+    public function testMovedItemHasValidTypeCastingInMagicGetters(): void
+    {
+        $collection = $this->collectionService->move($this->collectionId)->collection();
+        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($collection, CollectionItemResult::class);
+    }
 }

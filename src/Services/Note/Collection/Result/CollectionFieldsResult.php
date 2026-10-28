@@ -14,10 +14,33 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\Note\Collection\Result;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\LogicException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
 class CollectionFieldsResult extends AbstractResult
 {
+    /**
+     * Include name when selecting metadata fields so descriptors can be indexed.
+     *
+     * @return array<string, array<string, mixed>>
+     * @throws BaseException
+     * @throws LogicException
+     */
+    public function getFieldsDescription(): array
+    {
+        $fields = [];
+        foreach ($this->getCoreResponse()->getResponseData()->getResult()['items'] as $field) {
+            $name = $field['name'] ?? null;
+            if (!is_string($name) || $name === '') {
+                throw new LogicException('Collection field metadata must contain a nonempty string name.');
+            }
+
+            $fields[$name] = $field;
+        }
+
+        return $fields;
+    }
+
     /**
      * @return CollectionFieldItemResult[]
      * @throws BaseException
