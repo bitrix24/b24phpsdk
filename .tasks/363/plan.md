@@ -74,4 +74,4 @@ The live legacy Task endpoint ignores lowercase `<id` filters (50 records for `<
 
 ## Implementation verification outcome
 
-The deterministic unit simulator covers 2601 rows, multiple batch packets and Task filter casing. All three owned live regressions pass (3 tests, 9 assertions). No full Sale or legacy-Task sweep is claimed; the broad Core run fails only its unchanged scope catalog equality test. All shared light gates are run on the combined candidate; PR CI verifies each isolated branch. Broader scope-catalog readiness is recorded separately and PRs remain drafts.
+The deterministic unit simulator covers 2601 rows, multiple batch packets and Task filter casing. All three owned live regressions pass (3 tests, 9 assertions). No full Sale or legacy-Task sweep is claimed; the initial broad Core run failed only its scope catalog equality test, subsequently fixed in the credentials follow-up. All shared light gates are run on the combined candidate; PR CI verifies each isolated branch. Broader scope-catalog readiness is recorded separately and PR readiness is tracked by CI.
