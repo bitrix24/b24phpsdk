@@ -48,3 +48,7 @@ No separately configured restricted-user identity was available. Permission deni
 ## Delivery
 
 Feature PR targets v3-dev. No merge is authorized. PR: https://github.com/bitrix24/b24phpsdk/pull/689. Initial push jobs failed during dependency installation on published PHP 8.4.26. The quality workflows were updated to build from the current Dockerfile with fresh base images; final CI status is recorded in the task response after the corrected head completes checks.
+
+## CI result
+
+All 12 check runs succeeded for implementation head `b2f0d4c261e051a56812786961706ddf64f950a2` after the CI bootstrap fix, covering both push and pull_request events: PHPUnit, PHPStan, PhpCsFixer, Rector, Deptrac, and composer-license-checker. PR #689 targets v3-dev and is assigned to mesilov under milestone 3.8.0. A final documentation-only commit records this evidence; its checks are monitored separately before handoff.

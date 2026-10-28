@@ -1,6 +1,6 @@
 # Plan: Add REST v3 support for note.file.list (issue #688)
 
-Status: implemented and locally verified; PR delivery in progress.
+Status: implemented, locally verified, and published as PR #689; implementation CI passed all 12 checks.
 
 Issue: https://github.com/bitrix24/b24phpsdk/issues/688
 Target: SDK 3.8.0, REST API v3, scope `note`, PR base `v3-dev`.
@@ -187,7 +187,7 @@ Services depend on Core contracts/results, Note DTOs, attributes, and existing l
 - [x] Add disposable live fixtures and annotation/type checks.
 - [x] Run all phase 1 checks below, then phase 2 integration tests.
 - [x] Update CHANGELOG, review the scoped diff, verify OA endpoint coverage, and commit scoped files.
-- [ ] Read the current PR template, push branch, create PR against v3-dev, attach it to this task, and wait for final CI results. Do not merge without a separate instruction.
+- [x] Read the current PR template, push branch, create PR against v3-dev, attach it to this task, and wait for final CI results. Do not merge without a separate instruction.
 
 ## Verification
 
@@ -246,3 +246,5 @@ The coverage report must no longer list `note.file.list` as uncovered. Report un
 - Standard OA coverage CLI completed: note.file.list is absent from its uncovered list. Refreshed schema stays as an uncommitted research snapshot to avoid unrelated generated changes in this feature PR.
 
 - PR #689 created against v3-dev. Initial CI fails before checks: published PHP 8.4.26 is rejected by roave/security-advisories. The six quality workflows now build from the checked-out Dockerfile with `docker compose build --pull`, reproducing the verified local PHP 8.4.27 without weakening security constraints or publishing a shared image.
+
+- Delivery proof: https://github.com/bitrix24/b24phpsdk/pull/689, base v3-dev, milestone 3.8.0, assignee mesilov. All 12 GitHub checks (push and pull_request) succeeded for implementation head b2f0d4c261e051a56812786961706ddf64f950a2: PHPUnit, PHPStan, PhpCsFixer, Rector, Deptrac, and composer-license-checker. No merge performed.
