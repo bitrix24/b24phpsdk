@@ -32,7 +32,7 @@ make composer-update          # Update dependencies
 
 ```bash
 # Run ALL linters sequentially
-make lint-all                 # Runs: licenses, cs-fixer, phpstan, rector
+make lint-all                 # Runs: licenses, secrets, cs-fixer, phpstan, rector
 
 # Individual linters
 make lint-phpstan             # Static analysis (PHPStan level 5)
@@ -41,6 +41,7 @@ make lint-rector-fix          # Auto-fix code quality issues
 make lint-cs-fixer            # Code style check (PHP-CS-Fixer)
 make lint-cs-fixer-fix        # Auto-fix code style
 make lint-allowed-licenses    # Verify dependency licenses (MIT, BSD-3, Apache only)
+make lint-secrets             # Scan git history for leaked secrets (gitleaks, via docker)
 
 # Testing
 make test-unit                # Fast in-memory unit tests
