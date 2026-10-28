@@ -29,6 +29,7 @@ parameters:
     - tests/Integration/Services/CRM/Quote/Service/QuoteUserfieldTest.php
     - tests/Integration/Services/CRM/Quote/Service/QuoteProductRowsTest.php
     - tests/Integration/Services/CRM/Lead/Service/LeadUserfieldTest.php
+    - tests/Integration/Services/CRM/CallList
     - tests/Integration/Services/CRM/Currency
     - tests/Integration/Services/CRM/Type
     - tests/Integration/Services/CRM/Userfieldconfig

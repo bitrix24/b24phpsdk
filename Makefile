@@ -582,6 +582,10 @@ test-integration-sale-trade-platform:
 test-integration-scope-crm:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_crm
 
+.PHONY: test-integration-crm-calllist
+test-integration-crm-calllist:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_calllist
+
 .PHONY: test-integration-crm-type
 test-integration-crm-type:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_type

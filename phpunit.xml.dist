@@ -188,6 +188,9 @@
         <testsuite name="integration_tests_scope_crm_currency">
             <directory>./tests/Integration/Services/CRM/Currency/</directory>
         </testsuite>
+        <testsuite name="integration_tests_crm_calllist">
+            <directory>./tests/Integration/Services/CRM/CallList/</directory>
+        </testsuite>
         <testsuite name="integration_tests_crm_type">
             <directory>./tests/Integration/Services/CRM/Type/</directory>
         </testsuite>
