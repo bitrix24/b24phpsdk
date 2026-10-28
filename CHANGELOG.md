@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### Added
+- Added OpenSSF Scorecard workflow that analyses the default branch weekly and on push, uploading SARIF results to GitHub code scanning without publishing the score yet ([#95](https://github.com/bitrix24/b24phpsdk/issues/95))
 - Added typed CRM call-list services for all six `crm.calllist.*` methods and batch add/update/list support ([#208](https://github.com/bitrix24/b24phpsdk/issues/208))
 - Added REST v3 `note.file.list` with typed file results, attachment dates, and opaque cursor pagination; added dedicated file field metadata access while preserving existing methods ([#688](https://github.com/bitrix24/b24phpsdk/issues/688))
 - Added REST v3 `note.collection.move`, `note.collection.restore` and `note.collection.unarchive` to the Note `Collection` service; added `accessLevel`, `state` (`CollectionState` enum), `isArchived` and `markdownDescription` to `CollectionItemResult`, matching selectors to `CollectionSelectBuilder`, `editableGroups` to `CollectionFieldItemResult` and `getFieldsDescription()` to `CollectionFieldsResult` ([#687](https://github.com/bitrix24/b24phpsdk/issues/687))
