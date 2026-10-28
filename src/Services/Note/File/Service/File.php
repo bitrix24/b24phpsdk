@@ -23,10 +23,37 @@ use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Note\File\Result\FileFieldResult;
 use Bitrix24\SDK\Services\Note\File\Result\FileFieldsResult;
 use Bitrix24\SDK\Services\Note\File\Result\FileResult;
+use Bitrix24\SDK\Services\Note\File\Result\FilesResult;
 
 #[ApiServiceMetadata(new Scope(['note']))]
 class File extends AbstractService
 {
+    /**
+     * Lists file attachments for a document.
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'note.file.list',
+        'https://apidocs.bitrix24.com/api-reference/note/file/note-file-list.html',
+        'Lists file attachments for a document.',
+        ApiVersion::v3
+    )]
+    public function list(int $documentId, ?FileListPagination $pagination = null): FilesResult
+    {
+        return new FilesResult(
+            $this->core->call(
+                'note.file.list',
+                array_filter(
+                    ['documentId' => $documentId, 'pagination' => $pagination?->toArray()],
+                    static fn (mixed $value): bool => $value !== null
+                ),
+                ApiVersion::v3
+            )
+        );
+    }
+
     /**
      * Uploads a file attachment to a document.
      *

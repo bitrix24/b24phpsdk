@@ -15,17 +15,19 @@ namespace Bitrix24\SDK\Services\Note\File\Result;
 
 use Bitrix24\SDK\Attributes\OpenApiEntity;
 use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
+use Carbon\CarbonImmutable;
 
 /**
  * A single document file attachment returned by `note.file.*`.
  *
- * @property-read int         $id
- * @property-read int         $documentId
- * @property-read string      $name
- * @property-read int|null    $size
- * @property-read string|null $mimeType
- * @property-read string|null $assetType
- * @property-read string|null $assetMarkdown
+ * @property-read int                  $id
+ * @property-read int                  $documentId
+ * @property-read string               $name
+ * @property-read int|null             $size
+ * @property-read string|null          $mimeType
+ * @property-read string|null          $assetType
+ * @property-read CarbonImmutable|null $createdAt
+ * @property-read string|null          $assetMarkdown
  */
 #[OpenApiEntity(entityKey: 'bitrix.note.fileitemdto')]
 class FileItemResult extends AbstractAnnotatedItem

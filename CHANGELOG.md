@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Added
+- Added REST v3 `note.file.list` with typed file results, attachment dates, and opaque cursor pagination; added dedicated file field metadata access while preserving existing methods ([#688](https://github.com/bitrix24/b24phpsdk/issues/688))
+
 ## 3.7.0
 
 ### Added
