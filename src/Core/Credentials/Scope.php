@@ -22,10 +22,13 @@ class Scope
      */
     protected static array $availableScope = [
         'ai_admin',
+        'aiassistant',
         'appform',
         'baas',
         'biconnector',
+        'biconnectormobile',
         'bizproc',
+        'bizprocdesigner',
         'booking',
         'calendar',
         'calendarmobile',
@@ -56,6 +59,7 @@ class Scope
         'lists',
         'log',
         'mail',
+        'mailsender',
         'mailservice',
         'main',
         'messageservice',

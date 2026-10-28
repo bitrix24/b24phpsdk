@@ -23,6 +23,7 @@ use Bitrix24\SDK\Core\Exceptions\MethodConfirmWaitingException;
 use Bitrix24\SDK\Core\Exceptions\PortalUnavailableException;
 use Bitrix24\SDK\Core\Exceptions\PortalDomainChangeRejectedException;
 use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
+use Bitrix24\SDK\Core\Exceptions\ResponseDecodingException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Events\AuthTokenRenewedEvent;
@@ -30,8 +31,8 @@ use Bitrix24\SDK\Events\PortalDomainUrlChangedEvent;
 use Bitrix24\SDK\Events\PortalDomainUrlChangingEvent;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class Core implements CoreInterface
@@ -249,8 +250,8 @@ class Core implements CoreInterface
                     $this->apiLevelErrorHandler->handle($body);
                     break;
             }
-        } catch (TransportExceptionInterface|JsonException $exception) {
-            // catch symfony http client transport exception
+        } catch (TransportExceptionInterface|DecodingExceptionInterface $exception) {
+            // catch Symfony HTTP client transport and response decoding exceptions
             $message = ExceptionContextSanitizer::redactMessage($exception->getMessage());
             $this->logger->error(
                 'call.transportException',
@@ -261,7 +262,8 @@ class Core implements CoreInterface
                 ]
             );
             // The original cause may contain credentials in its message, trace args or previous chain.
-            throw new TransportException(
+            $exceptionClass = $exception instanceof DecodingExceptionInterface ? ResponseDecodingException::class : TransportException::class;
+            throw new $exceptionClass(
                 sprintf('transport error - %s, type %s', $message, $exception::class),
                 $exception->getCode(),
                 previous: null
