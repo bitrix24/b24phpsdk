@@ -10,11 +10,13 @@
 - Added an eager `Core\Credentials\RenewedAuthToken` compatibility alias preserving legacy constructors, signatures and serialized tokens ([#117](https://github.com/bitrix24/b24phpsdk/issues/117))
 - Added non-interactive legacy API coverage reporting with `--show`, `--scope` and `--format=json` options ([#410](https://github.com/bitrix24/b24phpsdk/issues/410))
 - Added REST v3 `note.document.list` with typed `DocumentFilter` and opaque cursor pagination, `note.document.move`, `note.document.restore` and `note.document.unarchive`; added `contentUpdatedAt`, `state` (`DocumentState` enum), `isArchived`, `isTrashed` and `isOrphan` to `DocumentItemResult` and `getFieldsDescription()` to `DocumentFieldsResult` ([#686](https://github.com/bitrix24/b24phpsdk/issues/686))
+- Added operating time limit events for long-running batch writes: `OperatingThresholdCrossedEvent` on 10%…90% of the limit window (top-level `operating` of `batch` responses is tracked as method `batch`), `OperatingLimitConfig` (480 s by default), opt-in `OperatingLimitSleepListener`, `CoreBuilder::withOperatingLimitConfig()`, optional `$operatingLimitConfig` in `ServiceBuilderFactory`, `apiMethod`/`batchCommandId`/`operatingResetAt` in `OperationTimeLimitExceededException`, documentation `docs/EN/Core/operating-limit.md` with cloud portal measurements and integration tests in `tests/Integration/Core/OperatingLimit/` ([#76](https://github.com/bitrix24/b24phpsdk/issues/76))
 
 ### Changed
 - Hardened CI workflows for OpenSSF Scorecard: added least-privilege `GITHUB_TOKEN` permissions to every workflow, pinned all GitHub Actions to full commit SHAs and enabled Dependabot updates for the `docker/php-cli` base images ([#95](https://github.com/bitrix24/b24phpsdk/issues/95))
 - CI quality checks now build the PHP runtime from the current Dockerfile with fresh base images, avoiding dependency-install failures from an outdated shared PHP image ([#688](https://github.com/bitrix24/b24phpsdk/issues/688))
 - Updated `b24phpsdk-maintainer` skill: documented non-interactive legacy coverage commands, JSON output and verification ([#410](https://github.com/bitrix24/b24phpsdk/issues/410))
+- `OperationTimeLimitExceededException` now reaches callers of `Response::getResponseData()` and `Core\Batch::addEntityItems()`, `updateEntityItems()`, `deleteEntityItems()` with its own type instead of a generic `BaseException` wrapper; code catching `BaseException` still catches it ([#76](https://github.com/bitrix24/b24phpsdk/issues/76))
 
 ### Deprecated
 - Deprecated the `Core\Response\DTO\RenewedAuthToken` name in favor of `Core\Credentials\RenewedAuthToken` ([#117](https://github.com/bitrix24/b24phpsdk/issues/117))

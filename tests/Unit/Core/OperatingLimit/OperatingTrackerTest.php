@@ -38,11 +38,11 @@ class OperatingTrackerTest extends TestCase
     protected function setUp(): void
     {
         $this->events = [];
-        $dispatcher = new EventDispatcher();
-        $dispatcher->addListener(OperatingThresholdCrossedEvent::class, function (OperatingThresholdCrossedEvent $event): void {
-            $this->events[] = $event;
+        $eventDispatcher = new EventDispatcher();
+        $eventDispatcher->addListener(OperatingThresholdCrossedEvent::class, function (OperatingThresholdCrossedEvent $operatingThresholdCrossedEvent): void {
+            $this->events[] = $operatingThresholdCrossedEvent;
         });
-        $this->tracker = new OperatingTracker(new OperatingLimitConfig(100.0), $dispatcher);
+        $this->tracker = new OperatingTracker(new OperatingLimitConfig(100.0), $eventDispatcher);
     }
 
     #[Test]
@@ -216,7 +216,7 @@ class OperatingTrackerTest extends TestCase
      */
     private function thresholds(): array
     {
-        return array_map(static fn(OperatingThresholdCrossedEvent $event): int => $event->getThresholdPercent(), $this->events);
+        return array_map(static fn(OperatingThresholdCrossedEvent $operatingThresholdCrossedEvent): int => $operatingThresholdCrossedEvent->getThresholdPercent(), $this->events);
     }
 
     /**

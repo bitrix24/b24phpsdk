@@ -18,6 +18,7 @@ use Bitrix24\SDK\Events\OperatingThresholdCrossedEvent;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 #[CoversClass(OperatingLimitSleepListener::class)]
@@ -36,7 +37,7 @@ class OperatingLimitSleepListenerTest extends TestCase
         $this->listener = new OperatingLimitSleepListener(
             90,
             1,
-            null,
+            new NullLogger(),
             function (int $seconds): void {
                 $this->sleeps[] = $seconds;
             },
@@ -72,9 +73,9 @@ class OperatingLimitSleepListenerTest extends TestCase
     #[Test]
     public function testWorksAsDispatcherListener(): void
     {
-        $dispatcher = new EventDispatcher();
-        $dispatcher->addListener(OperatingThresholdCrossedEvent::class, $this->listener);
-        $dispatcher->dispatch($this->event(90, 1010));
+        $eventDispatcher = new EventDispatcher();
+        $eventDispatcher->addListener(OperatingThresholdCrossedEvent::class, $this->listener);
+        $eventDispatcher->dispatch($this->event(90, 1010));
 
         $this->assertSame([11], $this->sleeps);
     }

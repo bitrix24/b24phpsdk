@@ -30,11 +30,11 @@ class OperationTimeLimitExceededException extends BaseException
     public function __construct(
         string $message = '',
         int $code = 0,
-        ?Throwable $previous = null,
+        ?Throwable $throwable = null,
         public readonly ?string $apiMethod = null,
         public readonly ?string $batchCommandId = null,
         public readonly ?int $operatingResetAt = null
     ) {
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message, $code, $throwable);
     }
 }

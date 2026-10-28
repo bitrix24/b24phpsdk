@@ -61,7 +61,11 @@ class OperatingTracker
 
         foreach ($resultTime as $batchCommandId => $time) {
             $apiMethod = self::resolveBatchCommandMethod($command, (string)$batchCommandId);
-            if ($apiMethod === null || !is_array($time)) {
+            if ($apiMethod === null) {
+                continue;
+            }
+
+            if (!is_array($time)) {
                 continue;
             }
 

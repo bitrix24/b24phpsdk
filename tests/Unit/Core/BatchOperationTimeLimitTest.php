@@ -37,37 +37,37 @@ class BatchOperationTimeLimitTest extends TestCase
     public function testUpdateEntityItemsRethrowsOperationTimeLimitUnwrapped(): void
     {
         $batch = $this->batch('OPERATION_TIME_LIMIT');
-        $exception = $this->drain($batch->updateEntityItems('crm.deal.update', [1 => ['fields' => ['TITLE' => 'a']]]));
+        $throwable = $this->drain($batch->updateEntityItems('crm.deal.update', [1 => ['fields' => ['TITLE' => 'a']]]));
 
-        $this->assertSame(OperationTimeLimitExceededException::class, $exception::class);
+        $this->assertSame(OperationTimeLimitExceededException::class, $throwable::class);
     }
 
     #[Test]
     public function testAddEntityItemsRethrowsOperationTimeLimitUnwrapped(): void
     {
         $batch = $this->batch('OPERATION_TIME_LIMIT');
-        $exception = $this->drain($batch->addEntityItems('crm.deal.add', [['fields' => ['TITLE' => 'a']]]));
+        $throwable = $this->drain($batch->addEntityItems('crm.deal.add', [['fields' => ['TITLE' => 'a']]]));
 
-        $this->assertSame(OperationTimeLimitExceededException::class, $exception::class);
+        $this->assertSame(OperationTimeLimitExceededException::class, $throwable::class);
     }
 
     #[Test]
     public function testDeleteEntityItemsRethrowsOperationTimeLimitUnwrapped(): void
     {
         $batch = $this->batch('OPERATION_TIME_LIMIT');
-        $exception = $this->drain($batch->deleteEntityItems('crm.deal.delete', [1]));
+        $throwable = $this->drain($batch->deleteEntityItems('crm.deal.delete', [1]));
 
-        $this->assertSame(OperationTimeLimitExceededException::class, $exception::class);
+        $this->assertSame(OperationTimeLimitExceededException::class, $throwable::class);
     }
 
     #[Test]
     public function testOtherErrorsStillWrapped(): void
     {
         $batch = $this->batch('ACCESS_DENIED');
-        $exception = $this->drain($batch->updateEntityItems('crm.deal.update', [1 => ['fields' => ['TITLE' => 'a']]]));
+        $throwable = $this->drain($batch->updateEntityItems('crm.deal.update', [1 => ['fields' => ['TITLE' => 'a']]]));
 
-        $this->assertSame(BaseException::class, $exception::class);
-        $this->assertStringStartsWith('batch update entity items:', $exception->getMessage());
+        $this->assertSame(BaseException::class, $throwable::class);
+        $this->assertStringStartsWith('batch update entity items:', $throwable->getMessage());
     }
 
     private function drain(Generator $generator): Throwable
