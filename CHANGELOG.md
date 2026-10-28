@@ -8,6 +8,9 @@
 ### Changed
 - CI quality checks now build the PHP runtime from the current Dockerfile with fresh base images, avoiding dependency-install failures from an outdated shared PHP image ([#688](https://github.com/bitrix24/b24phpsdk/issues/688))
 
+### Fixed
+- Reused core pagination for Task, Sale Order and BasketItem batches, preserving requested sorting, nested result references, filters and limits ([#363](https://github.com/bitrix24/b24phpsdk/issues/363))
+
 ## 3.7.0
 
 ### Added
