@@ -70,4 +70,4 @@ Run integration only after the five light gates pass. No live integration succes
 
 ## Implementation verification outcome
 
-The enum unit suite and the live CRM messenger round trip pass. The live test removes its own contact. All shared light gates are run on the combined candidate; PR CI verifies each isolated branch. Broader scope-catalog readiness is recorded separately and PRs remain drafts.
+The enum unit suite and the live CRM messenger round trip pass. The live test removes its own contact. All shared light gates are run on the combined candidate; PR CI verifies each isolated branch. Broader scope-catalog readiness is recorded separately and PR readiness is tracked by CI.
