@@ -199,18 +199,18 @@ class ContactTest extends TestCase
      */
     public function testGetInstantMessenger(): void
     {
-        $phone = $this->faker->e164PhoneNumber();
-        $this->assertEquals($phone,
-            $this->contactService->get(
-                $this->contactService->add([
-                    'NAME' => $this->faker->name(),
-                    'IM' => [
-                        [
-                            'VALUE' => $phone,
-                            'VALUE_TYPE' => InstantMessengerValueType::telegram->name,
-                        ]
-                    ],
-                ])->getId())->contact()->IM[0]->VALUE);
+        $value = 'sdk-156-' . bin2hex(random_bytes(8));
+        $id = $this->contactService->add([
+            'NAME' => 'SDK messenger regression',
+            'IM' => [['VALUE' => $value, 'VALUE_TYPE' => InstantMessengerValueType::telegram->value]],
+        ])->getId();
+        try {
+            $messenger = $this->contactService->get($id)->contact()->IM[0];
+            self::assertSame($value, $messenger->VALUE);
+            self::assertSame(InstantMessengerValueType::telegram, $messenger->VALUE_TYPE);
+        } finally {
+            $this->contactService->delete($id);
+        }
     }
 
     /**

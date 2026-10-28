@@ -18,7 +18,7 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
 /**
  * @property-read string $VALUE
  * @property-read int $ID
- * @property-read PhoneValueType $VALUE_TYPE
+ * @property-read InstantMessengerValueType $VALUE_TYPE
  */
 class InstantMessenger extends AbstractItem
 {
@@ -27,7 +27,7 @@ class InstantMessenger extends AbstractItem
         return match ($offset) {
             'VALUE' => $this->data[$offset],
             'ID' => (int)$this->data['ID'],
-            'VALUE_TYPE' => EmailValueType::from($this->data['VALUE_TYPE']),
+            'VALUE_TYPE' => InstantMessengerValueType::from($this->data['VALUE_TYPE']),
             default => parent::__get($offset),
         };
     }
