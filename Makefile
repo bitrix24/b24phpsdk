@@ -57,6 +57,7 @@ help:
 	@echo "lint-rector               - lint source code with rector"
 	@echo "lint-rector-fix           - fix source code with rector"
 	@echo "lint-deptrac              - lint source code with deptrac (architecture checks)"
+	@echo "lint-secrets              - scan git history for leaked secrets with gitleaks"
 	@echo ""
 	@echo "test-integration-main-user-history - run REST v3 user history tests"
 	@echo "test-unit                 - run unit tests"
@@ -232,8 +233,13 @@ lint-rector-fix:
 lint-deptrac:
 	docker compose run --rm php-cli vendor/bin/deptrac analyse
 
+.PHONY: lint-secrets
+lint-secrets:
+	docker run --rm -v $(PWD):/repo -w /repo --entrypoint sh ghcr.io/gitleaks/gitleaks:v8.30.1 \
+		-c 'git config --global --add safe.directory /repo && gitleaks git --no-banner --redact --verbose --config .gitleaks.toml .'
+
 .PHONY: lint-all
-lint-all: lint-allowed-licenses lint-cs-fixer lint-phpstan lint-rector lint-deptrac
+lint-all: lint-allowed-licenses lint-secrets lint-cs-fixer lint-phpstan lint-rector lint-deptrac
 
 # unit tests
 .PHONY: test-unit

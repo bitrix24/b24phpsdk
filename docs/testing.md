@@ -136,6 +136,7 @@ Individual linters:
 | Target | Tool | Notes |
 |---|---|---|
 | `make lint-allowed-licenses` | license-checker | Validates dependency licenses |
+| `make lint-secrets` | gitleaks (docker) | Scan git history for leaked secrets |
 | `make lint-cs-fixer` | php-cs-fixer | Check code style |
 | `make lint-cs-fixer-fix` | php-cs-fixer | Auto-fix code style |
 | `make lint-phpstan` | PHPStan | Static analysis |
@@ -227,6 +228,7 @@ skip_violations:
 |---|---|
 | `make lint-all` | Run all linters sequentially |
 | `make lint-allowed-licenses` | Check dependency licenses |
+| `make lint-secrets` | Scan git history for leaked secrets (gitleaks) |
 | `make lint-cs-fixer` | Check code style |
 | `make lint-cs-fixer-fix` | Fix code style |
 | `make lint-phpstan` | Static analysis |
