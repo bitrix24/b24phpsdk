@@ -15,6 +15,7 @@
 ### Fixed
 - Recognized four current portal scopes and validated portal-scope containment without requiring every SDK scope to be installed on a test portal ([#117](https://github.com/bitrix24/b24phpsdk/issues/117))
 - Corrected `InstantMessenger::VALUE_TYPE` conversion and PHPDoc to use `InstantMessengerValueType` ([#156](https://github.com/bitrix24/b24phpsdk/issues/156))
+- Distinguished response decoding failures with `ResponseDecodingException` while preserving sanitized diagnostics and excluding unsafe exception chains ([#667](https://github.com/bitrix24/b24phpsdk/issues/667))
 
 ## 3.7.0
 
