@@ -36,6 +36,7 @@ class CoreBuilder
     private HttpClientInterface $httpClient;
 
     private EventDispatcherInterface $eventDispatcher;
+
     private ?OperatingLimitConfig $operatingLimitConfig = null;
 
     private LoggerInterface $logger;

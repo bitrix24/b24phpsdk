@@ -42,8 +42,8 @@ class OperatingLimitWiringTest extends TestCase
     {
         $this->events = [];
         $this->dispatcher = new EventDispatcher();
-        $this->dispatcher->addListener(OperatingThresholdCrossedEvent::class, function (OperatingThresholdCrossedEvent $event): void {
-            $this->events[] = $event;
+        $this->dispatcher->addListener(OperatingThresholdCrossedEvent::class, function (OperatingThresholdCrossedEvent $operatingThresholdCrossedEvent): void {
+            $this->events[] = $operatingThresholdCrossedEvent;
         });
     }
 
@@ -89,11 +89,11 @@ class OperatingLimitWiringTest extends TestCase
         try {
             $response->getResponseData();
             $this->fail('OperationTimeLimitExceededException expected');
-        } catch (OperationTimeLimitExceededException $exception) {
-            $this->assertSame(OperationTimeLimitExceededException::class, $exception::class);
-            $this->assertSame('crm.deal.update', $exception->apiMethod);
-            $this->assertSame('b', $exception->batchCommandId);
-            $this->assertSame(1000, $exception->operatingResetAt);
+        } catch (OperationTimeLimitExceededException $operationTimeLimitExceededException) {
+            $this->assertSame(OperationTimeLimitExceededException::class, $operationTimeLimitExceededException::class);
+            $this->assertSame('crm.deal.update', $operationTimeLimitExceededException->apiMethod);
+            $this->assertSame('b', $operationTimeLimitExceededException->batchCommandId);
+            $this->assertSame(1000, $operationTimeLimitExceededException->operatingResetAt);
         }
 
         $this->assertSame([10, 20, 30], $this->thresholds());
@@ -114,11 +114,11 @@ class OperatingLimitWiringTest extends TestCase
         try {
             $core->call('crm.deal.update', ['id' => 2]);
             $this->fail('OperationTimeLimitExceededException expected');
-        } catch (OperationTimeLimitExceededException $exception) {
-            $this->assertSame(OperationTimeLimitExceededException::class, $exception::class);
-            $this->assertSame('crm.deal.update', $exception->apiMethod);
-            $this->assertNull($exception->batchCommandId);
-            $this->assertSame(2000, $exception->operatingResetAt);
+        } catch (OperationTimeLimitExceededException $operationTimeLimitExceededException) {
+            $this->assertSame(OperationTimeLimitExceededException::class, $operationTimeLimitExceededException::class);
+            $this->assertSame('crm.deal.update', $operationTimeLimitExceededException->apiMethod);
+            $this->assertNull($operationTimeLimitExceededException->batchCommandId);
+            $this->assertSame(2000, $operationTimeLimitExceededException->operatingResetAt);
         }
     }
 
@@ -174,7 +174,7 @@ class OperatingLimitWiringTest extends TestCase
      */
     private function thresholds(): array
     {
-        return array_map(static fn(OperatingThresholdCrossedEvent $event): int => $event->getThresholdPercent(), $this->events);
+        return array_map(static fn(OperatingThresholdCrossedEvent $operatingThresholdCrossedEvent): int => $operatingThresholdCrossedEvent->getThresholdPercent(), $this->events);
     }
 
     /**

@@ -2,6 +2,27 @@
 
 ## Unreleased
 
+### Added
+
+- Operating time limit events for long-running batch writes ([#76](https://github.com/bitrix24/b24phpsdk/issues/76)):
+    - `Bitrix24\SDK\Events\OperatingThresholdCrossedEvent` is dispatched when a method's `operating` time crosses
+      10%…90% of the limit window, including nested commands of `batch` requests
+    - `Bitrix24\SDK\Core\OperatingLimit\OperatingLimitConfig` — limit (default 480 s) and thresholds settings
+    - `Bitrix24\SDK\Core\OperatingLimit\OperatingLimitSleepListener` — opt-in listener that sleeps until
+      `operating_reset_at`
+    - `CoreBuilder::withOperatingLimitConfig()` and optional `$operatingLimitConfig` argument in
+      `ServiceBuilderFactory::__construct()`
+    - `OperationTimeLimitExceededException` now has `apiMethod`, `batchCommandId` and `operatingResetAt` properties
+    - documentation: `docs/EN/Core/operating-limit.md`
+
+### Changed
+
+- `OperationTimeLimitExceededException` now reaches callers of `Response::getResponseData()` and
+  `Core\Batch::addEntityItems()`, `updateEntityItems()`, `deleteEntityItems()` with its own type instead of being
+  wrapped into a generic `BaseException` ([#76](https://github.com/bitrix24/b24phpsdk/issues/76)).
+  Code catching `BaseException` still catches it; code that inspected the wrapper message
+  (`api request error: ...`, `batch update entity items: ...`) should switch to catching the specific exception.
+
 ## 1.13.0 - 2026.09.30
 
 ### Added

@@ -116,19 +116,19 @@ class Response
         return $this->responseData;
     }
 
-    private function enrichOperationTimeLimitException(OperationTimeLimitExceededException $exception): OperationTimeLimitExceededException
+    private function enrichOperationTimeLimitException(OperationTimeLimitExceededException $operationTimeLimitExceededException): OperationTimeLimitExceededException
     {
         $apiMethod = $this->apiCommand->getApiMethod();
-        if ($exception->batchCommandId !== null) {
-            $apiMethod = OperatingTracker::resolveBatchCommandMethod($this->apiCommand, $exception->batchCommandId);
+        if ($operationTimeLimitExceededException->batchCommandId !== null) {
+            $apiMethod = OperatingTracker::resolveBatchCommandMethod($this->apiCommand, $operationTimeLimitExceededException->batchCommandId);
         }
 
         return new OperationTimeLimitExceededException(
-            $exception->getMessage(),
-            $exception->getCode(),
-            $exception,
+            $operationTimeLimitExceededException->getMessage(),
+            $operationTimeLimitExceededException->getCode(),
+            $operationTimeLimitExceededException,
             $apiMethod,
-            $exception->batchCommandId,
+            $operationTimeLimitExceededException->batchCommandId,
             $apiMethod === null ? null : $this->operatingTracker?->getLastOperatingResetAt($apiMethod)
         );
     }

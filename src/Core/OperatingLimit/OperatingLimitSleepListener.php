@@ -24,13 +24,11 @@ use Psr\Log\NullLogger;
  * Register it on the event dispatcher passed to ServiceBuilderFactory:
  * $dispatcher->addListener(OperatingThresholdCrossedEvent::class, new OperatingLimitSleepListener(90));
  */
-final class OperatingLimitSleepListener
+final readonly class OperatingLimitSleepListener
 {
-    private readonly LoggerInterface $logger;
+    private Closure $sleep;
 
-    private readonly Closure $sleep;
-
-    private readonly Closure $now;
+    private Closure $now;
 
     /**
      * @param int $sleepFromThresholdPercent sleep on events with threshold at or above this value
@@ -39,27 +37,26 @@ final class OperatingLimitSleepListener
      * @param Closure(): int|null $now current unix timestamp
      */
     public function __construct(
-        private readonly int $sleepFromThresholdPercent = 90,
-        private readonly int $safetyMarginSeconds = 1,
-        ?LoggerInterface $logger = null,
+        private int $sleepFromThresholdPercent = 90,
+        private int $safetyMarginSeconds = 1,
+        private LoggerInterface $logger = new NullLogger(),
         ?Closure $sleep = null,
         ?Closure $now = null
     ) {
-        $this->logger = $logger ?? new NullLogger();
         $this->sleep = $sleep ?? static function (int $seconds): void {
             sleep($seconds);
         };
         $this->now = $now ?? time(...);
     }
 
-    public function __invoke(OperatingThresholdCrossedEvent $event): void
+    public function __invoke(OperatingThresholdCrossedEvent $operatingThresholdCrossedEvent): void
     {
-        if ($event->getThresholdPercent() < $this->sleepFromThresholdPercent) {
+        if ($operatingThresholdCrossedEvent->getThresholdPercent() < $this->sleepFromThresholdPercent) {
             return;
         }
 
-        $resetAt = $event->getOperatingResetAt();
-        if ($resetAt === null) {
+        $resetAt = $operatingThresholdCrossedEvent->getOperatingResetAt();
+        if (!$resetAt instanceof \Carbon\CarbonImmutable) {
             return;
         }
 
@@ -69,9 +66,9 @@ final class OperatingLimitSleepListener
         }
 
         $this->logger->info('operatingLimit.sleep', [
-            'apiMethod' => $event->getApiMethod(),
-            'operating' => $event->getOperating(),
-            'thresholdPercent' => $event->getThresholdPercent(),
+            'apiMethod' => $operatingThresholdCrossedEvent->getApiMethod(),
+            'operating' => $operatingThresholdCrossedEvent->getOperating(),
+            'thresholdPercent' => $operatingThresholdCrossedEvent->getThresholdPercent(),
             'seconds' => $seconds,
         ]);
         ($this->sleep)($seconds);
