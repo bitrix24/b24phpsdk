@@ -27,17 +27,17 @@ class ScopeTest extends TestCase
         $scopeCodes = $this->sb->getMainScope()->main()->getAvailableScope()->getResponseData()->getResult();
         sort($scopeCodes);
 
-        $this->assertEquals(
-            $scopeCodes,
-            Scope::getAvailableScopeCodes(),
-            sprintf(
-                'actual scope codes are not equal sdk scope codes, diff «%s»',
-                implode(', ', array_diff($scopeCodes, Scope::getAvailableScopeCodes()))
-            )
-        );
+        // full=true describes this portal; the SDK also knows scopes from other editions/modules.
+        self::assertNotEmpty($scopeCodes, 'The portal must return its available scope catalog');
+        $unknownScopeCodes = array_values(array_diff($scopeCodes, Scope::getAvailableScopeCodes()));
+        self::assertSame([], $unknownScopeCodes, sprintf(
+            'Portal scopes missing from the SDK catalog: %s',
+            implode(', ', $unknownScopeCodes)
+        ));
+        self::assertSame($scopeCodes, new Scope($scopeCodes)->getScopeCodes());
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->sb = Factory::getServiceBuilder();
     }
