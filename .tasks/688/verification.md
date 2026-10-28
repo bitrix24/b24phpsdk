@@ -47,4 +47,4 @@ No separately configured restricted-user identity was available. Permission deni
 
 ## Delivery
 
-Feature PR targets v3-dev. No merge is authorized. Final CI status is recorded in the task response after the pushed head completes checks.
+Feature PR targets v3-dev. No merge is authorized. PR: https://github.com/bitrix24/b24phpsdk/pull/689. Initial push jobs failed during dependency installation on published PHP 8.4.26. The quality workflows were updated to build from the current Dockerfile with fresh base images; final CI status is recorded in the task response after the corrected head completes checks.

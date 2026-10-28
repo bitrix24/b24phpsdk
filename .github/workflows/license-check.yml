@@ -24,8 +24,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: "Pull Docker image (build if not yet published)"
-        run: docker compose pull || docker compose build
+      - name: "Build current PHP runtime"
+        run: docker compose build --pull
 
       - name: "Install dependencies"
         run: make composer-install

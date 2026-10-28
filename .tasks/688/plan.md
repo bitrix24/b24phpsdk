@@ -244,3 +244,5 @@ The coverage report must no longer list `note.file.list` as uncovered. Report un
 
 - Final local gates passed on independent fresh dependencies: CS Fixer, Rector, PHPStan, Deptrac, 1,991 unit tests / 6,623 assertions (same 11 baseline deprecations), license checker, and 14 live Note File tests / 84 assertions. Scoped Note CS, integration Rector, and integration PHPStan checks passed in addition to the standard targets. Both independent spec and code-quality reviews approved, including live-contract fixes.
 - Standard OA coverage CLI completed: note.file.list is absent from its uncovered list. Refreshed schema stays as an uncommitted research snapshot to avoid unrelated generated changes in this feature PR.
+
+- PR #689 created against v3-dev. Initial CI fails before checks: published PHP 8.4.26 is rejected by roave/security-advisories. The six quality workflows now build from the checked-out Dockerfile with `docker compose build --pull`, reproducing the verified local PHP 8.4.27 without weakening security constraints or publishing a shared image.
