@@ -6,6 +6,18 @@
 - Added CI check for leaked secrets (API keys, tokens, webhooks) in the codebase and git history with
   [gitleaks](https://github.com/gitleaks/gitleaks): workflow `.github/workflows/gitleaks.yml`, config `.gitleaks.toml`
   and `make lint-secrets` target, included in `make lint-all` ([#38](https://github.com/bitrix24/b24phpsdk/issues/38))
+- Operating time limit events for long-running batch writes ([#76](https://github.com/bitrix24/b24phpsdk/issues/76)):
+    - `Bitrix24\SDK\Events\OperatingThresholdCrossedEvent` is dispatched when a method's `operating` time crosses
+      10%…90% of the limit window; for `batch` requests the top-level `operating` is tracked as method `batch`,
+      nested commands are tracked by their own method when the portal reports `operating` for them
+    - `Bitrix24\SDK\Core\OperatingLimit\OperatingLimitConfig` — limit (default 480 s) and thresholds settings
+    - `Bitrix24\SDK\Core\OperatingLimit\OperatingLimitSleepListener` — opt-in listener that sleeps until
+      `operating_reset_at`
+    - `CoreBuilder::withOperatingLimitConfig()` and optional `$operatingLimitConfig` argument in
+      `ServiceBuilderFactory::__construct()`
+    - `OperationTimeLimitExceededException` now has `apiMethod`, `batchCommandId` and `operatingResetAt` properties
+    - documentation: `docs/EN/Core/operating-limit.md` with measurements on a cloud portal
+    - integration tests for mass contact add and update in `tests/Integration/Core/OperatingLimit/`
 - Added code coverage metrics for unit tests: line, function and method, class and trait coverage
   ([#307](https://github.com/bitrix24/b24phpsdk/issues/307)):
     - `pcov` extension in the `php-cli` docker container (disabled by default, enabled only for coverage runs)
@@ -17,6 +29,14 @@
       and merges coverage with `phpunit/phpcov` into `var/coverage/merged`, test suites can be selected with
       `INTEGRATION_COVERAGE_SUITES` variable
     - `phpunit/phpcov` dev dependency and `integration_tests_scope_main` test suite for `tests/Integration/Services/Main`
+
+### Changed
+
+- `OperationTimeLimitExceededException` now reaches callers of `Response::getResponseData()` and
+  `Core\Batch::addEntityItems()`, `updateEntityItems()`, `deleteEntityItems()` with its own type instead of being
+  wrapped into a generic `BaseException` ([#76](https://github.com/bitrix24/b24phpsdk/issues/76)).
+  Code catching `BaseException` still catches it; code that inspected the wrapper message
+  (`api request error: ...`, `batch update entity items: ...`) should switch to catching the specific exception.
 
 ### Fixed
 - Fixed PHPUnit warnings `is not a valid target for code coverage` in contract unit tests for reference
