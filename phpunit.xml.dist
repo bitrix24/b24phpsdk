@@ -140,6 +140,9 @@
         <testsuite name="integration_tests_scope_log">
             <directory>./tests/Integration/Services/Log/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_main">
+            <directory>./tests/Integration/Services/Main/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_sale">
             <directory>./tests/Integration/Services/Sale/</directory>
         </testsuite>

@@ -241,6 +241,8 @@ skip_violations:
 | Target | Description |
 |---|---|
 | `make test-unit` | Run all unit tests |
+| `make test-unit-coverage` | Run unit tests with code coverage report in `var/coverage` (see [CONTRIBUTING.md](../CONTRIBUTING.md#code-coverage)) |
+| `make test-integration-coverage` | Run unit and integration suites with merged coverage in `var/coverage/merged`; requires a test portal |
 
 ### Tests — integration (CRM)
 

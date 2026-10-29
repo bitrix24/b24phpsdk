@@ -31,7 +31,6 @@ use ReflectionProperty;
 use Symfony\Component\Process\Process;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-#[CoversClass(RenewedAuthToken::class)]
 #[CoversClass(LegacyRenewedAuthToken::class)]
 class RenewedAuthTokenTest extends TestCase
 {
