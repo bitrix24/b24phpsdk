@@ -32,7 +32,7 @@ class CallListStatusItemResultAnnotationsTest extends TestCase
         $this->callList = Factory::getServiceBuilder()->getCRMScope()->callList();
     }
 
-    public function testAllFieldsAreAnnotated(): void
+    public function testAllSystemFieldsAnnotated(): void
     {
         $raw = $this->callList->statusList()->getCoreResponse()->getResponseData()->getResult();
         self::assertNotEmpty($raw);
@@ -41,7 +41,7 @@ class CallListStatusItemResultAnnotationsTest extends TestCase
         }
     }
 
-    public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
+    public function testAllSystemFieldsHasValidTypeAnnotation(): void
     {
         $items = $this->callList->statusList()->getStatuses();
         self::assertNotEmpty($items);

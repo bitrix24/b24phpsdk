@@ -22,13 +22,13 @@ class CallListItemResultAnnotationsTest extends CallListTestCase
 {
     use CustomBitrix24Assertions;
 
-    public function testAllFieldsAreAnnotated(): void
+    public function testAllSystemFieldsAnnotated(): void
     {
         $raw = $this->callList->get(self::$listId)->getCoreResponse()->getResponseData()->getResult();
         $this->assertBitrix24AllResultItemFieldsAnnotated(array_keys($raw), CallListItemResult::class);
     }
 
-    public function testAllFieldsHasValidTypeCastingInMagicGetters(): void
+    public function testAllSystemFieldsHasValidTypeAnnotation(): void
     {
         $item = $this->callList->get(self::$listId)->callList();
         $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($item, CallListItemResult::class);
