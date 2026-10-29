@@ -11,7 +11,10 @@ Every response carries this state in the `time` object:
 - `operating` — accumulated execution time of the method, seconds;
 - `operating_reset_at` — Unix timestamp when the oldest basket is excluded from `operating`.
 
-For `batch` the outer call is not counted; each nested command is counted against its own method.
+For `batch` the documentation says each nested command is counted against its own method, but cloud portals
+report `operating` only in the top-level `time` of the batch response, accumulated for the `batch` method
+(nested `result_time` entries carry no `operating`). The SDK tracks both: the top-level value under the method
+name `batch`, and nested commands under their own methods when `operating` is present there.
 
 Long batch writes (`*.add`, `*.update` over thousands of items) usually hit this limit first.
 The SDK watches `operating` and tells your code when a method gets close, so you decide what to do.
@@ -26,7 +29,7 @@ Event payload:
 
 | Getter                    | Meaning                                                      |
 |---------------------------|--------------------------------------------------------------|
-| `getApiMethod()`          | method name, for example `crm.contact.update`                |
+| `getApiMethod()`          | method name, for example `crm.contact.update` or `batch`     |
 | `getOperating()`          | accumulated execution time, seconds                          |
 | `getOperatingResetAt()`   | `CarbonImmutable` when the oldest basket is released, or null |
 | `getThresholdPercent()`   | threshold that was crossed                                   |

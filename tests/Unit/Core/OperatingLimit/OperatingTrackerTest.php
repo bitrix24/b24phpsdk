@@ -149,14 +149,17 @@ class OperatingTrackerTest extends TestCase
     }
 
     #[Test]
-    public function testBatchIgnoresTopLevelTime(): void
+    public function testBatchTopLevelTimeTrackedAsBatchMethod(): void
     {
+        // real portals report operating only in the top-level time of a batch response
         $command = new Command('batch', ['halt' => 0, 'cmd' => ['a' => 'crm.deal.update?ID=1']]);
-        $body = $this->batch([]);
-        $body['time'] = $this->time(99, 1000);
+        $body = $this->batch(['a' => $this->time(null, null)]);
+        $body['time'] = $this->time(25, 1000);
         $this->tracker->observeResponse($command, $body);
 
-        $this->assertSame([], $this->thresholds());
+        $this->assertSame([10, 20], $this->thresholds());
+        $this->assertSame('batch', $this->events[0]->getApiMethod());
+        $this->assertSame(1000, $this->tracker->getLastOperatingResetAt('batch'));
     }
 
     #[Test]

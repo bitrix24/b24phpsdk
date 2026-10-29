@@ -45,15 +45,16 @@ class OperatingTracker
      */
     public function observeResponse(Command $command, array $responseBody): void
     {
-        if ($command->getApiMethod() !== 'batch') {
-            if (isset($responseBody['time']) && is_array($responseBody['time'])) {
-                $this->observe($command->getApiMethod(), $responseBody['time']);
-            }
+        // for batch, portals report the accumulated operating of the batch method in the top-level time
+        if (isset($responseBody['time']) && is_array($responseBody['time'])) {
+            $this->observe($command->getApiMethod(), $responseBody['time']);
+        }
 
+        if ($command->getApiMethod() !== 'batch') {
             return;
         }
 
-        // outer batch call is not accounted in operating, only nested commands
+        // nested commands are tracked by their own method when result_time carries operating
         $resultTime = $responseBody['result']['result_time'] ?? null;
         if (!is_array($resultTime)) {
             return;
