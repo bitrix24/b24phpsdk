@@ -16,7 +16,8 @@
     - `CoreBuilder::withOperatingLimitConfig()` and optional `$operatingLimitConfig` argument in
       `ServiceBuilderFactory::__construct()`
     - `OperationTimeLimitExceededException` now has `apiMethod`, `batchCommandId` and `operatingResetAt` properties
-    - documentation: `docs/EN/Core/operating-limit.md`
+    - documentation: `docs/EN/Core/operating-limit.md` with measurements on a cloud portal
+    - integration tests for mass contact add and update in `tests/Integration/Core/OperatingLimit/`
 - Added code coverage metrics for unit tests: line, function and method, class and trait coverage
   ([#307](https://github.com/bitrix24/b24phpsdk/issues/307)):
     - `pcov` extension in the `php-cli` docker container (disabled by default, enabled only for coverage runs)

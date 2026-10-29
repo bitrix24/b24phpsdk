@@ -48,7 +48,8 @@ before the next request; when the listener returns, the batch continues where it
 
 ## Defaults and configuration
 
-- limit: **480 seconds** (the cloud limit is not published, 480 s is the documented example);
+- limit: **480 seconds** (the cloud limit is not published, 480 s is the documented example and matches
+  the measurement below);
 - thresholds: **10, 20, 30, 40, 50, 60, 70, 80, 90** percent.
 
 ```php
@@ -80,7 +81,7 @@ $dispatcher->addListener(OperatingThresholdCrossedEvent::class, new OperatingLim
 $serviceBuilder = ServiceBuilderFactory::createServiceBuilderFromWebhook($webhookUrl, $dispatcher, $logger);
 
 foreach ($serviceBuilder->getCRMScope()->contact()->batch->update($contactsToUpdate) as $id => $result) {
-    // the loop pauses here when crm.contact.update reaches 90% of the window
+    // the loop pauses here when the batch method reaches 90% of the window
 }
 ```
 
@@ -106,6 +107,43 @@ try {
 }
 ```
 
+## Observed behaviour on a cloud portal
+
+Measured on a test cloud portal (2026-10-29) with incoming webhook, `crm.contact` batch packs of 50 commands
+and integration tests `tests/Integration/Core/OperatingLimit/` (thresholds every 1%):
+
+| Scenario                                             | Result                                                                  |
+|------------------------------------------------------|-------------------------------------------------------------------------|
+| 1 process, 25 000 `crm.contact.add`                  | 1766 s, no errors, `operating` plateau ~285 s (59%)                     |
+| 1 process, `crm.contact.update`                      | no errors, `operating` plateau 260–290 s                                |
+| 3 processes, 3 × 4500 contacts × 3 update rounds     | `OPERATION_TIME_LIMIT` after 2750 updates per process (~235 s)          |
+| same, with `OperatingLimitSleepListener(90)`         | all 40 500 updates done in ~2060 s, no errors, peak `operating` 437.8 s |
+
+What it shows:
+
+- the limit is **480 s**: the `batch` method was blocked right after `operating` passed 480 s;
+- `operating` is reported in the top-level `time` of the batch response and is shared by all processes
+  using the same webhook; nested `result_time` entries carry no `operating`;
+- the 429 is returned for the whole `batch` request, so the exception has `apiMethod = batch`,
+  `batchCommandId = null` and `operatingResetAt` from the last successful response;
+- one process running packs back to back grows `operating` by about half of its wall time, so it levels
+  off near 60% of the window and does not reach the limit; several processes do;
+- with the sleep listener the work goes in ~10-minute cycles: about 5 minutes of updates up to 90%,
+  a sleep of ~280 s until `operating_reset_at` (the portal frees `operating` in large steps, not every
+  minute), then a short extra sleep of 13–17 s; about 43% of the wall time is spent sleeping.
+
+To repeat the measurements:
+
+```bash
+docker-compose run --rm -e INTEGRATION_TEST_OPERATING_CONTACTS_COUNT=25000 php-cli \
+  vendor/bin/phpunit tests/Integration/Core/OperatingLimit/OperatingLimitContactsBatchAddTest.php
+```
+
+`OperatingLimitContactsBatchUpdateTest` also reads `INTEGRATION_TEST_OPERATING_UPDATE_ROUNDS`,
+`INTEGRATION_TEST_OPERATING_SHARD` / `INTEGRATION_TEST_OPERATING_SHARDS` (disjoint contact slices for parallel
+processes), `INTEGRATION_TEST_OPERATING_SLEEP_FROM` (attach the sleep listener) and
+`INTEGRATION_TEST_OPERATING_CLEANUP=0` (keep contacts for the next run).
+
 ## Known limitations
 
 - If a batch pack has both successful commands and an `OPERATION_TIME_LIMIT` error, the exception is thrown
@@ -115,3 +153,5 @@ try {
   the cost of one pack.
 - Batch classes of individual services (for example `Services\Sale\*\Batch`) still wrap errors into
   `BaseException`.
+- When the window moves while the load stays high, every threshold below the current load is dispatched
+  again, so a listener receives several events per window shift (one per threshold).
