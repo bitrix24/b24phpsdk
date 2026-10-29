@@ -17,6 +17,7 @@ use Bitrix24\SDK\Core\ApiLevelErrorHandler;
 use Bitrix24\SDK\Core\Batch;
 use Bitrix24\SDK\Core\Commands\Command;
 use Bitrix24\SDK\Core\Contracts\ApiClientInterface;
+use Bitrix24\SDK\Core\Contracts\ApiVersion;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\OperationTimeLimitExceededException;
@@ -85,12 +86,12 @@ class BatchOperationTimeLimitTest extends TestCase
 
     private function batch(string $errorCode): Batch
     {
-        $core = new class ($errorCode) implements CoreInterface {
-            public function __construct(private readonly string $errorCode)
+        $core = new readonly class ($errorCode) implements CoreInterface {
+            public function __construct(private string $errorCode)
             {
             }
 
-            public function call(string $apiMethod, array $parameters = []): Response
+            public function call(string $apiMethod, array $parameters = [], ApiVersion $apiVersion = ApiVersion::v1): Response
             {
                 $commandIds = array_keys($parameters['cmd']);
                 $body = [
@@ -118,6 +119,15 @@ class BatchOperationTimeLimitTest extends TestCase
             public function getApiClient(): ApiClientInterface
             {
                 throw new \LogicException('not used');
+            }
+
+            public function setAuthConnector(?string $authConnector): void
+            {
+            }
+
+            public function getAuthConnector(): ?string
+            {
+                return null;
             }
         };
 
