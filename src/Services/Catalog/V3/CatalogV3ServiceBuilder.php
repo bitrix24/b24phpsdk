@@ -50,4 +50,18 @@ class CatalogV3ServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    public function section(): Section\Service\Section
+    {
+        $this->serviceCache[__METHOD__] ??= new Section\Service\Section($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function sectionField(): SectionField\Service\SectionField
+    {
+        $this->serviceCache[__METHOD__] ??= new SectionField\Service\SectionField($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
 }
