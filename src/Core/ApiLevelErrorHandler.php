@@ -26,6 +26,7 @@ use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Exceptions\UserNotFoundOrIsNotActiveException;
 use Bitrix24\SDK\Core\Exceptions\ValidationException;
+use Bitrix24\SDK\Core\Exceptions\VersionMismatchException;
 use Bitrix24\SDK\Core\Exceptions\WrongAuthTypeException;
 use Bitrix24\SDK\Core\Exceptions\WrongClientException;
 use Bitrix24\SDK\Core\Response\DTO\UnsuccessfulResponseError;
@@ -193,6 +194,11 @@ class ApiLevelErrorHandler
             case 'not_found':
             case 'error_not_found':
                 throw new ItemNotFoundException(sprintf('%s - %s', $errorCode, $errorDescription));
+            case 'crm_form_version_mismatch':
+                throw new VersionMismatchException(
+                    sprintf('%s - %s %s', $errorCode, $errorDescription, $batchErrorPrefix),
+                    VersionMismatchException::parseVersion($unsuccessfulResponseError?->details['currentUpdatedTime'] ?? null)
+                );
             case 'bitrix_rest_v3_exception_unknowndtopropertyexception':
                 throw new InvalidArgumentException(sprintf('%s - %s %s', $errorCode, $errorDescription, $batchErrorPrefix));
             default:

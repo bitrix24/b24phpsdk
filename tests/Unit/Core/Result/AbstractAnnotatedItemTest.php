@@ -84,6 +84,23 @@ final class AbstractAnnotatedItemTest extends TestCase
         (new AnnotatedIpItemStub(['address' => 'invalid']))->address;
     }
 
+    #[Test]
+    public function testMagicGetterCastsNestedItemFromAnnotatedClass(): void
+    {
+        $item = new AnnotatedNestedItemStub(['interval' => ['from' => 3, 'title' => 'Integer settings']]);
+
+        $this->assertInstanceOf(NestedIntervalItemStub::class, $item->interval);
+        $this->assertSame(3, $item->interval->from);
+        $this->assertSame('Integer settings', $item->interval->title);
+        $this->assertSame($item->interval->from, (new AnnotatedNestedItemStub(['interval' => $item->interval]))->interval->from);
+    }
+
+    #[Test]
+    public function testMagicGetterKeepsNullNestedItem(): void
+    {
+        $this->assertNull((new AnnotatedNestedItemStub(['interval' => null]))->interval);
+    }
+
 }
 
 /**
@@ -109,5 +126,20 @@ enum IntStatusStub: int
  * @property-read string $text
  */
 final class AnnotatedIpItemStub extends AbstractAnnotatedItem
+{
+}
+
+/**
+ * @property-read NestedIntervalItemStub|null $interval
+ */
+final class AnnotatedNestedItemStub extends AbstractAnnotatedItem
+{
+}
+
+/**
+ * @property-read int|null    $from
+ * @property-read string|null $title
+ */
+final class NestedIntervalItemStub extends AbstractAnnotatedItem
 {
 }

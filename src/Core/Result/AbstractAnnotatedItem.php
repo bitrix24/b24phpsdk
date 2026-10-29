@@ -103,6 +103,12 @@ abstract class AbstractAnnotatedItem extends AbstractItem
             return $this->castArrayValue($value, $type);
         }
 
+        // resolved before the str_contains() checks below: class names may contain "int", "string", ...
+        $nestedItemClass = $this->resolveNestedItemClass($type);
+        if ($nestedItemClass !== null) {
+            return is_array($value) ? new $nestedItemClass($value) : $value;
+        }
+
         $backedEnumClass = $this->resolveBackedEnumClass($type);
         if ($backedEnumClass !== null) {
             return $this->castBackedEnumValue($value, $type, $backedEnumClass);
@@ -171,6 +177,25 @@ abstract class AbstractAnnotatedItem extends AbstractItem
             }
 
             if (enum_exists($candidate) && is_a($candidate, BackedEnum::class, true)) {
+                return $candidate;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return class-string<AbstractItem>|null
+     */
+    private function resolveNestedItemClass(string $type): ?string
+    {
+        foreach (preg_split('/[|&]/', $type) ?: [] as $candidate) {
+            $candidate = ltrim(trim($candidate), '?\\');
+            if ($candidate === '' || $candidate === 'null' || str_contains($candidate, '<')) {
+                continue;
+            }
+
+            if (class_exists($candidate) && is_a($candidate, AbstractItem::class, true)) {
                 return $candidate;
             }
         }
