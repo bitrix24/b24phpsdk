@@ -692,6 +692,10 @@
             <directory>./tests/Integration/Services/CRM/V3/Form/</directory>
             <directory>./tests/Integration/Services/CRM/V3/FormField/</directory>
         </testsuite>
+        <testsuite name="integration_tests_crm_v3_form_embedding">
+            <directory>./tests/Integration/Services/CRM/V3/FormEmbedding/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormEmbeddingField/</directory>
+        </testsuite>
         <testsuite name="integration_tests_catalog_vat">
             <directory>./tests/Integration/Services/Catalog/Vat/</directory>
         </testsuite>
