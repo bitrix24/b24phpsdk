@@ -17,7 +17,10 @@ use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
 use Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface;
 use Bitrix24\SDK\Services\Catalog\CatalogServiceBuilder;
+use Bitrix24\SDK\Services\Catalog\Measure\Service\Measure as LegacyMeasure;
 use Bitrix24\SDK\Services\Catalog\V3\CatalogV3ServiceBuilder;
+use Bitrix24\SDK\Services\Catalog\V3\Measure\Service\Measure;
+use Bitrix24\SDK\Services\Catalog\V3\MeasureField\Service\MeasureField;
 use Bitrix24\SDK\Services\Catalog\V3\Vat\Service\Vat;
 use Bitrix24\SDK\Services\Catalog\V3\VatField\Service\VatField;
 use Bitrix24\SDK\Services\Catalog\Vat\Service\Vat as LegacyVat;
@@ -36,7 +39,7 @@ class CatalogV3ServiceBuilderTest extends TestCase
     {
         $builder = $this->catalogBuilder()->v3();
 
-        foreach (['vat' => Vat::class, 'vatField' => VatField::class] as $accessor => $class) {
+        foreach (['vat' => Vat::class, 'vatField' => VatField::class, 'measure' => Measure::class, 'measureField' => MeasureField::class] as $accessor => $class) {
             $this->assertInstanceOf($class, $builder->$accessor());
             $this->assertSame($builder->$accessor(), $builder->$accessor());
         }
@@ -46,12 +49,13 @@ class CatalogV3ServiceBuilderTest extends TestCase
     }
 
     #[Test]
-    public function testCatalogBuilderExposesCachedV3BuilderAndKeepsLegacyVat(): void
+    public function testCatalogBuilderExposesCachedV3BuilderAndKeepsLegacyServices(): void
     {
         $catalog = $this->catalogBuilder();
 
         $this->assertSame($catalog->v3(), $catalog->v3());
         $this->assertInstanceOf(LegacyVat::class, $catalog->vat());
+        $this->assertInstanceOf(LegacyMeasure::class, $catalog->measure());
     }
 
     private function catalogBuilder(): CatalogServiceBuilder

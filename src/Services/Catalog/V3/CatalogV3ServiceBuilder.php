@@ -36,4 +36,18 @@ class CatalogV3ServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    public function measure(): Measure\Service\Measure
+    {
+        $this->serviceCache[__METHOD__] ??= new Measure\Service\Measure($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function measureField(): MeasureField\Service\MeasureField
+    {
+        $this->serviceCache[__METHOD__] ??= new MeasureField\Service\MeasureField($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
 }
