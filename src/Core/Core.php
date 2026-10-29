@@ -19,9 +19,7 @@ use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\AuthForbiddenException;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\MethodConfirmWaitingException;
-use Bitrix24\SDK\Core\Exceptions\OperationTimeLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Core\OperatingLimit\OperatingTracker;
 use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Events\AuthTokenRenewedEvent;
 use Bitrix24\SDK\Events\PortalDomainUrlChangedEvent;
@@ -37,8 +35,7 @@ class Core implements CoreInterface
         protected ApiClientInterface       $apiClient,
         protected ApiLevelErrorHandler     $apiLevelErrorHandler,
         protected EventDispatcherInterface $eventDispatcher,
-        protected LoggerInterface          $logger,
-        protected ?OperatingTracker        $operatingTracker = null)
+        protected LoggerInterface          $logger)
     {
     }
 
@@ -69,7 +66,7 @@ class Core implements CoreInterface
             switch ($apiCallResponse->getStatusCode()) {
                 case StatusCodeInterface::STATUS_OK:
                     //todo check with empty response size from server
-                    $response = new Response($apiCallResponse, new Command($apiMethod, $parameters), $this->apiLevelErrorHandler, $this->logger, $this->operatingTracker);
+                    $response = new Response($apiCallResponse, new Command($apiMethod, $parameters), $this->apiLevelErrorHandler, $this->logger);
                     break;
                 case StatusCodeInterface::STATUS_FOUND:
                     // change domain url
@@ -173,29 +170,6 @@ class Core implements CoreInterface
                         ]
                     );
                     $this->apiLevelErrorHandler->handle($body);
-                    break;
-                case StatusCodeInterface::STATUS_TOO_MANY_REQUESTS:
-                    $body = $apiCallResponse->toArray(false);
-                    $this->logger->notice(
-                        'too many requests',
-                        [
-                            'apiMethod' => $apiMethod,
-                            'rawResponse' => $body,
-                        ]
-                    );
-                    try {
-                        $this->apiLevelErrorHandler->handle($body);
-                    } catch (OperationTimeLimitExceededException $exception) {
-                        throw new OperationTimeLimitExceededException(
-                            $exception->getMessage(),
-                            $exception->getCode(),
-                            $exception,
-                            $apiMethod,
-                            null,
-                            $this->operatingTracker?->getLastOperatingResetAt($apiMethod)
-                        );
-                    }
-
                     break;
                 default:
                     $body = $apiCallResponse->toArray(false);

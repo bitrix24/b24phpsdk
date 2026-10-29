@@ -18,8 +18,6 @@ use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
-use Bitrix24\SDK\Core\OperatingLimit\OperatingLimitConfig;
-use Bitrix24\SDK\Core\OperatingLimit\OperatingTracker;
 use Bitrix24\SDK\Infrastructure\HttpClient\RequestId\DefaultRequestIdGenerator;
 use Bitrix24\SDK\Infrastructure\HttpClient\RequestId\RequestIdGeneratorInterface;
 use Psr\Log\LoggerInterface;
@@ -36,8 +34,6 @@ class CoreBuilder
     private HttpClientInterface $httpClient;
 
     private EventDispatcherInterface $eventDispatcher;
-
-    private ?OperatingLimitConfig $operatingLimitConfig = null;
 
     private LoggerInterface $logger;
 
@@ -107,13 +103,6 @@ class CoreBuilder
         return $this;
     }
 
-    public function withOperatingLimitConfig(OperatingLimitConfig $operatingLimitConfig): self
-    {
-        $this->operatingLimitConfig = $operatingLimitConfig;
-
-        return $this;
-    }
-
     /**
      * @throws InvalidArgumentException
      */
@@ -137,8 +126,7 @@ class CoreBuilder
             $this->apiClient,
             $this->apiLevelErrorHandler,
             $this->eventDispatcher,
-            $this->logger,
-            new OperatingTracker($this->operatingLimitConfig ?? new OperatingLimitConfig(), $this->eventDispatcher)
+            $this->logger
         );
     }
 }
