@@ -226,6 +226,39 @@ Services depend on Core/Attributes/Filters only. No new `skip_violations`.
   `getCurrentVersion()`, delete confirmation for an active form, nested block annotations/casting) pass;
   no leftover forms. The 10 PR 1 methods are no longer in `make sdk-coverage-v3-show-uncovered`.
 
+## PR 2 implementation notes (2026-10-29)
+
+- Branch `feature/670-crm-form-v3-embedding`, stacked on PR 1 (#711).
+- Live finding not in the plan: `crm.form.embedding.get` with `variant` returns a different payload,
+  `{variant, code}` (or `{variant, url}` for the undocumented-in-OpenAPI `link` variant), not the embedding DTO.
+  So the service has two methods for one REST method (precedent: `crm.*.details.configuration.*`):
+  `get(int $formId): FormEmbeddingResult` (all variants) and
+  `getVariant(int $formId, EmbeddingVariant $variant, ?string $buttonText, ?EmbeddingButtonType $buttonType, ?int $delay)`.
+  `buttonText`/`buttonType` (click only) and `delay` (auto only) are validated before the request, matching portal errors.
+- `update(int $formId, CarbonImmutable $updatedTime, ?array $clickSettings = null, ?array $autoSettings = null)` wraps
+  each variant as `{settings: …}`; at least one is required. `settings`/`options` stay arrays (keys differ per variant).
+- `DisposableFormTrait` added for integration tests that need a throw-away form.
+- Quality gate: cs-fixer, rector, phpstan, deptrac, `make test-unit` (2219 tests),
+  `make test-integration-crm-v3-form-embedding` (10 tests) and `make test-integration-crm-v3-form` (12 tests) pass on
+  the live portal (embedding update bumps the form version; stale form and embedding updates throw
+  `VersionMismatchException`); no leftover forms; `crm.form.embedding.*` no longer uncovered.
+
+## PR 3 implementation notes (2026-10-29)
+
+- Branch `feature/670-crm-form-v3-directories`, stacked on PR 1 (#711) — not on PR 2; both add accessors to
+  `CRMV3ServiceBuilder`, so the second one to merge needs a trivial conflict resolution.
+- Deviation from the plan: every configuration block is typed (not only entity schemes, duplicate modes,
+  languages and currencies) — the blocks are small and fully verified live: `ConfigurationEntitySchemeItemResult`,
+  `NamedCodeItemResult`, `NamedIdItemResult`, `ConfigurationLeadItemResult`, `ConfigurationSmartProcessItemResult`,
+  `ConfigurationCurrencyItemResult`, `ConfigurationFieldTypeItemResult`, `ConfigurationPermissionsItemResult`,
+  `ConfigurationLimitsItemResult` / `ConfigurationActiveFormsLimitItemResult`, `ConfigurationProductItemResult`.
+- `formEntityField()->list(array $entityNames)` builds `['entityName', 'in', …]` and rejects an empty list.
+- Test helpers: `tests/Unit/Services/CRM/V3/V3ServiceTestTrait.php` (core double + endpoint metadata check) and
+  `tests/Integration/Services/CRM/V3/NestedItemAnnotationsTrait.php` (nested item annotations vs raw payload).
+- Quality gate: cs-fixer, rector, phpstan, deptrac, `make test-unit` (2230 tests),
+  `make test-integration-crm-v3-form-directories` (27 tests, read-only) and `make test-integration-crm-v3-form`
+  (12 tests) pass; the 12 directory methods are no longer uncovered.
+
 ## PR 4 implementation notes (2026-10-29)
 
 - Branch `feature/670-crm-form-v3-placements`, stacked on PR 1 (#711). The test helpers
