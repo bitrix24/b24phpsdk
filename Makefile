@@ -319,6 +319,10 @@ test-integration-im-chat-user:
 test-integration-im-notify:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_notify
 
+.PHONY: test-integration-placement-registrar
+test-integration-placement-registrar:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_placement_registrar
+
 .PHONY: test-integration-scope-placement
 test-integration-scope-placement:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_placement
@@ -1044,9 +1048,29 @@ test-integration-catalog-document-contractor-annotations:
 test-integration-catalog-vat:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_vat
 
+.PHONY: test-integration-catalog-v3-vat
+test-integration-catalog-v3-vat:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_v3_vat
+
+.PHONY: test-integration-catalog-v3-measure
+test-integration-catalog-v3-measure:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_v3_measure
+
+.PHONY: test-integration-catalog-v3-section
+test-integration-catalog-v3-section:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_v3_section
+
+.PHONY: test-integration-catalog-v3-catalog
+test-integration-catalog-v3-catalog:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_v3_catalog
+
 .PHONY: test-integration-crm-v3-form
 test-integration-crm-v3-form:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_v3_form
+
+.PHONY: test-integration-crm-v3-form-embedding
+test-integration-crm-v3-form-embedding:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_v3_form_embedding
 
 .PHONY: test-integration-crm-v3-form-directories
 test-integration-crm-v3-form-directories:

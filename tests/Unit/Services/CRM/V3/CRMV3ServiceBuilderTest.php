@@ -19,6 +19,8 @@ use Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface;
 use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
 use Bitrix24\SDK\Services\CRM\V3\CRMV3ServiceBuilder;
 use Bitrix24\SDK\Services\CRM\V3\Form\Service\Form;
+use Bitrix24\SDK\Services\CRM\V3\FormEmbedding\Service\FormEmbedding;
+use Bitrix24\SDK\Services\CRM\V3\FormEmbeddingField\Service\FormEmbeddingField;
 use Bitrix24\SDK\Services\CRM\V3\FormField\Service\FormField;
 use Bitrix24\SDK\Services\CRM\V3\FormConfiguration\Service\FormConfiguration;
 use Bitrix24\SDK\Services\CRM\V3\FormConfigurationField\Service\FormConfigurationField;
@@ -50,7 +52,7 @@ class CRMV3ServiceBuilderTest extends TestCase
         $builder = $crm->v3();
 
         $this->assertSame($builder, $crm->v3());
-        foreach (['form' => Form::class, 'formField' => FormField::class, 'formConfiguration' => FormConfiguration::class, 'formConfigurationField' => FormConfigurationField::class, 'formEntityField' => FormEntityField::class, 'formEntityFieldField' => FormEntityFieldField::class, 'formScenario' => FormScenario::class, 'formScenarioField' => FormScenarioField::class, 'formScenarioCategory' => FormScenarioCategory::class, 'formScenarioCategoryField' => FormScenarioCategoryField::class] as $accessor => $class) {
+        foreach (['form' => Form::class, 'formField' => FormField::class, 'formEmbedding' => FormEmbedding::class, 'formEmbeddingField' => FormEmbeddingField::class, 'formConfiguration' => FormConfiguration::class, 'formConfigurationField' => FormConfigurationField::class, 'formEntityField' => FormEntityField::class, 'formEntityFieldField' => FormEntityFieldField::class, 'formScenario' => FormScenario::class, 'formScenarioField' => FormScenarioField::class, 'formScenarioCategory' => FormScenarioCategory::class, 'formScenarioCategoryField' => FormScenarioCategoryField::class] as $accessor => $class) {
             $this->assertInstanceOf($class, $builder->$accessor());
             $this->assertSame($builder->$accessor(), $builder->$accessor());
         }

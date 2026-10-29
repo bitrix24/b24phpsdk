@@ -37,6 +37,20 @@ class CRMV3ServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    public function formEmbedding(): FormEmbedding\Service\FormEmbedding
+    {
+        $this->serviceCache[__METHOD__] ??= new FormEmbedding\Service\FormEmbedding($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function formEmbeddingField(): FormEmbeddingField\Service\FormEmbeddingField
+    {
+        $this->serviceCache[__METHOD__] ??= new FormEmbeddingField\Service\FormEmbeddingField($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function formConfiguration(): FormConfiguration\Service\FormConfiguration
     {
         $this->serviceCache[__METHOD__] ??= new FormConfiguration\Service\FormConfiguration($this->core, $this->log);
