@@ -6,6 +6,22 @@
 - Added CI check for leaked secrets (API keys, tokens, webhooks) in the codebase and git history with
   [gitleaks](https://github.com/gitleaks/gitleaks): workflow `.github/workflows/gitleaks.yml`, config `.gitleaks.toml`
   and `make lint-secrets` target, included in `make lint-all` ([#38](https://github.com/bitrix24/b24phpsdk/issues/38))
+- Added code coverage metrics for unit tests: line, function and method, class and trait coverage
+  ([#307](https://github.com/bitrix24/b24phpsdk/issues/307)):
+    - `pcov` extension in the `php-cli` docker container (disabled by default, enabled only for coverage runs)
+    - `make test-unit-coverage` and `composer phpunit-run-unit-tests-coverage` generate text summary, HTML and Clover
+      reports in `var/coverage`
+    - «Code coverage» job in the `PHPUnit tests` GitHub workflow publishes the summary in the job summary and uploads
+      the full report as the `code-coverage-report` artifact
+    - `make test-integration-coverage` runs unit tests and integration tests by scope test suites with `--coverage-php`
+      and merges coverage with `phpunit/phpcov` into `var/coverage/merged`, test suites can be selected with
+      `INTEGRATION_COVERAGE_SUITES` variable
+    - `phpunit/phpcov` dev dependency and `integration_tests_scope_main` test suite for `tests/Integration/Services/Main`
+
+### Fixed
+- Fixed PHPUnit warnings `is not a valid target for code coverage` in contract unit tests for reference
+  implementations: `#[CoversClass]` pointed to interfaces or to test-only classes, replaced with `#[CoversNothing]`
+  ([#307](https://github.com/bitrix24/b24phpsdk/issues/307))
 
 ## 1.13.0 - 2026.09.30
 

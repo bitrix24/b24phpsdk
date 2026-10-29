@@ -24,6 +24,41 @@ make lint-rector
 make lint-rector-fix
 ```
 
+## Code coverage
+
+Unit tests collect code coverage with [pcov](https://github.com/krakjoe/pcov), it is installed in the `php-cli` docker container:
+
+```shell
+make test-unit-coverage
+```
+
+The command prints a summary of the code coverage metrics:
+
+- **Lines** – line coverage, whether each executable line was executed
+- **Methods** – function and method coverage, a method is covered only when all of its executable lines are covered
+- **Classes** – class and trait coverage, a class or trait is covered only when all of its methods are covered
+
+Reports are generated in the `var/coverage` folder: `html/index.html` – HTML report, `clover.xml` – Clover XML report.
+In CI the summary is published in the job summary of the «Code coverage» job, the full report is available as the `code-coverage-report` artifact.
+
+Most of the `src/Services` code is tested by integration tests, they are not executed in CI because they require a test Bitrix24 portal.
+To get the full code coverage, configure `tests/.env.local` (see [Integration Tests Setup](CLAUDE.md)) and run:
+
+```shell
+make test-integration-coverage
+```
+
+The command runs unit tests and every integration scope test suite with `--coverage-php`, saves coverage of each suite in
+`var/coverage/php/*.cov` and merges them with [phpcov](https://github.com/sebastianbergmann/phpcov) into `var/coverage/merged`
+(`coverage.txt`, `html/index.html`, `clover.xml`). Failed test suites do not stop the run, they are listed at the end and fail the command.
+The full run takes a long time and creates and deletes a lot of entities on the portal, you can run selected suites only:
+
+```shell
+make test-integration-coverage INTEGRATION_COVERAGE_SUITES="integration_tests_core integration_tests_scope_crm"
+```
+
+Code coverage counts only code declared in `#[CoversClass]` / `#[CoversMethod]` attributes of a test.
+
 ## Patches and bugfixes 
 
 1. Check the oldest version that patch/bug fix can be applied.
