@@ -64,4 +64,18 @@ class CatalogV3ServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    public function catalog(): Catalog\Service\Catalog
+    {
+        $this->serviceCache[__METHOD__] ??= new Catalog\Service\Catalog($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function catalogField(): CatalogField\Service\CatalogField
+    {
+        $this->serviceCache[__METHOD__] ??= new CatalogField\Service\CatalogField($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
 }
