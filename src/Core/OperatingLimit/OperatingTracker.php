@@ -94,13 +94,20 @@ class OperatingTracker
      */
     private function observe(string $apiMethod, array $time): void
     {
-        $operating = (float)($time['operating'] ?? 0);
         $resetAt = isset($time['operating_reset_at']) ? (int)$time['operating_reset_at'] : null;
         if ($resetAt !== null) {
             $this->lastOperatingResetAt[$apiMethod] = $resetAt;
         }
 
+        // missing operating metadata says nothing about the load, keep fired thresholds as is
+        if (!isset($time['operating'])) {
+            return;
+        }
+
+        $operating = (float)$time['operating'];
+        // explicit zero means the load dropped below every threshold, re-arm them
         if ($operating <= 0) {
+            unset($this->firedThresholds[$apiMethod]);
             return;
         }
 

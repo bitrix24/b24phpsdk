@@ -113,6 +113,28 @@ class OperatingTrackerTest extends TestCase
     }
 
     #[Test]
+    public function testRearmsAfterExplicitZeroOperatingWithoutResetAt(): void
+    {
+        $command = new Command('crm.deal.update', []);
+        $this->tracker->observeResponse($command, $this->single(95, null));
+        $this->tracker->observeResponse($command, $this->single(0, null));
+        $this->tracker->observeResponse($command, $this->single(95, null));
+
+        $this->assertSame([10, 20, 30, 40, 50, 60, 70, 80, 90, 10, 20, 30, 40, 50, 60, 70, 80, 90], $this->thresholds());
+    }
+
+    #[Test]
+    public function testMissingOperatingKeepsFiredThresholds(): void
+    {
+        $command = new Command('crm.deal.update', []);
+        $this->tracker->observeResponse($command, $this->single(15, null));
+        $this->tracker->observeResponse($command, ['result' => [], 'time' => $this->time(null, null)]);
+        $this->tracker->observeResponse($command, $this->single(15, null));
+
+        $this->assertSame([10], $this->thresholds());
+    }
+
+    #[Test]
     public function testNullResetAtFiresOnce(): void
     {
         $command = new Command('crm.deal.update', []);
