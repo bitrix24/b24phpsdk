@@ -14,6 +14,9 @@ $finder = Finder::create()
     ->in(__DIR__ . '/src/Services/CRM/Contact/')
     ->in(__DIR__ . '/src/Services/CRM/Quote/')
     ->in(__DIR__ . '/src/Services/CRM/Lead/')
+    ->in(__DIR__ . '/src/Services/CRM/CallList/')
+    ->in(__DIR__ . '/tests/Unit/Services/CRM/CallList/')
+    ->in(__DIR__ . '/tests/Integration/Services/CRM/CallList/')
     ->in(__DIR__ . '/src/Services/CRM/Currency/')
     ->in(__DIR__ . '/src/Services/CRM/Type/')
     ->in(__DIR__ . '/src/Services/CRM/Userfieldconfig/')
@@ -43,6 +46,18 @@ $finder = Finder::create()
     ->in(__DIR__ . '/src/Services/Pull/')
     ->in(__DIR__ . '/tests/Integration/Services/Pull/')
     ->in(__DIR__ . '/tests/Unit/Services/Pull/')
+    ->in(__DIR__ . '/tests/Unit/Services/Placement/')
+    ->append([
+        __DIR__ . '/src/Services/Placement/Common/PlacementHandlerMetadata.php',
+        __DIR__ . '/src/Services/Placement/PlacementConflictPolicy.php',
+        __DIR__ . '/src/Services/Placement/PlacementRegistrationStatus.php',
+        __DIR__ . '/src/Services/Placement/Result/PlacementRegistrationItemResult.php',
+        __DIR__ . '/src/Services/Placement/Result/PlacementRegistrationResult.php',
+        __DIR__ . '/src/Services/Placement/Service/PlacementRegistrar.php',
+        __DIR__ . '/src/Services/Placement/Service/Placement.php',
+        __DIR__ . '/src/Services/Placement/PlacementServiceBuilder.php',
+        __DIR__ . '/tests/Integration/Services/Placement/Service/PlacementRegistrarTest.php',
+    ])
     ->in(__DIR__ . '/src/Services/IM/')
     ->in(__DIR__ . '/src/Services/IMBot/')
     ->in(__DIR__ . '/src/Services/Catalog/')

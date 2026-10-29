@@ -19,6 +19,7 @@ use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Exceptions\OperationTimeLimitExceededException;
 use Bitrix24\SDK\Core\Response\DTO\Pagination;
 use Bitrix24\SDK\Core\Response\DTO\ResponseData;
 use Bitrix24\SDK\Core\Response\DTO\Result;
@@ -101,6 +102,16 @@ class Batch implements BatchOperationsInterface
             foreach ($this->getTraversable(true) as $cnt => $addedItemResult) {
                 yield $cnt => $addedItemResult;
             }
+        } catch (OperationTimeLimitExceededException $exception) {
+            $this->logger->error(
+                sprintf('batch add entity items: %s', $exception->getMessage()),
+                [
+                    'apiMethod' => $exception->apiMethod,
+                    'batchCommandId' => $exception->batchCommandId,
+                    'operatingResetAt' => $exception->operatingResetAt,
+                ]
+            );
+            throw $exception;
         } catch (\Throwable $throwable) {
             $errorMessage = sprintf('batch add entity items: %s', $throwable->getMessage());
             $this->logger->error(
@@ -166,7 +177,7 @@ class Batch implements BatchOperationsInterface
             foreach ($this->getTraversable(true) as $cnt => $deletedItemResult) {
                 yield $cnt => $deletedItemResult;
             }
-        } catch (InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException|OperationTimeLimitExceededException $exception) {
             $errorMessage = sprintf('batch delete entity items: %s', $exception->getMessage());
             $this->logger->error(
                 $errorMessage,
@@ -262,7 +273,7 @@ class Batch implements BatchOperationsInterface
             foreach ($this->getTraversable(true) as $cnt => $updatedItemResult) {
                 yield $cnt => $updatedItemResult;
             }
-        } catch (InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException|OperationTimeLimitExceededException $exception) {
             $errorMessage = sprintf('batch update entity items: %s', $exception->getMessage());
             $this->logger->error(
                 $errorMessage,
@@ -401,7 +412,7 @@ class Batch implements BatchOperationsInterface
      *
      * @param array<string,string> $order
      * @param array<string,mixed> $filter
-     * @param array<string,mixed> $select
+     * @param array<array-key, mixed> $select
      *
      * @return \Generator<mixed>
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
@@ -614,14 +625,12 @@ class Batch implements BatchOperationsInterface
                 // Extract elements from the result
                 $resultElements = $this->extractElementsFromBatchResult($batchResult, $isCrmItemsInBatch);
 
-                // For each result element, return it and track the last element ID
-                // The lastElementId will be used for the next batch if using ASC sort
-                foreach ($resultElements as $resultElement) {
-                    // Update lastElementId properly depending on sort order
-                    if (isset($resultElement[$keyId])) {
-                        $lastElementId = (int)$resultElement[$keyId];
-                    }
+                // Reuse the response-ID hook on every page, including entity-specific envelopes.
+                if ($resultElements !== []) {
+                    $lastElementId = $this->getLastElementId($resultElements, $keyId, $isAscendingSort);
+                }
 
+                foreach ($resultElements as $resultElement) {
                     yield $resultElement;
                     $elementsCounter++;
                     if ($limit !== null && $elementsCounter >= $limit) {
@@ -656,7 +665,7 @@ class Batch implements BatchOperationsInterface
      *
      * @param array<string,string> $order
      * @param array<string,mixed> $filter
-     * @param array<string,mixed> $select
+     * @param array<array-key, mixed> $select
      *
      * @return Generator<mixed>
      * @throws BaseException
@@ -929,11 +938,31 @@ class Batch implements BatchOperationsInterface
             $apiCommands[$command->getId()] = sprintf(
                 '%s?%s',
                 $command->getApiMethod(),
-                http_build_query($parameters)
+                http_build_query($this->replaceNullWithEmptyString($parameters))
             );
         }
 
         return $apiCommands;
+    }
+
+    /**
+     * http_build_query() silently drops null values, so filters like ['parentId150' => null] would vanish
+     * from batch sub-commands; an empty value is what Bitrix24 treats as null in a query string
+     *
+     * @param array<array-key, mixed> $parameters
+     * @return array<array-key, mixed>
+     */
+    private function replaceNullWithEmptyString(array $parameters): array
+    {
+        foreach ($parameters as $key => $value) {
+            if ($value === null) {
+                $parameters[$key] = '';
+            } elseif (is_array($value)) {
+                $parameters[$key] = $this->replaceNullWithEmptyString($value);
+            }
+        }
+
+        return $parameters;
     }
 
 

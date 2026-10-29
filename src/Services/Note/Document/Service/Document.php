@@ -27,12 +27,14 @@ use Bitrix24\SDK\Services\Note\Document\Result\DeletedDocumentResult;
 use Bitrix24\SDK\Services\Note\Document\Result\DocumentFieldResult;
 use Bitrix24\SDK\Services\Note\Document\Result\DocumentFieldsResult;
 use Bitrix24\SDK\Services\Note\Document\Result\DocumentResult;
+use Bitrix24\SDK\Services\Note\Document\Result\DocumentsResult;
 use Bitrix24\SDK\Services\Note\Document\Result\DocumentSearchFieldResult;
 use Bitrix24\SDK\Services\Note\Document\Result\DocumentSearchFieldsResult;
 use Bitrix24\SDK\Services\Note\Document\Result\DocumentSearchResult;
 use Bitrix24\SDK\Services\Note\Document\Result\DocumentTreeFieldResult;
 use Bitrix24\SDK\Services\Note\Document\Result\DocumentTreeFieldsResult;
 use Bitrix24\SDK\Services\Note\Document\Result\DocumentTreeResult;
+use Bitrix24\SDK\Services\Note\Document\Result\UnarchivedDocumentResult;
 
 #[ApiServiceMetadata(new Scope(['note']))]
 class Document extends AbstractService
@@ -220,6 +222,150 @@ class Document extends AbstractService
                 ),
                 ApiVersion::v3
             )
+        );
+    }
+
+    /**
+     * Lists documents visible to the user, page by page.
+     *
+     * Without a `state` condition only live documents are returned. Walk the pages by passing
+     * {@see DocumentsResult::getNextCursor()} back until it is null; an empty page with a cursor is not the end.
+     * `markdown` cannot be selected here — read the text with {@see Document::get()}.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/note/document/note-document-list.html
+     *
+     * @param array|FilterBuilderInterface             $filter Filter conditions (REST v3 format), see {@see DocumentFilter}
+     * @param array<int,string>|DocumentSelectBuilder $select
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'note.document.list',
+        'https://apidocs.bitrix24.com/api-reference/note/document/note-document-list.html',
+        'Lists documents visible to the user with cursor pagination.',
+        ApiVersion::v3
+    )]
+    public function list(
+        array|FilterBuilderInterface $filter = [],
+        array|DocumentSelectBuilder $select = [],
+        ?DocumentListPagination $pagination = null,
+    ): DocumentsResult {
+        if ($filter instanceof FilterBuilderInterface) {
+            $filter = $filter->toArray();
+        }
+
+        if ($select instanceof SelectBuilderInterface) {
+            $select = $select->buildSelect();
+        }
+
+        return new DocumentsResult(
+            $this->core->call(
+                'note.document.list',
+                array_filter(
+                    [
+                        'filter'     => $filter,
+                        'select'     => $select,
+                        'pagination' => $pagination?->toArray(),
+                    ],
+                    static fn (mixed $value): bool => $value !== null && $value !== []
+                ),
+                ApiVersion::v3
+            )
+        );
+    }
+
+    /**
+     * Moves a document with all its nested documents to another collection, parent or position.
+     *
+     * An omitted `collectionId` keeps the current collection, an omitted `parentId` makes the document
+     * a root of the target collection, an omitted `position` places it last.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/note/document/note-document-move.html
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'note.document.move',
+        'https://apidocs.bitrix24.com/api-reference/note/document/note-document-move.html',
+        'Moves a document with its nested documents.',
+        ApiVersion::v3
+    )]
+    public function move(int $id, ?int $collectionId = null, ?int $parentId = null, ?int $position = null): DocumentResult
+    {
+        return new DocumentResult(
+            $this->core->call(
+                'note.document.move',
+                array_filter(
+                    [
+                        'id'           => $id,
+                        'collectionId' => $collectionId,
+                        'parentId'     => $parentId,
+                        'position'     => $position,
+                    ],
+                    static fn (mixed $value): bool => $value !== null
+                ),
+                ApiVersion::v3
+            )
+        );
+    }
+
+    /**
+     * Restores a document from the recycle bin.
+     *
+     * The docs describe nested documents as restored too; on a live portal (checked 2026-10-28) they
+     * stay in the recycle bin and must be restored one by one.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/note/document/note-document-restore.html
+     *
+     * @param int|null $collectionId target collection; required when the original collection is gone
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'note.document.restore',
+        'https://apidocs.bitrix24.com/api-reference/note/document/note-document-restore.html',
+        'Restores a document from the recycle bin.',
+        ApiVersion::v3
+    )]
+    public function restore(int $id, ?int $collectionId = null): DocumentResult
+    {
+        return new DocumentResult(
+            $this->core->call(
+                'note.document.restore',
+                array_filter(
+                    [
+                        'id'           => $id,
+                        'collectionId' => $collectionId,
+                    ],
+                    static fn (mixed $value): bool => $value !== null
+                ),
+                ApiVersion::v3
+            )
+        );
+    }
+
+    /**
+     * Returns a document from the archive.
+     *
+     * The docs describe nested documents as returned too; on a live portal (checked 2026-10-28) they
+     * stay archived and must be unarchived one by one.
+     *
+     * @link https://apidocs.bitrix24.com/api-reference/note/document/note-document-unarchive.html
+     *
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[ApiEndpointMetadata(
+        'note.document.unarchive',
+        'https://apidocs.bitrix24.com/api-reference/note/document/note-document-unarchive.html',
+        'Returns a document from the archive.',
+        ApiVersion::v3
+    )]
+    public function unarchive(int $id): UnarchivedDocumentResult
+    {
+        return new UnarchivedDocumentResult(
+            $this->core->call('note.document.unarchive', ['id' => $id], ApiVersion::v3)
         );
     }
 

@@ -29,7 +29,7 @@ interface BatchOperationsInterface
      *
      * @param array<string,mixed> $order
      * @param array<string,mixed> $filter
-     * @param array<string,mixed> $select
+     * @param array<array-key, mixed> $select
      * @return Generator<mixed>
      * @throws BaseException
      */

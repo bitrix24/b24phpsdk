@@ -18,13 +18,14 @@ use Bitrix24\SDK\Core\Contracts\ApiVersion;
 use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
 use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Credentials;
+use Bitrix24\SDK\Core\Credentials\RenewedAuthToken;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\InvalidGrantException;
 use Bitrix24\SDK\Core\Exceptions\PortalDomainNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Exceptions\WrongClientException;
-use Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken;
+use Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken as LegacyRenewedAuthToken;
 use Bitrix24\SDK\Infrastructure\HttpClient\RequestId\RequestIdGeneratorInterface;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Log\LoggerInterface;
@@ -89,7 +90,7 @@ class ApiClient implements ApiClientInterface
      * @throws WrongClientException
      */
     #[\Override]
-    public function getNewAuthToken(): RenewedAuthToken
+    public function getNewAuthToken(): LegacyRenewedAuthToken
     {
         $requestId = $this->requestIdGenerator->getRequestId();
         $this->logger->debug('getNewAuthToken.start', [

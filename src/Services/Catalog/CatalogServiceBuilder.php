@@ -21,6 +21,21 @@ use Bitrix24\SDK\Services\Catalog;
 #[ApiServiceBuilderMetadata(new Scope(['catalog']))]
 class CatalogServiceBuilder extends AbstractServiceBuilder
 {
+    /**
+     * REST API v3 catalog services; the accessors of this builder keep serving REST API v1.
+     */
+    public function v3(): Catalog\V3\CatalogV3ServiceBuilder
+    {
+        $this->serviceCache[__METHOD__] ??= new Catalog\V3\CatalogV3ServiceBuilder(
+            $this->core,
+            $this->batch,
+            $this->bulkItemsReader,
+            $this->log
+        );
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function catalog(): Catalog\Catalog\Service\Catalog
     {
         $this->serviceCache[__METHOD__] ??= new Catalog\Catalog\Service\Catalog(

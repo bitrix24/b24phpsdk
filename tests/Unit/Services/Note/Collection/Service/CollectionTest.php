@@ -23,6 +23,8 @@ use Bitrix24\SDK\Services\Note\Collection\Result\CollectionFieldsResult;
 use Bitrix24\SDK\Services\Note\Collection\Result\CollectionResult;
 use Bitrix24\SDK\Services\Note\Collection\Result\CollectionsResult;
 use Bitrix24\SDK\Services\Note\Collection\Result\DeletedCollectionResult;
+use Bitrix24\SDK\Services\Note\Collection\Result\RestoredCollectionResult;
+use Bitrix24\SDK\Services\Note\Collection\Result\UnarchivedCollectionResult;
 use Bitrix24\SDK\Services\Note\Collection\Service\Collection;
 use Bitrix24\SDK\Services\Note\Collection\Service\CollectionListCursor;
 use Bitrix24\SDK\Services\Note\Collection\Service\CollectionListPagination;
@@ -86,6 +88,24 @@ class CollectionTest extends TestCase
     public function testListReturnsCollectionsResult(): void
     {
         $this->assertInstanceOf(CollectionsResult::class, $this->service->list());
+    }
+
+    #[Test]
+    public function testMoveReturnsCollectionResult(): void
+    {
+        $this->assertInstanceOf(CollectionResult::class, $this->service->move(1));
+    }
+
+    #[Test]
+    public function testRestoreReturnsRestoredCollectionResult(): void
+    {
+        $this->assertInstanceOf(RestoredCollectionResult::class, $this->service->restore(1));
+    }
+
+    #[Test]
+    public function testUnarchiveReturnsUnarchivedCollectionResult(): void
+    {
+        $this->assertInstanceOf(UnarchivedCollectionResult::class, $this->service->unarchive(1));
     }
 
     #[Test]
@@ -187,6 +207,46 @@ class CollectionTest extends TestCase
         $this->assertSame('note.collection.update', $method);
         $this->assertSame(3, $captured['id']);
         $this->assertSame(['name' => 'New name'], $captured['fields']);
+    }
+
+    #[Test]
+    #[TestDox('move() sends id and position when a position is given')]
+    public function testMoveSendsIdAndPosition(): void
+    {
+        [$method, $captured] = $this->call(static fn (Collection $service) => $service->move(3, 1500));
+
+        $this->assertSame('note.collection.move', $method);
+        $this->assertSame(['id' => 3, 'position' => 1500], $captured);
+    }
+
+    #[Test]
+    #[TestDox('move() omits position to place the knowledge base last')]
+    public function testMoveWithoutPositionSendsOnlyId(): void
+    {
+        [$method, $captured] = $this->call(static fn (Collection $service) => $service->move(3));
+
+        $this->assertSame('note.collection.move', $method);
+        $this->assertSame(['id' => 3], $captured);
+    }
+
+    #[Test]
+    #[TestDox('restore() calls note.collection.restore with id')]
+    public function testRestoreSendsId(): void
+    {
+        [$method, $captured] = $this->call(static fn (Collection $service) => $service->restore(5));
+
+        $this->assertSame('note.collection.restore', $method);
+        $this->assertSame(['id' => 5], $captured);
+    }
+
+    #[Test]
+    #[TestDox('unarchive() calls note.collection.unarchive with id')]
+    public function testUnarchiveSendsId(): void
+    {
+        [$method, $captured] = $this->call(static fn (Collection $service) => $service->unarchive(6));
+
+        $this->assertSame('note.collection.unarchive', $method);
+        $this->assertSame(['id' => 6], $captured);
     }
 
     /**

@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Tests\Unit\Services\Note\Document\Service;
 
 use Bitrix24\SDK\Core\ApiLevelErrorHandler;
 use Bitrix24\SDK\Core\Commands\Command;
+use Bitrix24\SDK\Core\Contracts\ApiVersion;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Services\Note\Document\Result\ArchivedDocumentResult;
@@ -22,6 +23,9 @@ use Bitrix24\SDK\Services\Note\Document\Result\DeletedDocumentResult;
 use Bitrix24\SDK\Services\Note\Document\Result\DocumentFieldResult;
 use Bitrix24\SDK\Services\Note\Document\Result\DocumentFieldsResult;
 use Bitrix24\SDK\Services\Note\Document\Result\DocumentResult;
+use Bitrix24\SDK\Services\Note\Document\Result\DocumentsResult;
+use Bitrix24\SDK\Services\Note\Document\Result\DocumentState;
+use Bitrix24\SDK\Services\Note\Document\Result\UnarchivedDocumentResult;
 use Bitrix24\SDK\Services\Note\Document\Result\DocumentSearchFieldResult;
 use Bitrix24\SDK\Services\Note\Document\Result\DocumentSearchFieldsResult;
 use Bitrix24\SDK\Services\Note\Document\Result\DocumentSearchResult;
@@ -29,6 +33,8 @@ use Bitrix24\SDK\Services\Note\Document\Result\DocumentTreeFieldResult;
 use Bitrix24\SDK\Services\Note\Document\Result\DocumentTreeFieldsResult;
 use Bitrix24\SDK\Services\Note\Document\Result\DocumentTreeResult;
 use Bitrix24\SDK\Services\Note\Document\Service\Document;
+use Bitrix24\SDK\Services\Note\Document\Service\DocumentFilter;
+use Bitrix24\SDK\Services\Note\Document\Service\DocumentListPagination;
 use Bitrix24\SDK\Services\Note\Document\Service\DocumentSelectBuilder;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullCore;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -189,13 +195,123 @@ class DocumentTest extends TestCase
         $this->assertSame(10, $captured['pagination']['limit']);
     }
 
+    #[Test]
+    public function testListReturnsDocumentsResult(): void
+    {
+        $this->assertInstanceOf(DocumentsResult::class, $this->service->list());
+    }
+
+    #[Test]
+    public function testMoveReturnsDocumentResult(): void
+    {
+        $this->assertInstanceOf(DocumentResult::class, $this->service->move(1));
+    }
+
+    #[Test]
+    public function testRestoreReturnsDocumentResult(): void
+    {
+        $this->assertInstanceOf(DocumentResult::class, $this->service->restore(1));
+    }
+
+    #[Test]
+    public function testUnarchiveReturnsUnarchivedDocumentResult(): void
+    {
+        $this->assertInstanceOf(UnarchivedDocumentResult::class, $this->service->unarchive(1));
+    }
+
+    #[Test]
+    #[TestDox('list() without arguments sends an empty REST v3 payload')]
+    public function testListWithoutArgumentsSendsEmptyPayload(): void
+    {
+        [$method, $captured, $version] = $this->call(static fn (Document $service) => $service->list());
+
+        $this->assertSame('note.document.list', $method);
+        $this->assertSame([], $captured);
+        $this->assertSame(ApiVersion::v3, $version);
+    }
+
+    #[Test]
+    #[TestDox('list() sends filter builder, select builder and opaque pagination cursor')]
+    public function testListSendsFilterSelectAndPagination(): void
+    {
+        $cursor = ['stream' => 'collections', 'collectionId' => 123, 'id' => 42];
+        $filter = new DocumentFilter();
+        $filter->collectionId()->eq(123);
+        $filter->state()->eq(DocumentState::archived->value);
+        $select = (new DocumentSelectBuilder())->title();
+
+        [, $captured] = $this->call(
+            static fn (Document $service) => $service->list($filter, $select, new DocumentListPagination(1, $cursor))
+        );
+
+        $this->assertSame(
+            [
+                'filter'     => [['collectionId', '=', 123], ['state', '=', 'archived']],
+                'select'     => $select->buildSelect(),
+                'pagination' => ['limit' => 1, 'afterCursor' => $cursor],
+            ],
+            $captured
+        );
+    }
+
+    #[Test]
+    #[TestDox('list() passes an array filter and array select unchanged')]
+    public function testListPassesArrayFilterAndSelect(): void
+    {
+        [, $captured] = $this->call(
+            static fn (Document $service) => $service->list([['collectionId', '=', 5]], ['id', 'title'])
+        );
+
+        $this->assertSame(['filter' => [['collectionId', '=', 5]], 'select' => ['id', 'title']], $captured);
+    }
+
+    #[Test]
+    #[TestDox('move() sends only the target coordinates that were given')]
+    public function testMoveOmitsNullArguments(): void
+    {
+        [$method, $captured, $version] = $this->call(static fn (Document $service) => $service->move(7, null, 3));
+
+        $this->assertSame('note.document.move', $method);
+        $this->assertSame(['id' => 7, 'parentId' => 3], $captured);
+        $this->assertSame(ApiVersion::v3, $version);
+
+        [, $captured] = $this->call(static fn (Document $service) => $service->move(7, 2, 3, 1500));
+        $this->assertSame(['id' => 7, 'collectionId' => 2, 'parentId' => 3, 'position' => 1500], $captured);
+    }
+
+    #[Test]
+    #[TestDox('restore() sends id and the optional target collection')]
+    public function testRestoreSendsOptionalCollectionId(): void
+    {
+        [$method, $captured, $version] = $this->call(static fn (Document $service) => $service->restore(7));
+
+        $this->assertSame('note.document.restore', $method);
+        $this->assertSame(['id' => 7], $captured);
+        $this->assertSame(ApiVersion::v3, $version);
+
+        [, $captured] = $this->call(static fn (Document $service) => $service->restore(7, 4));
+        $this->assertSame(['id' => 7, 'collectionId' => 4], $captured);
+    }
+
+    #[Test]
+    #[TestDox('unarchive() sends id')]
+    public function testUnarchiveSendsId(): void
+    {
+        [$method, $captured, $version] = $this->call(static fn (Document $service) => $service->unarchive(7));
+
+        $this->assertSame('note.document.unarchive', $method);
+        $this->assertSame(['id' => 7], $captured);
+        $this->assertSame(ApiVersion::v3, $version);
+    }
+
     /**
-     * @return array{0: string, 1: array<string, mixed>}
+     * @return array{0: string, 1: array<string, mixed>, 2: ApiVersion|null}
      */
     private function call(callable $action): array
     {
         $method = null;
         $captured = [];
+        $version = null;
         $response = new Response(
             new MockResponse(''),
             new Command('', []),
@@ -205,9 +321,10 @@ class DocumentTest extends TestCase
 
         $core = $this->createStub(CoreInterface::class);
         $core->method('call')->willReturnCallback(
-            function (string $apiMethod, array $parameters = []) use (&$method, &$captured, $response): Response {
+            function (string $apiMethod, array $parameters = [], ?ApiVersion $apiVersion = null) use (&$method, &$captured, &$version, $response): Response {
                 $method = $apiMethod;
                 $captured = $parameters;
+                $version = $apiVersion;
 
                 return $response;
             }
@@ -215,6 +332,6 @@ class DocumentTest extends TestCase
 
         $action(new Document($core, new NullLogger()));
 
-        return [$method, $captured];
+        return [$method, $captured, $version];
     }
 }

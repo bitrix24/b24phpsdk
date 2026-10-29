@@ -91,4 +91,17 @@ class DocumentItemResultTest extends TestCase
         $document = $this->documentService->get($this->documentId)->document();
         $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($document, DocumentItemResult::class);
     }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    #[Test]
+    #[TestDox('DocumentItemResult from note.document.list has valid type casting in magic getters')]
+    public function testListItemHasValidTypeCastingInMagicGetters(): void
+    {
+        $documents = $this->documentService->list([['collectionId', '=', $this->collectionId]])->getDocuments();
+        $this->assertCount(1, $documents);
+        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($documents[0], DocumentItemResult::class);
+    }
 }

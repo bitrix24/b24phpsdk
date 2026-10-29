@@ -203,6 +203,14 @@ trait CustomBitrix24Assertions
                         break;
                     }
 
+                    // string values may be exposed as a string-backed enum
+                    $annotatedType = ltrim(str_replace('|null', '', $propsFromAnnotations[$fieldCode]), '\\');
+                    if (enum_exists($annotatedType)
+                        && (new \ReflectionEnum($annotatedType))->getBackingType()?->getName() === 'string'
+                    ) {
+                        break;
+                    }
+
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'string'),
                         sprintf(
@@ -229,6 +237,20 @@ trait CustomBitrix24Assertions
                             $propsFromAnnotations[$fieldCode],
                             $fieldData['type'],
                             'int'
+                        )
+                    );
+                    break;
+                // REST v3 field metadata reports plain floating-point DTO properties as float
+                case 'float':
+                    $this->assertTrue(
+                        str_contains($propsFromAnnotations[$fieldCode], 'float'),
+                        sprintf(
+                            'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                            $resultItemClassName,
+                            $fieldCode,
+                            $propsFromAnnotations[$fieldCode],
+                            $fieldData['type'],
+                            'float'
                         )
                     );
                     break;
@@ -316,6 +338,7 @@ trait CustomBitrix24Assertions
                     );
                     break;
                 case 'char':
+                case 'bool':
                     $this->assertTrue(
                         str_contains($propsFromAnnotations[$fieldCode], 'bool'),
                         sprintf(

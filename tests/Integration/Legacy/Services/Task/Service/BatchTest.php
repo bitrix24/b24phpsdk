@@ -38,6 +38,47 @@ class BatchTest extends TestCase
         }
     }
 
+    public function testOwnedTasksKeepDescendingAndTitleOrderAcrossPages(): void
+    {
+        $prefix = 'sdk-363-' . bin2hex(random_bytes(8));
+        $ids = [];
+        $titles = [];
+        try {
+            $fields = [];
+            for ($i = 0; $i < 105; ++$i) {
+                $fields[] = ['TITLE' => $prefix . sprintf('-%03d', 105 - $i), 'RESPONSIBLE_ID' => $this->userId];
+            }
+
+            foreach ($this->taskService->batch->add($fields) as $position => $result) {
+                $id = $result->getId();
+                $ids[] = $id;
+                $titles[$id] = $fields[$position]['TITLE'];
+            }
+
+            self::assertCount(105, $ids);
+            $filter = ['%TITLE' => $prefix];
+            $expected = $ids;
+            rsort($expected, SORT_NUMERIC);
+            $actual = [];
+            foreach ($this->taskService->batch->list(['ID' => 'DESC'], $filter, ['ID', 'TITLE']) as $task) {
+                $actual[] = (int) $task->id;
+            }
+
+            self::assertSame($expected, $actual);
+            asort($titles, SORT_STRING);
+            $actual = [];
+            foreach ($this->taskService->batch->list(['TITLE' => 'ASC'], $filter, ['ID', 'TITLE'], 51) as $task) {
+                $actual[] = (int) $task->id;
+            }
+
+            self::assertSame(array_slice(array_keys($titles), 0, 51), $actual);
+        } finally {
+            foreach ($ids as $id) {
+                $this->taskService->delete($id);
+            }
+        }
+    }
+
     /**
      * @throws BaseException
      * @throws TransportException
