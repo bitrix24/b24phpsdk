@@ -19,6 +19,8 @@ use Bitrix24\SDK\Services\IM\Department\Result\DepartmentsResult;
 use Bitrix24\SDK\Services\IM\Department\Result\DepartmentUsersByDepartmentResult;
 use Bitrix24\SDK\Services\IM\Department\Result\DepartmentUsersResult;
 use Bitrix24\SDK\Services\IM\Department\Service\Department;
+use Bitrix24\SDK\Services\IM\Batch as IMBatch;
+use Bitrix24\SDK\Services\IM\Department\Service\Batch;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -36,7 +38,7 @@ final class DepartmentTest extends TestCase
     protected function setUp(): void
     {
         $this->coreMock = $this->createMock(CoreInterface::class);
-        $this->service = new Department($this->coreMock, new NullLogger());
+        $this->service = new Department(new Batch(new IMBatch($this->coreMock, new NullLogger()), new NullLogger()), $this->coreMock, new NullLogger());
     }
 
     #[Test]

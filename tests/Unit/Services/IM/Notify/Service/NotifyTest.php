@@ -16,6 +16,8 @@ namespace Bitrix24\SDK\Tests\Unit\Services\IM\Notify\Service;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Services\IM\Notify\Service\Notify;
+use Bitrix24\SDK\Services\IM\Batch as IMBatch;
+use Bitrix24\SDK\Services\IM\Notify\Service\Batch;
 use Carbon\CarbonImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -30,7 +32,7 @@ final class NotifyTest extends TestCase
     {
         $response = $this->createStub(Response::class);
         $core = $this->createMock(CoreInterface::class);
-        $notify = new Notify($core, new NullLogger());
+        $notify = new Notify(new Batch(new IMBatch($core, new NullLogger()), new NullLogger()), $core, new NullLogger());
 
         $core->expects($this->once())
             ->method('call')
@@ -53,7 +55,7 @@ final class NotifyTest extends TestCase
     {
         $response = $this->createStub(Response::class);
         $core = $this->createMock(CoreInterface::class);
-        $notify = new Notify($core, new NullLogger());
+        $notify = new Notify(new Batch(new IMBatch($core, new NullLogger()), new NullLogger()), $core, new NullLogger());
 
         $core->expects($this->once())
             ->method('call')
@@ -72,7 +74,7 @@ final class NotifyTest extends TestCase
     {
         $response = $this->createStub(Response::class);
         $core = $this->createMock(CoreInterface::class);
-        $notify = new Notify($core, new NullLogger());
+        $notify = new Notify(new Batch(new IMBatch($core, new NullLogger()), new NullLogger()), $core, new NullLogger());
 
         $from = CarbonImmutable::parse('2024-01-01T00:00:00+00:00');
         $to = CarbonImmutable::parse('2024-01-31T23:59:59+00:00');
@@ -106,7 +108,7 @@ final class NotifyTest extends TestCase
     {
         $response = $this->createStub(Response::class);
         $core = $this->createMock(CoreInterface::class);
-        $notify = new Notify($core, new NullLogger());
+        $notify = new Notify(new Batch(new IMBatch($core, new NullLogger()), new NullLogger()), $core, new NullLogger());
 
         $core->expects($this->once())
             ->method('call')
@@ -121,7 +123,7 @@ final class NotifyTest extends TestCase
     {
         $response = $this->createStub(Response::class);
         $core = $this->createMock(CoreInterface::class);
-        $notify = new Notify($core, new NullLogger());
+        $notify = new Notify(new Batch(new IMBatch($core, new NullLogger()), new NullLogger()), $core, new NullLogger());
 
         $core->expects($this->once())
             ->method('call')
@@ -139,7 +141,7 @@ final class NotifyTest extends TestCase
     {
         $response = $this->createStub(Response::class);
         $core = $this->createMock(CoreInterface::class);
-        $notify = new Notify($core, new NullLogger());
+        $notify = new Notify(new Batch(new IMBatch($core, new NullLogger()), new NullLogger()), $core, new NullLogger());
 
         $core->expects($this->once())
             ->method('call')
@@ -157,7 +159,7 @@ final class NotifyTest extends TestCase
     {
         $response = $this->createStub(Response::class);
         $core = $this->createMock(CoreInterface::class);
-        $notify = new Notify($core, new NullLogger());
+        $notify = new Notify(new Batch(new IMBatch($core, new NullLogger()), new NullLogger()), $core, new NullLogger());
 
         $core->expects($this->once())
             ->method('call')

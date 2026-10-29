@@ -21,12 +21,36 @@
 - Added REST v3 support for `catalog.section.*` (`get`, `list`, `add`, `update`, `delete`, `field.get`, `field.list`) via `CatalogServiceBuilder::v3()->section()` with typed `SectionFilter`, `SectionSelectBuilder`, `SectionItemBuilder` and `SectionListPagination`, and `v3()->sectionField()` for field metadata; `list()` takes the information block ID required by the API, the Y/N `active` flag is exposed as `bool`, and the legacy REST v1 `section()` service is unchanged ([#672](https://github.com/bitrix24/b24phpsdk/issues/672))
 - Added REST v3 support for `catalog.catalog.*` (`get`, `list`, `add`, `update`, `delete`, `isoffers`, `field.get`, `field.list`) via `CatalogServiceBuilder::v3()->catalog()` with typed `CatalogFilter`, `CatalogSelectBuilder`, `CatalogItemBuilder` and `CatalogListPagination`, `isOffers()` for SKU catalogs, and `v3()->catalogField()` for field metadata; `delete()` removes only the catalog flag and keeps the information block, the Y/N `yandexExport`/`subscription` flags are exposed as `bool`, and the legacy REST v1 `catalog()` service is unchanged ([#671](https://github.com/bitrix24/b24phpsdk/issues/671))
 - Added operating time limit events for long-running batch writes: `OperatingThresholdCrossedEvent` on 10%…90% of the limit window (top-level `operating` of `batch` responses is tracked as method `batch`), `OperatingLimitConfig` (480 s by default), opt-in `OperatingLimitSleepListener`, `CoreBuilder::withOperatingLimitConfig()`, optional `$operatingLimitConfig` in `ServiceBuilderFactory`, `apiMethod`/`batchCommandId`/`operatingResetAt` in `OperationTimeLimitExceededException`, documentation `docs/EN/Core/operating-limit.md` with cloud portal measurements and integration tests in `tests/Integration/Core/OperatingLimit/` ([#76](https://github.com/bitrix24/b24phpsdk/issues/76))
+- Added batch calls support for services of the `Services\IM` scope, available through the `batch` property
+  of each service, see [im.* methods](https://apidocs.bitrix24.com/api-reference/chats/index.html)
+  ([#626](https://github.com/bitrix24/b24phpsdk/issues/626)):
+    - `Chat` - `add` (`im.chat.add`)
+    - `ChatUser` - `add` (`im.chat.user.add`), `delete` (`im.chat.user.delete`),
+      `list` gets participants of several chats (`im.chat.user.list`)
+    - `Department` - `colleaguesList`, `colleaguesIdsList` (`im.department.colleagues.list`)
+    - `Dialog` - `usersList` (`im.dialog.users.list`)
+    - `Disk` - `deleteFile` (`im.disk.file.delete`)
+    - `Message` - `add` (`im.message.add`), `update` (`im.message.update`), `delete` (`im.message.delete`)
+    - `Notify` - `fromSystem` (`im.notify.system.add`), `fromPersonal` (`im.notify.personal.add`),
+      `delete` (`im.notify.delete`), `markMessagesAsRead`, `markMessagesAsUnread` (`im.notify.read.list`)
+    - `Recent` - `list` (`im.recent.list`)
+    - `Search` - `chatList` (`im.search.chat.list`), `departmentList` (`im.search.department.list`),
+      `userList` (`im.search.user.list`), deprecated `lastAdd` (`im.search.last.add`)
+      and `lastDelete` (`im.search.last.delete`)
+    - `UserStatus` - `set` (`im.user.status.set`)
+- Added `Services\IM\Batch` extending `Core\Batch`: offset pagination via top-level `OFFSET` / `LIMIT`
+  for `im.*` list methods, unwrapping of `im.recent.list` `items` with the `hasMore` flag, and execution
+  of commands with flat upper-case parameters ([#626](https://github.com/bitrix24/b24phpsdk/issues/626)).
 
 ### Changed
 - Hardened CI workflows for OpenSSF Scorecard: added least-privilege `GITHUB_TOKEN` permissions to every workflow, pinned all GitHub Actions to full commit SHAs and enabled Dependabot updates for the `docker/php-cli` base images ([#95](https://github.com/bitrix24/b24phpsdk/issues/95))
 - CI quality checks now build the PHP runtime from the current Dockerfile with fresh base images, avoiding dependency-install failures from an outdated shared PHP image ([#688](https://github.com/bitrix24/b24phpsdk/issues/688))
 - Updated `b24phpsdk-maintainer` skill: documented non-interactive legacy coverage commands, JSON output and verification ([#410](https://github.com/bitrix24/b24phpsdk/issues/410))
 - `OperationTimeLimitExceededException` now reaches callers of `Response::getResponseData()` and `Core\Batch::addEntityItems()`, `updateEntityItems()`, `deleteEntityItems()` with its own type instead of a generic `BaseException` wrapper; code catching `BaseException` still catches it ([#76](https://github.com/bitrix24/b24phpsdk/issues/76))
+- IM services `Chat`, `ChatUser`, `Department`, `Dialog`, `Disk`, `Message`, `Notify`, `Recent`, `Search`,
+  `UserStatus` now receive their batch service as the first constructor argument and expose it via the public
+  `$batch` property; code that instantiates these services directly must pass the batch service,
+  services created by `IMServiceBuilder` are not affected ([#626](https://github.com/bitrix24/b24phpsdk/issues/626)).
 
 ### Deprecated
 - Deprecated the `Core\Response\DTO\RenewedAuthToken` name in favor of `Core\Credentials\RenewedAuthToken` ([#117](https://github.com/bitrix24/b24phpsdk/issues/117))

@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Unit\Services\IM\Recent\Service;
 
 use Bitrix24\SDK\Services\IM\Recent\Service\Recent;
+use Bitrix24\SDK\Services\IM\Batch as IMBatch;
+use Bitrix24\SDK\Services\IM\Recent\Service\Batch;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullCore;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -28,7 +30,7 @@ class RecentTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->service = new Recent(new NullCore(), new NullLogger());
+        $this->service = new Recent(new Batch(new IMBatch(new NullCore(), new NullLogger()), new NullLogger()), new NullCore(), new NullLogger());
     }
 
     #[Test]
