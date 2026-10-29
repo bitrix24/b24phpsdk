@@ -1052,6 +1052,10 @@ test-integration-catalog-v3-vat:
 test-integration-catalog-v3-measure:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_v3_measure
 
+.PHONY: test-integration-catalog-v3-section
+test-integration-catalog-v3-section:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_v3_section
+
 # work dev environment
 .PHONY: php-dev-server-up
 php-dev-server-up:

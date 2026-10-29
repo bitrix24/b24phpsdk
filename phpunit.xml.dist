@@ -699,6 +699,10 @@
             <directory>./tests/Integration/Services/Catalog/V3/Measure/</directory>
             <directory>./tests/Integration/Services/Catalog/V3/MeasureField/</directory>
         </testsuite>
+        <testsuite name="integration_tests_catalog_v3_section">
+            <directory>./tests/Integration/Services/Catalog/V3/Section/</directory>
+            <directory>./tests/Integration/Services/Catalog/V3/SectionField/</directory>
+        </testsuite>
         <testsuite name="integration-scope-timeman-readonly">
             <directory>./tests/Integration/Services/Timeman/NetworkRange</directory>
             <directory>./tests/Integration/Services/Timeman/TimeControl</directory>
