@@ -35,6 +35,15 @@ Source: https://apidocs.bitrix24.com/limits.html
   example (self-hosted default is 420 s).
 - An outer `batch` call is not counted in `operating`; every nested command is
   counted and checked against its own method's limit.
+- **Observed on a cloud portal (2026-10-29, 8000 `crm.contact.add` in packs of
+  50):** nested `result_time` entries carry no `operating` at all; the
+  top-level `time` of every batch response carries `operating` and
+  `operating_reset_at`, growing across packs (14 s → ~256 s during adds, a
+  plateau of ~285 s during the following deletes, so it accumulates for the
+  `batch` method rather than per nested method). The tracker therefore
+  observes the top-level `time` of a batch response under the method name
+  `batch`, and still observes nested `result_time` per method when it carries
+  `operating`.
 
 ## Goals
 
@@ -90,6 +99,8 @@ Source: https://apidocs.bitrix24.com/limits.html
   until `operating_reset_at` (freeing only the oldest one-minute basket) be
   woken again and sleep another step, instead of the batch running on into
   429. Responses with the same `operating_reset_at` do not re-fire.
+- The top-level `time` of a `batch` response is tracked under the method name
+  `batch`.
 - Method name for a nested batch command is taken from the command string in
   the batch request (`cmd[<id>] = "<method>?<query>"`, the part before `?`),
   matched to `result_time[<id>]`.

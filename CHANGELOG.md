@@ -8,7 +8,8 @@
   and `make lint-secrets` target, included in `make lint-all` ([#38](https://github.com/bitrix24/b24phpsdk/issues/38))
 - Operating time limit events for long-running batch writes ([#76](https://github.com/bitrix24/b24phpsdk/issues/76)):
     - `Bitrix24\SDK\Events\OperatingThresholdCrossedEvent` is dispatched when a method's `operating` time crosses
-      10%…90% of the limit window, including nested commands of `batch` requests
+      10%…90% of the limit window; for `batch` requests the top-level `operating` is tracked as method `batch`,
+      nested commands are tracked by their own method when the portal reports `operating` for them
     - `Bitrix24\SDK\Core\OperatingLimit\OperatingLimitConfig` — limit (default 480 s) and thresholds settings
     - `Bitrix24\SDK\Core\OperatingLimit\OperatingLimitSleepListener` — opt-in listener that sleeps until
       `operating_reset_at`
