@@ -106,4 +106,32 @@ class CRMV3ServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    public function formSiteButton(): FormSiteButton\Service\FormSiteButton
+    {
+        $this->serviceCache[__METHOD__] ??= new FormSiteButton\Service\FormSiteButton($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function formSiteButtonField(): FormSiteButtonField\Service\FormSiteButtonField
+    {
+        $this->serviceCache[__METHOD__] ??= new FormSiteButtonField\Service\FormSiteButtonField($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function formOpenLine(): FormOpenLine\Service\FormOpenLine
+    {
+        $this->serviceCache[__METHOD__] ??= new FormOpenLine\Service\FormOpenLine($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function formOpenLineField(): FormOpenLineField\Service\FormOpenLineField
+    {
+        $this->serviceCache[__METHOD__] ??= new FormOpenLineField\Service\FormOpenLineField($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
 }
