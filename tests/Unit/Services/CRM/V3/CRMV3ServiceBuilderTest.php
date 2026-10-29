@@ -22,6 +22,14 @@ use Bitrix24\SDK\Services\CRM\V3\Form\Service\Form;
 use Bitrix24\SDK\Services\CRM\V3\FormEmbedding\Service\FormEmbedding;
 use Bitrix24\SDK\Services\CRM\V3\FormEmbeddingField\Service\FormEmbeddingField;
 use Bitrix24\SDK\Services\CRM\V3\FormField\Service\FormField;
+use Bitrix24\SDK\Services\CRM\V3\FormConfiguration\Service\FormConfiguration;
+use Bitrix24\SDK\Services\CRM\V3\FormConfigurationField\Service\FormConfigurationField;
+use Bitrix24\SDK\Services\CRM\V3\FormEntityField\Service\FormEntityField;
+use Bitrix24\SDK\Services\CRM\V3\FormEntityFieldField\Service\FormEntityFieldField;
+use Bitrix24\SDK\Services\CRM\V3\FormScenario\Service\FormScenario;
+use Bitrix24\SDK\Services\CRM\V3\FormScenarioField\Service\FormScenarioField;
+use Bitrix24\SDK\Services\CRM\V3\FormScenarioCategory\Service\FormScenarioCategory;
+use Bitrix24\SDK\Services\CRM\V3\FormScenarioCategoryField\Service\FormScenarioCategoryField;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullCore;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -44,7 +52,7 @@ class CRMV3ServiceBuilderTest extends TestCase
         $builder = $crm->v3();
 
         $this->assertSame($builder, $crm->v3());
-        foreach (['form' => Form::class, 'formField' => FormField::class, 'formEmbedding' => FormEmbedding::class, 'formEmbeddingField' => FormEmbeddingField::class] as $accessor => $class) {
+        foreach (['form' => Form::class, 'formField' => FormField::class, 'formEmbedding' => FormEmbedding::class, 'formEmbeddingField' => FormEmbeddingField::class, 'formConfiguration' => FormConfiguration::class, 'formConfigurationField' => FormConfigurationField::class, 'formEntityField' => FormEntityField::class, 'formEntityFieldField' => FormEntityFieldField::class, 'formScenario' => FormScenario::class, 'formScenarioField' => FormScenarioField::class, 'formScenarioCategory' => FormScenarioCategory::class, 'formScenarioCategoryField' => FormScenarioCategoryField::class] as $accessor => $class) {
             $this->assertInstanceOf($class, $builder->$accessor());
             $this->assertSame($builder->$accessor(), $builder->$accessor());
         }

@@ -699,6 +699,16 @@
             <directory>./tests/Integration/Services/CRM/V3/FormEmbedding/</directory>
             <directory>./tests/Integration/Services/CRM/V3/FormEmbeddingField/</directory>
         </testsuite>
+        <testsuite name="integration_tests_crm_v3_form_directories">
+            <directory>./tests/Integration/Services/CRM/V3/FormConfiguration/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormConfigurationField/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormEntityField/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormEntityFieldField/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormScenario/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormScenarioField/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormScenarioCategory/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormScenarioCategoryField/</directory>
+        </testsuite>
         <testsuite name="integration_tests_catalog_vat">
             <directory>./tests/Integration/Services/Catalog/Vat/</directory>
         </testsuite>

@@ -1072,6 +1072,10 @@ test-integration-crm-v3-form:
 test-integration-crm-v3-form-embedding:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_v3_form_embedding
 
+.PHONY: test-integration-crm-v3-form-directories
+test-integration-crm-v3-form-directories:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_v3_form_directories
+
 # work dev environment
 .PHONY: php-dev-server-up
 php-dev-server-up:
