@@ -16,8 +16,6 @@ namespace Bitrix24\SDK\Core\Response;
 use Bitrix24\SDK\Core\ApiLevelErrorHandler;
 use Bitrix24\SDK\Core\Commands\Command;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Exceptions\OperationTimeLimitExceededException;
-use Bitrix24\SDK\Core\OperatingLimit\OperatingTracker;
 use Bitrix24\SDK\Core\Response\DTO;
 use Bitrix24\SDK\Infrastructure\HttpClient\TransportLayer\NetworkTimingsParser;
 use Bitrix24\SDK\Infrastructure\HttpClient\TransportLayer\ResponseInfoParser;
@@ -36,8 +34,7 @@ class Response
         protected ResponseInterface    $httpResponse,
         protected Command              $apiCommand,
         protected ApiLevelErrorHandler $apiLevelErrorHandler,
-        protected LoggerInterface      $logger,
-        protected ?OperatingTracker    $operatingTracker = null)
+        protected LoggerInterface      $logger)
     {
     }
 
@@ -66,9 +63,6 @@ class Response
                     'responseBody' => $responseResult,
                 ]);
 
-                // track operating time before error handling, successful batch commands carry operating_reset_at
-                $this->operatingTracker?->observeResponse($this->apiCommand, $responseResult);
-
                 // try to handle api-level errors
                 $this->apiLevelErrorHandler->handle($responseResult);
 
@@ -92,14 +86,6 @@ class Response
                     new DTO\Pagination($nextItem, $total)
                 );
                 $this->logger->debug('getResponseData.parseResponse.finish');
-            } catch (OperationTimeLimitExceededException $exception) {
-                $this->logger->error(
-                    $exception->getMessage(),
-                    [
-                        'response' => $this->getHttpResponseContent(),
-                    ]
-                );
-                throw $this->enrichOperationTimeLimitException($exception);
             } catch (Throwable $exception) {
                 $this->logger->error(
                     $exception->getMessage(),
@@ -114,23 +100,6 @@ class Response
         $this->logger->debug('getResponseData.finish');
 
         return $this->responseData;
-    }
-
-    private function enrichOperationTimeLimitException(OperationTimeLimitExceededException $operationTimeLimitExceededException): OperationTimeLimitExceededException
-    {
-        $apiMethod = $this->apiCommand->getApiMethod();
-        if ($operationTimeLimitExceededException->batchCommandId !== null) {
-            $apiMethod = OperatingTracker::resolveBatchCommandMethod($this->apiCommand, $operationTimeLimitExceededException->batchCommandId);
-        }
-
-        return new OperationTimeLimitExceededException(
-            $operationTimeLimitExceededException->getMessage(),
-            $operationTimeLimitExceededException->getCode(),
-            $operationTimeLimitExceededException,
-            $apiMethod,
-            $operationTimeLimitExceededException->batchCommandId,
-            $apiMethod === null ? null : $this->operatingTracker?->getLastOperatingResetAt($apiMethod)
-        );
     }
 
     private function getHttpResponseContent(): ?string

@@ -24,7 +24,6 @@ use Bitrix24\SDK\Core\Credentials\DefaultOAuthServerUrl;
 use Bitrix24\SDK\Core\Credentials\Endpoints;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
-use Bitrix24\SDK\Core\OperatingLimit\OperatingLimitConfig;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -39,13 +38,9 @@ class ServiceBuilderFactory
     /**
      * @param EventDispatcherInterface $eventDispatcher
      * @param LoggerInterface $log
-     * @param OperatingLimitConfig|null $operatingLimitConfig optional operating limit settings, defaults are used if null
      */
-    public function __construct(
-        EventDispatcherInterface $eventDispatcher,
-        LoggerInterface $log,
-        private readonly ?OperatingLimitConfig $operatingLimitConfig = null
-    ) {
+    public function __construct(EventDispatcherInterface $eventDispatcher, LoggerInterface $log)
+    {
         $this->eventDispatcher = $eventDispatcher;
         $this->log = $log;
     }
@@ -135,15 +130,11 @@ class ServiceBuilderFactory
      */
     private function getServiceBuilder(Credentials $credentials): ServiceBuilder
     {
-        $coreBuilder = (new CoreBuilder())
+        $core = (new CoreBuilder())
             ->withEventDispatcher($this->eventDispatcher)
             ->withLogger($this->log)
-            ->withCredentials($credentials);
-        if ($this->operatingLimitConfig instanceof OperatingLimitConfig) {
-            $coreBuilder->withOperatingLimitConfig($this->operatingLimitConfig);
-        }
-
-        $core = $coreBuilder->build();
+            ->withCredentials($credentials)
+            ->build();
         $batch = new Batch($core, $this->log);
 
         return new ServiceBuilder(

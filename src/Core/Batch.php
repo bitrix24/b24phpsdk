@@ -19,7 +19,6 @@ use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
-use Bitrix24\SDK\Core\Exceptions\OperationTimeLimitExceededException;
 use Bitrix24\SDK\Core\Response\DTO\Pagination;
 use Bitrix24\SDK\Core\Response\DTO\ResponseData;
 use Bitrix24\SDK\Core\Response\DTO\Result;
@@ -101,16 +100,6 @@ class Batch implements BatchOperationsInterface
             foreach ($this->getTraversable(true) as $cnt => $addedItemResult) {
                 yield $cnt => $addedItemResult;
             }
-        } catch (OperationTimeLimitExceededException $exception) {
-            $this->logger->error(
-                sprintf('batch add entity items: %s', $exception->getMessage()),
-                [
-                    'apiMethod' => $exception->apiMethod,
-                    'batchCommandId' => $exception->batchCommandId,
-                    'operatingResetAt' => $exception->operatingResetAt,
-                ]
-            );
-            throw $exception;
         } catch (\Throwable $throwable) {
             $errorMessage = sprintf('batch add entity items: %s', $throwable->getMessage());
             $this->logger->error(
@@ -175,7 +164,7 @@ class Batch implements BatchOperationsInterface
             foreach ($this->getTraversable(true) as $cnt => $deletedItemResult) {
                 yield $cnt => $deletedItemResult;
             }
-        } catch (InvalidArgumentException|OperationTimeLimitExceededException $exception) {
+        } catch (InvalidArgumentException $exception) {
             $errorMessage = sprintf('batch delete entity items: %s', $exception->getMessage());
             $this->logger->error(
                 $errorMessage,
@@ -270,7 +259,7 @@ class Batch implements BatchOperationsInterface
             foreach ($this->getTraversable(true) as $cnt => $updatedItemResult) {
                 yield $cnt => $updatedItemResult;
             }
-        } catch (InvalidArgumentException|OperationTimeLimitExceededException $exception) {
+        } catch (InvalidArgumentException $exception) {
             $errorMessage = sprintf('batch update entity items: %s', $exception->getMessage());
             $this->logger->error(
                 $errorMessage,
