@@ -20,6 +20,10 @@ use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
 use Bitrix24\SDK\Services\CRM\V3\CRMV3ServiceBuilder;
 use Bitrix24\SDK\Services\CRM\V3\Form\Service\Form;
 use Bitrix24\SDK\Services\CRM\V3\FormField\Service\FormField;
+use Bitrix24\SDK\Services\CRM\V3\FormSiteButton\Service\FormSiteButton;
+use Bitrix24\SDK\Services\CRM\V3\FormSiteButtonField\Service\FormSiteButtonField;
+use Bitrix24\SDK\Services\CRM\V3\FormOpenLine\Service\FormOpenLine;
+use Bitrix24\SDK\Services\CRM\V3\FormOpenLineField\Service\FormOpenLineField;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullCore;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -42,7 +46,7 @@ class CRMV3ServiceBuilderTest extends TestCase
         $builder = $crm->v3();
 
         $this->assertSame($builder, $crm->v3());
-        foreach (['form' => Form::class, 'formField' => FormField::class] as $accessor => $class) {
+        foreach (['form' => Form::class, 'formField' => FormField::class, 'formSiteButton' => FormSiteButton::class, 'formSiteButtonField' => FormSiteButtonField::class, 'formOpenLine' => FormOpenLine::class, 'formOpenLineField' => FormOpenLineField::class] as $accessor => $class) {
             $this->assertInstanceOf($class, $builder->$accessor());
             $this->assertSame($builder->$accessor(), $builder->$accessor());
         }

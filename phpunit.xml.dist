@@ -692,6 +692,12 @@
             <directory>./tests/Integration/Services/CRM/V3/Form/</directory>
             <directory>./tests/Integration/Services/CRM/V3/FormField/</directory>
         </testsuite>
+        <testsuite name="integration_tests_crm_v3_form_placements">
+            <directory>./tests/Integration/Services/CRM/V3/FormSiteButton/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormSiteButtonField/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormOpenLine/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormOpenLineField/</directory>
+        </testsuite>
         <testsuite name="integration_tests_catalog_vat">
             <directory>./tests/Integration/Services/Catalog/Vat/</directory>
         </testsuite>

@@ -225,3 +225,24 @@ Services depend on Core/Attributes/Filters only. No new `skip_violations`.
   `make test-integration-crm-v3-form` (12 tests, live portal: lifecycle incl. stale-version rejection with
   `getCurrentVersion()`, delete confirmation for an active form, nested block annotations/casting) pass;
   no leftover forms. The 10 PR 1 methods are no longer in `make sdk-coverage-v3-show-uncovered`.
+
+## PR 4 implementation notes (2026-10-29)
+
+- Branch `feature/670-crm-form-v3-placements`, stacked on PR 1 (#711). The test helpers
+  `V3ServiceTestTrait` and `NestedItemAnnotationsTrait` are copied byte-for-byte from PR 3, so merging both
+  branches is a clean add/add of identical files.
+- Live findings not in the plan:
+  - `formId` is not a "buttons of this form" filter: the list always returns **all** website widgets / Open
+    Channels; `bound` tells whether the requested form is attached (for widgets `bound` equals
+    `formId ∈ formsId`, asserted in the integration test). Only the `=` operator is accepted (`in` fails with
+    "filter by required field formId").
+  - Pagination accepts only `limit`/`offset`; `page` fails with `BITRIX_REST_V3_EXCEPTION_INVALIDPAGINATIONEXCEPTION`.
+    Hence a dedicated `Form\Service\FormPlacementListPagination(limit, offset)`.
+  - Only `id` is sortable; `list(int $formId, ?SortOrder $idOrder = null, ?FormPlacementListPagination $pagination = null)`.
+  - `select` is ignored by both methods, so it is not exposed.
+- `crm.form.form.*` aliases: documented in the CHANGELOG entry and the PR; after all four parts are merged they are the
+  only `crm.form.*` entries left in `make sdk-coverage-v3-show-uncovered` (no alias support in the coverage command —
+  follow-up issue proposed).
+- Quality gate: cs-fixer, rector, phpstan, deptrac, `make test-unit` (2218 tests),
+  `make test-integration-crm-v3-form-placements` (16 tests, read-only) and `make test-integration-crm-v3-form`
+  (12 tests) pass; sitebutton/openline methods are no longer uncovered.
