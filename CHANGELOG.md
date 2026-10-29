@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### Added
+- Added an installer-oriented placement registrar with idempotent registration, explicit replacement policy and per-handler results ([#446](https://github.com/bitrix24/b24phpsdk/issues/446))
 - Added OpenSSF Scorecard workflow that analyses the default branch weekly and on push, uploading SARIF results to GitHub code scanning without publishing the score yet ([#95](https://github.com/bitrix24/b24phpsdk/issues/95))
 - Added typed CRM call-list services for all six `crm.calllist.*` methods and batch add/update/list support ([#208](https://github.com/bitrix24/b24phpsdk/issues/208))
 - Added REST v3 `note.file.list` with typed file results, attachment dates, and opaque cursor pagination; added dedicated file field metadata access while preserving existing methods ([#688](https://github.com/bitrix24/b24phpsdk/issues/688))

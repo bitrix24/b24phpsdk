@@ -77,24 +77,24 @@ class Placement extends AbstractService
      *
      * @throws BaseException
      * @throws TransportException
-     * @link https://training.bitrix24.com/rest_help/application_embedding/metods/placement_unbind.php
+     * @link https://apidocs.bitrix24.com/api-reference/widgets/placement-unbind.html
      */
     #[ApiEndpointMetadata(
         'placement.unbind',
-        'https://training.bitrix24.com/rest_help/application_embedding/metods/placement_unbind.php',
+        'https://apidocs.bitrix24.com/api-reference/widgets/placement-unbind.html',
         'Deletes the registered embedding location handler. Shall be executed with the available account administrative privileges.'
     )]
-    public function unbind(string $placementCode, string|Url|null $handlerUrl = null): PlacementUnbindResult
+    public function unbind(string $placementCode, string|Url|null $handlerUrl = null, ?int $b24UserId = null): PlacementUnbindResult
     {
-        return new PlacementUnbindResult(
-            $this->core->call(
-                'placement.unbind',
-                [
-                    'PLACEMENT' => $placementCode,
-                    'HANDLER' => $handlerUrl === null || $handlerUrl === '' ? $handlerUrl : ValueObjectResolver::resolveUrl($handlerUrl),
-                ]
-            )
-        );
+        $parameters = [
+            'PLACEMENT' => $placementCode,
+            'HANDLER' => $handlerUrl === null || $handlerUrl === '' ? $handlerUrl : ValueObjectResolver::resolveUrl($handlerUrl),
+        ];
+        if ($b24UserId !== null) {
+            $parameters['USER_ID'] = $b24UserId;
+        }
+
+        return new PlacementUnbindResult($this->core->call('placement.unbind', $parameters));
     }
 
     /**
@@ -123,11 +123,11 @@ class Placement extends AbstractService
      *
      * @throws BaseException
      * @throws TransportException
-     * @link https://training.bitrix24.com/rest_help/application_embedding/metods/placement_get.php
+     * @link https://apidocs.bitrix24.com/api-reference/widgets/placement-get.html
      */
     #[ApiEndpointMetadata(
         'placement.get',
-        'https://training.bitrix24.com/rest_help/application_embedding/metods/placement_get.php',
+        'https://apidocs.bitrix24.com/api-reference/widgets/placement-get.html',
         'This method is used to retrieve the list of registered handlers for embedding locations.'
     )]
     public function get(): PlacementsLocationInformationResult
