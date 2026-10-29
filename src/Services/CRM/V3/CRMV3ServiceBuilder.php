@@ -36,4 +36,60 @@ class CRMV3ServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    public function formConfiguration(): FormConfiguration\Service\FormConfiguration
+    {
+        $this->serviceCache[__METHOD__] ??= new FormConfiguration\Service\FormConfiguration($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function formConfigurationField(): FormConfigurationField\Service\FormConfigurationField
+    {
+        $this->serviceCache[__METHOD__] ??= new FormConfigurationField\Service\FormConfigurationField($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function formEntityField(): FormEntityField\Service\FormEntityField
+    {
+        $this->serviceCache[__METHOD__] ??= new FormEntityField\Service\FormEntityField($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function formEntityFieldField(): FormEntityFieldField\Service\FormEntityFieldField
+    {
+        $this->serviceCache[__METHOD__] ??= new FormEntityFieldField\Service\FormEntityFieldField($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function formScenario(): FormScenario\Service\FormScenario
+    {
+        $this->serviceCache[__METHOD__] ??= new FormScenario\Service\FormScenario($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function formScenarioField(): FormScenarioField\Service\FormScenarioField
+    {
+        $this->serviceCache[__METHOD__] ??= new FormScenarioField\Service\FormScenarioField($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function formScenarioCategory(): FormScenarioCategory\Service\FormScenarioCategory
+    {
+        $this->serviceCache[__METHOD__] ??= new FormScenarioCategory\Service\FormScenarioCategory($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function formScenarioCategoryField(): FormScenarioCategoryField\Service\FormScenarioCategoryField
+    {
+        $this->serviceCache[__METHOD__] ??= new FormScenarioCategoryField\Service\FormScenarioCategoryField($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
 }

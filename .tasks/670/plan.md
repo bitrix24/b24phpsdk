@@ -225,3 +225,19 @@ Services depend on Core/Attributes/Filters only. No new `skip_violations`.
   `make test-integration-crm-v3-form` (12 tests, live portal: lifecycle incl. stale-version rejection with
   `getCurrentVersion()`, delete confirmation for an active form, nested block annotations/casting) pass;
   no leftover forms. The 10 PR 1 methods are no longer in `make sdk-coverage-v3-show-uncovered`.
+
+## PR 3 implementation notes (2026-10-29)
+
+- Branch `feature/670-crm-form-v3-directories`, stacked on PR 1 (#711) — not on PR 2; both add accessors to
+  `CRMV3ServiceBuilder`, so the second one to merge needs a trivial conflict resolution.
+- Deviation from the plan: every configuration block is typed (not only entity schemes, duplicate modes,
+  languages and currencies) — the blocks are small and fully verified live: `ConfigurationEntitySchemeItemResult`,
+  `NamedCodeItemResult`, `NamedIdItemResult`, `ConfigurationLeadItemResult`, `ConfigurationSmartProcessItemResult`,
+  `ConfigurationCurrencyItemResult`, `ConfigurationFieldTypeItemResult`, `ConfigurationPermissionsItemResult`,
+  `ConfigurationLimitsItemResult` / `ConfigurationActiveFormsLimitItemResult`, `ConfigurationProductItemResult`.
+- `formEntityField()->list(array $entityNames)` builds `['entityName', 'in', …]` and rejects an empty list.
+- Test helpers: `tests/Unit/Services/CRM/V3/V3ServiceTestTrait.php` (core double + endpoint metadata check) and
+  `tests/Integration/Services/CRM/V3/NestedItemAnnotationsTrait.php` (nested item annotations vs raw payload).
+- Quality gate: cs-fixer, rector, phpstan, deptrac, `make test-unit` (2230 tests),
+  `make test-integration-crm-v3-form-directories` (27 tests, read-only) and `make test-integration-crm-v3-form`
+  (12 tests) pass; the 12 directory methods are no longer uncovered.
