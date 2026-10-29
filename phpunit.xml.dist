@@ -95,6 +95,9 @@
         <testsuite name="integration_tests_im_open_lines_operator">
             <directory>./tests/Integration/Services/IMOpenLines/Operator/</directory>
         </testsuite>
+        <testsuite name="integration_tests_placement_registrar">
+            <file>./tests/Integration/Services/Placement/Service/PlacementRegistrarTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_scope_placement">
             <directory>./tests/Integration/Services/Placement/</directory>
         </testsuite>
@@ -698,6 +701,22 @@
         </testsuite>
         <testsuite name="integration_tests_catalog_vat">
             <directory>./tests/Integration/Services/Catalog/Vat/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_v3_vat">
+            <directory>./tests/Integration/Services/Catalog/V3/Vat/</directory>
+            <directory>./tests/Integration/Services/Catalog/V3/VatField/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_v3_measure">
+            <directory>./tests/Integration/Services/Catalog/V3/Measure/</directory>
+            <directory>./tests/Integration/Services/Catalog/V3/MeasureField/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_v3_section">
+            <directory>./tests/Integration/Services/Catalog/V3/Section/</directory>
+            <directory>./tests/Integration/Services/Catalog/V3/SectionField/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_v3_catalog">
+            <directory>./tests/Integration/Services/Catalog/V3/Catalog/</directory>
+            <directory>./tests/Integration/Services/Catalog/V3/CatalogField/</directory>
         </testsuite>
         <testsuite name="integration-scope-timeman-readonly">
             <directory>./tests/Integration/Services/Timeman/NetworkRange</directory>

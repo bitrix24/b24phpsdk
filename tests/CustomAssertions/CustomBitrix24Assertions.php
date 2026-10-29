@@ -240,6 +240,20 @@ trait CustomBitrix24Assertions
                         )
                     );
                     break;
+                // REST v3 field metadata reports plain floating-point DTO properties as float
+                case 'float':
+                    $this->assertTrue(
+                        str_contains($propsFromAnnotations[$fieldCode], 'float'),
+                        sprintf(
+                            'class «%s» field «%s» has invalid type phpdoc annotation «%s», field type from bitrix24 is «%s», expected sdk-type «%s»',
+                            $resultItemClassName,
+                            $fieldCode,
+                            $propsFromAnnotations[$fieldCode],
+                            $fieldData['type'],
+                            'float'
+                        )
+                    );
+                    break;
                 case 'double':
                     if (str_contains(mb_strtoupper($fieldCode), 'SORTING')) {
                         $this->assertTrue(
