@@ -695,6 +695,10 @@
             <directory>./tests/Integration/Services/Catalog/V3/Vat/</directory>
             <directory>./tests/Integration/Services/Catalog/V3/VatField/</directory>
         </testsuite>
+        <testsuite name="integration_tests_catalog_v3_measure">
+            <directory>./tests/Integration/Services/Catalog/V3/Measure/</directory>
+            <directory>./tests/Integration/Services/Catalog/V3/MeasureField/</directory>
+        </testsuite>
         <testsuite name="integration-scope-timeman-readonly">
             <directory>./tests/Integration/Services/Timeman/NetworkRange</directory>
             <directory>./tests/Integration/Services/Timeman/TimeControl</directory>
