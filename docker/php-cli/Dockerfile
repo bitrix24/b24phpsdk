@@ -42,7 +42,10 @@ RUN <<EOF
   rm -rf /var/lib/apt/lists/*
 EOF
 
-RUN install-php-extensions bcmath excimer intl pcntl opcache yaml zip
+RUN install-php-extensions bcmath excimer intl pcntl opcache pcov yaml zip
+
+# pcov is used only for code coverage reports, keep it disabled by default to avoid overhead
+RUN echo "pcov.enabled=0" > "$PHP_INI_DIR/conf.d/zz-pcov.ini"
 
 WORKDIR /var/www/html
 

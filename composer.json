@@ -56,6 +56,7 @@
     "nyholm/psr7": "^1.8",
     "openai-php/client": "0.10.*",
     "phpstan/phpstan": "^1",
+    "phpunit/phpcov": "^9 || ^10 || ^11",
     "phpunit/phpunit": "^10 || ^11|| ^12",
     "rector/rector": "^1",
     "roave/security-advisories": "dev-master",
@@ -80,6 +81,9 @@
   "scripts": {
     "phpunit-run-unit-tests": [
       "phpunit --testsuite unit_tests"
+    ],
+    "phpunit-run-unit-tests-coverage": [
+      "@php -d memory_limit=-1 -d pcov.enabled=1 vendor/bin/phpunit --testsuite unit_tests --colors=never --coverage-text=var/coverage/coverage.txt --only-summary-for-coverage-text --coverage-html var/coverage/html --coverage-clover var/coverage/clover.xml"
     ],
     "phpunit-run-integration-tests": [
       "phpunit --testsuite integration_tests"

@@ -52,3 +52,44 @@ jobs:
         if: ${{ failure() }}
         run: |
           echo '::error:: ❗️ unit tests tests failed (╯°益°)╯彡┻━┻'
+
+  coverage:
+    name: "Code coverage"
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: "pcov"
+          php-version: "8.4"
+          extensions: json, bcmath, curl, intl, mbstring
+
+      - name: "Install dependencies"
+        run: |
+          composer update ${{ env.COMPOSER_FLAGS }}
+
+      - name: "run unit tests with code coverage"
+        run: "composer phpunit-run-unit-tests-coverage"
+
+      - name: "publish code coverage summary"
+        if: ${{ always() }}
+        run: |
+          {
+            echo '### Code coverage (unit tests)'
+            echo '```'
+            cat var/coverage/coverage.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: "upload code coverage report"
+        if: ${{ always() }}
+        uses: "actions/upload-artifact@v4"
+        with:
+          name: "code-coverage-report"
+          path: var/coverage/
+          retention-days: 14

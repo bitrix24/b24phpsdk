@@ -1,0 +1,17 @@
+# Gitleaks configuration for leaked secrets detection
+# see https://github.com/gitleaks/gitleaks#configuration
+
+title = "b24phpsdk gitleaks config"
+
+[extend]
+useDefault = true
+
+# Fake application tokens used as fixtures in unit tests (tests/Unit/Services/RemoteEventsFa*Test.php).
+# Add new fixture values here only if they are NOT real credentials.
+[[allowlists]]
+description = "unit tests fixture application tokens"
+regexTarget = "match"
+regexes = [
+    '''3c6c9248ec54af6bea1159b43ee0ab32''',
+    '''e24831714bb347622e3ef25af61525cf''',
+]

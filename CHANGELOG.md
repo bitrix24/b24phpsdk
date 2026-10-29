@@ -3,7 +3,6 @@
 ## Unreleased
 
 ### Added
-
 - Added batch calls support for services of the `Services\IM` scope, available through the `batch` property
   of each service, see [im.* methods](https://apidocs.bitrix24.com/api-reference/chats/index.html)
   ([#626](https://github.com/bitrix24/b24phpsdk/issues/626)):
@@ -24,13 +23,31 @@
 - Added `Services\IM\Batch` extending `Core\Batch`: offset pagination via top-level `OFFSET` / `LIMIT`
   for `im.*` list methods, unwrapping of `im.recent.list` `items` with the `hasMore` flag, and execution
   of commands with flat upper-case parameters ([#626](https://github.com/bitrix24/b24phpsdk/issues/626)).
+- Added CI check for leaked secrets (API keys, tokens, webhooks) in the codebase and git history with
+  [gitleaks](https://github.com/gitleaks/gitleaks): workflow `.github/workflows/gitleaks.yml`, config `.gitleaks.toml`
+  and `make lint-secrets` target, included in `make lint-all` ([#38](https://github.com/bitrix24/b24phpsdk/issues/38))
+- Added code coverage metrics for unit tests: line, function and method, class and trait coverage
+  ([#307](https://github.com/bitrix24/b24phpsdk/issues/307)):
+    - `pcov` extension in the `php-cli` docker container (disabled by default, enabled only for coverage runs)
+    - `make test-unit-coverage` and `composer phpunit-run-unit-tests-coverage` generate text summary, HTML and Clover
+      reports in `var/coverage`
+    - «Code coverage» job in the `PHPUnit tests` GitHub workflow publishes the summary in the job summary and uploads
+      the full report as the `code-coverage-report` artifact
+    - `make test-integration-coverage` runs unit tests and integration tests by scope test suites with `--coverage-php`
+      and merges coverage with `phpunit/phpcov` into `var/coverage/merged`, test suites can be selected with
+      `INTEGRATION_COVERAGE_SUITES` variable
+    - `phpunit/phpcov` dev dependency and `integration_tests_scope_main` test suite for `tests/Integration/Services/Main`
 
 ### Changed
-
 - IM services `Chat`, `ChatUser`, `Department`, `Dialog`, `Disk`, `Message`, `Notify`, `Recent`, `Search`,
   `UserStatus` now receive their batch service as the first constructor argument and expose it via the public
   `$batch` property; code that instantiates these services directly must pass the batch service,
   services created by `IMServiceBuilder` are not affected ([#626](https://github.com/bitrix24/b24phpsdk/issues/626)).
+
+### Fixed
+- Fixed PHPUnit warnings `is not a valid target for code coverage` in contract unit tests for reference
+  implementations: `#[CoversClass]` pointed to interfaces or to test-only classes, replaced with `#[CoversNothing]`
+  ([#307](https://github.com/bitrix24/b24phpsdk/issues/307))
 
 ## 1.13.0 - 2026.09.30
 

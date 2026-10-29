@@ -29,11 +29,11 @@ use Bitrix24\SDK\Tests\Unit\Application\Contracts\ContactPersons\Entity\ContactP
 use Carbon\CarbonImmutable;
 use Darsyn\IP\Version\Multi as IP;
 use libphonenumber\PhoneNumber;
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Psr\Log\NullLogger;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(ContactPersonRepositoryInterface::class)]
+#[CoversNothing]
 class InMemoryContactPersonRepositoryImplementationTest extends ContactPersonRepositoryInterfaceTest
 {
     protected function createBitrix24AccountImplementation(
