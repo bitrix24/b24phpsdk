@@ -19,6 +19,9 @@ use Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface;
 use Bitrix24\SDK\Services\Catalog\CatalogServiceBuilder;
 use Bitrix24\SDK\Services\Catalog\Measure\Service\Measure as LegacyMeasure;
 use Bitrix24\SDK\Services\Catalog\Section\Service\Section as LegacySection;
+use Bitrix24\SDK\Services\Catalog\Catalog\Service\Catalog as LegacyCatalog;
+use Bitrix24\SDK\Services\Catalog\V3\Catalog\Service\Catalog;
+use Bitrix24\SDK\Services\Catalog\V3\CatalogField\Service\CatalogField;
 use Bitrix24\SDK\Services\Catalog\V3\CatalogV3ServiceBuilder;
 use Bitrix24\SDK\Services\Catalog\V3\Measure\Service\Measure;
 use Bitrix24\SDK\Services\Catalog\V3\MeasureField\Service\MeasureField;
@@ -42,7 +45,7 @@ class CatalogV3ServiceBuilderTest extends TestCase
     {
         $builder = $this->catalogBuilder()->v3();
 
-        foreach (['vat' => Vat::class, 'vatField' => VatField::class, 'measure' => Measure::class, 'measureField' => MeasureField::class, 'section' => Section::class, 'sectionField' => SectionField::class] as $accessor => $class) {
+        foreach (['vat' => Vat::class, 'vatField' => VatField::class, 'measure' => Measure::class, 'measureField' => MeasureField::class, 'section' => Section::class, 'sectionField' => SectionField::class, 'catalog' => Catalog::class, 'catalogField' => CatalogField::class] as $accessor => $class) {
             $this->assertInstanceOf($class, $builder->$accessor());
             $this->assertSame($builder->$accessor(), $builder->$accessor());
         }
@@ -60,6 +63,7 @@ class CatalogV3ServiceBuilderTest extends TestCase
         $this->assertInstanceOf(LegacyVat::class, $catalog->vat());
         $this->assertInstanceOf(LegacyMeasure::class, $catalog->measure());
         $this->assertInstanceOf(LegacySection::class, $catalog->section());
+        $this->assertInstanceOf(LegacyCatalog::class, $catalog->catalog());
     }
 
     private function catalogBuilder(): CatalogServiceBuilder

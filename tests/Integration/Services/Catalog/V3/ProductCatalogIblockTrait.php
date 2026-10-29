@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Services\Catalog\V3;
 
-use Bitrix24\SDK\Core\Contracts\ApiVersion;
+use Bitrix24\SDK\Services\Catalog\V3\Catalog\Service\CatalogFilter;
 use Bitrix24\SDK\Tests\Integration\Factory;
 
 /**
@@ -23,19 +23,15 @@ trait ProductCatalogIblockTrait
 {
     protected function getProductCatalogIblockId(): int
     {
-        // a product catalog (not a SKU catalog) has no parent product iblock
-        $catalogs = Factory::getCore()->call(
-            'catalog.catalog.list',
-            ['select' => ['iblockId', 'productIblockId']],
-            ApiVersion::v3
-        )->getResponseData()->getResult()['items'];
+        // a product catalog (not an offers catalog) has no parent product iblock
+        $filter = new CatalogFilter();
+        $filter->productIblockId()->eq(0);
 
-        foreach ($catalogs as $catalog) {
-            if ((int)$catalog['productIblockId'] === 0) {
-                return (int)$catalog['iblockId'];
-            }
+        $catalogs = Factory::getServiceBuilder()->getCatalogScope()->v3()->catalog()->list($filter)->getCatalogs();
+        if ($catalogs === []) {
+            self::markTestSkipped('test portal has no product catalog');
         }
 
-        self::markTestSkipped('test portal has no product catalog');
+        return (int)$catalogs[0]->iblockId;
     }
 }
