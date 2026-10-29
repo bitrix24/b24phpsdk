@@ -178,7 +178,10 @@ class ApiLevelErrorHandler
             case 'error_method_not_found':
                 throw new MethodNotFoundException(sprintf('api method not found %s %s', $errorDescription, $batchErrorPrefix));
             case 'operation_time_limit':
-                throw new OperationTimeLimitExceededException(sprintf('operation time limit exceeded %s %s', $errorDescription, $batchErrorPrefix));
+                throw new OperationTimeLimitExceededException(
+                    sprintf('operation time limit exceeded %s %s', $errorDescription, $batchErrorPrefix),
+                    batchCommandId: $batchCommandId
+                );
             case 'error_activity_already_installed':
                 throw new ActivityOrRobotAlreadyInstalledException(sprintf('%s - %s', $errorCode, $errorDescription));
             case 'error_activity_validation_failure':
