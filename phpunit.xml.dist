@@ -691,6 +691,10 @@
         <testsuite name="integration_tests_catalog_document_contractor_annotations">
             <file>./tests/Integration/Services/Catalog/DocumentContractor/Result/DocumentContractorItemResultTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_crm_v3_form">
+            <directory>./tests/Integration/Services/CRM/V3/Form/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormField/</directory>
+        </testsuite>
         <testsuite name="integration_tests_catalog_vat">
             <directory>./tests/Integration/Services/Catalog/Vat/</directory>
         </testsuite>

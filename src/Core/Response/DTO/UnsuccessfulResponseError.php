@@ -16,12 +16,14 @@ namespace Bitrix24\SDK\Core\Response\DTO;
 readonly class UnsuccessfulResponseError
 {
     /**
-     * @param ValidationError[] $validation
+     * @param ValidationError[]    $validation
+     * @param array<string, mixed> $details    error keys beyond code, message and validation, e.g. currentUpdatedTime
      */
     public function __construct(
         public string $code,
         public string $message,
         public array $validation = [],
+        public array $details = [],
     ) {
     }
 
@@ -43,7 +45,8 @@ readonly class UnsuccessfulResponseError
         return new self(
             (string)($data['code'] ?? ''),
             (string)($data['message'] ?? ''),
-            $validation
+            $validation,
+            array_diff_key($data, array_flip(['code', 'message', 'validation']))
         );
     }
 }
