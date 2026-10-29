@@ -2,25 +2,22 @@
 
 ## Unreleased
 
+## 3.8.0
+
 ### Added
-- Added an installer-oriented placement registrar with idempotent registration, explicit replacement policy and per-handler results ([#446](https://github.com/bitrix24/b24phpsdk/issues/446))
-- Added OpenSSF Scorecard workflow that analyses the default branch weekly and on push, uploading SARIF results to GitHub code scanning without publishing the score yet ([#95](https://github.com/bitrix24/b24phpsdk/issues/95))
-- Added typed CRM call-list services for all six `crm.calllist.*` methods and batch add/update/list support ([#208](https://github.com/bitrix24/b24phpsdk/issues/208))
+
 - Added REST v3 `note.file.list` with typed file results, attachment dates, and opaque cursor pagination; added dedicated file field metadata access while preserving existing methods ([#688](https://github.com/bitrix24/b24phpsdk/issues/688))
-- Added REST v3 `note.collection.move`, `note.collection.restore` and `note.collection.unarchive` to the Note `Collection` service; added `accessLevel`, `state` (`CollectionState` enum), `isArchived` and `markdownDescription` to `CollectionItemResult`, matching selectors to `CollectionSelectBuilder`, `editableGroups` to `CollectionFieldItemResult` and `getFieldsDescription()` to `CollectionFieldsResult` ([#687](https://github.com/bitrix24/b24phpsdk/issues/687))
-- Added an eager `Core\Credentials\RenewedAuthToken` compatibility alias preserving legacy constructors, signatures and serialized tokens ([#117](https://github.com/bitrix24/b24phpsdk/issues/117))
-- Added non-interactive legacy API coverage reporting with `--show`, `--scope` and `--format=json` options ([#410](https://github.com/bitrix24/b24phpsdk/issues/410))
 - Added REST v3 `note.document.list` with typed `DocumentFilter` and opaque cursor pagination, `note.document.move`, `note.document.restore` and `note.document.unarchive`; added `contentUpdatedAt`, `state` (`DocumentState` enum), `isArchived`, `isTrashed` and `isOrphan` to `DocumentItemResult` and `getFieldsDescription()` to `DocumentFieldsResult` ([#686](https://github.com/bitrix24/b24phpsdk/issues/686))
-- Added REST v3 CRM form services (part 1 of 4): `crm.form.get`, `list`, `add`, `update`, `delete`, `activate`, `deactivate`, `validate`, `field.get` and `field.list` via the new `CRMServiceBuilder::v3()` sub-builder (`v3()->form()`, `v3()->formField()`), with typed nested form blocks, `FormFilter`, `FormSelectBuilder`, `FormItemBuilder` and `CarbonImmutable` form versions for optimistic concurrency ([#670](https://github.com/bitrix24/b24phpsdk/issues/670))
-- Added `Core\Exceptions\VersionMismatchException` with `getCurrentVersion()` for REST v3 optimistic concurrency errors (`CRM_FORM_VERSION_MISMATCH`), `UnsuccessfulResponseError::$details` with extra REST v3 error keys, and casting of nested `*ItemResult` objects annotated on `AbstractAnnotatedItem` properties ([#670](https://github.com/bitrix24/b24phpsdk/issues/670))
-- Added REST v3 CRM form placements (part 4 of 4): `crm.form.sitebutton.list`, `crm.form.openline.list` and their `field.get`/`field.list` via `CRMServiceBuilder::v3()->formSiteButton()`, `formOpenLine()`, `formSiteButtonField()` and `formOpenLineField()`; `list()` takes the form ID required by the API and returns every website widget / Open Channel with the form's `bound` state, sorted by id and paginated by `FormPlacementListPagination` (limit/offset). The undocumented `crm.form.form.*` OpenAPI paths are live aliases of `crm.form.*` with identical payloads and are intentionally not wrapped ([#670](https://github.com/bitrix24/b24phpsdk/issues/670))
-- Added REST v3 CRM form builder directories (part 3 of 4): `crm.form.configuration.get`, `crm.form.entityfield.list`, `crm.form.scenario.list`, `crm.form.scenariocategory.list` and their `field.get`/`field.list` via `CRMServiceBuilder::v3()->formConfiguration()`, `formEntityField()`, `formScenario()`, `formScenarioCategory()` and the matching `*Field()` accessors, with typed directory items; `formEntityField()->list()` takes the entity names required by the API ([#670](https://github.com/bitrix24/b24phpsdk/issues/670))
-- Added REST v3 CRM form embedding (part 2 of 4): `crm.form.embedding.get`, `update`, `field.get` and `field.list` via `CRMServiceBuilder::v3()->formEmbedding()` and `v3()->formEmbeddingField()`; `get()` returns the public link and all placement variants, `getVariant()` returns the code or link of one `EmbeddingVariant` with click/auto options validated before the request, and `update()` saves click/auto settings under the form version ([#670](https://github.com/bitrix24/b24phpsdk/issues/670))
+- Added REST v3 `note.collection.move`, `note.collection.restore` and `note.collection.unarchive` to the Note `Collection` service; added `accessLevel`, `state` (`CollectionState` enum), `isArchived` and `markdownDescription` to `CollectionItemResult`, matching selectors to `CollectionSelectBuilder`, `editableGroups` to `CollectionFieldItemResult` and `getFieldsDescription()` to `CollectionFieldsResult` ([#687](https://github.com/bitrix24/b24phpsdk/issues/687))
 - Added REST v3 support for `catalog.vat.*` (`get`, `list`, `add`, `update`, `delete`, `field.get`, `field.list`) through the new `CatalogServiceBuilder::v3()` sub-builder: `v3()->vat()` with typed `VatFilter`, `VatSelectBuilder`, `VatItemBuilder` and `VatListPagination`, and `v3()->vatField()` for field metadata; the legacy REST v1 `vat()` service is unchanged ([#674](https://github.com/bitrix24/b24phpsdk/issues/674))
 - Added REST v3 support for `catalog.measure.*` (`get`, `list`, `add`, `update`, `delete`, `field.get`, `field.list`) via `CatalogServiceBuilder::v3()->measure()` with typed `MeasureFilter`, `MeasureSelectBuilder`, `MeasureItemBuilder` and `MeasureListPagination`, and `v3()->measureField()` for field metadata; the legacy REST v1 `measure()` service is unchanged ([#673](https://github.com/bitrix24/b24phpsdk/issues/673))
 - Added REST v3 support for `catalog.section.*` (`get`, `list`, `add`, `update`, `delete`, `field.get`, `field.list`) via `CatalogServiceBuilder::v3()->section()` with typed `SectionFilter`, `SectionSelectBuilder`, `SectionItemBuilder` and `SectionListPagination`, and `v3()->sectionField()` for field metadata; `list()` takes the information block ID required by the API, the Y/N `active` flag is exposed as `bool`, and the legacy REST v1 `section()` service is unchanged ([#672](https://github.com/bitrix24/b24phpsdk/issues/672))
 - Added REST v3 support for `catalog.catalog.*` (`get`, `list`, `add`, `update`, `delete`, `isoffers`, `field.get`, `field.list`) via `CatalogServiceBuilder::v3()->catalog()` with typed `CatalogFilter`, `CatalogSelectBuilder`, `CatalogItemBuilder` and `CatalogListPagination`, `isOffers()` for SKU catalogs, and `v3()->catalogField()` for field metadata; `delete()` removes only the catalog flag and keeps the information block, the Y/N `yandexExport`/`subscription` flags are exposed as `bool`, and the legacy REST v1 `catalog()` service is unchanged ([#671](https://github.com/bitrix24/b24phpsdk/issues/671))
-- Added operating time limit events for long-running batch writes: `OperatingThresholdCrossedEvent` on 10%…90% of the limit window (top-level `operating` of `batch` responses is tracked as method `batch`), `OperatingLimitConfig` (480 s by default), opt-in `OperatingLimitSleepListener`, `CoreBuilder::withOperatingLimitConfig()`, optional `$operatingLimitConfig` in `ServiceBuilderFactory`, `apiMethod`/`batchCommandId`/`operatingResetAt` in `OperationTimeLimitExceededException`, documentation `docs/EN/Core/operating-limit.md` with cloud portal measurements and integration tests in `tests/Integration/Core/OperatingLimit/` ([#76](https://github.com/bitrix24/b24phpsdk/issues/76))
+- Added REST v3 CRM form services (part 1 of 4): `crm.form.get`, `list`, `add`, `update`, `delete`, `activate`, `deactivate`, `validate`, `field.get` and `field.list` via the new `CRMServiceBuilder::v3()` sub-builder (`v3()->form()`, `v3()->formField()`), with typed nested form blocks, `FormFilter`, `FormSelectBuilder`, `FormItemBuilder` and `CarbonImmutable` form versions for optimistic concurrency ([#670](https://github.com/bitrix24/b24phpsdk/issues/670))
+- Added REST v3 CRM form embedding (part 2 of 4): `crm.form.embedding.get`, `update`, `field.get` and `field.list` via `CRMServiceBuilder::v3()->formEmbedding()` and `v3()->formEmbeddingField()`; `get()` returns the public link and all placement variants, `getVariant()` returns the code or link of one `EmbeddingVariant` with click/auto options validated before the request, and `update()` saves click/auto settings under the form version ([#670](https://github.com/bitrix24/b24phpsdk/issues/670))
+- Added REST v3 CRM form builder directories (part 3 of 4): `crm.form.configuration.get`, `crm.form.entityfield.list`, `crm.form.scenario.list`, `crm.form.scenariocategory.list` and their `field.get`/`field.list` via `CRMServiceBuilder::v3()->formConfiguration()`, `formEntityField()`, `formScenario()`, `formScenarioCategory()` and the matching `*Field()` accessors, with typed directory items; `formEntityField()->list()` takes the entity names required by the API ([#670](https://github.com/bitrix24/b24phpsdk/issues/670))
+- Added REST v3 CRM form placements (part 4 of 4): `crm.form.sitebutton.list`, `crm.form.openline.list` and their `field.get`/`field.list` via `CRMServiceBuilder::v3()->formSiteButton()`, `formOpenLine()`, `formSiteButtonField()` and `formOpenLineField()`; `list()` takes the form ID required by the API and returns every website widget / Open Channel with the form's `bound` state, sorted by id and paginated by `FormPlacementListPagination` (limit/offset). The undocumented `crm.form.form.*` OpenAPI paths are live aliases of `crm.form.*` with identical payloads and are intentionally not wrapped ([#670](https://github.com/bitrix24/b24phpsdk/issues/670))
+- Added `Core\Exceptions\VersionMismatchException` with `getCurrentVersion()` for REST v3 optimistic concurrency errors (`CRM_FORM_VERSION_MISMATCH`), `UnsuccessfulResponseError::$details` with extra REST v3 error keys, and casting of nested `*ItemResult` objects annotated on `AbstractAnnotatedItem` properties ([#670](https://github.com/bitrix24/b24phpsdk/issues/670))
 - Added batch calls support for services of the `Services\IM` scope, available through the `batch` property
   of each service, see [im.* methods](https://apidocs.bitrix24.com/api-reference/chats/index.html)
   ([#626](https://github.com/bitrix24/b24phpsdk/issues/626)):
@@ -41,27 +38,51 @@
 - Added `Services\IM\Batch` extending `Core\Batch`: offset pagination via top-level `OFFSET` / `LIMIT`
   for `im.*` list methods, unwrapping of `im.recent.list` `items` with the `hasMore` flag, and execution
   of commands with flat upper-case parameters ([#626](https://github.com/bitrix24/b24phpsdk/issues/626)).
+- Added typed CRM call-list services for all six `crm.calllist.*` methods and batch add/update/list support ([#208](https://github.com/bitrix24/b24phpsdk/issues/208))
+- Added an installer-oriented placement registrar with idempotent registration, explicit replacement policy and per-handler results ([#446](https://github.com/bitrix24/b24phpsdk/issues/446))
+- Added operating time limit events for long-running batch writes: `OperatingThresholdCrossedEvent` on 10%…90% of the limit window (top-level `operating` of `batch` responses is tracked as method `batch`), `OperatingLimitConfig` (480 s by default), opt-in `OperatingLimitSleepListener`, `CoreBuilder::withOperatingLimitConfig()`, optional `$operatingLimitConfig` in `ServiceBuilderFactory`, `apiMethod`/`batchCommandId`/`operatingResetAt` in `OperationTimeLimitExceededException`, documentation `docs/EN/Core/operating-limit.md` with cloud portal measurements and integration tests in `tests/Integration/Core/OperatingLimit/` ([#76](https://github.com/bitrix24/b24phpsdk/issues/76))
+- Added an eager `Core\Credentials\RenewedAuthToken` compatibility alias preserving legacy constructors, signatures and serialized tokens ([#117](https://github.com/bitrix24/b24phpsdk/issues/117))
+- Added non-interactive legacy API coverage reporting with `--show`, `--scope` and `--format=json` options ([#410](https://github.com/bitrix24/b24phpsdk/issues/410))
+- Added OpenSSF Scorecard workflow that analyses the default branch weekly and on push, uploading SARIF results to GitHub code scanning without publishing the score yet ([#95](https://github.com/bitrix24/b24phpsdk/issues/95))
 
 ### Changed
-- Hardened CI workflows for OpenSSF Scorecard: added least-privilege `GITHUB_TOKEN` permissions to every workflow, pinned all GitHub Actions to full commit SHAs and enabled Dependabot updates for the `docker/php-cli` base images ([#95](https://github.com/bitrix24/b24phpsdk/issues/95))
-- CI quality checks now build the PHP runtime from the current Dockerfile with fresh base images, avoiding dependency-install failures from an outdated shared PHP image ([#688](https://github.com/bitrix24/b24phpsdk/issues/688))
-- Updated `b24phpsdk-maintainer` skill: documented non-interactive legacy coverage commands, JSON output and verification ([#410](https://github.com/bitrix24/b24phpsdk/issues/410))
-- `OperationTimeLimitExceededException` now reaches callers of `Response::getResponseData()` and `Core\Batch::addEntityItems()`, `updateEntityItems()`, `deleteEntityItems()` with its own type instead of a generic `BaseException` wrapper; code catching `BaseException` still catches it ([#76](https://github.com/bitrix24/b24phpsdk/issues/76))
+
+- Updated SDK version headers to `3.8.0` and the README installation constraint to `^3.8` ([#718](https://github.com/bitrix24/b24phpsdk/issues/718))
 - IM services `Chat`, `ChatUser`, `Department`, `Dialog`, `Disk`, `Message`, `Notify`, `Recent`, `Search`,
   `UserStatus` now receive their batch service as the first constructor argument and expose it via the public
   `$batch` property; code that instantiates these services directly must pass the batch service,
   services created by `IMServiceBuilder` are not affected ([#626](https://github.com/bitrix24/b24phpsdk/issues/626)).
+- `OperationTimeLimitExceededException` now reaches callers of `Response::getResponseData()` and `Core\Batch::addEntityItems()`, `updateEntityItems()`, `deleteEntityItems()` with its own type instead of a generic `BaseException` wrapper; code catching `BaseException` still catches it ([#76](https://github.com/bitrix24/b24phpsdk/issues/76))
+- Hardened CI workflows for OpenSSF Scorecard: added least-privilege `GITHUB_TOKEN` permissions to every workflow, pinned all GitHub Actions to full commit SHAs and enabled Dependabot updates for the `docker/php-cli` base images ([#95](https://github.com/bitrix24/b24phpsdk/issues/95))
+- CI quality checks now build the PHP runtime from the current Dockerfile with fresh base images, avoiding dependency-install failures from an outdated shared PHP image ([#688](https://github.com/bitrix24/b24phpsdk/issues/688))
+- Updated `b24phpsdk-maintainer` skill: documented non-interactive legacy coverage commands, JSON output and verification ([#410](https://github.com/bitrix24/b24phpsdk/issues/410))
 
 ### Deprecated
+
 - Deprecated the `Core\Response\DTO\RenewedAuthToken` name in favor of `Core\Credentials\RenewedAuthToken` ([#117](https://github.com/bitrix24/b24phpsdk/issues/117))
 
 ### Fixed
+
+- Distinguished response decoding failures with `ResponseDecodingException` while preserving sanitized diagnostics and excluding unsafe exception chains ([#667](https://github.com/bitrix24/b24phpsdk/issues/667))
+- Fixed `Core\Batch` dropping `null` parameters from batch sub-commands, so filters like `['parentId150' => null]` were silently ignored; `null` values are now sent as empty values, matching non-batch calls ([#319](https://github.com/bitrix24/b24phpsdk/issues/319))
+- Reused core pagination for Task, Sale Order and BasketItem batches, preserving requested sorting, nested result references, filters and limits ([#363](https://github.com/bitrix24/b24phpsdk/issues/363))
 - Recognized four current portal scopes and validated portal-scope containment without requiring every SDK scope to be installed on a test portal ([#117](https://github.com/bitrix24/b24phpsdk/issues/117))
 - Corrected `InstantMessenger::VALUE_TYPE` conversion and PHPDoc to use `InstantMessengerValueType` ([#156](https://github.com/bitrix24/b24phpsdk/issues/156))
-- Distinguished response decoding failures with `ResponseDecodingException` while preserving sanitized diagnostics and excluding unsafe exception chains ([#667](https://github.com/bitrix24/b24phpsdk/issues/667))
-- Reused core pagination for Task, Sale Order and BasketItem batches, preserving requested sorting, nested result references, filters and limits ([#363](https://github.com/bitrix24/b24phpsdk/issues/363))
 - Fixed dead REST v3 documentation links in the Note `Collection` service metadata; they now point to `https://apidocs.bitrix24.com/api-reference/note/collection/` ([#687](https://github.com/bitrix24/b24phpsdk/issues/687))
-- Fixed `Core\Batch` dropping `null` parameters from batch sub-commands, so filters like `['parentId150' => null]` were silently ignored; `null` values are now sent as empty values, matching non-batch calls ([#319](https://github.com/bitrix24/b24phpsdk/issues/319))
+
+### API coverage
+
+Measured on 2026-10-29 (UTC) from the release candidate.
+
+| REST API | Covered methods | Total methods | Uncovered methods | Coverage | Basis |
+|---|---:|---:|---:|---:|---|
+| v3 (new) | 174 | 578 | 404 | 30.10% | OpenAPI snapshot: `docs/open-api/openapi.json` |
+| v1 (legacy) | 768 | 1162 | 394 | 66.09% | Methods available on the configured portal |
+
+These figures describe SDK method coverage against each baseline, not test coverage
+or proof that every method was exercised against a live portal. The v1 baseline is
+portal-specific, not the entire Bitrix24 REST API catalog. The v3 percentage is lower
+than in 3.7.0 because the OpenAPI snapshot grew from 314 to 578 methods.
 
 ## 3.7.0
 
