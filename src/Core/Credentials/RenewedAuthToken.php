@@ -13,4 +13,13 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\Credentials;
 
-class_alias(\Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken::class, __NAMESPACE__ . '\\RenewedAuthToken');
+// The alias is registered by the legacy DTO file; loading it defines this name.
+\class_exists(\Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken::class);
+
+// Never executed: lets Composer's classmap scanner (including --classmap-authoritative) find this file
+// and gives static analysers the legacy DTO's shape. Replaced by a real class in 4.0, see #721.
+if (false) { // @phpstan-ignore if.alwaysFalse
+    readonly class RenewedAuthToken extends \Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken
+    {
+    }
+}

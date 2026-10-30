@@ -64,3 +64,7 @@ readonly class RenewedAuthToken
         );
     }
 }
+
+// Registered together with the legacy class so that tokens created under either name
+// satisfy both type declarations without eager Composer "files" autoloading.
+\class_alias(RenewedAuthToken::class, \Bitrix24\SDK\Core\Credentials\RenewedAuthToken::class);

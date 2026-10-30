@@ -214,11 +214,12 @@ class RenewedAuthTokenTest extends TestCase
         self::assertSame(LegacyRenewedAuthToken::class, $restoredToken::class);
     }
 
-    public function testComposerEagerlyLoadsAliasForLegacyTokenPassedToNewParameter(): void
+    #[DataProvider('freshProcessTokenClassProvider')]
+    public function testAliasIsAvailableInFreshProcessWithoutEagerAutoload(string $tokenClass): void
     {
         $script = <<<'PHP'
 require 'vendor/autoload.php';
-$token = new \Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken(
+$token = new $argv[1](
     new \Bitrix24\SDK\Core\Credentials\AuthToken('access-token', 'refresh-token', 1900000000),
     'member-id',
     'https://portal.bitrix24.com/rest/',
@@ -226,19 +227,29 @@ $token = new \Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken(
     \Bitrix24\SDK\Application\ApplicationStatus::subscription(),
     'portal.bitrix24.com'
 );
-$accept = static function (\Bitrix24\SDK\Core\Credentials\RenewedAuthToken $token): \Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken {
-    return $token;
-};
-if ($accept($token) !== $token) {
+$acceptNew = static fn (\Bitrix24\SDK\Core\Credentials\RenewedAuthToken $token): \Bitrix24\SDK\Core\Credentials\RenewedAuthToken => $token;
+$acceptLegacy = static fn (\Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken $token): \Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken => $token;
+if ($acceptNew($token) !== $token || $acceptLegacy($token) !== $token) {
     exit(1);
 }
 echo $token::class;
 PHP;
-        $process = new Process([PHP_BINARY, '-r', $script], dirname(__DIR__, 4));
+        $process = new Process([PHP_BINARY, '-r', $script, '--', $tokenClass], dirname(__DIR__, 4));
         $process->run();
 
         self::assertSame(0, $process->getExitCode(), $process->getErrorOutput() . $process->getOutput());
         self::assertSame(LegacyRenewedAuthToken::class, $process->getOutput());
+    }
+
+    /**
+     * @return array<string, array{class-string}>
+     */
+    public static function freshProcessTokenClassProvider(): array
+    {
+        return [
+            'legacy name loaded first' => [LegacyRenewedAuthToken::class],
+            'credentials name loaded first' => [RenewedAuthToken::class],
+        ];
     }
 
     /**

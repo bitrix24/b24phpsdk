@@ -100,6 +100,10 @@ deptrac:
     # without depending on the Application layer.
     Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken:
       - Bitrix24\SDK\Application\ApplicationStatus
+    # Never-executed classmap declaration of the #117 alias inherits the legacy DTO dependency.
+    # Removed together with the alias in 4.0: https://github.com/bitrix24/b24phpsdk/issues/721
+    Bitrix24\SDK\Core\Credentials\RenewedAuthToken:
+      - Bitrix24\SDK\Application\ApplicationStatus
 
     # TODO: move Base64Encoder to Core\Encoding (or a standalone utility).
     # Services should not depend on Infrastructure implementation details.
