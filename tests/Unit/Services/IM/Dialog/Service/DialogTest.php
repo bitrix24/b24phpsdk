@@ -22,6 +22,8 @@ use Bitrix24\SDK\Services\IM\Dialog\Result\DialogReadResult;
 use Bitrix24\SDK\Services\IM\Dialog\Result\DialogResult;
 use Bitrix24\SDK\Services\IM\Dialog\Result\DialogUsersResult;
 use Bitrix24\SDK\Services\IM\Dialog\Service\Dialog;
+use Bitrix24\SDK\Services\IM\Batch as IMBatch;
+use Bitrix24\SDK\Services\IM\Dialog\Service\Batch;
 use Carbon\CarbonImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -40,7 +42,7 @@ final class DialogTest extends TestCase
     protected function setUp(): void
     {
         $this->coreMock = $this->createMock(CoreInterface::class);
-        $this->service = new Dialog($this->coreMock, new NullLogger());
+        $this->service = new Dialog(new Batch(new IMBatch($this->coreMock, new NullLogger()), new NullLogger()), $this->coreMock, new NullLogger());
     }
 
     #[Test]

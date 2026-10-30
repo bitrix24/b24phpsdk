@@ -24,6 +24,8 @@ use Bitrix24\SDK\Services\IM\Disk\Result\FileSaveResult;
 use Bitrix24\SDK\Services\IM\Disk\Result\FolderIdResult;
 use Bitrix24\SDK\Services\IM\Disk\Result\RecordShareResult;
 use Bitrix24\SDK\Services\IM\Disk\Service\Disk;
+use Bitrix24\SDK\Services\IM\Batch as IMBatch;
+use Bitrix24\SDK\Services\IM\Disk\Service\Batch;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -51,7 +53,7 @@ final class DiskTest extends TestCase
             )
             ->willReturn($response);
 
-        $folderIdResult = (new Disk($core, new NullLogger()))->getFolderId(17, 'chat17');
+        $folderIdResult = (new Disk(new Batch(new IMBatch($core, new NullLogger()), new NullLogger()), $core, new NullLogger()))->getFolderId(17, 'chat17');
 
         $this->assertInstanceOf(FolderIdResult::class, $folderIdResult);
         $this->assertSame(5153, $folderIdResult->getId());
@@ -74,7 +76,7 @@ final class DiskTest extends TestCase
             )
             ->willReturn($response);
 
-        $fileCommitResult = (new Disk($core, new NullLogger()))->commitFile(
+        $fileCommitResult = (new Disk(new Batch(new IMBatch($core, new NullLogger()), new NullLogger()), $core, new NullLogger()))->commitFile(
             chatId: 17,
             fileId: [5249, 5250],
         );
@@ -102,7 +104,7 @@ final class DiskTest extends TestCase
             )
             ->willReturn($response);
 
-        $fileCommitResult = (new Disk($core, new NullLogger()))->commitFile(
+        $fileCommitResult = (new Disk(new Batch(new IMBatch($core, new NullLogger()), new NullLogger()), $core, new NullLogger()))->commitFile(
             dialogId: 'chat17',
             uploadId: 991,
             message: 'Documents by project',
@@ -130,7 +132,7 @@ final class DiskTest extends TestCase
             )
             ->willReturn($response);
 
-        $fileDeleteResult = (new Disk($core, new NullLogger()))->deleteFile(17, 5249);
+        $fileDeleteResult = (new Disk(new Batch(new IMBatch($core, new NullLogger()), new NullLogger()), $core, new NullLogger()))->deleteFile(17, 5249);
 
         $this->assertInstanceOf(FileDeleteResult::class, $fileDeleteResult);
     }
@@ -151,7 +153,7 @@ final class DiskTest extends TestCase
             )
             ->willReturn($response);
 
-        $fileSaveResult = (new Disk($core, new NullLogger()))->saveFile(5249);
+        $fileSaveResult = (new Disk(new Batch(new IMBatch($core, new NullLogger()), new NullLogger()), $core, new NullLogger()))->saveFile(5249);
 
         $this->assertInstanceOf(FileSaveResult::class, $fileSaveResult);
     }
@@ -173,7 +175,7 @@ final class DiskTest extends TestCase
             )
             ->willReturn($response);
 
-        $recordShareResult = (new Disk($core, new NullLogger()))->shareRecord('chat17', 5249);
+        $recordShareResult = (new Disk(new Batch(new IMBatch($core, new NullLogger()), new NullLogger()), $core, new NullLogger()))->shareRecord('chat17', 5249);
 
         $this->assertInstanceOf(RecordShareResult::class, $recordShareResult);
     }

@@ -32,6 +32,8 @@ use Bitrix24\SDK\Core\Result\AbstractAnnotatedItem;
  * @property-read array $COPILOT
  * @property-read array $CHANNEL_COMMENT
  * @property-read array $TASKS_TASK
+ * @property-read array $VIBECODE_APP
+ * @property-read array $VIBECODE_APP_UNREAD
  */
 class CountersItemResult extends AbstractAnnotatedItem
 {

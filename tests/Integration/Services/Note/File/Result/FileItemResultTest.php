@@ -85,7 +85,14 @@ class FileItemResultTest extends TestCase
         $rawItem = $this->fileService->get($this->fileId, $this->documentId)
             ->getCoreResponse()->getResponseData()->getResult()['item'];
 
-        $this->assertBitrix24AllResultItemFieldsAnnotated(array_keys($rawItem), FileItemResult::class);
+        $rawItems = $this->fileService->list($this->documentId)
+            ->getCoreResponse()->getResponseData()->getResult()['items'];
+        self::assertNotEmpty($rawItems);
+        self::assertArrayHasKey('createdAt', $rawItems[0]);
+        // get returns the same metadata without the list-specific attachment timestamp.
+        self::assertSame([], array_diff_key($rawItem, $rawItems[0]));
+        self::assertSame($rawItem, array_intersect_key($rawItems[0], $rawItem));
+        $this->assertBitrix24AllResultItemFieldsAnnotated(array_keys($rawItems[0]), FileItemResult::class);
     }
 
     /**
@@ -98,5 +105,9 @@ class FileItemResultTest extends TestCase
     {
         $file = $this->fileService->get($this->fileId, $this->documentId)->file();
         $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($file, FileItemResult::class);
+        $files = $this->fileService->list($this->documentId)->getFiles();
+        self::assertNotEmpty($files);
+        self::assertInstanceOf(\Carbon\CarbonImmutable::class, $files[0]->createdAt);
+        $this->assertBitrix24ResultItemFieldsTypeCastMatchAnnotations($files[0], FileItemResult::class);
     }
 }

@@ -18,13 +18,12 @@ use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\Applicati
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Exceptions\ApplicationInstallationNotFoundException;
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Repository\ApplicationInstallationRepositoryInterface;
 use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Repository\Bitrix24AccountRepositoryInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(ApplicationInstallationRepositoryInterface::class)]
-#[CoversClass(InMemoryApplicationInstallationRepositoryImplementation::class)]
+#[CoversNothing]
 class CurrentApplicationInstallationRepositoryTest extends TestCase
 {
     public function testGetCurrentReturnsSelectedInstallationAmongSeveral(): void

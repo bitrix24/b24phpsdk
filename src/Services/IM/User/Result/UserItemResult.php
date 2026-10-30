@@ -45,6 +45,8 @@ use Carbon\CarbonImmutable;
  * @property-read string $type
  * @property-read string $website
  * @property-read string $email
+ * @property-read bool $internal_account
+ * @property-read bool $intranet_user
  */
 class UserItemResult extends AbstractAnnotatedItem
 {

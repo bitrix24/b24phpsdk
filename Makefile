@@ -57,10 +57,13 @@ help:
 	@echo "lint-rector               - lint source code with rector"
 	@echo "lint-rector-fix           - fix source code with rector"
 	@echo "lint-deptrac              - lint source code with deptrac (architecture checks)"
+	@echo "lint-secrets              - scan git history for leaked secrets with gitleaks"
 	@echo ""
 	@echo "test-integration-main-user-history - run REST v3 user history tests"
 	@echo "test-unit                 - run unit tests"
 	@echo "test-file path=<path>     - run PHPUnit for a specific test file or directory"
+	@echo "test-unit-coverage        - run unit tests with code coverage report (text, html, clover in var/coverage)"
+	@echo "test-integration-coverage - run unit and integration tests by scope with merged code coverage report (var/coverage/merged)"
 	@echo "test-integration-calendar-event - run Calendar Event integration tests"
 	@echo "test-integration-calendar-resource - run Calendar Resource integration tests"
 	@echo "test-integration-sale-basket-property - run BasketProperty integration tests"
@@ -107,6 +110,7 @@ help:
 	@echo "test-integration-im-chat - run IM Chat integration tests"
 	@echo "test-integration-im-chat-user - run IM Chat User integration tests"
 	@echo "test-integration-im-notify - run IM Notify integration tests"
+	@echo "test-integration-im-batch - run IM batch integration tests"
 	@echo "test-integration-scope-humanresources - run HumanResources integration tests"
 	@echo "test-integration-scope-lists - run Lists integration tests"
 	@echo "test-integration-lists-service - run Lists Service integration tests"
@@ -231,8 +235,13 @@ lint-rector-fix:
 lint-deptrac:
 	docker compose run --rm php-cli vendor/bin/deptrac analyse
 
+.PHONY: lint-secrets
+lint-secrets:
+	docker run --rm -v $(PWD):/repo -w /repo --entrypoint sh ghcr.io/gitleaks/gitleaks:v8.30.1 \
+		-c 'git config --global --add safe.directory /repo && gitleaks git --no-banner --redact --verbose --config .gitleaks.toml .'
+
 .PHONY: lint-all
-lint-all: lint-allowed-licenses lint-cs-fixer lint-phpstan lint-rector lint-deptrac
+lint-all: lint-allowed-licenses lint-secrets lint-cs-fixer lint-phpstan lint-rector lint-deptrac
 
 # unit tests
 .PHONY: test-unit
@@ -245,6 +254,77 @@ ifndef path
 	$(error path is required, usage: make test-file path=tests/Unit/ExampleTest.php)
 endif
 	docker compose run --rm php-cli $(PHPUNIT) $(path) --display-warnings
+
+# memory_limit is passed to phpunit too, so tests in separate processes get it as well
+PHPUNIT_WITH_COVERAGE = php -d memory_limit=-1 -d pcov.enabled=1 -d pcov.directory=src -d auto_prepend_file=tests/phpunit-preload-guard.php vendor/bin/phpunit -d memory_limit=-1
+
+# unit tests with code coverage metrics: line, function and method, class and trait coverage
+.PHONY: test-unit-coverage
+test-unit-coverage:
+	docker compose run --rm php-cli $(PHPUNIT_WITH_COVERAGE) --testsuite unit_tests \
+		--coverage-text=var/coverage/coverage.txt --only-summary-for-coverage-text \
+		--coverage-html var/coverage/html \
+		--coverage-clover var/coverage/clover.xml
+	@cat var/coverage/coverage.txt
+
+# integration test suites for code coverage, each suite covers one top-level directory in tests/Integration
+# run selected suites: make test-integration-coverage INTEGRATION_COVERAGE_SUITES="integration_tests_core integration_tests_scope_crm"
+INTEGRATION_COVERAGE_SUITES ?= \
+	integration_tests_core \
+	integration_tests_scope_ai_admin \
+	integration_tests_scope_biconnector \
+	integration_tests_scope_booking \
+	integration_tests_scope_calendar \
+	integration_tests_scope_catalog \
+	integration_tests_scope_crm \
+	integration_tests_department \
+	integration_tests_scope_disk \
+	integration_tests_scope_documentgenerator \
+	integration_tests_scope_entity \
+	integration_tests_scope_humanresources \
+	integration_tests_scope_im \
+	integration_tests_scope_imbot \
+	integration_tests_scope_im_open_lines \
+	integration_tests_scope_landing \
+	integration_tests_scope_lists \
+	integration_tests_scope_log \
+	integration_tests_scope_mail \
+	integration_tests_mailservice \
+	integration_tests_scope_main \
+	integration_tests_scope_messageservice \
+	integration_tests_scope_note \
+	integration_tests_scope_paysystem \
+	integration_tests_scope_placement \
+	integration_tests_scope_rest \
+	integration_tests_scope_sale \
+	integration_tests_scope_sign \
+	integration_tests_scope_sonet_group \
+	integration_tests_task \
+	integration_tests_scope_telephony \
+	integration_tests_scope_timeman \
+	integration_tests_scope_user \
+	integration_tests_scope_user_consent \
+	integration_tests_scope_workflows
+
+# unit and integration tests with merged code coverage report, requires test Bitrix24 portal in tests/.env.local
+# coverage of every suite is saved in var/coverage/php/*.cov, failed suites do not stop the run, but fail the target
+.PHONY: test-integration-coverage
+test-integration-coverage:
+	rm -rf var/coverage/php var/coverage/merged
+	mkdir -p var/coverage/php
+	docker compose run --rm php-cli $(PHPUNIT_WITH_COVERAGE) --testsuite unit_tests --coverage-php var/coverage/php/unit_tests.cov
+	@failed=""; \
+	for suite in $(INTEGRATION_COVERAGE_SUITES); do \
+		echo "run $$suite with code coverage…"; \
+		docker compose run --rm php-cli $(PHPUNIT_WITH_COVERAGE) --testsuite $$suite --coverage-php var/coverage/php/$$suite.cov || failed="$$failed $$suite"; \
+	done; \
+	docker compose run --rm php-cli vendor/bin/phpcov merge \
+		--text var/coverage/merged/coverage.txt \
+		--html var/coverage/merged/html \
+		--clover var/coverage/merged/clover.xml \
+		var/coverage/php || exit 1; \
+	sed -n '1,/Lines:/p' var/coverage/merged/coverage.txt; \
+	if [ -n "$$failed" ]; then echo "failed test suites:$$failed"; exit 1; fi
 
 # integration tests with granularity by api-scope
 .PHONY: test-integration-voximplant-callback
@@ -318,6 +398,14 @@ test-integration-im-chat-user:
 .PHONY: test-integration-im-notify
 test-integration-im-notify:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_notify
+
+.PHONY: test-integration-placement-registrar
+test-integration-placement-registrar:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_placement_registrar
+
+.PHONY: test-integration-im-batch
+test-integration-im-batch:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_im_batch
 
 .PHONY: test-integration-scope-placement
 test-integration-scope-placement:
@@ -581,6 +669,10 @@ test-integration-sale-trade-platform:
 .PHONY: test-integration-scope-crm
 test-integration-scope-crm:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_scope_crm
+
+.PHONY: test-integration-crm-calllist
+test-integration-crm-calllist:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_calllist
 
 .PHONY: test-integration-crm-type
 test-integration-crm-type:
@@ -1040,6 +1132,38 @@ test-integration-catalog-document-contractor-annotations:
 test-integration-catalog-vat:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_vat
 
+.PHONY: test-integration-catalog-v3-vat
+test-integration-catalog-v3-vat:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_v3_vat
+
+.PHONY: test-integration-catalog-v3-measure
+test-integration-catalog-v3-measure:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_v3_measure
+
+.PHONY: test-integration-catalog-v3-section
+test-integration-catalog-v3-section:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_v3_section
+
+.PHONY: test-integration-catalog-v3-catalog
+test-integration-catalog-v3-catalog:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_catalog_v3_catalog
+
+.PHONY: test-integration-crm-v3-form
+test-integration-crm-v3-form:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_v3_form
+
+.PHONY: test-integration-crm-v3-form-embedding
+test-integration-crm-v3-form-embedding:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_v3_form_embedding
+
+.PHONY: test-integration-crm-v3-form-directories
+test-integration-crm-v3-form-directories:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_v3_form_directories
+
+.PHONY: test-integration-crm-v3-form-placements
+test-integration-crm-v3-form-placements:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_v3_form_placements
+
 # work dev environment
 .PHONY: php-dev-server-up
 php-dev-server-up:
@@ -1081,8 +1205,12 @@ build-documentation:
 	--file=docs/EN/Services/bitrix24-php-sdk-methods.md
 
 sdk-coverage-v1-show:
-	docker compose run --rm php-cli php bin/console b24-dev:show-sdk-coverage-statistics \
-	--webhook=$(BITRIX24_WEBHOOK)
+	docker compose run --rm -T php-cli php bin/console b24-dev:show-sdk-coverage-statistics \
+	--webhook=$(BITRIX24_WEBHOOK) --show=scope-stat $(ARGS)
+
+.PHONY: test-integration-coverage-command
+test-integration-coverage-command:
+	docker compose run --rm -T php-cli $(PHPUNIT) tests/Integration/Infrastructure/Console/ShowCoverageStatisticsCommandTest.php
 
 sdk-coverage-v3-show:
 	docker compose run --rm php-cli php bin/console b24-dev:show-oa-sdk-coverage \

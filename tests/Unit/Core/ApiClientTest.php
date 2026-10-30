@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Core;
 
+use Bitrix24\SDK\Application\ApplicationStatus;
 use Bitrix24\SDK\Core\ApiClient;
 use Bitrix24\SDK\Core\ApiLevelErrorHandler;
 use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
 use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\Endpoints;
+use Bitrix24\SDK\Core\Credentials\RenewedAuthToken;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\EndpointUrlFormatter;
@@ -26,6 +28,7 @@ use Bitrix24\SDK\Core\Exceptions\InvalidGrantException;
 use Bitrix24\SDK\Core\Exceptions\PortalDomainNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Exceptions\WrongClientException;
+use Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken as LegacyRenewedAuthToken;
 use Bitrix24\SDK\Infrastructure\HttpClient\RequestId\DefaultRequestIdGenerator;
 use Fig\Http\Message\StatusCodeInterface;
 use Generator;
@@ -234,9 +237,37 @@ class ApiClientTest extends TestCase
 
         $renewedAuthToken = $apiClient->getNewAuthToken();
 
+        $this->assertInstanceOf(RenewedAuthToken::class, $renewedAuthToken);
+        $this->assertInstanceOf(LegacyRenewedAuthToken::class, $renewedAuthToken);
         $this->assertEquals('new-access-token', $renewedAuthToken->authToken->accessToken);
         $this->assertEquals('new-refresh-token', $renewedAuthToken->authToken->refreshToken);
         $this->assertEquals($expiresTimestamp, $renewedAuthToken->authToken->expires);
+    }
+
+    #[Test]
+    public function testSubclassCanKeepLegacyTokenReturnType(): void
+    {
+        $renewedAuthToken = new LegacyRenewedAuthToken(
+            new AuthToken('access-token', 'refresh-token', 1900000000),
+            'member-id',
+            'https://portal.bitrix24.com/rest/',
+            'https://oauth.bitrix.info/rest/',
+            ApplicationStatus::subscription(),
+            'portal.bitrix24.com'
+        );
+        $apiClient = new class ($renewedAuthToken) extends ApiClient {
+            public function __construct(private readonly LegacyRenewedAuthToken $token)
+            {
+            }
+
+            #[\Override]
+            public function getNewAuthToken(): LegacyRenewedAuthToken
+            {
+                return $this->token;
+            }
+        };
+
+        self::assertSame($renewedAuthToken, $apiClient->getNewAuthToken());
     }
 
     #[Test]
@@ -248,9 +279,9 @@ class ApiClientTest extends TestCase
                 $headers = self::normalizeHeaders($options['headers'] ?? []);
 
                 self::assertSame('POST', $method);
-                self::assertSame('3.7.0', $headers['x-bitrix24-php-sdk-version'] ?? null);
+                self::assertSame('3.8.0', $headers['x-bitrix24-php-sdk-version'] ?? null);
                 self::assertStringStartsWith(
-                    'b24-php-sdk-vendor-v-3.7.0-php-',
+                    'b24-php-sdk-vendor-v-3.8.0-php-',
                     $headers['user-agent'] ?? ''
                 );
 

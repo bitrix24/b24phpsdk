@@ -17,13 +17,22 @@ use Bitrix24\SDK\Attributes\ApiServiceBuilderMetadata;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\Placement\Service\Placement;
+use Bitrix24\SDK\Services\Placement\Service\PlacementRegistrar;
 use Bitrix24\SDK\Services\Placement\Service\UserFieldType;
+
 #[ApiServiceBuilderMetadata(new Scope(['placement']))]
 class PlacementServiceBuilder extends AbstractServiceBuilder
 {
     public function placement(): Placement
     {
         $this->serviceCache[__METHOD__] ??= new Placement($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function registrar(): PlacementRegistrar
+    {
+        $this->serviceCache[__METHOD__] ??= new PlacementRegistrar($this->placement());
 
         return $this->serviceCache[__METHOD__];
     }

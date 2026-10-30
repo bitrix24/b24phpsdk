@@ -77,6 +77,18 @@
         <testsuite name="integration_tests_im_notify">
             <directory>./tests/Integration/Services/IM/Notify/</directory>
         </testsuite>
+        <testsuite name="integration_tests_im_batch">
+            <file>./tests/Integration/Services/IM/Chat/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/IM/Chat/Service/ChatUserBatchTest.php</file>
+            <file>./tests/Integration/Services/IM/Department/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/IM/Dialog/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/IM/Disk/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/IM/Message/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/IM/Notify/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/IM/Recent/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/IM/Search/Service/BatchTest.php</file>
+            <file>./tests/Integration/Services/IM/User/Service/UserStatusBatchTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_scope_im_open_lines">
             <directory>./tests/Integration/Services/IMOpenLines/</directory>
         </testsuite>
@@ -94,6 +106,9 @@
         </testsuite>
         <testsuite name="integration_tests_im_open_lines_operator">
             <directory>./tests/Integration/Services/IMOpenLines/Operator/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_placement_registrar">
+            <file>./tests/Integration/Services/Placement/Service/PlacementRegistrarTest.php</file>
         </testsuite>
         <testsuite name="integration_tests_scope_placement">
             <directory>./tests/Integration/Services/Placement/</directory>
@@ -124,6 +139,9 @@
         </testsuite>
         <testsuite name="integration_tests_scope_log">
             <directory>./tests/Integration/Services/Log/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_main">
+            <directory>./tests/Integration/Services/Main/</directory>
         </testsuite>
         <testsuite name="integration_tests_scope_sale">
             <directory>./tests/Integration/Services/Sale/</directory>
@@ -187,6 +205,9 @@
         </testsuite>
         <testsuite name="integration_tests_scope_crm_currency">
             <directory>./tests/Integration/Services/CRM/Currency/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_crm_calllist">
+            <directory>./tests/Integration/Services/CRM/CallList/</directory>
         </testsuite>
         <testsuite name="integration_tests_crm_type">
             <directory>./tests/Integration/Services/CRM/Type/</directory>
@@ -685,8 +706,48 @@
         <testsuite name="integration_tests_catalog_document_contractor_annotations">
             <file>./tests/Integration/Services/Catalog/DocumentContractor/Result/DocumentContractorItemResultTest.php</file>
         </testsuite>
+        <testsuite name="integration_tests_crm_v3_form">
+            <directory>./tests/Integration/Services/CRM/V3/Form/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormField/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_crm_v3_form_embedding">
+            <directory>./tests/Integration/Services/CRM/V3/FormEmbedding/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormEmbeddingField/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_crm_v3_form_directories">
+            <directory>./tests/Integration/Services/CRM/V3/FormConfiguration/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormConfigurationField/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormEntityField/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormEntityFieldField/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormScenario/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormScenarioField/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormScenarioCategory/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormScenarioCategoryField/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_crm_v3_form_placements">
+            <directory>./tests/Integration/Services/CRM/V3/FormSiteButton/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormSiteButtonField/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormOpenLine/</directory>
+            <directory>./tests/Integration/Services/CRM/V3/FormOpenLineField/</directory>
+        </testsuite>
         <testsuite name="integration_tests_catalog_vat">
             <directory>./tests/Integration/Services/Catalog/Vat/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_v3_vat">
+            <directory>./tests/Integration/Services/Catalog/V3/Vat/</directory>
+            <directory>./tests/Integration/Services/Catalog/V3/VatField/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_v3_measure">
+            <directory>./tests/Integration/Services/Catalog/V3/Measure/</directory>
+            <directory>./tests/Integration/Services/Catalog/V3/MeasureField/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_v3_section">
+            <directory>./tests/Integration/Services/Catalog/V3/Section/</directory>
+            <directory>./tests/Integration/Services/Catalog/V3/SectionField/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_catalog_v3_catalog">
+            <directory>./tests/Integration/Services/Catalog/V3/Catalog/</directory>
+            <directory>./tests/Integration/Services/Catalog/V3/CatalogField/</directory>
         </testsuite>
         <testsuite name="integration-scope-timeman-readonly">
             <directory>./tests/Integration/Services/Timeman/NetworkRange</directory>

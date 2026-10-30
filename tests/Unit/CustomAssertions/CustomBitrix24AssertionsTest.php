@@ -18,12 +18,12 @@ use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 use Generator;
 use Bitrix24\SDK\Services\Main\Result\EventLogItemResult;
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(CustomBitrix24Assertions::class)]
+#[CoversNothing]
 class CustomBitrix24AssertionsTest extends TestCase
 {
     use CustomBitrix24Assertions;

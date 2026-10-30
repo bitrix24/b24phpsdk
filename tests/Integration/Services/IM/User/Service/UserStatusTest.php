@@ -32,7 +32,7 @@ class UserStatusTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->userStatusService = Factory::getServiceBuilder()->getIMScope()->userStatus();
+        $this->userStatusService = Factory::getServiceBuilder(true)->getIMScope()->userStatus();
     }
 
     /**

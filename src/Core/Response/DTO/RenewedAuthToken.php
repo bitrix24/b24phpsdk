@@ -18,6 +18,9 @@ use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Endpoints;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 
+/**
+ * @deprecated Use \Bitrix24\SDK\Core\Credentials\RenewedAuthToken instead.
+ */
 readonly class RenewedAuthToken
 {
     /**
@@ -32,8 +35,8 @@ readonly class RenewedAuthToken
         public string            $clientEndpoint,
         public string            $serverEndpoint,
         public ApplicationStatus $applicationStatus,
-        public string            $domain)
-    {
+        public string            $domain
+    ) {
     }
 
     /**
@@ -61,3 +64,7 @@ readonly class RenewedAuthToken
         );
     }
 }
+
+// Registered together with the legacy class so that tokens created under either name
+// satisfy both type declarations without eager Composer "files" autoloading.
+\class_alias(RenewedAuthToken::class, \Bitrix24\SDK\Core\Credentials\RenewedAuthToken::class);

@@ -15,6 +15,7 @@ namespace Bitrix24\SDK\Services\IM\Notify\Service;
 
 use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
@@ -27,10 +28,16 @@ use Bitrix24\SDK\Services\IM\Notify\Result\NotifyHistorySearchResult;
 use Bitrix24\SDK\Services\IM\Notify\Result\NotifyReadAllResult;
 use Bitrix24\SDK\Services\IM\Notify\Result\NotifySchemaResult;
 use Carbon\CarbonImmutable;
+use Psr\Log\LoggerInterface;
 
 #[ApiServiceMetadata(new Scope(['im']))]
 class Notify extends AbstractService
 {
+    public function __construct(public readonly Batch $batch, CoreInterface $core, LoggerInterface $logger)
+    {
+        parent::__construct($core, $logger);
+    }
+
     /**
      * @param positive-int $userId
      * @param non-empty-string $message

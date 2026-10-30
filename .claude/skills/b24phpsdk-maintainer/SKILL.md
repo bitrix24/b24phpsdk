@@ -902,11 +902,11 @@ checkout, after the release changes are finalized, run these commands in order:
 ```bash
 make -s oa-schema-build
 make -s sdk-coverage-v3-show
-printf '0\n' | make -s sdk-coverage-v1-show
+make -s sdk-coverage-v1-show
 ```
 
-`0` exits the v1 command's menu after printing the overall statistics. `-s` suppresses
-Make's command echo, which can contain the webhook URL. Keep credentials and unredacted
+The v1 target uses Docker `-T` and `--show=scope-stat` to finish without a TTY or
+menu input. `-s` suppresses Make's command echo, which can contain the webhook URL. Keep credentials and unredacted
 logs out of the changelog, issue, and PR.
 
 Use the **overall summary** fields, not per-scope sums, batch-wrapper inventory, or
@@ -923,6 +923,39 @@ covered / total * 100 rounded to two decimal places. A missing target, failed sc
 refresh, unavailable portal, missing summary, or inconsistent counts **blocks release
 readiness**: report the cause and rerun after resolving it. Do not omit an API row,
 invent zero coverage, or reuse numbers from another checkout or an earlier release.
+
+### Legacy coverage command options
+
+`make -s sdk-coverage-v1-show` selects `--show=scope-stat` and accepts extra flags
+through `ARGS`, for example `ARGS='--scope=crm --format=json'`. To list uncovered
+methods use `ARGS='--show=uncovered --scope=crm --format=json'`.
+
+For one clean JSON document on stdout, invoke the command directly without a TTY:
+
+```bash
+docker compose run --rm --no-TTY php-cli php bin/console \
+  b24-dev:show-sdk-coverage-statistics \
+  --webhook='https://your-domain.bitrix24.com/rest/1/REPLACE_WITH_TOKEN/' \
+  --no-interaction --show=uncovered --scope=crm --format=json
+```
+
+`--show` accepts `scope-stat` or `uncovered`; `--format` accepts `table` (default)
+or `json`. `uncovered` requires `--scope`; `scope-stat` optionally restricts its rows
+with `--scope`. Scope codes must be known SDK scope codes. Without `--show`, only
+interactive menu execution is allowed; specifying `--scope` or `--format` also
+requires `--show`. Invalid options fail before portal initialization. JSON contains
+no splash, progress, menu or trace. Exit codes are 0 (success), 1 (runtime failure
+or Symfony argument parsing failure), and 2 (report validation failure); errors
+go to stderr when available.
+
+The JSON `summary` is the unique global portal baseline; per-scope rows can overlap.
+Deprecated methods remain in coverage counts and are excluded only from
+`uncoveredMethods`. `uncoveredMethodsIncludingDeprecated` preserves them.
+`sdkOnlyMethods` and its counts are inventory outside the coverage denominator.
+REST v1 portal coverage and REST v3 OpenAPI coverage must stay separate.
+See `docs/EN/coverage-reporting.md` for the full JSON contract. Never publish a
+real webhook in documentation or recorded output. Run the read-only live check
+with `make test-integration-coverage-command` only after the light quality gate.
 
 ### Write and verify the release entry
 

@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Unit\Services\IM\User\Service;
 
 use Bitrix24\SDK\Services\IM\User\Service\UserStatus;
+use Bitrix24\SDK\Services\IM\Batch as IMBatch;
+use Bitrix24\SDK\Services\IM\User\Service\UserStatusBatch;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullCore;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -28,7 +30,7 @@ class UserStatusTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->service = new UserStatus(new NullCore(), new NullLogger());
+        $this->service = new UserStatus(new UserStatusBatch(new IMBatch(new NullCore(), new NullLogger()), new NullLogger()), new NullCore(), new NullLogger());
     }
 
     #[Test]

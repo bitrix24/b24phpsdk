@@ -26,6 +26,7 @@ use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Exceptions\UserNotFoundOrIsNotActiveException;
 use Bitrix24\SDK\Core\Exceptions\ValidationException;
+use Bitrix24\SDK\Core\Exceptions\VersionMismatchException;
 use Bitrix24\SDK\Core\Exceptions\WrongAuthTypeException;
 use Bitrix24\SDK\Core\Exceptions\WrongClientException;
 use Bitrix24\SDK\Core\Response\DTO\UnsuccessfulResponseError;
@@ -177,7 +178,10 @@ class ApiLevelErrorHandler
             case 'error_method_not_found':
                 throw new MethodNotFoundException(sprintf('api method not found %s %s', $errorDescription, $batchErrorPrefix));
             case 'operation_time_limit':
-                throw new OperationTimeLimitExceededException(sprintf('operation time limit exceeded %s %s', $errorDescription, $batchErrorPrefix));
+                throw new OperationTimeLimitExceededException(
+                    sprintf('operation time limit exceeded %s %s', $errorDescription, $batchErrorPrefix),
+                    batchCommandId: $batchCommandId
+                );
             case 'error_activity_already_installed':
                 throw new ActivityOrRobotAlreadyInstalledException(sprintf('%s - %s', $errorCode, $errorDescription));
             case 'error_activity_validation_failure':
@@ -193,6 +197,11 @@ class ApiLevelErrorHandler
             case 'not_found':
             case 'error_not_found':
                 throw new ItemNotFoundException(sprintf('%s - %s', $errorCode, $errorDescription));
+            case 'crm_form_version_mismatch':
+                throw new VersionMismatchException(
+                    sprintf('%s - %s %s', $errorCode, $errorDescription, $batchErrorPrefix),
+                    VersionMismatchException::parseVersion($unsuccessfulResponseError?->details['currentUpdatedTime'] ?? null)
+                );
             case 'bitrix_rest_v3_exception_unknowndtopropertyexception':
                 throw new InvalidArgumentException(sprintf('%s - %s %s', $errorCode, $errorDescription, $batchErrorPrefix));
             default:

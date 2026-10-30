@@ -24,6 +24,7 @@ use Bitrix24\SDK\Core\Credentials\Endpoints;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\EndpointUrlFormatter;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\ResponseDecodingException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Infrastructure\HttpClient\RequestId\DefaultRequestIdGenerator;
 use Generator;
@@ -115,7 +116,7 @@ class CoreExceptionLoggingTest extends TestCase
     public static function failureProvider(): Generator
     {
         yield 'transport' => [HttpTransportException::class, 'call.transportException', TransportException::class];
-        yield 'JSON' => [JsonException::class, 'call.transportException', TransportException::class];
+        yield 'JSON' => [JsonException::class, 'call.transportException', ResponseDecodingException::class];
         yield 'unknown' => [\RuntimeException::class, 'call.unknownException', BaseException::class];
     }
 

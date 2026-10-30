@@ -27,6 +27,7 @@ use Bitrix24\SDK\Core\Exceptions\PaymentRequiredException;
 use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException;
 use Bitrix24\SDK\Core\Exceptions\ValidationException;
+use Bitrix24\SDK\Core\Exceptions\VersionMismatchException;
 use Bitrix24\SDK\Core\Exceptions\WrongClientException;
 use Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -220,6 +221,41 @@ class ApiLevelErrorHandlerTest extends TestCase
             $this->assertSame('Required field', $errors[0]->message);
             $this->assertSame('status', $errors[1]->field);
             $this->assertSame('Invalid value', $errors[1]->message);
+        }
+    }
+
+    #[Test]
+    #[TestDox('VersionMismatchException carries the current entity version from a v3 optimistic concurrency error')]
+    public function testVersionMismatchExceptionCarriesCurrentVersion(): void
+    {
+        $responseBody = [
+            'error' => [
+                'code' => 'CRM_FORM_VERSION_MISMATCH',
+                'message' => 'The CRM form version is outdated',
+                'currentUpdatedTime' => '2026-10-29T14:16:55+03:00',
+            ],
+        ];
+
+        try {
+            $this->apiLevelErrorHandler->handle($responseBody);
+            $this->fail('Expected VersionMismatchException was not thrown');
+        } catch (VersionMismatchException $versionMismatchException) {
+            $this->assertSame('2026-10-29T14:16:55+03:00', $versionMismatchException->getCurrentVersion()?->toIso8601String());
+            $this->assertStringContainsString('crm_form_version_mismatch', $versionMismatchException->getMessage());
+        }
+    }
+
+    #[Test]
+    #[TestDox('VersionMismatchException has no current version when the error omits it')]
+    public function testVersionMismatchExceptionWithoutCurrentVersion(): void
+    {
+        $this->expectException(VersionMismatchException::class);
+
+        try {
+            $this->apiLevelErrorHandler->handle(['error' => ['code' => 'CRM_FORM_VERSION_MISMATCH', 'message' => 'outdated']]);
+        } catch (VersionMismatchException $versionMismatchException) {
+            $this->assertNull($versionMismatchException->getCurrentVersion());
+            throw $versionMismatchException;
         }
     }
 

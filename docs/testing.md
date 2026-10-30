@@ -136,6 +136,7 @@ Individual linters:
 | Target | Tool | Notes |
 |---|---|---|
 | `make lint-allowed-licenses` | license-checker | Validates dependency licenses |
+| `make lint-secrets` | gitleaks (docker) | Scan git history for leaked secrets |
 | `make lint-cs-fixer` | php-cs-fixer | Check code style |
 | `make lint-cs-fixer-fix` | php-cs-fixer | Auto-fix code style |
 | `make lint-phpstan` | PHPStan | Static analysis |
@@ -227,6 +228,7 @@ skip_violations:
 |---|---|
 | `make lint-all` | Run all linters sequentially |
 | `make lint-allowed-licenses` | Check dependency licenses |
+| `make lint-secrets` | Scan git history for leaked secrets (gitleaks) |
 | `make lint-cs-fixer` | Check code style |
 | `make lint-cs-fixer-fix` | Fix code style |
 | `make lint-phpstan` | Static analysis |
@@ -239,6 +241,8 @@ skip_violations:
 | Target | Description |
 |---|---|
 | `make test-unit` | Run all unit tests |
+| `make test-unit-coverage` | Run unit tests with code coverage report in `var/coverage` (see [CONTRIBUTING.md](../CONTRIBUTING.md#code-coverage)) |
+| `make test-integration-coverage` | Run unit and integration suites with merged coverage in `var/coverage/merged`; requires a test portal |
 
 ### Tests — integration (CRM)
 
