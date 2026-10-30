@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.14.0 - 2026.10.30
+
 ### Added
 - Added batch calls support for services of the `Services\IM` scope, available through the `batch` property
   of each service, see [im.* methods](https://apidocs.bitrix24.com/api-reference/chats/index.html)
