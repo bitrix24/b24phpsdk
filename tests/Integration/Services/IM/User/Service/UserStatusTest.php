@@ -32,7 +32,7 @@ class UserStatusTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->userStatusService = Fabric::getServiceBuilder()->getIMScope()->userStatus();
+        $this->userStatusService = Fabric::getServiceBuilder(true)->getIMScope()->userStatus();
     }
 
     /**
