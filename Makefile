@@ -113,6 +113,7 @@ help:
 	@echo "test-integration-im-notify - run IM Notify integration tests"
 	@echo "test-integration-im-event-v2 - run IM EventV2 integration tests"
 	@echo "test-integration-im-file-v2 - run IM FileV2 integration tests"
+	@echo "test-integration-im-batch - run IM batch integration tests"
 	@echo "test-integration-scope-sign - run Sign B2e integration tests"
 	@echo "test-integration-sign-document - run Sign Document integration tests"
 	@echo "test-integration-sign-company-provider - run Sign CompanyProvider integration tests"
@@ -835,6 +836,11 @@ test-integration-im-event-v2:
 .PHONY: test-integration-im-file-v2
 test-integration-im-file-v2:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_file_v2
+
+.PHONY: test-integration-im-batch
+test-integration-im-batch:
+	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_im_batch
+
 .PHONY: test-integration-scope-sign
 test-integration-scope-sign:
 	docker compose run --rm php-cli vendor/bin/phpunit --testsuite integration_tests_scope_sign

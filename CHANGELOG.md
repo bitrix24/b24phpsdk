@@ -3,6 +3,26 @@
 ## Unreleased
 
 ### Added
+- Added batch calls support for services of the `Services\IM` scope, available through the `batch` property
+  of each service, see [im.* methods](https://apidocs.bitrix24.com/api-reference/chats/index.html)
+  ([#626](https://github.com/bitrix24/b24phpsdk/issues/626)):
+    - `Chat` - `add` (`im.chat.add`)
+    - `ChatUser` - `add` (`im.chat.user.add`), `delete` (`im.chat.user.delete`),
+      `list` gets participants of several chats (`im.chat.user.list`)
+    - `Department` - `colleaguesList`, `colleaguesIdsList` (`im.department.colleagues.list`)
+    - `Dialog` - `usersList` (`im.dialog.users.list`)
+    - `Disk` - `deleteFile` (`im.disk.file.delete`)
+    - `Message` - `add` (`im.message.add`), `update` (`im.message.update`), `delete` (`im.message.delete`)
+    - `Notify` - `fromSystem` (`im.notify.system.add`), `fromPersonal` (`im.notify.personal.add`),
+      `delete` (`im.notify.delete`), `markMessagesAsRead`, `markMessagesAsUnread` (`im.notify.read.list`)
+    - `Recent` - `list` (`im.recent.list`)
+    - `Search` - `chatList` (`im.search.chat.list`), `departmentList` (`im.search.department.list`),
+      `userList` (`im.search.user.list`), deprecated `lastAdd` (`im.search.last.add`)
+      and `lastDelete` (`im.search.last.delete`)
+    - `UserStatus` - `set` (`im.user.status.set`)
+- Added `Services\IM\Batch` extending `Core\Batch`: offset pagination via top-level `OFFSET` / `LIMIT`
+  for `im.*` list methods, unwrapping of `im.recent.list` `items` with the `hasMore` flag, and execution
+  of commands with flat upper-case parameters ([#626](https://github.com/bitrix24/b24phpsdk/issues/626)).
 - Added CI check for leaked secrets (API keys, tokens, webhooks) in the codebase and git history with
   [gitleaks](https://github.com/gitleaks/gitleaks): workflow `.github/workflows/gitleaks.yml`, config `.gitleaks.toml`
   and `make lint-secrets` target, included in `make lint-all` ([#38](https://github.com/bitrix24/b24phpsdk/issues/38))
@@ -17,6 +37,12 @@
       and merges coverage with `phpunit/phpcov` into `var/coverage/merged`, test suites can be selected with
       `INTEGRATION_COVERAGE_SUITES` variable
     - `phpunit/phpcov` dev dependency and `integration_tests_scope_main` test suite for `tests/Integration/Services/Main`
+
+### Changed
+- IM services `Chat`, `ChatUser`, `Department`, `Dialog`, `Disk`, `Message`, `Notify`, `Recent`, `Search`,
+  `UserStatus` now receive their batch service as the first constructor argument and expose it via the public
+  `$batch` property; code that instantiates these services directly must pass the batch service,
+  services created by `IMServiceBuilder` are not affected ([#626](https://github.com/bitrix24/b24phpsdk/issues/626)).
 
 ### Fixed
 - Fixed PHPUnit warnings `is not a valid target for code coverage` in contract unit tests for reference

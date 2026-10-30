@@ -34,7 +34,7 @@ final class UserItemResultTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->userService = Fabric::getServiceBuilder()->getIMScope()->user();
+        $this->userService = Fabric::getServiceBuilder(true)->getIMScope()->user();
     }
 
     /**

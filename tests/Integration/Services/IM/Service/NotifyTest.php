@@ -165,6 +165,6 @@ class NotifyTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->imNotifyService = Fabric::getServiceBuilder()->getIMScope()->notify();
+        $this->imNotifyService = Fabric::getServiceBuilder(true)->getIMScope()->notify();
     }
 }
