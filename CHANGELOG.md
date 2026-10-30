@@ -48,6 +48,9 @@
 - Fixed PHPUnit warnings `is not a valid target for code coverage` in contract unit tests for reference
   implementations: `#[CoversClass]` pointed to interfaces or to test-only classes, replaced with `#[CoversNothing]`
   ([#307](https://github.com/bitrix24/b24phpsdk/issues/307))
+- Fixed `Core\Batch` dropping `null` parameters from batch sub-commands, so filters like `['parentId150' => null]`
+  were silently ignored; `null` values are now sent as empty values, matching non-batch calls
+  ([#319](https://github.com/bitrix24/b24phpsdk/issues/319))
 
 ## 1.13.0 - 2026.09.30
 
