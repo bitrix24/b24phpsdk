@@ -17,12 +17,12 @@ use Bitrix24\SDK\Attributes\OpenApiEntity;
 use Bitrix24\SDK\Services\AbstractSelectBuilder;
 use Bitrix24\SDK\Tests\CustomAssertions\SelectBuilderAssertions;
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(SelectBuilderAssertions::class)]
+#[CoversNothing]
 class SelectBuilderAssertionsTest extends TestCase
 {
     #[Test]

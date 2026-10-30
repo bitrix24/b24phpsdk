@@ -30,13 +30,13 @@ use Bitrix24\SDK\Tests\Unit\Application\Contracts\ApplicationInstallations\Entit
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountReferenceEntityImplementation;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\Bitrix24Accounts\Repository\InMemoryBitrix24AccountRepositoryImplementation;
 use Carbon\CarbonImmutable;
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Log\NullLogger;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(InMemoryApplicationInstallationRepositoryImplementation::class)]
+#[CoversNothing]
 class InMemoryApplicationInstallationRepositoryImplementationTest extends ApplicationInstallationRepositoryInterfaceTest
 {
     private ?InMemoryBitrix24AccountRepositoryImplementation $bitrix24AccountRepository = null;

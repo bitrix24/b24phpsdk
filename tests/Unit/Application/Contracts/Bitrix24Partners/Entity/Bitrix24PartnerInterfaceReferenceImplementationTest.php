@@ -17,10 +17,10 @@ use Bitrix24\SDK\Application\Contracts\Bitrix24Partners\Entity\Bitrix24PartnerIn
 use Bitrix24\SDK\Application\Contracts\Bitrix24Partners\Entity\Bitrix24PartnerStatus;
 use Bitrix24\SDK\Tests\Application\Contracts\Bitrix24Partners\Entity\Bitrix24PartnerInterfaceTest;
 use libphonenumber\PhoneNumber;
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(Bitrix24PartnerInterface::class)]
+#[CoversNothing]
 class Bitrix24PartnerInterfaceReferenceImplementationTest extends Bitrix24PartnerInterfaceTest
 {
     #[\Override]

@@ -15,19 +15,17 @@ namespace Bitrix24\SDK\Tests\Unit\Application\Contracts\ApplicationInstallations
 
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationInterface;
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationStatus;
-use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Repository\ApplicationInstallationRepositoryInterface;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\Bitrix24Accounts\Repository\InMemoryBitrix24AccountRepositoryImplementation;
 use Carbon\CarbonImmutable;
 use Generator;
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(ApplicationInstallationRepositoryInterface::class)]
-#[CoversClass(InMemoryApplicationInstallationRepositoryImplementation::class)]
+#[CoversNothing]
 class StaleApplicationInstallationRepositoryTest extends TestCase
 {
     #[Test]
