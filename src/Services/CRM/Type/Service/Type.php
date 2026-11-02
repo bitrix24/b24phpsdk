@@ -169,7 +169,7 @@ class Type extends AbstractService
      *
      * @link https://apidocs.bitrix24.com/api-reference/crm/universal/user-defined-object-types/crm-type-delete.html
      *
-     * @param int $entityTypeId
+     * @param int $entityTypeId Internal type id; legacy argument name retained for named-call compatibility.
      * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
@@ -181,6 +181,6 @@ class Type extends AbstractService
     )]
     public function delete(int $entityTypeId): DeletedItemResult
     {
-        return new DeletedItemResult($this->core->call('crm.type.delete', ['entityTypeId' => $entityTypeId]));
+        return new DeletedItemResult($this->core->call('crm.type.delete', ['id' => $entityTypeId]));
     }
 }

@@ -18,6 +18,7 @@ use Bitrix24\SDK\Attributes\ApiBatchServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
 use Bitrix24\SDK\Services\CRM\Item\Result\ItemItemResult;
 use Generator;
@@ -31,7 +32,9 @@ class Batch
     }
 
     /**
-     * Batch list method for crm items
+     * Batch list method for crm items.
+     * Original UF names require wildcard selection because some portals omit system
+     * fields (including the pagination id) from explicit selects in that mode.
      *
      * @return Generator<int, ItemItemResult>
      * @throws BaseException
@@ -41,8 +44,12 @@ class Batch
         'https://training.bitrix24.com/rest_help/crm/dynamic/methodscrmitem/crm_item_list.php',
         'Method returns array with SPA items with entityTypeId.'
     )]
-    public function list(int $entityTypeId, array $order, array $filter, array $select, ?int $limit = null): Generator
+    public function list(int $entityTypeId, array $order, array $filter, array $select, ?int $limit = null, bool $useOriginalUfNames = false): Generator
     {
+        if ($useOriginalUfNames && !in_array('*', $select, true)) {
+            throw new InvalidArgumentException('Original UF name batch reads require select=["*"] to preserve the pagination id.');
+        }
+
         $this->log->debug(
             'batchList',
             [
@@ -53,7 +60,7 @@ class Batch
                 'limit' => $limit,
             ]
         );
-        foreach ($this->batch->getTraversableList('crm.item.list', $order, $filter, $select, $limit, ['entityTypeId' => $entityTypeId]) as $key => $value) {
+        foreach ($this->batch->getTraversableList('crm.item.list', $order, $filter, $select, $limit, ['entityTypeId' => $entityTypeId, ...($useOriginalUfNames ? ['useOriginalUfNames' => 'Y'] : [])]) as $key => $value) {
             yield $key => new ItemItemResult($value);
         }
     }
