@@ -99,9 +99,9 @@ class Item extends AbstractService
         'https://training.bitrix24.com/rest_help/crm/dynamic/methodscrmitem/crm_item_fields.php',
         'Returns the fields data with entityTypeId.'
     )]
-    public function fields(int $entityTypeId): FieldsResult
+    public function fields(int $entityTypeId, bool $useOriginalUfNames = false): FieldsResult
     {
-        return new FieldsResult($this->core->call('crm.item.fields', ['entityTypeId' => $entityTypeId]));
+        return new FieldsResult($this->core->call('crm.item.fields', ['entityTypeId' => $entityTypeId, ...($useOriginalUfNames ? ['useOriginalUfNames' => 'Y'] : [])]));
     }
 
     /**
@@ -117,9 +117,9 @@ class Item extends AbstractService
         'https://training.bitrix24.com/rest_help/crm/dynamic/methodscrmitem/crm_item_get.php',
         'Returns item data with id for SPA with entityTypeId.'
     )]
-    public function get(int $entityTypeId, int $id): ItemResult
+    public function get(int $entityTypeId, int $id, bool $useOriginalUfNames = false): ItemResult
     {
-        return new ItemResult($this->core->call('crm.item.get', ['entityTypeId' => $entityTypeId, 'id' => $id]));
+        return new ItemResult($this->core->call('crm.item.get', ['entityTypeId' => $entityTypeId, 'id' => $id, ...($useOriginalUfNames ? ['useOriginalUfNames' => 'Y'] : [])]));
     }
 
     /**
@@ -135,7 +135,7 @@ class Item extends AbstractService
         'https://training.bitrix24.com/rest_help/crm/dynamic/methodscrmitem/crm_item_list.php',
         'Returns array with SPA items with entityTypeId'
     )]
-    public function list(int $entityTypeId, array $order, array $filter, array $select, int $startItem = 0): ItemsResult
+    public function list(int $entityTypeId, array $order, array $filter, array $select, int $startItem = 0, bool $useOriginalUfNames = false): ItemsResult
     {
         if ($select === []) {
             $select = ['*'];
@@ -150,6 +150,7 @@ class Item extends AbstractService
                     'filter' => $filter,
                     'select' => $select,
                     'start' => $startItem,
+                    ...($useOriginalUfNames ? ['useOriginalUfNames' => 'Y'] : []),
                 ]
             )
         );
@@ -188,8 +189,8 @@ class Item extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
-    public function countByFilter(int $entityTypeId, array $filter = []): int
+    public function countByFilter(int $entityTypeId, array $filter = [], bool $useOriginalUfNames = false): int
     {
-        return $this->list($entityTypeId, [], $filter, ['id'], 1)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
+        return $this->list($entityTypeId, [], $filter, ['id'], 1, $useOriginalUfNames)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
     }
 }

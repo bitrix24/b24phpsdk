@@ -182,6 +182,10 @@
         <testsuite name="integration_tests_sale_basket_property">
             <directory>./tests/Integration/Services/Sale/BasketProperty/</directory>
         </testsuite>
+        <testsuite name="integration_tests_crm_smart_process_reads">
+            <directory>tests/Integration/Services/CRM/Category</directory>
+            <file>tests/Integration/Services/CRM/Item/Service/OriginalUserfieldNamesTest.php</file>
+        </testsuite>
         <testsuite name="integration_tests_scope_crm">
             <directory>./tests/Integration/Services/CRM/</directory>
         </testsuite>

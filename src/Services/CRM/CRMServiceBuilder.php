@@ -309,6 +309,13 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    public function category(): Category\Service\Category
+    {
+        $this->serviceCache[__METHOD__] ??= new Category\Service\Category($this->core, $this->log);
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function dealCategory(): Deal\Service\DealCategory
     {
         if (!isset($this->serviceCache[__METHOD__])) {

@@ -18,6 +18,7 @@ parameters:
     - tests/Integration/Services/CRM/Address
     - tests/Integration/Services/CRM/Deal/Service/DealRecurringTest.php
     - tests/Integration/Services/CRM/Lead/Service/LeadContactTest.php
+    - tests/Integration/Services/CRM/Category
     - tests/Integration/Services/CRM/Item
     - tests/Integration/Services/CRM/Deal/Service/DealDetailsConfigurationTest.php
     - tests/Integration/Services/CRM/Lead/Service/LeadDetailsConfigurationTest.php

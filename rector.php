@@ -44,6 +44,8 @@ return RectorConfig::configure()
         __DIR__ . '/tests/Integration/Services/Placement',
         __DIR__ . '/src/Services/CRM/Deal',
         __DIR__ . '/tests/Integration/Services/CRM/Deal/Service',
+        __DIR__ . '/src/Services/CRM/Category',
+        __DIR__ . '/tests/Integration/Services/CRM/Category',
         __DIR__ . '/src/Services/CRM/Item',
         __DIR__ . '/tests/Integration/Services/CRM/Item',
         __DIR__ . '/src/Services/CRM/Deal/Service/DealDetailsConfiguration.php',

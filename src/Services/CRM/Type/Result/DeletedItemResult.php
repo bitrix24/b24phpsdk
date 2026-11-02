@@ -21,6 +21,8 @@ class DeletedItemResult extends AbstractResult implements DeletedItemResultInter
 {
     public function isSuccess(): bool
     {
-        return true;
+        $result = $this->getCoreResponse()->getResponseData()->getResult();
+
+        return $result === [] || ($result[0] ?? null) === true;
     }
 }

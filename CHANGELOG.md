@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Added
+
+- Added typed universal CRM category reads (`fields`, `get`, `list`) and optional original custom-field names for CRM item reads and batch traversal, with a wildcard-select guard for safe original-name pagination ([#727](https://github.com/bitrix24/b24phpsdk/issues/727))
+
+### Fixed
+
+- Fixed smart-process type deletion to send the internal `id` and verify the actual response instead of reporting successful deletion for a null result ([#728](https://github.com/bitrix24/b24phpsdk/issues/728))
+
 ## 3.8.0
 
 ### Added

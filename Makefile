@@ -1250,3 +1250,7 @@ test-integration-pull:
 .PHONY: test-integration-scope-timeman-readonly
 test-integration-scope-timeman-readonly:
 	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration-scope-timeman-readonly --display-warnings
+
+.PHONY: test-integration-crm-smart-process-reads
+test-integration-crm-smart-process-reads:
+	docker compose run --rm php-cli $(PHPUNIT) --testsuite integration_tests_crm_smart_process_reads
