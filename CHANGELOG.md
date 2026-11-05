@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Added typed `crm.stagehistory.list` for leads, deals, and smart processes through `stageHistory()`, with selected fields, filters, date casting, and pagination metadata ([#730](https://github.com/bitrix24/b24phpsdk/issues/730))
+
 ## 3.8.0
 
 ### Added

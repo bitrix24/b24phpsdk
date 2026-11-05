@@ -624,6 +624,15 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
     
+    public function stageHistory(): StageHistory\Service\StageHistory
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new StageHistory\Service\StageHistory($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function status(): Status\Service\Status
     {
         if (!isset($this->serviceCache[__METHOD__])) {
