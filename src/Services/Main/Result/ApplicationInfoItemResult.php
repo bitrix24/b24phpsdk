@@ -51,8 +51,9 @@ class ApplicationInfoItemResult extends AbstractItem
     {
         switch ($offset) {
             case 'LICENSE_FAMILY':
-                if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
-                    return PortalLicenseFamily::from($this->data[$offset]);
+                $code = $this->getLicenseFamilyCode();
+                if ($code !== '' && $code !== null) {
+                    return PortalLicenseFamily::tryFrom($code) ?? PortalLicenseFamily::unknown;
                 }
 
                 return null;
@@ -89,6 +90,14 @@ class ApplicationInfoItemResult extends AbstractItem
             default:
                 return $this->data[$offset] ?? null;
         }
+    }
+
+    /**
+     * Original API code, including families not yet known to this SDK.
+     */
+    public function getLicenseFamilyCode(): ?string
+    {
+        return $this->data['LICENSE_FAMILY'] ?? null;
     }
 
     public function getStatus(): ?ApplicationStatus
