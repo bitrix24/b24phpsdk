@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+
+- Handle unrecognized portal license family codes without interrupting metadata access and expose the original code through `getLicenseFamilyCode()` ([#732](https://github.com/bitrix24/b24phpsdk/issues/732)).
+
 ## 3.8.0
 
 ### Added
